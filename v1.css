@@ -106,6 +106,31 @@ img { display: block; max-width: 100%; }
   outline-offset: 3px;
   border-radius: 2px;
 }
+/* The landing target itself is focusable so the skip actually moves the
+   caret, but it is not a control and should never draw a ring of its own. */
+main:focus { outline: none; }
+
+/* Off screen until it is tabbed to, then a paper chip in the corner the eye
+   already goes to. It sits above the nav because it has to be reachable
+   before the nav is. */
+.skip {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 80;
+  padding: 12px 18px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: .82rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--hairline-firm);
+  border-radius: var(--r-badge);
+  transform: translateY(calc(-100% - 20px));
+  transition: transform 200ms var(--ease-out);
+}
+.skip:focus-visible { transform: translateY(0); }
 
 /* ---------- Type ---------- */
 
@@ -193,6 +218,15 @@ img { display: block; max-width: 100%; }
   text-wrap: balance;
 }
 .script--sm { font-size: clamp(1.4rem, 2.4vw, 2rem); margin: .4rem 0 1.6rem; }
+/* The licensed face, once, at the one moment that earns it. */
+.script--xl {
+  display: block;
+  font-size: clamp(1.8rem, 4.6vw, 3.9rem);
+  line-height: 1.14;
+  color: var(--paper);
+  max-width: 17ch;
+  margin: 0;
+}
 
 .eyebrow {
   display: block;
@@ -461,6 +495,17 @@ img { display: block; max-width: 100%; }
   width: var(--tab-w);
   height: var(--tab-h);
   padding: 0 10px;
+  /* TJ's chip, chosen off a rendered ladder that ran from 0.46 down to
+     zero. No border at all, and a 0.04 taupe tint. On a photograph the
+     backdrop blur does the defining; on the flat pale grounds the chip is
+     close to invisible on purpose.
+
+     The mechanism that makes a borderless chip possible: alpha compositing
+     pulls the ground toward the overlay, so a mid tone lands below a light
+     ground and above a dark one and adapts by itself. A white fill cannot
+     do that here, because the grounds sit around 232 of 255.
+
+     Do not raise it to fix the faintness. That is the effect. */
   border: 0;
   border-radius: var(--r-badge);
   background: rgba(140, 127, 121, .04);
@@ -489,6 +534,8 @@ img { display: block; max-width: 100%; }
    already working. It arrives on the same trigger as the ink, at 0.38 of the
    dissolve, so the two happen as one moment rather than two. */
 .nav.is-dark .tab {
+  /* The dark frame needs its own value: at 0.04 the tint is no longer
+     doing the compositing work that lets one mid tone serve both grounds. */
   background: rgba(140, 127, 121, .46);
   color: var(--paper);
 }
@@ -497,6 +544,13 @@ img { display: block; max-width: 100%; }
   .tab:hover { background: rgba(140, 127, 121, .14); }
   .nav.is-dark .tab:hover { background: rgba(140, 127, 121, .62); }
 }
+
+/* A finger is not a cursor. The row sizes itself against the window, which
+   on a phone lands at 34px, and Menu and Enquire are the only two controls
+   on the whole screen there. Coarse pointers get the 44px that every touch
+   guideline asks for; the mouse keeps the proportions the row was drawn
+   with. */
+
 
 /* The open panel's tab still takes the accent. That is a state, not a
    fill, and the reference does the same thing. */
@@ -537,6 +591,8 @@ img { display: block; max-width: 100%; }
    and it sits in the left group where the section tabs were, so on a phone
    the row reads Menu, wordmark, Enquire rather than collapsing to a glyph
    and dropping the call to action entirely, which is what it did before. */
+/* Hidden on desktop, where the three section tabs are the left group. It
+   takes their place below 900px. */
 .tab--menu { display: none; }
 
 /* ---- Drop panel ---- */
@@ -614,6 +670,8 @@ img { display: block; max-width: 100%; }
   .tab--menu { display: inline-flex; }
   /* Enquire is the one thing that never leaves. */
   .nav__side--r .tab--cta { display: inline-flex; }
+  /* Opening the Menu chip drops the three section tabs out as a row under
+     the bar, and the panel for whichever is active hangs below them. */
   .nav.is-open .nav__side--l .nav__tabs {
     display: flex;
     position: absolute;
@@ -745,6 +803,12 @@ img { display: block; max-width: 100%; }
 
 /* ---------- Act 2: rest ---------- */
 
+/* Deliberately plain since the treatment act's removal, 2026-09-07: it lost
+   the mesh drift ground it used to pass through opaquely (see "BLUSH DRIFT"
+   below), and TJ asked it stay plain white rather than carry the field on
+   its own for now. No drift-on override needed here; it falls through to
+   the page's own white and always has. This act is otherwise unresolved
+   pending a later pass. */
 .act--rest { padding-block: var(--section); }
 .act--rest .wrap--narrow { margin-bottom: clamp(32px, 6vh, 64px); }
 
@@ -762,49 +826,18 @@ img { display: block; max-width: 100%; }
 }
 [data-reveal] { will-change: clip-path; }
 
-/* ---------- Act 3: the treatment ---------- */
+/* ---------- The split-stage device ---------- */
 
-/* This is the beat that carries the whole differentiator: care turned
-   toward the mother rather than the baby. It gets more room than a split
-   layout would normally take. */
-.act--treatment {
-  padding-block: calc(var(--section) * 1.4);
-  background: var(--paper);
-}
+/* Built for the treatment act, which is retired as of 2026-09-07 (see
+   HANDOVER.md): its copy repeated the treatments gallery already folded
+   into programmes, and the split-stage was its only real contribution.
+   That device now belongs to the confinement act instead, which is the
+   only section using these classes. */
 
-/* ------------------------------------------------------------
-   BLUSH DRIFT
-   A WebGL mesh gradient, one canvas fixed to the viewport, serving
-   the two acts between the bath and the coral band: "You go back to
-   bed" and "The care turns toward you".
-
-   Fixed rather than per section on purpose. A background painted into
-   each act would meet at their join and that meeting is a line, which
-   is the one thing this page cannot have. Being fixed, there is only
-   ever one of it and no join exists to align.
-
-   z-index -1 puts it above the page ground and below every element,
-   so it shows only where a section declines to paint its own. That is
-   also what hides its fades: the acts either side are opaque, so the
-   canvas is covered while its opacity is moving and exposed only once
-   it has arrived.
-
-   The paper ground on .act--treatment above stays as the default. It
-   is dropped only once the shader is actually running, so a browser
-   without WebGL keeps the cream and white the page has always had
-   rather than falling through to a bare canvas colour.
-   ------------------------------------------------------------ */
-.drift {
-  position: fixed;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0;
-  pointer-events: none;
-}
-html.drift-on .act--treatment { background: transparent; }
+/* The WebGL mesh drift field lived here until 2026-09-07. The aurora
+   replaced it in the confinement act, which by then was the only act it
+   still served, and the canvas, the shader and the fade timed against the
+   bath all came out with it. See "THE AURORA" below. */
 
 .stage--split {
   height: auto;
@@ -818,7 +851,7 @@ html.drift-on .act--treatment { background: transparent; }
   overflow: visible;
 }
 @media (min-width: 900px) {
-  .stage--split { grid-template-columns: 1.32fr .68fr; gap: clamp(36px, 5vw, 72px); }
+  .stage--split { grid-template-columns: 1.18fr .82fr; gap: clamp(36px, 5vw, 72px); }
 }
 
 .stage__frame {
@@ -841,7 +874,30 @@ html.drift-on .act--treatment { background: transparent; }
 
 /* ---------- Act 4: the rail ---------- */
 
-.act--pan .stage { align-items: center; }
+/* The rail travels sideways under a fixed frame, so both ends of it are cut
+   by the window. A hard cut through a word is what made the opening heading
+   read as a bug: for most of the act the screen said "ds of care, gle day."
+   The frame softens instead, so the intro dissolves as it leaves and the
+   next card dissolves in, and the right edge doubles as the affordance that
+   says the rail continues. Cheaper and steadier than measuring the intro's
+   position every frame, and it fixes both edges at once. */
+/* The fade is exactly the gutter wide, which is what lets it cost nothing.
+   The rail already starts and ends its content one gutter in, so the ramp
+   finishes precisely where the heading begins and begins precisely where
+   the closing note ends: both open and land crisp with no padding added.
+   Padding here would have been paid for in scroll length, and the rail is
+   already long enough that it was crowding the peak's span. */
+.act--pan { --edge: var(--gutter); }
+.act--pan .stage {
+  align-items: center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 var(--edge), #000 calc(100% - var(--edge)), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 var(--edge), #000 calc(100% - var(--edge)), transparent 100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* The rail becomes a plain horizontal scroller here, which the reader
+     drives themselves, so nothing should be faded out at its ends. */
+  .act--pan .stage { -webkit-mask-image: none; mask-image: none; }
+}
 
 .rail {
   display: flex;
@@ -870,18 +926,34 @@ html.drift-on .act--treatment { background: transparent; }
   padding-left: clamp(20px, 3vw, 36px);
 }
 
-/* Cards: paper on the blush band, 10px, no shadow, hairline dividers. */
+/* Not cards.
+
+   These were paper rectangles at 10px on the coral band, four of them,
+   identical, forced to one height. That is the most recognisable layout
+   in the world, and it was drawing a box around content that already had
+   two edges of its own: the band separates the set from the page, and the
+   photograph has a border of its own the moment it stops being a
+   thumbnail inside something. So the paper, the padding and the card
+   radius are gone. What is left is a picture, a rule, and a caption.
+
+   The 16:9 media box stays exactly as it was, for the reason given above
+   it: these source photographs are 1920 by 1072 and a portrait crop threw
+   away half their width, and a landscape frame is the right shape for a
+   set that travels sideways. Only the box around it has gone. */
 .card {
-  background: var(--paper);
-  border-radius: var(--r-card);
-  padding: 24px;
   display: flex;
   flex-direction: column;
-  /* The rail read as a ragged set while two of the four carried an image
-     and two did not. All four now carry one, and the media grows to take
-     up whatever slack the copy leaves, so their bases line up. */
-  min-height: min(64vh, 540px);
 }
+/* The title leads the card as of 2026-09-07, with the photograph under it
+   and the description under that. The title is 24px display, which is
+   large text and owes 3:1 rather than the 4.5 the 12.5px number it
+   replaced owed, so it stays in ink without the accent-tier correction the
+   number needed on this ground.
+
+   The rule that used to sit above the title now sits under it, between the
+   title and the photograph, and it carries Ember rather than the neutral
+   hairline: on the coral band a neutral line is nearly the band itself,
+   and the accent is the one tier that reads as deliberate there. */
 .card__title {
   font-family: var(--f-display);
   text-transform: uppercase;
@@ -889,20 +961,22 @@ html.drift-on .act--treatment { background: transparent; }
   letter-spacing: .04em;
   font-weight: 400;
   line-height: 1.1;
-  margin: 0 0 .8rem;
-  padding-bottom: .8rem;
-  border-bottom: 1px solid var(--hairline);
+  margin: 0 0 1.1rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid var(--ember);
 }
 /* A real 16:9 box rather than whatever height the flex leftover happened to
    be. The source photographs are 1920 by 1072, so they were being cropped to
    0.81 and losing 55% of their own width. In a rail that travels sideways the
    landscape frame also runs with the movement instead of against it. */
-.card__media { margin: 0 0 1rem; flex: 0 0 auto; aspect-ratio: 16 / 9; min-height: 0; overflow: hidden; }
+/* The title leads and the photograph sits under it, but the frame is still
+   a picture in its own right rather than a thumbnail inside a box, so it
+   keeps the media radius rather than the badge radius. */
+.card__media { margin: 0 0 1.1rem; flex: 0 0 auto; aspect-ratio: 16 / 9; min-height: 0; overflow: hidden; border-radius: var(--r-media); }
 .card__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--r-badge);
 }
 .card .body { margin-bottom: 0; }
 
@@ -946,66 +1020,421 @@ html.drift-on .act--treatment { background: transparent; }
 .plate__slot { display: grid; }
 .plate__slot > * { grid-area: 1 / 1; }
 
-/* ---------- Act 6: night ---------- */
+/* ---------- The turn: story hands over to answer ---------- */
 
-.act--night {
-  padding-block: clamp(96px, 18vh, 200px);
-  background: var(--rose-mist);
-  text-align: left;
+/* Paper, straight after the darkest frame on the page. The change of
+   light is the whole device: no rule, no band, no heading above it. */
+.act--turn {
+  background: var(--paper);
+  /* Less on top than below. devices.md section 8: a flow section directly
+     after a pinned act takes reduced padding, because the pinned stage
+     already needs a full viewport to scroll off and full padding on top of
+     that delays the first line by another screen. The bath is sticky and
+     sits immediately above this. */
+  /* The floor is the nav plus clearance, not a proportion of the window.
+     At 10vh alone a 670px window gives 67px of padding under an 80px bar,
+     so the heading sat behind it. Measured at eight sizes: three had the
+     heading overlapping the bar and four more had it within 10px. */
+  padding-block: clamp(104px, 10vh, 132px) clamp(84px, 13vh, 160px);
+}
+/* Redesigned 2026-09-07 onto the split-stage device (see "The split-stage
+   device" above): .stage__side is a single reading column now rather than
+   the old two-column lead/trail split, since the text column sits at
+   .stage--split's narrower 1.32fr share rather than the full .wrap width.
+   The heading lost the page's one deliberately centred instance in the
+   move; it is left lead like every other heading now, which is a real
+   trade against the anchor-variation the hard rules ask for and is worth
+   revisiting if another act can carry a centred heading instead. */
+.stage__side .display { max-width: 20ch; }
+
+/* The standfirst. One step up from body and in the darker ink, so the
+   section has something between a 54px heading and 16px copy. taste.md
+   keeps body between 45 and 75 characters; at this size in this column it
+   measures about 52. */
+.turn__standfirst {
+  font-family: var(--f-read);
+  font-size: clamp(1.14rem, 1.35vw, 1.34rem);
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 0 0 1.1rem;
+  text-wrap: pretty;
+  max-width: 52ch;
+}
+
+/* The claim. A hairline above it, so it reads as a change of register
+   (tradition to offer) rather than a fourth line of the same paragraph. */
+.turn__trail {
+  border-top: 1px solid var(--hairline-firm);
+  padding-top: 1.4rem;
+  margin-top: .4rem;
+  max-width: 46ch;
+}
+
+/* The confinement photograph. Wider than the treatment act's portrait
+   stills on purpose: the source frame is a room with the mother visible
+   through a doorway on one side and the specialist at the crib on the
+   other, and the treatment act's 4/3 box would crop away one side of
+   that. 3/2 keeps both readable. object-position is measured off the
+   actual photograph, not guessed: the specialist and crib sit right of
+   centre, the doorway further left, so the horizontal anchor leans right
+   of centre rather than sitting at 50%. */
+.stage__frame.stage__frame--turn {
+  aspect-ratio: 4 / 5;
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+.stage__frame.stage__frame--turn img {
+  object-position: center center;
+  height: 114%;
+  top: -7%;
 }
 
 /* ---------- Act 7: programmes ---------- */
 
 .act--programmes { padding-block: var(--section); background: var(--canvas); }
 
+/* ============================================================
+   THE AURORA, the programmes act only
+
+   Ported from the component in Faurora-background.txt, which is React and
+   Tailwind but pure CSS underneath: two repeating linear gradients at
+   100deg, one held still and one travelling across it, blurred hard and
+   held at low opacity so the repeat never resolves into stripes.
+
+   Four deliberate departures from the source.
+
+   The source runs `invert` with `mix-blend-mode: difference` over a dark
+   zinc page. On warm paper that produces colours nobody chose, so both are
+   gone and the palette is named straight from the Brand Pack instead:
+   white and the light neutrals carry most of the field, with coral and
+   ember appearing in it as the darker weather.
+
+   It is masked away from the top edge rather than gathered into the top
+   right corner the way the source has it. The coral band sits directly
+   above this section, and the one previous attempt at a coloured ground
+   here failed because it met that band as a near miss and the join read as
+   a fault rather than a change. Starting on plain canvas at the seam and
+   blooming below it means there is no join to find.
+
+   The blur is far heavier than the source's 10px. This effect is built out
+   of repeating gradients, which is banding by construction, and banding is
+   the one thing this page cannot have. The blur is what holds the repeat
+   under the threshold, so it is not a taste setting.
+
+   `background-attachment: fixed` is dropped. It is broken and expensive on
+   iOS Safari, and the layer is positioned inside the section anyway, so it
+   was buying nothing.
+   ============================================================ */
+.aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  /* Held behind the section's own content without needing a stacking
+     context on every child: the act is already position: relative. */
+  z-index: 0;
+}
+.act--programmes > .wrap,
+.act--turn > .stage { position: relative; z-index: 1; }
+
+.aurora__field,
+.aurora__field::after {
+  /* The white layer sits over the colour layer, so its transparent windows
+     are the only places the colour reads. The source's windows are about
+     two points wide, which on this palette left a warm haze and no coral
+     at all. These are widened to let the colour through as actual weather
+     while white still carries most of the field. */
+  --aurora-light: repeating-linear-gradient(100deg,
+    #FFFFFF 0%, #FFFFFF 6%, transparent 9%, transparent 15%, #FFFFFF 19%);
+  --aurora-colour: repeating-linear-gradient(100deg,
+    var(--ember) 8%, var(--coral-mid) 14%, var(--blush) 20%,
+    var(--rose-mist) 26%, var(--coral-deep) 32%);
+}
+
+.aurora__field {
+  position: absolute;
+  /* Slightly larger than the box it sits in, so the blur's own soft edge
+     is cut off by the overflow rather than drawn as a rectangle inside it. */
+  inset: -40px;
+  display: block;
+  background-image: var(--aurora-light), var(--aurora-colour);
+  background-size: 300%, 200%;
+  background-position: 50% 50%, 50% 50%;
+  filter: blur(46px);
+  /* Measured, not chosen by eye. At .58 the gallery's meta line met the
+     ground at 3.52:1 where it owes 4.5, which is the same way the earlier
+     Blush Drift attempt failed on this page. This is the strongest the
+     field goes while every line in the act still clears. */
+  opacity: .46;
+  will-change: transform;
+  /* Two masks doing two jobs.
+
+     The linear one fades the field in from the top so the seam with the
+     coral band above is plain canvas, and out again before the foot of the
+     section, so neither boundary has an edge to find.
+
+     The elliptical one varies the strength across the width. Even after
+     the layers are decorrelated, a field at uniform opacity right across
+     1600px still reads as a pattern simply because it is evenly weighted.
+     Weighting it off centre gives the section somewhere the weather is
+     coming from, which is what the source's corner mask was doing.
+
+     The linear one ends earlier than it looks like it should. The duration
+     scale in the lower half of this act is the densest reading on the page,
+     and measured across the animation loop its notes met the ground at
+     4.21:1 where body copy owes 4.5. Fading the field out above them buys
+     that back without darkening type the Brand Pack sets in the muted ink. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 24%, #000 58%, transparent 86%),
+    radial-gradient(ellipse 90% 70% at 72% 30%, #000 12%, rgba(0,0,0,.35) 62%, transparent 88%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 24%, #000 58%, transparent 86%),
+    radial-gradient(ellipse 90% 70% at 72% 30%, #000 12%, rgba(0,0,0,.35) 62%, transparent 88%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+/* The travelling layer.
+
+   The source keeps both layers at 100deg and relies on
+   mix-blend-mode: difference to stop the repeat reading as a pattern.
+   Without that blend the two stack in phase and the field resolves into
+   regular vertical bars, which is visible the moment the section's own
+   content is taken off it. So this layer is decorrelated by hand instead:
+   a different angle, a different period and a different scale, so the two
+   only ever agree by accident and the eye finds no march to follow. */
+.aurora__field::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(123deg,
+      #FFFFFF 0%, #FFFFFF 8%, transparent 11%, transparent 18%, #FFFFFF 23%),
+    repeating-linear-gradient(123deg,
+      var(--coral-deep) 6%, var(--rose-mist) 13%, var(--haze) 21%,
+      var(--coral-mid) 28%, var(--ember-deep) 37%);
+  background-size: 235%, 128%;
+  animation: aurora 62s linear infinite;
+}
+
+@keyframes aurora {
+  from { background-position: 50% 50%, 50% 50%; }
+  to   { background-position: 350% 50%, 350% 50%; }
+}
+
+/* The confinement act's copy of the field, 2026-09-07, replacing the WebGL
+   mesh drift that used to serve it.
+
+   Two things differ from the programmes act and both come from what sits
+   around it. Above is the bath, a photograph rather than a flat ground, so
+   the seam is already busy and the field can come up sooner without a join
+   to protect. And this act is a two column split with the reading copy on
+   the left, so the weather is weighted to the right, behind the photograph
+   rather than behind the sentences. Which is also what keeps the copy's
+   contrast where it was.
+
+   It runs a little quieter than the programmes copy because this act sits
+   on paper rather than canvas, and the same opacity over a whiter ground
+   reads stronger. */
+/* Retuned when the testimonials merged into this act on 2026-09-07 and it
+   roughly doubled in height. The weather stays in the confinement half,
+   where the photograph is, and thins out through the seam so the quote
+   below reads on something close to plain paper. The radial moved up with
+   it: at 44% it would now sit on the seam itself, which is the one place
+   nothing should be drawing attention. */
+.aurora--turn .aurora__field {
+  opacity: .38;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 12%, #000 44%, transparent 78%),
+    radial-gradient(ellipse 78% 62% at 78% 26%, #000 10%, rgba(0,0,0,.32) 58%, transparent 86%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0%, #000 12%, #000 44%, transparent 78%),
+    radial-gradient(ellipse 78% 62% at 78% 26%, #000 10%, rgba(0,0,0,.32) 58%, transparent 86%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora__field::after { animation: none; }
+}
+/* The close was lifted out of the programmes act, so it needs the ground
+   and the vertical rhythm that act used to give it. Same canvas, same
+   padding. The .close card inside is untouched, but its top margin was
+   spacing it off the pricing note above it, and there is nothing above it
+   now, so that margin comes off here rather than by editing the card. */
+.act--close { padding-block: var(--section); background: var(--canvas); }
+.act--close .close { margin-top: 0; }
+
 .sec-head { margin-bottom: clamp(40px, 7vh, 72px); }
 .sec-head .display { margin-bottom: 1.2rem; }
 
-.prog {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+/* ---------- Duration, drawn ----------
+
+   One scale, thirty days wide, shared by the ruler and by every track
+   under it. Both are laid on the same three-column grid, so a mark and a
+   bar at the same percentage land on the same pixel without either of
+   them knowing the other exists.
+
+   The week rules are a repeating gradient rather than four positioned
+   elements. 700% / 30 is seven days of the scale, so the rules fall on 7,
+   14, 21 and 28 in every row, at every width, and nothing has to be
+   placed by hand. Depth stays hairlines and edges: no shadow anywhere. */
+
+.dur {
+  --dur-max:  30;                                   /* the scale, in days */
+  --dur-cols: clamp(102px, 13vw, 146px) minmax(0, 1fr) minmax(0, 26ch);
+  --dur-gap:  clamp(16px, 2.6vw, 40px);
   border-top: 1px solid var(--hairline-firm);
 }
-@media (min-width: 860px) { .prog { grid-template-columns: repeat(4, 1fr); } }
 
-.prog__item {
-  padding: 28px 24px 28px 0;
-  border-bottom: 1px solid var(--hairline-firm);
-  border-right: 1px solid var(--hairline-firm);
+.dur__scale,
+.dur__row {
+  display: grid;
+  grid-template-columns: var(--dur-cols);
+  gap: var(--dur-gap);
+  align-items: center;
 }
-.prog__item:last-child { border-right: none; }
-@media (min-width: 860px) { .prog__item { border-bottom: none; } }
 
-.prog__days {
-  display: block;
+.dur__scale { padding-block: 12px 16px; }
+.dur__ruler { position: relative; display: block; height: 1.5rem; }
+.dur__mark {
+  position: absolute;
+  top: 0;
+  left: calc(var(--at) / var(--dur-max) * 100%);
+  transform: translateX(-50%);
+  font-family: var(--f-mono);
+  font-size: .66rem;
+  letter-spacing: .07em;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+/* The tick, not the label, is the true position: the label is centred on
+   it and may sit a pixel either side of where the type happens to land. */
+.dur__mark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 1px;
+  height: 6px;
+  background: var(--hairline-firm);
+}
+
+.dur__list { list-style: none; margin: 0; padding: 0; }
+
+.dur__row {
+  padding-block: clamp(18px, 2.4vh, 26px);
+  border-bottom: 1px solid var(--hairline);
+}
+.dur__row:last-child { border-bottom: none; }
+
+.dur__head {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.dur__n {
   font-family: var(--f-display);
-  text-transform: uppercase;
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-size: clamp(2.1rem, 3.4vw, 3rem);
   line-height: 1;
   font-variant-numeric: tabular-nums;
   color: var(--ink);
 }
-.prog__unit {
-  display: block;
+.dur__unit {
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: .66rem;
   font-weight: 600;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--ink-mute);
-  margin: .5rem 0 1rem;
 }
+
+/* 3px, not the 6px badge radius. At fourteen pixels tall a six-pixel
+   corner turns the five-day bar into a lozenge, and the brand's line on
+   buttons is that they are soft rectangles and never pills. A measured
+   length should read as a length. */
+.dur__track {
+  position: relative;
+  display: block;
+  height: 14px;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(to right,
+      var(--hairline-firm) 0 1px,
+      transparent 1px calc(700% / 30));
+}
+.dur__bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--days) / var(--dur-max) * 100%);
+  border-radius: 3px;
+  background: var(--sand);
+  transform-origin: left center;
+}
+
+/* Thirty takes the accent because it is the length the tradition is
+   actually kept at, which is a fact about the programme rather than a
+   recommendation about the sale. */
+.dur__row--full .dur__bar { background: var(--ember); }
+.dur__row--full .dur__n   { color: var(--ember); }
+
+.dur__note {
+  font-family: var(--f-read);
+  font-size: .95rem;
+  line-height: 1.55;
+  color: var(--ink-mute);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* Stacked. The ruler keeps its two outer marks only: four labels inside a
+   phone's measure collide, and two weeks and four weeks are enough to
+   read the scale by. */
+@media (max-width: 760px) {
+  .dur__scale,
+  .dur__row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dur__pad { display: none; }
+  .dur__row { padding-block: 22px; }
+  .dur__mark:nth-child(odd) { display: none; }
+}
+
+/* ---------- The decision ---------- */
 
 .close {
   margin-top: clamp(56px, 10vh, 110px);
-  padding-top: clamp(32px, 5vh, 56px);
-  border-top: 1px solid var(--hairline);
+  padding: clamp(26px, 3.6vw, 44px);
+  background: var(--paper);
+  border: 1px solid var(--hairline-firm);
+  border-radius: var(--r-card);
+  display: grid;
+  gap: clamp(22px, 4vw, 56px);
+  align-items: end;
+}
+@media (min-width: 820px) { .close { grid-template-columns: minmax(0, 1fr) auto; } }
+
+.close__say .display { margin-bottom: .1rem; }
+.close__say .script--sm { margin-bottom: 0; }
+.close__act {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.1rem;
+}
+.close__meta {
+  font-family: var(--f-body);
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .05em;
+  line-height: 1.7;
+  color: var(--ink-mute);
+  margin: 0;
 }
 
 /* ---------- Footer ---------- */
 
+/* Haze, not canvas. The turn, the programmes, the decision card and the
+   footer were four consecutive things on two grounds; the last of them
+   now closes the page instead of continuing it. */
 .foot {
-  background: var(--canvas);
+  background: var(--haze);
   padding-block: clamp(48px, 8vh, 88px);
   border-top: 1px solid var(--hairline);
 }
@@ -1019,6 +1448,8 @@ html.drift-on .act--treatment { background: transparent; }
 
 @media (prefers-reduced-motion: reduce) {
   .js [data-fade], .js [data-in] > * { opacity: 1 !important; transform: none !important; }
+  /* The bars are the figure, so they are drawn, not animated to. */
+  .dur__bar { transform: none !important; }
   [data-focus] { filter: none !important; transform: none !important; }
   .dissolve__night { opacity: .5; }
   .xfade__img:not(:first-child) { opacity: 0; }
@@ -1040,7 +1471,19 @@ html.drift-on .act--treatment { background: transparent; }
    ============================================================ */
 @media (max-width: 700px) {
 
-  /* Hero */
+  /* Hero.
+
+     The stage stays exactly one viewport tall, even though its media no
+     longer fills it. It is pinned for 1.46 viewports while the fog comes
+     up, and a pinned box shorter than the screen holds a band of empty
+     canvas under the button for the whole of that pin: on a 390x844 phone
+     the content ended at 531px and the next act did not begin for another
+     1.5 screens. Nothing was broken, there was simply nothing there.
+
+     So the media keeps its 4:3 block, which is the crop that survives
+     without cutting the mother out, and the copy takes every pixel the
+     media does not, centring itself in what it is given. The slack
+     becomes margin around the headline instead of a hole beneath it. */
   .act--hero .stage {
     height: auto;
     min-height: 0;
@@ -1062,6 +1505,49 @@ html.drift-on .act--treatment { background: transparent; }
 
   /* Act 2, the wipe frame */
   .frame--bleed img { height: auto; aspect-ratio: 4 / 3; object-position: center 38%; }
+
+  /* Act 4, the rail. Stacked on a phone as of 2026-09-07.
+
+     Pinned and travelling sideways, this act left about half the screen
+     empty: measured at 390x844 the stage is 844px and a card is 430px, so
+     414px of the screen was nothing, and at 430x932 it was 502px. The
+     photograph inside the card was 169px tall, a fifth of the screen, on
+     the device where the images are already smallest.
+
+     A horizontal hijack is also the weakest form of this device on touch,
+     because the thumb travels one way and the content another. Stacked,
+     the cards travel with the thumb, the act ends when the last one does,
+     and it stops spending four viewport-heights to say four things.
+
+     The stage stops being a pinned full-height box. The rail keeps its
+     gutter padding, which is what holds the cards off both edges. */
+  .act--pan .stage {
+    height: auto;
+    min-height: 0;
+    display: block;
+    overflow: visible;
+    padding-block: var(--section);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  .rail {
+    flex-direction: column;
+    align-items: stretch;
+    gap: clamp(40px, 7vh, 64px);
+    will-change: auto;
+  }
+  .rail__item { width: 100%; align-self: stretch; }
+  .rail__intro { width: 100%; align-self: stretch; }
+  /* The closing note's rule was a left border because it stood at the end
+     of a row. In a column it belongs on top. */
+  .rail__close {
+    width: 100%;
+    align-self: stretch;
+    border-left: 0;
+    padding-left: 0;
+    border-top: 1px solid var(--hairline-firm);
+    padding-top: clamp(20px, 4vh, 32px);
+  }
 
   /* Act 5, the dissolve. The plate comes out from over the photograph and
      sits under it, so neither the frame nor the line has to give way. */
@@ -1236,9 +1722,27 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   width: 100%;
   max-width: var(--max);
   margin-inline: auto;
-  padding: 0 var(--gutter) clamp(56px, 11vh, 120px);
+  /* Lifted off the floor of the frame to sit level with her face rather
+     than down by the water. Expressed against the height of the window,
+     because that is what the photograph is scaled against too. */
+  padding: 0 var(--gutter) 38svh;
 }
-.bath__copy .say { max-width: 26ch; }
+/* The copy sits on the right of the article column, not the left. In this
+   photograph she is on the left and the water and the steam are on the
+   right, so type on the left was competing with her face. The lines stay
+   left aligned inside their own column: the page never right aligns text.
+
+   Each line holds on one line. The measure that wrapped them is replaced
+   with an outright refusal to break. At 1600 the display line is about
+   542px of a 984px column, so it fits with room to spare, and the clamp
+   shrinks it with the window. */
+.bath__copy { display: flex; justify-content: flex-end; }
+.bath__lines { max-width: none; }
+.bath__lines .say,
+.bath__lines .script { max-width: none; white-space: nowrap; }
+/* Tighter than the hero's gap. Two short lines this close in size need to
+   read as one thought rather than as a heading and a caption. */
+.bath__lines .script { margin-top: 1rem; }
 
 @media (max-width: 700px) {
   /* Same arithmetic as the desktop rule. At 200vh the scene came unstuck at
@@ -1254,7 +1758,13 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
      away mid move. 260vh puts it at 1.79 and gives the finished frame the
      same beat the desktop gets. */
   .act--bath { height: 260vh; }
-  .bath__copy { padding-bottom: clamp(44px, 9vh, 80px); }
+  /* On a phone the column is the whole screen, so there is no right hand
+     side to move to and no room to hold a line. It goes back to the left,
+     it wraps, and it stays down where the frame is empty. */
+  .bath__copy { padding-bottom: clamp(44px, 9vh, 80px); justify-content: flex-start; }
+  .bath__lines { max-width: 20ch; }
+  .bath__lines .say,
+  .bath__lines .script { white-space: normal; }
 
   /* Window width is the right rule on a landscape screen and the wrong one
      on a portrait phone. At 390 wide the image comes out 367 tall in an 844
@@ -1306,15 +1816,11 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
    frame past the fold and cut the top and bottom thumbnails off.
    ============================================================ */
 
-.act--gallery {
-  background: var(--canvas);
-  min-height: 100svh;
-  display: grid;
-  align-content: center;
-  padding-block: clamp(48px, 8vh, 96px);
-}
+/* The gallery now lives inside the programmes act, under its heading and
+   above the day counts, so it no longer carries a section of its own. */
 
 .gal {
+  margin-bottom: clamp(48px, 8vh, 96px);
   --gal-h: min(66svh, 620px);
   --gal-gap: 10px;
   --gal-n: 6;          /* set from JS at init to the real item count */
@@ -1398,21 +1904,23 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 /* ---- Copy ---- */
 
 .gal__heading { margin-bottom: .8rem; }
+/* Ink mute goes to ink soft here, and only here, for the same reason the
+   card number took ember deep on the coral band: the ground under it
+   changed and the tier no longer clears on it. This is the smallest type
+   in the act set in the weakest ink, so it is the first line the aurora
+   costs. On plain canvas it measured 6.90:1; under the field at ink mute
+   it measured 4.07:1 against the 4.5 it owes at 11.8px. */
 .gal__meta {
   font-family: var(--f-body);
   font-size: .74rem;
   letter-spacing: .06em;
-  color: var(--ink-mute);
+  color: var(--ink-soft);
   margin: 0 0 1.4rem;
 }
-.gal__body { max-width: 38ch; margin-bottom: 1.6rem; }
-.gal__name {
-  font-family: var(--f-body);
-  font-size: .92rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin: 0;
-}
+/* The description is the last thing in this column now that the length has
+   moved up into the heading, so it no longer needs to hold a line off
+   below it. .gal__name went with that move. */
+.gal__body { max-width: 38ch; margin-bottom: 0; }
 
 /* ---- Frame ---- */
 
@@ -1465,4 +1973,364 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .gal__img, .gal__thumb { transition-duration: .01s; }
+}
+/* ============================================================
+   VOICES, the clean testimonial
+   Ported from the 21st.dev "clean-testimonial" React component. Every
+   number is the source's, resolved out of Tailwind into real values.
+
+   Tailwind token    value used here
+   ----------------  ------------------------------------------
+   max-w-xl          576px
+   py-20 / px-8      80px / 32px
+   top|right|left|
+     bottom-8        32px
+   text-xl / 2xl     1.25rem / 1.5rem      font-light  300
+   leading-relaxed   1.625                 tracking-tight -.025em
+   mt-12 / mt-16     48px / 64px
+   gap-4 / pl-4      16px / 16px
+   w-12 h-12         48px      -inset-1.5  -6px
+   w-6 h-6           24px      -space-x-2  -8px
+   text-sm / xs      .875rem / .75rem      mt-0.5  2px
+   tracking-wide /
+     -widest         .025em / .1em
+
+   Colour is the source's own shadcn neutral set, NOT the Brand Pack, on
+   TJ's instruction to land the component unchanged and match it later.
+   The one judgement call: shadcn's stock --accent is a near white that
+   would render the progress bar and the author's rule invisible, so
+   accent resolves to the foreground ink. Everything else is stock.
+   ============================================================ */
+
+/* Was .act--voices, its own section, until 2026-09-07. It is the lower
+   half of the confinement act now, so it no longer paints a ground: the
+   aurora runs behind both halves and an opaque box here would cut a white
+   rectangle out of it. That is also why the background declaration is
+   gone rather than set to transparent, and why the block keeps its z-index
+   so it still sits above the field.
+
+   Never transformed, unchanged from before: the hero's pin measures the
+   document with getBoundingClientRect and a transformed box reports the
+   wrong height.
+
+   --tv-bg is no longer the ground, but it is still the ring around the
+   small avatar previews, so it stays and stays white: the rings read as
+   cut out of the page rather than drawn on it. */
+.voices {
+  --tv-bg:      #FFFFFF;
+  --tv-fg:      #0A0A0A;
+  --tv-mute:    #737373;
+  --tv-border:  #E5E5E5;
+  --tv-accent:  #0A0A0A;
+
+  position: relative;
+  z-index: 1;
+  /* Was 60svh as its own section. Lower now, because the space above it is
+     no longer a section boundary doing the separating, it is the seam rule
+     and the padding either side of it. min-height rather than height on
+     purpose: on a short window, or a narrow one where the quote runs to
+     more lines, it grows to fit its content instead of clipping it. */
+  min-height: 46svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The seam. A short rule, not a full width edge: the two halves are one
+   section on one ground now, and a line running the whole way across would
+   put the boundary back that merging them removed. Centred, because the
+   testimonial block below it is centred and the confinement copy above is
+   left lead, so centre is the one position that does not take a side. */
+.seam {
+  position: relative;
+  z-index: 1;
+  border: 0;
+  height: 2px;
+  width: clamp(360px, 66vw, 780px);
+  margin: clamp(28px, 6vh, 64px) auto 0;
+  background: var(--hairline-firm);
+}
+
+.tv2 {
+  position: relative;
+  width: 100%;
+  max-width: 576px;
+  margin-inline: auto;
+  /* The top was 80 only so the title could clear the faces and the counter
+     while those were pinned into the corners. They sit under the title now,
+     so it comes down to 48 and that is what pays for the extra row without
+     the section getting taller. The bottom is 72, measured rather than
+     guessed: the hint sits 32 up from the base and is about 16 tall, so a
+     smaller value leaves the progress bar reading as if it touches it. */
+  padding: 48px 32px 72px;
+  color: var(--tv-fg);
+}
+.tv2:focus-visible { outline: 2px solid var(--tv-accent); outline-offset: 4px; }
+
+
+/* ---- index, top right ---- */
+.tv2__index {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--f-mono);
+  font-size: .75rem;
+  opacity: 0;
+  transition: opacity .4s ease .5s;
+}
+.tv2.is-in .tv2__index { opacity: 1; }
+.tv2__now {
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--tv-fg);
+  transition: opacity .3s ease, transform .3s ease;
+}
+.tv2__now.is-turning { opacity: 0; transform: translateY(10px); }
+.tv2__sep, .tv2__total { color: var(--tv-mute); }
+
+/* ---- stacked avatar previews, top left ---- */
+.tv2__pips {
+  display: flex;
+  opacity: 0;
+  transition: opacity .4s ease .6s;
+}
+.tv2.is-in .tv2__pips { opacity: .6; }
+.tv2__pip {
+  width: 24px; height: 24px;
+  margin-left: -8px;
+  border: 2px solid var(--tv-bg);
+  border-radius: 9999px;
+  overflow: hidden;
+  filter: grayscale(1);
+  opacity: .5;
+  transition: transform .3s ease, opacity .3s ease, filter .3s ease, box-shadow .3s ease;
+}
+.tv2__pip:first-child { margin-left: 0; }
+.tv2__pip img { width: 100%; height: 100%; object-fit: cover; }
+.tv2__pip.is-on {
+  filter: none;
+  opacity: 1;
+  box-shadow: 0 0 0 1px var(--tv-bg), 0 0 0 2px var(--tv-accent);
+}
+.tv2__pip:hover { transform: scale(1.1); opacity: 1; }
+
+/* ---- the title ----
+   Left aligned on the same edge as the quote. It starts at the block's
+   80px top padding, which is what keeps it clear of the small avatar
+   previews and the counter: both are pinned into the top corners at 32px
+   and are 24px tall, so they finish at 56 and the title begins 24 below
+   them. That is why the top padding is not one of the places the room for
+   this came from. */
+.tv2__head { margin: 0 0 20px; }
+
+/* Faces left, counter right, on one line under the title. */
+.tv2__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 24px;
+}
+
+.tv2__title {
+  margin: 0;
+  font-family: var(--f-display);
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1;
+  letter-spacing: .02em;
+  color: var(--tv-fg);
+}
+
+/* Quentin, weight 400, the page's script role. Set large, as the Brand
+   Pack requires of this face, and in Ember Deep like the hero's line. */
+.tv2__script {
+  margin: 10px 0 0;
+  font-family: var(--f-script);
+  font-size: clamp(1.35rem, 2.1vw, 1.8rem);
+  line-height: 1.15;
+  color: var(--ember-deep);
+}
+
+/* ---- the arrows ----
+   The surface is the nav chip's, copied rather than reinvented: the same
+   0.04 taupe, the same 14px blur at 1.2 saturation, no border, the same
+   180ms ease on the background and the same 0.14 on hover. Round rather
+   than the badge radius, because it holds one glyph and nothing else.
+
+   They sit outside the 576px text column on a wide window, so nothing in
+   the block has to move to make room. Below 1000px there is no room out
+   there and they tuck to the inside edges instead. */
+.tv2__nav {
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: clamp(38px, 2.6vw, 46px);
+  height: clamp(38px, 2.6vw, 46px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: rgba(140, 127, 121, .04);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 180ms var(--ease-out);
+}
+.tv2__nav:hover { background: rgba(140, 127, 121, .14); }
+.tv2__nav:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+.tv2__nav svg {
+  width: 42%;
+  height: 42%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tv2__nav--prev { left: -76px; }
+.tv2__nav--next { right: -76px; }
+
+/* Under 1000px there is no room beside the text column, and tucking them
+   to its inside edges put them straight through the quote: measured, the
+   back arrow overlapped the first line by 14px. So below that they stop
+   flanking and become a pair at the foot of the block, in the space the
+   "Click anywhere" hint used to occupy. */
+@media (max-width: 1000px) {
+  .tv2__nav { top: auto; bottom: 0; translate: none; }
+  .tv2__nav--prev { left: 0; }
+  .tv2__nav--next { left: 56px; right: auto; }
+}
+@media (max-width: 700px) {
+  .tv2__nav--next { left: 50px; }
+}
+
+/* ---- the quote ---- */
+.tv2__quote {
+  margin: 0;
+  font-family: var(--f-body);
+  font-size: 1.25rem;
+  font-weight: 300;
+  line-height: 1.625;
+  letter-spacing: -.025em;
+  color: var(--tv-fg);
+}
+@media (min-width: 768px) { .tv2__quote { font-size: 1.5rem; } }
+
+/* Each word arrives out of blur on its own delay. */
+.tv2__w {
+  display: inline-block;
+  margin-right: .25em;
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(8px);
+}
+.tv2__w.is-in {
+  opacity: 1;
+  transform: none;
+  filter: blur(0px);
+  transition: opacity .4s cubic-bezier(.22, 1, .36, 1),
+              transform .4s cubic-bezier(.22, 1, .36, 1),
+              filter .4s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* ---- author ---- */
+.tv2__by { display: flex; align-items: center; gap: 16px; margin-top: 32px; }
+
+.tv2__face { position: relative; width: 48px; height: 48px; flex: none; }
+.tv2__ring {
+  position: absolute;
+  inset: -6px;
+  border: 1px solid rgba(10, 10, 10, .4);
+  border-radius: 9999px;
+}
+.tv2__face img {
+  position: absolute;
+  inset: 0;
+  width: 48px; height: 48px;
+  border-radius: 9999px;
+  object-fit: cover;
+  filter: grayscale(1);
+  opacity: 0;
+  transition: opacity .4s ease-in-out, filter .5s ease;
+}
+.tv2__face img.is-on { opacity: 1; }
+.tv2__face:hover img.is-on { filter: none; }
+
+.tv2__meta {
+  position: relative;
+  padding-left: 16px;
+  opacity: 0;
+  transform: translateX(-10px);
+}
+.tv2__meta.is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity .3s ease, transform .3s ease;
+}
+.tv2__rule {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--tv-accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform .4s cubic-bezier(.22, 1, .36, 1) .1s;
+}
+.tv2__meta.is-in .tv2__rule { transform: scaleY(1); }
+.tv2__name {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: .025em;
+  color: var(--tv-fg);
+}
+.tv2__role {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--f-mono);
+  font-size: .75rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--tv-mute);
+}
+
+/* ---- progress ---- */
+.tv2__bar {
+  position: relative;
+  /* 40 rather than 64. Along with the author gap above and the bottom
+     padding, this is where the room for the title came from, so the
+     section holds more without getting taller. */
+  margin-top: 40px;
+  height: 1px;
+  background: var(--tv-border);
+  overflow: hidden;
+}
+.tv2__fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: var(--tv-accent);
+  transition: width .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv2__w, .tv2__w.is-in, .tv2__meta, .tv2__meta.is-in, .tv2__rule,
+  .tv2__fill, .tv2__now { transition: none; }
+  .tv2__w { opacity: 1; transform: none; filter: none; }
+}
+
+@media (max-width: 700px) {
+  .tv2 { padding: 40px 24px 58px; }
+  .tv2__by { margin-top: 26px; }
+  .tv2__bar { margin-top: 32px; }
+  .tv2__head { margin-bottom: 16px; }
+  .tv2__row { margin-bottom: 20px; }
 }

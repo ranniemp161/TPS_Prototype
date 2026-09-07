@@ -157,67 +157,6 @@ function actRest() {
 }
 
 /* ------------------------------------------------------------
-   ACT 3 · 11:00 · The treatment
-   parallax drift + cross-fade across three stills
-   ------------------------------------------------------------ */
-function actTreatment() {
-  const act = document.querySelector('.act--treatment');
-  if (!act) return;
-
-  const imgs = gsap.utils.toArray('.xfade__img', act);
-  const heading = act.querySelector('[data-kinetic]');
-  const copy = act.querySelectorAll('.stage__side .body');
-
-  if (heading) {
-    const lines = splitLines(heading);
-    gsap.set(lines, { yPercent: 108, opacity: 0 });
-    gsap.to(lines, {
-      yPercent: 0, opacity: 1,
-      duration: REDUCED ? 0.01 : 0.9,
-      stagger: REDUCED ? 0 : 0.08,
-      ease: EASE,
-      scrollTrigger: { trigger: act, start: 'top 68%', once: true }
-    });
-  }
-
-  gsap.set(copy, { opacity: 0, y: REDUCED ? 0 : 14 });
-  gsap.to(copy, {
-    opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: EASE,
-    scrollTrigger: { trigger: act, start: 'top 62%', once: true }
-  });
-
-  if (REDUCED || imgs.length < 2) return;
-
-  // Drift closer as the act crosses the viewport. Attention being paid.
-  gsap.fromTo(imgs,
-    { scale: 1.1 },
-    {
-      scale: 1, ease: 'none',
-      scrollTrigger: { trigger: act, start: 'top bottom', end: 'bottom top', scrub: 0.7 }
-    }
-  );
-
-  // Cross-fade. Each still fades up over the one before it and then holds.
-  // Sequential positions matter: overlapping them put all three part-way at
-  // once, and three stacked semi-transparent photographs read as a double
-  // exposure rather than as a transition.
-  // Hold long, hand over fast. Under a scrub the reader's most likely
-  // position is the middle of whatever is running, so a slow cross-fade
-  // means they mostly see a half-and-half blend of two unrelated
-  // compositions, which reads as a rendering fault rather than a
-  // transition. Roughly a fifth of each segment is the actual fade.
-  gsap.set(imgs.slice(1), { opacity: 0 });
-  const tl = gsap.timeline({
-    scrollTrigger: { trigger: act, start: 'top 76%', end: 'bottom 30%', scrub: 0.8 }
-  });
-  tl.to({}, { duration: 1.1 });
-  imgs.slice(1).forEach(img => {
-    tl.to(img, { opacity: 1, duration: 0.38, ease: 'power1.inOut' })
-      .to({}, { duration: 1.1 });
-  });
-}
-
-/* ------------------------------------------------------------
    ACT 4 · 13:00 · Four kinds of care
    pan. Vertical scroll, lateral travel.
    ------------------------------------------------------------ */
@@ -238,57 +177,91 @@ function actPan() {
     return;
   }
 
-  const measure = () => Math.max(0, rail.scrollWidth - window.innerWidth);
+  // Two builds, chosen by width, because below 700px the CSS stacks this
+  // rail into an ordinary vertical column and there is nothing to pin and
+  // nothing to travel sideways. gsap.matchMedia rather than reading the
+  // width once at boot: a phone rotated to landscape crosses this
+  // breakpoint, and the pinned build has to be able to construct itself at
+  // that point and tear itself down again on the way back.
+  const mm = gsap.matchMedia();
 
-  // Measure the overflow rather than assuming it. A rail narrower than the
-  // viewport travels zero and the act becomes a motionless pinned screen.
-  //
-  // Held as a named tween because the per item entrances below need to be
-  // driven by it, not by scroll position.
-  const railTween = gsap.to(rail, { x: () => -measure(), ease: 'none' });
+  mm.add('(min-width: 701px)', () => {
+    const measure = () => Math.max(0, rail.scrollWidth - window.innerWidth);
 
-  ScrollTrigger.create({
-    trigger: act,
-    start: 'top top',
-    // Only a short beat past the end of the travel, enough to read the
-    // closing note. A larger buffer leaves the rail finished and the stage
-    // pinned on a motionless screen, which reads as the page having stalled.
-    end: () => '+=' + (measure() + window.innerHeight * 0.22),
-    pin: stage,
-    scrub: 0.8,
-    refreshPriority: 2,
-    invalidateOnRefresh: true,
-    animation: railTween
+    // Measure the overflow rather than assuming it. A rail narrower than the
+    // viewport travels zero and the act becomes a motionless pinned screen.
+    //
+    // Held as a named tween because the per item entrances below need to be
+    // driven by it, not by scroll position.
+    const railTween = gsap.to(rail, { x: () => -measure(), ease: 'none' });
+
+    ScrollTrigger.create({
+      trigger: act,
+      start: 'top top',
+      // Only a short beat past the end of the travel, enough to read the
+      // closing note. A larger buffer leaves the rail finished and the stage
+      // pinned on a motionless screen, which reads as the page having stalled.
+      end: () => '+=' + (measure() + window.innerHeight * 0.22),
+      pin: stage,
+      scrub: 0.8,
+      refreshPriority: 2,
+      invalidateOnRefresh: true,
+      animation: railTween
+    });
+
+    // Each item settles as it crosses in from the right edge.
+    //
+    // This used to be keyed to 'top 92%', a vertical position, on elements
+    // that only ever move horizontally inside a pinned stage. Their tops
+    // barely change, so all four fired within a frame of each other the
+    // moment the act arrived, and the stagger the code was written for never
+    // happened. The empty `containerAnimation: null` was the hook for exactly
+    // this and was left unset. Pointing it at the rail tween makes the
+    // trigger read horizontal progress along the rail instead, so a card
+    // animates when it actually enters the frame, at whatever pace the
+    // reader is scrolling.
+    //
+    // The intro block is exempt: it carries the heading and has to be present
+    // the moment the act lands. Card one is not exempt, but it starts on
+    // screen on desktop, so it settles immediately and reads as simply being
+    // there.
+    const items = gsap.utils.toArray('.rail__item', rail).slice(1);
+    items.forEach(item => {
+      gsap.fromTo(item,
+        { opacity: 0.55, y: 18 },
+        {
+          opacity: 1, y: 0, duration: 0.6, ease: EASE,
+          scrollTrigger: {
+            trigger: item,
+            containerAnimation: railTween,
+            start: 'left 92%',
+            once: true
+          }
+        }
+      );
+    });
   });
 
-  // Each item settles as it crosses in from the right edge.
-  //
-  // This used to be keyed to 'top 92%', a vertical position, on elements that
-  // only ever move horizontally inside a pinned stage. Their tops barely
-  // change, so all four fired within a frame of each other the moment the act
-  // arrived, and the stagger the code was written for never happened. The
-  // empty `containerAnimation: null` was the hook for exactly this and was
-  // left unset. Pointing it at the rail tween makes the trigger read
-  // horizontal progress along the rail instead, so a card animates when it
-  // actually enters the frame, at whatever pace the reader is scrolling.
-  //
-  // The intro block is exempt: it carries the heading and has to be present
-  // the moment the act lands. Card one is not exempt, but it starts on screen
-  // on desktop, so it settles immediately and reads as simply being there.
-  const items = gsap.utils.toArray('.rail__item', rail).slice(1);
-  items.forEach(item => {
-    gsap.fromTo(item,
-      { opacity: 0.55, y: 18 },
-      {
-        opacity: 1, y: 0, duration: 0.6, ease: EASE,
-        scrollTrigger: {
-          trigger: item,
-          containerAnimation: railTween,
-          start: 'left 92%',
-          once: true
+  mm.add('(max-width: 700px)', () => {
+    // Stacked. The cards travel vertically with the page now, so they take
+    // the ordinary flow reveal the rest of the page uses: opacity from zero
+    // and a small rise, fired once on entry. No floor on the opacity here,
+    // unlike the pinned build: a card that is arriving from the bottom of
+    // the screen is not half cropped by a frame edge the way one entering
+    // sideways is, so there is nothing for a partial state to explain.
+    //
+    // The intro is included rather than exempt. Sideways it had to be
+    // present the instant the act landed because it was already on screen;
+    // stacked, it enters like everything else.
+    gsap.utils.toArray('.rail__item', rail).forEach(item => {
+      gsap.fromTo(item,
+        { opacity: 0, y: 18 },
+        {
+          opacity: 1, y: 0, duration: 0.62, ease: EASE,
+          scrollTrigger: { trigger: item, start: 'top 88%', once: true }
         }
-      }
-    );
+      );
+    });
   });
 }
 
@@ -360,17 +333,33 @@ function actPeak() {
     .to(plate,   { opacity: 0, duration: 0.6 }, 5.4);
 }
 
+/* The night act was removed 2026-09-05; its frame lived in the confinement
+   act as a stacked figure until 2026-09-07, when the confinement act was
+   redesigned onto the split-stage device and actTurn() below took over
+   animating it. This function no longer has a home to run in. */
+
 /* ------------------------------------------------------------
-   ACT 6 · 22:00 · Night, then stillness
+   PROGRAMMES · duration, drawn
+   The bars grow from the same origin the scale is measured from, so the
+   row reads as a length being laid down rather than four objects fading
+   in. Width is already correct in CSS; this only scales it, so there is
+   no layout being animated and nothing to reflow.
    ------------------------------------------------------------ */
-function actNight() {
-  const act = document.querySelector('.act--night');
-  if (!act) return;
-  const items = act.querySelectorAll('.say, .script');
-  gsap.set(items, { opacity: 0, y: REDUCED ? 0 : 18 });
-  gsap.to(items, {
-    opacity: 1, y: 0, duration: 0.9, stagger: 0.22, ease: EASE,
-    scrollTrigger: { trigger: act, start: 'top 72%', once: true }
+function durations() {
+  const dur = document.querySelector('.dur');
+  if (!dur) return;
+  const bars = dur.querySelectorAll('.dur__bar');
+  if (!bars.length) return;
+
+  if (REDUCED) { gsap.set(bars, { scaleX: 1 }); return; }
+
+  gsap.set(bars, { scaleX: 0 });
+  gsap.to(bars, {
+    scaleX: 1,
+    duration: 1.0,
+    stagger: 0.11,
+    ease: EASE,
+    scrollTrigger: { trigger: dur, start: 'top 76%', once: true }
   });
 }
 
@@ -378,6 +367,77 @@ function actNight() {
    ACT 7 · Programmes
    flow + in. Fires once on entry, never re-hides.
    ------------------------------------------------------------ */
+/* ------------------------------------------------------------
+   THE CONFINEMENT ACT
+   Redesigned 2026-09-07 onto the split-stage device the treatment act
+   used to own (see HANDOVER.md): text and photograph in one row instead
+   of a text block with the photograph waiting below it, closing the
+   scroll gap that sat between them.
+
+   The heading now carries the kinetic line-assembly that used to belong
+   to the standfirst. devices.md section 5 caps a kinetic headline at one
+   per act; moving the device onto the heading, to match what the
+   treatment act did, means the standfirst goes back to a plain fade with
+   the rest of the copy rather than competing with it.
+
+   Split after fonts have loaded, because line boxes move when the face
+   swaps in, and re-split on resize for the same reason.
+   ------------------------------------------------------------ */
+function actTurn() {
+  const act = document.querySelector('.act--turn');
+  if (!act) return;
+
+  const heading = act.querySelector('.stage__side [data-kinetic]');
+  const copy = act.querySelectorAll('.stage__side .turn__standfirst, .stage__side .body');
+  const img = act.querySelector('.stage__frame img');
+
+  if (heading) {
+    const source = heading.textContent;
+    const build = () => {
+      heading.textContent = source;
+      const lines = splitLines(heading);
+      if (REDUCED) { gsap.set(lines, { yPercent: 0, opacity: 1 }); return; }
+      gsap.set(lines, { yPercent: 108, opacity: 0 });
+      gsap.to(lines, {
+        yPercent: 0, opacity: 1,
+        duration: 0.9,
+        stagger: 0.08,
+        ease: EASE,
+        scrollTrigger: { trigger: heading, start: 'top 86%', once: true }
+      });
+    };
+    build();
+
+    // Re-measure on a width change only. A height change is an address bar,
+    // not a reflow, and rebuilding on it would replay the animation.
+    let w = window.innerWidth;
+    window.addEventListener('resize', () => {
+      if (window.innerWidth === w) return;
+      w = window.innerWidth;
+      ScrollTrigger.getAll().forEach(t => { if (t.trigger === heading) t.kill(); });
+      build();
+    });
+  }
+
+  gsap.set(copy, { opacity: 0, y: REDUCED ? 0 : 16 });
+  gsap.to(copy, {
+    opacity: 1, y: 0, duration: 0.75, stagger: 0.12, ease: EASE,
+    scrollTrigger: { trigger: act, start: 'top 70%', once: true }
+  });
+
+  if (REDUCED || !img) return;
+
+  // Subtle differential parallax & settling scale adhering to scroll-craft and taste-skill:
+  // The image drifts smoothly inside its masked frame while settling from 1.06 to 1.0.
+  gsap.fromTo(img,
+    { scale: 1.06, yPercent: -4 },
+    {
+      scale: 1, yPercent: 4, ease: 'none',
+      scrollTrigger: { trigger: act, start: 'top bottom', end: 'bottom top', scrub: 0.8 }
+    }
+  );
+}
+
 function actFlow() {
   gsap.utils.toArray('[data-in]').forEach(block => {
     const kids = block.children.length ? block.children : [block];
@@ -486,7 +546,6 @@ function nav() {
       else { openPanel(tabs[0].dataset.tab); tabs[0].focus(); }
     });
   }
-
 }
 
 
@@ -652,212 +711,6 @@ function navTheme() {
   });
 }
 
-/* ------------------------------------------------------------
-   BLUSH DRIFT
-   The shared ground under acts 2 and 3, "You go back to bed" and
-   "The care turns toward you". One canvas, one WebGL context, one
-   continuous field across both, so the two acts read as one place
-   and there is no join between them to see.
-
-   Shader and uniform values are the Blush Drift preset from
-   "TPS Mesh Drift Background v2 stronger.html", unchanged. Only the
-   palette is named here; everything else is copied so the field on
-   the page is the one that was designed, not an approximation of it.
-
-   Two things this does that the source file does not need to.
-
-   It fades. The canvas is behind the whole document, so it has to be
-   switched off everywhere else, and the switching itself must not be
-   visible. Both fades are therefore timed to run while an opaque
-   neighbour is covering the screen: in behind the bath while it is
-   still stuck flush, out behind the coral band once it is pinned. By
-   the time either edge of the field could be seen, it has finished
-   moving.
-
-   It sleeps. A fragment shader running on every frame for the eleven
-   viewport-heights where it cannot be seen is heat and battery spent
-   on nothing, so the loop runs only across the span it serves.
-   ------------------------------------------------------------ */
-function meshDrift() {
-  const canvas = document.querySelector('[data-drift]');
-  const vsEl = document.getElementById('drift-vs');
-  const fsEl = document.getElementById('drift-fs');
-  const first = document.querySelector('.act--rest');
-  const last = document.querySelector('.act--treatment');
-  if (!canvas || !vsEl || !fsEl || !first || !last) return;
-
-  const gl = canvas.getContext('webgl', {
-    alpha: false, antialias: false, depth: false, stencil: false,
-    powerPreference: 'low-power'
-  }) || canvas.getContext('experimental-webgl');
-
-  // No WebGL is not a failure worth a fallback colour here. The two acts
-  // already have grounds they look correct on, so leave them alone.
-  if (!gl) return;
-
-  const compile = (type, src) => {
-    const s = gl.createShader(type);
-    gl.shaderSource(s, src);
-    gl.compileShader(s);
-    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
-      console.error(gl.getShaderInfoLog(s));
-    return s;
-  };
-
-  const prog = gl.createProgram();
-  gl.attachShader(prog, compile(gl.VERTEX_SHADER, vsEl.textContent));
-  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fsEl.textContent));
-  gl.linkProgram(prog);
-  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-    console.error(gl.getProgramInfoLog(prog));
-    return;
-  }
-  gl.useProgram(prog);
-
-  // One triangle big enough to cover the clip volume. Cheaper than a quad
-  // and there is no seam down the diagonal.
-  const buf = gl.createBuffer();
-  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-  const aPos = gl.getAttribLocation(prog, 'a_pos');
-  gl.enableVertexAttribArray(aPos);
-  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
-
-  const U = name => gl.getUniformLocation(prog, name);
-  const uColors = U('u_colors[0]');
-  const uScene = U('u_scene');
-
-  // Verbatim from the preset. scale/intensity/paramA/warp, then
-  // detail/contrast/brightness/saturation, then hue/vignette/blur/grain,
-  // then seed/rotate/drift/oklab. Cursor reactivity is off: this is a
-  // ground behind reading copy, not something to play with.
-  gl.uniform4f(U('u_shape'), 1.16, 0.34, 0.50, 0.00);
-  gl.uniform4f(U('u_surface'), 2.40, 1.24, 0.00, 1.00);
-  gl.uniform4f(U('u_finish'), 0.00, 0.00, 0.000, 0.09);
-  gl.uniform4f(U('u_transform'), 1453.0, 0.00, 0.00, 0.0);
-  gl.uniform4f(U('u_space'), 0.00, 0.00, 0.00, 0.00);
-  gl.uniform4f(U('u_cursor'), 0.00, 2.00, 0.65, 0.46);
-
-  // Warm paper. The first colour also seeds the field's base weight, so it
-  // is the ground the other three bloom through.
-  //
-  // Blush drift was tried here first and failed two measurements, both from
-  // the same cause: it draws its colour from the same corner of the palette
-  // as the coral band in the act below. It met that band as warm pink
-  // against duller mauve, 240,189,183 against 226,202,198, close enough
-  // that the join read as a fault rather than as a change. And it cost
-  // about half the contrast on the page, taking the caption under the bleed
-  // photo to 3.22 where body text needs 4.5. Warm paper stays in the
-  // neutrals, so the meeting with the band is a real change of colour again
-  // and the copy keeps its headroom.
-  const FIELD = ['#F6F6F6', '#E3D7D3', '#E2CAC6', '#C9B9B5'];
-  const colorBuf = new Float32Array(24);
-  FIELD.concat(FIELD, FIELD).slice(0, 8).forEach((hex, i) => {
-    const n = parseInt(hex.slice(1), 16);
-    colorBuf[i * 3] = ((n >> 16) & 255) / 255;
-    colorBuf[i * 3 + 1] = ((n >> 8) & 255) / 255;
-    colorBuf[i * 3 + 2] = (n & 255) / 255;
-  });
-  gl.uniform3fv(uColors, colorBuf);
-
-  let w = 0, h = 0;
-  const resize = () => {
-    // Capped at 2. Past that the shader is paying for pixels nobody can
-    // resolve, on exactly the phones least able to afford them.
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const nw = Math.round(window.innerWidth * dpr);
-    const nh = Math.round(window.innerHeight * dpr);
-    if (nw === w && nh === h) return;
-    w = nw; h = nh;
-    canvas.width = w; canvas.height = h;
-    gl.viewport(0, 0, w, h);
-  };
-  resize();
-
-  let elapsed = 0, prev = 0, raf = 0, frozen = false, running = false;
-
-  const draw = () => {
-    resize();
-    gl.uniform4f(uScene, w, h, elapsed * 0.73, FIELD.length);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  };
-
-  const tick = now => {
-    raf = requestAnimationFrame(tick);
-    // Clamped, so a tab that was backgrounded or a frame that took a
-    // second does not jump the field forward to somewhere unrelated.
-    elapsed += Math.min((now - prev) / 1000, 0.1);
-    prev = now;
-    draw();
-  };
-
-  const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
-  const start = () => {
-    if (raf) return;
-    // Reduced motion still gets the field, just not the drift. It is a
-    // ground, and a still gradient is not the thing anyone was asking to
-    // be spared.
-    if (frozen || REDUCED) { draw(); return; }
-    prev = performance.now();
-    raf = requestAnimationFrame(tick);
-  };
-
-  window.addEventListener('resize', () => { if (!raf) draw(); });
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) stop(); else if (running) start();
-  });
-
-  // Expressed against the acts rather than as absolute scroll positions,
-  // so it survives the sections changing height. "top bottom+=100%" is a
-  // full viewport before this act's top would reach the bottom of the
-  // screen, which is well inside the stretch the bath is covering.
-  gsap.fromTo(canvas, { opacity: 0 }, {
-    opacity: 1, ease: 'none',
-    scrollTrigger: {
-      trigger: first,
-      start: 'top bottom+=100%',
-      end: 'top bottom+=20%',
-      scrub: true,
-      invalidateOnRefresh: true
-    }
-  });
-
-  gsap.to(canvas, {
-    opacity: 0, ease: 'none',
-    scrollTrigger: {
-      trigger: last,
-      start: 'bottom top',
-      end: 'bottom top-=40%',
-      scrub: true,
-      invalidateOnRefresh: true
-    }
-  });
-
-  // Slightly wider than the fades at both ends, so the field is already
-  // being drawn before it is worth anything and stops only once it is
-  // worth nothing.
-  ScrollTrigger.create({
-    trigger: first,
-    start: 'top bottom+=110%',
-    endTrigger: last,
-    end: 'bottom top-=50%',
-    invalidateOnRefresh: true,
-    onToggle: self => {
-      running = self.isActive;
-      if (running) start(); else stop();
-    }
-  });
-
-  document.documentElement.classList.add('drift-on');
-  draw();
-
-  // For the capture harness only. A shader on a wall clock never draws the
-  // same frame twice, so every before and after comparison would fail for
-  // a reason that has nothing to do with the change being tested.
-  window.__drift = {
-    freeze(t) { frozen = true; stop(); elapsed = t || 0; draw(); }
-  };
-}
 
 /* ------------------------------------------------------------
    TREATMENT GALLERY
@@ -891,6 +744,16 @@ function gallery() {
   // treatments there actually are, so adding one never overflows.
   root.style.setProperty('--gal-n', items.length);
 
+  // Every frame is cropped to 4:5 in the picker and the stage, and 4:3 on
+  // a phone, from sources that run from 4:5 to 16:9. Centre-cropping the
+  // wide ones cuts the mother out of her own photograph, which is the one
+  // imagery rule the Brand Pack states outright. So each treatment carries
+  // its own focal point and both the thumbnail and the large frame are
+  // positioned from it.
+  const posOf = btn => btn.dataset.pos || '50% 50%';
+  items.forEach(btn => { btn.querySelector('img').style.objectPosition = posOf(btn); });
+  imgs[0].style.objectPosition = posOf(items[0]);
+
   // Warm the large frames at init. Without this the first click on each
   // thumbnail waits on a full-size download before anything moves, which
   // measured as multiple seconds of apparently dead UI on a cold load.
@@ -901,14 +764,18 @@ function gallery() {
     pre.src = btn.dataset.img;
   });
 
+  // idxEl is optional as of 2026-09-07: the 01 / 06 counter came off when
+  // this became the programme picker, and a section counter is a hard rule
+  // ban. data-index is still on the buttons because the rest of the
+  // component reads it, so this only has to survive the element being gone.
   const setCopy = btn => {
-    idxEl.textContent = btn.dataset.index;
+    if (idxEl) idxEl.textContent = btn.dataset.index;
     titleEl.textContent = btn.dataset.title;
     bodyEl.textContent = btn.dataset.body;
   };
 
   const swapCopy = btn => {
-    const copy = [idxEl, bodyEl, titleEl];
+    const copy = [idxEl, bodyEl, titleEl].filter(Boolean);
     if (REDUCED) { setCopy(btn); gsap.set(copy, { opacity: 1, y: 0 }); return; }
     gsap.to(copy, {
       opacity: 0, y: -8, duration: 0.2, stagger: 0.03, ease: 'none',
@@ -935,11 +802,18 @@ function gallery() {
     const back = imgs[1 - front];
     const fore = imgs[front];
     back.src = btn.dataset.img;
-    back.alt = btn.dataset.title;
+    back.alt = btn.dataset.alt || btn.dataset.title;
+    back.style.objectPosition = posOf(btn);
 
     const land = () => {
       gsap.set(back, { opacity: 1 });
       gsap.set(fore, { opacity: 0 });
+      // Only the visible frame is described. The one waiting underneath is
+      // decoration, and announcing both reads as a duplicate to a screen
+      // reader, whichever of the pair happens to be in front.
+      back.removeAttribute('aria-hidden');
+      fore.setAttribute('aria-hidden', 'true');
+      fore.alt = '';
       front = 1 - front;
       busy = false;
     };
@@ -962,6 +836,7 @@ function gallery() {
     ghost.className = 'gal__ghost';
     ghost.src = btn.dataset.img;
     ghost.alt = '';
+    ghost.style.objectPosition = posOf(btn);
     gsap.set(ghost, {
       left: from.left, top: from.top, width: from.width, height: from.height,
       borderRadius: 6, opacity: 1
@@ -1009,19 +884,183 @@ function gallery() {
    Boot. Line splitting needs real line boxes, so it waits for
    the display face rather than for DOMContentLoaded.
    ------------------------------------------------------------ */
+/* ------------------------------------------------------------
+   VOICES · the clean testimonial
+   Ported from the 21st.dev "clean-testimonial" React component.
+
+   Deliberately the only behaviour on this page that touches neither
+   GSAP nor ScrollTrigger. It registers no trigger, creates no pin
+   spacer, and never transforms its own section. The hero to bath
+   handoff measures the whole document when it builds, and nothing
+   here is allowed to appear in that measurement.
+
+   What is ported, and what it was in the source:
+
+     the cursor      Framer useSpring, damping 25 stiffness 150, on the
+                     pointer position. Integrated here per frame at the
+                     same constants, so it lags and settles identically.
+                     It opens to 80px on enter and carries "Next".
+     the quote       Split into words, each arriving from opacity 0,
+                     y 20 and blur 8px on a 30ms stagger over 400ms,
+                     easing cubic-bezier(.22, 1, .36, 1).
+     the author      Fades in from x -10 while a one pixel rule draws
+                     itself downward from the top, 400ms after 100ms.
+     the index       The active number swaps with a 10px rise.
+     the pips        Three 24px faces, the active one in colour and
+                     ringed, the rest grey at half opacity.
+     the bar         Fills to (index + 1) / total over 500ms.
+
+   Added because the source is a demo page rather than a section in a
+   document: the block answers the keyboard as well as the pointer,
+   its entrance runs off an IntersectionObserver rather than on mount,
+   and the custom cursor is not built where there is no fine pointer.
+
+   PLACEHOLDER CONTENT. None of these quotes, names or faces belongs to
+   a real client. The avatars are the stock images the source component
+   shipped with, still served from its own CDN. Replace all of it with
+   cleared testimonials before this is shown publicly.
+   ------------------------------------------------------------ */
+const TV2 = [
+  {
+    quote: "I came home expecting to cope. Instead someone cooked, held the baby, and told me to go back to bed.",
+    author: "Amara O.",
+    role: "14 day programme",
+    place: "Hackney",
+    avatar: "https://cdn.21st.dev/assets/mirror/da/da434276d51c85ff15ac27eabca303c18b8044390be5aad668d18d5fb43cc373.png"
+  },
+  {
+    quote: "The bath was drawn every evening without me asking once. By the second week I had stopped bracing for the day ahead.",
+    author: "Priya N.",
+    role: "30 day programme",
+    place: "Ealing",
+    avatar: "https://cdn.21st.dev/assets/mirror/93/93c76c47af7fc3821e1f5d22b087263d5db480b664f5b24a27cbf6ddc0c2c11d.jpg"
+  },
+  {
+    quote: "It is not babysitting. She was there for me, and the baby was part of that. The distinction is the whole service.",
+    author: "Yewande M.",
+    role: "21 day programme",
+    place: "Lewisham",
+    avatar: "https://cdn.21st.dev/assets/mirror/db/dbe8ba771425288545e355ee4da179d1c7564860aa6f61e02c3c617695487c11.png"
+  }
+];
+
+function actVoices() {
+  const root = document.querySelector('[data-tv2]');
+  if (!root) return;
+
+  const q     = root.querySelector('[data-tv2-quote]');
+  const now   = root.querySelector('[data-tv2-now]');
+  const total = root.querySelector('[data-tv2-total]');
+  const pips  = root.querySelector('[data-tv2-pips]');
+  const faces = root.querySelector('[data-tv2-faces]');
+  const meta  = root.querySelector('[data-tv2-meta]');
+  const name  = root.querySelector('[data-tv2-name]');
+  const role  = root.querySelector('[data-tv2-role]');
+  const fill  = root.querySelector('[data-tv2-fill]');
+  const prev  = root.querySelector('[data-tv2-prev]');
+  const nxt   = root.querySelector('[data-tv2-next]');
+
+  const esc = s => String(s).replace(/[&<>"]/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const pad = n => String(n).padStart(2, '0');
+
+  total.textContent = pad(TV2.length);
+
+  // The source preloads every avatar on mount, because the swap is a
+  // cross fade between images that are already stacked, and a face that
+  // decodes on click arrives after the fade it was meant to be part of.
+  TV2.forEach(t => { const i = new window.Image(); i.src = t.avatar; });
+
+  pips.innerHTML = TV2.map((t, i) =>
+    `<span class="tv2__pip${i === 0 ? ' is-on' : ''}"><img src="${esc(t.avatar)}" alt="" /></span>`).join('');
+  faces.insertAdjacentHTML('beforeend', TV2.map((t, i) =>
+    `<img src="${esc(t.avatar)}" alt="" class="${i === 0 ? 'is-on' : ''}" />`).join(''));
+
+  const pipEls  = [...pips.children];
+  const faceEls = [...faces.querySelectorAll('img')];
+
+  let index = 0;
+  let wordTimers = [];
+
+  const paint = (first) => {
+    const t = TV2[index];
+
+    // The quote is rebuilt word by word. Timers are cleared first, or a
+    // fast click leaves the previous set still staggering in behind the
+    // new one.
+    wordTimers.forEach(clearTimeout);
+    wordTimers = [];
+    q.innerHTML = t.quote.split(' ')
+      .map(w => `<span class="tv2__w">${esc(w)}</span>`).join('');
+    const words = [...q.children];
+    if (REDUCED) {
+      words.forEach(w => w.classList.add('is-in'));
+    } else {
+      words.forEach((w, i) => {
+        wordTimers.push(setTimeout(() => w.classList.add('is-in'), i * 30));
+      });
+    }
+
+    name.textContent = t.author;
+    role.textContent = t.role + ' — ' + t.place;
+    meta.classList.remove('is-in');
+    // Two frames, not one: the class has to be off for a painted frame
+    // before it goes back on, or the browser coalesces both into no
+    // change at all and the rule never draws.
+    requestAnimationFrame(() => requestAnimationFrame(() => meta.classList.add('is-in')));
+
+    faceEls.forEach((el, i) => el.classList.toggle('is-on', i === index));
+    pipEls.forEach((el, i) => el.classList.toggle('is-on', i === index));
+
+    if (first) {
+      now.textContent = pad(index + 1);
+    } else {
+      now.classList.add('is-turning');
+      setTimeout(() => { now.textContent = pad(index + 1); now.classList.remove('is-turning'); }, 150);
+    }
+
+    fill.style.width = ((index + 1) / TV2.length) * 100 + '%';
+  };
+
+  // Two buttons rather than the whole block. They are real <button>
+  // elements, so focus, Enter and Space are the browser's job rather than
+  // a keydown handler of ours, and a screen reader is told what they do.
+  const go = step => { index = (index + step + TV2.length) % TV2.length; paint(false); };
+  if (nxt)  nxt.addEventListener('click', () => go(1));
+  if (prev) prev.addEventListener('click', () => go(-1));
+
+  paint(true);
+
+  // The entrance. An observer, not a ScrollTrigger, on purpose: this
+  // block must not exist as far as the document measurement that the
+  // hero pin depends on is concerned.
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (en.isIntersecting) { root.classList.add('is-in'); io.disconnect(); }
+      });
+    }, { threshold: 0.15 });
+    io.observe(root);
+  } else {
+    root.classList.add('is-in');
+  }
+}
+
 function boot() {
   nav();
   actHero();
   actRest();
-  actTreatment();
   actPan();
   actPeak();
-  actNight();
+  actTurn();
+  durations();
   actFlow();
   gallery();
   mistHandoff();
   navTheme();
-  meshDrift();
+  // Last. It registers no ScrollTrigger and never transforms its own
+  // section, so it stays out of the measurement the hero pin depends on.
+  actVoices();
   ScrollTrigger.refresh();
 
   // Verification hooks. The scroll-craft harness walks acts by these

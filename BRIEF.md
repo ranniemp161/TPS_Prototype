@@ -73,11 +73,26 @@ someone else's house and realise you were never the one holding the baby.
 
 ## Grammar and gate
 
-**Grammar: chaptered day.** Not filmic one-shot. The seven other grammars lost
-because the asset set is literally one location at several times of day, which
-is a cutlist, not a flight. Filmic one-shot in particular was refused because a
-continuous camera move would need generated footage the brand does not want and
-would smooth over the exact cut (afternoon to evening) the page is built around.
+**Grammar: RETIRED 2026-09-05, none currently in its place.**
+
+It was the chaptered day, chosen over seven other grammars because the asset
+set is one location at several times of day, which is a cutlist rather than a
+flight. TJ abandoned the idea: the site is no longer snapshots taken through
+a day, and nothing in a future design should be argued for on the grounds
+that it belongs to a particular hour.
+
+**The code will contradict this.** v1 was pulled fresh from GitHub on
+2026-09-06 and the retirement, which had only ever been local, came out with
+it. So `v1.html` again carries a `data-time` on six acts and seven act
+headers written as hours. All of it is inherited and invisible to a visitor.
+TJ has asked that the page files be left alone, so it stays for now. Four
+lines of visible copy are also leftovers of the day and are listed in
+HANDOVER.md section 1, awaiting his words.
+
+The acts the grammar produced are still in the file and several still sit in
+the order it gave them, though the order has since changed twice. They are
+inherited, not endorsed. A replacement structure should be argued from what
+sells the service, not from a time of day.
 
 **Fingerprint gate:** the registry at `scrollcraft/FINGERPRINTS.md` is empty,
 this being the first build, so the gate passes with nothing to clear.
@@ -96,14 +111,22 @@ tool are gone; the acts keep `data-time`, which now only feeds the audit tool.
 
 This leaves the build without a signature move, which is a standing gap
 against the skill's own rule of one bespoke interaction per page. The
-chaptered day is still the grammar, so a replacement should come from the
-same idea rather than be bolted on. Not yet decided.
+chaptered day that would once have supplied a replacement has since been
+retired too, so a new signature move has to come from somewhere else
+entirely. Not yet decided.
 
 ## The score
 
+**This is the original score, kept as a record. It is superseded.** It was
+written under the retired chaptered day, it predates the bath handoff rebuild,
+the testimonial block, the confinement act and the single chip nav, and the
+running order has changed twice since. The page now runs ten acts at about
+17.9 viewport heights. HANDOVER.md section 5 has the current list, measured.
+Read this table for the device reasoning only.
+
 | Act | Beat | Device | Why this one |
 |---|---|---|---|
-| 1 | Arrival | `pin` + focus pull + kinetic | The room coming into focus is what waking up is |
+| 1 | Arrival | `pin` + focus pull + kinetic | The room coming into focus is the reader arriving in the scene |
 | 2 | Rest | `reveal` | A wipe is a change of state, and this beat is permission |
 | 3 | Treatment | `parallax` + cross-fade | Drifting closer reads as attention being paid |
 | 4 | Meals and home | `pan` | Lateral travel reads as breadth, which is what four pillars are |

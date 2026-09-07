@@ -6,6 +6,20 @@
 <title>The Postpartum Suite — Live-in postpartum care</title>
 <meta name="description" content="Live-in postpartum care for you and your baby. A trained specialist stays with you, from five days to thirty, so your own recovery is the thing being looked after." />
 <link rel="icon" href="assets/img/the-postpartum-suite-logo-mark.webp" />
+
+<!-- A page whose whole argument is made in photographs was unfurling in
+     messages and DMs as a bare grey link. The handover frame is the one
+     image that carries the proposition on its own. Relative paths resolve
+     against the document, which is enough for the crawlers that matter;
+     they become absolute when this gets a domain. -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="The Postpartum Suite — Live-in postpartum care" />
+<meta property="og:description" content="A trained specialist stays with you, from five days to thirty, so your own recovery is the thing being looked after." />
+<meta property="og:image" content="assets/img/s2-handoff.webp" />
+<meta property="og:image:alt" content="A specialist passing the swaddled baby to the mother resting in bed" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#F3EFEC" />
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
@@ -13,17 +27,13 @@
 </head>
 <body>
 
-<!-- ============================================================
-     BLUSH DRIFT
-     One canvas, fixed to the viewport, sitting behind every section.
-     It is not attached to either act it serves, which is the point:
-     "You go back to bed" and "The care turns toward you" stop painting
-     their own grounds and the same single field shows through both, so
-     there is no join between them to see. It is invisible everywhere
-     else because it is faded out, and it only fades while an opaque
-     neighbour is covering the screen.
-     ============================================================ -->
-<canvas class="drift" data-drift aria-hidden="true"></canvas>
+<!-- The WebGL mesh drift field was removed on 2026-09-07 and the aurora
+     took over the one act it still served. It was a fixed canvas, one
+     shader, about 270 lines of GLSL and a fade timed against the bath, and
+     the aurora does the same job in CSS with no context to hold, no draw
+     loop to sleep and wake, and nothing to keep off the seam by timing.
+     That also closes the open item about the field drawing across eleven
+     viewport-heights it could not be seen through. -->
 
 <!-- ============================================================
      NAVIGATION
@@ -46,16 +56,25 @@
      their own contrast instead, and the whole set flips to a light
      treatment over the one dark frame on the page.
      ============================================================ -->
+<!-- Fourteen viewport-heights of scroll story sit between the nav and the
+     programmes. A keyboard user should not have to travel it to reach the
+     content, and this page has no other way past the bar. -->
+<a class="skip" href="#content">Skip to content</a>
+
 <header class="nav" data-nav>
   <div class="nav__inner">
 
     <div class="nav__side nav__side--l">
+      <!-- Reverted to the v1-ruined nav on TJ's call. Three section tabs,
+           each opening its own panel, with the Menu chip taking their place
+           below 900px. The single-chip version that replaced them on
+           2026-09-07 is gone. -->
       <div class="nav__tabs" data-tabs>
         <button class="tab" type="button" data-tab="care" aria-expanded="false" aria-controls="panel-care">Care</button>
         <button class="tab" type="button" data-tab="programmes" aria-expanded="false" aria-controls="panel-programmes">Programmes</button>
         <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About</button>
       </div>
-      <!-- Takes the place of the three above it below 860px. A word, not a
+      <!-- Takes the place of the three above it below 900px. A word, not a
            glyph, in the same chip as everything else. -->
       <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-care">Menu</button>
     </div>
@@ -77,6 +96,8 @@
 
   <div class="menu" data-menu hidden>
 
+    <!-- Three panels, one per tab, as v1-ruined had them. Every link is
+         placeholder until the client settles the sitemap. -->
     <section class="menu__panel" id="panel-care" data-panel="care" hidden>
       <div class="menu__group">
         <h2 class="menu__head">What we do</h2>
@@ -138,12 +159,11 @@
       </div>
     </section>
 
-  </div>
-</header>
+  </header>
 
 <div class="veil" data-veil hidden></div>
 
-<main>
+<main id="content" tabindex="-1">
 
 <!-- ============ ACT 1 · 07:00 · ARRIVAL ============
      pin + focus pull + kinetic lines. The room resolves out of blur. -->
@@ -156,7 +176,7 @@
     <div class="stage__copy">
       <h1 class="display display--xl" data-kinetic>Live-in postpartum care,<br />for you and your baby.</h1>
       <p class="script" data-fade="0.2">Because mum needs looking after too.</p>
-      <p class="lede" data-fade="0.35">Live-in postpartum care, for you and your baby. A trained specialist stays with you, from five days to thirty.</p>
+      <p class="lede" data-fade="0.35">Rooted in Malaysian confinement traditions, our certified specialists provide dedicated in-home care for mother and baby for 5 to 30 days.</p>
       <a class="btn btn--primary" href="#programmes" data-fade="0.5">Book a consultation</a>
     </div>
   </div>
@@ -223,8 +243,359 @@
     <img class="bath__img" data-bath-img src="assets/img/bath-steam.webp" alt="A mother resting in a warm herbal bath, steam rising around her" width="2400" height="2260" />
     <div class="scrim scrim--bath" data-bath-scrim></div>
     <div class="bath__copy">
-      <p class="say" data-bath-line>A herbal bath, drawn warm.<br />You did not run it. You will not clean it.</p>
+      <!-- data-bath-line moved onto the wrapper so both lines rise and fade
+           as one. mistHandoff() takes a single element, and splitting the
+           copy in two without this would have animated the display line and
+           left the handwriting behind. -->
+      <div class="bath__lines" data-bath-line>
+        <p class="say">They say rest and recover.</p>
+        <p class="script">We make it possible.</p>
+      </div>
     </div>
+  </div>
+</section>
+
+<!-- ============ THE TURN ============
+     The seam between the story and the answer.
+
+     Redesigned 2026-09-07 onto the split-stage device the treatment act
+     used to own: text and photograph in one row, not a text block with a
+     photograph waiting below it. The old stacked layout put a scroll gap
+     between the definition and the frame that answers it; this removes
+     the gap by putting both on screen together. The treatment act itself
+     is retired (see below), so this is the split-stage's only home on the
+     page now, not a repeated device. -->
+<section class="act act--turn" data-act aria-labelledby="confinement-heading">
+
+  <!-- Same aurora as the programmes act, tuned for this one. It replaced
+       the WebGL mesh field here on 2026-09-07. -->
+  <div class="aurora aurora--turn" aria-hidden="true"><span class="aurora__field"></span></div>
+
+  <div class="stage stage--split" data-stage>
+    <div class="stage__side">
+      <!-- The heading now carries the kinetic assembly, matching what the
+           treatment act did. The standfirst held that job before; moving
+           it here means the heading and the photograph's own drift read as
+           one arrival instead of two unrelated devices (a mask reveal on
+           the copy, a clip-path wipe on the frame) doing the same job
+           differently. -->
+      <h2 class="display display--lg" id="confinement-heading" data-kinetic>What is Confinement?</h2>
+      <p class="turn__standfirst">In Malaysian and Southeast Asian traditions, the first month after birth, known as the confinement period, is a sacred window dedicated entirely to maternal rest, healing, and bonding.</p>
+      <p class="body">Rather than expecting a mother to navigate the postpartum transition alone, confinement surrounds her with skilled daily support, nourishing food, and restorative bodywork.</p>
+      <!-- The turn from what the tradition is to what you do with it. It
+           carries a hairline rather than a heading, because depth on this
+           brand is edges and overlap, and because a second heading here
+           would compete with the question above. -->
+      <p class="body body--mute turn__trail">At The Postpartum Suite, we bring this time-honoured practice into your home through dedicated live-in care from morning to evening.</p>
+    </div>
+
+    <!-- The one photograph the act already had, not the treatment act's
+         three treatment stills: those show specific services and belong
+         to programmes, not to the act that defines the tradition. The
+         source frame is wide (a room, a doorway, the mother visible
+         through it) so the box is wider than the treatment act's portrait
+         4/3 stills, to keep both the specialist and the doorway in frame
+         rather than cropping down to a tight portrait. -->
+    <div class="stage__frame stage__frame--turn">
+        <img class="xfade__img" src="assets/img/s8-confinement-arrival.webp" alt="A postpartum specialist in soft rose uniform arriving at the home, greeted warmly by the mother holding her newborn" width="1228" height="1536" loading="lazy" />
+    </div>
+  </div>
+
+  <!-- ============ VOICES ============
+       Merged into the confinement act on 2026-09-07. Both were white once
+       the testimonials came off canvas, so the join between them had
+       nothing to mark it and the two read as one section that had lost its
+       middle. They are one section now, on one aurora, with a short rule
+       standing between them instead of a full width edge: it says the
+       subject has changed without cutting the ground in two, which a rule
+       running the whole width would.
+
+       The block itself is the 21st.dev "clean-testimonial" component TJ
+       supplied as v2, ported on the source's own numbers and its own
+       neutral palette rather than the Brand Pack's, so he could judge the
+       mechanism first.
+
+       One quote at a time. Click anywhere to advance. A custom cursor
+       follows the pointer on a spring and opens into an 80px disc reading
+       "Next", the quote reassembles word by word out of blur, the author's
+       rule draws itself downward, and a progress bar tracks position.
+
+       Two deliberate departures, both because the source is a React demo
+       living alone on a page rather than a block inside a document:
+         1. Nothing here uses ScrollTrigger and nothing transforms its own
+            box. The hero to bath handoff measures the whole document, so
+            this stays out of that measurement entirely. Its entrance runs
+            off an IntersectionObserver instead.
+         2. The click target also answers the keyboard and hides its custom
+            cursor on touch, where "cursor: none" would strand the visitor.
+
+       NOTE: quotes, names and faces are PLACEHOLDER. The avatars are the
+       stock images the source component shipped with. Replace with cleared
+       client testimonials before this is shown publicly. -->
+  <hr class="seam" aria-hidden="true" />
+
+  <div class="voices" aria-labelledby="voices-heading">
+  <div class="tv2" data-tv2>
+
+    <header class="tv2__head">
+      <h2 class="tv2__title" id="voices-heading">Testimonials</h2>
+      <p class="tv2__script">What our clients say about us.</p>
+    </header>
+
+    <!-- The faces and the counter used to be pinned into the top corners,
+         above everything. They are a row in the normal flow now, sitting
+         under the title, faces left and counter right. -->
+    <div class="tv2__row">
+      <div class="tv2__pips" data-tv2-pips aria-hidden="true"></div>
+      <p class="tv2__index" aria-hidden="true">
+        <span class="tv2__now" data-tv2-now>01</span><span class="tv2__sep">/</span><span class="tv2__total" data-tv2-total>03</span>
+      </p>
+    </div>
+
+    <!-- Two real buttons, so the keyboard and screen readers get this for
+         free. They sit outside the text column on a wide window and tuck
+         back inside it when there is no room. -->
+    <button class="tv2__nav tv2__nav--prev" type="button" data-tv2-prev aria-label="Previous testimonial">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
+    </button>
+    <button class="tv2__nav tv2__nav--next" type="button" data-tv2-next aria-label="Next testimonial">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
+    </button>
+
+    <div class="tv2__main">
+      <blockquote class="tv2__quote" data-tv2-quote></blockquote>
+
+      <div class="tv2__by">
+        <div class="tv2__face" data-tv2-faces><span class="tv2__ring" aria-hidden="true"></span></div>
+        <div class="tv2__meta" data-tv2-meta>
+          <span class="tv2__rule" aria-hidden="true"></span>
+          <span class="tv2__name" data-tv2-name></span>
+          <span class="tv2__role" data-tv2-role></span>
+        </div>
+      </div>
+
+      <div class="tv2__bar" aria-hidden="true"><span class="tv2__fill" data-tv2-fill></span></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ============ ACT 4 · 13:00 · FOUR KINDS OF CARE ============
+     pan. Lateral travel reads as breadth. -->
+<section class="act act--pan band" data-act data-time="13:00">
+  <div class="stage" data-stage>
+    <div class="rail" data-rail>
+
+      <div class="rail__intro rail__item">
+        <h2 class="display display--lg">Four kinds of care,<br />every single day.</h2>
+      </div>
+
+      <!-- Title, then photograph, then description. The counters came off
+           on 2026-09-07: four cards in a rail the reader can see the whole
+           of do not need to be numbered, and the hard rules ban a section
+           counter anyway. The hairline the number carried moved onto the
+           title, so each card still opens on an edge rather than floating
+           on the band. -->
+      <article class="rail__item card">
+        <h3 class="card__title">Mother and baby</h3>
+        <figure class="card__media"><img src="assets/img/hero_night-shift_v1.webp" alt="A specialist settling the baby into the cot at night while the mother sleeps in the room next door" width="1920" height="1072" /></figure>
+        <p class="body">Hands-on support for your baby throughout the day so you can rest completely. Your dedicated specialist takes care of your newborn while you nap, recover, and bond, and is on hand to accompany you and your baby on outings.</p>
+      </article>
+
+      <article class="rail__item card">
+        <h3 class="card__title">Treatments</h3>
+        <figure class="card__media"><img src="assets/img/stones.webp" alt="Hot stones laid out ready for a postpartum massage" width="1920" height="2384" /></figure>
+        <p class="body">Hands-on therapeutic care integrated directly into your stay, not offered as a one-off treat. Every programme includes daily traditional belly binding, daily herbal baths, thermal blanket treatments, and scheduled postpartum massages with hot stone therapy, foot reflexology, and herbal foot spas.</p>
+      </article>
+
+      <article class="rail__item card">
+        <h3 class="card__title">Meals</h3>
+        <figure class="card__media"><img src="assets/img/meal.webp" alt="A warm postpartum recovery meal of salmon and vegetables" width="1920" height="1072" /></figure>
+        <p class="body">Three fresh, tailored postpartum meals cooked daily in your own kitchen for you and your family. Your nutrition is supported throughout the day with traditional herbal teas and lactation drinks designed to restore your energy and assist feeding.</p>
+      </article>
+
+      <article class="rail__item card">
+        <h3 class="card__title">Home</h3>
+        <figure class="card__media"><img src="assets/img/hero_household-wide_v2_ironing.webp" alt="A specialist ironing and folding laundry in the living room while the mother rests on the sofa and the baby sleeps in a moses basket" width="1920" height="1072" /></figure>
+        <p class="body">Day-to-day household demands handled from the moment we arrive. Your specialist takes care of light housekeeping, organizing the baby&rsquo;s wardrobe, grocery collection, and daily laundry and ironing.</p>
+      </article>
+
+      <div class="rail__item rail__close">
+        <p class="say say--sm">The same four, whichever programme you choose.<br />What changes is how long they last.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT 7 · PROGRAMMES ============
+     flow + in. The story is over. This answers the question it raised. -->
+<section class="act act--programmes" id="programmes" data-act>
+
+  <!-- The aurora, this section only. Ported from the component TJ supplied
+       in Faurora-background.txt. Two layers rather than one: the field is
+       held still and its ::after travels across it, and the two sliding
+       against each other is what stops the repeat reading as stripes. See
+       the note in v1.css for what was changed from the source and why. -->
+  <div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div>
+
+  <div class="wrap">
+
+    <header class="sec-head" data-in>
+      <span class="eyebrow">Programmes</span>
+      <h2 class="display display--lg">Same care. Longer stay.</h2>
+      <p class="body body--wide">Every programme includes the same four areas of care. The longer ones give your recovery more time, and repeat the treatments more often as it progresses.</p>
+    </header>
+
+    <!-- The programme picker, rebuilt 2026-09-07. It was a six item
+         treatments gallery; it carries the four programme lengths now, so
+         the section picks a length rather than listing treatments that are
+         already listed in the care rail above.
+
+         Three columns: the lengths run down the left, the copy sits in the
+         middle, and the chosen frame plays on the right inside a ring.
+         Clicking a length flies its frame in from slightly deeper in the
+         page rather than crossfading it flat.
+
+         The 01 / 06 counter came off with the rebuild. Four items the
+         reader can see all of do not need counting, and a section counter
+         is a hard rule ban in scroll-craft. The breadcrumb line under the
+         heading came off with it: it read "Treatments", which is no longer
+         what this is, and it was the one line in the act that the aurora
+         cost contrast on.
+
+         Each length carries its own focal point in data-pos. The frames
+         crop to 4:5 here and 4:3 on a phone.
+
+         NOTE: the four photographs are placeholders. No image in the set
+         shows a length of stay, because a photograph cannot; these are
+         chosen to read as recovery progressing. They want naming properly,
+         the way the care rail images were. -->
+    <div class="gal" data-gallery>
+
+    <div class="gal__picker">
+      <ul class="gal__list">
+        <li class="gal__row">
+          <button class="gal__thumb is-active" type="button" data-gal-item
+            data-index="01" data-title="5 days of care"
+            data-body="The first week home, covered. Your specialist is there for the days when everything is new, so you are not learning it alone."
+            data-img="assets/img/s3-rest.webp" data-pos="50% 45%"
+            data-alt="A mother resting back against the pillows while her specialist settles the baby"
+            aria-pressed="true" aria-label="5 days of care">
+            <img src="assets/img/s3-rest.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="02" data-title="7 days of care"
+            data-body="A full week, with treatments running through it. Long enough for a rhythm to start, and for the difference to be something you feel rather than something you are told."
+            data-img="assets/img/bind.webp" data-pos="50% 50%"
+            data-alt="A binding cloth rolled and folded on the bed beside a bowl of warm oil"
+            aria-pressed="false" aria-label="7 days of care">
+            <img src="assets/img/bind.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="03" data-title="14 days of care"
+            data-body="Two weeks, and the treatments move to a weekly rhythm. This is where recovery stops being something you are waiting on and starts being something already underway."
+            data-img="assets/img/massage.webp" data-pos="50% 45%"
+            data-alt="A specialist working along a mother's back and shoulders with warm oil"
+            aria-pressed="false" aria-label="14 days of care">
+            <img src="assets/img/massage.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="04" data-title="30 days of care"
+            data-body="The full confinement period, kept the way tradition intends. Thirty days of daily support, all four areas of care, with the treatments repeating throughout."
+            data-img="assets/img/stones.webp" data-pos="50% 50%"
+            data-alt="Hot stones warming on a folded blanket at the end of the bed, with oil beside them"
+            aria-pressed="false" aria-label="30 days of care">
+            <img src="assets/img/stones.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- The heading is the changing element as of 2026-09-07. It carried a
+         static "Choose a length." with the chosen length repeated as a small
+         line under the description; the length is the heading itself now and
+         the description sits under it, so the reader is told what they are
+         looking at before they read about it rather than after. -->
+    <div class="gal__copy">
+      <h2 class="display display--lg gal__heading" data-gal-title>5 days of care</h2>
+      <p class="body gal__body" data-gal-body>The first week home, covered. Your specialist is there for the days when everything is new, so you are not learning it alone.</p>
+    </div>
+
+    <div class="gal__frame">
+      <div class="gal__ring"></div>
+      <div class="gal__media">
+        <img class="gal__img" data-gal-img src="assets/img/s3-rest.webp" alt="A mother resting back against the pillows while her specialist settles the baby" />
+        <img class="gal__img" data-gal-img alt="" aria-hidden="true" />
+      </div>
+    </div>
+
+    </div>
+
+    <!-- ============================================================
+         DURATION, DRAWN
+         The one thing this page claims no competitor does is make the
+         length of live-in care legible. Four equal columns said the
+         opposite of that: they gave thirty days exactly as much room on
+         the page as five, so the layout argued against its own sentence.
+
+         The programmes are measured against one shared thirty-day scale
+         now. The week rules run through every track at the same pitch,
+         seven days wide, so "two weeks" is a place on the page rather
+         than a number to convert. Thirty carries the accent because it
+         is the traditional confinement period, not because it is the one
+         being sold hardest.
+
+         The bars are a drawing of the numbers beside them, which is why
+         they are aria-hidden: the figure and the unit already carry the
+         whole fact for anyone not looking at it.
+         ============================================================ -->
+    <div class="dur" data-in>
+
+      <div class="dur__scale" aria-hidden="true">
+        <span class="dur__pad"></span>
+        <span class="dur__ruler">
+          <span class="dur__mark" style="--at: 7">1 week</span>
+          <span class="dur__mark" style="--at: 14">2 weeks</span>
+          <span class="dur__mark" style="--at: 21">3 weeks</span>
+          <span class="dur__mark" style="--at: 28">4 weeks</span>
+        </span>
+        <span class="dur__pad"></span>
+      </div>
+
+      <ol class="dur__list">
+        <li class="dur__row" style="--days: 5">
+          <p class="dur__head"><span class="dur__n">5</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">The first week home, covered.</p>
+        </li>
+        <li class="dur__row" style="--days: 7">
+          <p class="dur__head"><span class="dur__n">7</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">A full week, with treatments through it.</p>
+        </li>
+        <li class="dur__row" style="--days: 14">
+          <p class="dur__head"><span class="dur__n">14</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">Treatments move to a weekly rhythm.</p>
+        </li>
+        <li class="dur__row dur__row--full" style="--days: 30">
+          <p class="dur__head"><span class="dur__n">30</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">The full confinement period, as it is traditionally kept.</p>
+        </li>
+      </ol>
+
+    </div>
+
+    <p class="note" data-in>Pricing is shown on the programmes page and talked through on the call. Placeholder in this prototype: see the note in the build report.</p>
+
   </div>
 </section>
 
@@ -238,72 +609,6 @@
     <img src="assets/img/treatment.webp" alt="A mother asleep on a bed while her specialist quietly moves the cot beside the window" width="1920" height="1072" />
     <figcaption class="caption">Nothing needs you for the next few hours.</figcaption>
   </figure>
-</section>
-
-<!-- ============ ACT 3 · 11:00 · THE TREATMENT ============
-     parallax + cross-fade. The frame drifts closer. This is the differentiator. -->
-<section class="act act--treatment" data-act data-time="11:00">
-  <div class="stage stage--split" data-stage>
-    <div class="stage__frame">
-      <div class="xfade" data-xfade>
-        <img class="xfade__img" src="assets/img/massage.webp" alt="A postpartum massage being given at home" width="1920" height="2100" />
-        <img class="xfade__img" src="assets/img/stones.webp" alt="Hot stone therapy laid out for a postpartum treatment" width="1920" height="2384" />
-        <img class="xfade__img" src="assets/img/bind.webp" alt="Traditional belly binding being wrapped" width="1920" height="2384" />
-      </div>
-    </div>
-    <div class="stage__side">
-      <h2 class="display display--lg" data-kinetic>The care turns toward you.</h2>
-      <p class="body">Massage with hot stones. Foot reflexology. Herbal baths. Belly binding, daily.</p>
-      <p class="body body--mute">Hands on care that repeats through your stay, not offered once as a treat.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ACT 4 · 13:00 · FOUR KINDS OF CARE ============
-     pan. Lateral travel reads as breadth. -->
-<section class="act act--pan band" data-act data-time="13:00">
-  <div class="stage" data-stage>
-    <div class="rail" data-rail>
-
-      <div class="rail__intro rail__item">
-        <h2 class="display display--lg">Four kinds of care,<br />every single day.</h2>
-        <p class="body body--mute">Daily live-in support, seven in the morning until seven at night.</p>
-      </div>
-
-      <article class="rail__item card">
-        <span class="num">01</span>
-        <h3 class="card__title">Mother and baby</h3>
-        <figure class="card__media"><img src="assets/img/home.webp" alt="A mother resting on the sofa while her specialist holds the baby beside her" width="1920" height="1072" /></figure>
-        <p class="body">Your baby cared for while you rest. Someone with you on the first walk outside.</p>
-      </article>
-
-      <article class="rail__item card">
-        <span class="num">02</span>
-        <h3 class="card__title">Treatments</h3>
-        <figure class="card__media"><img src="assets/img/stones.webp" alt="Hot stones laid out ready for a postpartum massage" width="1920" height="2384" /></figure>
-        <p class="body">Belly binding daily. Herbal baths daily. Thermal blanket treatment through the week.</p>
-      </article>
-
-      <article class="rail__item card">
-        <span class="num">03</span>
-        <h3 class="card__title">Meals</h3>
-        <figure class="card__media"><img src="assets/img/meal.webp" alt="A warm postpartum recovery meal of salmon and vegetables" width="1920" height="1072" /></figure>
-        <p class="body">Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
-      </article>
-
-      <article class="rail__item card">
-        <span class="num">04</span>
-        <h3 class="card__title">Home</h3>
-        <figure class="card__media"><img src="assets/img/cover.webp" alt="A nursery kept ready, cot made and clothes folded" width="1920" height="1072" /></figure>
-        <p class="body">Laundry, ironing, light cleaning, the baby wardrobe organised, the groceries collected.</p>
-      </article>
-
-      <div class="rail__item rail__close">
-        <p class="say say--sm">The same four, whichever programme you choose.<br />What changes is how long they last.</p>
-      </div>
-
-    </div>
-  </div>
 </section>
 
 <!-- ============ ACT 5 · 15:00 → 19:00 · THE DISSOLVE ============
@@ -328,144 +633,30 @@
   </div>
 </section>
 
-<!-- ============ ACT 6 · 22:00 · NIGHT ============
-     reveal, then stillness. Authored silence. -->
-<section class="act act--night" data-act data-time="22:00">
-  <div class="wrap wrap--narrow">
-    <p class="say" data-fade>You sleep. Someone else is awake.</p>
-    <p class="script">And in the morning, she is still here.</p>
-  </div>
-</section>
-
-<!-- ============ THE TREATMENTS ============
-     Sits after the day story closes, before the programmes, so it reads
-     as a catalogue of the care rather than a moment inside the day.
-     Three columns: the picker holds the left under a counter, the copy
-     sits in the middle, and the chosen frame plays on the right inside a
-     ring. Clicking a thumbnail flies the new frame in from slightly
-     deeper in the page rather than crossfading it flat.
-
-     Carries no data-time. It was written to avoid running the day clock's
-     readout backwards from 22:00, and that rail has since been removed, so
-     nothing reads the attribute now either way.
-     NOTE: images are placeholders from the starter pack, to be swapped. -->
-<section class="act act--gallery" data-act>
+<!-- ============ THE CLOSE ============
+     Lifted out of the programmes act on 2026-09-06 so the two can be
+     placed independently. The markup inside it is untouched; it only has
+     a section and a wrap of its own now, and the ground and vertical
+     padding the programmes act used to give it. -->
+<section class="act act--close" data-act>
   <div class="wrap">
-    <div class="gal" data-gallery>
-
-      <div class="gal__picker">
-        <p class="gal__count">
-          <span class="gal__count-now" data-gal-index>01</span><span class="gal__count-total"> / 06</span>
-        </p>
-        <ul class="gal__list">
-          <li class="gal__row">
-            <button class="gal__thumb is-active" type="button" data-gal-item
-              data-index="01" data-title="Postpartum massage" data-body="Warm oil and slow pressure, worked around what is still tender. Four times a week on the longer programmes."
-              data-img="https://annnimate.b-cdn.net/preview-assets/vanta/product_tennis-racket_02.jpg?width=1200" aria-pressed="true" aria-label="Postpartum massage">
-              <img src="https://annnimate.b-cdn.net/preview-assets/vanta/product_tennis-racket_02.jpg?width=320" alt="" loading="lazy" />
-            </button>
-          </li>
-          <li class="gal__row">
-            <button class="gal__thumb" type="button" data-gal-item
-              data-index="02" data-title="Belly binding" data-body="Wrapped daily and adjusted as the swelling goes down. The part mothers say they miss once it stops."
-              data-img="https://annnimate.b-cdn.net/preview-assets/vanta/product_football-boot_01.jpg?width=1200" aria-pressed="false" aria-label="Belly binding">
-              <img src="https://annnimate.b-cdn.net/preview-assets/vanta/product_football-boot_01.jpg?width=320" alt="" loading="lazy" />
-            </button>
-          </li>
-          <li class="gal__row">
-            <button class="gal__thumb" type="button" data-gal-item
-              data-index="03" data-title="Herbal bath" data-body="Drawn warm and steeped with herbs, the way the forty days have always been kept."
-              data-img="https://annnimate.b-cdn.net/preview-assets/vanta/texture_fabric-macro_01.jpg?width=1200" aria-pressed="false" aria-label="Herbal bath">
-              <img src="https://annnimate.b-cdn.net/preview-assets/vanta/texture_fabric-macro_01.jpg?width=320" alt="" loading="lazy" />
-            </button>
-          </li>
-          <li class="gal__row">
-            <button class="gal__thumb" type="button" data-gal-item
-              data-index="04" data-title="Foot reflexology" data-body="Once a week, at the end of a day you spent lying down. Circulation, not indulgence."
-              data-img="https://annnimate.b-cdn.net/preview-assets/vanta/product_shoe_01.jpg?width=1200" aria-pressed="false" aria-label="Foot reflexology">
-              <img src="https://annnimate.b-cdn.net/preview-assets/vanta/product_shoe_01.jpg?width=320" alt="" loading="lazy" />
-            </button>
-          </li>
-          <li class="gal__row">
-            <button class="gal__thumb" type="button" data-gal-item
-              data-index="05" data-title="Facial massage" data-body="Short, quiet, and yours. Fifteen minutes where nobody needs anything from you."
-              data-img="https://annnimate.b-cdn.net/preview-assets/vanta/texture_tennis-macro_01.jpg?width=1200" aria-pressed="false" aria-label="Facial massage">
-              <img src="https://annnimate.b-cdn.net/preview-assets/vanta/texture_tennis-macro_01.jpg?width=320" alt="" loading="lazy" />
-            </button>
-          </li>
-          <li class="gal__row">
-            <button class="gal__thumb" type="button" data-gal-item
-              data-index="06" data-title="Full body scrub" data-body="Prepared fresh in your own kitchen rather than brought in. Once a stay, twice on the thirty day."
-              data-img="https://annnimate.b-cdn.net/preview-assets/vanta/product_ball_02.jpg?width=1200" aria-pressed="false" aria-label="Full body scrub">
-              <img src="https://annnimate.b-cdn.net/preview-assets/vanta/product_ball_02.jpg?width=320" alt="" loading="lazy" />
-            </button>
-          </li>
-        </ul>
-      </div>
-
-      <div class="gal__copy">
-        <h2 class="display display--lg gal__heading">Hands on care.</h2>
-        <p class="gal__meta">The Postpartum Suite / Treatments / Every programme</p>
-        <p class="body gal__body" data-gal-body>Warm oil and slow pressure, worked around what is still tender. Four times a week on the longer programmes.</p>
-        <p class="gal__name" data-gal-title>Postpartum massage</p>
-      </div>
-
-      <div class="gal__frame">
-        <div class="gal__ring"></div>
-        <div class="gal__media">
-          <img class="gal__img" data-gal-img src="https://annnimate.b-cdn.net/preview-assets/vanta/product_tennis-racket_02.jpg?width=1200" alt="Postpartum massage" />
-          <img class="gal__img" data-gal-img alt="" aria-hidden="true" />
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ ACT 7 · PROGRAMMES ============
-     flow + in. The story is over. This answers the question it raised. -->
-<section class="act act--programmes" id="programmes" data-act>
-  <div class="wrap">
-
-    <header class="sec-head" data-in>
-      <span class="eyebrow">Programmes</span>
-      <h2 class="display display--lg">Same care. Longer stay.</h2>
-      <p class="body body--wide">Every programme includes the same four areas of care. The longer ones give your recovery more time, and repeat the treatments more often as it progresses.</p>
-    </header>
-
-    <div class="prog" data-in data-stagger>
-      <article class="prog__item">
-        <span class="prog__days">5</span>
-        <span class="prog__unit">days of care</span>
-        <p class="body body--mute">The first week home, covered.</p>
-      </article>
-      <article class="prog__item">
-        <span class="prog__days">7</span>
-        <span class="prog__unit">days of care</span>
-        <p class="body body--mute">A full week, with treatments through it.</p>
-      </article>
-      <article class="prog__item">
-        <span class="prog__days">14</span>
-        <span class="prog__unit">days of care</span>
-        <p class="body body--mute">Treatments move to a weekly rhythm.</p>
-      </article>
-      <article class="prog__item">
-        <span class="prog__days">30</span>
-        <span class="prog__unit">days of care</span>
-        <p class="body body--mute">The full confinement period, as it is traditionally kept.</p>
-      </article>
-    </div>
-
-    <p class="note" data-in>Pricing is shown on the programmes page and talked through on the call. Placeholder in this prototype: see the note in the build report.</p>
-
+    <!-- The decision. A statement and an action as two objects rather
+         than three lines stacked in a column, on paper inside a hairline
+         so the page ends on something with an edge instead of fading out
+         into the same ground it has been on since the turn. -->
     <div class="close" data-in>
-      <h2 class="display display--md">Ready to talk it through?</h2>
-      <p class="script script--sm">Start with a conversation.</p>
-      <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
+      <div class="close__say">
+        <h2 class="display display--md">Ready to talk it through?</h2>
+        <p class="script script--sm">Start with a conversation.</p>
+      </div>
+      <div class="close__act">
+        <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
+        <p class="close__meta">Thirty minutes, by phone or video.<br />Nothing is booked on the call.</p>
+      </div>
     </div>
-
   </div>
 </section>
+
 
 </main>
 
@@ -476,274 +667,6 @@
   </div>
 </footer>
 
-<!-- ============================================================
-     BLUSH DRIFT SHADER
-     Lifted verbatim from "TPS Mesh Drift Background v2 stronger.html",
-     ids namespaced and nothing else touched, so the field on the page is
-     provably the same one that was designed rather than a reconstruction
-     of it. The palette and the uniform values live in meshDrift() in
-     v1.js. GLSL stays in script tags rather than JS string literals for
-     the same reason the rest of this prototype has no build step.
-     ============================================================ -->
-<script id="drift-vs" type="x-shader/x-vertex">
-attribute vec2 a_pos;
-void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }
-</script>
-
-<script id="drift-fs" type="x-shader/x-fragment">
-// "Mesh drift" — made with the 21st.dev Shader Builder
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-precision highp float;
-#else
-precision mediump float;
-#endif
-
-uniform vec3 u_colors[8];
-uniform vec4 u_scene;      // resolution.xy, time, colour count
-uniform vec4 u_shape;      // scale, intensity, paramA, warp
-uniform vec4 u_surface;    // detail, contrast, brightness, saturation
-uniform vec4 u_finish;     // hue, vignette, blur, grain
-uniform vec4 u_transform;  // seed, rotation, drift, OKLab toggle
-uniform vec4 u_space;      // offset.xy, pointer.xy
-uniform vec4 u_cursor;
-
-#define u_resolution u_scene.xy
-#define u_time u_scene.z
-#define u_colorCount u_scene.w
-#define u_scale u_shape.x
-#define u_intensity u_shape.y
-#define u_paramA u_shape.z
-#define u_warp u_shape.w
-#define u_detail u_surface.x
-#define u_contrast u_surface.y
-#define u_brightness u_surface.z
-#define u_saturation u_surface.w
-#define u_hue u_finish.x
-#define u_vignette u_finish.y
-#define u_blur u_finish.z
-#define u_grain u_finish.w
-#ifdef GL_FRAGMENT_PRECISION_HIGH
-#define u_seed u_transform.x
-#else
-// Keep hash inputs inside mediump's guaranteed range.
-#define u_seed mod(u_transform.x, 31.0)
-#endif
-#define u_rotate u_transform.y
-#define u_drift u_transform.z
-#define u_oklab u_transform.w
-#define u_offset u_space.xy
-#define u_mouse u_space.zw
-#define u_cursorPresence u_cursor.x
-#define u_cursorEffect u_cursor.y
-#define u_cursorStrength u_cursor.z
-#define u_cursorRadius u_cursor.w
-
-float hash21(vec2 p) {
-#ifndef GL_FRAGMENT_PRECISION_HIGH
-  p = mod(p, 31.0);
-#endif
-  p = fract(p * vec2(234.34, 435.345));
-  p += dot(p, p + 34.23);
-  return fract(p.x * p.y);
-}
-
-float grainHash(vec2 p) {
-  vec3 p3 = fract(vec3(p.xyx) * 0.1031);
-  p3 += dot(p3, p3.yzx + 33.33);
-  return fract((p3.x + p3.y) * p3.z);
-}
-
-vec2 hash22(vec2 p) {
-#ifndef GL_FRAGMENT_PRECISION_HIGH
-  p = mod(p, 31.0);
-#endif
-  float n = sin(dot(p, vec2(41.0, 289.0)));
-  return fract(vec2(15731.743, 7892.321) * n);
-}
-
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash21(i), hash21(i + vec2(1.0, 0.0)), u.x),
-    mix(hash21(i + vec2(0.0, 1.0)), hash21(i + vec2(1.0, 1.0)), u.x),
-    u.y);
-}
-
-float fbm(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  for (int i = 0; i < 5; i++) {
-    v += a * noise(p);
-    p = p * 2.03 + vec2(17.0, 9.2);
-    a *= 0.5;
-  }
-  return v;
-}
-
-// --- OKLab colour mixing (perceptual), gated by u_oklab ---
-vec3 srgbToLinear(vec3 c) {
-  return mix(c / 12.92, pow((c + 0.055) / 1.055, vec3(2.4)),
-    step(0.04045, c));
-}
-vec3 linearToSrgb(vec3 c) {
-  return mix(c * 12.92, 1.055 * pow(max(c, vec3(0.0)), vec3(1.0 / 2.4)) - 0.055,
-    step(0.0031308, c));
-}
-vec3 linToOklab(vec3 c) {
-  float l = 0.4122214708 * c.r + 0.5363325363 * c.g + 0.0514459929 * c.b;
-  float m = 0.2119034982 * c.r + 0.6806995451 * c.g + 0.1073969566 * c.b;
-  float s = 0.0883024619 * c.r + 0.2817188376 * c.g + 0.6299787005 * c.b;
-  l = pow(max(l, 0.0), 1.0 / 3.0);
-  m = pow(max(m, 0.0), 1.0 / 3.0);
-  s = pow(max(s, 0.0), 1.0 / 3.0);
-  return vec3(
-    0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
-    1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
-    0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s);
-}
-vec3 oklabToLin(vec3 c) {
-  float l = c.x + 0.3963377774 * c.y + 0.2158037573 * c.z;
-  float m = c.x - 0.1055613458 * c.y - 0.0638541728 * c.z;
-  float s = c.x - 0.0894841775 * c.y - 1.2914855480 * c.z;
-  l = l * l * l; m = m * m * m; s = s * s * s;
-  return vec3(
-    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
-    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
-    -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s);
-}
-vec3 mixColour(vec3 a, vec3 b, float t) {
-  if (u_oklab > 0.5) {
-    vec3 la = linToOklab(srgbToLinear(a));
-    vec3 lb = linToOklab(srgbToLinear(b));
-    return clamp(linearToSrgb(oklabToLin(mix(la, lb, t))), 0.0, 1.0);
-  }
-  return mix(a, b, t);
-}
-
-vec3 palette(float x) {
-  float n = max(u_colorCount - 1.0, 1.0);
-  float f = clamp(x, 0.0, 1.0) * n;
-  vec3 col = u_colors[0];
-  for (int i = 0; i < 7; i++) {
-    if (float(i) < n)
-      col = mixColour(col, u_colors[i + 1],
-        smoothstep(0.0, 1.0, clamp(f - float(i), 0.0, 1.0)));
-  }
-  return col;
-}
-
-vec3 hueRotate(vec3 col, float a) {
-  const mat3 toYIQ = mat3(0.299, 0.596, 0.211,
-                          0.587, -0.274, -0.523,
-                          0.114, -0.322, 0.312);
-  const mat3 toRGB = mat3(1.0, 1.0, 1.0,
-                          0.956, -0.272, -1.106,
-                          0.621, -0.647, 1.703);
-  vec3 yiq = toYIQ * col;
-  float ca = cos(a), sa = sin(a);
-  yiq = vec3(yiq.x, yiq.y * ca - yiq.z * sa, yiq.y * sa + yiq.z * ca);
-  return toRGB * yiq;
-}
-
-vec3 shade(vec2 uv, vec2 p, float t) {
-  vec3 acc = u_colors[0] * 0.15;
-  float total = 0.15;
-  for (int i = 0; i < 8; i++) {
-    if (float(i) >= u_colorCount) break;
-    float fi = float(i);
-    vec2 c = vec2(
-      sin(t * (0.21 + fi * 0.071) + fi * 2.4 + u_seed),
-      cos(t * (0.17 + fi * 0.093) + fi * 1.7)) * (0.45 + u_intensity * 0.35);
-    float w = exp(-dot(p - c, p - c) * 6.0);
-    acc += u_colors[i] * w;
-    total += w;
-  }
-  return acc / total;
-}
-
-void main() {
-  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-  vec2 screenUv = uv;
-  vec2 p = (gl_FragCoord.xy - 0.5 * u_resolution.xy)
-    / min(u_resolution.x, u_resolution.y);
-  float cursorMask = 0.0;
-
-  if (u_cursorPresence > 0.001) {
-    vec2 cursor = (0.5 * u_mouse * u_resolution.xy)
-      / min(u_resolution.x, u_resolution.y);
-    vec2 cursorDelta = p - cursor;
-    if (u_cursorEffect < 0.5) {
-      p += cursor * u_cursorPresence * u_cursorStrength * 0.55;
-    } else {
-      float cursorDistance = length(cursorDelta);
-      vec2 cursorDirection = cursorDelta / max(cursorDistance, 0.0001);
-      cursorMask = u_cursorPresence
-        * (1.0 - smoothstep(0.0, u_cursorRadius, cursorDistance));
-      if (u_cursorEffect < 1.5) {
-        p -= cursorDirection * cursorMask * u_cursorStrength * 0.24;
-      } else if (u_cursorEffect < 2.5) {
-        float cursorAngle = cursorMask * u_cursorStrength * 2.2;
-        float cc = cos(cursorAngle), cs = sin(cursorAngle);
-        p = cursor + mat2(cc, -cs, cs, cc) * cursorDelta;
-      } else if (u_cursorEffect < 3.5) {
-        float ripple = sin(
-          cursorDistance / max(u_cursorRadius, 0.001) * 18.0 - u_time * 5.0);
-        p -= cursorDirection * ripple * cursorMask * u_cursorStrength * 0.07;
-      }
-    }
-  }
-
-  uv = p * min(u_resolution.x, u_resolution.y) / u_resolution.xy + 0.5;
-  p *= u_scale;
-  if (abs(u_rotate) > 0.0001) {
-    float cr = cos(u_rotate), sr = sin(u_rotate);
-    p = mat2(cr, -sr, sr, cr) * p;
-  }
-  p += u_offset;
-  if (u_drift > 0.0001)
-    p += u_drift * vec2(sin(u_time * 0.31), cos(u_time * 0.23));
-  if (u_warp > 0.0) {
-    p += u_warp * (vec2(
-      fbm(p * u_detail + u_seed),
-      fbm(p * u_detail + vec2(5.2, 1.3))) - 0.5);
-  }
-  vec3 col;
-  if (u_blur > 0.0) {
-    float e = u_blur;
-    float pe = e * u_scale;
-    vec2 uvE = vec2(e) * min(u_resolution.x, u_resolution.y) / u_resolution.xy;
-    col  = shade(uv, p, u_time) * 0.36;
-    col += shade(uv + vec2(uvE.x, 0.0), p + vec2(pe, 0.0), u_time) * 0.16;
-    col += shade(uv - vec2(uvE.x, 0.0), p - vec2(pe, 0.0), u_time) * 0.16;
-    col += shade(uv + vec2(0.0, uvE.y), p + vec2(0.0, pe), u_time) * 0.16;
-    col += shade(uv - vec2(0.0, uvE.y), p - vec2(0.0, pe), u_time) * 0.16;
-  } else {
-    col = shade(uv, p, u_time);
-  }
-  if (abs(u_contrast - 1.0) > 0.0001)
-    col = (col - 0.5) * u_contrast + 0.5;
-  if (abs(u_saturation - 1.0) > 0.0001) {
-    float luma = dot(col, vec3(0.299, 0.587, 0.114));
-    col = mix(vec3(luma), col, u_saturation);
-  }
-  if (abs(u_hue) > 0.0001)
-    col = hueRotate(col, u_hue);
-  if (abs(u_brightness) > 0.0001)
-    col += u_brightness;
-  if (u_vignette > 0.0001) {
-    float vd = length(screenUv - 0.5) * 1.41421356;
-    col *= 1.0 - u_vignette * smoothstep(0.35, 1.0, vd);
-  }
-  if (u_cursorPresence > 0.001 && u_cursorEffect > 3.5)
-    col += (vec3(0.18) + col * 0.12) * cursorMask * u_cursorStrength;
-  if (u_grain > 0.0001)
-    col += (grainHash(
-      gl_FragCoord.xy + vec2(u_seed * 17.0, u_seed * 31.0)) - 0.5) * u_grain;
-  gl_FragColor = vec4(clamp(col, 0.0, 1.0), 1.0);
-}
-</script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
