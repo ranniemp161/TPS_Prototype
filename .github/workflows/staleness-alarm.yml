@@ -1,0 +1,72 @@
+# Catches the pipeline dying quietly.
+#
+# The sync and deploy jobs both fail loudly when they fail at all, but there
+# are two ways this setup stops working without anything going red: a force
+# push upstream that makes the merge impossible, and GitHub disabling the
+# scheduled sync after 60 days of inactivity. Both leave a stale site up and
+# nobody the wiser, which is the version of broken a client actually notices.
+#
+# So we check the outcome rather than the machinery: does the live site, as
+# served, contain the newest upstream commit? That one question covers a
+# failed sync, a failed deploy, and Pages serving something old.
+name: Staleness alarm
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Compare live site against upstream
+        env:
+          SITE: https://ranniemp161.github.io/TPS_Prototype
+          # Upstream needs time to travel: up to ~10 min waiting for the sync
+          # cron, plus a Pages build. Anything under this is normal propagation,
+          # not a fault, and alarming on it would train you to ignore the alarm.
+          GRACE_MINUTES: '45'
+        run: |
+          set -euo pipefail
+
+          git remote add upstream https://github.com/subishop/TPS_Prototype.git
+          git fetch -q upstream main
+          UP=$(git rev-parse upstream/main)
+          UP_AGE=$(( ( $(date +%s) - $(git log -1 --format=%ct upstream/main) ) / 60 ))
+
+          if ! LIVE_JSON=$(curl -fsS --max-time 30 "$SITE/build-info.json"); then
+            echo "::error::Could not fetch $SITE/build-info.json - the site may be down or was never deployed."
+            exit 1
+          fi
+          LIVE=$(printf '%s' "$LIVE_JSON" | jq -r .sha)
+          BUILT=$(printf '%s' "$LIVE_JSON" | jq -r .built)
+
+          echo "upstream/main : $UP  (committed ${UP_AGE}m ago)"
+          echo "live build    : $LIVE  (built $BUILT)"
+
+          if ! git cat-file -e "${LIVE}^{commit}" 2>/dev/null; then
+            echo "::error::Live site was built from $LIVE, which is not in this fork's history. A force push probably rewrote it."
+            exit 1
+          fi
+
+          if git merge-base --is-ancestor "$UP" "$LIVE"; then
+            echo "OK - the live site includes the newest upstream commit."
+            exit 0
+          fi
+
+          if [ "$UP_AGE" -lt "$GRACE_MINUTES" ]; then
+            echo "Upstream moved ${UP_AGE}m ago; still inside the ${GRACE_MINUTES}m propagation window. Not alarming yet."
+            exit 0
+          fi
+
+          echo "::error::Live site is stale. Upstream commit $UP is ${UP_AGE}m old and still is not published. Check the Sync upstream workflow."
+          exit 1

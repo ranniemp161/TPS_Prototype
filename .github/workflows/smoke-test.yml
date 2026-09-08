@@ -1,0 +1,72 @@
+# Runs after a Pages deploy and checks the site a client would actually see.
+#
+# Deliberately tests the published URL rather than a local build: the failures
+# worth catching here -- a path that only breaks under the /TPS_Prototype/
+# subpath, an asset that never made it into the artifact -- are invisible to a
+# local server and only show up once Pages is serving it.
+name: Smoke test
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Pages"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    # A failed deploy is already loud; re-reporting it as a smoke failure would
+    # just be noise pointing at the wrong workflow.
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    env:
+      SITE: https://ranniemp161.github.io/TPS_Prototype/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for Pages to serve the new build
+        run: |
+          set -euo pipefail
+          # deploy-pages reports success once the deployment is accepted, which
+          # is slightly ahead of the CDN serving it. Poll rather than sleep.
+          for i in $(seq 1 20); do
+            if curl -fsS --max-time 15 -o /dev/null "$SITE"; then
+              echo "Site responding after ${i} attempt(s)."
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::$SITE did not respond within ~200s."
+          exit 1
+
+      - name: Check assets resolve at the subpath
+        run: |
+          set -euo pipefail
+          failed=0
+          for path in "" v1.css v1.js index.html assets/img/cover.webp assets/font/Quentin.otf build-info.json; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "${SITE}${path}")
+            printf '%-34s %s\n' "/${path}" "$code"
+            [ "$code" = "200" ] || failed=1
+          done
+          # Working files must stay unpublished; a client-facing URL should not
+          # hand out the brief.
+          for path in BRIEF.md HANDOVER.md; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "${SITE}${path}")
+            printf '%-34s %s (expect 404)\n' "/${path}" "$code"
+            [ "$code" = "404" ] || failed=1
+          done
+          [ "$failed" = "0" ] || { echo "::error::One or more asset checks failed."; exit 1; }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Chromium
+        run: |
+          npm install --no-save playwright@^1.49
+          npx playwright install --with-deps chromium
+
+      - name: Load the site in a browser
+        run: node .github/scripts/smoke.mjs

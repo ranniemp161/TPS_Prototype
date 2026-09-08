@@ -48,6 +48,10 @@ jobs:
             --exclude '.vercelignore' \
             ./ _site/
           cp _site/v1.html _site/index.html
+          # A stamp the staleness alarm can read back over HTTP to learn which
+          # commit the live site was actually built from. Without it we could
+          # only check that the fork looks right, not that Pages is serving it.
+          echo "{\"sha\":\"$GITHUB_SHA\",\"built\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"}" > _site/build-info.json
           echo "Published files:"
           find _site -maxdepth 1 -type f | sort
 
