@@ -1,0 +1,6 @@
+# Working files that should not be served on the client-facing preview.
+BRIEF.md
+lab/
+scrollcraft/
+.agents/
+node_modules/

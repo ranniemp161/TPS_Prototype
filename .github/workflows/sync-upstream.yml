@@ -1,0 +1,49 @@
+# Keeps this fork's main in step with subishop/TPS_Prototype.
+#
+# Vercel deploys this fork, but the work happens upstream, where we only have
+# write access and cannot install Vercel's GitHub App. So we mirror instead:
+# every run merges upstream/main into our main, and that push is what triggers
+# the rebuild. We merge rather than fast-forward because this fork carries two
+# commits of its own -- vercel.json and this workflow -- that upstream never
+# sees. Upstream never touches those paths, so the merge stays conflict-free.
+name: Sync upstream
+
+on:
+  schedule:
+    # Ten minutes is roughly GitHub's practical floor for cron; runs are
+    # best-effort and get skipped under load, so treat it as a ceiling on
+    # freshness, not a guarantee.
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge upstream/main
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/subishop/TPS_Prototype.git
+          git fetch upstream main
+
+          if git merge-base --is-ancestor upstream/main HEAD; then
+            echo "Already up to date with upstream."
+            exit 0
+          fi
+
+          git merge upstream/main --no-edit
+          git push origin main
