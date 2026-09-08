@@ -1,0 +1,66 @@
+# Publishes the prototype to GitHub Pages.
+#
+# Pages has no rewrite engine -- it serves index.html at the root and that is
+# that -- so the "show v1 at the root" decision has to happen at build time.
+# We copy v1.html over index.html in the artifact only, never in the repo, so
+# upstream can change index.html freely without ever conflicting with us.
+name: Deploy to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a run finish rather than cancelling it midway; a half-published site is
+# worse than a slightly stale one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble the site
+        run: |
+          set -euo pipefail
+          mkdir -p _site
+          # Working files: briefs, verification tooling, deploy config. None of
+          # it belongs on a URL we hand to a client.
+          rsync -a \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude '_site/' \
+            --exclude 'node_modules/' \
+            --exclude 'lab/' \
+            --exclude 'scrollcraft/' \
+            --exclude '.agents/' \
+            --exclude 'BRIEF.md' \
+            --exclude 'HANDOVER.md' \
+            --exclude 'vercel.json' \
+            --exclude '.vercelignore' \
+            ./ _site/
+          cp _site/v1.html _site/index.html
+          echo "Published files:"
+          find _site -maxdepth 1 -type f | sort
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
