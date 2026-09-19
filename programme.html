@@ -164,19 +164,26 @@
 
 
 <!-- ============================================================
-     THE SHAPE
-     Three of the eight steps decide the shape of the stay, and they
-     move the fee far more than the other five. They had been the top
-     three rows of one long column, which gave the length of the
-     programme exactly as much of the page as a breakfast checkbox.
+     THE BUILDER
+     One section and one grid, so the summary beside it is sticky for
+     the whole of the choosing rather than for a third of it. It used
+     to be three sections with the panel living in the middle one: a
+     client setting the length or answering what matters most could
+     not see the programme she was setting it for.
 
-     They get the full width now, and the length gets a row of its
-     own, because it is the single most consequential control on the
-     page. Everything is still visible at once: this is a different
-     arrangement of one page, not a first step of a wizard.
+     Inside the column the three movements keep the shapes they had.
+     The length still takes a full row of its own, because it is the
+     decision the client came to make and it moves the fee more than
+     anything else here. Format and shift still sit abreast, because
+     they are one question asked twice: who is in the house, and when.
+
+     Everything is visible at once. This is one page arranged, not the
+     first step of a wizard.
      ============================================================ -->
-<section class="act act--shape-band" id="builder">
-  <div class="wrap">
+<section class="act act--build" id="builder">
+  <div class="wrap build">
+
+    <div class="build__main">
 
     <h2 class="movement movement--lead">The shape of your stay</h2>
 
@@ -254,21 +261,6 @@
       </fieldset>
     </div>
 
-  </div>
-</section>
-
-
-<!-- ============================================================
-     THE DETAIL
-     Four steps against the running summary. These are the
-     adjustments: they shape the care rather than the stay, and the
-     fee moves under them by tens rather than hundreds, so they get
-     the narrower column and the summary gets the rest.
-     ============================================================ -->
-<section class="act act--builder">
-  <div class="wrap build">
-
-    <div class="build__steps">
 
       <h2 class="movement">Through the day</h2>
 
@@ -417,6 +409,28 @@
         <p class="step__note" data-rhythm-note>Our 5-day programme is built around four times a week. Choose more or less and the fee moves with it. Massage is never taken on consecutive days, so your body has a day between treatments.</p>
       </fieldset>
 
+      <!-- Neither control below moves the fee, so they close the column
+           rather than sitting among the priced ones. They are the two
+           things we read before the call. -->
+      <div class="matters">
+        <!-- Not "What matters most" over "08 What matters most". The
+             block heading says what the block is for; the step keeps
+             the name the spec gives it. -->
+        <h2 class="movement">Before your call</h2>
+      <fieldset class="step" id="step-08">
+        <legend class="step__head"><span class="step__n">08</span> What matters most</legend>
+        <div class="priorities">
+          <label class="prio"><input type="checkbox" name="p-sleep" value="Sleep and rest" /><span>Sleep and rest</span></label>
+          <label class="prio"><input type="checkbox" name="p-recovery" value="My own physical recovery" /><span>My own physical recovery</span></label>
+          <label class="prio"><input type="checkbox" name="p-baby" value="Confidence with the baby" /><span>Confidence with the baby</span></label>
+          <label class="prio"><input type="checkbox" name="p-food" value="Nourishment and meals" /><span>Nourishment and meals</span></label>
+          <label class="prio"><input type="checkbox" name="p-house" value="Relief from the household" /><span>Relief from the household</span></label>
+          <label class="prio"><input type="checkbox" name="p-family" value="Support for the wider family" /><span>Support for the wider family</span></label>
+        </div>
+        <p class="step__note">These do not change the fee. They change the conversation, and they are the first thing we read before your call.</p>
+      </fieldset>
+      </div>
+
     </div>
 
     <aside class="build__summary" aria-label="Your programme so far">
@@ -427,33 +441,71 @@
              sit in a foot that does not move. Before the split, the
              consultation button lived below an internal scrollbar and a
              visitor on a 900px window never saw the primary action. -->
+        <div class="summary__top">
+          <!-- The fee leads the panel rather than closing it.
+               Underneath, it was in the foot: 368px of card below the
+               areas, so at the top of the builder, before the panel had
+               anything to stick to, the one number the client is here
+               for sat just under the fold. A panel that is always
+               present is only worth having if the number is. -->
+          <p class="summary__head">Your programme</p>
+          <div class="fee">
+            <span class="fee__label">Indicative fee</span>
+            <!-- aria-live rather than a silent swap: for a screen reader the
+                 fee is the one thing on the page that answers the question
+                 being asked, and it changes without focus moving. -->
+            <strong class="fee__amount" data-fee aria-live="polite">£1,995</strong>
+            <p class="fee__intro">Introductory pricing, held for bookings taken in 2026.</p>
+          </div>
+
+          <p class="notice notice--floor" data-floor-notice hidden>Because your specialist is reserved exclusively for your family, this programme has a minimum fee for the period selected.</p>
+          <p class="notice notice--complete" data-complete-notice>This is our complete 5-day programme, <span data-complete-fee>£1,995</span> indicative.</p>
+
+          <!-- Two readings of the same programme, one panel. The fee
+               below belongs to both and never moves, so switching view
+               never costs the client sight of the number. -->
+          <div class="summary__tabs" role="tablist" aria-label="Panel view">
+            <button class="summary__tab" type="button" role="tab" id="tab-programme"
+                    aria-controls="view-programme" aria-selected="true" data-view="programme">What you have built</button>
+            <button class="summary__tab" type="button" role="tab" id="tab-budget"
+                    aria-controls="view-budget" aria-selected="false" data-view="budget">Your budget</button>
+          </div>
+        </div>
+
         <div class="summary__body">
 
-        <h2 class="summary__head">Your programme</h2>
+        <div class="view" id="view-programme" role="tabpanel" aria-labelledby="tab-programme" tabindex="0">
+          <p class="summary__hint">Each heading below goes back to the controls that set it.</p>
 
+        <!-- Each heading that has a control behind it is a way back to
+             it. The panel is where a client notices something is wrong
+             with her programme, and it sat seven hundred pixels from
+             the switch that would fix it. Household support carries no
+             button because nothing here can change it, which is itself
+             worth knowing. -->
         <dl class="areas">
           <div class="area" data-area="duration">
-            <dt class="area__label">Duration and care format</dt>
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-02">Duration and care format</button></dt>
             <dd class="area__body" data-area-body>5 days, live-in care</dd>
           </div>
           <div class="area" data-area="reservation">
-            <dt class="area__label">Specialist reservation</dt>
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-02">Specialist reservation</button></dt>
             <dd class="area__body" data-area-body>One postpartum specialist, reserved for your family for the full 5 days</dd>
           </div>
           <div class="area" data-area="mother">
-            <dt class="area__label">Mother's recovery support</dt>
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-05">Mother's recovery support</button></dt>
             <dd class="area__body" data-area-body>Herbal baths daily, postpartum massage with hot stone therapy, daily belly binding</dd>
           </div>
           <div class="area" data-area="baby">
-            <dt class="area__label">Baby support</dt>
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-03">Baby support</button></dt>
             <dd class="area__body" data-area-body>Hands-on care through the day</dd>
           </div>
           <div class="area" data-area="meals">
-            <dt class="area__label">Meals and nourishment</dt>
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-04">Meals and nourishment</button></dt>
             <dd class="area__body" data-area-body>Breakfast, lunch and dinner cooked daily, herbal teas and lactation drinks</dd>
           </div>
           <div class="area" data-area="treatments">
-            <dt class="area__label">Recovery treatments</dt>
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-06">Recovery treatments</button></dt>
             <dd class="area__body" data-area-body>body scrub (1), foot reflexology (1), facial massage (1), herbal foot treatment (1) and hair serum therapy (1)</dd>
           </div>
           <div class="area" data-area="household">
@@ -468,71 +520,49 @@
 
         <p class="summary__support">We'll review your preferences and recommend the most suitable programme before confirming availability and pricing.</p>
 
+        </div><!-- /#view-programme -->
+
+        <div class="view budget" id="view-budget" role="tabpanel" aria-labelledby="tab-budget" tabindex="0" hidden>
+          <label class="budget__label" for="budget">Have a care budget in mind?</label>
+          <p class="budget__help">Share what matters most to you and we'll recommend the strongest programme for your recovery, your baby, and your household.</p>
+          <div class="budget__field">
+            <span class="budget__prefix" aria-hidden="true">&pound;</span>
+            <input class="budget__input" id="budget" name="budget" type="number" inputmode="numeric" min="0" step="50" placeholder="2,000" />
+          </div>
+          <p class="budget__answer" data-budget-answer hidden></p>
+
+          <!-- Every figure in here is priced through the same calculate()
+               as the rest of the page, and the buttons put that
+               programme on it. -->
+          <div class="fit" data-budget-fit hidden>
+            <p class="fit__head" data-fit-head></p>
+            <p class="fit__body" data-fit-body></p>
+            <button class="btn btn--outline btn--sm fit__apply" type="button" data-fit-apply hidden></button>
+
+            <!-- The second answer, when there is one. A budget that buys
+                 a complete short programme often also buys a longer one
+                 with fewer elements in it, and which of those is the
+                 better recovery is not this page's call. -->
+            <div class="fit__alt" data-fit-alt hidden>
+              <p class="fit__body" data-fit-alt-body></p>
+              <button class="btn btn--outline btn--sm fit__apply" type="button" data-fit-apply hidden></button>
+            </div>
+          </div>
+        </div>
+
         </div><!-- /.summary__body -->
 
         <div class="summary__foot">
-        <div class="fee">
-          <span class="fee__label">Indicative fee</span>
-          <!-- aria-live rather than a silent swap: for a screen reader the
-               fee is the one thing on the page that answers the question
-               being asked, and it changes without focus moving. -->
-          <strong class="fee__amount" data-fee aria-live="polite">£1,995</strong>
-          <p class="fee__intro">Introductory pricing, held for bookings taken in 2026.</p>
-        </div>
-
-        <p class="notice notice--floor" data-floor-notice hidden>Because your specialist is reserved exclusively for your family, this programme has a minimum fee for the period selected.</p>
-        <p class="notice notice--complete" data-complete-notice>This is our complete 5-day programme, <span data-complete-fee>£1,995</span> indicative.</p>
 
           <div class="summary__act">
             <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Request my consultation</a>
             <button class="btn btn--outline" type="button" data-brief-toggle aria-expanded="false" aria-controls="brief">See my programme summary</button>
           </div>
-          <p class="summary__disclaimer">Indicative pricing only. Final programme, availability and fee are confirmed after consultation.</p>
+          <p class="summary__disclaimer">Indicative only. Confirmed after consultation.</p>
         </div>
 
       </div>
     </aside>
-
-  </div>
-</section>
-
-
-<!-- ============================================================
-     WHAT MATTERS MOST
-     Out of the column and into a band of its own. Neither control
-     here moves the fee, so sitting them in the priced column was
-     telling the client something untrue about what they do. They
-     are the two things we read before the call, which is a
-     different question from the seven above them and deserves to
-     be asked somewhere else.
-     ============================================================ -->
-<section class="act act--brief-band">
-  <div class="wrap brief-band">
-
-    <div class="brief-band__ask">
-      <fieldset class="step" id="step-08">
-        <legend class="step__head"><span class="step__n">08</span> What matters most</legend>
-        <div class="priorities">
-          <label class="prio"><input type="checkbox" name="p-sleep" value="Sleep and rest" /><span>Sleep and rest</span></label>
-          <label class="prio"><input type="checkbox" name="p-recovery" value="My own physical recovery" /><span>My own physical recovery</span></label>
-          <label class="prio"><input type="checkbox" name="p-baby" value="Confidence with the baby" /><span>Confidence with the baby</span></label>
-          <label class="prio"><input type="checkbox" name="p-food" value="Nourishment and meals" /><span>Nourishment and meals</span></label>
-          <label class="prio"><input type="checkbox" name="p-house" value="Relief from the household" /><span>Relief from the household</span></label>
-          <label class="prio"><input type="checkbox" name="p-family" value="Support for the wider family" /><span>Support for the wider family</span></label>
-        </div>
-        <p class="step__note">These do not change the fee. They change the conversation, and they are the first thing we read before your call.</p>
-      </fieldset>
-    </div>
-
-    <div class="brief-band__budget">
-      <label class="budget__label" for="budget">Have a care budget in mind?</label>
-      <p class="budget__help">Share what matters most to you and we'll recommend the strongest programme for your recovery, your baby, and your household.</p>
-      <div class="budget__field">
-        <span class="budget__prefix" aria-hidden="true">&pound;</span>
-        <input class="budget__input" id="budget" name="budget" type="number" inputmode="numeric" min="0" step="50" placeholder="2,000" />
-      </div>
-      <p class="budget__answer" data-budget-answer hidden></p>
-    </div>
 
   </div>
 </section>

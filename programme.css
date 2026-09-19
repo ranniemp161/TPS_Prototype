@@ -92,9 +92,9 @@ html { background: var(--canvas); }
    fixed bar at the bottom of the window.
    ============================================================ */
 
-/* ---------- The shape band, full width ---------- */
+/* ---------- The builder, one section ---------- */
 
-.act--shape-band { padding-block: var(--section) calc(var(--section) * 0.6); }
+.act--build { padding-block: var(--section); }
 
 .movement--lead {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -102,8 +102,24 @@ html { background: var(--canvas); }
   padding-bottom: 1.1rem;
 }
 
-/* The length runs the full 1080, four tiles across. */
-.act--shape-band > .wrap > .step { border-top: none; padding-top: 0; }
+/* The length opens the column and takes a row of its own. */
+.build__main > .step:first-of-type { border-top: none; padding-top: 0; }
+
+/* Neither control in here moves the fee, so the block is set on its own
+   ground rather than continuing the priced column. Held inside the
+   column instead of bled across the window, because the summary beside
+   it runs the full height of the section now. */
+.matters {
+  margin-top: 3.5rem;
+  padding: 1.8rem 1.8rem 2rem;
+  background: var(--haze);
+  border-radius: var(--r-card);
+}
+.matters .movement { margin-top: 0; border-bottom-color: var(--sand); }
+.matters .step { border-top: none; padding: 0; }
+.matters .prio { background: var(--paper); }
+.matters .step__n { color: var(--ember-deep); }
+@media (max-width: 700px) { .matters { padding: 1.4rem 1.2rem 1.6rem; } }
 
 /* Format and shift, side by side. Two questions about the same thing,
    asked once each, so they share a row rather than queueing. */
@@ -114,6 +130,7 @@ html { background: var(--canvas); }
   align-items: start;
 }
 .pair .step { padding-bottom: 0; }
+.pair { margin-top: 2.5rem; }
 @media (min-width: 861px) {
   /* The divider between them is vertical. Both keep their own top rule,
      because one column ruled and the other not reads as a rule that
@@ -128,7 +145,7 @@ html { background: var(--canvas); }
    again into two is narrower than the copy each option carries. */
 .pair .choices--wide { grid-template-columns: minmax(0, 1fr); }
 
-.act--builder { padding-block: calc(var(--section) * 0.6) var(--section); }
+
 
 .build {
   display: grid;
@@ -137,11 +154,23 @@ html { background: var(--canvas); }
   align-items: start;
 }
 
-.build__steps { min-width: 0; }
+.build__main {
+  min-width: 0;
+  /* Room under the last control for the panel to stay stuck through it.
+     A sticky element releases when its own bottom reaches the bottom of
+     its container, so without this the panel let go while the client
+     was still answering step 08, and the card was left clipped through
+     the middle with its fee above the fold. */
+  padding-bottom: clamp(140px, 24vh, 280px);
+}
 
 .build__summary {
   position: sticky;
   top: calc(var(--nav-h) + 16px);
+  /* The column beside it is several thousand pixels tall now, so the
+     panel stays put for the whole of the choosing. That is the point of
+     the merge: a client setting the length or answering what matters
+     most can see the programme and the fee she is setting them for. */
 }
 
 /* ---------- Movements ---------- */
@@ -603,10 +632,34 @@ html { background: var(--canvas); }
      soon as you reach that end. A fade, not a shadow, which the brand
      pack has none of. */
   background:
-    linear-gradient(var(--paper) 40%, rgba(255, 255, 255, 0)) top    / 100% 28px no-repeat local,
+    linear-gradient(var(--paper) 40%, rgba(255, 255, 255, 0)) top    / 100% 20px no-repeat local,
     linear-gradient(rgba(255, 255, 255, 0), var(--paper) 60%) bottom / 100% 28px no-repeat local;
   background-color: var(--paper);
+
+  /* The bar itself. Chrome's default is a 15px grey channel with a
+     chunky thumb and it was the one piece of operating system on a page
+     built entirely from hairlines. Firefox and the standards property
+     take the first two lines; the WebKit rules under them are what
+     Chrome and Safari read. Sand on paper, no track, no buttons, and it
+     stays at Sand rather than brightening on hover, because a scrollbar
+     that competes with the Ember controls beside it is a scrollbar
+     asking to be used. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--sand) transparent;
+  scrollbar-gutter: stable;
 }
+.summary__body::-webkit-scrollbar { width: 10px; }
+.summary__body::-webkit-scrollbar-track { background: transparent; }
+.summary__body::-webkit-scrollbar-thumb {
+  background-color: var(--sand);
+  border-radius: 999px;
+  /* Drawn inside a transparent border so the thumb reads as a 4px rule
+     with air either side rather than a bar wedged against the type. */
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+.summary__body::-webkit-scrollbar-thumb:hover { background-color: var(--ink-mute); }
+.summary__body::-webkit-scrollbar-button { display: none; }
 
 /* The part that does not. One hairline separates it, no shadow, because
    the brand pack has none and an edge is enough.
@@ -616,42 +669,164 @@ html { background: var(--canvas); }
    on a laptop, so in the body it was below the fold of its own card. */
 .summary__foot {
   flex: none;
-  padding: 16px 20px;
+  padding: 14px 20px 16px;
   border-top: 1px solid var(--hairline-firm);
   background: var(--paper);
   border-radius: 0 0 var(--r-card) var(--r-card);
 }
 
-.summary__head {
-  font-family: var(--f-display);
-  text-transform: uppercase;
-  font-weight: 400;
-  font-size: 1.15rem;
-  letter-spacing: .04em;
-  color: var(--ink);
-  margin: 0 0 1.2rem;
+/* Title, areas, fee. Only the middle one scrolls: a card whose own
+   name scrolls away leaves the client looking at seven unlabelled
+   paragraphs and wondering what they belong to. */
+.summary__top {
+  flex: none;
+  padding: 18px 20px 0;
 }
 
+/* A label now, not the headline. The fee under it is the headline. */
+.summary__head {
+  font-family: var(--f-body);
+  font-size: .64rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0;
+}
+
+/* Two tabs, drawn as the page draws everything else: a hairline under
+   the pair and a heavier rule under the open one. No pills, no fill. */
+.summary__tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid var(--hairline);
+  margin-top: .2rem;
+}
+.summary__tab {
+  font-family: var(--f-body);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  padding: 0 0 .6rem;
+  cursor: pointer;
+  text-align: left;
+  transition: color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+}
+.summary__tab + .summary__tab { text-align: right; }
+.summary__tab:hover { color: var(--ink); }
+.summary__tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ember); }
+
+/* A recommendation that arrived while the other view was open. An
+   Ember rule under the label rather than a dot, because the page has
+   no decorative dots and this one would be the first. */
+.summary__tab.has-news:not([aria-selected="true"]) {
+  color: var(--ember);
+  border-bottom-color: var(--blush);
+}
+
+.view:focus { outline: none; }
+.view:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+
+/* In the panel the budget is the whole view, so it carries no rule of
+   its own and the field runs the full width. */
+.view.budget .budget__label { font-size: .85rem; }
+.view.budget .fit { margin-top: 1rem; }
+
 .areas { margin: 0; }
+/* The flag bar is drawn 20px to the left, in the body's own padding. */
+.summary__body { overflow-x: hidden; }
+/* Tightened from .75rem and .83rem. Seven areas at the old rhythm ran
+   822px inside a 299px body, so five of the seven were never on screen
+   at once. This is about a third off without taking the measure below
+   the point where it reads as prose. */
 .area {
-  padding: .75rem 0;
+  padding: .55rem 0;
   border-top: 1px solid var(--hairline);
 }
 .area:first-child { border-top: none; padding-top: 0; }
 
+.summary__hint {
+  font-family: var(--f-body);
+  font-size: .7rem;
+  line-height: 1.5;
+  color: var(--ink-mute);
+  margin: 0 0 1rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
 .area__label {
   font-family: var(--f-body);
-  font-size: .66rem;
+  font-size: .63rem;
   font-weight: 600;
-  letter-spacing: .14em;
+  letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--ink-mute);
-  margin: 0 0 .35rem;
+  margin: 0 0 .25rem;
+}
+
+/* A heading that leads somewhere, drawn as a heading that leads
+   somewhere. The hairline under it is the standing cue, so the
+   affordance does not depend on a hover a phone cannot perform. */
+.area__jump {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--hairline-firm);
+  padding: 0 0 2px;
+  margin: 0;
+  text-align: left;
+  cursor: pointer;
+  transition: color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+}
+.area__jump:hover { color: var(--ember); border-bottom-color: var(--ember); }
+
+/* The area that just moved, marked for a beat. Toggling one meal
+   changes four words in a panel of two hundred, and without this the
+   client has to hunt for what her own click did. Opacity only, on a
+   bar that is always there. */
+.area { position: relative; }
+.area::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: var(--ember);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .area.is-changed::before { animation: flag 1400ms var(--ease-out); }
+}
+@keyframes flag {
+  0%   { opacity: 0; }
+  12%  { opacity: 1; }
+  60%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* The step a heading sent you to, marked the same way, so the eye
+   lands on the right one of seven rather than somewhere near it. */
+@media (prefers-reduced-motion: no-preference) {
+  .step.is-targeted { animation: target 1600ms var(--ease-out); }
+}
+@keyframes target {
+  0%, 100% { background-color: rgba(226, 202, 198, 0); }
+  15%, 55% { background-color: rgba(226, 202, 198, .5); }
 }
 .area__body {
   font-family: var(--f-read);
-  font-size: .83rem;
-  line-height: 1.5;
+  font-size: .79rem;
+  line-height: 1.45;
   color: var(--ink-soft);
   margin: 0;
 }
@@ -663,16 +838,9 @@ html { background: var(--canvas); }
 
 /* ---------- The fee ---------- */
 
-.fee { margin-bottom: 1rem; }
-.fee__label {
-  display: block;
-  font-family: var(--f-body);
-  font-size: .66rem;
-  font-weight: 600;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-}
+.fee { margin: .1rem 0 .9rem; }
+/* The panel already says what it is, directly above. */
+.fee__label { display: none; }
 .fee__amount {
   display: block;
   font-family: var(--f-display);
@@ -780,16 +948,51 @@ html { background: var(--canvas); }
 .budget__input:focus { outline: none; }
 .budget__input::placeholder { color: var(--ink-mute); opacity: 1; }
 
+/* Plain, not boxed. It is the courtesy; the card under it is the
+   answer, and two boxes of equal weight made the client read the wrong
+   one first. */
 .budget__answer {
   font-family: var(--f-body);
-  font-size: .76rem;
+  font-size: .74rem;
   line-height: 1.55;
-  color: var(--ink-soft);
-  background: var(--haze);
-  border-radius: var(--r-badge);
-  padding: .7rem .8rem;
+  color: var(--ink-mute);
   margin: .7rem 0 0;
 }
+
+/* The recommendation. It carries a real figure and a control, so it is
+   given a paper card and the Ember rule down its edge, which is the
+   weight the rest of the page reserves for something actionable. */
+.fit {
+  margin-top: .8rem;
+  padding: 1rem 1.1rem;
+  background: var(--paper);
+  border: 1px solid var(--hairline-firm);
+  border-left: 3px solid var(--ember);
+  border-radius: var(--r-card);
+}
+.fit__head {
+  font-family: var(--f-body);
+  font-size: .85rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink);
+  margin: 0;
+}
+.fit__body {
+  font-family: var(--f-read);
+  font-size: .82rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: .4rem 0 0;
+}
+.fit__apply { margin-top: .9rem; }
+
+.fit__alt {
+  margin-top: 1rem;
+  padding-top: .9rem;
+  border-top: 1px solid var(--hairline);
+}
+.fit__alt .fit__body { margin: 0; }
 
 /* ---------- Actions ---------- */
 
@@ -807,41 +1010,6 @@ html { background: var(--canvas); }
   margin: .8rem 0 0;
 }
 .summary__disclaimer { margin-top: .7rem; }
-
-
-/* ============================================================
-   WHAT MATTERS MOST
-   The two controls that do not touch the fee, in a band of their
-   own on the blush ground. Nothing here is priced, so nothing here
-   sits in the priced column.
-   ============================================================ */
-
-.act--brief-band {
-  padding-block: var(--section);
-  background: var(--haze);
-}
-
-.brief-band {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  gap: clamp(32px, 5vw, 72px);
-  align-items: start;
-}
-.brief-band .step { border-top: none; padding: 0; }
-/* The pills have the room to spread here, so they run wider than they
-   could in the column and the six of them read as one set. */
-.brief-band .priorities { gap: 10px; }
-.brief-band .prio { background: var(--paper); }
-/* Ember measures 3.99 against Haze, which is under AA at this size, and
-   the answer box was Haze on Haze and so had no edges at all. */
-.brief-band .step__n { color: var(--ember-deep); }
-.brief-band .budget__answer { background: var(--paper); border: 1px solid var(--hairline); }
-
-.brief-band__budget { padding-left: clamp(0px, 3vw, 32px); border-left: 1px solid var(--hairline); }
-@media (max-width: 860px) {
-  .brief-band { grid-template-columns: minmax(0, 1fr); }
-  .brief-band__budget { padding-left: 0; border-left: none; border-top: 1px solid var(--hairline); padding-top: 1.6rem; }
-}
 
 
 /* ============================================================
@@ -1093,11 +1261,58 @@ html { background: var(--canvas); }
 
 
 /* ============================================================
-   THE PHONE FEE BAR
-   Hidden on desktop, where the summary is on screen anyway.
+   THE FEE BAR
+   Not a phone component. It is the fallback for any window where the
+   panel's own fee is not on screen, which is a phone, and is also a
+   short laptop at the very top of the builder before the panel has
+   anything to stick to. The script watches the fee in the panel and
+   turns this on only while that one is out of sight, so the page
+   never shows the number twice and never shows it nowhere.
    ============================================================ */
 
-.feebar { display: none; }
+.feebar {
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 55;
+  background: var(--paper);
+  border-top: 1px solid var(--hairline-firm);
+  padding: 10px var(--gutter);
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+}
+.page--builder.is-fee-adrift .feebar { display: block; }
+
+.feebar__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: var(--max);
+  margin-inline: auto;
+}
+.feebar__label {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .6rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.feebar__amount {
+  flex: 1;
+  font-family: var(--f-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+.feebar .btn { flex: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .page--builder.is-fee-adrift .feebar { animation: barin 260ms var(--ease-out); }
+}
+@keyframes barin { from { transform: translateY(100%); } to { transform: none; } }
 
 
 /* ============================================================
@@ -1139,49 +1354,19 @@ html { background: var(--canvas); }
   /* Unstacked, the panel is just a block in the flow, so the split that
      keeps the controls in view on a laptop has nothing left to do. */
   .summary__body { overflow: visible; }
+  .summary__top { border-bottom: none; padding-bottom: 0; }
   .summary__foot { border-top: none; padding-top: 0; }
-  /* The fee lives on the fixed bar on a phone, so printing it twice
-     inside the summary as well is one number too many in one view. */
+  /* The bar carries the fee on a phone, so the panel does not print it
+     a second time in the same view. */
   .build__summary .fee { display: none; }
+  .build__summary .summary__head { margin-bottom: .6rem; }
+  /* Unstacked, the panel follows the column, so both views are simply
+     shown one after the other and the tabs have nothing left to do. */
+  .summary__tabs { display: none; }
+  .view[hidden] { display: block; }
+  .view + .view { margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid var(--hairline); }
 
   .included { grid-template-columns: minmax(0, 1fr); }
-
-  .feebar {
-    display: block;
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    z-index: 55;
-    background: var(--paper);
-    border-top: 1px solid var(--hairline-firm);
-    padding: 10px var(--gutter);
-    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-  }
-  .feebar__inner {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    max-width: var(--max);
-    margin-inline: auto;
-  }
-  .feebar__label {
-    font-family: var(--f-body);
-    font-size: .6rem;
-    font-weight: 600;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    color: var(--ink-mute);
-    display: block;
-  }
-  .feebar__amount {
-    flex: 1;
-    font-family: var(--f-display);
-    font-size: 1.5rem;
-    font-weight: 400;
-    line-height: 1;
-    color: var(--ink);
-    font-variant-numeric: tabular-nums;
-  }
-  .feebar .btn { flex: none; }
 
   /* Clear of the bar, so the last thing on the page is reachable. */
   .foot { padding-bottom: 96px; }

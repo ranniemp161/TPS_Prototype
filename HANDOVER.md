@@ -54,7 +54,10 @@ TJ's own copy describing a working day.
 | `v1-ruined.*` | A real working version, not damaged goods. See below |
 | `programme.html` / `programme.css` / `programme.js` | **The programme builder.** A second page, linked from the programmes act and the nav. It loads `v1.css` first for the tokens, the type, the buttons and the nav, then adds its own. Not driven by `v1.js` |
 | `programme-pricing.js` | The builder's arithmetic, loaded by the page and required by the suite. See below |
-| `lab/programme-check.mjs` | The builder's acceptance suite. Run it after touching any rate |
+| `lab/programme-check.mjs` | The builder's arithmetic. Run it after touching any rate |
+| `lab/programme-panel.mjs` | The builder's summary panel, driven in a real browser at five window sizes |
+| `lab/programme-budget.mjs` | The budget field's recommendation, and the panel scrollbar |
+| `lab/programme-shot.mjs` | Full page shot of the builder with every scroll entrance triggered first |
 | `index.html` | An earlier direction, kept for reference |
 | `lab/` | About sixty measurement tools. The real leverage here |
 | `lab/baseline/v1.*` | A control copy for the comparison tools. Not for editing |
@@ -68,12 +71,24 @@ complete programme lands exactly on the published price. Change any unit rate,
 treatment count or standard rhythm and all four published prices drift silently.
 `lab/programme-check.mjs` re-solves the reservation, replays the twenty scenarios
 from the client's spec, and sweeps every reachable combination for the nine
-invariants. Run it before believing a pricing change is safe:
+invariants. It needs nothing running. The other two drive the real page, so
+serve it first:
 
 ```bash
 export PATH="/c/Program Files/nodejs:$PATH"
 node lab/programme-check.mjs
+
+npx -y http-server -p 4321 -c-1 &
+node lab/programme-panel.mjs
+node lab/programme-budget.mjs
 ```
+
+**The panel suite holds one rule that has broken twice:** a fee is on screen,
+somewhere, at every control, at every window size. The panel carries it while
+the panel is in view and the fixed bar carries it when the panel is not, never
+both and never neither. It broke once when the panel was sticky inside only one
+of three sections, and again when the fee sat in a 368px foot that fell below
+the fold on a 1280 by 720 laptop.
 
 **`v1-ruined` is not damaged.** On 2026-09-05 TJ believed v1 was broken and
 asked for it to be set aside under that name. It was not broken; Chrome was
