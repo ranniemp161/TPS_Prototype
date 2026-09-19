@@ -681,7 +681,7 @@
     // waits out a transition to read the sentence she came for. Reveals
     // start below the fold, where there is something to reveal.
     var targets = [].slice.call(document.querySelectorAll(
-      '.movement, .step, .shape__head, .shape, .included__copy, .included__frame, .close'));
+      '.movement, .step, .pair, .brief-band__budget, .shape__head, .shape, .included__copy, .included__frame, .close'));
     targets.forEach(function (t) { t.classList.add('rise'); });
 
     var io = new IntersectionObserver(function (entries) {

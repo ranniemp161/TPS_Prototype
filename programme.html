@@ -164,24 +164,54 @@
 
 
 <!-- ============================================================
-     THE BUILDER
-     Eight steps, all of them visible at once. No wizard and no
-     pagination: a client shaping her own recovery should be able to
-     see the whole of what she is shaping, and a wizard would turn an
-     exploration into a funnel.
+     THE SHAPE
+     Three of the eight steps decide the shape of the stay, and they
+     move the fee far more than the other five. They had been the top
+     three rows of one long column, which gave the length of the
+     programme exactly as much of the page as a breakfast checkbox.
 
-     The eight are gathered into three movements so the column does
-     not read as eight identical cards stacked. Each movement is a
-     different control family as well as a different question.
+     They get the full width now, and the length gets a row of its
+     own, because it is the single most consequential control on the
+     page. Everything is still visible at once: this is a different
+     arrangement of one page, not a first step of a wizard.
      ============================================================ -->
-<section class="act act--builder" id="builder">
-  <div class="wrap build">
+<section class="act act--shape-band" id="builder">
+  <div class="wrap">
 
-    <div class="build__steps">
+    <h2 class="movement movement--lead">The shape of your stay</h2>
 
-      <!-- ---------- Movement one: the shape of the stay ---------- -->
-      <h2 class="movement">The shape of your stay</h2>
+    <!-- The length first, and across the whole row. It is the decision
+         the client came to make, it moves the fee more than anything
+         else on the page, and giving it the same 572px column as a
+         checkbox was the layout arguing against its own content. -->
+    <fieldset class="step" id="step-02">
+      <legend class="step__head"><span class="step__n">02</span> Length of programme</legend>
+      <div class="lengths" role="radiogroup" aria-label="Length of programme">
+        <label class="length">
+          <input type="radio" name="days" value="5" checked />
+          <span class="length__body"><span class="length__n">5</span><span class="length__unit">days</span></span>
+        </label>
+        <label class="length">
+          <input type="radio" name="days" value="7" />
+          <span class="length__body"><span class="length__n">7</span><span class="length__unit">days</span></span>
+        </label>
+        <label class="length">
+          <input type="radio" name="days" value="14" />
+          <span class="length__body"><span class="length__n">14</span><span class="length__unit">days</span></span>
+        </label>
+        <label class="length">
+          <input type="radio" name="days" value="30" />
+          <span class="length__body"><span class="length__n">30</span><span class="length__unit">days</span></span>
+        </label>
+      </div>
+      <p class="step__note">Thirty days is the full confinement period, kept the way tradition intends. Changing the length resets the massage rhythm to the standard for that length, so you are always starting from the published programme.</p>
+    </fieldset>
 
+    <!-- Format and shift sit together because they are one question
+         asked twice: who is in the house, and when. Night care is only
+         offered on live-in, so the rule that couples them reads better
+         with the two controls side by side than seventy pixels apart. -->
+    <div class="pair">
       <fieldset class="step" id="step-01">
         <legend class="step__head"><span class="step__n">01</span> Your care format</legend>
         <div class="choices choices--wide" role="radiogroup" aria-label="Your care format">
@@ -202,30 +232,6 @@
         </div>
         <p class="step__note">Live-in means your postpartum specialist stays in your home for the whole programme. Daytime in-home care means she arrives each morning and leaves in the evening, and carries a supplement of £30 a day towards her accommodation and travel.</p>
       </fieldset>
-
-      <fieldset class="step" id="step-02">
-        <legend class="step__head"><span class="step__n">02</span> Length of programme</legend>
-        <div class="lengths" role="radiogroup" aria-label="Length of programme">
-          <label class="length">
-            <input type="radio" name="days" value="5" checked />
-            <span class="length__body"><span class="length__n">5</span><span class="length__unit">days</span></span>
-          </label>
-          <label class="length">
-            <input type="radio" name="days" value="7" />
-            <span class="length__body"><span class="length__n">7</span><span class="length__unit">days</span></span>
-          </label>
-          <label class="length">
-            <input type="radio" name="days" value="14" />
-            <span class="length__body"><span class="length__n">14</span><span class="length__unit">days</span></span>
-          </label>
-          <label class="length">
-            <input type="radio" name="days" value="30" />
-            <span class="length__body"><span class="length__n">30</span><span class="length__unit">days</span></span>
-          </label>
-        </div>
-        <p class="step__note">Thirty days is the full confinement period, kept the way tradition intends. Changing the length resets the massage rhythm to the standard for that length, so you are always starting from the published programme.</p>
-      </fieldset>
-
       <fieldset class="step" id="step-03">
         <legend class="step__head"><span class="step__n">03</span> Daytime, or day and night</legend>
         <div class="choices choices--wide" role="radiogroup" aria-label="Daytime, or day and night">
@@ -246,8 +252,24 @@
         </div>
         <p class="step__note">Daytime care runs 7am to 7pm. With night care your specialist starts at 1pm, settles at 7pm, takes your baby from 11.30pm and hands back at 6am, so you sleep through. Night care is available on live-in programmes.</p>
       </fieldset>
+    </div>
 
-      <!-- ---------- Movement two: the day itself ---------- -->
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THE DETAIL
+     Four steps against the running summary. These are the
+     adjustments: they shape the care rather than the stay, and the
+     fee moves under them by tens rather than hundreds, so they get
+     the narrower column and the summary gets the rest.
+     ============================================================ -->
+<section class="act act--builder">
+  <div class="wrap build">
+
+    <div class="build__steps">
+
       <h2 class="movement">Through the day</h2>
 
       <fieldset class="step" id="step-04">
@@ -295,8 +317,7 @@
         <p class="step__note">Drawn with herbs chosen for the stage of your recovery, and run for you rather than left for you to run. <strong data-bath-count>Five baths</strong> across this programme.</p>
       </fieldset>
 
-      <!-- ---------- Movement three: recovery ---------- -->
-      <h2 class="movement">Your recovery</h2>
+      <h2 class="movement">Your own recovery</h2>
 
       <fieldset class="step" id="step-06">
         <legend class="step__head"><span class="step__n">06</span> Recovery treatments</legend>
@@ -396,32 +417,8 @@
         <p class="step__note" data-rhythm-note>Our 5-day programme is built around four times a week. Choose more or less and the fee moves with it. Massage is never taken on consecutive days, so your body has a day between treatments.</p>
       </fieldset>
 
-      <!-- ---------- Movement four: the brief ---------- -->
-      <h2 class="movement">What matters most</h2>
-
-      <fieldset class="step" id="step-08">
-        <legend class="step__head"><span class="step__n">08</span> What matters most</legend>
-        <div class="priorities">
-          <label class="prio"><input type="checkbox" name="p-sleep" value="Sleep and rest" /><span>Sleep and rest</span></label>
-          <label class="prio"><input type="checkbox" name="p-recovery" value="My own physical recovery" /><span>My own physical recovery</span></label>
-          <label class="prio"><input type="checkbox" name="p-baby" value="Confidence with the baby" /><span>Confidence with the baby</span></label>
-          <label class="prio"><input type="checkbox" name="p-food" value="Nourishment and meals" /><span>Nourishment and meals</span></label>
-          <label class="prio"><input type="checkbox" name="p-house" value="Relief from the household" /><span>Relief from the household</span></label>
-          <label class="prio"><input type="checkbox" name="p-family" value="Support for the wider family" /><span>Support for the wider family</span></label>
-        </div>
-        <p class="step__note">These do not change the fee. They change the conversation, and they are the first thing we read before your call.</p>
-      </fieldset>
-
     </div>
 
-    <!-- ============================================================
-         THE SUMMARY
-         Seven care areas, grouped, with no price against any of them.
-         That is a commercial decision rather than a layout one: a
-         priced line per item turns a programme into a menu of parts
-         to negotiate away, and the reservation underneath it is not
-         a part.
-         ============================================================ -->
     <aside class="build__summary" aria-label="Your programme so far">
       <div class="summary" data-summary>
 
@@ -465,6 +462,15 @@
           </div>
         </dl>
 
+
+        <p class="summary__reserve" data-reserve-note>For live-in care, your specialist is reserved exclusively for your family for the full period. Removing elements adjusts the shape of care, not the reservation beneath it.</p>
+
+
+        <p class="summary__support">We'll review your preferences and recommend the most suitable programme before confirming availability and pricing.</p>
+
+        </div><!-- /.summary__body -->
+
+        <div class="summary__foot">
         <div class="fee">
           <span class="fee__label">Indicative fee</span>
           <!-- aria-live rather than a silent swap: for a screen reader the
@@ -477,23 +483,6 @@
         <p class="notice notice--floor" data-floor-notice hidden>Because your specialist is reserved exclusively for your family, this programme has a minimum fee for the period selected.</p>
         <p class="notice notice--complete" data-complete-notice>This is our complete 5-day programme, <span data-complete-fee>£1,995</span> indicative.</p>
 
-        <p class="summary__reserve" data-reserve-note>For live-in care, your specialist is reserved exclusively for your family for the full period. Removing elements adjusts the shape of care, not the reservation beneath it.</p>
-
-        <div class="budget">
-          <label class="budget__label" for="budget">Have a care budget in mind?</label>
-          <p class="budget__help">Share what matters most to you and we'll recommend the strongest programme for your recovery, your baby, and your household.</p>
-          <div class="budget__field">
-            <span class="budget__prefix" aria-hidden="true">£</span>
-            <input class="budget__input" id="budget" name="budget" type="number" inputmode="numeric" min="0" step="50" placeholder="2,000" />
-          </div>
-          <p class="budget__answer" data-budget-answer hidden></p>
-        </div>
-
-        <p class="summary__support">We'll review your preferences and recommend the most suitable programme before confirming availability and pricing.</p>
-
-        </div><!-- /.summary__body -->
-
-        <div class="summary__foot">
           <div class="summary__act">
             <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Request my consultation</a>
             <button class="btn btn--outline" type="button" data-brief-toggle aria-expanded="false" aria-controls="brief">See my programme summary</button>
@@ -503,6 +492,47 @@
 
       </div>
     </aside>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     WHAT MATTERS MOST
+     Out of the column and into a band of its own. Neither control
+     here moves the fee, so sitting them in the priced column was
+     telling the client something untrue about what they do. They
+     are the two things we read before the call, which is a
+     different question from the seven above them and deserves to
+     be asked somewhere else.
+     ============================================================ -->
+<section class="act act--brief-band">
+  <div class="wrap brief-band">
+
+    <div class="brief-band__ask">
+      <fieldset class="step" id="step-08">
+        <legend class="step__head"><span class="step__n">08</span> What matters most</legend>
+        <div class="priorities">
+          <label class="prio"><input type="checkbox" name="p-sleep" value="Sleep and rest" /><span>Sleep and rest</span></label>
+          <label class="prio"><input type="checkbox" name="p-recovery" value="My own physical recovery" /><span>My own physical recovery</span></label>
+          <label class="prio"><input type="checkbox" name="p-baby" value="Confidence with the baby" /><span>Confidence with the baby</span></label>
+          <label class="prio"><input type="checkbox" name="p-food" value="Nourishment and meals" /><span>Nourishment and meals</span></label>
+          <label class="prio"><input type="checkbox" name="p-house" value="Relief from the household" /><span>Relief from the household</span></label>
+          <label class="prio"><input type="checkbox" name="p-family" value="Support for the wider family" /><span>Support for the wider family</span></label>
+        </div>
+        <p class="step__note">These do not change the fee. They change the conversation, and they are the first thing we read before your call.</p>
+      </fieldset>
+    </div>
+
+    <div class="brief-band__budget">
+      <label class="budget__label" for="budget">Have a care budget in mind?</label>
+      <p class="budget__help">Share what matters most to you and we'll recommend the strongest programme for your recovery, your baby, and your household.</p>
+      <div class="budget__field">
+        <span class="budget__prefix" aria-hidden="true">&pound;</span>
+        <input class="budget__input" id="budget" name="budget" type="number" inputmode="numeric" min="0" step="50" placeholder="2,000" />
+      </div>
+      <p class="budget__answer" data-budget-answer hidden></p>
+    </div>
 
   </div>
 </section>

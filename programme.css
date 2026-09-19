@@ -92,7 +92,43 @@ html { background: var(--canvas); }
    fixed bar at the bottom of the window.
    ============================================================ */
 
-.act--builder { padding-block: var(--section); }
+/* ---------- The shape band, full width ---------- */
+
+.act--shape-band { padding-block: var(--section) calc(var(--section) * 0.6); }
+
+.movement--lead {
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  margin-bottom: 2rem;
+  padding-bottom: 1.1rem;
+}
+
+/* The length runs the full 1080, four tiles across. */
+.act--shape-band > .wrap > .step { border-top: none; padding-top: 0; }
+
+/* Format and shift, side by side. Two questions about the same thing,
+   asked once each, so they share a row rather than queueing. */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+.pair .step { padding-bottom: 0; }
+@media (min-width: 861px) {
+  /* The divider between them is vertical. Both keep their own top rule,
+     because one column ruled and the other not reads as a rule that
+     failed to draw rather than as a decision. */
+  .pair .step:last-child {
+    border-left: 1px solid var(--hairline);
+    padding-left: clamp(24px, 4vw, 56px);
+  }
+}
+
+/* Inside the pair the two options stack, because a 540px column split
+   again into two is narrower than the copy each option carries. */
+.pair .choices--wide { grid-template-columns: minmax(0, 1fr); }
+
+.act--builder { padding-block: calc(var(--section) * 0.6) var(--section); }
 
 .build {
   display: grid;
@@ -106,12 +142,6 @@ html { background: var(--canvas); }
 .build__summary {
   position: sticky;
   top: calc(var(--nav-h) + 16px);
-  /* Capped to the window rather than allowed to run past it. The panel
-     is the taller of the two columns on a laptop, and a sticky element
-     taller than the viewport leaves its own bottom permanently out of
-     reach. The cap lives here; the split between what scrolls inside it
-     and what stays put is on .summary below. */
-  max-height: calc(100vh - var(--nav-h) - 32px);
 }
 
 /* ---------- Movements ---------- */
@@ -296,13 +326,8 @@ html { background: var(--canvas); }
 
 .meals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 
-.meal {
-  border: 1px solid var(--hairline-firm);
-  background: var(--paper);
-  padding: .9rem 1rem;
-}
+.meal { border: 1px solid var(--hairline-firm); background: var(--paper); padding: .9rem 1rem .9rem 2.9rem; }
 .meal:hover:not(:has(input:disabled)) { border-color: var(--sand); }
-.meal:has(input:checked) { border-color: var(--ember); background: var(--blush); }
 
 .meal__title {
   font-family: var(--f-body);
@@ -310,6 +335,74 @@ html { background: var(--canvas); }
   font-weight: 500;
   color: var(--ink);
 }
+
+
+/* ---------- Included, rather than selected ----------
+   The eleven meal and treatment checkboxes used to carry the same
+   Ember border and Blush fill as the radios. Every one of them is on
+   by default, so the page opened with sixteen of its thirty three
+   controls filled: the column read as a field of pink, and a state
+   that almost everything is in tells the eye nothing.
+
+   These are not options being chosen between. They are things already
+   in the programme that a client may take out, which is a different
+   proposition and now looks like one. Included is paper with a ticked
+   box; taken out is canvas with the tick gone and the type gone quiet.
+   The tick is the cue that does not depend on colour.
+
+   The Blush fill stays where it belongs, on the five radio groups,
+   where one of several really is being picked. */
+
+.meal, .treat {
+  position: relative;
+  background: var(--canvas);
+  border-color: var(--hairline);
+}
+
+/* The box. 4px rather than the 6px badge radius: the scale is held by
+   ratio, and 6px on a 17px affordance reads as a circle. */
+.meal::before, .treat::before {
+  content: "";
+  position: absolute;
+  left: 1.1rem;
+  top: 50%;
+  width: 17px; height: 17px;
+  margin-top: -8.5px;
+  border: 1px solid var(--sand);
+  border-radius: 4px;
+  background: var(--paper);
+  transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+}
+
+/* The tick, drawn from two borders rather than carried in as an icon. */
+.meal::after, .treat::after {
+  content: "";
+  position: absolute;
+  left: calc(1.1rem + 4px);
+  top: 50%;
+  width: 8px; height: 4px;
+  margin-top: -4px;
+  border-left: 2px solid var(--paper);
+  border-bottom: 2px solid var(--paper);
+  transform: rotate(-45deg);
+  opacity: 0;
+  transition: opacity 140ms var(--ease-out);
+}
+
+.meal:has(input:checked), .treat:has(input:checked) {
+  background: var(--paper);
+  border-color: var(--hairline-firm);
+}
+.meal:has(input:checked)::before, .treat:has(input:checked)::before {
+  background: var(--ember);
+  border-color: var(--ember);
+}
+.meal:has(input:checked)::after, .treat:has(input:checked)::after { opacity: 1; }
+
+/* Taken out. The type goes quiet as well as the ground, so the state
+   survives a greyscale print and a colour blind reader. */
+.meal:not(:has(input:checked)) .meal__title,
+.treat:not(:has(input:checked)) .treat__title { color: var(--ink-mute); font-weight: 400; }
 
 /* ---------- 05: the bath scale ---------- */
 
@@ -362,13 +455,8 @@ html { background: var(--canvas); }
 
 .treats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 
-.treat {
-  border: 1px solid var(--hairline-firm);
-  background: var(--paper);
-  padding: .95rem 1.1rem;
-}
+.treat { border: 1px solid var(--hairline-firm); padding: .95rem 1.1rem .95rem 2.9rem; }
 .treat:hover:not(:has(input:disabled)) { border-color: var(--sand); }
-.treat:has(input:checked) { border-color: var(--ember); background: var(--blush); }
 
 .treat__body {
   display: flex;
@@ -457,8 +545,10 @@ html { background: var(--canvas); }
    small figures that sit inside a selected control take the deeper tier.
    Measured on the composited page, not estimated from the tokens. */
 .length:has(input:checked) .length__unit,
-.treat:has(input:checked) .treat__count,
 .rhythm:has(input:checked) .rhythm__count { color: var(--ember-deep); }
+/* On paper rather than Blush now, where plain Ember measures 5.61. */
+.treat:has(input:checked) .treat__count { color: var(--ember); }
+.treat:not(:has(input:checked)) .treat__count { color: var(--ink-mute); }
 
 /* ---------- 08: priorities ---------- */
 
@@ -484,7 +574,12 @@ html { background: var(--canvas); }
 .summary {
   display: flex;
   flex-direction: column;
-  max-height: 100%;
+  /* The cap is stated here in real units, not as `max-height: 100%` of
+     the sticky box. A percentage resolves against a definite height and
+     the parent only had a max-height, so the rule was silently dropped
+     and the card ran to 1442px inside a 788px box: it spilled, and the
+     section edge cut it through the middle of the fee. */
+  max-height: calc(100vh - var(--nav-h) - 32px);
   background: var(--paper);
   border: 1px solid var(--hairline-firm);
   border-radius: var(--r-card);
@@ -499,10 +594,26 @@ html { background: var(--canvas); }
   min-height: 0;
   overflow-y: auto;
   padding: 20px;
+
+  /* Seven care areas do not fit a laptop window above the fee, so the
+     body scrolls, and a hard cut through the middle of an area reads as
+     the list ending there. These two gradients fade the content into the
+     paper at whichever edge still has content beyond it: they are
+     attached `local`, so they travel with the content and disappear as
+     soon as you reach that end. A fade, not a shadow, which the brand
+     pack has none of. */
+  background:
+    linear-gradient(var(--paper) 40%, rgba(255, 255, 255, 0)) top    / 100% 28px no-repeat local,
+    linear-gradient(rgba(255, 255, 255, 0), var(--paper) 60%) bottom / 100% 28px no-repeat local;
+  background-color: var(--paper);
 }
 
 /* The part that does not. One hairline separates it, no shadow, because
-   the brand pack has none and an edge is enough. */
+   the brand pack has none and an edge is enough.
+
+   The fee lives here rather than in the body. It is the one number the
+   client came for, and with the seven areas above it the body scrolls
+   on a laptop, so in the body it was below the fold of its own card. */
 .summary__foot {
   flex: none;
   padding: 16px 20px;
@@ -552,11 +663,7 @@ html { background: var(--canvas); }
 
 /* ---------- The fee ---------- */
 
-.fee {
-  margin-top: 1.4rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--hairline-firm);
-}
+.fee { margin-bottom: 1rem; }
 .fee__label {
   display: block;
   font-family: var(--f-body);
@@ -604,7 +711,7 @@ html { background: var(--canvas); }
   font-family: var(--f-body);
   font-size: .76rem;
   line-height: 1.55;
-  margin: 1rem 0 0;
+  margin: 0 0 1rem;
   padding: .8rem .9rem;
   border-radius: var(--r-badge);
 }
@@ -700,6 +807,41 @@ html { background: var(--canvas); }
   margin: .8rem 0 0;
 }
 .summary__disclaimer { margin-top: .7rem; }
+
+
+/* ============================================================
+   WHAT MATTERS MOST
+   The two controls that do not touch the fee, in a band of their
+   own on the blush ground. Nothing here is priced, so nothing here
+   sits in the priced column.
+   ============================================================ */
+
+.act--brief-band {
+  padding-block: var(--section);
+  background: var(--haze);
+}
+
+.brief-band {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+.brief-band .step { border-top: none; padding: 0; }
+/* The pills have the room to spread here, so they run wider than they
+   could in the column and the six of them read as one set. */
+.brief-band .priorities { gap: 10px; }
+.brief-band .prio { background: var(--paper); }
+/* Ember measures 3.99 against Haze, which is under AA at this size, and
+   the answer box was Haze on Haze and so had no edges at all. */
+.brief-band .step__n { color: var(--ember-deep); }
+.brief-band .budget__answer { background: var(--paper); border: 1px solid var(--hairline); }
+
+.brief-band__budget { padding-left: clamp(0px, 3vw, 32px); border-left: 1px solid var(--hairline); }
+@media (max-width: 860px) {
+  .brief-band { grid-template-columns: minmax(0, 1fr); }
+  .brief-band__budget { padding-left: 0; border-left: none; border-top: 1px solid var(--hairline); padding-top: 1.6rem; }
+}
 
 
 /* ============================================================
@@ -863,24 +1005,27 @@ html { background: var(--canvas); }
   align-items: center;
 }
 
+/* Seven items, paired across two columns. It was `columns: 2`, which
+   flows by height rather than by count, so a two line item pushed the
+   break and the halves came out ragged and mismatched. A grid fills
+   left to right and the odd one out lands under the first column,
+   which is what a list of seven should look like. */
 .included__list {
   list-style: none;
   margin: 1.6rem 0 0;
   padding: 0;
-  /* Seven items. Two columns with a hairline between them rather than a
-     rule under every row, which is what makes a list of seven read as a
-     spec sheet. */
-  columns: 2;
-  column-gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .2rem 2rem;
 }
 .included__list li {
   font-family: var(--f-read);
   font-size: .92rem;
   line-height: 1.5;
   color: var(--ink-soft);
-  break-inside: avoid;
   padding: .45rem 0;
 }
+@media (max-width: 700px) { .included__list { grid-template-columns: minmax(0, 1fr); } }
 
 .included__frame { margin: 0; border-radius: var(--r-media); overflow: hidden; aspect-ratio: 4 / 3; }
 .included__frame img { width: 100%; height: 100%; object-fit: cover; }
@@ -924,7 +1069,7 @@ html { background: var(--canvas); }
    CLOSE AND FOOTER
    ============================================================ */
 
-.act--close-builder { padding-block: var(--section); background: var(--paper); }
+.act--close-builder { padding-block: calc(var(--section) * 0.7); background: var(--paper); }
 
 .act--close-builder .close {
   display: flex;
@@ -1046,7 +1191,6 @@ html { background: var(--canvas); }
   .choices--wide { grid-template-columns: minmax(0, 1fr); }
   .lengths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .meals { grid-template-columns: minmax(0, 1fr); }
-  .included__list { columns: 1; }
   .scale { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.2rem; }
   /* The connecting line only makes sense while the stops are on one
      row. Wrapped to two rows it would cut across the labels. */
