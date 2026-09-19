@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Build your programme — The Postpartum Suite</title>
+<meta name="description" content="Tell us the shape of the postpartum care you are imagining and see an indicative fee as you go. Nothing here is a quote." />
+<link rel="icon" href="assets/img/the-postpartum-suite-logo-mark.webp" />
+
+<!-- Not cosmetic and not optional. Without it, Chrome on Android and the
+     in-app browsers in Instagram and WhatsApp auto-invert the page and the
+     brand palette is destroyed. This was a real defect in an earlier build,
+     which is why the spec makes it a non-negotiable and why it is declared
+     twice, here and in the stylesheet. -->
+<meta name="color-scheme" content="light only" />
+<meta name="theme-color" content="#F3EFEC" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Build your programme — The Postpartum Suite" />
+<meta property="og:description" content="Explore the care you may want, and see an indicative fee as you go." />
+<meta property="og:image" content="assets/img/s3-rest.webp" />
+<meta property="og:image:alt" content="A mother resting back against the pillows while her specialist settles the baby" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+
+<!-- v1.css first for the tokens, the type roles, the buttons, the nav and
+     the aurora. programme.css adds only what this page needs and overrides
+     nothing in it. The two pages are siblings, not copies: a change to a
+     brand token reaches both. -->
+<link rel="stylesheet" href="v1.css" />
+<link rel="stylesheet" href="programme.css" />
+</head>
+<body class="page--builder">
+
+<a class="skip" href="#builder">Skip to the builder</a>
+
+<!-- The nav is v1's, with the Programmes panel now pointing at a page that
+     exists. Its behaviour lives in programme.js rather than v1.js, because
+     v1.js is a scroll score for a page whose sections are not here. -->
+<header class="nav is-scrolled" data-nav>
+  <div class="nav__inner">
+
+    <div class="nav__side nav__side--l">
+      <div class="nav__tabs" data-tabs>
+        <button class="tab" type="button" data-tab="care" aria-expanded="false" aria-controls="panel-care">Care</button>
+        <button class="tab" type="button" data-tab="programmes" aria-expanded="false" aria-controls="panel-programmes">Programmes</button>
+        <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About</button>
+      </div>
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-care">Menu</button>
+    </div>
+
+    <a class="nav__brand" href="v1.html" aria-label="The Postpartum Suite, home">
+      <img class="nav__mark" src="assets/img/tps-mark-only.webp" alt="" width="567" height="558" />
+      <span class="nav__wordmark" aria-hidden="true">
+        <span class="wm-line wm-line--1"></span>
+        <span class="wm-line wm-line--2"></span>
+        <span class="wm-line wm-line--3"></span>
+      </span>
+    </a>
+
+    <div class="nav__side nav__side--r">
+      <a class="tab tab--cta" href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
+    </div>
+
+  </div>
+
+  <div class="menu" data-menu hidden>
+
+    <section class="menu__panel" id="panel-care" data-panel="care" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">What we do</h2>
+        <ul class="menu__list">
+          <li><a href="v1.html#care">The four kinds of care</a></li>
+          <li><a href="v1.html#care">Treatments</a></li>
+          <li><a href="v1.html#care">Meals</a></li>
+          <li><a href="v1.html#care">Home support</a></li>
+        </ul>
+      </div>
+      <div class="menu__group">
+        <h2 class="menu__head">Practical</h2>
+        <ul class="menu__list">
+          <li><span class="menu__pending">What is included</span></li>
+          <li><span class="menu__pending">If your baby comes early</span></li>
+        </ul>
+      </div>
+      <p class="menu__note">Greyed entries are pages this prototype does not build yet.</p>
+    </section>
+
+    <section class="menu__panel" id="panel-programmes" data-panel="programmes" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">Choose a length</h2>
+        <ul class="menu__list">
+          <li><a href="v1.html#programmes">Five days</a></li>
+          <li><a href="v1.html#programmes">Seven days</a></li>
+          <li><a href="v1.html#programmes">Fourteen days</a></li>
+          <li><a href="v1.html#programmes">Thirty days</a></li>
+        </ul>
+      </div>
+      <div class="menu__group">
+        <h2 class="menu__head">Work out your own</h2>
+        <ul class="menu__list">
+          <li><a href="programme.html" aria-current="page">Build your programme</a></li>
+          <li><a href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a></li>
+        </ul>
+      </div>
+      <p class="menu__note">The builder gives an indicative fee. Your final programme is confirmed after your consultation.</p>
+    </section>
+
+    <section class="menu__panel" id="panel-about" data-panel="about" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">The people</h2>
+        <ul class="menu__list">
+          <li><span class="menu__pending">Our story</span></li>
+          <li><span class="menu__pending">Meet your specialist</span></li>
+        </ul>
+      </div>
+      <div class="menu__group">
+        <h2 class="menu__head">Talk to us</h2>
+        <ul class="menu__list">
+          <li><a href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a></li>
+        </ul>
+      </div>
+      <p class="menu__note">Greyed entries are pages this prototype does not build yet.</p>
+    </section>
+
+  </div>
+</header>
+
+<div class="veil" data-veil hidden></div>
+
+<main id="content" tabindex="-1">
+
+<!-- ============================================================
+     HERO
+     Left lead, photograph right. The aurora is the same component the
+     programmes act on the homepage stands on, so arriving here from
+     that act does not read as arriving at a different site.
+
+     Four text elements and no more: the label, the headline, the
+     paragraph, and the reservation notice the spec requires in all
+     three of the hero, the summary and the footer. No scroll cue: the
+     first control is already in frame under the fold line, and a
+     visitor looking at a hero knows what a wheel does.
+     ============================================================ -->
+<section class="act act--builder-hero">
+  <div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div>
+
+  <div class="wrap bhero">
+    <div class="bhero__copy">
+      <span class="eyebrow">Build your indicative programme</span>
+      <h1 class="display display--xl">Explore the care <em>you may want</em>.</h1>
+      <p class="lede">Tell us the shape of the support you are imagining and we will show you an indicative fee as you go. Nothing here is a quote. Your final recommendation and fee are confirmed after your consultation, once we understand your birth, your household and how you are recovering.</p>
+      <p class="reserve-note">For live-in care, your postpartum specialist is reserved exclusively for your family for the full period. Removing selected elements may adjust the shape of care, but the reservation itself remains the foundation of the fee.</p>
+    </div>
+
+    <figure class="bhero__frame">
+      <img src="assets/img/s3-rest.webp" alt="A mother resting back against the pillows while her specialist settles the baby" width="1200" height="1500" />
+    </figure>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THE BUILDER
+     One section and one grid, so the summary beside it is sticky for
+     the whole of the choosing rather than for a third of it. It used
+     to be three sections with the panel living in the middle one: a
+     client setting the length or answering what matters most could
+     not see the programme she was setting it for.
+
+     Inside the column the three movements keep the shapes they had.
+     The length still takes a full row of its own, because it is the
+     decision the client came to make and it moves the fee more than
+     anything else here. Format and shift still sit abreast, because
+     they are one question asked twice: who is in the house, and when.
+
+     Everything is visible at once. This is one page arranged, not the
+     first step of a wizard.
+     ============================================================ -->
+<section class="act act--build" id="builder">
+  <div class="wrap build">
+
+    <div class="build__main">
+
+    <h2 class="movement movement--lead">The shape of your stay</h2>
+
+    <!-- The length first, and across the whole row. It is the decision
+         the client came to make, it moves the fee more than anything
+         else on the page, and giving it the same 572px column as a
+         checkbox was the layout arguing against its own content. -->
+    <fieldset class="step" id="step-02">
+      <legend class="step__head"><span class="step__n">02</span> Length of programme</legend>
+      <div class="lengths" role="radiogroup" aria-label="Length of programme">
+        <label class="length">
+          <input type="radio" name="days" value="5" checked />
+          <span class="length__body"><span class="length__n">5</span><span class="length__unit">days</span></span>
+        </label>
+        <label class="length">
+          <input type="radio" name="days" value="7" />
+          <span class="length__body"><span class="length__n">7</span><span class="length__unit">days</span></span>
+        </label>
+        <label class="length">
+          <input type="radio" name="days" value="14" />
+          <span class="length__body"><span class="length__n">14</span><span class="length__unit">days</span></span>
+        </label>
+        <label class="length">
+          <input type="radio" name="days" value="30" />
+          <span class="length__body"><span class="length__n">30</span><span class="length__unit">days</span></span>
+        </label>
+      </div>
+      <p class="step__note">Thirty days is the full confinement period, kept the way tradition intends. Changing the length resets the massage rhythm to the standard for that length, so you are always starting from the published programme.</p>
+    </fieldset>
+
+    <!-- Format and shift sit together because they are one question
+         asked twice: who is in the house, and when. Night care is only
+         offered on live-in, so the rule that couples them reads better
+         with the two controls side by side than seventy pixels apart. -->
+    <div class="pair">
+      <fieldset class="step" id="step-01">
+        <legend class="step__head"><span class="step__n">01</span> Your care format</legend>
+        <div class="choices choices--wide" role="radiogroup" aria-label="Your care format">
+          <label class="choice">
+            <input type="radio" name="format" value="in" checked />
+            <span class="choice__body">
+              <span class="choice__title">Live-in care</span>
+              <span class="choice__meta">She stays in your home for the whole programme</span>
+            </span>
+          </label>
+          <label class="choice">
+            <input type="radio" name="format" value="out" />
+            <span class="choice__body">
+              <span class="choice__title">Daytime in-home care</span>
+              <span class="choice__meta">She arrives each morning and leaves in the evening</span>
+            </span>
+          </label>
+        </div>
+        <p class="step__note">Live-in means your postpartum specialist stays in your home for the whole programme. Daytime in-home care means she arrives each morning and leaves in the evening, and carries a supplement of £30 a day towards her accommodation and travel.</p>
+      </fieldset>
+      <fieldset class="step" id="step-03">
+        <legend class="step__head"><span class="step__n">03</span> Daytime, or day and night</legend>
+        <div class="choices choices--wide" role="radiogroup" aria-label="Daytime, or day and night">
+          <label class="choice">
+            <input type="radio" name="shift" value="day" checked />
+            <span class="choice__body">
+              <span class="choice__title">Daytime care</span>
+              <span class="choice__meta">7am to 7pm</span>
+            </span>
+          </label>
+          <label class="choice" data-night-choice>
+            <input type="radio" name="shift" value="night" />
+            <span class="choice__body">
+              <span class="choice__title">Day and night care</span>
+              <span class="choice__meta">1pm, then your baby from 11.30pm to 6am</span>
+            </span>
+          </label>
+        </div>
+        <p class="step__note">Daytime care runs 7am to 7pm. With night care your specialist starts at 1pm, settles at 7pm, takes your baby from 11.30pm and hands back at 6am, so you sleep through. Night care is available on live-in programmes.</p>
+      </fieldset>
+    </div>
+
+
+      <h2 class="movement">Through the day</h2>
+
+      <fieldset class="step" id="step-04">
+        <legend class="step__head"><span class="step__n">04</span> Meals and nourishment</legend>
+        <div class="meals">
+          <label class="meal">
+            <input type="checkbox" name="breakfast" checked />
+            <span class="meal__body"><span class="meal__title">Breakfast</span></span>
+          </label>
+          <label class="meal">
+            <input type="checkbox" name="lunch" checked />
+            <span class="meal__body"><span class="meal__title">Lunch</span></span>
+          </label>
+          <label class="meal">
+            <input type="checkbox" name="dinner" checked />
+            <span class="meal__body"><span class="meal__title">Dinner</span></span>
+          </label>
+        </div>
+        <p class="step__note" data-meals-note>Cooked fresh in your kitchen, for you and your family. Herbal teas and lactation drinks are part of every programme.</p>
+      </fieldset>
+
+      <fieldset class="step" id="step-05">
+        <legend class="step__head"><span class="step__n">05</span> Herbal baths</legend>
+        <!-- A four stop scale rather than four radio rows. The choice here
+             is a frequency, and a frequency reads as a position on a line
+             far faster than it reads as a list. -->
+        <div class="scale" role="radiogroup" aria-label="Herbal baths">
+          <label class="stop">
+            <input type="radio" name="bath" value="daily" checked />
+            <span class="stop__body"><span class="stop__tick" aria-hidden="true"></span><span class="stop__label">Daily</span></span>
+          </label>
+          <label class="stop">
+            <input type="radio" name="bath" value="eod" />
+            <span class="stop__body"><span class="stop__tick" aria-hidden="true"></span><span class="stop__label">Every other day</span></span>
+          </label>
+          <label class="stop">
+            <input type="radio" name="bath" value="weekly" />
+            <span class="stop__body"><span class="stop__tick" aria-hidden="true"></span><span class="stop__label">Weekly</span></span>
+          </label>
+          <label class="stop">
+            <input type="radio" name="bath" value="none" />
+            <span class="stop__body"><span class="stop__tick" aria-hidden="true"></span><span class="stop__label">None</span></span>
+          </label>
+        </div>
+        <p class="step__note">Drawn with herbs chosen for the stage of your recovery, and run for you rather than left for you to run. <strong data-bath-count>Five baths</strong> across this programme.</p>
+      </fieldset>
+
+      <h2 class="movement">Your own recovery</h2>
+
+      <fieldset class="step" id="step-06">
+        <legend class="step__head"><span class="step__n">06</span> Recovery treatments</legend>
+        <div class="treats">
+          <label class="treat">
+            <input type="checkbox" name="massage" checked />
+            <span class="treat__body">
+              <span class="treat__title">Postpartum massage</span>
+              <span class="treat__count" data-count="massage">3 sessions</span>
+            </span>
+          </label>
+          <label class="treat" data-hotstone-choice>
+            <input type="checkbox" name="hotstone" checked />
+            <span class="treat__body">
+              <span class="treat__title">Hot stone therapy</span>
+              <span class="treat__count" data-count="hotstone">with each massage</span>
+            </span>
+          </label>
+          <label class="treat">
+            <input type="checkbox" name="binding" checked />
+            <span class="treat__body">
+              <span class="treat__title">Belly binding</span>
+              <span class="treat__count" data-count="binding">daily</span>
+            </span>
+          </label>
+          <label class="treat">
+            <input type="checkbox" name="scrub" checked />
+            <span class="treat__body">
+              <span class="treat__title">Body scrub</span>
+              <span class="treat__count" data-count="scrub">1</span>
+            </span>
+          </label>
+          <label class="treat">
+            <input type="checkbox" name="reflex" checked />
+            <span class="treat__body">
+              <span class="treat__title">Foot reflexology</span>
+              <span class="treat__count" data-count="reflex">1</span>
+            </span>
+          </label>
+          <label class="treat">
+            <input type="checkbox" name="facial" checked />
+            <span class="treat__body">
+              <span class="treat__title">Facial massage</span>
+              <span class="treat__count" data-count="facial">1</span>
+            </span>
+          </label>
+          <label class="treat">
+            <input type="checkbox" name="herbfoot" checked />
+            <span class="treat__body">
+              <span class="treat__title">Herbal foot treatment</span>
+              <span class="treat__count" data-count="herbfoot">1</span>
+            </span>
+          </label>
+          <label class="treat">
+            <input type="checkbox" name="serum" checked />
+            <span class="treat__body">
+              <span class="treat__title">Hair serum therapy</span>
+              <span class="treat__count" data-count="serum">1</span>
+            </span>
+          </label>
+        </div>
+        <p class="step__note">The figure beside each one is how many times it runs across the programme you have chosen. Those counts are set by the length, not by you.</p>
+      </fieldset>
+
+      <fieldset class="step" id="step-07" data-step-rhythm>
+        <legend class="step__head"><span class="step__n">07</span> Massage rhythm</legend>
+        <div class="rhythms" role="radiogroup" aria-label="Massage rhythm">
+          <label class="rhythm">
+            <input type="radio" name="rhythm" value="w4" checked />
+            <span class="rhythm__body">
+              <span class="rhythm__title">Four times a week</span>
+              <span class="rhythm__count" data-rhythm-count="w4">3</span>
+            </span>
+          </label>
+          <label class="rhythm">
+            <input type="radio" name="rhythm" value="w3" />
+            <span class="rhythm__body">
+              <span class="rhythm__title">Three times a week</span>
+              <span class="rhythm__count" data-rhythm-count="w3">3</span>
+            </span>
+          </label>
+          <label class="rhythm">
+            <input type="radio" name="rhythm" value="w2" />
+            <span class="rhythm__body">
+              <span class="rhythm__title">Twice a week</span>
+              <span class="rhythm__count" data-rhythm-count="w2">2</span>
+            </span>
+          </label>
+          <label class="rhythm">
+            <input type="radio" name="rhythm" value="w1" />
+            <span class="rhythm__body">
+              <span class="rhythm__title">Once a week</span>
+              <span class="rhythm__count" data-rhythm-count="w1">1</span>
+            </span>
+          </label>
+        </div>
+        <p class="step__note" data-rhythm-note>Our 5-day programme is built around four times a week. Choose more or less and the fee moves with it. Massage is never taken on consecutive days, so your body has a day between treatments.</p>
+      </fieldset>
+
+      <!-- Neither control below moves the fee, so they close the column
+           rather than sitting among the priced ones. They are the two
+           things we read before the call. -->
+      <div class="matters">
+        <!-- Not "What matters most" over "08 What matters most". The
+             block heading says what the block is for; the step keeps
+             the name the spec gives it. -->
+        <h2 class="movement">Before your call</h2>
+      <fieldset class="step" id="step-08">
+        <legend class="step__head"><span class="step__n">08</span> What matters most</legend>
+        <div class="priorities">
+          <label class="prio"><input type="checkbox" name="p-sleep" value="Sleep and rest" /><span>Sleep and rest</span></label>
+          <label class="prio"><input type="checkbox" name="p-recovery" value="My own physical recovery" /><span>My own physical recovery</span></label>
+          <label class="prio"><input type="checkbox" name="p-baby" value="Confidence with the baby" /><span>Confidence with the baby</span></label>
+          <label class="prio"><input type="checkbox" name="p-food" value="Nourishment and meals" /><span>Nourishment and meals</span></label>
+          <label class="prio"><input type="checkbox" name="p-house" value="Relief from the household" /><span>Relief from the household</span></label>
+          <label class="prio"><input type="checkbox" name="p-family" value="Support for the wider family" /><span>Support for the wider family</span></label>
+        </div>
+        <p class="step__note">These do not change the fee. They change the conversation, and they are the first thing we read before your call.</p>
+      </fieldset>
+      </div>
+
+    </div>
+
+    <aside class="build__summary" aria-label="Your programme so far">
+      <div class="summary" data-summary>
+
+        <!-- The panel is taller than a laptop window, so it is split: the
+             areas and the fee scroll inside the body, and the two controls
+             sit in a foot that does not move. Before the split, the
+             consultation button lived below an internal scrollbar and a
+             visitor on a 900px window never saw the primary action. -->
+        <div class="summary__top">
+          <!-- The fee leads the panel rather than closing it.
+               Underneath, it was in the foot: 368px of card below the
+               areas, so at the top of the builder, before the panel had
+               anything to stick to, the one number the client is here
+               for sat just under the fold. A panel that is always
+               present is only worth having if the number is. -->
+          <p class="summary__head">Your programme</p>
+          <div class="fee">
+            <span class="fee__label">Indicative fee</span>
+            <!-- aria-live rather than a silent swap: for a screen reader the
+                 fee is the one thing on the page that answers the question
+                 being asked, and it changes without focus moving. -->
+            <strong class="fee__amount" data-fee aria-live="polite">£1,995</strong>
+            <p class="fee__intro">Introductory pricing, held for bookings taken in 2026.</p>
+          </div>
+
+          <p class="notice notice--floor" data-floor-notice hidden>Because your specialist is reserved exclusively for your family, this programme has a minimum fee for the period selected.</p>
+          <p class="notice notice--complete" data-complete-notice>This is our complete 5-day programme, <span data-complete-fee>£1,995</span> indicative.</p>
+
+          <!-- Two readings of the same programme, one panel. The fee
+               below belongs to both and never moves, so switching view
+               never costs the client sight of the number. -->
+          <div class="summary__tabs" role="tablist" aria-label="Panel view">
+            <button class="summary__tab" type="button" role="tab" id="tab-programme"
+                    aria-controls="view-programme" aria-selected="true" data-view="programme">What you have built</button>
+            <button class="summary__tab" type="button" role="tab" id="tab-budget"
+                    aria-controls="view-budget" aria-selected="false" data-view="budget">Your budget</button>
+          </div>
+        </div>
+
+        <div class="summary__body">
+
+        <div class="view" id="view-programme" role="tabpanel" aria-labelledby="tab-programme" tabindex="0">
+          <p class="summary__hint">Each heading below goes back to the controls that set it.</p>
+
+        <!-- Each heading that has a control behind it is a way back to
+             it. The panel is where a client notices something is wrong
+             with her programme, and it sat seven hundred pixels from
+             the switch that would fix it. Household support carries no
+             button because nothing here can change it, which is itself
+             worth knowing. -->
+        <dl class="areas">
+          <div class="area" data-area="duration">
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-02">Duration and care format</button></dt>
+            <dd class="area__body" data-area-body>5 days, live-in care</dd>
+          </div>
+          <div class="area" data-area="reservation">
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-02">Specialist reservation</button></dt>
+            <dd class="area__body" data-area-body>One postpartum specialist, reserved for your family for the full 5 days</dd>
+          </div>
+          <div class="area" data-area="mother">
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-05">Mother's recovery support</button></dt>
+            <dd class="area__body" data-area-body>Herbal baths daily, postpartum massage with hot stone therapy, daily belly binding</dd>
+          </div>
+          <div class="area" data-area="baby">
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-03">Baby support</button></dt>
+            <dd class="area__body" data-area-body>Hands-on care through the day</dd>
+          </div>
+          <div class="area" data-area="meals">
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-04">Meals and nourishment</button></dt>
+            <dd class="area__body" data-area-body>Breakfast, lunch and dinner cooked daily, herbal teas and lactation drinks</dd>
+          </div>
+          <div class="area" data-area="treatments">
+            <dt class="area__label"><button class="area__jump" type="button" data-goto="step-06">Recovery treatments</button></dt>
+            <dd class="area__body" data-area-body>body scrub (1), foot reflexology (1), facial massage (1), herbal foot treatment (1) and hair serum therapy (1)</dd>
+          </div>
+          <div class="area" data-area="household">
+            <dt class="area__label">Household support</dt>
+            <dd class="area__body" data-area-body>Light housekeeping, laundry and ironing, grocery shopping and cooking</dd>
+          </div>
+        </dl>
+
+
+        <p class="summary__reserve" data-reserve-note>For live-in care, your specialist is reserved exclusively for your family for the full period. Removing elements adjusts the shape of care, not the reservation beneath it.</p>
+
+
+        <p class="summary__support">We'll review your preferences and recommend the most suitable programme before confirming availability and pricing.</p>
+
+        </div><!-- /#view-programme -->
+
+        <div class="view budget" id="view-budget" role="tabpanel" aria-labelledby="tab-budget" tabindex="0" hidden>
+          <label class="budget__label" for="budget">Have a care budget in mind?</label>
+          <p class="budget__help">Share what matters most to you and we'll recommend the strongest programme for your recovery, your baby, and your household.</p>
+          <div class="budget__field">
+            <span class="budget__prefix" aria-hidden="true">&pound;</span>
+            <input class="budget__input" id="budget" name="budget" type="number" inputmode="numeric" min="0" step="50" placeholder="2,000" />
+          </div>
+          <p class="budget__answer" data-budget-answer hidden></p>
+
+          <!-- Every figure in here is priced through the same calculate()
+               as the rest of the page, and the buttons put that
+               programme on it. -->
+          <div class="fit" data-budget-fit hidden>
+            <p class="fit__head" data-fit-head></p>
+            <p class="fit__body" data-fit-body></p>
+            <button class="btn btn--outline btn--sm fit__apply" type="button" data-fit-apply hidden></button>
+
+            <!-- The second answer, when there is one. A budget that buys
+                 a complete short programme often also buys a longer one
+                 with fewer elements in it, and which of those is the
+                 better recovery is not this page's call. -->
+            <div class="fit__alt" data-fit-alt hidden>
+              <p class="fit__body" data-fit-alt-body></p>
+              <button class="btn btn--outline btn--sm fit__apply" type="button" data-fit-apply hidden></button>
+            </div>
+          </div>
+        </div>
+
+        </div><!-- /.summary__body -->
+
+        <div class="summary__foot">
+
+          <div class="summary__act">
+            <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Request my consultation</a>
+            <button class="btn btn--outline" type="button" data-brief-toggle aria-expanded="false" aria-controls="brief">See my programme summary</button>
+          </div>
+          <p class="summary__disclaimer">Indicative only. Confirmed after consultation.</p>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THE SHAPE OF THE STAY
+     The one device on this page that is not a control and not a
+     readout. Every other builder answers "what does it cost"; this
+     answers "what will it actually be like", by drawing the
+     programme the client has just built as days on a line.
+
+     Every mark comes from the same arithmetic that prices the page:
+     bath frequency, massage sessions, and the fixed treatment counts
+     for the chosen length. Nothing is invented, and the caption says
+     plainly that the order is indicative, because a specialist sets
+     the real order with the client and a pretty timetable that turns
+     out to be fiction is worse than no timetable.
+     ============================================================ -->
+<section class="act act--shape">
+  <div class="wrap">
+    <header class="shape__head">
+      <h2 class="display display--md" data-shape-title>Five days, laid out</h2>
+      <p class="body body--wide">This is the rhythm your programme carries as it stands. Change anything above and it redraws.</p>
+    </header>
+
+    <div class="shape" data-shape>
+      <div class="shape__grid" data-shape-grid></div>
+      <ul class="shape__key">
+        <li class="key key--bath"><span class="key__mark" aria-hidden="true"></span>Herbal bath</li>
+        <li class="key key--massage"><span class="key__mark" aria-hidden="true"></span>Massage</li>
+        <li class="key key--treat"><span class="key__mark" aria-hidden="true"></span>Recovery treatment</li>
+        <li class="key key--night"><span class="key__mark" aria-hidden="true"></span>Night care</li>
+      </ul>
+      <p class="shape__empty" data-shape-empty hidden>Nothing is selected to place across these days yet. Your specialist, your meals and your household support still run throughout.</p>
+    </div>
+
+    <p class="caption">An indicative shape, not a timetable. Your specialist sets the real order with you, around your birth and how you are recovering.</p>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     ALWAYS INCLUDED
+     Static, and deliberately not a set of controls. These are the
+     things that do not come off, so giving them checkboxes would
+     invite a client to try.
+     ============================================================ -->
+<section class="act act--included band">
+  <div class="wrap included">
+    <div class="included__copy">
+      <h2 class="display display--md">In every programme, whatever you choose.</h2>
+      <ul class="included__list">
+        <li>A reserved postpartum specialist</li>
+        <li>Hands-on baby care through the day</li>
+        <li>Someone with you while you rest</li>
+        <li>Light housekeeping</li>
+        <li>Baby's laundry and ironing</li>
+        <li>Grocery shopping</li>
+        <li>Herbal teas and lactation drinks</li>
+      </ul>
+    </div>
+    <figure class="included__frame">
+      <img src="assets/img/care.webp" alt="A specialist folding laundry in a quiet room while the baby sleeps nearby" loading="lazy" width="1200" height="900" />
+    </figure>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     THE ENQUIRY BRIEF
+     Revealed rather than always open. It is written as an internal
+     brief rather than an invoice, because that is what it becomes:
+     the thing the team reads before the call.
+     ============================================================ -->
+<section class="act act--brief">
+  <div class="wrap">
+    <div class="brief" id="brief" hidden>
+      <div class="brief__bar">
+        <h2 class="micro">Your programme summary</h2>
+        <button class="btn btn--outline btn--sm" type="button" data-brief-copy>Copy</button>
+      </div>
+      <pre class="brief__text" data-brief-text></pre>
+      <p class="caption">Bring this to your consultation, or leave it with us. Final programme, availability and fee are confirmed after that call.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================
+     CLOSE
+     The page resolves on the one action rather than trailing into a
+     footer. One label for it, the same label used in the summary
+     and in the nav's enquiry chip.
+     ============================================================ -->
+<section class="act act--close-builder">
+  <div class="wrap close">
+    <div class="close__say">
+      <h2 class="display display--md">Ready to talk it through?</h2>
+      <p class="body">Thirty minutes, by phone or video. Nothing is booked on the call.</p>
+    </div>
+    <div class="close__act">
+      <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Request my consultation</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <img class="foot__mark" src="assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="700" height="900" loading="lazy" />
+    <p class="foot__legal">For live-in care, your postpartum specialist is reserved exclusively for your family for the full period. Removing selected elements may adjust the shape of care, but the reservation itself remains the foundation of the fee.</p>
+    <p class="foot__legal">Indicative pricing only. Final programme, availability and fee are confirmed after consultation. Introductory pricing is held for bookings taken in 2026.</p>
+    <p class="micro">The Postpartum Suite &middot; Prototype &middot; Programme builder</p>
+  </div>
+</footer>
+
+<!-- The fee follows the client down the page on a phone, where the
+     summary column has been unstacked and is a long way from the
+     control she is touching. -->
+<div class="feebar" data-feebar>
+  <div class="feebar__inner">
+    <span class="feebar__label">Indicative fee</span>
+    <strong class="feebar__amount" data-fee>£1,995</strong>
+    <a class="btn btn--primary btn--sm" href="https://calendly.com/thepostpartumsuite/30min">Request my consultation</a>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="programme-pricing.js"></script>
+<script src="programme.js"></script>
+</body>
+</html>
