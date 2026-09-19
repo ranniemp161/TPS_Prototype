@@ -52,10 +52,28 @@ TJ's own copy describing a working day.
 | `v1.html` / `v1.css` / `v1.js` | **Production.** The live direction |
 | `STATE.md` | Generated. The current facts. Do not edit |
 | `v1-ruined.*` | A real working version, not damaged goods. See below |
+| `programme.html` / `programme.css` / `programme.js` | **The programme builder.** A second page, linked from the programmes act and the nav. It loads `v1.css` first for the tokens, the type, the buttons and the nav, then adds its own. Not driven by `v1.js` |
+| `programme-pricing.js` | The builder's arithmetic, loaded by the page and required by the suite. See below |
+| `lab/programme-check.mjs` | The builder's acceptance suite. Run it after touching any rate |
 | `index.html` | An earlier direction, kept for reference |
 | `lab/` | About sixty measurement tools. The real leverage here |
 | `lab/baseline/v1.*` | A control copy for the comparison tools. Not for editing |
 | `lab/revert/` | The pre 2026-09-05 bath handoff, kept in case it is wanted |
+
+**The builder prices from one file.** `programme-pricing.js` loads as a classic
+script in the browser and as a CommonJS module in node, so the page and the
+acceptance suite cannot disagree. Its `RESERVATION` table is a solved plug and
+not a rate: it is whatever remains once every other line is priced, so that a
+complete programme lands exactly on the published price. Change any unit rate,
+treatment count or standard rhythm and all four published prices drift silently.
+`lab/programme-check.mjs` re-solves the reservation, replays the twenty scenarios
+from the client's spec, and sweeps every reachable combination for the nine
+invariants. Run it before believing a pricing change is safe:
+
+```bash
+export PATH="/c/Program Files/nodejs:$PATH"
+node lab/programme-check.mjs
+```
 
 **`v1-ruined` is not damaged.** On 2026-09-05 TJ believed v1 was broken and
 asked for it to be set aside under that name. It was not broken; Chrome was

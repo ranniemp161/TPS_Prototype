@@ -1,0 +1,1062 @@
+/* ============================================================
+   THE POSTPARTUM SUITE, programme builder
+
+   Loaded after v1.css and adds only what this page needs. Every
+   colour, radius, measure and face is a token defined there, which
+   comes in turn from TPS Brand Pack.html. Nothing new is introduced.
+
+   The two brand rules govern here as well: no shadows anywhere, and
+   no dark section. Structure comes from hairlines, edges and fill,
+   never from a raised box. A selected control is an Ember border with
+   a Blush fill, which is the one state treatment the brand pack
+   specifies, and it is used for every control family on the page so
+   eight different-looking steps still answer to one language.
+   ============================================================ */
+
+/* Declared in the meta tag as well. Without both, Chrome on Android and
+   the in-app browsers in Instagram and WhatsApp auto-invert the page and
+   the palette is destroyed. The explicit background on html is the other
+   half of the same fix: an inverting browser repaints the root first. */
+:root { color-scheme: light only; }
+html { background: var(--canvas); }
+
+.page--builder {
+  /* The nav is fixed and carries no background of its own, so the page
+     has to hold its own content clear of it. */
+  padding-top: var(--nav-h);
+}
+
+/* The bar sits over pale grounds the whole way down this page, so the
+   scrolled treatment is the only one it ever needs. v1 earns the morph
+   by travelling through a photographic hero; there is nothing here for
+   the full lockup to sit on. */
+.page--builder .nav { background: var(--canvas); border-bottom: 1px solid var(--hairline); }
+
+
+/* ============================================================
+   HERO
+   Asymmetric split, copy leading. The aurora is v1's component; only
+   its container changes.
+   ============================================================ */
+
+.act--builder-hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(48px, 8vh, 96px) var(--section);
+}
+
+.bhero {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+
+.bhero__copy .display { margin-bottom: 0; }
+
+/* Instrument Serif is set in capitals across this brand, and the italic
+   is the emphasis. Same face, not a second one: a serif word dropped
+   into a sans headline is the tell this page is trying not to be. */
+.bhero__copy .display em { font-style: italic; }
+
+.bhero__frame {
+  margin: 0;
+  border-radius: var(--r-media);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+.bhero__frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+
+/* Repeated in the summary and again in the footer. It is the one line
+   that explains why stripping the programme back does not strip the
+   fee back with it, so it is set apart from the paragraph above it by
+   a rule rather than by a box. */
+.reserve-note {
+  font-family: var(--f-body);
+  font-size: .82rem;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  max-width: 54ch;
+  margin: 2rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
+}
+
+
+/* ============================================================
+   THE BUILDER
+   Steps left, summary sticky right at 340px, which is the spec's
+   number. Below 980px the column unstacks and the fee moves to a
+   fixed bar at the bottom of the window.
+   ============================================================ */
+
+.act--builder { padding-block: var(--section); }
+
+.build {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: clamp(32px, 5vw, 72px);
+  align-items: start;
+}
+
+.build__steps { min-width: 0; }
+
+.build__summary {
+  position: sticky;
+  top: calc(var(--nav-h) + 16px);
+  /* Capped to the window rather than allowed to run past it. The panel
+     is the taller of the two columns on a laptop, and a sticky element
+     taller than the viewport leaves its own bottom permanently out of
+     reach. The cap lives here; the split between what scrolls inside it
+     and what stays put is on .summary below. */
+  max-height: calc(100vh - var(--nav-h) - 32px);
+}
+
+/* ---------- Movements ---------- */
+
+/* Four headings across eight steps. The alternative was an eyebrow above
+   every step, which is how a form ends up reading as a template. */
+.movement {
+  font-family: var(--f-display);
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  letter-spacing: .04em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 1.5rem;
+  padding-bottom: .8rem;
+  border-bottom: 1px solid var(--hairline-firm);
+}
+.movement + .step { border-top: none; }
+.step + .movement { margin-top: 3.5rem; }
+
+/* ---------- A step ---------- */
+
+.step {
+  border: none;
+  border-top: 1px solid var(--hairline);
+  margin: 0;
+  padding: 2rem 0 2.5rem;
+  min-width: 0;
+}
+
+.step__head {
+  display: flex;
+  align-items: baseline;
+  gap: .8rem;
+  font-family: var(--f-body);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  color: var(--ink);
+  padding: 0;
+  margin-bottom: 1.2rem;
+}
+
+/* The spec numbers the steps 01 to 08 and asks for them on the page. They
+   are a client-specified wayfinding aid in a form with eight questions,
+   not a decorative section counter. */
+.step__n {
+  font-family: var(--f-mono);
+  font-size: .78rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  color: var(--ember);
+}
+
+.step__note {
+  font-family: var(--f-body);
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  max-width: 62ch;
+  margin: 1.2rem 0 0;
+}
+.step__note strong { color: var(--ink-soft); font-weight: 600; }
+
+/* A whole step goes quiet when its question no longer applies. */
+.step.is-off { opacity: .4; }
+.step.is-off .step__note { color: var(--ink-mute); }
+
+
+/* ============================================================
+   CONTROLS
+   Five families, one state language. Every selected control is an
+   Ember border over a Blush fill; every disabled one is 40% opacity
+   on canvas with a not-allowed cursor. The families differ so the
+   eight steps do not read as one control repeated eight times; the
+   state treatment is identical so they still read as one instrument.
+   ============================================================ */
+
+/* The real input stays in the accessibility tree and keeps the keyboard
+   behaviour of a native radio or checkbox. It is placed under its own
+   label rather than moved off screen, so the focus ring lands on the
+   control the eye is looking at. */
+.choice input, .length input, .meal input, .stop input,
+.treat input, .rhythm input, .prio input {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: 0; padding: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.choice, .length, .meal, .stop, .treat, .rhythm, .prio {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  border-radius: var(--r-card);
+  transition: border-color 160ms var(--ease-out),
+              background-color 160ms var(--ease-out),
+              color 160ms var(--ease-out);
+}
+
+/* One ring, drawn on the label, so a keyboard user sees the thing they
+   are about to change rather than a one-pixel input hidden beneath it. */
+.choice:focus-within, .length:focus-within, .meal:focus-within,
+.stop:focus-within, .treat:focus-within, .rhythm:focus-within,
+.prio:focus-within {
+  outline: 2px solid var(--ember);
+  outline-offset: 3px;
+}
+
+/* Disabled, per the brand pack: 40% opacity, canvas fill, not-allowed. */
+.choice:has(input:disabled), .meal:has(input:disabled),
+.treat:has(input:disabled), .rhythm:has(input:disabled) {
+  opacity: .4;
+  cursor: not-allowed;
+  background: var(--canvas);
+}
+
+/* ---------- 01 and 03: wide choice rows ---------- */
+
+.choices { display: grid; gap: 10px; }
+.choices--wide { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.choice {
+  border: 1px solid var(--hairline-firm);
+  background: var(--paper);
+  padding: 1.1rem 1.2rem;
+}
+.choice:hover:not(:has(input:disabled)) { border-color: var(--sand); }
+.choice:has(input:checked) { border-color: var(--ember); background: var(--blush); }
+
+.choice__body { display: block; }
+.choice__title {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.choice__meta {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .78rem;
+  color: var(--ink-mute);
+  margin-top: .3rem;
+}
+.choice:has(input:checked) .choice__meta { color: var(--ink-soft); }
+
+/* ---------- 02: lengths ---------- */
+
+.lengths { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+
+.length {
+  border: 1px solid var(--hairline-firm);
+  background: var(--paper);
+  padding: 1.1rem .6rem;
+  text-align: center;
+}
+.length:hover { border-color: var(--sand); }
+.length:has(input:checked) { border-color: var(--ember); background: var(--blush); }
+
+.length__n {
+  display: block;
+  font-family: var(--f-display);
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  line-height: 1;
+  color: var(--ink);
+}
+.length__unit {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-top: .5rem;
+}
+
+/* ---------- 04: meals ---------- */
+
+.meals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+
+.meal {
+  border: 1px solid var(--hairline-firm);
+  background: var(--paper);
+  padding: .9rem 1rem;
+}
+.meal:hover:not(:has(input:disabled)) { border-color: var(--sand); }
+.meal:has(input:checked) { border-color: var(--ember); background: var(--blush); }
+
+.meal__title {
+  font-family: var(--f-body);
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* ---------- 05: the bath scale ---------- */
+
+/* One hairline running the width of the step with four stops on it. The
+   line is drawn behind the ticks, which is why the ticks carry a fill of
+   their own rather than sitting transparent. */
+.scale {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  padding-top: 4px;
+}
+.scale::before {
+  content: "";
+  position: absolute;
+  left: 12.5%; right: 12.5%;
+  top: 10px;
+  height: 1px;
+  background: var(--rule);
+}
+
+.stop { padding: 0 .2rem 0; text-align: center; border-radius: var(--r-badge); }
+.stop__body { display: block; }
+
+.stop__tick {
+  position: relative;
+  display: block;
+  width: 13px; height: 13px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1px solid var(--sand);
+  background: var(--canvas);
+  transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+}
+.stop:hover .stop__tick { border-color: var(--ink-mute); }
+.stop:has(input:checked) .stop__tick { border-color: var(--ember); background: var(--ember); }
+
+.stop__label {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .76rem;
+  line-height: 1.35;
+  color: var(--ink-mute);
+  margin-top: .7rem;
+}
+.stop:has(input:checked) .stop__label { color: var(--ink); font-weight: 600; }
+
+/* ---------- 06: treatments ---------- */
+
+.treats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+
+.treat {
+  border: 1px solid var(--hairline-firm);
+  background: var(--paper);
+  padding: .95rem 1.1rem;
+}
+.treat:hover:not(:has(input:disabled)) { border-color: var(--sand); }
+.treat:has(input:checked) { border-color: var(--ember); background: var(--blush); }
+
+.treat__body {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .8rem;
+}
+.treat__title {
+  font-family: var(--f-body);
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+.treat__count {
+  flex: none;
+  font-family: var(--f-mono);
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+
+/* ---------- 07: rhythm ---------- */
+
+.rhythms { display: grid; gap: 8px; }
+
+.rhythm {
+  border: 1px solid var(--hairline-firm);
+  background: var(--paper);
+  padding: .85rem 1.1rem;
+}
+.rhythm:hover:not(:has(input:disabled)) { border-color: var(--sand); }
+.rhythm:has(input:checked) { border-color: var(--ember); background: var(--blush); }
+
+.rhythm__body {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.rhythm__title {
+  font-family: var(--f-body);
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+/* The session count is the number that actually differs between these
+   four options, so it is set in the figures face and given room. */
+.rhythm__count {
+  font-family: var(--f-mono);
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.rhythm__count::after {
+  content: " sessions";
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.rhythm__count.is-one::after { content: " session"; }
+
+/* The rhythm the published programme for this length is built around. */
+.rhythm.is-standard .rhythm__title::after {
+  content: "Standard";
+  font-family: var(--f-body);
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ember);
+  border: 1px solid var(--blush);
+  border-radius: var(--r-badge);
+  padding: 2px 6px;
+  margin-left: .6rem;
+  vertical-align: 2px;
+}
+
+
+/* ---------- Selected-state ink ----------
+   Ember on the Blush fill measures 3.61 to 1, which is under AA for text
+   at these sizes. Ember Deep on the same fill measures 5.03, so the three
+   small figures that sit inside a selected control take the deeper tier.
+   Measured on the composited page, not estimated from the tokens. */
+.length:has(input:checked) .length__unit,
+.treat:has(input:checked) .treat__count,
+.rhythm:has(input:checked) .rhythm__count { color: var(--ember-deep); }
+
+/* ---------- 08: priorities ---------- */
+
+.priorities { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.prio {
+  border: 1px solid var(--hairline-firm);
+  background: var(--paper);
+  border-radius: var(--r-badge);
+  padding: .6rem .9rem;
+  font-family: var(--f-body);
+  font-size: .82rem;
+  color: var(--ink-soft);
+}
+.prio:hover { border-color: var(--sand); }
+.prio:has(input:checked) { border-color: var(--ember); background: var(--blush); color: var(--ink); font-weight: 500; }
+
+
+/* ============================================================
+   THE SUMMARY PANEL
+   ============================================================ */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  background: var(--paper);
+  border: 1px solid var(--hairline-firm);
+  border-radius: var(--r-card);
+}
+
+/* The part that scrolls. The areas and the fee can run as long as the
+   programme needs; the controls below them never move out of sight.
+   Chaining is left on so the wheel carries on down the page once this
+   reaches its end rather than stopping dead under the pointer. */
+.summary__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* The part that does not. One hairline separates it, no shadow, because
+   the brand pack has none and an edge is enough. */
+.summary__foot {
+  flex: none;
+  padding: 16px 20px;
+  border-top: 1px solid var(--hairline-firm);
+  background: var(--paper);
+  border-radius: 0 0 var(--r-card) var(--r-card);
+}
+
+.summary__head {
+  font-family: var(--f-display);
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 1.15rem;
+  letter-spacing: .04em;
+  color: var(--ink);
+  margin: 0 0 1.2rem;
+}
+
+.areas { margin: 0; }
+.area {
+  padding: .75rem 0;
+  border-top: 1px solid var(--hairline);
+}
+.area:first-child { border-top: none; padding-top: 0; }
+
+.area__label {
+  font-family: var(--f-body);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin: 0 0 .35rem;
+}
+.area__body {
+  font-family: var(--f-read);
+  font-size: .83rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+/* An area with nothing in it says so. Leaving it out would read as
+   though the thing were still in the programme. */
+.area.is-empty { opacity: .55; }
+.area.is-empty .area__body { font-style: italic; }
+
+/* ---------- The fee ---------- */
+
+.fee {
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--hairline-firm);
+}
+.fee__label {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.fee__amount {
+  display: block;
+  font-family: var(--f-display);
+  font-size: clamp(2.2rem, 3.2vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: .01em;
+  color: var(--ink);
+  margin-top: .3rem;
+  /* Tabular figures so the amount does not jitter sideways as digits
+     change under the client's hand. */
+  font-variant-numeric: tabular-nums;
+}
+.fee__intro {
+  font-family: var(--f-body);
+  font-size: .72rem;
+  color: var(--ink-mute);
+  margin: .5rem 0 0;
+}
+
+/* The fee settles rather than flickers. A number that has just moved is
+   worth a beat of attention; a number that flashes on every keystroke is
+   noise. Transform and opacity only. */
+.fee__amount, .feebar__amount { will-change: transform; }
+@media (prefers-reduced-motion: no-preference) {
+  .fee__amount.is-moved, .feebar__amount.is-moved {
+    animation: settle 420ms var(--ease-out);
+  }
+}
+@keyframes settle {
+  from { transform: translateY(5px); opacity: .35; }
+  to   { transform: none;            opacity: 1; }
+}
+
+.notice {
+  font-family: var(--f-body);
+  font-size: .76rem;
+  line-height: 1.55;
+  margin: 1rem 0 0;
+  padding: .8rem .9rem;
+  border-radius: var(--r-badge);
+}
+.notice--floor    { background: var(--blush); color: var(--ink-soft); }
+.notice--complete { background: var(--haze);  color: var(--ink-soft); }
+
+.summary__reserve {
+  font-family: var(--f-body);
+  font-size: .72rem;
+  line-height: 1.55;
+  color: var(--ink-mute);
+  margin: 1rem 0 0;
+  padding-top: .9rem;
+  border-top: 1px solid var(--hairline);
+}
+
+/* ---------- Budget ---------- */
+
+.budget { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--hairline); }
+
+.budget__label {
+  display: block;
+  font-family: var(--f-body);
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+.budget__help {
+  font-family: var(--f-body);
+  font-size: .72rem;
+  line-height: 1.5;
+  color: var(--ink-mute);
+  margin: .35rem 0 .7rem;
+}
+
+.budget__field {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--hairline-firm);
+  border-radius: var(--r-input, 8px);
+  background: var(--paper);
+  overflow: hidden;
+}
+.budget__field:focus-within { border-color: var(--ember); }
+
+.budget__prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 .1rem 0 .8rem;
+  font-family: var(--f-mono);
+  font-size: .9rem;
+  color: var(--ink-mute);
+}
+.budget__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: .7rem .8rem .7rem .3rem;
+  font-family: var(--f-mono);
+  font-size: .9rem;
+  /* ink-soft rather than ink-mute: a placeholder any lighter than this
+     stops clearing AA against paper. */
+  color: var(--ink);
+}
+.budget__input:focus { outline: none; }
+.budget__input::placeholder { color: var(--ink-mute); opacity: 1; }
+
+.budget__answer {
+  font-family: var(--f-body);
+  font-size: .76rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  background: var(--haze);
+  border-radius: var(--r-badge);
+  padding: .7rem .8rem;
+  margin: .7rem 0 0;
+}
+
+/* ---------- Actions ---------- */
+
+.summary__act { display: grid; gap: 8px; }
+.summary__act .btn { text-align: center; }
+
+.btn--sm { padding: 10px 16px; font-size: .85rem; }
+
+.summary__support,
+.summary__disclaimer {
+  font-family: var(--f-body);
+  font-size: .7rem;
+  line-height: 1.5;
+  color: var(--ink-mute);
+  margin: .8rem 0 0;
+}
+.summary__disclaimer { margin-top: .7rem; }
+
+
+/* ============================================================
+   THE SHAPE OF THE STAY
+   ============================================================ */
+
+.act--shape { padding-block: var(--section); background: var(--paper); }
+
+.shape__head { margin-bottom: 2rem; }
+.shape__head .display { margin-bottom: .8rem; }
+
+/* One column per day. At thirty days the columns are narrow and that is
+   the point: the eye reads the density of the marks rather than counting
+   them, and a thirty day stay should look denser than a five day one.
+
+   What it must not do is make a five day stay look like a thin version
+   of a thirty day one. So the weight is a tier, set on the grid by the
+   script: the marks, the day rules and the labels all grow as the stay
+   shortens, and every value below hangs off these six variables rather
+   than being restated per tier. */
+.shape__grid {
+  --mark-h: 10px;
+  --mark-h-massage: 16px;
+  --mark-h-night: 6px;
+  --mark-w: 56px;
+  --mark-gap: 3px;    /* between the marks stacked within one day */
+  --col-gap: 3px;     /* between one day and the next */
+  --col-pad: 0px;     /* inside a ruled day column */
+  --day-rule: transparent;
+
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--col-gap);
+  align-items: end;
+  border-bottom: 1px solid var(--hairline-firm);
+  padding-bottom: .5rem;
+}
+
+/* Fourteen days. Half as many columns as thirty, so each one can carry
+   about twice the weight and the strip keeps the same visual mass. */
+.shape__grid[data-scale="mid"] {
+  --mark-h: 16px;
+  --mark-h-massage: 26px;
+  --mark-h-night: 9px;
+  --mark-w: 76px;
+  --mark-gap: 6px;
+  --col-gap: 6px;
+}
+
+/* Five and seven days. Ruled between the days, because at this size the
+   marks alone float: the rules are what turn five ticks on paper into a
+   drawing of a week. Hairlines, not boxes. */
+.shape__grid[data-scale="short"] {
+  --mark-h: 26px;
+  --mark-h-massage: 40px;
+  --mark-h-night: 14px;
+  --mark-w: 148px;
+  --mark-gap: 4px;
+  /* The days sit flush against their rules, so the rule is the only
+     thing between one day and the next. The air goes inside the column
+     instead, which is what keeps the marks from touching the line. */
+  --col-gap: 0px;
+  --col-pad: 14px;
+  --day-rule: var(--hairline);
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--mark-gap);
+  min-width: 0;
+  border-left: 1px solid var(--day-rule);
+  padding-inline: var(--col-pad);
+}
+.day:last-child { border-right: 1px solid var(--day-rule); }
+
+/* A day is a stack of marks, one per thing happening that day. Height,
+   not colour alone, carries the difference, so the strip still reads
+   without colour vision. Capped in width so the marks stay marks rather
+   than stretching into one bar per day. */
+.mark {
+  display: block;
+  width: 100%;
+  max-width: var(--mark-w);
+  margin-inline: auto;
+  height: var(--mark-h);
+  border-radius: 2px;
+}
+.mark--bath    { background: var(--rose-mist); }
+.mark--massage { background: var(--coral-deep); height: var(--mark-h-massage); }
+.mark--treat   { background: var(--sand); }
+.mark--night   { background: var(--haze); height: var(--mark-h-night); }
+
+/* A day with nothing on it still has to occupy a day's worth of the
+   strip at the short tier, or the ruled columns collapse to different
+   heights and the week stops reading as a week. */
+.shape__grid[data-scale="short"] .day { min-height: calc(var(--mark-h) * 3); }
+
+.day__n {
+  font-family: var(--f-mono);
+  font-size: .58rem;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+  text-align: center;
+  margin-top: .35rem;
+}
+.day__n:empty { min-height: .8rem; }
+
+.shape__grid[data-scale="mid"] .day__n  { font-size: .64rem; }
+.shape__grid[data-scale="short"] .day__n {
+  font-size: .7rem;
+  color: var(--ink-soft);
+  margin-top: .7rem;
+}
+
+.shape__key {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  margin: 1.4rem 0 0;
+  padding: 0;
+}
+.key {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: var(--f-body);
+  font-size: .72rem;
+  color: var(--ink-mute);
+}
+.key__mark { width: 14px; height: 10px; border-radius: 2px; }
+.key--bath    .key__mark { background: var(--rose-mist); }
+.key--massage .key__mark { background: var(--coral-deep); }
+.key--treat   .key__mark { background: var(--sand); }
+.key--night   .key__mark { background: var(--haze); border: 1px solid var(--hairline); }
+.key.is-off { opacity: .35; }
+
+.shape__empty {
+  font-family: var(--f-body);
+  font-size: .85rem;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  max-width: 62ch;
+  margin: 1.4rem 0 0;
+}
+
+
+/* ============================================================
+   ALWAYS INCLUDED
+   ============================================================ */
+
+.act--included { padding-block: var(--section); }
+
+.included {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+}
+
+.included__list {
+  list-style: none;
+  margin: 1.6rem 0 0;
+  padding: 0;
+  /* Seven items. Two columns with a hairline between them rather than a
+     rule under every row, which is what makes a list of seven read as a
+     spec sheet. */
+  columns: 2;
+  column-gap: 2rem;
+}
+.included__list li {
+  font-family: var(--f-read);
+  font-size: .92rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  break-inside: avoid;
+  padding: .45rem 0;
+}
+
+.included__frame { margin: 0; border-radius: var(--r-media); overflow: hidden; aspect-ratio: 4 / 3; }
+.included__frame img { width: 100%; height: 100%; object-fit: cover; }
+
+
+/* ============================================================
+   THE ENQUIRY BRIEF
+   ============================================================ */
+
+.act--brief:has(.brief[hidden]) { padding: 0; }
+.act--brief { padding-block: var(--section); }
+
+.brief {
+  border: 1px solid var(--hairline-firm);
+  border-radius: var(--r-card);
+  background: var(--paper);
+  padding: 24px;
+}
+.brief__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+.brief__bar .micro { margin: 0; }
+
+.brief__text {
+  font-family: var(--f-mono);
+  font-size: .78rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 1.2rem 0 0;
+}
+
+
+/* ============================================================
+   CLOSE AND FOOTER
+   ============================================================ */
+
+.act--close-builder { padding-block: var(--section); background: var(--paper); }
+
+.act--close-builder .close {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--hairline-firm);
+}
+.act--close-builder .close__say .body { margin: .8rem 0 0; }
+
+.foot__legal {
+  font-family: var(--f-body);
+  font-size: .72rem;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  max-width: 68ch;
+  margin: 0 0 .8rem;
+}
+
+
+/* ============================================================
+   THE PHONE FEE BAR
+   Hidden on desktop, where the summary is on screen anyway.
+   ============================================================ */
+
+.feebar { display: none; }
+
+
+/* ============================================================
+   ENTRANCES
+   IntersectionObserver, not ScrollTrigger. This page registers no
+   pins and measures no document, so it cannot inherit v1's refresh
+   trap, and there is nothing here worth the cost of a scroll score.
+   Transform and opacity only.
+   ============================================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 620ms var(--ease-out), transform 620ms var(--ease-out);
+  }
+  .rise.is-in { opacity: 1; transform: none; }
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   Single column below 980px, with the fee on a fixed bottom bar.
+   ============================================================ */
+
+@media (max-width: 1100px) {
+  .treats { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 980px) {
+  .bhero { grid-template-columns: minmax(0, 1fr); }
+  .bhero__frame { order: -1; aspect-ratio: 16 / 10; }
+
+  .build { grid-template-columns: minmax(0, 1fr); }
+  .build__summary {
+    position: static;
+    max-height: none;
+  }
+  /* Unstacked, the panel is just a block in the flow, so the split that
+     keeps the controls in view on a laptop has nothing left to do. */
+  .summary__body { overflow: visible; }
+  .summary__foot { border-top: none; padding-top: 0; }
+  /* The fee lives on the fixed bar on a phone, so printing it twice
+     inside the summary as well is one number too many in one view. */
+  .build__summary .fee { display: none; }
+
+  .included { grid-template-columns: minmax(0, 1fr); }
+
+  .feebar {
+    display: block;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 55;
+    background: var(--paper);
+    border-top: 1px solid var(--hairline-firm);
+    padding: 10px var(--gutter);
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  }
+  .feebar__inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: var(--max);
+    margin-inline: auto;
+  }
+  .feebar__label {
+    font-family: var(--f-body);
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    display: block;
+  }
+  .feebar__amount {
+    flex: 1;
+    font-family: var(--f-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .feebar .btn { flex: none; }
+
+  /* Clear of the bar, so the last thing on the page is reachable. */
+  .foot { padding-bottom: 96px; }
+}
+
+@media (max-width: 700px) {
+  .choices--wide { grid-template-columns: minmax(0, 1fr); }
+  .lengths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .meals { grid-template-columns: minmax(0, 1fr); }
+  .included__list { columns: 1; }
+  .scale { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.2rem; }
+  /* The connecting line only makes sense while the stops are on one
+     row. Wrapped to two rows it would cut across the labels. */
+  .scale::before { display: none; }
+  .act--close-builder .close { flex-direction: column; align-items: flex-start; }
+
+  /* Thirty columns in 342px is three pixels a day. The strip keeps its
+     shape and scrolls sideways instead. Five and seven days fit on a
+     phone as they are, so they are left alone. */
+  .shape { overflow-x: auto; overscroll-behavior-x: contain; }
+  .shape__grid[data-scale="mid"],
+  .shape__grid[data-scale="long"] { min-width: 520px; }
+}
