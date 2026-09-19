@@ -293,6 +293,17 @@ main:focus { outline: none; }
 }
 .btn--primary { background: var(--action); color: var(--paper); }
 .btn--primary:hover { background: var(--action-hover); }
+
+/* Ghost button: sits on the section ground with a slim ember outline. */
+.btn--outline {
+  background: transparent;
+  color: var(--ember);
+  border: 1px solid var(--ember);
+  transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out),
+              transform 120ms var(--ease-out);
+}
+.btn--outline:hover { background: var(--ember); color: var(--paper); }
+
 .btn:active { transform: translateY(1px); }
 
 /* ---------- Layout ---------- */
@@ -873,7 +884,7 @@ main:focus { outline: none; }
    its own for now. No drift-on override needed here; it falls through to
    the page's own white and always has. This act is otherwise unresolved
    pending a later pass. */
-.act--rest { padding-block: var(--section); }
+.act--rest { padding-block: var(--section); background: var(--paper); }
 .act--rest .wrap--narrow { margin-bottom: clamp(32px, 6vh, 64px); }
 
 .frame--bleed {
@@ -1085,28 +1096,230 @@ main:focus { outline: none; }
    by laying a canvas plate over the photograph and setting ink on that.
    Same device here. Legible in both lights, and it keeps the rule that no
    section in this system is dark. */
-.act--peak .stage__copy {
+/* Rebuilt 2026-09-16, third attempt, from v1-ruined's rest act.
+
+   The title is its own block above the figure and needs nothing
+   peak-specific: it uses [data-fade], already defined globally.
+
+   The figure is v1-ruined's .frame--bleed with two changes, both of them
+   the single difference TJ asked for. It runs edge to edge instead of
+   inside the gutter, and it is the height of the screen instead of the
+   68vh box, so that when the wipe finishes the photograph is already
+   sitting exactly where the dissolve needs it and nothing moves when the
+   crossfade takes over. The images stack on top of each other so the
+   night one can fade in over the day one. */
+/* Rebuilt 2026-09-17. The large centred serif title on cream above the
+   photograph is gone: with the question now set on the image itself, the
+   two asked the same thing a few hundred pixels apart and the second read
+   as a repeat rather than a new beat.
+
+   The section is now one frame carrying four pieces of furniture, on a
+   diagonal so the middle of the photograph stays clear: the question quiet
+   in the top left, the sundial and the four states centred, and the answer
+   in the bottom right once the other two have gone. */
+.act--peak .peak__hold { position: relative; }
+.act--peak .peak__frame {
+  position: relative;
+  padding-inline: 0;
+  margin: 0;
+  height: 100svh;
+  min-height: 540px;
+  overflow: hidden;
+}
+.act--peak .peak__frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   max-width: none;
-  padding-inline: var(--gutter);
+  object-fit: cover;
+  object-position: 55% center;
+  border-radius: 0;
 }
-.plate {
-  background: var(--canvas);
-  border-radius: var(--r-card);
-  padding: clamp(24px, 3vw, 36px) clamp(28px, 3.4vw, 44px);
-  width: min(46ch, 100%);
-  border-top: 1px solid rgba(255,255,255,.5);
+.act--peak .dissolve__night { opacity: 0; will-change: opacity; }
+
+/* Scrim bands. The type below sits directly on the photograph, where it
+   measured about 2.8 to 1 over the bright afternoon sofa. The nav's ink
+   flip cannot solve this the way it solves the chips, because the chips
+   have their own tinted surface to sit on and this type does not. */
+.act--peak .peak__band {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 34%;
+  background: linear-gradient(to top, rgba(10,10,10,.34), rgba(10,10,10,0));
+  pointer-events: none;
 }
-.act--peak .plate .say {
+.act--peak .peak__band--top {
+  top: 0; bottom: auto; height: 26%;
+  background: linear-gradient(to bottom, rgba(10,10,10,.32), rgba(10,10,10,0));
+}
+
+/* The question. Montserrat, not the display face, and deliberately small:
+   it is a label on the image, not the section's headline.
+
+   Moved outside the figure and onto fixed positioning 2026-09-17. It used
+   to be an absolutely positioned child of the figure, which is the element
+   the wipe clips: before the wipe starts, the figure is clipped to
+   nothing, so the title was invisible from the very first frame, which is
+   the opposite of what TJ wanted, visible on the plain ground before the
+   photograph arrives. Fixed, at the same coordinates the figure itself
+   resolves to once its own pin engages, means the title sits in the same
+   screen position throughout: on the cream ground while the section is
+   still approaching, then covered by the photograph as it wipes up over
+   it, with no jump at the handover because both are anchored to the
+   viewport, not to document flow. */
+.act--peak .peak__ask {
+  position: fixed;
+  top: calc(var(--nav-h) + clamp(18px, 3vh, 34px));
+  /* Pulled in from the corner 2026-09-17: 15% of the screen width, on top
+     of the existing gutter, not a resize of the gutter itself. */
+  left: calc(var(--gutter) + 15vw);
+  margin: 0;
+  /* One line. The 16ch cap that was here broke it across two, which read
+     as a paragraph rather than a label. */
+  max-width: none;
+  white-space: nowrap;
+  font-family: var(--f-body);
+  font-size: clamp(.72rem, .95vw, .95rem);
+  font-weight: 400;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  line-height: 1.5;
+  /* Starts dark grey on the cream ground. The flip to white is now a hard
+     cut timed to the wipe passing over it, not a gradual ease across the
+     whole crossfade, so it reads as the swipe itself changing the colour.
+     See actPeak() in v1.js. */
   color: var(--ink);
-  margin-bottom: 0;
-  max-width: none;
-  font-size: clamp(1.5rem, 2.6vw, 2.3rem);
+  opacity: 0;
+  z-index: 1;
+  will-change: opacity, color;
 }
-.act--peak [data-cue] { will-change: opacity, transform; }
-/* Each line occupies the same slot, so the plate does not resize as the
-   lines hand over and the frame behind it never jumps. */
-.plate__slot { display: grid; }
-.plate__slot > * { grid-area: 1 / 1; }
+
+/* The clock: sundial over the four states, centred, clearing away
+   together once the light has gone. Raised 2026-09-17: it sat in the
+   bottom sixth of the screen, TJ wanted it between there and mid screen.
+   The sun's own travel distance is unchanged, only the block's position;
+   see .sundial__sky below, which still clips over its own fixed height. */
+.act--peak .peak__clock {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  bottom: clamp(230px, 34vh, 400px);
+  width: min(560px, calc(100% - var(--gutter) * 2));
+  display: flex; flex-direction: column; align-items: center;
+  gap: clamp(20px, 3.4vh, 38px);
+  opacity: 0;
+  will-change: opacity;
+  pointer-events: none;
+}
+
+/* The sun travels inside .sundial__sky, which clips it, so the disc is
+   genuinely cut by the horizon as it sets rather than sliding under a
+   drawn line. The line itself is the sky box's own bottom edge. */
+.act--peak .sundial {
+  position: relative;
+  width: min(340px, 64vw);
+  height: clamp(86px, 13vh, 132px);
+}
+.act--peak .sundial__sky {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.act--peak .sundial__sun {
+  position: absolute;
+  left: 50%;
+  width: clamp(30px, 4.4vw, 46px);
+  height: clamp(30px, 4.4vw, 46px);
+  margin-left: calc(clamp(30px, 4.4vw, 46px) / -2);
+  border-radius: 50%;
+  background: var(--paper);
+  top: 0;
+  will-change: transform;
+}
+.act--peak .sundial__line {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: var(--paper);
+  opacity: .55;
+}
+
+.act--peak .peak__states {
+  display: flex;
+  gap: clamp(14px, 2.6vw, 34px);
+  justify-content: center;
+  flex-wrap: nowrap;
+  font-family: var(--f-body);
+  font-size: clamp(8px, .92vw, 11px);
+  font-weight: 500;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--paper);
+  white-space: nowrap;
+}
+
+/* The answer, bottom right, after the clock has gone. */
+.act--peak .peak__answer {
+  position: absolute;
+  /* Pulled in from the corner 2026-09-17, matching the question: 15% of
+     the screen width on top of the existing gutter. */
+  right: calc(var(--gutter) + 15vw);
+  /* Raised 2026-09-17, TJ asked for it higher but still clearly under the
+     four words: the clock block's own floor is clamp(230px, 34vh, 400px),
+     so this stays under that with real margin at every size. */
+  bottom: clamp(140px, 20vh, 220px);
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: clamp(14px, 2.2vh, 22px);
+  text-align: right;
+  opacity: 0;
+  transform: translateY(16px);
+  will-change: opacity, transform;
+}
+/* Set to match the question exactly, 2026-09-17. It was the display serif
+   at up to 3.4rem, which made the answer shout back at a question asked
+   in a whisper. The pair now reads as one quiet exchange across the
+   diagonal. */
+.act--peak .peak__yes {
+  margin: 0;
+  font-family: var(--f-body);
+  text-transform: uppercase;
+  font-size: clamp(.72rem, .95vw, .95rem);
+  font-weight: 400;
+  letter-spacing: .13em;
+  line-height: 1.5;
+  white-space: nowrap;
+  color: var(--paper);
+}
+
+/* The booking control, quieted to sit with them. The filled ember button
+   is the page's loudest object and it was pulling the eye off the
+   photograph the moment it arrived. A hairline and a letter-spaced label
+   keeps the same target size without the block of colour, and the page's
+   own depth language is hairlines rather than fills. */
+.act--peak .peak__answer .btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, .45);
+  color: var(--paper);
+  font-family: var(--f-body);
+  font-size: clamp(.68rem, .88vw, .82rem);
+  font-weight: 400;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  padding: 12px 22px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .act--peak .peak__answer .btn:hover {
+    background: rgba(255, 255, 255, .12);
+    border-color: rgba(255, 255, 255, .7);
+  }
+}
+
+/* Below the phone breakpoint the four states will not fit one row at a
+   readable size, so they stack two by two and the sundial comes down. */
+@media (max-width: 620px) {
+  .act--peak .peak__states {
+    flex-wrap: wrap;
+    max-width: 22ch;
+    gap: 8px clamp(12px, 4vw, 20px);
+  }
+  .act--peak .peak__ask { max-width: 12ch; }
+}
 
 /* ---------- The turn: story hands over to answer ---------- */
 
@@ -1245,7 +1458,7 @@ main:focus { outline: none; }
 
 /* ---------- Act 7: programmes ---------- */
 
-.act--programmes { padding-block: var(--section); background: var(--canvas); }
+.act--programmes { padding-block: var(--section); background: var(--paper); }
 
 /* ============================================================
    THE AURORA, the programmes act only
@@ -1714,31 +1927,10 @@ main:focus { outline: none; }
     padding-top: clamp(20px, 4vh, 32px);
   }
 
-  /* Act 5, the dissolve. The plate comes out from over the photograph and
-     sits under it, so neither the frame nor the line has to give way. */
-  .act--peak .stage {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: clamp(20px, 4vh, 32px);
-    background: var(--canvas);
-  }
-  .act--peak .dissolve {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    flex: none;
-  }
-  .act--peak .scrim--band { display: none; }
-  .act--peak .stage__copy { position: relative; padding-bottom: 0; }
-  .act--peak .plate {
-    background: transparent;
-    border-top: none;
-    padding: 0;
-    width: 100%;
-  }
-  .act--peak .plate .say { font-size: clamp(1.5rem, 6.5vw, 2rem); }
+  /* Act 5, the dissolve. Removed 2026-09-16: this block existed to keep the
+     old plate from overlapping the photograph on small screens. The title
+     is its own block above the frame now, in normal flow, so there is
+     nothing left to keep apart and nothing here to override. */
 
   /* Act 3, the treatment frame */
   .stage__frame { aspect-ratio: 4 / 3; }
@@ -2508,4 +2700,739 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   .tv2__bar { margin-top: 32px; }
   .tv2__head { margin-bottom: 16px; }
   .tv2__row { margin-bottom: 20px; }
+}
+
+/* ============================================================
+   ACT: STANDALONE TREATMENTS (IN-HOME CARE)
+   True Horizontal Stepped Concertina (No Cards) + Minimal Scrubber
+   ============================================================ */
+
+.act--treatments {
+  padding-block: clamp(90px, 10vh, 120px) clamp(70px, 8vh, 90px);
+  background: #F3EFEC; /* TPS Brand Pack Canvas (Pure solid color-block edge) */
+  border: none;
+  position: relative;
+  scroll-margin-top: calc(var(--nav-h) + 20px);
+  overflow: hidden;
+}
+
+.treatments-wrap {
+  max-width: 1260px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 4vw, 40px);
+}
+
+.act--treatments .sec-head {
+  text-align: center;
+  max-width: 68ch;
+  margin-inline: auto;
+  margin-bottom: clamp(32px, 4vh, 48px);
+}
+
+.act--treatments .sec-head .standfirst {
+  margin-inline: auto;
+}
+
+/* ---------- The True Horizontal Stepped Concertina Arena ---------- */
+
+.concertina-arena {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 100%;
+  min-height: 440px;
+  height: 440px;
+  position: relative;
+  overflow: visible;
+  margin-top: clamp(20px, 3vh, 32px);
+}
+
+/* Individual Pleat Panel */
+.concertina-pleat {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  outline: none;
+  user-select: none;
+  transition: flex-basis 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+              flex-grow 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+              max-width 0.62s cubic-bezier(0.16, 1, 0.3, 1),
+              min-width 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Collapsed Pleat (Slim Spine with Stepped Hairline) */
+.concertina-pleat:not(.is-open) {
+  flex: 0 0 52px;
+  min-width: 52px;
+  cursor: pointer;
+  overflow: visible;
+  /* A concrete value, not `none`: max-width is transitioned, and `none` is
+     not interpolatable, so the closing pleat would snap to full width for a
+     few frames before flex-basis pulled it back. */
+  max-width: 52px;
+}
+
+/* Expanded Pleat: the pleat itself widens between the hairlines, pushing the
+   remaining spines along the row. That widening IS the concertina, so it is
+   animated on flex-basis rather than swapped in a fixed stage. */
+.concertina-pleat.is-open {
+  /* An explicit basis, not auto: flex-basis needs two concrete endpoints for
+     the widening to interpolate instead of snapping open. */
+  flex: 1 1 calc(100% - 156px);
+  min-width: 0;
+  overflow: hidden;
+  cursor: default;
+  /* The panel is capped so the spines trailing it are never pushed to the
+     right edge: each trailing label starts at its own hairline and runs
+     rightward, and --trail-reach reserves exactly that run. */
+  max-width: calc(100% - var(--lead-spines, 0px) - var(--trail-reach, 0px) - 12px);
+}
+
+/* Vertical Dividing Hairline (Stepped from --step-top) */
+.concertina-pleat__line {
+  position: absolute;
+  left: 0;
+  top: var(--step-top, 0px);
+  bottom: 0;
+  width: 1px;
+  background: var(--hairline-firm);
+  transition: background 0.32s ease, width 0.32s ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.concertina-pleat:hover .concertina-pleat__line {
+  background: var(--ember);
+}
+
+.concertina-pleat.is-open .concertina-pleat__line {
+  background: var(--ember);
+  width: 2px;
+}
+
+/* Collapsed Stepped Horizontal Tab Title (Matching diagram.png) */
+.concertina-pleat__tab {
+  position: absolute;
+  left: 0;
+  top: var(--step-top, 0px);
+  height: 38px;
+  background: transparent;
+  border: none;
+  padding: 0 12px 0 14px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+  width: max-content;
+  z-index: 10;
+  transition: opacity 0.3s ease, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.concertina-pleat:hover .concertina-pleat__tab {
+  transform: translateX(4px);
+}
+
+/* Every treatment keeps its label in the cascade, including the open one, so
+   the ladder always reads as four stepped hairlines with four titles. The open
+   pleat's label is simply marked as current. */
+.concertina-pleat.is-open .concertina-pleat__tab {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.concertina-pleat.is-open .concertina-pleat__tab-title {
+  color: var(--ember);
+}
+
+.concertina-pleat.is-open .concertina-pleat__tab-icon {
+  opacity: 0;
+}
+
+.concertina-pleat__tab-title {
+  font-family: var(--f-display);
+  font-size: clamp(1.02rem, 1.15vw, 1.2rem);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1;
+  transition: color 0.24s ease;
+}
+
+.concertina-pleat:hover .concertina-pleat__tab-title {
+  color: var(--ink-strong);
+}
+
+.concertina-pleat__tab-icon {
+  font-family: var(--f-display);
+  font-size: 1.3rem;
+  color: var(--ink-mute);
+  line-height: 1;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.concertina-pleat:hover .concertina-pleat__tab-icon {
+  color: var(--ember);
+  transform: translateX(3px);
+}
+
+/* Expanded Pleat Body */
+.concertina-pleat:not(.is-open) .concertina-pleat__body {
+  display: none;
+}
+
+/* The body sits inside the pleat and is revealed as the pleat widens. The
+   left inset clears this pleat's own label, which stays on its rung. */
+.concertina-pleat.is-open .concertina-pleat__body {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  padding-left: var(--body-inset, 210px);
+  padding-right: clamp(16px, 2vw, 28px);
+  animation: pleatContentFadeIn 0.42s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pleatContentFadeIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.concertina-pleat__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: clamp(24px, 3vw, 40px);
+  align-items: center;
+  width: 100%;
+}
+
+.concertina-pleat__copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.concertina-pleat__headline {
+  font-family: var(--f-display);
+  font-size: clamp(1.42rem, 1.78vw, 1.85rem);
+  font-weight: 400;
+  line-height: 1.16;
+  color: var(--ink-strong);
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.concertina-pleat__desc {
+  font-family: var(--f-read);
+  font-size: 0.94rem;
+  line-height: 1.56;
+  color: var(--ink-soft);
+  margin: 0 0 16px;
+  max-width: 46ch;
+}
+
+
+/* Right Media Block (Framed on Canvas, 16px Radius) */
+.concertina-pleat__media {
+  position: relative;
+  border-radius: var(--r-media);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  max-height: 380px;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  box-shadow: 0 8px 24px -6px rgba(10, 10, 10, 0.08);
+}
+
+.concertina-pleat__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+
+/* ---------- Progress bar ----------
+   Same design as the testimonials bar (.tv2__bar / .tv2__fill): a 1px
+   hairline track with a fill that animates its width. No thumb, no dots,
+   no labels. The track still takes click and drag, so a generous
+   transparent hit area sits over the hairline via ::before. */
+
+/* Each open pleat's copy has to start clear of that pleat's own label, which
+   stays pinned on its rung at the pleat's left edge; and clear of the labels
+   of the spines trailing it, which run leftward into the panel.
+
+   The label type is clamp(1.02rem, 1.15vw, 1.2rem), so it grows with the
+   viewport up to 1.2rem. These gutters are expressed in the same vw unit with
+   a px floor so they track the text instead of being outrun by it on wide
+   screens, and an upper cap because the type stops growing at 1.2rem while a
+   raw vw value would keep widening and crush the image. */
+.concertina-pleat[data-pleat="3"] {
+  --body-inset: clamp(215px, 13.2vw, 254px);
+  --lead-spines: 0px;
+  --trail-reach: clamp(367px, 22.6vw, 434px);
+}
+.concertina-pleat[data-pleat="2"] {
+  --body-inset: clamp(214px, 13.1vw, 253px);
+  --lead-spines: 52px;
+  --trail-reach: clamp(315px, 19.4vw, 372px);
+}
+.concertina-pleat[data-pleat="1"] {
+  --body-inset: clamp(311px, 19.1vw, 368px);
+  --lead-spines: 104px;
+  --trail-reach: clamp(263px, 16.2vw, 311px);
+}
+.concertina-pleat[data-pleat="0"] {
+  --body-inset: clamp(291px, 17.9vw, 344px);
+  --lead-spines: 156px;
+  --trail-reach: 0px;
+}
+
+/* ------------------------------------------------------------------
+   ENTRANCE / EXIT for the treatments act.
+
+   Three movements, sequenced so they read as cause and effect rather
+   than as three things firing at once:
+
+     1. the heading and standfirst assemble, lines rising from behind
+        a mask;
+     2. the four hairlines draw themselves downward, staggered left to
+        right, which turns the descending-height stagger that already
+        defines this section into a motion;
+     3. the open panel's copy and photo lift in behind them.
+
+   Everything here animates transform and opacity only. In particular
+   the hairline is drawn with scaleY from a top origin, NEVER with
+   height or top: those two are what the concertina itself moves when a
+   pleat opens, and animating them here would fight the mechanism.
+   ------------------------------------------------------------------ */
+
+/* --- 1. the heading assembles ------------------------------------- */
+
+.act--treatments .sec-head__mask {
+  display: block;
+  overflow: hidden;
+}
+
+.act--treatments .sec-head__mask > * {
+  display: block;
+  transform: translateY(105%);
+  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.act--treatments.is-in .sec-head__mask > * {
+  transform: translateY(0);
+}
+
+.act--treatments .sec-head__mask--sub > * {
+  transition-delay: 0.07s;
+}
+
+/* --- 2. the hairlines draw down ----------------------------------- */
+
+.concertina-pleat__line {
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: background 0.32s ease,
+              width 0.32s ease,
+              transform 0.66s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.act--treatments.is-in .concertina-pleat__line {
+  transform: scaleY(1);
+}
+
+/* Staggered left to right, after the heading has landed. */
+.act--treatments.is-in .concertina-pleat[data-pleat="3"] .concertina-pleat__line { transition-delay: 0.16s; }
+.act--treatments.is-in .concertina-pleat[data-pleat="2"] .concertina-pleat__line { transition-delay: 0.23s; }
+.act--treatments.is-in .concertina-pleat[data-pleat="1"] .concertina-pleat__line { transition-delay: 0.30s; }
+.act--treatments.is-in .concertina-pleat[data-pleat="0"] .concertina-pleat__line { transition-delay: 0.37s; }
+
+/* The labels follow their own line rather than arriving as a block. */
+.concertina-pleat__tab {
+  opacity: 0;
+  transition: opacity 0.5s ease,
+              transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.act--treatments.is-in .concertina-pleat__tab {
+  opacity: 1;
+}
+
+.act--treatments.is-in .concertina-pleat[data-pleat="3"] .concertina-pleat__tab { transition-delay: 0.26s; }
+.act--treatments.is-in .concertina-pleat[data-pleat="2"] .concertina-pleat__tab { transition-delay: 0.33s; }
+.act--treatments.is-in .concertina-pleat[data-pleat="1"] .concertina-pleat__tab { transition-delay: 0.40s; }
+.act--treatments.is-in .concertina-pleat[data-pleat="0"] .concertina-pleat__tab { transition-delay: 0.47s; }
+
+/* Once the entrance has finished, every stagger delay is dropped. Without
+   this the first click inherits the entrance timing and the concertina
+   visibly stalls before it starts to widen. .is-settled is added by the
+   script when the last entrance step has landed. */
+.act--treatments.is-settled .concertina-pleat__line,
+.act--treatments.is-settled .concertina-pleat__tab,
+.act--treatments.is-settled .concertina-pleat__copy > *,
+.act--treatments.is-settled .concertina-pleat__media,
+.act--treatments.is-settled .treatments-cta {
+  transition-delay: 0s;
+}
+
+/* --- 3. the open panel lifts in ----------------------------------- */
+
+.act--treatments .concertina-pleat__copy > *,
+.act--treatments .concertina-pleat__media {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.62s ease, transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.act--treatments.is-in .concertina-pleat__copy > *,
+.act--treatments.is-in .concertina-pleat__media {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.act--treatments.is-in .concertina-pleat__copy > *:nth-child(1) { transition-delay: 0.40s; }
+.act--treatments.is-in .concertina-pleat__copy > *:nth-child(2) { transition-delay: 0.47s; }
+.act--treatments.is-in .concertina-pleat__media { transition-delay: 0.54s; }
+
+/* A pleat opened later by the reader must show its content at once;
+   the entrance delays would otherwise re-stagger it on every click. */
+.act--treatments.is-in .concertina-pleat.is-open .concertina-pleat__copy > *,
+.act--treatments.is-in .concertina-pleat.is-open .concertina-pleat__media {
+  transition-delay: 0s;
+}
+
+/* --- the CTA ------------------------------------------------------ */
+
+.act--treatments .treatments-cta {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.52s ease 0.62s,
+              transform 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.62s;
+}
+
+.act--treatments.is-in .treatments-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- reduced motion ----------------------------------------------- */
+/* Fewer and gentler, not zero: the opacity that carries comprehension
+   stays, every position change goes. */
+@media (prefers-reduced-motion: reduce) {
+  .act--treatments .sec-head__mask > *,
+  .act--treatments.is-in .sec-head__mask > * {
+    transform: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .act--treatments .sec-head__mask > * { opacity: 0; }
+  .act--treatments.is-in .sec-head__mask > * { opacity: 1; }
+
+  .concertina-pleat__line { transform: none; }
+
+  .act--treatments .concertina-pleat__copy > *,
+  .act--treatments .concertina-pleat__media,
+  .act--treatments .treatments-cta {
+    transform: none;
+    transition: opacity 0.4s ease;
+  }
+}
+
+/* Section-level booking action for the whole treatments act. */
+.treatments-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(28px, 4vh, 44px);
+}
+
+/* Between 900px and 1150px the label insets eat most of the pleat, so the
+   image would be squeezed to a sliver. Drop it and let the copy have the
+   panel; the concertina motion is what matters at this width. */
+@media (min-width: 900px) and (max-width: 1150px) {
+  .concertina-pleat__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .concertina-pleat__media {
+    display: none;
+  }
+}
+
+/* ---------- Responsive Layout (< 900px) ---------- */
+
+@media (max-width: 900px) {
+  .concertina-arena {
+    flex-direction: column;
+    min-height: auto;
+    height: auto;
+  }
+
+  .concertina-pleat {
+    flex-direction: column;
+    width: 100%;
+    min-width: 100%;
+    border-bottom: 1px solid var(--hairline);
+    transition: none;
+  }
+
+  .concertina-pleat:not(.is-open) {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 100%;
+    height: 52px;
+    min-height: 52px;
+  }
+
+  .concertina-pleat.is-open {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 100%;
+    height: auto;
+    min-height: auto;
+    padding-bottom: 20px;
+  }
+
+  .concertina-pleat__line {
+    display: none;
+  }
+
+  /* Stacked rows: undo the desktop rail positioning. */
+  .concertina-pleat__tab,
+  .concertina-pleat.is-open .concertina-pleat__tab {
+    position: relative;
+    left: 0;
+    right: auto;
+    top: 0;
+    width: 100%;
+    height: 52px;
+    padding: 0 12px;
+    transform: none;
+  }
+
+  .concertina-pleat.is-open .concertina-pleat__tab {
+    display: none;
+  }
+
+  .concertina-pleat__tab-title {
+    flex-grow: 1;
+    text-align: left;
+    font-size: 1.02rem;
+  }
+
+  /* The desktop stage is pinned to the right of the arena; stacked rows put
+     the body back in normal flow underneath its own row. */
+  .concertina-pleat__body,
+  .concertina-pleat.is-open .concertina-pleat__body {
+    position: static;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 16px;
+    transform: none;
+  }
+
+  /* The stepped hairline is a desktop device only. */
+  .concertina-pleat.is-open .concertina-pleat__line {
+    position: absolute;
+    left: 0;
+  }
+
+  .concertina-pleat__grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .concertina-pleat__media {
+    max-height: 260px;
+    aspect-ratio: 16 / 10;
+  }
+
+}
+
+/* ============================================================
+   SECTION 6b: TREATMENTS, HORIZONTAL ACCORDION
+   Added 2026-09-17, alongside the original section 6 above, not
+   replacing it. Prototyped in lab/accordion-options.html; this is
+   label option one (short distinguishing words per panel) with the
+   split open-panel treatment, photograph and copy side by side rather
+   than type overlaid on the image, because the treatment photographs
+   here are pale and bright and a scrim would have been the third one
+   on the page.
+   ============================================================ */
+.act--treatments-b {
+  padding-block: clamp(90px, 10vh, 120px) clamp(70px, 8vh, 90px);
+  background: var(--canvas);
+  position: relative;
+  scroll-margin-top: calc(var(--nav-h) + 20px);
+}
+.treatments-b-wrap {
+  max-width: 1260px;
+  margin-inline: auto;
+  padding-inline: clamp(20px, 4vw, 40px);
+}
+.act--treatments-b .sec-head {
+  text-align: center;
+  max-width: 52ch;
+  margin-inline: auto;
+  margin-bottom: clamp(32px, 4vh, 48px);
+}
+
+/* The row. Widths are what animate; overflow: hidden on each panel does
+   the cropping, nothing reflows. Matches the reference's proportions:
+   roughly a fifth of the row per closed panel, the rest to the open one. */
+.tb-acc {
+  display: flex;
+  gap: 3px;
+  height: min(58vh, 520px);
+  border-radius: var(--r-media);
+  overflow: hidden;
+}
+.tb-acc__panel {
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(96px, 12vw, 140px);
+  height: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  background: var(--blush);
+  overflow: hidden;
+  transition: width .55s cubic-bezier(.65, 0, .35, 1);
+  text-align: left;
+  font: inherit;
+}
+.tb-acc__panel.is-open {
+  flex: 1 1 auto;
+  width: auto;
+  background: var(--paper);
+  cursor: default;
+}
+.tb-acc__panel > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .82;
+  transition: opacity .4s ease;
+}
+.tb-acc__panel.is-open > img { opacity: 0; }
+
+/* The closed label. Horizontal, bottom anchored, one short word so it
+   never wraps at the panel's minimum width (clamp floor 96px). Distinct
+   words per panel, agreed 2026-09-17 after the real names ("Postpartum
+   Massage", "Traditional Massage" etc.) turned out to repeat "Massage"
+   three or four times, which made them useless as closed labels: the
+   section title now carries that word once for the whole group instead. */
+.tb-acc__label {
+  position: absolute;
+  left: 0; right: 0; bottom: clamp(16px, 3vh, 28px);
+  text-align: center;
+  padding-inline: 8px;
+  font-family: var(--f-body);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-weight: 500;
+  font-size: clamp(.68rem, .85vw, .8rem);
+  color: var(--ink);
+  white-space: nowrap;
+  opacity: 1;
+  transition: opacity .25s ease;
+}
+.tb-acc__panel.is-open .tb-acc__label { opacity: 0; }
+
+/* The open panel. Photograph and copy side by side on the panel's own
+   blush ground, so the copy never needs a scrim over the photograph. */
+.tb-acc__open {
+  position: absolute;
+  inset: 0;
+  display: none;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.tb-acc__panel.is-open .tb-acc__open { display: grid; }
+.tb-acc__open-media {
+  position: relative;
+  overflow: hidden;
+  background: var(--blush);
+}
+.tb-acc__open-media img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.tb-acc__open-copy {
+  background: var(--blush);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: .5rem;
+  padding: clamp(20px, 3vw, 44px);
+}
+.tb-acc__meta {
+  font-family: var(--f-body);
+  font-size: clamp(.68rem, .85vw, .78rem);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.tb-acc__open-copy h3 {
+  margin: 0;
+  font-family: var(--f-display);
+  text-transform: uppercase;
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+  line-height: 1.15;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+.tb-acc__open-copy p {
+  margin: 0;
+  font-family: var(--f-read);
+  font-size: clamp(.86rem, 1.1vw, .98rem);
+  line-height: 1.55;
+  color: var(--ink-mute);
+  max-width: 36ch;
+}
+
+/* Mobile: vertical, not squeezed horizontal. TJ asked specifically for
+   this rather than letting the same row shrink, since four panels each
+   trying to keep a minimum readable width cannot fit a phone screen
+   without either the labels or the photograph losing all their room.
+   Stacked, each row is short when closed and expands in height rather
+   than width when opened; the mechanic is the same principle, animate
+   the dimension that changes, crop with overflow: hidden, just turned
+   90 degrees. */
+@media (max-width: 720px) {
+  .tb-acc {
+    flex-direction: column;
+    height: auto;
+    gap: 2px;
+  }
+  .tb-acc__panel {
+    width: 100%;
+    height: 72px;
+    flex: 0 0 auto;
+    transition: height .5s cubic-bezier(.65, 0, .35, 1);
+  }
+  .tb-acc__panel.is-open {
+    height: min(70vh, 620px);
+    flex: 0 0 auto;
+  }
+  .tb-acc__label {
+    bottom: auto; top: 50%;
+    transform: translateY(-50%);
+  }
+  .tb-acc__open { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+  .tb-acc__open-media { min-height: 160px; }
 }

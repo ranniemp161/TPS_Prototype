@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Night care indicator: three options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600&family=Karla:wght@400;500&display=swap" />
+<style>
+  :root {
+    --canvas:    #F3EFEC;
+    --paper:     #FFFFFF;
+    --ink:       #0A0A0A;
+    --ink-mute:  #5A524F;
+    --ember:     #A64C45;
+    --ember-deep:#8C362F;
+    --sand:      #C9B9B5;
+    --hairline:  rgba(10,10,10,.08);
+    --f-display: "Instrument Serif", Georgia, serif;
+    --f-body:    "Montserrat", ui-sans-serif, system-ui, sans-serif;
+    --f-read:    "Karla", ui-sans-serif, system-ui, sans-serif;
+    --r-button:  8px;
+    --gutter:    24px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--f-read); }
+
+  /* ---- explainer chrome, not part of any proposal ---- */
+  .note {
+    max-width: 720px; margin: 0 auto; padding: 88px var(--gutter) 40px;
+  }
+  .note h1 {
+    font-family: var(--f-display); text-transform: uppercase;
+    font-size: clamp(2rem, 4vw, 3rem); line-height: 1.1; margin: 0 0 18px;
+    letter-spacing: .02em;
+  }
+  .note p { font-size: 15px; line-height: 1.65; color: var(--ink-mute); margin: 0 0 12px; }
+  .label {
+    font-family: var(--f-body); text-transform: uppercase; letter-spacing: .16em;
+    font-size: 10px; color: var(--ember); margin: 0 0 10px;
+  }
+  .divider { height: 1px; background: var(--hairline); max-width: 720px; margin: 24px auto; }
+
+  /* ---- the scroll rig each option runs in ---- */
+  .demo { height: 320vh; position: relative; }
+  .frame {
+    position: sticky; top: 0; height: 100svh; overflow: hidden;
+  }
+  .frame img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; object-position: 55% center;
+  }
+  .frame .night { opacity: 0; }
+
+  /* The page's own scrim band device. Without it, small type sitting
+     directly on the photograph measures about 2.8 to 1 over the bright
+     afternoon sofa, which is the contrast trap the old text plate existed
+     to solve. This is the lighter fix: density only where the type is. */
+  .band {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 34%;
+    background: linear-gradient(to top, rgba(10,10,10,.34), rgba(10,10,10,0));
+    pointer-events: none;
+  }
+  .band--top {
+    top: 0; bottom: auto; height: 26%;
+    background: linear-gradient(to bottom, rgba(10,10,10,.30), rgba(10,10,10,0));
+  }
+
+  /* the section title, same treatment the real page uses */
+  .heading {
+    position: absolute; left: 0; right: 0; top: 7%;
+    text-align: center; padding-inline: var(--gutter);
+    font-family: var(--f-display); text-transform: uppercase;
+    font-size: clamp(1.6rem, 4.2vw, 3.4rem); letter-spacing: .02em;
+    margin: 0; white-space: nowrap;
+  }
+
+  /* ============ OPTION 1 · the words ============ */
+  .words {
+    position: absolute; left: 0; right: 0; bottom: 9%;
+    display: flex; gap: clamp(18px, 4vw, 54px);
+    justify-content: center; padding-inline: var(--gutter);
+    font-family: var(--f-body); text-transform: uppercase;
+    font-size: clamp(9px, 1.15vw, 13px); letter-spacing: .22em; font-weight: 500;
+  }
+  .words span { transition: opacity .25s linear; white-space: nowrap; }
+
+  /* ============ OPTION 2 · the answer ============ */
+  .answer {
+    position: absolute; left: 0; right: 0; bottom: 12%;
+    text-align: center; padding-inline: var(--gutter);
+    display: flex; flex-direction: column; align-items: center; gap: 22px;
+  }
+  .answer__yes {
+    font-family: var(--f-display); text-transform: uppercase;
+    font-size: clamp(2rem, 5vw, 4rem); letter-spacing: .02em; margin: 0;
+    opacity: 0; transform: translateY(14px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .answer__cta {
+    display: inline-block; font-family: var(--f-body); font-size: 13px;
+    font-weight: 500; letter-spacing: .04em;
+    background: var(--ember); color: var(--paper);
+    padding: 13px 26px; border-radius: var(--r-button); text-decoration: none;
+    opacity: 0; transform: translateY(14px);
+    transition: opacity .5s ease .12s, transform .5s ease .12s, background .2s ease;
+  }
+  .answer__cta:hover { background: var(--ember-deep); }
+  .answer.is-in .answer__yes,
+  .answer.is-in .answer__cta { opacity: 1; transform: none; }
+
+  /* ============ OPTION 3 · the horizon ============ */
+  /* A sun descending toward a horizon line, then sinking through it.
+     Not a rail: nothing travels sideways and there is no track. */
+  .horizon {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    bottom: 11%; width: min(260px, 52vw); height: 150px;
+    pointer-events: none;
+  }
+  .horizon__line {
+    position: absolute; left: 0; right: 0; bottom: 42px; height: 1px;
+    background: currentColor; opacity: .5;
+  }
+  .horizon__sun {
+    position: absolute; left: 50%; width: 15px; height: 15px;
+    margin-left: -7.5px; border-radius: 50%;
+    background: currentColor;
+  }
+  /* the part of the sun below the line is hidden, so it genuinely sets */
+  .horizon__clip {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 108px;
+    overflow: hidden;
+  }
+  .horizon__cap {
+    position: absolute; left: 0; right: 0; bottom: 30px;
+    text-align: center; font-family: var(--f-body);
+    text-transform: uppercase; letter-spacing: .22em; font-size: 10px;
+    font-weight: 500; opacity: .75;
+  }
+</style>
+</head>
+<body>
+
+<div class="note">
+  <h1>Three ways to show the light changing</h1>
+  <p>Scroll each one. They use the real photographs, the real type and the real palette, so what you see is what the page would look like. Nothing here is wired into the live page.</p>
+  <p>Each behaves the way the real section does: the frame holds still and your scrolling drives the light from afternoon into night.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ OPTION 1 ============ -->
+<div class="note">
+  <p class="label">Option one</p>
+  <h1 style="font-size:clamp(1.4rem,3vw,2rem)">The words</h1>
+  <p>Morning, afternoon, evening, night. The one you are in sits at full strength and the others stay faint, and the lit one travels as you scroll. The ink flips from dark to white partway down, the same way the menu chips do, so it stays readable as the room darkens.</p>
+</div>
+
+<section class="demo" data-demo="words">
+  <div class="frame">
+    <img class="day"   src="../assets/img/care.webp"  alt="" />
+    <img class="night" src="../assets/img/night.webp" alt="" />
+    <div class="band band--top"></div>
+    <div class="band"></div>
+    <h2 class="heading">Do we offer night care?</h2>
+    <div class="words">
+      <span data-w="0">Morning</span>
+      <span data-w="1">Afternoon</span>
+      <span data-w="2">Evening</span>
+      <span data-w="3">Night</span>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ OPTION 2 ============ -->
+<div class="note">
+  <p class="label">Option two</p>
+  <h1 style="font-size:clamp(1.4rem,3vw,2rem)">The answer</h1>
+  <p>No indicator at all. The question stays on screen, and once the light has gone the answer arrives with the booking button under it. The pull is wanting the answer rather than being told to scroll.</p>
+</div>
+
+<section class="demo" data-demo="answer">
+  <div class="frame">
+    <img class="day"   src="../assets/img/care.webp"  alt="" />
+    <img class="night" src="../assets/img/night.webp" alt="" />
+    <div class="band band--top"></div>
+    <div class="band"></div>
+    <h2 class="heading">Do we offer night care?</h2>
+    <div class="answer">
+      <p class="answer__yes">Yes. Every night.</p>
+      <a class="answer__cta" href="#">Enquire now</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============ OPTION 3 ============ -->
+<div class="note">
+  <p class="label">Option three</p>
+  <h1 style="font-size:clamp(1.4rem,3vw,2rem)">The horizon</h1>
+  <p>A sun descending toward a horizon line and sinking through it. It is not a rail, nothing travels sideways and there is no track to fill. The disc sitting above the line is what tells you there is further to go.</p>
+</div>
+
+<section class="demo" data-demo="horizon">
+  <div class="frame">
+    <img class="day"   src="../assets/img/care.webp"  alt="" />
+    <img class="night" src="../assets/img/night.webp" alt="" />
+    <div class="band band--top"></div>
+    <div class="band"></div>
+    <h2 class="heading">Do we offer night care?</h2>
+    <div class="horizon">
+      <div class="horizon__clip"><div class="horizon__sun"></div></div>
+      <div class="horizon__line"></div>
+      <div class="horizon__cap">Afternoon</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+<div class="note">
+  <p>End of the examples. Tell me which to take further, or which parts to combine.</p>
+</div>
+
+<script>
+/* Progress through each demo section, 0 to 1, the same shape the real
+   pinned act produces. Plain scroll maths, no GSAP: this is a mockup. */
+const demos = [...document.querySelectorAll('.demo')];
+
+// The point where ink flips from dark to white, matching the live page's
+// nav behaviour rather than guessing a new number.
+const INK_FLIP = 0.345;
+
+const lerp = (a, b, t) => a + (b - a) * t;
+
+function paint() {
+  for (const d of demos) {
+    const r = d.getBoundingClientRect();
+    const span = d.offsetHeight - window.innerHeight;
+    const p = Math.min(1, Math.max(0, -r.top / span));
+
+    const night = d.querySelector('.night');
+    const heading = d.querySelector('.heading');
+
+    // The light leaves the room across the whole travel, in every option.
+    night.style.opacity = p;
+
+    // With the scrim band in place the type is legible in both lights, so
+    // it stays one colour. The ink flip was tried first and is wrong here:
+    // the nav's flip works because its chips sit on their own tinted
+    // surface, while this type sits directly on the photograph, where dark
+    // ink measured about 2.8 to 1 over the bright afternoon sofa.
+    const ink = '#FFFFFF';
+    heading.style.color = ink;
+
+    const kind = d.dataset.demo;
+
+    if (kind === 'words') {
+      // Four words across the same travel. Each one peaks as its own
+      // quarter passes, and falls away either side, so the attention
+      // slides along the row instead of snapping between states.
+      const words = d.querySelectorAll('.words span');
+      const pos = p * 3;                    // 0 at Morning, 3 at Night
+      words.forEach((w, i) => {
+        const dist = Math.abs(pos - i);
+        const lit = Math.max(0, 1 - dist);  // 1 when centred, 0 a step away
+        w.style.opacity = lerp(0.22, 1, lit);
+        w.style.color = ink;
+        w.style.transition = 'opacity .25s linear, color .18s linear';
+      });
+    }
+
+    if (kind === 'answer') {
+      d.querySelector('.answer').classList.toggle('is-in', p > 0.82);
+      // This was the bug the first render caught: the answer kept its
+      // default dark ink and was almost unreadable on the night frame.
+      d.querySelector('.answer__yes').style.color = ink;
+    }
+
+    if (kind === 'horizon') {
+      // The sun falls through its clip box, so the lower half of the disc
+      // disappears behind the horizon line exactly as it would setting.
+      const box = d.querySelector('.horizon');
+      const sun = d.querySelector('.horizon__sun');
+      const cap = d.querySelector('.horizon__cap');
+      const clipH = d.querySelector('.horizon__clip').offsetHeight;
+      sun.style.top = (p * (clipH + 8) - 4) + 'px';
+      box.style.color = ink;
+      box.style.transition = 'color .18s linear';
+      cap.textContent = p < 0.3 ? 'Afternoon' : p < 0.62 ? 'Evening' : p < 0.88 ? 'Dusk' : 'Night';
+    }
+  }
+}
+
+let ticking = false;
+addEventListener('scroll', () => {
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => { paint(); ticking = false; });
+}, { passive: true });
+addEventListener('resize', paint);
+paint();
+</script>
+
+</body>
+</html>

@@ -29,6 +29,24 @@ const EASE = 'power2.out';
 const MIST_VH = 1.5;
 const MIST_PIN_VH = 1.46;
 
+// The dissolve's pin span, in viewport-heights. Halved from 3.2 to 1.6 at
+// TJ's request 2026-09-17, then slowed 20% the same day once the halved
+// version felt too fast to actually experience the light changing: 1.6 to
+// 1.92. Shared with navTheme() below so its own span-conversion constant
+// can never drift out of sync with this one the way it did before, when
+// 3.2 was typed here and 4.2 was typed there as a separately hand-measured,
+// already slightly stale guess.
+const PEAK_PIN_VH = 1.92;
+
+// A hold added after the answer has fully arrived, 2026-09-17: TJ wants
+// real dwell time on the button before the page lets the reader continue,
+// not the pin releasing the moment the answer finishes fading in. This is
+// additional scroll distance, separate from PEAK_PIN_VH above: the motion
+// (wipe into crossfade into clock into answer) is unaffected, and this much
+// more scrolling has to happen after progress 1 on that motion before the
+// pin actually lets go.
+const PEAK_HOLD_VH = 0.6;
+
 /* ------------------------------------------------------------
    Kinetic type: split a heading into real line boxes.
    Measured after fonts load, because line boxes move when the
@@ -124,54 +142,8 @@ function actHero() {
   act.classList.add('is-ready');
 }
 
-/* ------------------------------------------------------------
-   ACT 2 · 09:30 · Rest
-   reveal. A wipe up a full-bleed frame.
-   ------------------------------------------------------------ */
-function actRest() {
-  const act = document.querySelector('.act--rest');
-  if (!act) return;
-
-  const say = act.querySelector('[data-fade]');
-  const frame = act.querySelector('[data-reveal]');
-
-  gsap.set(say, { opacity: 0, y: REDUCED ? 0 : 16 });
-  gsap.to(say, {
-    opacity: 1, y: 0, duration: 0.8, ease: EASE,
-    scrollTrigger: { trigger: say, start: 'top 82%', once: true }
-  });
-
-  if (REDUCED) return;
-
-  gsap.set(frame, { clipPath: 'inset(100% 0% 0% 0%)' });
-  gsap.to(frame, {
-    clipPath: 'inset(0% 0% 0% 0%)',
-    ease: 'none',
-    scrollTrigger: {
-      trigger: frame,
-      start: 'top 88%',
-      end: 'top 32%',
-      scrub: 0.5
-    }
-  });
-
-  // The photograph travels inside the frame the wipe is opening. Two rates on
-  // one gesture: the frame's edge is uncovering at the reader's pace while the
-  // picture behind it is moving at its own, which is what stops a full-bleed
-  // still from reading as a flat plate slotted into the page. Runs across the
-  // whole crossing rather than only the wipe, so it is still moving after the
-  // frame is fully open.
-  const plane = frame.querySelector('.frame__clip img');
-  if (plane) {
-    gsap.fromTo(plane,
-      { yPercent: -6 },
-      {
-        yPercent: 6, ease: 'none',
-        scrollTrigger: { trigger: frame, start: 'top bottom', end: 'bottom top', scrub: 0.6 }
-      }
-    );
-  }
-}
+/* actRest() removed 2026-09-16: the rest act was merged into the dissolve
+   at TJ's direction. See actPeak() below. */
 
 /* ------------------------------------------------------------
    ACT 4 · 13:00 · Four kinds of care
@@ -323,63 +295,213 @@ function actPeak() {
   const act = document.querySelector('.act--peak');
   if (!act) return;
 
+  const frame = act.querySelector('[data-reveal]');
   const stage = act.querySelector('[data-stage]');
   const night = act.querySelector('.dissolve__night');
-  const plate = act.querySelector('.plate');
-  const cues = {
-    a: act.querySelector('[data-cue="a"]'),
-    b: act.querySelector('[data-cue="b"]'),
-    c: act.querySelector('[data-cue="c"]')
-  };
+  const ask = act.querySelector('[data-peak-ask]');
+  const clock = act.querySelector('[data-peak-clock]');
+  const sun = act.querySelector('[data-peak-sun]');
+  const states = [...act.querySelectorAll('[data-peak-states] span')];
+  const answer = act.querySelector('[data-peak-answer]');
 
   if (REDUCED) {
-    gsap.set([cues.a, cues.b, cues.c], { opacity: 1, y: 0 });
+    // The resolved end state: night fallen, the clock gone, the question
+    // and the answer both present and readable without any motion. The
+    // question reads white here, matching the fallen night it sits over.
+    gsap.set(night, { opacity: 1 });
+    gsap.set(ask, { opacity: 1, color: '#FFFFFF' });
+    gsap.set(answer, { opacity: 1, y: 0 });
+    gsap.set(clock, { opacity: 0 });
     return;
   }
 
-  const tl = gsap.timeline({
+  // Ink for the question: dark grey against daylight, easing to white as
+  // the room darkens. A continuous interpolation rather than the nav's
+  // is-dark class flip, because it has to track the crossfade's own
+  // opacity exactly rather than switch at one threshold. Read by both
+  // drivers below, since the question's colour has to keep updating across
+  // the wipe and the pin, one continuous journey, while its opacity and
+  // the rest of the frame's furniture only start once the pin engages.
+  const INK = [10, 10, 10];    // --ink   #0A0A0A
+  const PAPER = [255, 255, 255]; // --paper #FFFFFF
+  const inkAt = t => {
+    const c = INK.map((v, i) => Math.round(v + (PAPER[i] - v) * t));
+    return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+  };
+
+  // The question is now `position: fixed`, outside the figure entirely
+  // (see v1.html and the .peak__ask rule in v1.css), because it used to be
+  // a child of the element the wipe clips: before the wipe started, the
+  // figure was clipped to nothing and so was the title inside it. TJ wanted
+  // the opposite, the title established on the plain ground before the
+  // photograph arrives, so it needed to exist outside the clipped subtree.
+  //
+  // Being fixed means it is no longer scoped to this section just by
+  // living inside it, so a dedicated trigger shows it on entry. The exit
+  // side is handled separately, below, off the pin itself: a first attempt
+  // used a second trigger spanning 'top bottom' to 'bottom top' on the act,
+  // and its own 'bottom top' measured a scroll position past what the
+  // document can actually reach, off by the same amount the pin adds to
+  // the page, so onLeave could never fire and the title never hid again.
+  // The pin trigger's own onLeave is reachable by definition, since it is
+  // the thing setting the page's scroll length at that point.
+  gsap.set(ask, { opacity: 0, color: inkAt(0) });
+  ScrollTrigger.create({
+    trigger: act,
+    start: 'top bottom',
+    end: 'top top',
+    onEnter: () => gsap.set(ask, { opacity: 1 }),
+    onLeaveBack: () => gsap.set(ask, { opacity: 0 })
+  });
+
+  // The photograph's entrance. This is v1-ruined's actRest() wipe copied
+  // verbatim, trigger points included: the figure starts fully clipped and
+  // un-clips upward across its own crossing of the viewport. Nothing else
+  // animates but the wipe itself; the two earlier attempts at this merge
+  // added a parallax drift inside the frame and pinned the wiped element
+  // itself, and neither is in the original.
+  gsap.set(frame, { clipPath: 'inset(100% 0% 0% 0%)' });
+  gsap.to(frame, {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    ease: 'none',
     scrollTrigger: {
-      trigger: act,
+      trigger: frame,
+      start: 'top 88%',
+      // v1-ruined ends this at 'top 32%', where its boxed frame came to rest
+      // mid screen. This frame is the height of the screen and has to come to
+      // rest filling it, so the wipe finishes at the moment its top reaches
+      // the top of the viewport, which is also where the pin takes over.
+      end: 'top top',
+      scrub: 0.5,
+      onUpdate: self => {
+        // The flip is a hard cut, not a fade: TJ wanted the swipe itself to
+        // look like it is what changes the colour. That only reads if the
+        // flip happens at the instant the photograph's own leading edge
+        // physically reaches the title's position on screen, not at an
+        // arbitrary fraction of the wipe's travel. A first version used
+        // 0.55, chosen without measuring, and it fired while the photograph
+        // was still hundreds of pixels below the title, on plain cream
+        // ground, so the colour changed for no visible reason.
+        //
+        // Measured directly instead: the wipe's visible top edge (the
+        // clip's percentage translated into an actual screen position) was
+        // walked frame by frame against the title's own fixed y (107px at
+        // 1600x900) and crossed it at progress 0.94, not 0.55. That
+        // measurement is viewport-height dependent, since both the clip
+        // percentage and the title's offset scale differently, so it is
+        // recomputed here rather than pinned to the one viewport it was
+        // measured at.
+        const askTop = ask.getBoundingClientRect().top;
+        const rect = frame.getBoundingClientRect();
+        const clipPct = 100 - self.progress * 100; // inset() top value, decreasing as it opens
+        const visibleTop = rect.top + rect.height * (clipPct / 100);
+        ask.style.color = inkAt(visibleTop <= askTop ? 1 : 0);
+      }
+    }
+  });
+
+  // The crossfade. Pinned on .peak__hold, which is a wrapper around the
+  // figure rather than the figure itself, so the element being wiped is
+  // never also the element being pulled out of flow by the pin.
+  //
+  // It starts where the wipe ends, at the same coordinate against the same
+  // element, so the light begins leaving the room at the exact scroll
+  // position the image finishes arriving, with no gap and no overlap.
+  gsap.set(night, { opacity: 0 });
+  gsap.set(clock, { opacity: 0 });
+  gsap.set(answer, { opacity: 0, y: 16 });
+
+  // The pin's total scroll range now carries the motion (PEAK_PIN_VH) and,
+  // after it, a hold (PEAK_HOLD_VH) where nothing moves, added 2026-09-17 so
+  // the answer has real dwell time before the page lets the reader
+  // continue. MOTION_FRAC is what fraction of the combined range the motion
+  // occupies; every beat below is defined against 0 to 1 of the motion
+  // itself and then remapped onto that fraction, so the beats' relative
+  // timing to each other is untouched by adding the hold.
+  const TOTAL_VH = PEAK_PIN_VH + PEAK_HOLD_VH;
+  const MOTION_FRAC = PEAK_PIN_VH / TOTAL_VH;
+
+  // Where each beat sits on the motion's own 0 to 1, before the hold is
+  // added. Named because the order is the whole design and it has to be
+  // readable here: the clock owns the middle, and it is gone before the
+  // answer starts, so the frame is never carrying both at once.
+  const CLOCK_IN   = 0.04;
+  const CLOCK_OUT  = 0.74;   // fully gone by GONE, below
+  const GONE       = 0.82;
+  const ANSWER_IN  = 0.86;
+
+  const between = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
+
+  gsap.to(night, {
+    opacity: 1,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: frame,
       start: 'top top',
-      // A function, not a string. Computed once, this froze the peak's span at
-      // whatever the viewport was on first paint, so every later refresh, a
-      // resize, a rotation, an address bar collapsing, left the pin running
-      // to a stale pixel value while everything around it had re-measured.
-      end: () => '+=' + window.innerHeight * 3.2,
+      end: () => '+=' + window.innerHeight * TOTAL_VH,
       pin: stage,
       scrub: 0.9,
       // Pins are refreshed highest priority first. Giving them explicit
       // descending values in document order means each one measures its own
       // start after every pin above it has already claimed its spacer.
       refreshPriority: 1,
-      invalidateOnRefresh: true
+      invalidateOnRefresh: true,
+
+      // The question hides once this pin releases, since it has nothing
+      // left to sit on top of past this point. This trigger's own end is
+      // guaranteed reachable, unlike the earlier attempt that measured
+      // .act--peak's bottom separately and got a scroll position past what
+      // the document could actually reach.
+      onLeave: () => gsap.set(ask, { opacity: 0 }),
+      onLeaveBack: () => gsap.set(ask, { opacity: 0 }),
+
+      // Everything the frame carries is driven from this one trigger's
+      // progress rather than from triggers of its own. Separate triggers
+      // on overlay elements inside a pinned stage read the stage's frozen
+      // position, not the reader's travel, which is the same mistake the
+      // care rail's per item entrances made before they were pointed at
+      // the rail tween.
+      onUpdate: self => {
+        // Remapped onto the motion portion and clamped, so once scroll
+        // enters the hold, m sits at 1 and every beat below simply stays
+        // at its finished state rather than continuing to move.
+        const m = Math.min(1, self.progress / MOTION_FRAC);
+
+        // The clock arrives, holds, and clears before the answer.
+        clock.style.opacity = m < GONE
+          ? between(m, 0, CLOCK_IN) * (1 - between(m, CLOCK_OUT, GONE))
+          : 0;
+
+        // The sun falls through its own sky box, so the horizon line cuts
+        // the disc as it sets instead of the disc sliding under a rule.
+        // Measured against the box rather than a fixed pixel count so it
+        // lands exactly on the line at whatever size the clamp resolves to.
+        const sky = sun.parentElement.offsetHeight;
+        const travel = between(m, CLOCK_IN, CLOCK_OUT);
+        sun.style.transform = `translateY(${travel * sky}px)`;
+
+        // Four states across the same travel. Each peaks as its own quarter
+        // passes and falls away either side, so attention slides along the
+        // row rather than snapping between them.
+        const pos = travel * (states.length - 1);
+        states.forEach((s, i) => {
+          const lit = Math.max(0, 1 - Math.abs(pos - i));
+          s.style.opacity = 0.24 + lit * 0.76;
+        });
+
+        // The answer, last, on an otherwise clear frame. Once m reaches 1
+        // (motion finished, whether that is exactly at the boundary or
+        // because scroll is now inside the hold) this stays at fully in.
+        const a = between(m, ANSWER_IN, 1);
+        answer.style.opacity = a;
+        answer.style.transform = `translateY(${(1 - a) * 16}px)`;
+
+        // The question's colour is already settled to white by the wipe's
+        // own trigger above before this pin ever engages, so nothing here
+        // touches it again.
+      }
     }
   });
-
-  // "Three in the afternoon" is already on screen when the act begins,
-  // so the pinned stage is never a frame of empty photograph.
-  gsap.set(cues.a, { opacity: 1, y: 0 });
-  gsap.set([cues.b, cues.c], { opacity: 0, y: 12 });
-
-  // The dissolve is the act. It used to run 0.7 to 3.1 of a six unit
-  // timeline, so the light had finished leaving barely half way through and
-  // the remaining scroll was carried by two lines of text fading, which move
-  // about a third of one percent of the screen. Measured, that was a full
-  // viewport-height of scrolling with nothing visibly happening, in the one
-  // act built to be the thing people remember. Running it 0.25 to 5.15
-  // instead means the room is still darkening under every line, and the
-  // closing frame is unchanged: night full, plate gone.
-  tl.to(cues.a, { opacity: 0, y: -10, duration: 0.8 }, 0.9)
-    .to(night,   { opacity: 1, duration: 4.9, ease: 'none' }, 0.25)
-    .to(cues.b,  { opacity: 1, y: 0, duration: 0.8 }, 1.5)
-    .to(cues.b,  { opacity: 0, y: -10, duration: 0.7 }, 2.9)
-    .to(cues.c,  { opacity: 1, y: 0, duration: 0.9 }, 3.3)
-    // This is not the last act on the page, so its closing line must not
-    // hold. A held cue stays lit through the whole un-pin slide, travelling
-    // a full viewport upward and overlapping the section that follows.
-    // The plate goes with it: fading only the line leaves an empty canvas
-    // box sitting on the photograph, which reads as a rendering fault.
-    .to(plate,   { opacity: 0, duration: 0.6 }, 5.4);
 }
 
 /* The night act was removed 2026-09-05; its frame lived in the confinement
@@ -796,38 +918,49 @@ function mistHandoff() {
    which is precisely when the dark frame is still sliding up past the
    bar. Created after the pin exists so it measures the spacer.
    ------------------------------------------------------------ */
-// The pinned dissolve as a fraction of the whole peak act. actPeak() pins
-// for 3.2 viewport-heights inside an act that runs 4.2, so this converts a
-// position on the dissolve into a position on this trigger.
-const DISSOLVE_SPAN = 3.2 / 4.2;
-
 function navTheme() {
   const bar = document.querySelector('[data-nav]');
   const peak = document.querySelector('.act--peak');
   if (!bar || !peak) return;
+
+  // The pinned dissolve as a fraction of the whole peak act, computed from
+  // the real measured height rather than a second hand-typed constant.
+  // Two hardcoded numbers, 3.2 here and 4.2 for the act, were previously
+  // kept in sync by hand and had already drifted: the act measured 4.43vh
+  // once the title above the figure grew, not the 4.2 the comment claimed.
+  // Reading peak.offsetHeight directly means this can only ever be correct,
+  // whatever the title's height or the pin span happen to be. Read inside
+  // onRefresh so it re-measures whenever ScrollTrigger does, same as the
+  // trigger's own 'bottom top' end.
+  let dissolveSpan = 1;
+  const measure = () => {
+    dissolveSpan = (window.innerHeight * PEAK_PIN_VH) / peak.offsetHeight;
+  };
+  measure();
 
   ScrollTrigger.create({
     trigger: peak,
     start: 'top top',
     end: 'bottom top',
     invalidateOnRefresh: true,
+    onRefresh: measure,
     // Where the wordmark and the tab ink flip to white together.
     //
     // Two different scales meet here and they are easy to confuse. This
-    // trigger spans the whole peak act, 4.2 viewport-heights, because a
-    // toggle driven off the pin alone stops updating while the dark frame
-    // is still sliding up past the bar. The dissolve itself is only the
-    // pinned 3.2 of that. So a position measured on the dissolve has to be
-    // converted before it can be compared against self.progress, which is
-    // what DISSOLVE_SPAN does. Getting this wrong put the flip at 0.50 of
-    // the dissolve rather than 0.34, and left a stretch where dark ink sat
-    // at 3.4 to 1 waiting for a switch that had not come yet.
+    // trigger spans the whole peak act, because a toggle driven off the pin
+    // alone stops updating while the dark frame is still sliding up past
+    // the bar. The dissolve itself is only the pinned PEAK_PIN_VH portion
+    // of that. So a position measured on the dissolve has to be converted
+    // before it can be compared against self.progress, which is what
+    // dissolveSpan does. Getting this wrong put the flip at 0.50 of the
+    // dissolve rather than 0.34, and left a stretch where dark ink sat at
+    // 3.4 to 1 waiting for a switch that had not come yet.
     //
     // 0.345 is the crossover: measured on the chip surface the text
     // actually sits on, dark ink reads 4.60 and white reads 4.57 at that
     // point, so both clear 4.5 and the 180ms cross fade cannot be caught
     // in an unreadable state either side of it.
-    onUpdate: self => bar.classList.toggle('is-dark', self.progress > 0.345 * DISSOLVE_SPAN),
+    onUpdate: self => bar.classList.toggle('is-dark', self.progress > 0.345 * dissolveSpan),
     onLeave: () => bar.classList.remove('is-dark'),
     onLeaveBack: () => bar.classList.remove('is-dark')
   });
@@ -1168,10 +1301,147 @@ function actVoices() {
   }
 }
 
+
+
+/* ============================================================
+   ACT: STANDALONE TREATMENTS (IN-HOME CARE)
+   True Horizontal Concertina on Canvas + Scrubber Slider (No Arrows)
+   ============================================================ */
+function actTreatments() {
+  const root = document.querySelector('.act--treatments');
+  if (!root) return;
+
+  const pleats = Array.from(root.querySelectorAll('[data-pleat]'));
+
+  let activeIdx = 3; // data-pleat 3 is Postpartum Massage, the head of the cascade
+
+  const openPleat = (idx) => {
+    activeIdx = Math.max(0, Math.min(3, idx));
+
+    pleats.forEach((pleat) => {
+      const pIdx = parseInt(pleat.dataset.pleat, 10);
+      const isOpen = pIdx === activeIdx;
+      pleat.classList.toggle('is-open', isOpen);
+      const tabBtn = pleat.querySelector('[data-pleat-trigger]');
+      if (tabBtn) {
+        tabBtn.setAttribute('aria-expanded', String(isOpen));
+      }
+    });
+  };
+
+  // Pleat clicks
+  pleats.forEach((pleat) => {
+    const trigger = pleat.querySelector('[data-pleat-trigger]');
+    const handleExpand = (e) => {
+      e.stopPropagation();
+      const idx = parseInt(pleat.dataset.pleat, 10);
+      openPleat(idx);
+    };
+
+    if (trigger) trigger.addEventListener('click', handleExpand);
+    pleat.addEventListener('click', (e) => {
+      if (!pleat.classList.contains('is-open')) {
+        handleExpand(e);
+      }
+    });
+  });
+
+  // Default initial state: Postpartum Massage (data-pleat 3), the leftmost
+  // pleat, open on entry.
+  openPleat(3);
+
+  // The entrance. Adds is-in once and disconnects, matching the pattern the
+  // voices block uses: it fires when the reader is looking, and content that
+  // re-hides on scroll back up would be a defect rather than an effect.
+  //
+  // Everything it drives is transform and opacity in CSS. The hairlines in
+  // particular are drawn with scaleY, never height or top, because those are
+  // what the concertina moves when a pleat opens.
+  // The entrance runs on staggered transition-delays. Those delays must not
+  // outlive it: the first click would otherwise inherit them and the
+  // concertina would stall before widening. is-settled clears them once the
+  // last step (the CTA at 0.62s + 0.52s) has landed.
+  const ENTRANCE_MS = 1200;
+  const reveal = () => {
+    root.classList.add('is-in');
+    window.setTimeout(() => root.classList.add('is-settled'), ENTRANCE_MS);
+  };
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => {
+        if (en.isIntersecting) {
+          reveal();
+          io.disconnect();
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -12% 0px' });
+    io.observe(root);
+
+    // Safety net. The entrance hides its own content until is-in lands, so
+    // anything that stops the observer firing would leave the section blank:
+    // a deep link straight into it, a restored scroll position, or a window
+    // tall enough that the threshold is never crossed by a scroll event.
+    // Reveal unconditionally once the section has been reachable for a beat.
+    window.setTimeout(() => {
+      if (root.classList.contains('is-in')) return;
+      const r = root.getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        reveal();
+        io.disconnect();
+      }
+    }, 1200);
+  } else {
+    reveal();
+  }
+}
+
+/* ------------------------------------------------------------
+   SECTION 6b · Treatments, horizontal accordion
+   Click to open one panel at a time. No ScrollTrigger of its own: the
+   mechanic is just a width transition with overflow: hidden doing the
+   cropping (see .tb-acc__panel in v1.css), so it needs nothing scroll
+   driven, only a click handler swapping which panel carries .is-open.
+
+   On desktop that width change never touches page height, so nothing
+   downstream is affected. On mobile the panel instead changes HEIGHT (see
+   the @media block in v1.css), growing from about 72px to as much as
+   70vh, which pushes every section below it up the page. Caught live: the
+   dissolve act's own title, .peak__ask, is fixed and shows itself via a
+   ScrollTrigger watching when .act--peak's top crosses the viewport's
+   bottom edge (see actPeak() above). That trigger's cached boundary goes
+   stale the instant this accordion's height changes, so without a refresh
+   the title could read as already on screen while the reader is still
+   inside this section, hundreds of pixels above where .act--peak actually
+   sits. ScrollTrigger.refresh() after the transition ends fixes it for
+   every downstream trigger at once, not just this one case.
+   ------------------------------------------------------------ */
+function actTreatmentsB() {
+  const acc = document.querySelector('[data-tb-acc]');
+  if (!acc) return;
+
+  const panels = [...acc.querySelectorAll('.tb-acc__panel')];
+  panels.forEach(panel => {
+    panel.addEventListener('click', () => {
+      if (panel.classList.contains('is-open')) return;
+      panels.forEach(p => {
+        const open = p === panel;
+        p.classList.toggle('is-open', open);
+        p.setAttribute('aria-expanded', String(open));
+      });
+      // 550ms matches the panel's own transition-duration in v1.css. Timed
+      // to the animation's end rather than fired immediately, so the
+      // refresh measures the settled layout, not a mid-transition one.
+      window.setTimeout(() => ScrollTrigger.refresh(), 560);
+    });
+  });
+}
+
 function boot() {
+  actTreatments();
+  actTreatmentsB();
   nav();
   actHero();
-  actRest();
   actPan();
   actPeak();
   actTurn();

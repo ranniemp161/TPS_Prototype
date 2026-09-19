@@ -1,0 +1,18 @@
+import { chromium } from 'playwright-core';
+import { pathToFileURL, fileURLToPath } from 'node:url';
+import { existsSync, mkdirSync } from 'node:fs';
+import path from 'node:path';
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const OUT = process.argv[2]; mkdirSync(OUT, { recursive: true });
+const exe = ['C:/Program Files/Google/Chrome/Application/chrome.exe'].find(p => existsSync(p));
+const b = await chromium.launch(exe ? { executablePath: exe } : { channel: 'chrome' });
+const p = await b.newPage({ viewport: { width: 1600, height: 900 } });
+await p.goto(pathToFileURL(path.join(ROOT, 'v1.html')).href, { waitUntil: 'load' });
+await p.waitForFunction(() => document.documentElement.classList.contains('sc-ready'), { timeout: 20000 });
+await p.evaluate(() => { document.documentElement.style.scrollBehavior='auto'; });
+await p.waitForTimeout(1200);
+await p.screenshot({ path: path.join(OUT, 'hero.png') });
+await p.evaluate(y => window.scrollTo(0, window.innerHeight*y), 1.45);
+await p.waitForTimeout(900);
+await p.screenshot({ path: path.join(OUT, 'bath.png') });
+await b.close();
