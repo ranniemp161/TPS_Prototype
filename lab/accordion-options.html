@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Horizontal accordion: labelling and open-panel options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600&family=Karla:wght@400;500&display=swap" />
+<style>
+  :root {
+    --canvas:    #F3EFEC;
+    --paper:     #FFFFFF;
+    --blush:     #E2CAC6;
+    --ink:       #0A0A0A;
+    --ink-mute:  #5A524F;
+    --ember:     #A64C45;
+    --sand:      #C9B9B5;
+    --hairline:  rgba(10,10,10,.08);
+    --f-display: "Instrument Serif", Georgia, serif;
+    --f-body:    "Montserrat", ui-sans-serif, system-ui, sans-serif;
+    --f-read:    "Karla", ui-sans-serif, system-ui, sans-serif;
+    --r-media:   16px;
+    --gutter:    24px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--f-read); }
+
+  .note { max-width: 900px; margin: 0 auto; padding: 88px var(--gutter) 32px; }
+  .note h1 {
+    font-family: var(--f-display); text-transform: uppercase;
+    font-size: clamp(1.8rem, 3.6vw, 2.6rem); line-height: 1.1; margin: 0 0 16px;
+    letter-spacing: .02em;
+  }
+  .note h2 { font-size: clamp(1.2rem, 2.2vw, 1.6rem); margin: 0 0 10px; font-family: var(--f-display); text-transform: uppercase; }
+  .note p { font-size: 15px; line-height: 1.65; color: var(--ink-mute); margin: 0 0 10px; }
+  .label {
+    font-family: var(--f-body); text-transform: uppercase; letter-spacing: .16em;
+    font-size: 10px; color: var(--ember); margin: 0 0 10px;
+  }
+  .divider { height: 1px; background: var(--hairline); max-width: 900px; margin: 40px auto; }
+  .stage { max-width: 1100px; margin: 0 auto; padding: 0 var(--gutter) 20px; }
+
+  /* ---------- shared accordion mechanics ---------- */
+  .acc {
+    display: flex;
+    height: min(62vh, 560px);
+    border-radius: var(--r-media);
+    overflow: hidden;
+    background: var(--canvas);
+    gap: 3px;
+  }
+  .acc__panel {
+    position: relative;
+    height: 100%;
+    flex: 0 0 auto;
+    width: 84px;
+    background: var(--blush);
+    cursor: pointer;
+    transition: width .5s cubic-bezier(.65,0,.35,1);
+    overflow: hidden;
+  }
+  .acc__panel.is-open { flex: 1 1 auto; width: auto; background: var(--paper); }
+  .acc__panel img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0; transition: opacity .4s ease;
+  }
+  .acc__panel.is-open img { opacity: 1; }
+
+  /* label on the CLOSED panel: horizontal, bottom-anchored */
+  .acc__closed-label {
+    position: absolute; left: 0; right: 0; bottom: 20px;
+    text-align: center; padding-inline: 6px;
+    font-family: var(--f-body); text-transform: uppercase;
+    letter-spacing: .12em; font-weight: 500; font-size: 11px;
+    color: var(--ink); opacity: 1; transition: opacity .25s ease;
+    line-height: 1.4;
+  }
+  .acc__panel.is-open .acc__closed-label { opacity: 0; }
+
+  /* open-panel content variants, toggled by data-variant on the arena */
+  .acc__open-overlay {
+    position: absolute; inset: 0; display: none;
+    align-items: flex-end; padding: 32px;
+    background: linear-gradient(to top, rgba(10,10,10,.55), rgba(10,10,10,0) 55%);
+  }
+  .acc__open-overlay h3 {
+    font-family: var(--f-display); text-transform: uppercase; color: #fff;
+    font-size: clamp(1.3rem, 2.4vw, 2rem); margin: 0 0 8px; letter-spacing: .02em;
+  }
+  .acc__open-overlay p { color: rgba(255,255,255,.88); font-size: 14px; max-width: 44ch; margin: 0; }
+
+  .acc__open-split {
+    position: absolute; inset: 0; display: none;
+    grid-template-columns: 1fr 1fr;
+  }
+  .acc__open-split .split-media { position: relative; overflow: hidden; }
+  .acc__open-split .split-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 1; }
+  .acc__open-split .split-copy {
+    background: var(--blush); display: flex; flex-direction: column;
+    justify-content: center; padding: clamp(24px, 4vw, 48px);
+  }
+  .acc__open-split .split-copy h3 {
+    font-family: var(--f-display); text-transform: uppercase;
+    font-size: clamp(1.4rem, 2.6vw, 2.1rem); margin: 0 0 14px; letter-spacing: .02em;
+  }
+  .acc__open-split .split-copy p { font-size: 15px; line-height: 1.6; color: var(--ink-mute); margin: 0; max-width: 34ch; }
+
+  [data-variant="overlay"] .acc__panel.is-open .acc__open-overlay { display: flex; }
+  [data-variant="overlay"] .acc__panel.is-open img { opacity: .78; }
+  [data-variant="split"] .acc__panel.is-open .acc__open-split { display: grid; }
+  [data-variant="split"] .acc__panel.is-open > img { opacity: 0; }
+
+  /* width recipes, per option */
+  [data-widths="tight"] .acc__panel { width: 84px; }
+  [data-widths="wide"] .acc__panel { width: 168px; }
+</style>
+</head>
+<body>
+
+<div class="note">
+  <h1>Horizontal accordion, labelling and open-panel options</h1>
+  <p>All four use your real treatment photographs, the brand palette and the two type faces already on the page. Click any closed panel to open it. Nothing here is wired into the live page.</p>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ LABEL OPTION 1: shortened names ============ -->
+<div class="note">
+  <p class="label">Label option one</p>
+  <h2>Shortened to the distinguishing word</h2>
+  <p>Three of your four real names contain the word "Massage", so as closed labels they read as duplicates. Here each closed panel carries the one word that makes it different: Lymphatic, Hot Stone, Confinement, Full Body. The full formal name appears once you open it. Open-panel style: overlay on the photograph.</p>
+</div>
+<div class="stage">
+  <div class="acc" data-widths="tight" data-variant="overlay" data-group="a">
+    <div class="acc__panel is-open" data-idx="0">
+      <img src="../assets/img/massage.webp" alt="" />
+      <div class="acc__closed-label">Lymphatic</div>
+      <div class="acc__open-overlay"><div><h3>Postpartum Massage</h3><p>Gentle lymphatic drainage, abdominal warming and muscular restoration for early recovery.</p></div></div>
+    </div>
+    <div class="acc__panel" data-idx="1">
+      <img src="../assets/img/stones.webp" alt="" />
+      <div class="acc__closed-label">Hot Stone</div>
+      <div class="acc__open-overlay"><div><h3>Massage &amp; Hot Stone</h3><p>Restorative bodywork with heated stones, easing nursing tension and lower back strain.</p></div></div>
+    </div>
+    <div class="acc__panel" data-idx="2">
+      <img src="../assets/img/bind.webp" alt="" />
+      <div class="acc__closed-label">Confinement</div>
+      <div class="acc__open-overlay"><div><h3>The Complete Confinement Ritual</h3><p>Our signature trio: postpartum massage, hot stone therapy, and bespoke Bengkung belly binding.</p></div></div>
+    </div>
+    <div class="acc__panel" data-idx="3">
+      <img src="../assets/img/traditional-massage.webp" alt="" />
+      <div class="acc__closed-label">Full Body</div>
+      <div class="acc__open-overlay"><div><h3>Traditional Full-Body Massage</h3><p>Whole-body massage for muscular release and rest. Open to partners and family.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ LABEL OPTION 2: full names, wider tabs ============ -->
+<div class="note">
+  <p class="label">Label option two</p>
+  <h2>Full names, closed panels widened</h2>
+  <p>Closed panels grow from about 84px to about 168px, enough for the real name to wrap onto two lines at a small size. The photograph gives up real width to buy this room. Open-panel style: split, photograph and copy side by side.</p>
+</div>
+<div class="stage">
+  <div class="acc" data-widths="wide" data-variant="split" data-group="b">
+    <div class="acc__panel is-open" data-idx="0">
+      <img src="../assets/img/massage.webp" alt="" />
+      <div class="acc__closed-label">Postpartum Massage</div>
+      <div class="acc__open-split">
+        <div class="split-media"><img src="../assets/img/massage.webp" alt="" /></div>
+        <div class="split-copy"><h3>Postpartum Massage</h3><p>Gentle lymphatic drainage, abdominal warming and muscular restoration for early recovery.</p></div>
+      </div>
+    </div>
+    <div class="acc__panel" data-idx="1">
+      <img src="../assets/img/stones.webp" alt="" />
+      <div class="acc__closed-label">Massage &amp; Hot Stone</div>
+      <div class="acc__open-split">
+        <div class="split-media"><img src="../assets/img/stones.webp" alt="" /></div>
+        <div class="split-copy"><h3>Massage &amp; Hot Stone</h3><p>Restorative bodywork with heated stones, easing nursing tension and lower back strain.</p></div>
+      </div>
+    </div>
+    <div class="acc__panel" data-idx="2">
+      <img src="../assets/img/bind.webp" alt="" />
+      <div class="acc__closed-label">The Complete Confinement Ritual</div>
+      <div class="acc__open-split">
+        <div class="split-media"><img src="../assets/img/bind.webp" alt="" /></div>
+        <div class="split-copy"><h3>The Complete Confinement Ritual</h3><p>Our signature trio: postpartum massage, hot stone therapy, and bespoke Bengkung belly binding.</p></div>
+      </div>
+    </div>
+    <div class="acc__panel" data-idx="3">
+      <img src="../assets/img/traditional-massage.webp" alt="" />
+      <div class="acc__closed-label">Traditional Full-Body Massage</div>
+      <div class="acc__open-split">
+        <div class="split-media"><img src="../assets/img/traditional-massage.webp" alt="" /></div>
+        <div class="split-copy"><h3>Traditional Full-Body Massage</h3><p>Whole-body massage for muscular release and rest. Open to partners and family.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ LABEL OPTION 3: tall foot label, full names ============ -->
+<div class="note">
+  <p class="label">Label option three</p>
+  <h2>Full names, in a footer band</h2>
+  <p>Panel width stays tight, matching option one, but each closed panel carries a solid ground band at the foot deep enough for the real name across two or three lines. This is closest to what your current concertina already does, moved into the horizontal frame. Open-panel style: overlay on the photograph.</p>
+</div>
+<div class="stage">
+  <div class="acc" data-widths="tight" data-variant="overlay" data-group="c" style="gap:2px;">
+    <div class="acc__panel is-open" data-idx="0">
+      <img src="../assets/img/massage.webp" alt="" />
+      <div class="acc__closed-label" style="bottom:0; background:var(--blush); padding:14px 6px 16px; opacity:1;">Postpartum<br>Massage</div>
+      <div class="acc__open-overlay"><div><h3>Postpartum Massage</h3><p>Gentle lymphatic drainage, abdominal warming and muscular restoration for early recovery.</p></div></div>
+    </div>
+    <div class="acc__panel" data-idx="1">
+      <img src="../assets/img/stones.webp" alt="" />
+      <div class="acc__closed-label" style="bottom:0; background:var(--blush); padding:14px 6px 16px; opacity:1;">Massage &amp;<br>Hot Stone</div>
+      <div class="acc__open-overlay"><div><h3>Massage &amp; Hot Stone</h3><p>Restorative bodywork with heated stones, easing nursing tension and lower back strain.</p></div></div>
+    </div>
+    <div class="acc__panel" data-idx="2">
+      <img src="../assets/img/bind.webp" alt="" />
+      <div class="acc__closed-label" style="bottom:0; background:var(--blush); padding:14px 6px 16px; opacity:1;">Confinement<br>Ritual</div>
+      <div class="acc__open-overlay"><div><h3>The Complete Confinement Ritual</h3><p>Our signature trio: postpartum massage, hot stone therapy, and bespoke Bengkung belly binding.</p></div></div>
+    </div>
+    <div class="acc__panel" data-idx="3">
+      <img src="../assets/img/traditional-massage.webp" alt="" />
+      <div class="acc__closed-label" style="bottom:0; background:var(--blush); padding:14px 6px 16px; opacity:1;">Full-Body<br>Massage</div>
+      <div class="acc__open-overlay"><div><h3>Traditional Full-Body Massage</h3><p>Whole-body massage for muscular release and rest. Open to partners and family.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="note">
+  <p>End of the options. Tell me which labelling approach and which open-panel treatment to combine, or which parts to mix.</p>
+</div>
+
+<script>
+document.querySelectorAll('.acc').forEach(acc => {
+  acc.querySelectorAll('.acc__panel').forEach(panel => {
+    panel.addEventListener('click', () => {
+      acc.querySelectorAll('.acc__panel').forEach(p => p.classList.toggle('is-open', p === panel));
+    });
+  });
+});
+</script>
+
+</body>
+</html>

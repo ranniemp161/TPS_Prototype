@@ -172,9 +172,9 @@
 
 <main id="content" tabindex="-1">
 
-<!-- ============ ACT 1 · 07:00 · ARRIVAL ============
+<!-- ============ SECTION: hero ============
      pin + focus pull + kinetic lines. The room resolves out of blur. -->
-<section class="act act--hero" id="day" data-act data-time="07:00">
+<section class="act act--hero" id="day" data-act data-section="hero">
   <div class="stage" data-stage>
     <div class="stage__media">
       <img data-focus src="assets/img/s2-handoff.webp" alt="A specialist passing the swaddled baby to the mother resting in bed" width="2000" height="1116" />
@@ -229,11 +229,11 @@
   <div class="fog__veil" data-fog-veil></div>
 </div>
 
-<!-- ============ ACT · 08:30 · THE BATH ============
+<!-- ============ SECTION: bath ============
      Pulled up over the hero's pin spacer in CSS so the scene is already
      sitting in position by the time the fog is dense. The whole scene
      carries one opacity, so nothing leaks over the hero while it waits. -->
-<section class="act act--bath" data-act data-time="08:30">
+<section class="act act--bath" data-act data-section="bath">
   <div class="bath" data-bath>
     <!-- The ground the steam finally dissolves into. It arrives late and
          underneath, once the steam above it is dense enough to hide the
@@ -272,7 +272,7 @@
      the gap by putting both on screen together. The treatment act itself
      is retired (see below), so this is the split-stage's only home on the
      page now, not a repeated device. -->
-<section class="act act--turn" data-act aria-labelledby="confinement-heading">
+<section class="act act--turn" data-act data-section="confinement" aria-labelledby="confinement-heading">
 
   <!-- Same aurora as the programmes act, tuned for this one. It replaced
        the WebGL mesh field here on 2026-09-07. -->
@@ -387,9 +387,9 @@
   </div>
 </section>
 
-<!-- ============ ACT 4 · 13:00 · FOUR KINDS OF CARE ============
+<!-- ============ SECTION: care · four kinds of care ============
      pan. Lateral travel reads as breadth. -->
-<section class="act act--pan band" id="care" data-act data-time="13:00">
+<section class="act act--pan band" id="care" data-act data-section="care">
   <div class="stage" data-stage>
     <div class="rail" data-rail>
 
@@ -435,9 +435,9 @@
   </div>
 </section>
 
-<!-- ============ ACT 7 · PROGRAMMES ============
+<!-- ============ SECTION: programmes ============
      flow + in. The story is over. This answers the question it raised. -->
-<section class="act act--programmes" id="programmes" data-act>
+<section class="act act--programmes" id="programmes" data-act data-section="programmes">
 
   <!-- The aurora, this section only. Ported from the component TJ supplied
        in Faurora-background.txt. Two layers rather than one: the field is
@@ -606,39 +606,303 @@
   </div>
 </section>
 
-<!-- ============ ACT 2 · 09:30 · REST ============
-     reveal. A wipe up a full-bleed frame. -->
-<section class="act act--rest" data-act data-time="09:30">
-  <div class="wrap wrap--narrow">
-    <p class="say" data-fade>You go back to bed. She takes the morning.</p>
-  </div>
-  <figure class="frame frame--bleed" data-reveal="up">
-    <div class="frame__clip">
-      <img src="assets/img/treatment.webp" alt="A mother asleep on a bed while her specialist quietly moves the cot beside the window" width="1920" height="1072" />
-    </div>
-    <figcaption class="caption">Nothing needs you for the next few hours.</figcaption>
-  </figure>
-</section>
+  <!-- ============ ACT: STANDALONE TREATMENTS ============
+       Single in-home treatments available outside the multi-day programmes.
+       Interactive layered deck with 4 core offerings + 1 exfoliation scrub add-on.
+       ============================================================ -->
+  <!-- ============ ACT: STANDALONE TREATMENTS (Stepped Horizontal Concertina) ============
+       Minimal, architectural horizontal concertina with stepped vertical hairlines.
+       Individual in-home treatments outside the multi-day residential programmes.
+       ============================================================ -->
+  <!-- ============ ACT: STANDALONE TREATMENTS (Centering Stepped Horizontal Concertina) ============
+       Minimal, architectural horizontal concertina with stepped vertical hairlines,
+       horizontal text extending across compressed pleats, auto-centering expansion,
+       and slide & snap navigation.
+       ============================================================ -->
+  <!-- ============ ACT: STANDALONE TREATMENTS (Stepped Horizontal Concertina) ============
+       Minimal, architectural horizontal concertina with stepped vertical hairlines,
+       horizontal text extending across compressed pleats, auto-centering expansion,
+       and slide & snap navigation.
+       ============================================================ -->
+  <!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
+     Stepped Concertina Ladder (Left) + Focused Content Stage (Right) + Continuous Scrubber Slider -->
+<!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
+     Stepped Concertina Ladder (Left) + Architectural Stage (Right) + Slider Navigation -->
+<!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
+     Stepped Concertina Spine (Left) + Architectural Stage (Right) + Slider Navigation -->
+<!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
+     True Horizontal Concertina on Canvas (No Cards) + Minimal Scrubber Slider -->
+<section class="act act--treatments" id="standalone-treatments" data-act data-section="treatments">
+  <div class="wrap treatments-wrap">
 
-<!-- ============ ACT 5 · 15:00 → 19:00 · THE DISSOLVE ============
-     PEAK. pin + cross-dissolve. Same sofa. The daylight leaves it.
-     The frame must not move, or the point is lost. -->
-<section class="act act--peak" data-act data-time="15:00">
-  <div class="stage" data-stage>
-    <div class="stage__media dissolve" data-dissolve>
-      <img class="dissolve__day"   src="assets/img/care.webp"  alt="A mother resting on the sofa in the afternoon while her specialist holds the baby beside her" width="1920" height="1072" />
-      <img class="dissolve__night" src="assets/img/night.webp" alt="The same sofa in the evening, the mother still resting, the specialist still holding the baby" width="1920" height="1072" />
-    </div>
-    <div class="scrim scrim--band"></div>
-    <div class="stage__copy stage__copy--low">
-      <div class="plate">
-        <div class="plate__slot">
-          <p class="say" data-cue="a">Three in the afternoon.</p>
-          <p class="say" data-cue="b">Seven in the evening.</p>
-          <p class="say" data-cue="c">She has not gone home.</p>
+    <!-- Section Header -->
+    <header class="sec-head">
+      <div class="sec-head__mask"><h2 class="display display--md">Individual Treatments</h2></div>
+      <div class="sec-head__mask sec-head__mask--sub"><p class="standfirst">Each ritual, brought to your home as a single session.</p></div>
+    </header>
+
+    <!-- The True Horizontal Stepped Concertina Arena (Pure Canvas, No Cards) -->
+    <div class="concertina-arena" data-concertina-arena>
+
+      <!-- Position 1: Postpartum Massage (Step 0) - OPEN BY DEFAULT -->
+      <div class="concertina-pleat is-open" data-pleat="3" style="--step-top: 0px; --rail-x: 0px;" tabindex="0" role="region" aria-label="Postpartum Massage">
+        <div class="concertina-pleat__line" aria-hidden="true"></div>
+
+        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="3" aria-expanded="true" aria-label="Expand Postpartum Massage">
+          <span class="concertina-pleat__tab-title">Postpartum Massage</span>
+          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
+        </button>
+
+        <div class="concertina-pleat__body">
+          <div class="concertina-pleat__grid">
+            <div class="concertina-pleat__copy">
+              <h3 class="concertina-pleat__headline">Postpartum Massage</h3>
+              <p class="concertina-pleat__desc">Gentle lymphatic drainage, abdominal warming and muscular restoration for early recovery.</p>
+            </div>
+            <div class="concertina-pleat__media">
+              <img src="assets/img/massage.webp" alt="Restorative in-home postpartum massage session" width="1200" height="1500" loading="lazy" />
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Position 2: Massage & Hot Stone (Step 1) -->
+      <div class="concertina-pleat" data-pleat="2" style="--step-top: 54px; --rail-x: 52px;" tabindex="0" role="region" aria-label="Massage & Hot Stone">
+        <div class="concertina-pleat__line" aria-hidden="true"></div>
+
+        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="2" aria-expanded="false" aria-label="Expand Massage & Hot Stone">
+          <span class="concertina-pleat__tab-title">Massage &amp; Hot Stone</span>
+          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
+        </button>
+
+        <div class="concertina-pleat__body">
+          <div class="concertina-pleat__grid">
+            <div class="concertina-pleat__copy">
+              <h3 class="concertina-pleat__headline">Massage &amp; Hot Stone</h3>
+              <p class="concertina-pleat__desc">Restorative bodywork with heated stones, easing nursing tension and lower back strain.</p>
+            </div>
+            <div class="concertina-pleat__media">
+              <img src="assets/img/stones.webp" alt="Warmed volcanic basalt stones placed along the back" width="1200" height="1500" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Position 3: The Complete Confinement Ritual (Step 2) -->
+      <div class="concertina-pleat" data-pleat="1" style="--step-top: 108px; --rail-x: 104px;" tabindex="0" role="region" aria-label="The Complete Confinement Ritual">
+        <div class="concertina-pleat__line" aria-hidden="true"></div>
+
+        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="1" aria-expanded="false" aria-label="Expand The Complete Confinement Ritual">
+          <span class="concertina-pleat__tab-title">The Complete Confinement Ritual</span>
+          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
+        </button>
+
+        <div class="concertina-pleat__body">
+          <div class="concertina-pleat__grid">
+            <div class="concertina-pleat__copy">
+              <h3 class="concertina-pleat__headline">The Complete Confinement Ritual</h3>
+              <p class="concertina-pleat__desc">Our signature trio: postpartum massage, hot stone therapy, and bespoke Bengkung belly binding.</p>
+            </div>
+            <div class="concertina-pleat__media">
+              <img src="assets/img/bind.webp" alt="Traditional cotton belly binding wrap and herbal oils" width="1200" height="1500" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Position 4: Traditional Full-Body Massage (Step 3) -->
+      <div class="concertina-pleat" data-pleat="0" style="--step-top: 162px; --rail-x: 156px;" tabindex="0" role="region" aria-label="Traditional Full-Body Massage">
+        <!-- Vertical Dividing Hairline (Stepped from --step-top) -->
+        <div class="concertina-pleat__line" aria-hidden="true"></div>
+
+        <!-- Collapsed Stepped Horizontal Tab -->
+        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="0" aria-expanded="false" aria-label="Expand Traditional Full-Body Massage">
+          <span class="concertina-pleat__tab-title">Traditional Full-Body Massage</span>
+          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
+        </button>
+
+        <!-- Expanded Content Body (Visible only when is-open) -->
+        <div class="concertina-pleat__body">
+          <div class="concertina-pleat__grid">
+            <div class="concertina-pleat__copy">
+              <h3 class="concertina-pleat__headline">Traditional Full-Body Massage</h3>
+              <p class="concertina-pleat__desc">Whole-body massage for muscular release and rest. Open to partners and family.</p>
+            </div>
+            <div class="concertina-pleat__media">
+              <img src="assets/img/traditional-massage.webp" alt="Traditional therapeutic whole-body massage" width="1200" height="1500" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
+
+    <!-- One booking action for the whole section, below the hairline. -->
+    <div class="treatments-cta">
+      <a class="btn btn--outline" href="https://calendly.com/thepostpartumsuite/30min">Book a treatment</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SECTION 6b: TREATMENTS, HORIZONTAL ACCORDION ============
+     Alternate build, added 2026-09-17, sitting directly after the original
+     section 6 so the two can be compared on the live page before TJ picks
+     one. section 6 above is untouched.
+
+     Mechanic: a row of panels, one open at a time, widths animated on
+     click with overflow: hidden doing the cropping, no reflow. Prototyped
+     and approved in lab/accordion-options.html (label option one: short
+     distinguishing words, open panel split into photograph plus copy).
+
+     Real copy is from the live booking system (booking.thepostpartumsuite.com,
+     screenshotted by TJ 2026-09-17), not the placeholder names the original
+     section 6 still carries: four single-session massages that escalate,
+     Postpartum, Traditional (the non-postpartum option), then two tiers
+     that each add one thing to the Postpartum massage. The section title
+     TJ set directly: "Try one of our single-session massage treatments."
+     Panel labels are Set A from that conversation, agreed to avoid the
+     word "massage" repeating four times: the title's own wording absorbs
+     it once for the whole group.
+
+     Responsive note: TJ asked for this to become a VERTICAL accordion on
+     mobile rather than a squeezed horizontal one. Not yet built; see the
+     open item in HANDOVER.md. -->
+<section class="act act--treatments-b" id="standalone-treatments-b" data-act data-section="treatments-b">
+  <div class="wrap treatments-b-wrap">
+
+    <header class="sec-head" data-in>
+      <h2 class="display display--md">Try one of our single-session massage treatments.</h2>
+    </header>
+
+    <div class="tb-acc" data-tb-acc data-in>
+
+      <button type="button" class="tb-acc__panel is-open" data-tb-panel="0" aria-expanded="true" aria-label="Postpartum Massage">
+        <img src="assets/img/massage.webp" alt="Postpartum massage, a full body massage working through the back, shoulders and hips" width="1200" height="1500" loading="lazy" />
+        <span class="tb-acc__label">Postpartum</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="assets/img/massage.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">60 minutes &middot; &pound;120</span>
+            <h3>Postpartum Massage</h3>
+            <p>A full body massage working through the back, shoulders and hips, with warm oils used throughout. Eases the tension that builds from feeding and carrying, and supports your body's recovery after birth.</p>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="tb-acc__panel" data-tb-panel="1" aria-expanded="false" aria-label="Traditional Massage">
+        <img src="assets/img/traditional-massage.webp" alt="Traditional massage, a classic full body massage using warm oils" width="1200" height="1500" loading="lazy" />
+        <span class="tb-acc__label">Traditional</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="assets/img/traditional-massage.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">60 minutes &middot; &pound;120</span>
+            <h3>Traditional Massage</h3>
+            <p>A classic full body massage using warm oils. Available to everyone, whether or not you've recently had a baby.</p>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="tb-acc__panel" data-tb-panel="2" aria-expanded="false" aria-label="Postpartum Massage with Traditional Hot Stone">
+        <img src="assets/img/stones.webp" alt="Postpartum massage combined with traditional hot stone therapy" width="1200" height="1500" loading="lazy" />
+        <span class="tb-acc__label">Hot Stone</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="assets/img/stones.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">90 minutes &middot; &pound;150</span>
+            <h3>Postpartum Massage with Traditional Hot Stone</h3>
+            <p>Our full postpartum massage combined with traditional hot stone therapy. Heated stones are worked along the entire body, releasing the tension held through the neck, shoulders and back.</p>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="tb-acc__panel" data-tb-panel="3" aria-expanded="false" aria-label="Postpartum Massage with Traditional Hot Stone and Belly Binding">
+        <img src="assets/img/bind.webp" alt="Postpartum massage and hot stone therapy finished with traditional cloth belly binding" width="1200" height="1500" loading="lazy" />
+        <span class="tb-acc__label">Belly Binding</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="assets/img/bind.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">120 minutes &middot; &pound;180</span>
+            <h3>Postpartum Massage with Traditional Hot Stone and Belly Binding</h3>
+            <p>The complete recovery treatment. Our full postpartum massage and hot stone therapy, finished with traditional cloth belly binding wrapped to support the abdomen and lower back.</p>
+          </div>
+        </div>
+      </button>
+
+    </div>
+
+    <div class="treatments-cta">
+      <a class="btn btn--outline" href="https://calendly.com/thepostpartumsuite/30min">Book a treatment</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SECTION: dissolve ============
+     Rebuilt 2026-09-16, third attempt, this time by copying the working
+     mechanic out of v1-ruined.html rather than adapting v1's own code.
+     The first two attempts invented motion that was never in the
+     original and read as clunky.
+
+     The structure below is v1-ruined's rest act verbatim: a title in a
+     narrow wrap, then a <figure data-reveal="up"> whose children are the
+     images directly. No inner clip wrapper, because v1-ruined has none,
+     and no parallax drift inside the frame, because v1-ruined has none.
+     The figure's own clip-path wipe is the entire entrance.
+
+     The one intended difference: the images are the day/night pair and
+     they sit full screen rather than in a margin-inset box, so once the
+     wipe finishes the frame is already exactly where the dissolve needs
+     it and nothing moves when the crossfade takes over.
+
+     The pin for the crossfade is on .peak__hold, a separate element from
+     the one being wiped. Pinning the wiped element itself is what made
+     the previous attempt jump: GSAP pulls a pinned element out of flow
+     the instant it engages. -->
+<section class="act act--peak" data-act data-section="dissolve">
+  <!-- The question, moved outside the figure 2026-09-17. It was nested
+       inside the wiped element, which meant it was clipped to nothing
+       before the wipe even started, so it could never be visible on the
+       plain ground first as TJ wanted. It now sits on the section's own
+       background, in the exact spot it occupies once the photograph
+       covers it, so the wipe passing over it reads as the swipe itself
+       changing its colour rather than two things happening at once. -->
+  <p class="peak__ask" data-peak-ask>Do we offer night care?</p>
+
+  <div class="peak__hold" data-stage>
+    <figure class="frame frame--bleed peak__frame" data-reveal="up">
+      <img class="dissolve__day"   src="assets/img/care.webp"  alt="A mother resting on the sofa in the afternoon while her specialist holds the baby beside her" width="1920" height="1072" />
+      <img class="dissolve__night" src="assets/img/night.webp" alt="The same sofa in the evening, the mother still resting, the specialist still holding the baby" width="1920" height="1072" />
+
+      <!-- Density only where type sits. Small type directly on this
+           photograph measures about 2.8 to 1 over the bright afternoon
+           sofa, which is the contrast trap the old text plate existed to
+           solve; these two bands are the lighter fix. -->
+      <div class="peak__band peak__band--top"></div>
+      <div class="peak__band"></div>
+
+      <!-- The clock: a sun descending through a horizon line, and the
+           four states below it. Both clear away once the light has gone,
+           so the answer lands on an uncluttered frame. -->
+      <div class="peak__clock" data-peak-clock>
+        <div class="sundial">
+          <div class="sundial__sky"><div class="sundial__sun" data-peak-sun></div></div>
+          <div class="sundial__line"></div>
+        </div>
+        <div class="peak__states" data-peak-states>
+          <span>Every morning</span>
+          <span>Every afternoon</span>
+          <span>Every evening</span>
+          <span>Every night</span>
+        </div>
+      </div>
+
+      <!-- The answer, bottom right, once everything above has finished. -->
+      <div class="peak__answer" data-peak-answer>
+        <p class="peak__yes">Yes, we do.</p>
+        <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Learn more</a>
+      </div>
+    </figure>
   </div>
 </section>
 
@@ -647,7 +911,7 @@
      placed independently. The markup inside it is untouched; it only has
      a section and a wrap of its own now, and the ground and vertical
      padding the programmes act used to give it. -->
-<section class="act act--close" data-act>
+<section class="act act--close" data-act data-section="close">
   <div class="wrap">
     <!-- The decision. A statement and an action as two objects rather
          than three lines stacked in a column, on paper inside a hairline
@@ -680,5 +944,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="v1.js"></script>
+
+<!-- Section identifier panel, development only. It loads solely when the URL
+     carries ?dev, so it cannot reach a visitor, and everything it does lives
+     in lab/devpanel.js. Nothing in production depends on it. -->
+<script>
+if (/(^|[?&])dev($|[=&])/.test(location.search)) {
+  const s = document.createElement('script');
+  s.src = 'lab/devpanel.js';
+  document.body.append(s);
+}
+</script>
 </body>
 </html>
