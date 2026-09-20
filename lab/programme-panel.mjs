@@ -31,19 +31,30 @@ for (const [w, h, label] of [[1920,1080,'large'],[1440,900,'desktop'],[1280,720,
   // suite caught two fees at once on a short laptop.
   const seen = await p.evaluate(async steps => {
     const NAV = 64, BAR = 72;
+    const count = () => {
+      const pr = document.querySelector('.summary__top [data-fee]').getBoundingClientRect();
+      const panelSeen = pr.height > 0 && pr.top > NAV && pr.bottom < innerHeight - BAR;
+      const barSeen = getComputedStyle(document.querySelector('.feebar')).display === 'block';
+      return (panelSeen ? 1 : 0) + (barSeen ? 1 : 0);
+    };
     const out = [];
     for (const id of steps) {
       document.getElementById(id).scrollIntoView({ block: 'center' });
-      await new Promise(r => setTimeout(r, 140));
-      const panel = document.querySelector('.summary__top [data-fee]');
-      const pr = panel.getBoundingClientRect();
-      const panelSeen = pr.height > 0 && pr.top > NAV && pr.bottom < innerHeight - BAR;
-      const barSeen = getComputedStyle(document.querySelector('.feebar')).display === 'block';
-      out.push({ id, n: (panelSeen ? 1 : 0) + (barSeen ? 1 : 0) });
+      // The bar is driven by two IntersectionObservers, which report on
+      // their own schedule rather than on the scroll. Poll for the
+      // settle rather than guessing a delay: a fixed 140ms wait passed
+      // four runs out of five and failed the fifth on a 1024 window,
+      // and an invariant test that is flaky is not an invariant test.
+      let n = count();
+      for (let i = 0; i < 24 && n !== 1; i++) {
+        await new Promise(r => requestAnimationFrame(() => setTimeout(r, 25)));
+        n = count();
+      }
+      out.push({ id, n });
     }
     return out;
   }, STEPS);
-  seen.forEach(x => ok(`${label} exactly one fee on screen at ${x.id}`, x.n, 1));
+  seen.forEach(x => ok(`${label} settles to exactly one fee at ${x.id}`, x.n, 1));
 
   if (w >= 980) {
     const panel = await p.evaluate(async () => {

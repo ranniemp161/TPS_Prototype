@@ -22,6 +22,10 @@
 
   var P = window.TPS_PRICING;
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // A phone cannot hold thirty days on one line. The strip is drawn as
+  // weeks below this width, which is a different arrangement rather
+  // than a smaller one, so the script has to know which it is drawing.
+  var NARROW = window.matchMedia('(max-width: 700px)');
   var EASE = 'power3.out';
 
   /* ------------------------------------------------------------
@@ -180,6 +184,7 @@
       budget:     document.getElementById('budget'),
       budgetAns:  document.querySelector('[data-budget-answer]'),
       budgetFit:  document.querySelector('[data-budget-fit]'),
+      restore:    document.querySelector('[data-restore]'),
       nightInput: form.querySelector('input[name="shift"][value="night"]'),
       breakfast:  form.querySelector('input[name="breakfast"]'),
       massage:    form.querySelector('input[name="massage"]'),
@@ -429,6 +434,12 @@
         el.doneFee.textContent = P.money(result.fee);
       }
 
+      // The way back, offered only when there is one to offer.
+      if (el.restore) {
+        el.restore.hidden = done;
+        if (!done) el.restore.textContent = 'Restore the complete ' + sel.days + ' day programme';
+      }
+
       el.reserveNote.textContent = sel.format === 'in'
         ? 'For live-in care, your specialist is reserved exclusively for your family for the full period. Removing elements adjusts the shape of care, not the reservation beneath it.'
         : 'Your specialist is held for your family for each day of the programme, whichever elements you keep. Daytime in-home care carries a supplement of £30 a day towards her accommodation and travel.';
@@ -489,7 +500,13 @@
       // land. The marks, the rules between days and the day labels all
       // grow as the stay shortens, so a short programme reads as a full
       // drawing rather than a sparse version of a longer one.
-      var scale = d <= 7 ? 'short' : d <= 14 ? 'mid' : 'long';
+      //
+      // On a phone none of that applies, because thirty days on one line
+      // is fourteen pixels a day behind a sideways scroll nobody finds.
+      // There the stay is drawn as weeks, seven days to a row, which is
+      // the shape a month already has in the reader's head.
+      var week = NARROW.matches;
+      var scale = week ? 'week' : d <= 7 ? 'short' : d <= 14 ? 'mid' : 'long';
       el.shapeGrid.setAttribute('data-scale', scale);
 
       var frag = document.createDocumentFragment();
@@ -507,14 +524,18 @@
         var n = document.createElement('span');
         n.className = 'day__n';
         // Named in full where there is room for the word, numbered where
-        // there is not: the first, every seventh, and the last.
-        // The last day always gets its number, and a week marker within
-        // two days of it is dropped rather than printed alongside: at
-        // thirty days, 28 and 30 otherwise collide.
-        var isWeek = (i + 1) % 7 === 0 && (d - 1 - i) > 2;
-        var label = scale === 'short'
-          ? 'Day ' + (i + 1)
-          : (i === 0 || i === d - 1 || isWeek) ? String(i + 1) : '';
+        // there is not: the first, every seventh, and the last. The last
+        // day always keeps its number, and a week marker within two days
+        // of it is dropped rather than printed alongside, because at
+        // thirty days 28 and 30 otherwise collide.
+        //
+        // In weeks every day is numbered. A cell is wide enough for two
+        // figures there, and a calendar with most of its dates missing
+        // is not a calendar.
+        var isWeekMark = (i + 1) % 7 === 0 && (d - 1 - i) > 2;
+        var label = (scale === 'week' || scale === 'short')
+          ? String(i + 1)
+          : (i === 0 || i === d - 1 || isWeekMark) ? String(i + 1) : '';
         n.textContent = label;
         col.appendChild(n);
 
@@ -762,6 +783,29 @@
       btn.setAttribute('data-complete', String(action.complete));
     }
 
+    // Restoring means the published programme at the length she has
+    // chosen. Her format and her shift are hers and are left alone, the
+    // same rule the budget's apply button follows.
+    if (el.restore) {
+      el.restore.addEventListener('click', function () {
+        var days = parseInt(radio('days'), 10);
+        var full = P.completeSelection(days);
+        // Set everything, then let applyRules be the authority on what
+        // the dependencies forbid. Skipping disabled inputs here looked
+        // safer and was wrong: with massage off, hot stone is disabled,
+        // so restore left it out and rebuilt a programme that was not
+        // the published one. The rules live in one place.
+        ['breakfast', 'lunch', 'dinner', 'massage', 'hotstone', 'binding']
+          .concat(P.COUNTED).forEach(function (k) {
+            var i = form.querySelector('input[name="' + k + '"]');
+            if (i) i.checked = full[k];
+          });
+        form.querySelector('input[name="bath"][value="' + full.bath + '"]').checked = true;
+        form.querySelector('input[name="rhythm"][value="' + full.rhythm + '"]').checked = true;
+        update('restore');
+      });
+    }
+
     // Putting the recommendation on the page rather than describing it.
     // The client's format and shift are hers and are left alone; only
     // the length, and the elements of the published programme, are set.
@@ -916,6 +960,13 @@
       flag(name, forced);
     });
     el.budget.addEventListener('input', function () { update('budget'); });
+
+    // Crossing the breakpoint changes what the strip is, not just how
+    // big it is, so it is redrawn rather than restyled. addListener is
+    // the older spelling and is still what some in-app browsers offer.
+    var onWidth = function () { update('width'); };
+    if (NARROW.addEventListener) NARROW.addEventListener('change', onWidth);
+    else if (NARROW.addListener) NARROW.addListener(onWidth);
 
     /* ---------- The brief reveal ---------- */
 

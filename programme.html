@@ -313,61 +313,108 @@
 
       <fieldset class="step" id="step-06">
         <legend class="step__head"><span class="step__n">06</span> Recovery treatments</legend>
+        <!-- Eight names and a count was a checklist, and a client who does
+             not know what a herbal foot treatment is cannot judge whether
+             to keep it. The safe move then is to switch it off, which is
+             the opposite of what this step is for.
+
+             One column rather than two, because a thumbnail and a line
+             need the width. The photographs are the ones the homepage
+             already uses. TWO ARE PLACEHOLDERS: herbal foot treatment
+             and hair serum therapy have no photograph in the set and
+             carry the generic treatment frame. They want shooting.
+
+             The descriptions say what happens rather than what it
+             achieves, deliberately: this page should not make a clinical
+             claim the business has not written itself. Placeholder copy,
+             for the client to approve. -->
         <div class="treats">
           <label class="treat">
             <input type="checkbox" name="massage" checked />
+            <img class="treat__thumb" src="assets/img/traditional-massage.webp" alt="A specialist working along a mother&rsquo;s back with warm oil" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Postpartum massage</span>
-              <span class="treat__count" data-count="massage">3 sessions</span>
+              <span class="treat__head">
+                <span class="treat__title">Postpartum massage</span>
+                <span class="treat__count" data-count="massage">3 sessions</span>
+              </span>
+              <span class="treat__what">Worked through the back, hips and shoulders with warm oil.</span>
             </span>
           </label>
           <label class="treat" data-hotstone-choice>
             <input type="checkbox" name="hotstone" checked />
+            <img class="treat__thumb" src="assets/img/stones.webp" alt="Hot stones warming on a folded blanket at the end of the bed" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Hot stone therapy</span>
-              <span class="treat__count" data-count="hotstone">with each massage</span>
+              <span class="treat__head">
+                <span class="treat__title">Hot stone therapy</span>
+                <span class="treat__count" data-count="hotstone">with each massage</span>
+              </span>
+              <span class="treat__what">Warmed stones laid along the spine, worked in with the massage.</span>
             </span>
           </label>
           <label class="treat">
             <input type="checkbox" name="binding" checked />
+            <img class="treat__thumb" src="assets/img/bind.webp" alt="A binding cloth rolled and folded on the bed beside a bowl of oil" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Belly binding</span>
-              <span class="treat__count" data-count="binding">daily</span>
+              <span class="treat__head">
+                <span class="treat__title">Belly binding</span>
+                <span class="treat__count" data-count="binding">daily</span>
+              </span>
+              <span class="treat__what">The abdomen wrapped and supported, a little at a time.</span>
             </span>
           </label>
           <label class="treat">
             <input type="checkbox" name="scrub" checked />
+            <img class="treat__thumb" src="assets/img/scrub.webp" alt="A bowl of scrub and a folded cloth set out on a warm towel" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Body scrub</span>
-              <span class="treat__count" data-count="scrub">1</span>
+              <span class="treat__head">
+                <span class="treat__title">Body scrub</span>
+                <span class="treat__count" data-count="scrub">1</span>
+              </span>
+              <span class="treat__what">A full body exfoliation, done for you rather than left to you.</span>
             </span>
           </label>
           <label class="treat">
             <input type="checkbox" name="reflex" checked />
+            <img class="treat__thumb" src="assets/img/t-treatment-07-foot-reflexology.webp" alt="A specialist working through the sole of a mother&rsquo;s foot" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Foot reflexology</span>
-              <span class="treat__count" data-count="reflex">1</span>
+              <span class="treat__head">
+                <span class="treat__title">Foot reflexology</span>
+                <span class="treat__count" data-count="reflex">1</span>
+              </span>
+              <span class="treat__what">Steady pressure worked through the soles of the feet.</span>
             </span>
           </label>
           <label class="treat">
             <input type="checkbox" name="facial" checked />
+            <img class="treat__thumb" src="assets/img/t-treatment-10-facial-massage.webp" alt="A specialist working slowly across a mother&rsquo;s cheek and jaw" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Facial massage</span>
-              <span class="treat__count" data-count="facial">1</span>
+              <span class="treat__head">
+                <span class="treat__title">Facial massage</span>
+                <span class="treat__count" data-count="facial">1</span>
+              </span>
+              <span class="treat__what">Slow work through the face and jaw.</span>
             </span>
           </label>
           <label class="treat">
             <input type="checkbox" name="herbfoot" checked />
+            <img class="treat__thumb" src="assets/img/treatment.webp" alt="Treatment oils and cloths laid out ready" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Herbal foot treatment</span>
-              <span class="treat__count" data-count="herbfoot">1</span>
+              <span class="treat__head">
+                <span class="treat__title">Herbal foot treatment</span>
+                <span class="treat__count" data-count="herbfoot">1</span>
+              </span>
+              <span class="treat__what">The feet soaked in warm herbs, then worked.</span>
             </span>
           </label>
           <label class="treat">
             <input type="checkbox" name="serum" checked />
+            <img class="treat__thumb" src="assets/img/treatment.webp" alt="Treatment oils and cloths laid out ready" loading="lazy" width="400" height="400" />
             <span class="treat__body">
-              <span class="treat__title">Hair serum therapy</span>
-              <span class="treat__count" data-count="serum">1</span>
+              <span class="treat__head">
+                <span class="treat__title">Hair serum therapy</span>
+                <span class="treat__count" data-count="serum">1</span>
+              </span>
+              <span class="treat__what">A scalp and hair treatment, through the length.</span>
             </span>
           </label>
         </div>
@@ -476,6 +523,12 @@
 
         <div class="view" id="view-programme" role="tabpanel" aria-labelledby="tab-programme" tabindex="0">
           <p class="summary__hint">Each heading below goes back to the controls that set it.</p>
+
+          <!-- Above the areas, not below them. Seven areas scroll on a
+               laptop, so at the foot of the list this sat under the fold
+               and a client who had stripped the programme back could not
+               see the way out of it. -->
+          <button class="areas__restore" type="button" data-restore hidden></button>
 
         <!-- Each heading that has a control behind it is a way back to
              it. The panel is where a client notices something is wrong
