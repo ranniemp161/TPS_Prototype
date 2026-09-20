@@ -534,9 +534,13 @@
         // In weeks every day is numbered. A cell is wide enough for two
         // figures there, and a calendar with most of its dates missing
         // is not a calendar.
+        // The short tier lost its wording when the week tier arrived and
+        // the two were folded into one branch. A 190px cell has room
+        // for the word and reads as a calendar with it; a 44px cell in
+        // a week row does not and takes the numeral.
         var isWeekMark = (i + 1) % 7 === 0 && (d - 1 - i) > 2;
-        var label = (scale === 'week' || scale === 'short')
-          ? String(i + 1)
+        var label = scale === 'short' ? 'Day ' + (i + 1)
+          : scale === 'week' ? String(i + 1)
           : (i === 0 || i === d - 1 || isWeekMark) ? String(i + 1) : '';
         n.textContent = label;
         col.appendChild(n);
