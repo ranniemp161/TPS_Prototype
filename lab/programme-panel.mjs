@@ -105,6 +105,26 @@ for (const [w, h, label] of [[1920,1080,'large'],[1440,900,'desktop'],[1280,720,
     const jumps = [...document.querySelectorAll('.area__jump')].every(b => !!document.getElementById(b.dataset.goto));
     return { flagged, jumps, jumpCount: document.querySelectorAll('.area__jump').length };
   });
+  // Asserting the hidden property missed that an explicit `display` on
+  // the class beat `[hidden]`, so the restore control rendered as an
+  // empty pill on every complete programme. Check what is painted.
+  const restore = await p.evaluate(async () => {
+    const q = s => document.querySelector(s);
+    const el = q('[data-restore]');
+    const whenComplete = getComputedStyle(el).display;
+    q('input[name="scrub"]').click();
+    await new Promise(r => setTimeout(r, 80));
+    const whenStripped = getComputedStyle(el).display;
+    el.click();
+    await new Promise(r => setTimeout(r, 120));
+    return { whenComplete, whenStripped, after: getComputedStyle(el).display,
+      complete: !q('[data-complete-notice]').hidden };
+  });
+  ok(`${label} restore is not painted on a complete programme`, restore.whenComplete, 'none');
+  ok(`${label} restore is painted once something is out`, restore.whenStripped, 'block');
+  ok(`${label} restore rebuilds the programme`, restore.complete, true);
+  ok(`${label} and stops being painted again`, restore.after, 'none');
+
   ok(`${label} the change flag still fires`, wiring.flagged, 'meals');
   ok(`${label} every jump resolves`, wiring.jumps, true);
   ok(`${label} six jumps`, wiring.jumpCount, 6);
