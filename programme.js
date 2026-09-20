@@ -184,6 +184,7 @@
       budget:     document.getElementById('budget'),
       budgetAns:  document.querySelector('[data-budget-answer]'),
       budgetFit:  document.querySelector('[data-budget-fit]'),
+      prioCount:  document.querySelector('[data-prio-count]'),
       restore:    document.querySelector('[data-restore]'),
       nightInput: form.querySelector('input[name="shift"][value="night"]'),
       breakfast:  form.querySelector('input[name="breakfast"]'),
@@ -195,6 +196,7 @@
     // other change without diffing the whole selection.
     var lastDays = null;
     var lastFee = null;
+    var lastPriorities = null;
 
     function radio(name) {
       var hit = form.querySelector('input[name="' + name + '"]:checked');
@@ -667,6 +669,40 @@
     var WORDS = { 5: 'five', 7: 'seven', 14: 'fourteen', 30: 'thirty' };
     function word(d) { return WORDS[d] || String(d); }
 
+    var COUNTS = ['none', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+
+    // What the client just did, said back to her where she did it, and
+    // pointed at where it went. Neither of these moves the fee, and
+    // that is the point: the only evidence they are working at all is
+    // the brief, and the brief is behind a button.
+    function paintPriorities() {
+      var picked = priorities();
+      if (!el.prioCount) return;
+
+      if (!picked.length) {
+        el.prioCount.hidden = true;
+      } else {
+        el.prioCount.hidden = false;
+        el.prioCount.textContent = (COUNTS[picked.length] || picked.length) +
+          (picked.length === 1 ? ' thing noted for your call.' : ' things noted for your call.');
+      }
+
+      // And the control that holds them says so, until she opens it.
+      // Not on the first paint, which is the page loading rather than
+      // the client choosing, and not when she has just cleared the last
+      // one: a summary marked as holding something new, when what is
+      // new is that it holds nothing, is noise.
+      if (el.briefToggle && el.briefBox) {
+        var now = picked.join('|');
+        var first = lastPriorities === null;
+        var changed = !first && now !== lastPriorities;
+        lastPriorities = now;
+        if (changed && picked.length && el.briefBox.hidden) {
+          el.briefToggle.classList.add('has-news');
+        }
+      }
+    }
+
     // Consultative, never arithmetic. It never shows an over or under
     // amount, because the answer to a budget here is a conversation
     // rather than a shortfall.
@@ -841,6 +877,7 @@
       paintSteps(sel);
       paintSummary(sel, result);
       paintShape(sel);
+      paintPriorities();
       paintBudget(result, sel);
 
       var text = briefFor(sel, result);
@@ -975,6 +1012,7 @@
       el.briefBox.hidden = !open;
       el.briefToggle.setAttribute('aria-expanded', String(open));
       el.briefToggle.textContent = open ? 'Hide my programme summary' : 'See my programme summary';
+      if (open) el.briefToggle.classList.remove('has-news');
       if (open) {
         el.briefBox.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
       }

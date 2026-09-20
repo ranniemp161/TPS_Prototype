@@ -25,7 +25,12 @@ const STATES = {
   budget:   () => { const t = document.querySelector('[data-view="budget"]'); if (t) t.click();
                     const i = document.querySelector('#budget');
                     i.value = '4200'; i.dispatchEvent(new Event('input', { bubbles: true })); },
-  brief:    () => { document.querySelector('[data-brief-toggle]').click(); }
+  brief:    () => { document.querySelector('[data-brief-toggle]').click(); },
+  // The count line sits on the Haze ground of the matters block and the
+  // summary button takes a Blush fill once something is waiting in it.
+  // Both are Ember tier on a tinted ground, which is where this page has
+  // failed AA twice before.
+  priorities: () => { [...document.querySelectorAll('.prio input')].slice(0,3).forEach(i => i.click()); }
 };
 
 for (const [w, h, label] of [[1440,900,'desktop'],[390,844,'phone']]) {

@@ -58,7 +58,8 @@ TJ's own copy describing a working day.
 | `lab/programme-panel.mjs` | The builder's summary panel, driven in a real browser at five window sizes |
 | `lab/programme-budget.mjs` | The budget field's recommendation, and the panel scrollbar |
 | `lab/programme-strip.mjs` | The day strip at seven widths. One line on a laptop, weeks on a phone |
-| `lab/programme-contrast.mjs` | Contrast at two widths across seven states, pseudo elements included |
+| `lab/programme-contrast.mjs` | Contrast at two widths across eight states, pseudo elements included |
+| `lab/programme-priorities.mjs` | Step 08, and that ticking a priority visibly does something |
 | `lab/programme-shot.mjs` | Full page shot of the builder with every scroll entrance triggered first |
 | `index.html` | An earlier direction, kept for reference |
 | `lab/` | About sixty measurement tools. The real leverage here |
@@ -85,6 +86,7 @@ node lab/programme-panel.mjs
 node lab/programme-budget.mjs
 node lab/programme-strip.mjs
 node lab/programme-contrast.mjs
+node lab/programme-priorities.mjs
 ```
 
 **A full page screenshot cannot show you a viewport bug.** `shoot`-style
