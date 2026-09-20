@@ -20,6 +20,29 @@
 :root { color-scheme: light only; }
 html { background: var(--canvas); }
 
+/* ---------- Two scales this page adds to the brand's own ----------
+
+   MOTION. The page was running eight different durations, picked per
+   component rather than from a scale: 120, 140, 160, 180, 280, 380, 520
+   and 620 milliseconds. Nothing looks wrong in isolation and the whole
+   thing feels loose, which is the quieter half of looking unfinished.
+   Four steps, and every transition on the page uses one of them.
+
+   RADIUS. The brand pack sets four, 6 badge, 8 button, 10 card, 16
+   media, and the page was also using 2px and a 50% circle. The circle
+   is gone. The 2px is kept and named, because a mark on a chart is a
+   measurement rather than a card and reads more precisely with a
+   corner near zero; the rule is that data marks take this and nothing
+   else on the page does. */
+.page--builder {
+  --t-flip:  120ms;   /* a tick, a colour, a press */
+  --t-state: 180ms;   /* a control changing state */
+  --t-move:  360ms;   /* something travelling: a panel, a bar */
+  --t-enter: 620ms;   /* arriving on scroll */
+
+  --r-mark: 2px;      /* data marks only */
+}
+
 .page--builder {
   /* The nav is fixed and carries no background of its own, so the page
      has to hold its own content clear of it. */
@@ -277,10 +300,19 @@ html { background: var(--canvas); }
   display: block;
   cursor: pointer;
   border-radius: var(--r-card);
-  transition: border-color 160ms var(--ease-out),
-              background-color 160ms var(--ease-out),
-              color 160ms var(--ease-out);
+  transition: border-color var(--t-state) var(--ease-out),
+              background-color var(--t-state) var(--ease-out),
+              color var(--t-state) var(--ease-out),
+              transform var(--t-flip) var(--ease-out);
 }
+
+/* Every control answers the finger. v1's buttons already did this and
+   the custom controls did not, so clicking a length tile felt dead
+   against clicking Request my consultation. Transform only. */
+.choice:active, .length:active, .meal:active, .stop:active,
+.treat:active, .rhythm:active, .prio:active { transform: translateY(1px); }
+.choice:has(input:disabled):active, .meal:has(input:disabled):active,
+.treat:has(input:disabled):active, .rhythm:has(input:disabled):active { transform: none; }
 
 /* One ring, drawn on the label, so a keyboard user sees the thing they
    are about to change rather than a one-pixel input hidden beneath it. */
@@ -391,11 +423,15 @@ html { background: var(--canvas); }
    The Blush fill stays where it belongs, on the five radio groups,
    where one of several really is being picked. */
 
-.meal, .treat {
+/* Meals keep their boxes: three of them, side by side, reading as
+   three things you can pick up and put down. Treatments are a list of
+   eight and read as a list. */
+.meal {
   position: relative;
   background: var(--canvas);
   border-color: var(--hairline);
 }
+.treat { position: relative; }
 
 /* The box. 4px rather than the 6px badge radius: the scale is held by
    ratio, and 6px on a 17px affordance reads as a circle. */
@@ -409,7 +445,7 @@ html { background: var(--canvas); }
   border: 1px solid var(--sand);
   border-radius: 4px;
   background: var(--paper);
-  transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+  transition: background-color var(--t-state) var(--ease-out), border-color var(--t-state) var(--ease-out);
 }
 
 /* The tick, drawn from two borders rather than carried in as an icon. */
@@ -424,10 +460,10 @@ html { background: var(--canvas); }
   border-bottom: 2px solid var(--paper);
   transform: rotate(-45deg);
   opacity: 0;
-  transition: opacity 140ms var(--ease-out);
+  transition: opacity var(--t-flip) var(--ease-out);
 }
 
-.meal:has(input:checked), .treat:has(input:checked) {
+.meal:has(input:checked) {
   background: var(--paper);
   border-color: var(--hairline-firm);
 }
@@ -471,15 +507,19 @@ html { background: var(--canvas); }
 .stop { padding: 0 .2rem 0; text-align: center; border-radius: var(--r-badge); }
 .stop__body { display: block; }
 
+/* Square, at the data radius. It was the only circle on a page whose
+   brand has none: the buttons are rectangles, the badges are
+   rectangles, and a tick on a scale is a mark on a measurement, so it
+   now shares its shape with the marks on the day strip. */
 .stop__tick {
   position: relative;
   display: block;
   width: 13px; height: 13px;
   margin: 0 auto;
-  border-radius: 50%;
+  border-radius: var(--r-mark);
   border: 1px solid var(--sand);
   background: var(--canvas);
-  transition: border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  transition: border-color var(--t-state) var(--ease-out), background-color var(--t-state) var(--ease-out);
 }
 .stop:hover .stop__tick { border-color: var(--ink-mute); }
 .stop:has(input:checked) .stop__tick { border-color: var(--ember); background: var(--ember); }
@@ -498,17 +538,33 @@ html { background: var(--canvas); }
 
 /* One column, not two. A thumbnail and a line of description need the
    width, and this is the step that carries eight of the client's
-   decisions: it has earned the room. */
-.treats { display: grid; gap: 10px; }
+   decisions: it has earned the room.
+
+   Not eight boxes, though. The page was thirty three outlined
+   rectangles, and when every control is a card no card means anything;
+   the brand pack's own line is that structure comes from hairline
+   rules rather than boxes. These are a ruled list: one rule between
+   rows, none around them, and the state lives in the tick, the title
+   and the photograph instead of in a border. */
+.treats {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--hairline);
+}
 
 .treat {
   display: flex;
   align-items: center;
   gap: .9rem;
-  border: 1px solid var(--hairline-firm);
-  padding: .8rem 1.1rem .8rem 2.9rem;
+  border: none;
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 0;
+  background: transparent;
+  padding: .85rem 1.1rem .85rem 2.9rem;
 }
-.treat:hover:not(:has(input:disabled)) { border-color: var(--sand); }
+/* The hover is the row lifting off the canvas rather than an edge
+   appearing, which is the move a ruled list has and a card does not. */
+.treat:hover:not(:has(input:disabled)) { background: var(--paper); }
 
 /* The photograph the homepage already uses for this treatment. Small,
    square, and at the media radius rather than the card radius, because
@@ -519,7 +575,7 @@ html { background: var(--canvas); }
   height: 52px;
   object-fit: cover;
   border-radius: var(--r-badge);
-  transition: opacity 160ms var(--ease-out);
+  transition: opacity var(--t-state) var(--ease-out);
 }
 
 .treat__body { flex: 1; min-width: 0; }
@@ -558,15 +614,25 @@ html { background: var(--canvas); }
 
 /* ---------- 07: rhythm ---------- */
 
-.rhythms { display: grid; gap: 8px; }
+/* Four rows of one list, ruled rather than boxed, for the same reason
+   as the treatments above. The chosen one still takes the Blush fill
+   the brand pack specifies, run full width across the row: a
+   highlighted row in a list, which is what it is. */
+.rhythms {
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--hairline);
+}
 
 .rhythm {
-  border: 1px solid var(--hairline-firm);
-  background: var(--paper);
+  border: none;
+  border-bottom: 1px solid var(--hairline);
+  border-radius: 0;
+  background: transparent;
   padding: .85rem 1.1rem;
 }
-.rhythm:hover:not(:has(input:disabled)) { border-color: var(--sand); }
-.rhythm:has(input:checked) { border-color: var(--ember); background: var(--blush); }
+.rhythm:hover:not(:has(input:disabled)) { background: var(--paper); }
+.rhythm:has(input:checked) { background: var(--blush); }
 
 .rhythm__body {
   display: flex;
@@ -599,6 +665,11 @@ html { background: var(--canvas); }
 .rhythm__count.is-one::after { content: " session"; }
 
 /* The rhythm the published programme for this length is built around. */
+/* Ember Deep, not Ember. The badge sits on Blush whenever the standard
+   rhythm is also the chosen one, which is the default, and Ember on
+   Blush measures 3.61 to 1. It had been failing since the badge was
+   written, because the contrast sweeps only read text nodes and this
+   is pseudo element content. lab/programme-contrast.mjs reads both. */
 .rhythm.is-standard .rhythm__title::after {
   content: "Standard";
   font-family: var(--f-body);
@@ -606,8 +677,8 @@ html { background: var(--canvas); }
   font-weight: 600;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--ember);
-  border: 1px solid var(--blush);
+  color: var(--ember-deep);
+  border: 1px solid var(--sand);
   border-radius: var(--r-badge);
   padding: 2px 6px;
   margin-left: .6rem;
@@ -629,6 +700,17 @@ html { background: var(--canvas); }
 /* ---------- 08: priorities ---------- */
 
 .priorities { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Ember Deep, because this line lives on the Haze ground of the matters
+   block, where plain Ember is under AA. */
+.prio__count {
+  font-family: var(--f-body);
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--ember-deep);
+  margin: 1.1rem 0 0;
+}
+.prio__count[hidden] { display: none; }
 
 .prio {
   border: 1px solid var(--hairline-firm);
@@ -762,7 +844,7 @@ html { background: var(--canvas); }
   padding: 0 0 .6rem;
   cursor: pointer;
   text-align: left;
-  transition: color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+  transition: color var(--t-flip) var(--ease-out), border-color var(--t-flip) var(--ease-out);
 }
 .summary__tab + .summary__tab { text-align: right; }
 .summary__tab:hover { color: var(--ink); }
@@ -832,7 +914,7 @@ html { background: var(--canvas); }
   margin: 0;
   text-align: left;
   cursor: pointer;
-  transition: color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+  transition: color var(--t-flip) var(--ease-out), border-color var(--t-flip) var(--ease-out);
 }
 .area__jump:hover { color: var(--ember); border-bottom-color: var(--ember); }
 
@@ -852,7 +934,7 @@ html { background: var(--canvas); }
   pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .area.is-changed::before { animation: flag 1400ms var(--ease-out); }
+  .area.is-changed::before { animation: flag 1400ms var(--ease-out);  /* a held beat, not a transition */ }
 }
 @keyframes flag {
   0%   { opacity: 0; }
@@ -895,7 +977,7 @@ html { background: var(--canvas); }
   border: 1px solid var(--hairline);
   border-radius: var(--r-badge);
   cursor: pointer;
-  transition: background-color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+  transition: background-color var(--t-flip) var(--ease-out), border-color var(--t-flip) var(--ease-out);
 }
 .areas__restore:hover { background: var(--haze); border-color: var(--sand); }
 /* `display: block` above beats the user agent's `[hidden] { display:
@@ -939,7 +1021,7 @@ html { background: var(--canvas); }
 .fee__amount, .feebar__amount { will-change: transform; }
 @media (prefers-reduced-motion: no-preference) {
   .fee__amount.is-moved, .feebar__amount.is-moved {
-    animation: settle 420ms var(--ease-out);
+    animation: settle var(--t-move) var(--ease-out);
   }
 }
 @keyframes settle {
@@ -1072,6 +1154,17 @@ html { background: var(--canvas); }
 .summary__act .btn { text-align: center; }
 
 .btn--sm { padding: 10px 16px; font-size: .85rem; }
+
+/* Something has landed in here since it was last opened. The Blush fill
+   is the same signal a chosen control carries, so the button reads as
+   holding something rather than as a second primary action. Ember Deep
+   on Blush, since plain Ember measures 3.61 there. */
+.btn--outline.has-news {
+  background: var(--blush);
+  color: var(--ember-deep);
+  border-color: var(--ember-deep);
+}
+.btn--outline.has-news:hover { background: var(--ember); color: var(--paper); }
 
 .summary__support,
 .summary__disclaimer {
@@ -1208,7 +1301,7 @@ html { background: var(--canvas); }
   max-width: var(--mark-w);
   margin-inline: auto;
   height: var(--mark-h);
-  border-radius: 2px;
+  border-radius: var(--r-mark);
 }
 .mark--bath    { background: var(--rose-mist); }
 .mark--massage { background: var(--coral-deep); height: var(--mark-h-massage); }
@@ -1253,7 +1346,7 @@ html { background: var(--canvas); }
   font-size: .72rem;
   color: var(--ink-mute);
 }
-.key__mark { width: 14px; height: 10px; border-radius: 2px; }
+.key__mark { width: 14px; height: 10px; border-radius: var(--r-mark); }
 .key--bath    .key__mark { background: var(--rose-mist); }
 .key--massage .key__mark { background: var(--coral-deep); }
 .key--treat   .key__mark { background: var(--sand); }
@@ -1420,7 +1513,7 @@ html { background: var(--canvas); }
 .feebar .btn { flex: none; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .page--builder.is-fee-adrift .feebar { animation: barin 260ms var(--ease-out); }
+  .page--builder.is-fee-adrift .feebar { animation: barin var(--t-move) var(--ease-out); }
 }
 @keyframes barin { from { transform: translateY(100%); } to { transform: none; } }
 
@@ -1437,7 +1530,7 @@ html { background: var(--canvas); }
   .rise {
     opacity: 0;
     transform: translateY(18px);
-    transition: opacity 620ms var(--ease-out), transform 620ms var(--ease-out);
+    transition: opacity var(--t-enter) var(--ease-out), transform var(--t-enter) var(--ease-out);
   }
   .rise.is-in { opacity: 1; transform: none; }
 }
@@ -1464,7 +1557,16 @@ html { background: var(--canvas); }
     max-height: none;
   }
   /* Unstacked, the panel is just a block in the flow, so the split that
-     keeps the controls in view on a laptop has nothing left to do. */
+     keeps the controls in view on a laptop has nothing left to do.
+
+     The cap has to come off the card as well as off the sticky box
+     around it. With it still on, the body overflowed a container that
+     was pinned to the window height and the foot laid its two buttons
+     straight across the care areas. It survived every screenshot
+     because a full page capture resizes the viewport to the whole
+     document, which makes 100vh taller than the content and stops the
+     cap biting. Only a real window shows it. */
+  .summary { max-height: none; }
   .summary__body { overflow: visible; }
   .summary__top { border-bottom: none; padding-bottom: 0; }
   .summary__foot { border-top: none; padding-top: 0; }

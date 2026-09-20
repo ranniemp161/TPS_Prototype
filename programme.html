@@ -474,6 +474,12 @@
           <label class="prio"><input type="checkbox" name="p-house" value="Relief from the household" /><span>Relief from the household</span></label>
           <label class="prio"><input type="checkbox" name="p-family" value="Support for the wider family" /><span>Support for the wider family</span></label>
         </div>
+        <!-- The pills were wired to exactly one thing, the enquiry brief,
+             and the brief sits behind a button. So a client ticked three
+             boxes and the page said nothing back, which is how a control
+             that works comes to read as broken. This is the answer at
+             the point of tapping. -->
+        <p class="prio__count" data-prio-count hidden></p>
         <p class="step__note">These do not change the fee. They change the conversation, and they are the first thing we read before your call.</p>
       </fieldset>
       </div>
