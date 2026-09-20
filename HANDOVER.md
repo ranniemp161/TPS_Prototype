@@ -58,6 +58,7 @@ TJ's own copy describing a working day.
 | `lab/programme-panel.mjs` | The builder's summary panel, driven in a real browser at five window sizes |
 | `lab/programme-budget.mjs` | The budget field's recommendation, and the panel scrollbar |
 | `lab/programme-strip.mjs` | The day strip at seven widths. One line on a laptop, weeks on a phone |
+| `lab/programme-contrast.mjs` | Contrast at two widths across seven states, pseudo elements included |
 | `lab/programme-shot.mjs` | Full page shot of the builder with every scroll entrance triggered first |
 | `index.html` | An earlier direction, kept for reference |
 | `lab/` | About sixty measurement tools. The real leverage here |
@@ -83,7 +84,16 @@ npx -y http-server -p 4321 -c-1 &
 node lab/programme-panel.mjs
 node lab/programme-budget.mjs
 node lab/programme-strip.mjs
+node lab/programme-contrast.mjs
 ```
+
+**A full page screenshot cannot show you a viewport bug.** `shoot`-style
+captures resize the viewport to the height of the document, so every `vh` unit
+and every `100vh` cap goes slack. The summary panel was capped to the window
+height, kept that cap after the column unstacked on a phone, and laid its two
+buttons across the care areas; it photographed perfectly every time. Anything
+that depends on the window being a window belongs in `lab/programme-panel.mjs`,
+which measures at real viewport sizes.
 
 **The panel suite holds one rule that has broken twice:** a fee is on screen,
 somewhere, at every control, at every window size. The panel carries it while

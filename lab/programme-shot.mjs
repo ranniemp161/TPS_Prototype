@@ -8,6 +8,13 @@
  * comes out at zero opacity. This walks the document first, waits for the
  * observer, then returns to the top so the sticky summary is where a
  * visitor first meets it.
+ *
+ * WHAT A FULL PAGE SHOT CANNOT SHOW YOU: it resizes the viewport to the
+ * height of the document, so every `vh` unit and every `100vh` cap goes
+ * slack. A summary panel capped to the window height looks perfect here
+ * and lays its buttons across the care areas on a real phone. Anything
+ * that depends on the window being a window belongs in
+ * lab/programme-panel.mjs, which measures at real viewport sizes.
  */
 import { chromium } from 'playwright-core';
 

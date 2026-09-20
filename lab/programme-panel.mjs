@@ -129,6 +129,36 @@ for (const [w, h, label] of [[1920,1080,'large'],[1440,900,'desktop'],[1280,720,
   ok(`${label} every jump resolves`, wiring.jumps, true);
   ok(`${label} six jumps`, wiring.jumpCount, 6);
 
+  // Nothing in the card may sit on top of anything else in it. The foot
+  // once laid its two buttons across the care areas on a phone, because
+  // the card kept a 100vh cap after the column unstacked. No screenshot
+  // caught it: a full page capture resizes the viewport to the document
+  // height, so 100vh stops binding. Measured at a real window height.
+  const stack = await p.evaluate(() => {
+    const bodyEl = document.querySelector('.summary__body');
+    const top = document.querySelector('.summary__top').getBoundingClientRect();
+    const foot = document.querySelector('.summary__foot').getBoundingClientRect();
+    const card = document.querySelector('.summary').getBoundingClientRect();
+    // The CONTENT, not the box. With overflow visible the box keeps the
+    // height flex gave it while the content spills straight through the
+    // foot, so measuring the box reports no overlap and the first
+    // version of this check passed on the broken page.
+    const bodyBox = bodyEl.getBoundingClientRect();
+    return { topOverBody: Math.round(top.bottom - bodyBox.top),
+      bodyOverFoot: Math.round(bodyBox.bottom - foot.top),
+      // Content taller than its box is fine when the box scrolls, since
+      // the overflow is clipped. It is the bug when the box does not:
+      // the content then runs straight through whatever is below it,
+      // which is how the foot came to lie across the care areas.
+      spills: bodyEl.scrollHeight > bodyEl.clientHeight + 1
+              && getComputedStyle(bodyEl).overflowY === 'visible',
+      footPastCard: Math.round(foot.bottom - card.bottom) };
+  });
+  ok(`${label} the head does not overlap the body`, stack.topOverBody <= 1, true);
+  ok(`${label} the body does not overlap the foot`, stack.bodyOverFoot <= 1, true);
+  ok(`${label} the body does not spill a box that cannot clip it`, stack.spills, false);
+  ok(`${label} the foot stays inside the card`, stack.footPastCard <= 1, true);
+
   const ov = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   ok(`${label} no horizontal overflow`, ov, 0);
   if (errs.length) fails.push(`${label} page errors: ${errs.join(' | ')}`);
