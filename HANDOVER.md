@@ -57,6 +57,7 @@ TJ's own copy describing a working day.
 | `lab/programme-check.mjs` | The builder's arithmetic. Run it after touching any rate |
 | `lab/programme-panel.mjs` | The builder's summary panel, driven in a real browser at five window sizes |
 | `lab/programme-budget.mjs` | The budget field's recommendation, and the panel scrollbar |
+| `lab/programme-strip.mjs` | The day strip at seven widths. One line on a laptop, weeks on a phone |
 | `lab/programme-shot.mjs` | Full page shot of the builder with every scroll entrance triggered first |
 | `index.html` | An earlier direction, kept for reference |
 | `lab/` | About sixty measurement tools. The real leverage here |
@@ -81,6 +82,7 @@ node lab/programme-check.mjs
 npx -y http-server -p 4321 -c-1 &
 node lab/programme-panel.mjs
 node lab/programme-budget.mjs
+node lab/programme-strip.mjs
 ```
 
 **The panel suite holds one rule that has broken twice:** a fee is on screen,
@@ -89,6 +91,14 @@ the panel is in view and the fixed bar carries it when the panel is not, never
 both and never neither. It broke once when the panel was sticky inside only one
 of three sections, and again when the fee sat in a 368px foot that fell below
 the fold on a 1280 by 720 laptop.
+
+**Two placeholders in the builder need real work before this ships.** Herbal
+foot treatment and hair serum therapy have no photograph in `assets/img` and
+carry the generic treatment frame in step 06. And the eight one line treatment
+descriptions on that step are placeholder copy written to the brand voice, kept
+deliberately to what happens rather than what it achieves, because the page
+should not make a clinical claim the business has not written itself. They need
+Amidat's approval.
 
 **`v1-ruined` is not damaged.** On 2026-09-05 TJ believed v1 was broken and
 asked for it to be set aside under that name. It was not broken; Chrome was
