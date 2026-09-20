@@ -40,6 +40,7 @@ for (const [w, h, label] of WIDTHS) {
         sideScroll: s.scrollWidth > s.clientWidth + 1,
         pageOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         labelled: [...g.querySelectorAll('.day__n')].filter(n => n.textContent).length,
+        firstLabel: g.querySelector('.day__n').textContent,
         dayW: +cells[0].getBoundingClientRect().width.toFixed(1) };
     }, d);
 
@@ -51,7 +52,13 @@ for (const [w, h, label] of WIDTHS) {
     if (narrow) {
       ok(`${label} ${d}d seven columns`, r.cols, Math.min(d, 7));
       ok(`${label} ${d}d every day numbered`, r.labelled, d);
+      ok(`${label} ${d}d numerals, not words`, r.firstLabel, '1');
       if (r.dayW < 34) fails.push(`${label} ${d}d day cell only ${r.dayW}px wide`);
+    } else if (d <= 7) {
+      // The short tier says the word. It lost it once, silently, when
+      // the week tier arrived and the two were folded into one branch.
+      ok(`${label} ${d}d says Day`, r.firstLabel, 'Day 1');
+      ok(`${label} ${d}d labels every day`, r.labelled, d);
     }
   }
 

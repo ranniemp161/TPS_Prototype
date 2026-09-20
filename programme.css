@@ -147,21 +147,36 @@ html { background: var(--canvas); }
 /* Format and shift, side by side. Two questions about the same thing,
    asked once each, so they share a row rather than queueing. */
 .pair {
+  --pair-gutter: clamp(24px, 3vw, 44px);
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(24px, 4vw, 56px);
-  align-items: start;
+  gap: 0;
+  /* Stretch, not start. The divider is a border on the right hand step,
+     so it is only ever as tall as that step: with the columns sized to
+     their own content the left note ran longer and the rule stopped
+     two thirds of the way down, reading as a rule that failed to draw
+     rather than as a decision. */
+  align-items: stretch;
+  margin-top: 2.5rem;
 }
 .pair .step { padding-bottom: 0; }
-.pair { margin-top: 2.5rem; }
 @media (min-width: 861px) {
-  /* The divider between them is vertical. Both keep their own top rule,
-     because one column ruled and the other not reads as a rule that
-     failed to draw rather than as a decision. */
+  /* The gutter is split evenly between the two rather than taken
+     entirely out of the second. It used to be a grid gap AND a padding
+     on the right hand column, so that column's content ran 58px
+     narrower than the left one and its heading wrapped where the other
+     did not. Two equal columns now, with the rule down the middle. */
+  .pair .step:first-child { padding-right: var(--pair-gutter); }
   .pair .step:last-child {
     border-left: 1px solid var(--hairline);
-    padding-left: clamp(24px, 4vw, 56px);
+    padding-left: var(--pair-gutter);
   }
+  /* "Daytime, or day and night" takes two lines where "Your care
+     format" takes one, so the two option stacks began thirty pixels
+     apart and the row stopped reading as one row. Both heads hold two
+     lines' worth, and the extra falls below the text rather than
+     above, so the step numbers stay on one baseline. */
+  .pair .step__head { min-height: 3.2rem; }   /* two lines at the inherited 1.6 */
 }
 /* Below that the two questions queue instead. Two columns in a phone's
    width is 160px each, which broke "Daytime in-home care" over three
@@ -175,6 +190,16 @@ html { background: var(--canvas); }
 /* Inside the pair the two options stack, because a 540px column split
    again into two is narrower than the copy each option carries. */
 .pair .choices--wide { grid-template-columns: minmax(0, 1fr); }
+
+/* Every option box the same height. "7am to 7pm" is one line where the
+   other three descriptions take two, so the right column's first box
+   came out 86px against the left's 106: the second row started 20px
+   lower on one side than the other, and both notes with it.
+
+   `1fr` rows in an auto height grid all take the height of the tallest,
+   so this is content driven. A hard min-height would have to be
+   re-guessed every time the copy or the column width changed. */
+.pair .choices { grid-auto-rows: 1fr; }
 
 
 
@@ -191,8 +216,13 @@ html { background: var(--canvas); }
      A sticky element releases when its own bottom reaches the bottom of
      its container, so without this the panel let go while the client
      was still answering step 08, and the card was left clipped through
-     the middle with its fee above the fold. */
-  padding-bottom: clamp(140px, 24vh, 280px);
+     the middle with its fee above the fold.
+
+     Trimmed from 24vh, which put three hundred pixels of empty canvas
+     under the last question on a 900px window. The panel suite asserts
+     a fee is on screen at step 08 at five window sizes, so this is as
+     low as it can go and still hold. */
+  padding-bottom: clamp(72px, 12vh, 150px);
 }
 
 .build__summary {
@@ -1367,7 +1397,7 @@ html { background: var(--canvas); }
    ALWAYS INCLUDED
    ============================================================ */
 
-.act--included { padding-block: var(--section); }
+.act--included { padding-block: var(--section) 0; }
 
 .included {
   display: grid;
@@ -1376,27 +1406,24 @@ html { background: var(--canvas); }
   align-items: center;
 }
 
-/* Seven items, paired across two columns. It was `columns: 2`, which
-   flows by height rather than by count, so a two line item pushed the
-   break and the halves came out ragged and mismatched. A grid fills
-   left to right and the odd one out lands under the first column,
-   which is what a list of seven should look like. */
+/* One column. Two columns of 212px inside a 463px half meant all seven
+   items wrapped onto a second line, and a list where every entry is
+   broken in a different place is not a list, it is a texture. Full
+   width, one line each, more air between them. */
 .included__list {
   list-style: none;
-  margin: 1.6rem 0 0;
+  margin: 1.8rem 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: .2rem 2rem;
+  gap: .1rem;
 }
 .included__list li {
   font-family: var(--f-read);
-  font-size: .92rem;
+  font-size: .95rem;
   line-height: 1.5;
   color: var(--ink-soft);
-  padding: .45rem 0;
+  padding: .5rem 0;
 }
-@media (max-width: 700px) { .included__list { grid-template-columns: minmax(0, 1fr); } }
 
 .included__frame { margin: 0; border-radius: var(--r-media); overflow: hidden; aspect-ratio: 4 / 3; }
 .included__frame img { width: 100%; height: 100%; object-fit: cover; }
@@ -1433,6 +1460,22 @@ html { background: var(--canvas); }
   white-space: pre-wrap;
   word-break: break-word;
   margin: 1.2rem 0 0;
+  /* Sized to its own longest line rather than to the card, so the
+     block stops sprawling to 934px when its content needs 838.
+
+     Two things that did not work, recorded so nobody tries them again.
+     A plain max-width in ch wraps the treatment list, and the brief
+     indents its detail by two spaces, so a wrapped line came back to
+     column zero and a continuation sat further left than the line it
+     continued. A hanging indent does not fix that either: inside
+     `white-space: pre-wrap` the whole thing is one block, so
+     text-indent moves the first line of the brief and nothing else.
+
+     `max-content` is the answer, because the content already knows how
+     wide it wants to be. max-width keeps it inside the card on a
+     narrow window, where it falls back to wrapping. */
+  width: max-content;
+  max-width: 100%;
 }
 
 
@@ -1440,18 +1483,43 @@ html { background: var(--canvas); }
    CLOSE AND FOOTER
    ============================================================ */
 
-.act--close-builder { padding-block: calc(var(--section) * 0.7); background: var(--paper); }
+/* The same ground as the band above it, so the page ends on one held
+   colour instead of a strip of pure white between two warm ones. The
+   two are one closing act with a rule between them: here is what is in
+   every programme, and here is how you start one. */
+.act--close-builder {
+  padding-block: calc(var(--section) * 0.8) var(--section);
+  background: var(--blush);
+}
 
+/* v1's `.close` is a card, and inheriting it put a hairline rectangle
+   with a 10px radius around the last thing on the page. The ending is
+   a rule and some air, which is what the brand pack asks for
+   everywhere else on this page. */
 .act--close-builder .close {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--hairline-firm);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  /* This element is `wrap close`, and v1's .close is a card with its
+     own clamped padding on all four sides. Zeroing the shorthand put
+     the last section 48px outside the column; leaving it alone put it
+     4px inside. Both axes are stated, so the close starts on the same
+     line as every other section at every width.
+
+     margin-top is reset for the same reason: v1's card carries up to
+     110px of it, on top of the padding this section already sets. */
+  padding-block: calc(var(--section) * 0.8) 0;
+  padding-inline: var(--gutter);
+  margin-top: 0;
+  border-top: 1px solid var(--sand);
 }
-.act--close-builder .close__say .body { margin: .8rem 0 0; }
+.act--close-builder .close__say { max-width: 44ch; }
+.act--close-builder .close__say .body { margin: 1rem 0 0; }
 
 .foot__legal {
   font-family: var(--f-body);
