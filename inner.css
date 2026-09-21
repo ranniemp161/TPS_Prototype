@@ -53,3 +53,196 @@
   line-height: 1.6;
   color: var(--ink-mute);
 }
+
+/* ============================================================
+   ARTICLE LAYOUT, added 2026-09-21
+
+   Placeholder content for care.html, programmes.html, about.html and
+   specialist.html. Deliberately plain: a heading, a paragraph, an image,
+   repeated. No alternating columns, no scroll behaviour, no device
+   borrowed from v1. The point of this layout is that the copy is what
+   gets judged, not the page. Every token still comes from v1.css.
+
+   Single treatments is not built to this pattern; it stays an
+   inner-stub, since that page maps to the existing booking system
+   rather than to new copy.
+   ============================================================ */
+
+.page--article main {
+  display: block;
+  min-height: 0;
+  padding-block: clamp(56px, 10vh, 96px) 96px;
+  padding-inline: var(--gutter);
+  background: var(--canvas);
+}
+
+.article {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.article__eyebrow {
+  margin: 0 0 1rem;
+  font-family: var(--f-body);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: clamp(.62rem, .8vw, .72rem);
+  color: var(--ember);
+  text-align: center;
+}
+
+.article__title {
+  margin: 0 0 1.5rem;
+  font-family: var(--f-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 4.4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: .02em;
+  color: var(--ink);
+  text-align: center;
+}
+
+.article__lede {
+  max-width: 62ch;
+  margin: 0 auto clamp(56px, 9vh, 96px);
+  font-family: var(--f-read);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  line-height: 1.7;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.block {
+  margin-block-end: clamp(56px, 9vh, 96px);
+}
+
+.block:last-child {
+  margin-block-end: 0;
+}
+
+.block__image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: var(--r-media);
+  display: block;
+  margin: 0 0 24px;
+}
+
+.block__heading {
+  margin: 0 0 .75rem;
+  font-family: var(--f-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+  line-height: 1.2;
+  letter-spacing: .01em;
+  color: var(--ink);
+}
+
+.block__text {
+  max-width: 62ch;
+  margin: 0 0 1rem;
+  font-family: var(--f-read);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.block__text:last-child { margin-bottom: 0; }
+
+.block__list {
+  max-width: 62ch;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  font-family: var(--f-read);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.block__list li {
+  padding-left: 1.1em;
+  position: relative;
+}
+
+.block__list li + li { margin-top: .4rem; }
+
+.block__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: .75em;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--ember);
+}
+
+/* A flagged gap: something a real client has to confirm, decide or
+   write before this page can go live. Set apart from ordinary copy by
+   a hairline and a muted label, so it reads as an editorial aside
+   rather than as finished brand voice. */
+.block__note {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--hairline);
+  max-width: 62ch;
+}
+
+.block__note-label {
+  font-family: var(--f-body);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .68rem;
+  color: var(--ember);
+}
+
+.block__note-text {
+  margin: .35rem 0 0;
+  font-family: var(--f-read);
+  font-style: italic;
+  font-size: .92rem;
+  line-height: 1.6;
+  color: var(--ink-mute);
+}
+
+.article__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.article__contact {
+  max-width: 62ch;
+  margin: 0 0 1.5rem;
+  font-family: var(--f-body);
+  font-size: .98rem;
+  color: var(--ink-soft);
+}
+
+.article__contact > div {
+  display: flex;
+  gap: .5em;
+  padding: .6rem 0;
+  border-top: 1px solid var(--hairline);
+}
+
+.article__contact > div:first-child { border-top: none; }
+
+.article__contact dt {
+  margin: 0;
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 8ch;
+}
+
+.article__contact dd { margin: 0; }
+
+@media (max-width: 560px) {
+  .block__image { aspect-ratio: 4 / 3; }
+}
