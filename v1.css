@@ -2724,6 +2724,31 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   position: relative;
   scroll-margin-top: calc(var(--nav-h) + 20px);
 }
+/* The body scrub add-on line, sitting between the accordion and the
+   section's end. Its own "Learn more" used to be a separate boxed button
+   underneath it, which TJ found competed with the Enquire button in the
+   nav above. Folded into the sentence instead, as a plain inline link,
+   the way an article's own "read more" sits at the end of a paragraph
+   rather than as a control of its own. */
+.act--treatments-b .treatments-addon {
+  margin: clamp(28px, 5vh, 48px) 0 0;
+  text-align: center;
+  font-family: var(--f-read);
+  font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+  color: var(--ink-mute);
+}
+.act--treatments-b .treatments-addon__link {
+  color: var(--ember);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s ease;
+}
+/* Same token as the text colour above, so the underline can never drift
+   from the word it sits under, confirmed 2026-09-21. */
+.act--treatments-b .treatments-addon__link:hover {
+  border-bottom-color: var(--ember);
+}
 .treatments-b-wrap {
   max-width: 1260px;
   margin-inline: auto;
@@ -2770,6 +2795,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 .tb-acc__panel > img {
   position: absolute;
   inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -2777,6 +2803,48 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   transition: opacity .4s ease;
 }
 .tb-acc__panel.is-open > img { opacity: 0; }
+
+/* A blush ground for the closed label to sit on, rising from the panel's
+   own bottom edge, added 2026-09-21: the word was sitting directly on
+   the bare photograph with nothing separating it. Closed panels only,
+   the open one has its own copy block and gradient already. */
+.tb-acc__panel:not(.is-open)::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 46%;
+  /* Solid blush behind the label rather than fading from the very
+     bottom edge, TJ asked for 2026-09-21: the label's own top sits about
+     20% up this band (9.3% of the whole panel). Full colour was first
+     held to 32%, well above the text, then TJ asked for the fade to
+     start closer to the top of the text while the point it finishes
+     fading, 100%, stays exactly where it was: the solid stop moved down
+     to 22%, the mid stops and the end are untouched. Two mid stops (55%,
+     78%) shape the ease: a plain two-stop fade from solid to transparent
+     reads as a straight ramp with a visible kink where it leaves the
+     solid block, and TJ asked for no harsh transition at that join. The
+     mid stops bend the curve so the softening itself looks gradual
+     rather than the blend simply starting on cue. */
+  background: linear-gradient(to top,
+    var(--blush) 0%,
+    var(--blush) 22%,
+    color-mix(in srgb, var(--blush) 62%, transparent) 55%,
+    color-mix(in srgb, var(--blush) 22%, transparent) 78%,
+    transparent 100%
+  );
+  pointer-events: none;
+  /* Without this the photograph painted over the gradient rather than
+     under it: ::before generates as the panel's first child, ahead of
+     the real <img> in source order, and with both absolutely positioned
+     at the default z-index, paint order follows that document order.
+     The image keeps its own position: absolute (set where it is defined
+     above) and gets a z-index alongside it instead of being touched
+     here, so its fill layout is not at risk from a second rule landing
+     on the same property. Caught only by looking at the rendered page,
+     not by reading the rule, which is why it shipped invisible the
+     first time. */
+  z-index: 1;
+}
 
 /* The closed label. Horizontal, bottom anchored, one short word so it
    never wraps at the panel's minimum width (clamp floor 96px). Distinct
@@ -2787,6 +2855,12 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 .tb-acc__label {
   position: absolute;
   left: 0; right: 0; bottom: clamp(16px, 3vh, 28px);
+  /* Above the blush gradient's z-index: 1, not on the default auto that
+     resolves under it. The label went visually faint under the wash
+     meant to sit behind it, the same mistake the gradient's own fix just
+     made with the photograph, caught the same way: by looking, not by
+     reading the rule. */
+  z-index: 2;
   text-align: center;
   padding-inline: 8px;
   font-family: var(--f-body);
@@ -2821,7 +2895,11 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   object-fit: cover;
 }
 .tb-acc__open-copy {
-  background: var(--blush);
+  /* Blush where it meets the photograph, easing into the section's own
+     canvas ground by the far edge, so the block reads as fading into the
+     page rather than stopping as a bordered box. TJ asked for this
+     2026-09-21. */
+  background: linear-gradient(to right, var(--blush), var(--canvas));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2838,6 +2916,12 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 .tb-acc__open-copy h3 {
   margin: 0;
   font-family: var(--f-display);
+  /* Instrument Serif ships weight 400 only, per TPS Brand Fonts section 3.
+     An <h3> defaults to bold in every browser, and with no real 700 file to
+     draw from, Chrome fakes it by fattening the 400 strokes, which is what
+     made this heading read heavier and blockier than the section title
+     above it, the same font at its correct weight. */
+  font-weight: 400;
   text-transform: uppercase;
   font-size: clamp(1.1rem, 2vw, 1.6rem);
   line-height: 1.15;
