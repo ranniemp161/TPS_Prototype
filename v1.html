@@ -613,169 +613,35 @@
   </div>
 </section>
 
-  <!-- ============ ACT: STANDALONE TREATMENTS ============
-       Single in-home treatments available outside the multi-day programmes.
-       Interactive layered deck with 4 core offerings + 1 exfoliation scrub add-on.
-       ============================================================ -->
-  <!-- ============ ACT: STANDALONE TREATMENTS (Stepped Horizontal Concertina) ============
-       Minimal, architectural horizontal concertina with stepped vertical hairlines.
-       Individual in-home treatments outside the multi-day residential programmes.
-       ============================================================ -->
-  <!-- ============ ACT: STANDALONE TREATMENTS (Centering Stepped Horizontal Concertina) ============
-       Minimal, architectural horizontal concertina with stepped vertical hairlines,
-       horizontal text extending across compressed pleats, auto-centering expansion,
-       and slide & snap navigation.
-       ============================================================ -->
-  <!-- ============ ACT: STANDALONE TREATMENTS (Stepped Horizontal Concertina) ============
-       Minimal, architectural horizontal concertina with stepped vertical hairlines,
-       horizontal text extending across compressed pleats, auto-centering expansion,
-       and slide & snap navigation.
-       ============================================================ -->
-  <!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
-     Stepped Concertina Ladder (Left) + Focused Content Stage (Right) + Continuous Scrubber Slider -->
-<!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
-     Stepped Concertina Ladder (Left) + Architectural Stage (Right) + Slider Navigation -->
-<!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
-     Stepped Concertina Spine (Left) + Architectural Stage (Right) + Slider Navigation -->
-<!-- ============ STANDALONE TREATMENTS (IN-HOME SINGLE VISITS) ============
-     True Horizontal Concertina on Canvas (No Cards) + Minimal Scrubber Slider -->
-<section class="act act--treatments" id="standalone-treatments" data-act data-section="treatments">
-  <div class="wrap treatments-wrap">
+  <!-- ============ SECTION: TREATMENTS, HORIZONTAL ACCORDION ============
+       Replaced the old stepped concertina outright 2026-09-21. That
+       version and this one lived side by side for a few days as
+       "section 6" and "section 6b" so TJ could compare them on the live
+       page; he picked this one, so the old markup, its four comment
+       headers recording past iterations of the same idea, and its class
+       names are gone rather than kept for reference. Its four treatment
+       photographs, copy and prices carry over unchanged.
 
-    <!-- Section Header -->
-    <header class="sec-head">
-      <div class="sec-head__mask"><h2 class="display display--md">Individual Treatments</h2></div>
-      <div class="sec-head__mask sec-head__mask--sub"><p class="standfirst">Each ritual, brought to your home as a single session.</p></div>
-    </header>
+       Mechanic: a row of panels, one open at a time, widths animated on
+       click with overflow: hidden doing the cropping, no reflow.
+       Prototyped and approved in lab/accordion-options.html (label
+       option one: short distinguishing words, open panel split into
+       photograph plus copy).
 
-    <!-- The True Horizontal Stepped Concertina Arena (Pure Canvas, No Cards) -->
-    <div class="concertina-arena" data-concertina-arena>
+       Real copy is from the live booking system
+       (booking.thepostpartumsuite.com, screenshotted by TJ 2026-09-17):
+       four single-session massages that escalate, Postpartum,
+       Traditional (the non-postpartum option), then two tiers that each
+       add one thing to the Postpartum massage. The section title TJ set
+       directly: "Try one of our single-session massage treatments."
+       Panel labels are Set A from that conversation, agreed to avoid the
+       word "massage" repeating four times: the title's own wording
+       absorbs it once for the whole group.
 
-      <!-- Position 1: Postpartum Massage (Step 0) - OPEN BY DEFAULT -->
-      <div class="concertina-pleat is-open" data-pleat="3" style="--step-top: 0px; --rail-x: 0px;" tabindex="0" role="region" aria-label="Postpartum Massage">
-        <div class="concertina-pleat__line" aria-hidden="true"></div>
-
-        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="3" aria-expanded="true" aria-label="Expand Postpartum Massage">
-          <span class="concertina-pleat__tab-title">Postpartum Massage</span>
-          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
-        </button>
-
-        <div class="concertina-pleat__body">
-          <div class="concertina-pleat__grid">
-            <div class="concertina-pleat__copy">
-              <h3 class="concertina-pleat__headline">Postpartum Massage</h3>
-              <p class="concertina-pleat__desc">Gentle lymphatic drainage, abdominal warming and muscular restoration for early recovery.</p>
-            </div>
-            <div class="concertina-pleat__media">
-              <img src="assets/img/massage.webp" alt="Restorative in-home postpartum massage session" width="1200" height="1500" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Position 2: Massage & Hot Stone (Step 1) -->
-      <div class="concertina-pleat" data-pleat="2" style="--step-top: 54px; --rail-x: 52px;" tabindex="0" role="region" aria-label="Massage & Hot Stone">
-        <div class="concertina-pleat__line" aria-hidden="true"></div>
-
-        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="2" aria-expanded="false" aria-label="Expand Massage & Hot Stone">
-          <span class="concertina-pleat__tab-title">Massage &amp; Hot Stone</span>
-          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
-        </button>
-
-        <div class="concertina-pleat__body">
-          <div class="concertina-pleat__grid">
-            <div class="concertina-pleat__copy">
-              <h3 class="concertina-pleat__headline">Massage &amp; Hot Stone</h3>
-              <p class="concertina-pleat__desc">Restorative bodywork with heated stones, easing nursing tension and lower back strain.</p>
-            </div>
-            <div class="concertina-pleat__media">
-              <img src="assets/img/stones.webp" alt="Warmed volcanic basalt stones placed along the back" width="1200" height="1500" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Position 3: The Complete Confinement Ritual (Step 2) -->
-      <div class="concertina-pleat" data-pleat="1" style="--step-top: 108px; --rail-x: 104px;" tabindex="0" role="region" aria-label="The Complete Confinement Ritual">
-        <div class="concertina-pleat__line" aria-hidden="true"></div>
-
-        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="1" aria-expanded="false" aria-label="Expand The Complete Confinement Ritual">
-          <span class="concertina-pleat__tab-title">The Complete Confinement Ritual</span>
-          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
-        </button>
-
-        <div class="concertina-pleat__body">
-          <div class="concertina-pleat__grid">
-            <div class="concertina-pleat__copy">
-              <h3 class="concertina-pleat__headline">The Complete Confinement Ritual</h3>
-              <p class="concertina-pleat__desc">Our signature trio: postpartum massage, hot stone therapy, and bespoke Bengkung belly binding.</p>
-            </div>
-            <div class="concertina-pleat__media">
-              <img src="assets/img/bind.webp" alt="Traditional cotton belly binding wrap and herbal oils" width="1200" height="1500" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Position 4: Traditional Full-Body Massage (Step 3) -->
-      <div class="concertina-pleat" data-pleat="0" style="--step-top: 162px; --rail-x: 156px;" tabindex="0" role="region" aria-label="Traditional Full-Body Massage">
-        <!-- Vertical Dividing Hairline (Stepped from --step-top) -->
-        <div class="concertina-pleat__line" aria-hidden="true"></div>
-
-        <!-- Collapsed Stepped Horizontal Tab -->
-        <button type="button" class="concertina-pleat__tab" data-pleat-trigger="0" aria-expanded="false" aria-label="Expand Traditional Full-Body Massage">
-          <span class="concertina-pleat__tab-title">Traditional Full-Body Massage</span>
-          <span class="concertina-pleat__tab-icon" aria-hidden="true">&rsaquo;</span>
-        </button>
-
-        <!-- Expanded Content Body (Visible only when is-open) -->
-        <div class="concertina-pleat__body">
-          <div class="concertina-pleat__grid">
-            <div class="concertina-pleat__copy">
-              <h3 class="concertina-pleat__headline">Traditional Full-Body Massage</h3>
-              <p class="concertina-pleat__desc">Whole-body massage for muscular release and rest. Open to partners and family.</p>
-            </div>
-            <div class="concertina-pleat__media">
-              <img src="assets/img/traditional-massage.webp" alt="Traditional therapeutic whole-body massage" width="1200" height="1500" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- One booking action for the whole section, below the hairline. -->
-    <div class="treatments-cta">
-      <a class="btn btn--outline" href="https://calendly.com/thepostpartumsuite/30min">Book a treatment</a>
-    </div>
-
-  </div>
-</section>
-
-<!-- ============ SECTION 6b: TREATMENTS, HORIZONTAL ACCORDION ============
-     Alternate build, added 2026-09-17, sitting directly after the original
-     section 6 so the two can be compared on the live page before TJ picks
-     one. section 6 above is untouched.
-
-     Mechanic: a row of panels, one open at a time, widths animated on
-     click with overflow: hidden doing the cropping, no reflow. Prototyped
-     and approved in lab/accordion-options.html (label option one: short
-     distinguishing words, open panel split into photograph plus copy).
-
-     Real copy is from the live booking system (booking.thepostpartumsuite.com,
-     screenshotted by TJ 2026-09-17), not the placeholder names the original
-     section 6 still carries: four single-session massages that escalate,
-     Postpartum, Traditional (the non-postpartum option), then two tiers
-     that each add one thing to the Postpartum massage. The section title
-     TJ set directly: "Try one of our single-session massage treatments."
-     Panel labels are Set A from that conversation, agreed to avoid the
-     word "massage" repeating four times: the title's own wording absorbs
-     it once for the whole group.
-
-     Responsive note: TJ asked for this to become a VERTICAL accordion on
-     mobile rather than a squeezed horizontal one. Not yet built; see the
-     open item in HANDOVER.md. -->
-<section class="act act--treatments-b" id="standalone-treatments-b" data-act data-section="treatments-b">
+       Responsive note: TJ asked for this to become a VERTICAL accordion
+       on mobile rather than a squeezed horizontal one. Not yet built;
+       see the open item in HANDOVER.md. -->
+<section class="act act--treatments-b" id="standalone-treatments" data-act data-section="treatments">
   <div class="wrap treatments-b-wrap">
 
     <header class="sec-head" data-in>
