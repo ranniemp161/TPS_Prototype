@@ -1,0 +1,55 @@
+/* ============================================================
+   THE POSTPARTUM SUITE, shared styles for the stage one inner pages
+
+   Added 2026-09-21. These pages are deliberately blank: the stage one
+   rollout in "The Postpartum Suite Site Structure" names seven pages to
+   build first, and five of them did not exist in any form, so the menu
+   had nowhere real to point. They are canvases, not drafts.
+
+   Loaded after v1.css, which carries every token, type role and the nav
+   itself. Nothing here overrides v1.css; it only sizes the empty main
+   so the footer does not ride up under the bar on a tall window.
+   ============================================================ */
+
+.page--inner main {
+  min-height: calc(100svh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: clamp(90px, 14vh, 160px);
+  padding-inline: var(--gutter);
+  background: var(--canvas);
+}
+
+.inner-stub {
+  max-width: 46ch;
+  text-align: center;
+}
+
+.inner-stub__eyebrow {
+  margin: 0 0 1rem;
+  font-family: var(--f-body);
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: clamp(.62rem, .8vw, .72rem);
+  color: var(--ember);
+}
+
+.inner-stub__title {
+  margin: 0 0 1.1rem;
+  font-family: var(--f-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.9rem, 4.4vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+
+.inner-stub__note {
+  margin: 0;
+  font-family: var(--f-read);
+  font-size: clamp(.95rem, 1.2vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--ink-mute);
+}

@@ -2703,578 +2703,51 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 }
 
 /* ============================================================
-   ACT: STANDALONE TREATMENTS (IN-HOME CARE)
-   True Horizontal Stepped Concertina (No Cards) + Minimal Scrubber
-   ============================================================ */
-
-.act--treatments {
-  padding-block: clamp(90px, 10vh, 120px) clamp(70px, 8vh, 90px);
-  background: #F3EFEC; /* TPS Brand Pack Canvas (Pure solid color-block edge) */
-  border: none;
-  position: relative;
-  scroll-margin-top: calc(var(--nav-h) + 20px);
-  overflow: hidden;
-}
-
-.treatments-wrap {
-  max-width: 1260px;
-  margin-inline: auto;
-  padding-inline: clamp(20px, 4vw, 40px);
-}
-
-.act--treatments .sec-head {
-  text-align: center;
-  max-width: 68ch;
-  margin-inline: auto;
-  margin-bottom: clamp(32px, 4vh, 48px);
-}
-
-.act--treatments .sec-head .standfirst {
-  margin-inline: auto;
-}
-
-/* ---------- The True Horizontal Stepped Concertina Arena ---------- */
-
-.concertina-arena {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  width: 100%;
-  min-height: 440px;
-  height: 440px;
-  position: relative;
-  overflow: visible;
-  margin-top: clamp(20px, 3vh, 32px);
-}
-
-/* Individual Pleat Panel */
-.concertina-pleat {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  outline: none;
-  user-select: none;
-  transition: flex-basis 0.62s cubic-bezier(0.16, 1, 0.3, 1),
-              flex-grow 0.62s cubic-bezier(0.16, 1, 0.3, 1),
-              max-width 0.62s cubic-bezier(0.16, 1, 0.3, 1),
-              min-width 0.62s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Collapsed Pleat (Slim Spine with Stepped Hairline) */
-.concertina-pleat:not(.is-open) {
-  flex: 0 0 52px;
-  min-width: 52px;
-  cursor: pointer;
-  overflow: visible;
-  /* A concrete value, not `none`: max-width is transitioned, and `none` is
-     not interpolatable, so the closing pleat would snap to full width for a
-     few frames before flex-basis pulled it back. */
-  max-width: 52px;
-}
-
-/* Expanded Pleat: the pleat itself widens between the hairlines, pushing the
-   remaining spines along the row. That widening IS the concertina, so it is
-   animated on flex-basis rather than swapped in a fixed stage. */
-.concertina-pleat.is-open {
-  /* An explicit basis, not auto: flex-basis needs two concrete endpoints for
-     the widening to interpolate instead of snapping open. */
-  flex: 1 1 calc(100% - 156px);
-  min-width: 0;
-  overflow: hidden;
-  cursor: default;
-  /* The panel is capped so the spines trailing it are never pushed to the
-     right edge: each trailing label starts at its own hairline and runs
-     rightward, and --trail-reach reserves exactly that run. */
-  max-width: calc(100% - var(--lead-spines, 0px) - var(--trail-reach, 0px) - 12px);
-}
-
-/* Vertical Dividing Hairline (Stepped from --step-top) */
-.concertina-pleat__line {
-  position: absolute;
-  left: 0;
-  top: var(--step-top, 0px);
-  bottom: 0;
-  width: 1px;
-  background: var(--hairline-firm);
-  transition: background 0.32s ease, width 0.32s ease;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.concertina-pleat:hover .concertina-pleat__line {
-  background: var(--ember);
-}
-
-.concertina-pleat.is-open .concertina-pleat__line {
-  background: var(--ember);
-  width: 2px;
-}
-
-/* Collapsed Stepped Horizontal Tab Title (Matching diagram.png) */
-.concertina-pleat__tab {
-  position: absolute;
-  left: 0;
-  top: var(--step-top, 0px);
-  height: 38px;
-  background: transparent;
-  border: none;
-  padding: 0 12px 0 14px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  outline: none;
-  white-space: nowrap;
-  width: max-content;
-  z-index: 10;
-  transition: opacity 0.3s ease, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.concertina-pleat:hover .concertina-pleat__tab {
-  transform: translateX(4px);
-}
-
-/* Every treatment keeps its label in the cascade, including the open one, so
-   the ladder always reads as four stepped hairlines with four titles. The open
-   pleat's label is simply marked as current. */
-.concertina-pleat.is-open .concertina-pleat__tab {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.concertina-pleat.is-open .concertina-pleat__tab-title {
-  color: var(--ember);
-}
-
-.concertina-pleat.is-open .concertina-pleat__tab-icon {
-  opacity: 0;
-}
-
-.concertina-pleat__tab-title {
-  font-family: var(--f-display);
-  font-size: clamp(1.02rem, 1.15vw, 1.2rem);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--ink);
-  line-height: 1;
-  transition: color 0.24s ease;
-}
-
-.concertina-pleat:hover .concertina-pleat__tab-title {
-  color: var(--ink-strong);
-}
-
-.concertina-pleat__tab-icon {
-  font-family: var(--f-display);
-  font-size: 1.3rem;
-  color: var(--ink-mute);
-  line-height: 1;
-  transition: transform 0.3s ease, color 0.3s ease;
-}
-
-.concertina-pleat:hover .concertina-pleat__tab-icon {
-  color: var(--ember);
-  transform: translateX(3px);
-}
-
-/* Expanded Pleat Body */
-.concertina-pleat:not(.is-open) .concertina-pleat__body {
-  display: none;
-}
-
-/* The body sits inside the pleat and is revealed as the pleat widens. The
-   left inset clears this pleat's own label, which stays on its rung. */
-.concertina-pleat.is-open .concertina-pleat__body {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  padding-left: var(--body-inset, 210px);
-  padding-right: clamp(16px, 2vw, 28px);
-  animation: pleatContentFadeIn 0.42s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes pleatContentFadeIn {
-  from { opacity: 0; transform: translateX(-12px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.concertina-pleat__grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: clamp(24px, 3vw, 40px);
-  align-items: center;
-  width: 100%;
-}
-
-.concertina-pleat__copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-
-.concertina-pleat__headline {
-  font-family: var(--f-display);
-  font-size: clamp(1.42rem, 1.78vw, 1.85rem);
-  font-weight: 400;
-  line-height: 1.16;
-  color: var(--ink-strong);
-  margin: 0 0 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.concertina-pleat__desc {
-  font-family: var(--f-read);
-  font-size: 0.94rem;
-  line-height: 1.56;
-  color: var(--ink-soft);
-  margin: 0 0 16px;
-  max-width: 46ch;
-}
-
-
-/* Right Media Block (Framed on Canvas, 16px Radius) */
-.concertina-pleat__media {
-  position: relative;
-  border-radius: var(--r-media);
-  overflow: hidden;
-  aspect-ratio: 4 / 5;
-  max-height: 380px;
-  background: var(--canvas);
-  border: 1px solid var(--hairline);
-  box-shadow: 0 8px 24px -6px rgba(10, 10, 10, 0.08);
-}
-
-.concertina-pleat__media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-
-
-/* ---------- Progress bar ----------
-   Same design as the testimonials bar (.tv2__bar / .tv2__fill): a 1px
-   hairline track with a fill that animates its width. No thumb, no dots,
-   no labels. The track still takes click and drag, so a generous
-   transparent hit area sits over the hairline via ::before. */
-
-/* Each open pleat's copy has to start clear of that pleat's own label, which
-   stays pinned on its rung at the pleat's left edge; and clear of the labels
-   of the spines trailing it, which run leftward into the panel.
-
-   The label type is clamp(1.02rem, 1.15vw, 1.2rem), so it grows with the
-   viewport up to 1.2rem. These gutters are expressed in the same vw unit with
-   a px floor so they track the text instead of being outrun by it on wide
-   screens, and an upper cap because the type stops growing at 1.2rem while a
-   raw vw value would keep widening and crush the image. */
-.concertina-pleat[data-pleat="3"] {
-  --body-inset: clamp(215px, 13.2vw, 254px);
-  --lead-spines: 0px;
-  --trail-reach: clamp(367px, 22.6vw, 434px);
-}
-.concertina-pleat[data-pleat="2"] {
-  --body-inset: clamp(214px, 13.1vw, 253px);
-  --lead-spines: 52px;
-  --trail-reach: clamp(315px, 19.4vw, 372px);
-}
-.concertina-pleat[data-pleat="1"] {
-  --body-inset: clamp(311px, 19.1vw, 368px);
-  --lead-spines: 104px;
-  --trail-reach: clamp(263px, 16.2vw, 311px);
-}
-.concertina-pleat[data-pleat="0"] {
-  --body-inset: clamp(291px, 17.9vw, 344px);
-  --lead-spines: 156px;
-  --trail-reach: 0px;
-}
-
-/* ------------------------------------------------------------------
-   ENTRANCE / EXIT for the treatments act.
-
-   Three movements, sequenced so they read as cause and effect rather
-   than as three things firing at once:
-
-     1. the heading and standfirst assemble, lines rising from behind
-        a mask;
-     2. the four hairlines draw themselves downward, staggered left to
-        right, which turns the descending-height stagger that already
-        defines this section into a motion;
-     3. the open panel's copy and photo lift in behind them.
-
-   Everything here animates transform and opacity only. In particular
-   the hairline is drawn with scaleY from a top origin, NEVER with
-   height or top: those two are what the concertina itself moves when a
-   pleat opens, and animating them here would fight the mechanism.
-   ------------------------------------------------------------------ */
-
-/* --- 1. the heading assembles ------------------------------------- */
-
-.act--treatments .sec-head__mask {
-  display: block;
-  overflow: hidden;
-}
-
-.act--treatments .sec-head__mask > * {
-  display: block;
-  transform: translateY(105%);
-  transition: transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.act--treatments.is-in .sec-head__mask > * {
-  transform: translateY(0);
-}
-
-.act--treatments .sec-head__mask--sub > * {
-  transition-delay: 0.07s;
-}
-
-/* --- 2. the hairlines draw down ----------------------------------- */
-
-.concertina-pleat__line {
-  transform: scaleY(0);
-  transform-origin: 50% 0;
-  transition: background 0.32s ease,
-              width 0.32s ease,
-              transform 0.66s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.act--treatments.is-in .concertina-pleat__line {
-  transform: scaleY(1);
-}
-
-/* Staggered left to right, after the heading has landed. */
-.act--treatments.is-in .concertina-pleat[data-pleat="3"] .concertina-pleat__line { transition-delay: 0.16s; }
-.act--treatments.is-in .concertina-pleat[data-pleat="2"] .concertina-pleat__line { transition-delay: 0.23s; }
-.act--treatments.is-in .concertina-pleat[data-pleat="1"] .concertina-pleat__line { transition-delay: 0.30s; }
-.act--treatments.is-in .concertina-pleat[data-pleat="0"] .concertina-pleat__line { transition-delay: 0.37s; }
-
-/* The labels follow their own line rather than arriving as a block. */
-.concertina-pleat__tab {
-  opacity: 0;
-  transition: opacity 0.5s ease,
-              transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.act--treatments.is-in .concertina-pleat__tab {
-  opacity: 1;
-}
-
-.act--treatments.is-in .concertina-pleat[data-pleat="3"] .concertina-pleat__tab { transition-delay: 0.26s; }
-.act--treatments.is-in .concertina-pleat[data-pleat="2"] .concertina-pleat__tab { transition-delay: 0.33s; }
-.act--treatments.is-in .concertina-pleat[data-pleat="1"] .concertina-pleat__tab { transition-delay: 0.40s; }
-.act--treatments.is-in .concertina-pleat[data-pleat="0"] .concertina-pleat__tab { transition-delay: 0.47s; }
-
-/* Once the entrance has finished, every stagger delay is dropped. Without
-   this the first click inherits the entrance timing and the concertina
-   visibly stalls before it starts to widen. .is-settled is added by the
-   script when the last entrance step has landed. */
-.act--treatments.is-settled .concertina-pleat__line,
-.act--treatments.is-settled .concertina-pleat__tab,
-.act--treatments.is-settled .concertina-pleat__copy > *,
-.act--treatments.is-settled .concertina-pleat__media,
-.act--treatments.is-settled .treatments-cta {
-  transition-delay: 0s;
-}
-
-/* --- 3. the open panel lifts in ----------------------------------- */
-
-.act--treatments .concertina-pleat__copy > *,
-.act--treatments .concertina-pleat__media {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.62s ease, transform 0.62s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.act--treatments.is-in .concertina-pleat__copy > *,
-.act--treatments.is-in .concertina-pleat__media {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.act--treatments.is-in .concertina-pleat__copy > *:nth-child(1) { transition-delay: 0.40s; }
-.act--treatments.is-in .concertina-pleat__copy > *:nth-child(2) { transition-delay: 0.47s; }
-.act--treatments.is-in .concertina-pleat__media { transition-delay: 0.54s; }
-
-/* A pleat opened later by the reader must show its content at once;
-   the entrance delays would otherwise re-stagger it on every click. */
-.act--treatments.is-in .concertina-pleat.is-open .concertina-pleat__copy > *,
-.act--treatments.is-in .concertina-pleat.is-open .concertina-pleat__media {
-  transition-delay: 0s;
-}
-
-/* --- the CTA ------------------------------------------------------ */
-
-.act--treatments .treatments-cta {
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.52s ease 0.62s,
-              transform 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.62s;
-}
-
-.act--treatments.is-in .treatments-cta {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* --- reduced motion ----------------------------------------------- */
-/* Fewer and gentler, not zero: the opacity that carries comprehension
-   stays, every position change goes. */
-@media (prefers-reduced-motion: reduce) {
-  .act--treatments .sec-head__mask > *,
-  .act--treatments.is-in .sec-head__mask > * {
-    transform: none;
-    transition: opacity 0.4s ease;
-  }
-
-  .act--treatments .sec-head__mask > * { opacity: 0; }
-  .act--treatments.is-in .sec-head__mask > * { opacity: 1; }
-
-  .concertina-pleat__line { transform: none; }
-
-  .act--treatments .concertina-pleat__copy > *,
-  .act--treatments .concertina-pleat__media,
-  .act--treatments .treatments-cta {
-    transform: none;
-    transition: opacity 0.4s ease;
-  }
-}
-
-/* Section-level booking action for the whole treatments act. */
-.treatments-cta {
-  display: flex;
-  justify-content: center;
-  margin-top: clamp(28px, 4vh, 44px);
-}
-
-/* Between 900px and 1150px the label insets eat most of the pleat, so the
-   image would be squeezed to a sliver. Drop it and let the copy have the
-   panel; the concertina motion is what matters at this width. */
-@media (min-width: 900px) and (max-width: 1150px) {
-  .concertina-pleat__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .concertina-pleat__media {
-    display: none;
-  }
-}
-
-/* ---------- Responsive Layout (< 900px) ---------- */
-
-@media (max-width: 900px) {
-  .concertina-arena {
-    flex-direction: column;
-    min-height: auto;
-    height: auto;
-  }
-
-  .concertina-pleat {
-    flex-direction: column;
-    width: 100%;
-    min-width: 100%;
-    border-bottom: 1px solid var(--hairline);
-    transition: none;
-  }
-
-  .concertina-pleat:not(.is-open) {
-    flex: 0 0 auto;
-    width: 100%;
-    min-width: 100%;
-    height: 52px;
-    min-height: 52px;
-  }
-
-  .concertina-pleat.is-open {
-    flex: 0 0 auto;
-    width: 100%;
-    min-width: 100%;
-    height: auto;
-    min-height: auto;
-    padding-bottom: 20px;
-  }
-
-  .concertina-pleat__line {
-    display: none;
-  }
-
-  /* Stacked rows: undo the desktop rail positioning. */
-  .concertina-pleat__tab,
-  .concertina-pleat.is-open .concertina-pleat__tab {
-    position: relative;
-    left: 0;
-    right: auto;
-    top: 0;
-    width: 100%;
-    height: 52px;
-    padding: 0 12px;
-    transform: none;
-  }
-
-  .concertina-pleat.is-open .concertina-pleat__tab {
-    display: none;
-  }
-
-  .concertina-pleat__tab-title {
-    flex-grow: 1;
-    text-align: left;
-    font-size: 1.02rem;
-  }
-
-  /* The desktop stage is pinned to the right of the arena; stacked rows put
-     the body back in normal flow underneath its own row. */
-  .concertina-pleat__body,
-  .concertina-pleat.is-open .concertina-pleat__body {
-    position: static;
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 16px;
-    transform: none;
-  }
-
-  /* The stepped hairline is a desktop device only. */
-  .concertina-pleat.is-open .concertina-pleat__line {
-    position: absolute;
-    left: 0;
-  }
-
-  .concertina-pleat__grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .concertina-pleat__media {
-    max-height: 260px;
-    aspect-ratio: 16 / 10;
-  }
-
-}
-
-/* ============================================================
-   SECTION 6b: TREATMENTS, HORIZONTAL ACCORDION
-   Added 2026-09-17, alongside the original section 6 above, not
-   replacing it. Prototyped in lab/accordion-options.html; this is
-   label option one (short distinguishing words per panel) with the
-   split open-panel treatment, photograph and copy side by side rather
-   than type overlaid on the image, because the treatment photographs
-   here are pale and bright and a scrim would have been the third one
-   on the page.
+   SECTION: TREATMENTS, HORIZONTAL ACCORDION
+   Added 2026-09-17 alongside the old stepped concertina and kept both
+   live for TJ to compare; he picked this one on 2026-09-21 and the old
+   markup and its CSS (formerly here, under .act--treatments and
+   .concertina-*) were deleted. Class names below still carry the "-b"
+   they were built with; data-section="treatments" on the element is the
+   real identity now, not the class.
+
+   Prototyped in lab/accordion-options.html; this is label option one
+   (short distinguishing words per panel) with the split open-panel
+   treatment, photograph and copy side by side rather than type
+   overlaid on the image, because the treatment photographs here are
+   pale and bright and a scrim would have been the third one on the
+   page.
    ============================================================ */
 .act--treatments-b {
   padding-block: clamp(90px, 10vh, 120px) clamp(70px, 8vh, 90px);
   background: var(--canvas);
   position: relative;
   scroll-margin-top: calc(var(--nav-h) + 20px);
+}
+/* The body scrub add-on line, sitting between the accordion and the
+   section's end. Its own "Learn more" used to be a separate boxed button
+   underneath it, which TJ found competed with the Enquire button in the
+   nav above. Folded into the sentence instead, as a plain inline link,
+   the way an article's own "read more" sits at the end of a paragraph
+   rather than as a control of its own. */
+.act--treatments-b .treatments-addon {
+  margin: clamp(28px, 5vh, 48px) 0 0;
+  text-align: center;
+  font-family: var(--f-read);
+  font-size: clamp(1.05rem, 1.3vw, 1.25rem);
+  color: var(--ink-mute);
+}
+.act--treatments-b .treatments-addon__link {
+  color: var(--ember);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s ease;
+}
+/* Same token as the text colour above, so the underline can never drift
+   from the word it sits under, confirmed 2026-09-21. */
+.act--treatments-b .treatments-addon__link:hover {
+  border-bottom-color: var(--ember);
 }
 .treatments-b-wrap {
   max-width: 1260px;
@@ -3322,6 +2795,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 .tb-acc__panel > img {
   position: absolute;
   inset: 0;
+  z-index: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -3329,6 +2803,48 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   transition: opacity .4s ease;
 }
 .tb-acc__panel.is-open > img { opacity: 0; }
+
+/* A blush ground for the closed label to sit on, rising from the panel's
+   own bottom edge, added 2026-09-21: the word was sitting directly on
+   the bare photograph with nothing separating it. Closed panels only,
+   the open one has its own copy block and gradient already. */
+.tb-acc__panel:not(.is-open)::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 46%;
+  /* Solid blush behind the label rather than fading from the very
+     bottom edge, TJ asked for 2026-09-21: the label's own top sits about
+     20% up this band (9.3% of the whole panel). Full colour was first
+     held to 32%, well above the text, then TJ asked for the fade to
+     start closer to the top of the text while the point it finishes
+     fading, 100%, stays exactly where it was: the solid stop moved down
+     to 22%, the mid stops and the end are untouched. Two mid stops (55%,
+     78%) shape the ease: a plain two-stop fade from solid to transparent
+     reads as a straight ramp with a visible kink where it leaves the
+     solid block, and TJ asked for no harsh transition at that join. The
+     mid stops bend the curve so the softening itself looks gradual
+     rather than the blend simply starting on cue. */
+  background: linear-gradient(to top,
+    var(--blush) 0%,
+    var(--blush) 22%,
+    color-mix(in srgb, var(--blush) 62%, transparent) 55%,
+    color-mix(in srgb, var(--blush) 22%, transparent) 78%,
+    transparent 100%
+  );
+  pointer-events: none;
+  /* Without this the photograph painted over the gradient rather than
+     under it: ::before generates as the panel's first child, ahead of
+     the real <img> in source order, and with both absolutely positioned
+     at the default z-index, paint order follows that document order.
+     The image keeps its own position: absolute (set where it is defined
+     above) and gets a z-index alongside it instead of being touched
+     here, so its fill layout is not at risk from a second rule landing
+     on the same property. Caught only by looking at the rendered page,
+     not by reading the rule, which is why it shipped invisible the
+     first time. */
+  z-index: 1;
+}
 
 /* The closed label. Horizontal, bottom anchored, one short word so it
    never wraps at the panel's minimum width (clamp floor 96px). Distinct
@@ -3339,6 +2855,12 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 .tb-acc__label {
   position: absolute;
   left: 0; right: 0; bottom: clamp(16px, 3vh, 28px);
+  /* Above the blush gradient's z-index: 1, not on the default auto that
+     resolves under it. The label went visually faint under the wash
+     meant to sit behind it, the same mistake the gradient's own fix just
+     made with the photograph, caught the same way: by looking, not by
+     reading the rule. */
+  z-index: 2;
   text-align: center;
   padding-inline: 8px;
   font-family: var(--f-body);
@@ -3373,7 +2895,11 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   object-fit: cover;
 }
 .tb-acc__open-copy {
-  background: var(--blush);
+  /* Blush where it meets the photograph, easing into the section's own
+     canvas ground by the far edge, so the block reads as fading into the
+     page rather than stopping as a bordered box. TJ asked for this
+     2026-09-21. */
+  background: linear-gradient(to right, var(--blush), var(--canvas));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3390,6 +2916,12 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
 .tb-acc__open-copy h3 {
   margin: 0;
   font-family: var(--f-display);
+  /* Instrument Serif ships weight 400 only, per TPS Brand Fonts section 3.
+     An <h3> defaults to bold in every browser, and with no real 700 file to
+     draw from, Chrome fakes it by fattening the 400 strokes, which is what
+     made this heading read heavier and blockier than the section title
+     above it, the same font at its correct weight. */
+  font-weight: 400;
   text-transform: uppercase;
   font-size: clamp(1.1rem, 2vw, 1.6rem);
   line-height: 1.15;

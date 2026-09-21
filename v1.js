@@ -1307,97 +1307,13 @@ function actVoices() {
    ACT: STANDALONE TREATMENTS (IN-HOME CARE)
    True Horizontal Concertina on Canvas + Scrubber Slider (No Arrows)
    ============================================================ */
-function actTreatments() {
-  const root = document.querySelector('.act--treatments');
-  if (!root) return;
-
-  const pleats = Array.from(root.querySelectorAll('[data-pleat]'));
-
-  let activeIdx = 3; // data-pleat 3 is Postpartum Massage, the head of the cascade
-
-  const openPleat = (idx) => {
-    activeIdx = Math.max(0, Math.min(3, idx));
-
-    pleats.forEach((pleat) => {
-      const pIdx = parseInt(pleat.dataset.pleat, 10);
-      const isOpen = pIdx === activeIdx;
-      pleat.classList.toggle('is-open', isOpen);
-      const tabBtn = pleat.querySelector('[data-pleat-trigger]');
-      if (tabBtn) {
-        tabBtn.setAttribute('aria-expanded', String(isOpen));
-      }
-    });
-  };
-
-  // Pleat clicks
-  pleats.forEach((pleat) => {
-    const trigger = pleat.querySelector('[data-pleat-trigger]');
-    const handleExpand = (e) => {
-      e.stopPropagation();
-      const idx = parseInt(pleat.dataset.pleat, 10);
-      openPleat(idx);
-    };
-
-    if (trigger) trigger.addEventListener('click', handleExpand);
-    pleat.addEventListener('click', (e) => {
-      if (!pleat.classList.contains('is-open')) {
-        handleExpand(e);
-      }
-    });
-  });
-
-  // Default initial state: Postpartum Massage (data-pleat 3), the leftmost
-  // pleat, open on entry.
-  openPleat(3);
-
-  // The entrance. Adds is-in once and disconnects, matching the pattern the
-  // voices block uses: it fires when the reader is looking, and content that
-  // re-hides on scroll back up would be a defect rather than an effect.
-  //
-  // Everything it drives is transform and opacity in CSS. The hairlines in
-  // particular are drawn with scaleY, never height or top, because those are
-  // what the concertina moves when a pleat opens.
-  // The entrance runs on staggered transition-delays. Those delays must not
-  // outlive it: the first click would otherwise inherit them and the
-  // concertina would stall before widening. is-settled clears them once the
-  // last step (the CTA at 0.62s + 0.52s) has landed.
-  const ENTRANCE_MS = 1200;
-  const reveal = () => {
-    root.classList.add('is-in');
-    window.setTimeout(() => root.classList.add('is-settled'), ENTRANCE_MS);
-  };
-
-  if ('IntersectionObserver' in window) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((en) => {
-        if (en.isIntersecting) {
-          reveal();
-          io.disconnect();
-        }
-      });
-    }, { threshold: 0.15, rootMargin: '0px 0px -12% 0px' });
-    io.observe(root);
-
-    // Safety net. The entrance hides its own content until is-in lands, so
-    // anything that stops the observer firing would leave the section blank:
-    // a deep link straight into it, a restored scroll position, or a window
-    // tall enough that the threshold is never crossed by a scroll event.
-    // Reveal unconditionally once the section has been reachable for a beat.
-    window.setTimeout(() => {
-      if (root.classList.contains('is-in')) return;
-      const r = root.getBoundingClientRect();
-      if (r.top < window.innerHeight && r.bottom > 0) {
-        reveal();
-        io.disconnect();
-      }
-    }, 1200);
-  } else {
-    reveal();
-  }
-}
+/* actTreatments() removed 2026-09-21: it drove the old stepped concertina
+   (.act--treatments, [data-pleat]), which was deleted from v1.html and
+   v1.css the same day in favour of the horizontal accordion below. See
+   actTreatmentsB(). */
 
 /* ------------------------------------------------------------
-   SECTION 6b · Treatments, horizontal accordion
+   SECTION · Treatments, horizontal accordion
    Click to open one panel at a time. No ScrollTrigger of its own: the
    mechanic is just a width transition with overflow: hidden doing the
    cropping (see .tb-acc__panel in v1.css), so it needs nothing scroll
@@ -1438,7 +1354,6 @@ function actTreatmentsB() {
 }
 
 function boot() {
-  actTreatments();
   actTreatmentsB();
   nav();
   actHero();
@@ -1463,6 +1378,42 @@ function boot() {
     a.setAttribute('data-sc-act', m ? m[1] : 'act');
   });
   document.documentElement.classList.add('sc-ready');
+
+  // ScrollTrigger registers its own refresh on window load, and boot() runs
+  // earlier than that, on document.fonts.ready. So anything measured above
+  // was being re-measured moments later by ScrollTrigger itself, at whatever
+  // scroll position the page was sitting at. With a fragment in the URL that
+  // position is wherever the browser has already jumped to, and the hero
+  // pin comes back measured from that wrong origin instead of 0. Its span
+  // is still right either way, which is what makes this easy to miss: the
+  // pin is not broken, it is measured from the wrong place, so it looks
+  // fine until someone opens the page on a URL ending in an anchor.
+  //
+  // This exact fix already existed in v1-ruined.js and was deliberately not
+  // carried across while it cost nothing to leave out. It started costing
+  // something 2026-09-19, when an unrelated change elsewhere on the page
+  // added one more entrance trigger and the hero guard caught the fault for
+  // the first time. Copied in now, unchanged from v1-ruined.js: zero the
+  // scroll, refresh from there so every pin measures from the true origin,
+  // then jump to the anchor.
+  const goToAnchor = () => {
+    const target = location.hash.length > 1 && document.querySelector(location.hash);
+    const root = document.documentElement;
+    const behaviour = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    // Not on trust: scrollRestoration set to manual does not stop Chrome
+    // re-applying a fragment once the document has grown.
+    window.scrollTo(0, 0);
+    ScrollTrigger.refresh();
+    if (target) {
+      window.scrollTo(0, target.getBoundingClientRect().top + window.scrollY);
+      ScrollTrigger.update();
+    }
+    root.style.scrollBehavior = behaviour;
+  };
+
+  if (document.readyState === 'complete') requestAnimationFrame(goToAnchor);
+  else window.addEventListener('load', () => requestAnimationFrame(goToAnchor), { once: true });
 }
 
 if (document.fonts && document.fonts.ready) {
