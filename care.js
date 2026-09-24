@@ -7,7 +7,7 @@
 
      LEGS         the single source of truth: film seconds and scroll weight
      mapTime      track position to film time
-     playhead     lerped, deadbanded, coalesced seeks on a Blob fetched clip
+     playhead     lerped, deadbanded, coalesced seeks on a streamed clip
      beats        copy windows; words drift the way the room does in each pan
      tilt         pointer depth, desktop only
      plan         the house in section, with a dot on the route and room jumps
@@ -221,10 +221,15 @@
   }
 
   /* ---------- the clip ----------
-     Fetched as a Blob so it seeks without depending on range requests, and
-     never fetched at all under reduced motion. The poster stays up until a
-     real decoded frame has painted: iOS leaves a seeked but never played
-     muted video blank, so metadata alone is not enough. */
+     Loaded straight into the video element and streamed, never fetched as
+     a whole file first. Two reasons, both seen on a collaborator's machine
+     (2026-09-24): fetch() is blocked on file://, so a page opened by double
+     click never got its film at all; and a Blob waits for all 12.6 MB, so
+     a slow line showed the room stills for many seconds. Streamed, the film
+     starts as soon as its opening arrives, and seeks inside what has
+     downloaded are immediate. Never loaded under reduced motion. The poster
+     stays up until a real decoded frame has painted: iOS leaves a seeked
+     but never played muted video blank, so metadata alone is not enough. */
   var clipReady = false;
   var play = 0, target = 0;
   var LERP = 0.12;
@@ -237,35 +242,29 @@
   }
 
   function loadClip() {
-    if (reduced || !video || !window.fetch) return;
+    if (reduced || !video) return;
     var mobile = phoneQuery.matches || !finePointer;
-    var src = mobile ? video.dataset.srcMobile : video.dataset.src;
-    fetch(src).then(function (r) {
-      if (!r.ok) throw new Error(r.status);
-      return r.blob();
-    }).then(function (blob) {
-      video.addEventListener('loadeddata', function once() {
-        video.removeEventListener('loadeddata', once);
-        var p = video.play();
-        var settle = function () {
-          video.pause();
-          // A frame callback is the real proof of paint. Some engines never
-          // present a frame for a paused clip (headless Chrome among them),
-          // so a timer backs it up rather than leaving the poster up forever.
-          video.addEventListener('seeked', function first() {
-            video.removeEventListener('seeked', first);
-            if (video.requestVideoFrameCallback) video.requestVideoFrameCallback(markReady);
-            setTimeout(markReady, video.requestVideoFrameCallback ? 800 : 120);
-          });
-          play = target;
-          video.currentTime = Math.max(0.001, play);
-        };
-        if (p && p.then) p.then(settle, settle); else settle();
-      });
-      video.preload = 'auto';
-      video.src = URL.createObjectURL(blob);
-      video.load();
-    }).catch(function () { /* the posters carry the page */ });
+    video.addEventListener('loadeddata', function once() {
+      video.removeEventListener('loadeddata', once);
+      var p = video.play();
+      var settle = function () {
+        video.pause();
+        // A frame callback is the real proof of paint. Some engines never
+        // present a frame for a paused clip (headless Chrome among them),
+        // so a timer backs it up rather than leaving the poster up forever.
+        video.addEventListener('seeked', function first() {
+          video.removeEventListener('seeked', first);
+          if (video.requestVideoFrameCallback) video.requestVideoFrameCallback(markReady);
+          setTimeout(markReady, video.requestVideoFrameCallback ? 800 : 120);
+        });
+        play = target;
+        video.currentTime = Math.max(0.001, play);
+      };
+      if (p && p.then) p.then(settle, settle); else settle();
+    });
+    video.preload = 'auto';
+    video.src = mobile ? video.dataset.srcMobile : video.dataset.src;
+    video.load();
   }
 
   function stepPlayhead() {

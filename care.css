@@ -319,3 +319,167 @@
   .flight__tilt, .flight__copy { transform: none; }
   .flight__poster { transform: none; transition: opacity 700ms linear; }
 }
+
+/* ============================================================
+   AROUND THE HOUSE (zones)
+
+   The plan of the house, scrubbed by the scroll, rooms lit one at a time
+   while one sentence changes its ending. zones.js writes opacity and
+   transform on the blocks and phrases; this file only places them.
+   Nothing above this line is changed by it.
+   ============================================================ */
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.zones {
+  position: relative;
+  /* zones.js replaces this with the measured track. */
+  height: 700svh;
+  background: var(--canvas);
+}
+
+.zones__stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* The film sits right of centre so the words own the left. Its ground is
+   already the paper colour (lab/zones-encode.mjs bakes it in), so there is
+   no box round it and no blending is needed. */
+.zones__film {
+  position: absolute;
+  /* Exactly the film's shape, centred in the space under the bar, so the
+     feather below lands on the film's own edges. */
+  top: calc(var(--nav-h) + (100svh - var(--nav-h)) / 2);
+  translate: 0 -50%;
+  right: 1vw;
+  width: min(66vw, (100svh - var(--nav-h) - 4svh) * 1.7937);
+  aspect-ratio: 1600 / 892;
+  background: var(--canvas);
+  /* The source ground is the paper to within a point, but the house's own
+     drop shadow reaches the bottom edge under the steps and is cut there.
+     A feather on all four edges means no frame can ever show as a box.
+     The house sits inside 4% to 95% of the height, so nothing is lost. */
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 3%, #000 96%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 3%, #000 96%, transparent);
+  mask-composite: intersect;
+}
+.zones__poster,
+.zones__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.zones__poster { opacity: 0; transition: opacity 500ms var(--ease-out); }
+.zones__poster.is-on { opacity: 1; }
+.zones__video { opacity: 0; }
+.zones__stage.has-clip .zones__video { opacity: 1; }
+.zones__stage.has-clip .zones__poster { opacity: 0; transition: none; }
+
+.zones__copy {
+  position: absolute;
+  left: calc(var(--gutter) + 2vw);
+  top: 50%;
+  translate: 0 -50%;
+  width: min(34vw, 36rem);
+}
+
+/* The intro and the sentence share one spot and cross over. */
+.zones__intro,
+.zones__line {
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity, transform;
+}
+.zones__intro { position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; }
+.zones__intro .beat__line { max-width: 30ch; }
+
+.zones__sentence {
+  margin: 0;
+  font-family: var(--f-display);
+  text-transform: uppercase;
+  font-size: clamp(2rem, 3.5vw, 3.3rem);
+  line-height: 1.06;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+.zones__fixed { display: block; }
+
+/* Every ending stacked in one grid cell, so the sentence holds the height
+   of its longest ending and nothing below it jumps as the words change. */
+.zones__swap { display: grid; }
+.zones__phrase {
+  grid-area: 1 / 1;
+  opacity: 0;
+  text-wrap: balance;
+  will-change: opacity, transform;
+}
+.zones__phrase em { font-style: normal; color: var(--ember-deep); }
+
+.zones__rooms {
+  list-style: none;
+  margin: clamp(28px, 5vh, 48px) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+}
+.zones__rooms button {
+  font-family: var(--f-body);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  background: transparent;
+  border: 1px solid var(--hairline-firm);
+  border-radius: var(--r-badge);
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+}
+.zones__rooms button:hover { color: var(--ink); border-color: var(--ink-mute); }
+.zones__rooms button[aria-current="true"] { color: var(--ember-deep); border-color: var(--ember); background: rgba(166, 76, 69, .07); }
+.zones__rooms button:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+
+@media (max-width: 767px) {
+  /* The phone clip is cropped to the house (about 9 by 10), so it takes
+     the upper part of the screen and the words sit under it. */
+  /* No feather: the phone crop brings the house close to its edges. */
+  .zones__film { left: 0; right: 0; top: calc(var(--nav-h) + 4px); translate: none; width: auto; aspect-ratio: auto; height: 50svh; -webkit-mask-image: none; mask-image: none; }
+  .zones__copy {
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    top: auto;
+    bottom: calc(24px + env(safe-area-inset-bottom));
+    translate: none;
+    min-height: 38svh;
+  }
+  .zones__intro { top: auto; bottom: 0; translate: none; }
+  .zones__line { position: absolute; left: 0; right: 0; bottom: 0; }
+  .zones__sentence { font-size: clamp(1.7rem, 8vw, 2.3rem); }
+  .zones__rooms { margin-top: 18px; gap: 6px; }
+  .zones__rooms button { padding: 10px 10px; font-size: .64rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zones__poster { transition: opacity 700ms linear; }
+}

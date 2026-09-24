@@ -186,6 +186,66 @@
     </div>
   </section>
 
+  <!-- Around the house. The plan of the same house on the same paper: it
+       draws itself, fills with daylight, dims, and then the rooms light one
+       at a time while the sentence names what she does in each. Scrubbed by
+       the scroll, driven by zones.js off its ROOMS table. The film's ground
+       is encoded in the paper colour, so there is no box round it.
+       The visible sentence is one line whose ending changes; screen readers
+       get the four full sentences as a list instead. -->
+  <section class="zones" data-zones aria-labelledby="zones-title">
+    <div class="zones__stage" data-zones-stage>
+
+      <div class="zones__film">
+        <img class="zones__poster is-on" data-zposter="0" src="assets/img/zones-day.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="1" src="assets/img/zones-living.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="2" src="assets/img/zones-kitchen.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="3" src="assets/img/zones-nursery.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="4" src="assets/img/zones-bathroom.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="5" src="assets/img/zones-all.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <video class="zones__video" data-zvideo
+               data-src="assets/video/zones.mp4"
+               data-src-mobile="assets/video/zones-m.mp4"
+               muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      </div>
+
+      <div class="zones__copy">
+
+        <div class="zones__intro" data-zbeat="intro">
+          <h2 class="say zones__title" id="zones-title">Around the house</h2>
+          <p class="beat__line">While you rest, the rooms you live in are looked after.</p>
+        </div>
+
+        <div class="zones__line" data-zbeat="line">
+          <p class="zones__sentence" aria-hidden="true">
+            <span class="zones__fixed">She will</span>
+            <span class="zones__swap">
+              <span class="zones__phrase" data-zphrase="living">tidy your <em>living room</em>.</span>
+              <span class="zones__phrase" data-zphrase="kitchen">clean your <em>kitchen</em>.</span>
+              <span class="zones__phrase" data-zphrase="nursery">keep your <em>nursery</em> ready.</span>
+              <span class="zones__phrase" data-zphrase="bathroom">clean your <em>bathroom</em>.</span>
+              <span class="zones__phrase" data-zphrase="all">keep them <em>all</em> ready for you.</span>
+            </span>
+          </p>
+          <ul class="sr-only">
+            <li>She will tidy your living room.</li>
+            <li>She will clean your kitchen.</li>
+            <li>She will keep your nursery ready.</li>
+            <li>She will clean your bathroom.</li>
+          </ul>
+
+          <ul class="zones__rooms" aria-label="Rooms">
+            <li><button type="button" data-zroom="living">Living room</button></li>
+            <li><button type="button" data-zroom="kitchen">Kitchen</button></li>
+            <li><button type="button" data-zroom="nursery">Nursery</button></li>
+            <li><button type="button" data-zroom="bathroom">Bathroom</button></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- The page after the house. Plain paper, which is what the sky has
        already faded to, so the flight releases into it with no seam. -->
   <section class="care-close" aria-labelledby="care-close-title">
@@ -222,5 +282,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="inner-nav.js"></script>
 <script src="care.js"></script>
+<script src="zones.js"></script>
 </body>
 </html>

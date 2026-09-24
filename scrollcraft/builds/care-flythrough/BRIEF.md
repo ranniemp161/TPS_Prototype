@@ -66,3 +66,25 @@ The words are placed in the room. Each room's lines drift the way the room
 does when the camera turns (a pan left carries them right, the rise into the
 nursery brings them down from above), while a hairline floor plan of the
 house in section tracks the route and lets you fly to any room.
+
+## Around the house (added 2026-09-25)
+
+TJ: "The goal is to have a showcase where the potential client can see what
+carers can do for their house. The scroll will be the controller, and it
+should appear in the text like: She will clean your [depends where the
+light is shown in the video]."
+
+The asset is `Zones.mp4` (13s): the house plan draws itself, fills with
+daylight, dims, then lights the living room, kitchen, nursery and bathroom
+one at a time, lights everything, and returns to a drawing.
+
+Choices: placed on The Care after the walk; one verb per room ("tidy your
+living room", "clean your kitchen", "keep your nursery ready", "clean your
+bathroom", then "keep them all ready for you"); all four rooms confirmed by
+TJ as within the carer's work.
+
+| Stage | Feeling | What on screen causes it |
+|---|---|---|
+| Plan appears | Oriented | The same house, now from above, drawn on the paper |
+| Rooms light | Reassured, one room at a time | The sentence keeps its start and changes its ending as each room lights |
+| All lit | Settled | "She will keep them all ready for you." |
