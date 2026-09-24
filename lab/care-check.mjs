@@ -11,7 +11,9 @@
                        at the frame where that block is fully shown
    Writes a screenshot at every room and a contact sheet.
 
-   Usage: node lab/care-check.mjs <outdir> [width] [height] [--reduced]
+   Usage: node lab/care-check.mjs <outdir> [width] [height] [--reduced] [--zones]
+   --zones checks the "around the house" section (window.__zones, blocks
+   [data-zbeat] and endings [data-zphrase]) instead of the flight.
    Needs the preview server on :4321. */
 import { chromium } from 'playwright-core';
 import { mkdirSync, writeFileSync } from 'node:fs';
@@ -19,6 +21,9 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 const out = process.argv[2] || 'lab/care-shots';
 const W = +(process.argv[3] || 1600), H = +(process.argv[4] || 900);
 const reduced = process.argv.includes('--reduced');
+const ZONES = process.argv.includes('--zones');
+const API = ZONES ? '__zones' : '__care';
+const SEL = ZONES ? '[data-zbeat],[data-zphrase]' : '[data-beat]';
 mkdirSync(out, { recursive: true });
 
 const b = await chromium.launch({ channel: 'chrome' });
@@ -35,24 +40,27 @@ const errors = [];
 p.on('pageerror', (e) => errors.push(String(e)));
 
 await p.goto('http://localhost:4321/care.html');
-await p.waitForFunction(() => window.__care);
-if (!reduced) await p.waitForFunction(() => __care.state().ready, null, { timeout: 30000 });
+await p.addInitScript(([api, sel]) => { window.__api = api; window.__sel = sel; }, [API, SEL]);
+await p.reload();
+await p.waitForFunction(() => window[window.__api]);
+await p.evaluate(() => window[__api].scrollToT(0));
+if (!reduced) await p.waitForFunction(() => window[__api].state().ready, null, { timeout: 30000 });
 
-const T = await p.evaluate(() => __care.T);
+const T = await p.evaluate(() => window[__api].T);
 // First the page has to paint the new position (target is only updated on
 // its next frame), then the lerped playhead has to arrive at the target.
 const settle = async () => {
-  await p.waitForFunction(() => { const s = __care.state(); return Math.abs(s.painted - s.t) < 1e-4; }, null, { timeout: 4000 }).catch(() => {});
+  await p.waitForFunction(() => { const s = window[__api].state(); return Math.abs(s.painted - s.t) < 1e-4; }, null, { timeout: 4000 }).catch(() => {});
   if (reduced) return p.waitForTimeout(700);
-  await p.waitForFunction(() => { const s = __care.state(); return Math.abs(s.current - s.target) < 0.03; }, null, { timeout: 8000 }).catch(() => {});
+  await p.waitForFunction(() => { const s = window[__api].state(); return Math.abs(s.current - s.target) < 0.03; }, null, { timeout: 8000 }).catch(() => {});
   await p.waitForTimeout(90);
 };
 
 const read = () => p.evaluate(() => {
-  const s = __care.state();
-  const beats = [...document.querySelectorAll('[data-beat]')].map((el) => ({ name: el.dataset.beat, o: +getComputedStyle(el).opacity }));
+  const s = window[__api].state();
+  const beats = [...document.querySelectorAll(__sel)].map((el) => ({ name: el.dataset.beat || el.dataset.zbeat || el.dataset.zphrase, o: +getComputedStyle(el).opacity }));
   const poster = [...document.querySelectorAll('[data-poster]')].findIndex((el) => el.classList.contains('is-on'));
-  const room = document.querySelector('[data-room][aria-current="true"]')?.dataset.room || null;
+  const room = document.querySelector('[data-room][aria-current="true"],[data-zroom][aria-current="true"]')?.dataset.room || null;
   return { ...s, beats, poster, room };
 });
 
@@ -60,7 +68,7 @@ const read = () => p.evaluate(() => {
 const STEP = 0.1;
 const rows = [];
 for (let t = 0; t <= T + 1e-6; t += STEP) {
-  await p.evaluate((v) => __care.scrollToT(v), t);
+  await p.evaluate((v) => window[__api].scrollToT(v), t);
   await settle();
   rows.push(await read());
 }
@@ -93,22 +101,23 @@ for (const n of names) {
   // centre of the stretch where this beat is at full strength
   const full = rows.filter((r) => r.beats[names.indexOf(n)].o > 0.99).map((r) => r.t);
   const at = full.length ? full[Math.floor(full.length / 2)] : peak[n].at;
-  await p.evaluate((v) => __care.scrollToT(v), at);
+  await p.evaluate((v) => window[__api].scrollToT(v), at);
   await settle();
   const file = `${out}/beat-${n}.png`;
   await p.screenshot({ path: file });
   shots.push(file);
 
   // hide the text only (the scrim stays), then sample under each text line
-  const boxes = await p.evaluate((name) => {
-    const el = document.querySelector(`[data-beat="${name}"]`);
-    const parts = [...el.querySelectorAll('h1,h2,p')];
+  // Scoped to the section under test: both sections have an "intro".
+  const find = (name) => ZONES ? `[data-zbeat="${name}"],[data-zphrase="${name}"]` : `[data-beat="${name}"]`;
+  const boxes = await p.evaluate(([name, q]) => {
+    const el = document.querySelector(q);
+    const found = [...el.querySelectorAll('h1,h2,p')];
+    const parts = found.length ? found : [el];
     const rs = parts.map((x) => x.getBoundingClientRect()).map((r) => ({ x: r.x, y: r.y, w: r.width, h: r.height }));
-    el.dataset.probe = '1';
-    el.style.setProperty('color', 'transparent', 'important');
-    parts.forEach((x) => x.style.setProperty('color', 'transparent', 'important'));
+    [el, ...el.querySelectorAll('*')].forEach((x) => x.style.setProperty('color', 'transparent', 'important'));
     return rs;
-  }, n);
+  }, [n, find(n)]);
   await p.waitForTimeout(60);
   let worst = Infinity;
   for (const bx of boxes) {
@@ -130,16 +139,15 @@ for (const n of names) {
     const bg = lum(...darkest);
     worst = Math.min(worst, (bg + 0.05) / (INK + 0.05));
   }
-  await p.evaluate((name) => {
-    const el = document.querySelector(`[data-beat="${name}"]`);
-    el.style.removeProperty('color');
-    el.querySelectorAll('h1,h2,p').forEach((x) => x.style.removeProperty('color'));
-  }, n);
+  await p.evaluate((q) => {
+    const el = document.querySelector(q);
+    [el, ...el.querySelectorAll('*')].forEach((x) => x.style.removeProperty('color'));
+  }, find(n));
   contrast[n] = +worst.toFixed(2);
 }
 
 // end of the track and the close section below it
-await p.evaluate((v) => __care.scrollToT(v), T);
+await p.evaluate((v) => window[__api].scrollToT(v), T);
 await settle();
 await p.screenshot({ path: `${out}/end.png` }); shots.push(`${out}/end.png`);
 await p.evaluate(() => scrollBy(0, innerHeight * 0.8));
