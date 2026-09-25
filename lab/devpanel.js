@@ -43,10 +43,10 @@
     const h = innerHeight;
     const timeline = list.filter(s => s.timeline !== null);
     const flight = document.querySelector('[data-flight]');
-    if (timeline.length && flight && window.__care) {
+    if (timeline.length && flight && window.__flight) {
       const r = flight.getBoundingClientRect();
       if (r.top <= h * 0.5 && r.bottom >= h * 0.5) {
-        const t = window.__care.state().t;
+        const t = window.__flight.state().t;
         let active = timeline[0];
         for (const s of timeline) if (s.timeline <= t + 0.001) active = s;
         return active;
@@ -160,7 +160,7 @@
       b.innerHTML = `<span class="n">${s.n}</span><span class="${s.loose ? 'loose' : ''}">${s.name}</span>`;
       b.title = s.loose ? 'no data-section, name read from the class' : 'copy section identity';
       b.onclick = () => {
-        if (s.timeline !== null && window.__care) window.__care.scrollToT(s.timeline);
+        if (s.timeline !== null && window.__flight) window.__flight.scrollToT(s.timeline);
         else s.el.scrollIntoView({ block: 'start' });
         copy(`Section ${s.n}: ${s.name} [${s.key}]`);
       };
