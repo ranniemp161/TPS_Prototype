@@ -1,7 +1,7 @@
 /* ============================================================
    THE POSTPARTUM SUITE, The Care: the flight
 
-   The scroll is the remote control. One continuous film (26.9s) is scrubbed
+   The scroll is the remote control. One continuous film (25.87s) is scrubbed
    by the wheel through a sticky stage, and everything else on the stage is
    derived from the same position along the track:
 
@@ -37,16 +37,16 @@
      dir is the camera move INTO that leg: how the world travels on screen.
      fx is where the carer stands in the frame, for the phone crop. */
   var LEGS = [
-    { name: 'door',    to: 1.0,   w: 0.60, kind: 'move',   fx: 52 },
-    { name: 'hall',    to: 4.0,   w: 0.60, kind: 'move',   fx: 58 },
-    { name: 'kitchen', to: 7.8,   w: 1.40, kind: 'settle', fx: 66, dir: 'forward', poster: 1 },
-    { name: 'panL',    to: 9.0,   w: 0.30, kind: 'move',   fx: 66 },
-    { name: 'living',  to: 12.4,  w: 1.30, kind: 'settle', fx: 78, dir: 'left',    poster: 2 },
-    { name: 'tilt',    to: 14.0,  w: 0.35, kind: 'move',   fx: 30 },
-    { name: 'nursery', to: 17.1,  w: 1.40, kind: 'settle', fx: 18, dir: 'up',      poster: 3 },
-    { name: 'panR',    to: 19.4,  w: 0.45, kind: 'move',   fx: 40 },
-    { name: 'bedroom', to: 22.3,  w: 1.20, kind: 'settle', fx: 52, dir: 'right',   poster: 4 },
-    { name: 'sky',     to: 26.85, w: 1.10, kind: 'exit',   fx: 50, dir: 'forward', poster: 5 }
+    { name: 'door',    to: 0.96,   w: 0.60, kind: 'move',   fx: 52 },
+    { name: 'hall',    to: 3.85,   w: 0.60, kind: 'move',   fx: 58 },
+    { name: 'kitchen', to: 7.50,   w: 1.40, kind: 'settle', fx: 66, dir: 'forward', poster: 1 },
+    { name: 'panL',    to: 8.65,   w: 0.30, kind: 'move',   fx: 66 },
+    { name: 'living',  to: 11.92,  w: 1.30, kind: 'settle', fx: 78, dir: 'left',    poster: 2 },
+    { name: 'tilt',    to: 13.46,  w: 0.35, kind: 'move',   fx: 30 },
+    { name: 'nursery', to: 16.44,  w: 1.40, kind: 'settle', fx: 18, dir: 'up',      poster: 3 },
+    { name: 'panR',    to: 18.65,  w: 0.45, kind: 'move',   fx: 40 },
+    { name: 'bedroom', to: 21.45,  w: 1.20, kind: 'settle', fx: 52, dir: 'right',   poster: 4 },
+    { name: 'sky',     to: 25.82, w: 1.10, kind: 'exit',   fx: 50, dir: 'forward', poster: 5 }
   ];
 
   var T = 0, film = 0;
@@ -241,9 +241,7 @@
     stage.classList.add('has-clip');
   }
 
-  function loadClip() {
-    if (reduced || !video) return;
-    var mobile = phoneQuery.matches || !finePointer;
+  function attachClip(src) {
     video.addEventListener('loadeddata', function once() {
       video.removeEventListener('loadeddata', once);
       var p = video.play();
@@ -263,8 +261,32 @@
       if (p && p.then) p.then(settle, settle); else settle();
     });
     video.preload = 'auto';
-    video.src = mobile ? video.dataset.srcMobile : video.dataset.src;
+    video.src = src;
     video.load();
+  }
+
+  function loadClip() {
+    if (reduced || !video) return;
+    var mobile = phoneQuery.matches || !finePointer;
+    var src = mobile ? video.dataset.srcMobile : video.dataset.src;
+    var localPreview = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+
+    // Basic local preview servers often omit byte-range support. A streamed
+    // video then displays its first frame but cannot seek with the scroll.
+    // Local development uses a Blob so every frame is seekable. Production
+    // keeps direct streaming and can use a CDN with range requests.
+    if (localPreview && window.fetch) {
+      fetch(src).then(function (response) {
+        if (!response.ok) throw new Error(response.status);
+        return response.blob();
+      }).then(function (blob) {
+        attachClip(URL.createObjectURL(blob));
+      }).catch(function () {
+        attachClip(src);
+      });
+    } else {
+      attachClip(src);
+    }
   }
 
   function stepPlayhead() {
@@ -298,7 +320,7 @@
     var t = clamp((scrollY - trackTop) / vhPx, 0, T);
 
     if (force || t !== lastT) {
-      target = Math.min(mapTime(t), 26.85);
+      target = Math.min(mapTime(t), 25.82);
 
 
       var blend = ramp(t, T - 0.6, T);

@@ -18,8 +18,8 @@ const run = (args) => execFileSync('ffmpeg', ['-y', '-hide_banner', '-loglevel',
 mkdirSync('assets/video', { recursive: true });
 
 const clips = [
-  { out: 'assets/video/care-flight.mp4',   scale: 'scale=1600:-2', gop: 8, crf: 24 },
-  { out: 'assets/video/care-flight-m.mp4', scale: 'scale=1024:-2', gop: 4, crf: 27 },
+  { out: 'assets/video/care-flight.mp4',   scale: 'scale=1920:-2', gop: 8, crf: 24 },
+  { out: 'assets/video/care-flight-m.mp4', scale: 'scale=1280:-2', gop: 4, crf: 27 },
 ];
 
 for (const c of clips) {
@@ -34,11 +34,11 @@ for (const c of clips) {
 // One still per scene, at the middle of its settle. Keep in step with care.js.
 const stills = [
   ['care-exterior', 0.0],
-  ['care-kitchen',  5.9],
-  ['care-living',  10.6],
-  ['care-nursery', 15.4],
-  ['care-bedroom', 20.8],
-  ['care-sky',     26.6],
+  ['care-kitchen',  5.67],
+  ['care-living',  10.19],
+  ['care-nursery', 14.81],
+  ['care-bedroom', 20.00],
+  ['care-sky',     25.58],
 ];
 for (const [name, t] of stills) {
   run(['-ss', String(t), '-i', clips[0].out, '-frames:v', '1', '-c:v', 'libwebp', '-quality', '78', `assets/img/${name}.webp`]);

@@ -130,7 +130,7 @@
        it shows are the same number, so a shorter strip on the original file
        would have left fingertips in a slot. A replacement photograph must be
        similarly wide or the ratios in booking.css will not hold. -->
-  <header class="bk-hero">
+  <header class="bk-hero" data-section="booking-hero" data-section-name="Booking Hero">
     <div class="bk-hero__strip">
       <img src="assets/img/booking-header-wide.webp" alt="" aria-hidden="true"
            width="4000" height="1758" fetchpriority="high" />
@@ -155,7 +155,7 @@
        gets out of the way. No eyebrow: the logo above carries the wordmark,
        and setting the practice's name again under its own mark would be
        saying it twice. -->
-  <section class="bk-head" id="book">
+  <section class="bk-head" id="book" data-section="booking-introduction" data-section-name="Book a Treatment">
     <h1 class="bk-head__title">Book a treatment</h1>
     <p class="bk-head__lede">
       Choose your treatment, then a time that suits you. Your confirmation
@@ -173,13 +173,13 @@
 
   <!-- The flow builds itself into here. Everything it draws is thrown away
        and rebuilt on each step, so nothing inside this div is authored. -->
-  <div class="bk-flow" data-booking></div>
+  <div class="bk-flow" data-booking data-section="booking-flow" data-section-name="Treatment Booking Flow"></div>
 
   <!-- The way back in, for somebody who is not booking at all. Somebody who
        already has an appointment and wants to move it arrives on this page,
        because this is the page they remember, not the inbox the confirmation
        landed in. -->
-  <p class="bk-foot-link">
+  <p class="bk-foot-link" data-section="manage-booking" data-section-name="Manage an Existing Booking">
     Already booked with us? <a href="#book">Manage your booking</a> to move or
     cancel your appointment.
   </p>
@@ -188,7 +188,7 @@
        prototype reproduces the booking app's flow, not its booking: no
        appointment is written and no card is taken, because SimplyBook is the
        third party that will own both. -->
-  <p class="bk-proto">
+  <p class="bk-proto" data-section="prototype-notice" data-section-name="Prototype Notice">
     Prototype of the booking flow. It goes as far as the confirmation and no
     further &mdash; no appointment is made and no payment is taken. Postcodes
     are checked for real against postcodes.io.
@@ -269,5 +269,6 @@
 <!-- The M25 ring first: booking.js ray-casts against it. -->
 <script src="booking-m25.js"></script>
 <script src="booking.js"></script>
+<script src="lab/devpanel-loader.js"></script>
 </body>
 </html>

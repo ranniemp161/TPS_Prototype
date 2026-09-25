@@ -135,32 +135,32 @@
 
       <div class="flight__copy">
 
-        <div class="beat beat--intro" data-beat="intro">
+        <div class="beat beat--intro" data-beat="intro" data-section="exterior" data-section-name="Exterior" data-dev-scroll-t="0">
           <h1 class="display display--xl beat__title">The Care</h1>
           <p class="beat__line">Scroll and come in.</p>
         </div>
 
-        <div class="beat beat--lead beat--kitchen" data-beat="kitchen">
+        <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="1.97">
           <h2 class="display display--lg beat__title">We cook for you</h2>
           <p class="beat__line">Warm, nourishing meals made in your own kitchen, so you eat well without lifting a thing.</p>
         </div>
 
-        <div class="beat beat--lead beat--living" data-beat="living">
+        <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="3.62">
           <h2 class="display display--lg beat__title">We keep the house</h2>
           <p class="beat__line">Laundry, ironing and the small daily jobs. The house keeps running while you rest.</p>
         </div>
 
-        <div class="beat beat--trail beat--nursery" data-beat="nursery">
+        <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="5.32">
           <h2 class="display display--lg beat__title">We care for your baby</h2>
           <p class="beat__line">Feeds, settling and the long nights, so you can finally sleep.</p>
         </div>
 
-        <div class="beat beat--lead beat--bedroom" data-beat="bedroom">
+        <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="7.06">
           <h2 class="display display--lg beat__title">We care for you</h2>
           <p class="beat__line">Postpartum treatments at home, to help your body recover.</p>
         </div>
 
-        <div class="beat beat--centre beat--close" data-beat="sky">
+        <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="8.21">
           <p class="script beat__script">All of it, in one pair of hands.</p>
           <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
         </div>
@@ -193,7 +193,7 @@
        is encoded in the paper colour, so there is no box round it.
        The visible sentence is one line whose ending changes; screen readers
        get the four full sentences as a list instead. -->
-  <section class="zones" data-zones aria-labelledby="zones-title">
+  <section class="zones" data-zones data-section="housekeeping-zones" data-section-name="Housekeeping Zones" aria-labelledby="zones-title">
     <div class="zones__stage" data-zones-stage>
 
       <div class="zones__film">
@@ -248,7 +248,7 @@
 
   <!-- The page after the house. Plain paper, which is what the sky has
        already faded to, so the flight releases into it with no seam. -->
-  <section class="care-close" aria-labelledby="care-close-title">
+  <section class="care-close" data-section="care-summary" data-section-name="Four Kinds of Care Summary" aria-labelledby="care-close-title">
     <div class="wrap care-close__wrap">
       <h2 class="say care-close__title" id="care-close-title">Four kinds of care. One person in your home.</h2>
 
@@ -283,5 +283,6 @@
 <script src="inner-nav.js"></script>
 <script src="care.js"></script>
 <script src="zones.js"></script>
+<script src="lab/devpanel-loader.js"></script>
 </body>
 </html>
