@@ -1,4 +1,4 @@
-/* Section identifier panel. Development only, loaded by v1.html when the URL
+/* Section identifier panel. Development only, loaded on any V1 page when the URL
    carries ?dev, so it can never reach a visitor.
 
    Three constraints shaped this file:
@@ -23,14 +23,16 @@
      and marks it so the gap is visible rather than silent. */
   const readSections = () =>
     [...document.querySelectorAll('section.act, [data-section]')].map((el, i) => {
-      const named = el.dataset.section;
+      const key = el.dataset.section;
       const fromClass = [...el.classList]
         .find(c => c.startsWith('act--'))?.slice(5);
       return {
         el,
         n: i + 1,
-        name: named || fromClass || 'unnamed',
-        loose: !named,
+        key: key || fromClass || 'unnamed',
+        name: el.dataset.sectionName || key || fromClass || 'unnamed',
+        loose: !key,
+        timeline: el.dataset.devScrollT == null ? null : Number(el.dataset.devScrollT),
       };
     });
 
@@ -39,8 +41,20 @@
      whose top has passed. It is whichever one is showing the most. */
   const current = list => {
     const h = innerHeight;
+    const timeline = list.filter(s => s.timeline !== null);
+    const flight = document.querySelector('[data-flight]');
+    if (timeline.length && flight && window.__care) {
+      const r = flight.getBoundingClientRect();
+      if (r.top <= h * 0.5 && r.bottom >= h * 0.5) {
+        const t = window.__care.state().t;
+        let active = timeline[0];
+        for (const s of timeline) if (s.timeline <= t + 0.001) active = s;
+        return active;
+      }
+    }
     let best = null, most = 0;
     for (const s of list) {
+      if (s.timeline !== null) continue;
       const r = s.el.getBoundingClientRect();
       const seen = Math.min(r.bottom, h) - Math.max(r.top, 0);
       if (seen > most) { most = seen; best = s; }
@@ -121,7 +135,7 @@
 <div class="wrap" data-open="false">
   <button class="dot" title="Sections"></button>
   <div class="panel">
-    <div class="head"><span>Sections</span><button class="close">&times;</button></div>
+    <div class="head"><span class="page">Sections</span><button class="close">&times;</button></div>
     <ul></ul>
     <div class="foot"><span class="pos"></span><span>click to copy</span></div>
   </div>
@@ -130,6 +144,7 @@
   const wrap = root.querySelector('.wrap');
   const list = root.querySelector('ul');
   const pos = root.querySelector('.pos');
+  const page = root.querySelector('.page');
   let sections = [];
 
   const build = () => {
@@ -143,10 +158,11 @@
       const li = document.createElement('li');
       const b = document.createElement('button');
       b.innerHTML = `<span class="n">${s.n}</span><span class="${s.loose ? 'loose' : ''}">${s.name}</span>`;
-      b.title = s.loose ? 'no data-section, name read from the class' : `copy "${s.name}"`;
+      b.title = s.loose ? 'no data-section, name read from the class' : 'copy section identity';
       b.onclick = () => {
-        s.el.scrollIntoView({ block: 'start' });
-        copy(s.name);
+        if (s.timeline !== null && window.__care) window.__care.scrollToT(s.timeline);
+        else s.el.scrollIntoView({ block: 'start' });
+        copy(`Section ${s.n}: ${s.name} [${s.key}]`);
       };
       li.append(b);
       list.append(li);
@@ -187,6 +203,8 @@
      while GSAP is measuring. Fixed and out of flow, so no refresh is needed. */
   const attach = () => {
     document.body.append(host);
+    const title = document.querySelector('h1')?.textContent.replace(/\s+/g, ' ').trim();
+    page.textContent = title ? `${title} sections` : 'Sections';
     let was = 'false';
     try { was = localStorage.getItem(STORE) || 'false'; } catch {}
     open(was === 'true');

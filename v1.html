@@ -153,7 +153,7 @@
 
 <!-- ============ SECTION: hero ============
      pin + focus pull + kinetic lines. The room resolves out of blur. -->
-<section class="act act--hero" id="day" data-act data-section="hero">
+<section class="act act--hero" id="day" data-act data-section="hero" data-section-name="Hero">
   <div class="stage" data-stage>
     <div class="stage__media">
       <img data-focus src="assets/img/s2-handoff.webp" alt="A specialist passing the swaddled baby to the mother resting in bed" width="2000" height="1116" />
@@ -212,7 +212,7 @@
      Pulled up over the hero's pin spacer in CSS so the scene is already
      sitting in position by the time the fog is dense. The whole scene
      carries one opacity, so nothing leaks over the hero while it waits. -->
-<section class="act act--bath" data-act data-section="bath">
+<section class="act act--bath" data-act data-section="bath" data-section-name="Postpartum Treatment">
   <div class="bath" data-bath>
     <!-- The ground the steam finally dissolves into. It arrives late and
          underneath, once the steam above it is dense enough to hide the
@@ -251,7 +251,7 @@
      the gap by putting both on screen together. The treatment act itself
      is retired (see below), so this is the split-stage's only home on the
      page now, not a repeated device. -->
-<section class="act act--turn" data-act data-section="confinement" aria-labelledby="confinement-heading">
+<section class="act act--turn" data-act data-section="confinement" data-section-name="What Is Confinement" aria-labelledby="confinement-heading">
 
   <!-- Same aurora as the programmes act, tuned for this one. It replaced
        the WebGL mesh field here on 2026-09-07. -->
@@ -368,7 +368,7 @@
 
 <!-- ============ SECTION: care · four kinds of care ============
      pan. Lateral travel reads as breadth. -->
-<section class="act act--pan band" id="care" data-act data-section="care">
+<section class="act act--pan band" id="care" data-act data-section="care" data-section-name="Four Kinds of Care">
   <div class="stage" data-stage>
     <div class="rail" data-rail>
 
@@ -416,7 +416,7 @@
 
 <!-- ============ SECTION: programmes ============
      flow + in. The story is over. This answers the question it raised. -->
-<section class="act act--programmes" id="programmes" data-act data-section="programmes">
+<section class="act act--programmes" id="programmes" data-act data-section="programmes" data-section-name="Programmes">
 
   <!-- The aurora, this section only. Ported from the component TJ supplied
        in Faurora-background.txt. Two layers rather than one: the field is
@@ -619,7 +619,7 @@
        Responsive note: TJ asked for this to become a VERTICAL accordion
        on mobile rather than a squeezed horizontal one. Not yet built;
        see the open item in HANDOVER.md. -->
-<section class="act act--treatments-b" id="standalone-treatments" data-act data-section="treatments">
+<section class="act act--treatments-b" id="standalone-treatments" data-act data-section="treatments" data-section-name="Single Treatments">
   <div class="wrap treatments-b-wrap">
 
     <header class="sec-head" data-in>
@@ -708,7 +708,7 @@
      the one being wiped. Pinning the wiped element itself is what made
      the previous attempt jump: GSAP pulls a pinned element out of flow
      the instant it engages. -->
-<section class="act act--peak" data-act data-section="dissolve">
+<section class="act act--peak" data-act data-section="dissolve" data-section-name="The Promise">
   <!-- The question, moved outside the figure 2026-09-17. It was nested
        inside the wiped element, which meant it was clipped to nothing
        before the wipe even started, so it could never be visible on the
@@ -760,7 +760,7 @@
      placed independently. The markup inside it is untouched; it only has
      a section and a wrap of its own now, and the ground and vertical
      padding the programmes act used to give it. -->
-<section class="act act--close" data-act data-section="close">
+<section class="act act--close" data-act data-section="close" data-section-name="Book a Consultation">
   <div class="wrap">
     <!-- The decision. A statement and an action as two objects rather
          than three lines stacked in a column, on paper inside a hairline
@@ -794,15 +794,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="v1.js"></script>
 
-<!-- Section identifier panel, development only. It loads solely when the URL
-     carries ?dev, so it cannot reach a visitor, and everything it does lives
-     in lab/devpanel.js. Nothing in production depends on it. -->
-<script>
-if (/(^|[?&])dev($|[=&])/.test(location.search)) {
-  const s = document.createElement('script');
-  s.src = 'lab/devpanel.js';
-  document.body.append(s);
-}
-</script>
+<script src="lab/devpanel-loader.js"></script>
 </body>
 </html>
