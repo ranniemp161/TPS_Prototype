@@ -1,22 +1,4 @@
-/* ============================================================
-   THE POSTPARTUM SUITE, homepage house flight
-
-   The scroll is the remote control. One continuous film (27.03s) is scrubbed
-   by the wheel through a sticky stage, and everything else on the stage is
-   derived from the same position along the track:
-
-     LEGS         the single source of truth: film seconds and scroll weight
-     mapTime      track position to film time
-     playhead     lerped, deadbanded, coalesced seeks on a streamed clip
-     beats        copy windows; words drift the way the room does in each pan
-     tilt         pointer depth, desktop only
-     plan         the house in section, with a dot on the route and room jumps
-     focal        on a phone, the crop follows the carer
-
-   Track position t is measured in viewport heights, the unit the weights are
-   written in. Film timings were read off a contact sheet of the encoded clip
-   (lab/care-encode.mjs); if the film changes, re-read them.
-   ============================================================ */
+/* Homepage house flight: one native scroll distance maps linearly to one film time. */
 (function () {
   'use strict';
 
@@ -24,491 +6,277 @@
   if (!section) return;
   var stage = section.querySelector('[data-stage]');
   var video = section.querySelector('[data-video]');
-
-  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var finePointer = matchMedia('(pointer: fine)').matches;
-  var phoneQuery = matchMedia('(max-width: 767px)');
-
-  /* ---------- LEGS ----------
-     kind 'settle' is a room with a service in it; the camera lingers there
-     in the film itself and gets the most scroll here. 'move' legs are the
-     pans between rooms and run quicker, so each room lands. The film never
-     stops anywhere on the track: no dead scroll.
-     dir is the camera move INTO that leg: how the world travels on screen.
-     fx is where the carer stands in the frame, for the phone crop. */
-  var LEGS = [
-    { name: 'handover',  to: 0.90,  w: 1.15, kind: 'settle', fx: 50, dir: 'forward', poster: 0 },
-    { name: 'pullout',   to: 2.35,  w: 0.75, kind: 'move',   fx: 50 },
-    { name: 'exterior',  to: 2.75,  w: 1.00, kind: 'settle', fx: 50, dir: 'forward', poster: 1 },
-    { name: 'door',      to: 3.50,  w: 0.45, kind: 'move',   fx: 52 },
-    { name: 'hall',      to: 4.35,  w: 0.55, kind: 'move',   fx: 58 },
-    { name: 'kitchen',   to: 8.00,  w: 1.40, kind: 'settle', fx: 66, dir: 'forward', poster: 2 },
-    { name: 'panL',      to: 9.15,  w: 0.30, kind: 'move',   fx: 66 },
-    { name: 'living',    to: 12.42, w: 1.30, kind: 'settle', fx: 78, dir: 'left',    poster: 3 },
-    { name: 'tilt',      to: 13.96, w: 0.35, kind: 'move',   fx: 30 },
-    { name: 'nursery',   to: 16.94, w: 1.40, kind: 'settle', fx: 18, dir: 'up',      poster: 4 },
-    { name: 'panR',      to: 19.15, w: 0.45, kind: 'move',   fx: 40 },
-    { name: 'bedroom',   to: 21.95, w: 1.20, kind: 'settle', fx: 52, dir: 'right',   poster: 5 },
-    { name: 'sky',       to: 26.98, w: 1.10, kind: 'exit',   fx: 50, dir: 'forward', poster: 6 }
-  ];
-
-  var T = 0, film = 0;
-  LEGS.forEach(function (leg) {
-    leg.from = film; leg.s0 = T;
-    T += leg.w; film = leg.to;
-    leg.s1 = T;
-  });
-  var byName = {};
-  LEGS.forEach(function (leg, i) { leg.i = i; byName[leg.name] = leg; });
-
-  var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
-  var mix = function (a, b, k) { return a + (b - a) * k; };
-  var smooth = function (k) { k = clamp(k, 0, 1); return k * k * (3 - 2 * k); };
-  var ramp = function (t, a, b) { return smooth((t - a) / (b - a)); };
-
-  /* Clean SMPTE 30 fps windows selected from the master. The flight may pass
-     through every frame, but direction-led gestures only rest at these points. */
-  function tc(seconds, frames) { return seconds + frames / 30; }
-  function trackForFilmTime(time) {
-    for (var i = 0; i < LEGS.length; i++) {
-      var leg = LEGS[i];
-      if (time <= leg.to || i === LEGS.length - 1) {
-        var span = Math.max(0.001, leg.to - leg.from);
-        return leg.s0 + clamp((time - leg.from) / span, 0, 1) * leg.w;
-      }
-    }
-    return T;
-  }
-  var SCENES = [
-    { name: 'handover', start: 0, rest: 0, end: 0 },
-    { name: 'exterior', start: tc(2, 9), rest: tc(2, 11.5), end: tc(2, 14) },
-    { name: 'kitchen', start: tc(6, 28), rest: (tc(6, 28) + tc(7, 25)) / 2, end: tc(7, 25) },
-    { name: 'living', start: tc(11, 16), rest: (tc(11, 16) + tc(12, 6)) / 2, end: tc(12, 6) },
-    { name: 'nursery', start: tc(16, 8), rest: (tc(16, 8) + tc(17, 10)) / 2, end: tc(17, 10) },
-    { name: 'bedroom', start: tc(21, 19), rest: (tc(21, 19) + tc(22, 12)) / 2, end: tc(22, 12) },
-    { name: 'sky', start: 26.98, rest: 26.98, end: 26.98 }
-  ];
-  SCENES.forEach(function (scene) {
-    scene.t0 = trackForFilmTime(scene.start);
-    scene.t = trackForFilmTime(scene.rest);
-    scene.t1 = trackForFilmTime(scene.end);
-  });
-
-  function legAt(t) {
-    for (var i = 0; i < LEGS.length; i++) if (t < LEGS[i].s1) return LEGS[i];
-    return LEGS[LEGS.length - 1];
-  }
-
-  function mapTime(t) {
-    var leg = legAt(t);
-    return mix(leg.from, leg.to, clamp((t - leg.s0) / leg.w, 0, 1));
-  }
-
-  /* Piecewise keyframes, [t, value...], interpolated with a smoothstep so
-     every corner is rounded. Used for the plan dot and the phone crop. */
-  function keyed(frames, t) {
-    if (t <= frames[0][0]) return frames[0].slice(1);
-    for (var i = 1; i < frames.length; i++) {
-      var a = frames[i - 1], b = frames[i];
-      if (t <= b[0]) {
-        var k = smooth((t - a[0]) / (b[0] - a[0]));
-        return a.slice(1).map(function (v, j) { return mix(v, b[j + 1], k); });
-      }
-    }
-    return frames[frames.length - 1].slice(1);
-  }
-
-  /* ---------- beats ----------
-     A room's words come up as the camera arrives and leave as it turns away,
-     overlapping the next room's so the stage is never empty mid move. */
-  var DIRS = { left: [1, 0], right: [-1, 0], up: [0, 1], forward: [0, 0] };
-  var DRIFT_X = 0.06, DRIFT_Y = 0.04;      // of the viewport: 6vw, 4vh caps
-
-  var settles = LEGS.filter(function (l) { return l.kind === 'settle'; });
-  var beats = [];
-
-  settles.forEach(function (leg, n) {
-    var el = section.querySelector('[data-beat="' + leg.name + '"]');
-    if (!el) return;
-    var next = settles[n + 1] || byName.sky;
-    beats.push({
-      el: el, room: leg.name, leg: leg,
-      win: function (t) { return { a: ramp(t, leg.s0 - 0.25, leg.s0 + 0.1), b: ramp(t, leg.s1 - 0.1, leg.s1 + 0.25) }; },
-      vIn: DIRS[leg.dir], vOut: DIRS[next.dir],
-      scaleIn: leg.dir === 'forward', scaleOut: next.dir === 'forward'
-    });
-  });
-
-  var skyEl = section.querySelector('[data-beat="sky"]');
-  var sky = byName.sky;
-  if (skyEl) beats.push({ el: skyEl, win: function (t) { return { a: ramp(t, sky.s0 + 0.2, sky.s0 + 0.7), b: 0 }; }, vIn: [0, 0], vOut: [0, 0], scaleIn: true });
-
-  beats.forEach(function (bt) { bt.last = { o: -1, tf: '' }; });
-
-  function paintBeats(t, vw, vh) {
-    beats.forEach(function (bt) {
-      var w = bt.win(t);
-      var o = w.a * (1 - w.b);
-      var tf = 'none';
-      if (!reduced) {
-        var inK = 1 - w.a, outK = w.b;
-        var x = (-bt.vIn[0] * inK + bt.vOut[0] * outK) * DRIFT_X * vw;
-        var y = (-bt.vIn[1] * inK + bt.vOut[1] * outK) * DRIFT_Y * vh;
-        var s = 1 - (bt.scaleIn ? inK * 0.06 : 0) + (bt.scaleOut ? outK * 0.08 : 0);
-        tf = 'translate3d(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px,0) scale(' + s.toFixed(4) + ')';
-      }
-      var oo = Math.round(o * 1000) / 1000;
-      if (oo !== bt.last.o) {
-        bt.el.style.opacity = oo;
-        bt.el.style.visibility = oo > 0.001 ? 'visible' : 'hidden';
-        bt.el.classList.toggle('is-live', oo > 0.5);
-        bt.last.o = oo;
-      }
-      if (tf !== bt.last.tf) { bt.el.style.transform = tf; bt.last.tf = tf; }
-    });
-  }
-
-  /* ---------- posters ----------
-     First paint, the stand in while the clip loads, and the whole film
-     under reduced motion. Each one owns the scroll from halfway through the
-     move before its room to halfway through the move after it. */
   var posters = [].slice.call(section.querySelectorAll('[data-poster]'));
-  var posterEdges = [0,
-    byName.pullout.s0 + byName.pullout.w * 0.55,
-    byName.hall.s0 + byName.hall.w * 0.5,
-    byName.panL.s0 + byName.panL.w * 0.5,
-    byName.tilt.s0 + byName.tilt.w * 0.5,
-    byName.panR.s0 + byName.panR.w * 0.5,
-    byName.bedroom.s1 + 0.2, T + 1];
-  var posterOn = 0;
-
-  function paintPosters(t) {
-    var idx = 0;
-    for (var i = 1; i < posterEdges.length - 1; i++) if (t >= posterEdges[i]) idx = i;
-    if (idx !== posterOn) {
-      posters[posterOn] && posters[posterOn].classList.remove('is-on');
-      posters[idx] && posters[idx].classList.add('is-on');
-      posterOn = idx;
-    }
-    if (!reduced && !clipReady && posters[idx]) {
-      var a = posterEdges[idx], b = posterEdges[idx + 1];
-      posters[idx].style.setProperty('--push', (1.03 + clamp((t - a) / (b - a), 0, 1) * 0.08).toFixed(4));
-    }
-  }
-
-  /* ---------- plan ---------- */
-  var plan = section.querySelector('[data-plan]');
-  var dot = section.querySelector('[data-plan-dot]');
+  var beats = [].slice.call(section.querySelectorAll('[data-beat]'));
   var rooms = [].slice.call(section.querySelectorAll('[data-room]'));
-  var K = byName;
-  var DOT = [
-    [0.3, 112, 148],
-    [K.kitchen.s0, 140, 120], [K.kitchen.s1, 140, 120],
-    [K.living.s0, 60, 120],   [K.living.s1, 60, 120],
-    [K.nursery.s0, 60, 80],   [K.nursery.s1, 60, 80],
-    [K.bedroom.s0, 140, 80],  [K.bedroom.s1, 140, 80],
-    [K.sky.s0 + 0.8, 196, 70]
+  var dot = section.querySelector('[data-plan-dot]');
+  var ghost = section.querySelector('[data-ghost]');
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var phone = matchMedia('(max-width: 767px)').matches;
+  var finePointer = matchMedia('(pointer: fine)').matches;
+
+  var DURATION = 26.98;
+  var TRACK_VH = 15.6;
+  var DEAD_BAND = phone || !finePointer ? 0.025 : 0.01;
+
+  function tc(seconds, frames) { return seconds + frames / 30; }
+  function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+  function mix(a, b, amount) { return a + (b - a) * amount; }
+  function smooth(value) { value = clamp(value, 0, 1); return value * value * (3 - 2 * value); }
+
+  var SCENES = [
+    { name: 'handover', beat: 'handover', time: 0, rest: 0, fx: 50, dot: [112, 148] },
+    { name: 'exterior', beat: 'exterior', time: tc(2, 11.5), rest: tc(2, 9), fx: 50, dot: [112, 148] },
+    { name: 'kitchen', beat: 'kitchen', time: (tc(6, 28) + tc(7, 25)) / 2, rest: tc(6, 28), fx: 66, dot: [140, 120], room: 'kitchen' },
+    { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 78, dot: [60, 120], room: 'living' },
+    { name: 'nursery', beat: 'nursery', time: (tc(16, 8) + tc(17, 10)) / 2, rest: tc(16, 8), fx: 18, dot: [60, 80], room: 'nursery' },
+    { name: 'treatment', beat: 'bedroom', time: (tc(21, 19) + tc(22, 12)) / 2, rest: tc(21, 19), fx: 52, dot: [140, 80], room: 'bedroom' },
+    { name: 'exit', beat: 'sky', time: DURATION, rest: DURATION, fx: 50, dot: [196, 70] }
   ];
-  var FOCAL = [[0, 52]];
-  LEGS.forEach(function (leg) { FOCAL.push([leg.s0 + leg.w * 0.5, leg.fx]); });
-  var roomOn = null;
 
-  function paintPlan(t) {
-    var o = ramp(t, K.exterior.s0 + 0.35, K.exterior.s0 + 0.7) * (1 - ramp(t, K.sky.s0 + 0.1, K.sky.s0 + 0.5));
-    stage.style.setProperty('--plan-o', o.toFixed(3));
-    stage.style.setProperty('--plan-v', o > 0.01 ? 'visible' : 'hidden');
-    if (dot) {
-      var p = keyed(DOT, t);
-      dot.setAttribute('cx', p[0].toFixed(1));
-      dot.setAttribute('cy', p[1].toFixed(1));
-    }
-    var current = null;
-    settles.forEach(function (leg) { if (t >= leg.s0 - 0.2) current = leg.name; });
-    if (t >= K.sky.s0 + 0.3) current = null;
-    if (current !== roomOn) {
-      rooms.forEach(function (r) { r.setAttribute('aria-current', String(r.dataset.room === current)); });
-      roomOn = current;
-    }
-  }
-
-  rooms.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var leg = byName[btn.dataset.room];
-      if (!leg) return;
-      window.scrollTo({ top: trackTop + (leg.s0 + leg.w * 0.55) * vhPx, behavior: reduced ? 'auto' : 'smooth' });
-    });
-  });
-
-  /* ---------- pointer depth ---------- */
+  var vh = innerHeight;
+  var trackTop = 0;
+  var target = 0;
+  var desired = 0;
+  var lastDesired = 0;
+  var wheelUntil = 0;
+  var keyUntil = 0;
+  var touchActive = false;
+  var settleTimer = 0;
+  var inputMode = 'native';
+  var ready = false;
+  var posterOn = 0;
+  var lastPaint = -1;
   var mx = 0, my = 0, tmx = 0, tmy = 0;
-  var tiltOn = finePointer && !reduced;
-  if (tiltOn) {
-    addEventListener('pointermove', function (e) {
-      tmx = clamp(e.clientX / innerWidth * 2 - 1, -1, 1);
-      tmy = clamp(e.clientY / innerHeight * 2 - 1, -1, 1);
-    }, { passive: true });
-    document.documentElement.addEventListener('pointerleave', function () { tmx = 0; tmy = 0; });
+  var gctx = ghost && phone ? ghost.getContext('2d') : null;
+  var GHOST_W = 96;
+  var GHOST_ZOOM = 1.3;
+
+  function sizeGhost() {
+    if (!gctx) return;
+    var rect = ghost.getBoundingClientRect();
+    ghost.width = GHOST_W;
+    ghost.height = Math.max(1, Math.round(GHOST_W * rect.height / Math.max(1, rect.width)));
   }
 
-  /* ---------- the clip ----------
-     Loaded straight into the video element and streamed, never fetched as
-     a whole file first. Two reasons, both seen on a collaborator's machine
-     (2026-09-24): fetch() is blocked on file://, so a page opened by double
-     click never got its film at all; and a Blob waits for all 12.6 MB, so
-     a slow line showed the room stills for many seconds. Streamed, the film
-     starts as soon as its opening arrives, and seeks inside what has
-     downloaded are immediate. Never loaded under reduced motion. The poster
-     stays up until a real decoded frame has painted: iOS leaves a seeked
-     but never played muted video blank, so metadata alone is not enough. */
-  var clipReady = false;
-  var play = 0, target = 0;
-  var LERP = 0.12;
-  var deadband = (phoneQuery.matches || !finePointer) ? 0.02 : 0.008;
-
-  function markReady() {
-    if (clipReady) return;
-    clipReady = true;
-    stage.classList.add('has-clip');
+  // Tiny canvas, upscaled and blurred by CSS: one video decode, near zero draw cost.
+  function drawGhost() {
+    if (!gctx) return;
+    var src = ready ? video : posters[posterOn];
+    if (!src) return;
+    var sw = ready ? video.videoWidth : src.naturalWidth;
+    var sh = ready ? video.videoHeight : src.naturalHeight;
+    if (!sw || !sh) return;
+    var cw = ghost.width, ch = ghost.height;
+    var scale = Math.max(cw / sw, ch / sh) * GHOST_ZOOM;
+    var dw = sw * scale, dh = sh * scale;
+    gctx.drawImage(src, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
   }
 
-  function attachClip(src) {
-    video.addEventListener('loadeddata', function once() {
-      video.removeEventListener('loadeddata', once);
-      var p = video.play();
-      var settle = function () {
+  function trackForTime(time) { return time / DURATION * TRACK_VH; }
+  function timeForTrack(track) { return clamp(track / TRACK_VH, 0, 1) * DURATION; }
+
+  function sceneAt(time) {
+    var index = 0;
+    for (var i = 1; i < SCENES.length; i++) {
+      if (time >= (SCENES[i - 1].time + SCENES[i].time) / 2) index = i;
+    }
+    return index;
+  }
+
+  function scenePair(time) {
+    var right = 1;
+    while (right < SCENES.length && time > SCENES[right].time) right++;
+    right = clamp(right, 1, SCENES.length - 1);
+    var left = right - 1;
+    var span = Math.max(0.001, SCENES[right].time - SCENES[left].time);
+    return { left: left, right: right, amount: smooth((time - SCENES[left].time) / span) };
+  }
+
+  function beatOpacity(sceneIndex, time) {
+    var scene = SCENES[sceneIndex];
+    if (sceneIndex === 0) return time < 0.5 ? 1 : clamp(1 - (time - 0.5) / 0.65, 0, 1);
+    if (sceneIndex === SCENES.length - 1) return smooth((time - (scene.time - 1.2)) / 0.9);
+    var previousMid = (SCENES[sceneIndex - 1].time + scene.time) / 2;
+    var nextMid = (scene.time + SCENES[sceneIndex + 1].time) / 2;
+    var fade = Math.min(0.75, (nextMid - previousMid) * 0.18);
+    var enter = smooth((time - previousMid) / fade);
+    var leave = 1 - smooth((time - (nextMid - fade)) / fade);
+    return clamp(enter * leave, 0, 1);
+  }
+
+  function paint(time) {
+    var current = sceneAt(time);
+    if (current !== posterOn) {
+      posters[posterOn] && posters[posterOn].classList.remove('is-on');
+      posters[current] && posters[current].classList.add('is-on');
+      posterOn = current;
+    }
+
+    beats.forEach(function (beat) {
+      var i = SCENES.findIndex(function (scene) { return scene.beat === beat.dataset.beat; });
+      var opacity = i < 0 ? 0 : beatOpacity(i, time);
+      beat.style.opacity = opacity.toFixed(3);
+      beat.style.visibility = opacity > 0.001 ? 'visible' : 'hidden';
+      beat.classList.toggle('is-live', opacity > 0.5);
+      beat.style.transform = 'none';
+    });
+
+    var pair = scenePair(time);
+    var a = SCENES[pair.left], b = SCENES[pair.right];
+    var x = mix(a.dot[0], b.dot[0], pair.amount);
+    var y = mix(a.dot[1], b.dot[1], pair.amount);
+    if (dot) { dot.setAttribute('cx', x.toFixed(1)); dot.setAttribute('cy', y.toFixed(1)); }
+
+    var planOpacity = smooth((time - 2.7) / 0.8) * (1 - smooth((time - 24.8) / 0.8));
+    stage.style.setProperty('--plan-o', planOpacity.toFixed(3));
+    stage.style.setProperty('--plan-v', planOpacity > 0.01 ? 'visible' : 'hidden');
+    stage.style.setProperty('--blend', smooth((time - 26.1) / 0.88).toFixed(3));
+    stage.style.setProperty('--fx', phone ? mix(a.fx, b.fx, pair.amount).toFixed(1) + '%' : '50%');
+
+    rooms.forEach(function (room) {
+      room.setAttribute('aria-current', String(room.dataset.room === SCENES[current].room));
+    });
+  }
+
+  function attachClip(source) {
+    video.addEventListener('loadeddata', function loaded() {
+      video.removeEventListener('loadeddata', loaded);
+      video.currentTime = Math.max(0.001, target);
+      var promise = video.play();
+      var stop = function () {
         video.pause();
-        // A frame callback is the real proof of paint. Some engines never
-        // present a frame for a paused clip (headless Chrome among them),
-        // so a timer backs it up rather than leaving the poster up forever.
-        video.addEventListener('seeked', function first() {
-          video.removeEventListener('seeked', first);
-          if (video.requestVideoFrameCallback) video.requestVideoFrameCallback(markReady);
-          setTimeout(markReady, video.requestVideoFrameCallback ? 800 : 120);
-        });
-        play = target;
-        video.currentTime = Math.max(0.001, play);
+        ready = true;
+        stage.classList.add('has-clip');
       };
-      if (p && p.then) p.then(settle, settle); else settle();
+      if (promise && promise.then) promise.then(stop, stop); else stop();
     });
     video.preload = 'auto';
-    video.src = src;
+    video.src = source;
     video.load();
   }
 
   function loadClip() {
-    if (reduced || !video) return;
-    var mobile = phoneQuery.matches || !finePointer;
-    var src = mobile ? video.dataset.srcMobile : video.dataset.src;
-    var localPreview = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-
-    // Basic local preview servers often omit byte-range support. A streamed
-    // video then displays its first frame but cannot seek with the scroll.
-    // Local development uses a Blob so every frame is seekable. Production
-    // keeps direct streaming and can use a CDN with range requests.
-    if (localPreview && window.fetch) {
-      fetch(src).then(function (response) {
-        if (!response.ok) throw new Error(response.status);
-        return response.blob();
-      }).then(function (blob) {
-        attachClip(URL.createObjectURL(blob));
-      }).catch(function () {
-        attachClip(src);
-      });
-    } else {
-      attachClip(src);
-    }
+    if (reduced) return;
+    var source = phone || !finePointer ? video.dataset.srcMobile : video.dataset.src;
+    var local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    if (local && window.fetch) {
+      fetch(source).then(function (response) { if (!response.ok) throw new Error(response.status); return response.blob(); })
+        .then(function (blob) { attachClip(URL.createObjectURL(blob)); })
+        .catch(function () { attachClip(source); });
+    } else attachClip(source);
   }
-
-  function stepPlayhead() {
-    if (!video || !video.src || video.readyState < 1) return;
-    var d = target - play;
-    play = Math.abs(d) < 0.001 ? target : play + d * LERP;
-    if (!video.seeking && Math.abs(video.currentTime - play) > deadband) {
-      video.currentTime = play;
-    }
-  }
-
-  /* ---------- layout ---------- */
-  var vhPx = innerHeight, vwPx = innerWidth, trackTop = 0;
-  var snapRun = null, snapIndex = 0;
-  var wheelSum = 0, wheelCommitted = false, wheelQuiet = 0;
-  var touchStartY = 0, touchStartIndex = 0;
 
   function layout() {
-    vhPx = stage.offsetHeight || innerHeight;
-    vwPx = innerWidth;
-    if (vhPx > 0) section.style.height = Math.round((T + 1) * vhPx) + 'px';
+    vh = stage.offsetHeight || innerHeight;
+    section.style.height = Math.round((TRACK_VH + 1) * vh) + 'px';
     trackTop = section.getBoundingClientRect().top + scrollY;
+    sizeGhost();
   }
 
-  function relayout() { layout(); frame(true); }
-  addEventListener('resize', relayout);
-  addEventListener('load', relayout);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
-
-  function currentTrack() { return clamp((scrollY - trackTop) / vhPx, 0, T); }
-  function closestScene(t) {
-    var best = 0, distance = Infinity;
-    SCENES.forEach(function (scene, i) {
-      var d = Math.abs(scene.t - t);
-      if (d < distance) { distance = d; best = i; }
-    });
-    return best;
-  }
-  function inFlight() {
-    var tolerance = vhPx * 0.18;
-    return scrollY >= trackTop - tolerance && scrollY <= trackTop + T * vhPx + tolerance;
-  }
-  function easeInOut(k) { return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; }
-  function easeOut(k) { return 1 - Math.pow(1 - k, 3); }
-
-  function animateTrack(from, entry, destination) {
-    if (snapRun) clearTimeout(snapRun);
-
-    var fromFilm = mapTime(from);
-    var entryFilm = mapTime(entry);
-    var destinationFilm = mapTime(destination);
-    var travelMs = Math.max(280, Math.abs(entryFilm - fromFilm) / 0.88 * 1000);
-    var landingMs = Math.abs(destinationFilm - entryFilm) < 0.01
-      ? 240
-      : Math.max(420, Math.abs(destinationFilm - entryFilm) / 0.55 * 1000);
-    var duration = travelMs + landingMs;
-    var started = performance.now();
-
-    function tick() {
-      var elapsed = performance.now() - started;
-      var filmTime;
-      if (elapsed < travelMs) {
-        filmTime = mix(fromFilm, entryFilm, easeInOut(elapsed / travelMs));
-      } else {
-        filmTime = mix(entryFilm, destinationFilm,
-          easeOut(clamp((elapsed - travelMs) / landingMs, 0, 1)));
-      }
-      var t = trackForFilmTime(filmTime);
-      window.scrollTo({ top: trackTop + t * vhPx, behavior: 'instant' });
-
-      if (elapsed < duration) {
-        snapRun = setTimeout(tick, 34);
-      } else {
-        window.scrollTo({ top: trackTop + destination * vhPx, behavior: 'instant' });
-        target = Math.min(destinationFilm, 26.98);
-        play = target;
-        if (video && video.readyState >= 1 && !video.seeking) video.currentTime = target;
-        lastT = -1;
-        snapRun = null;
-      }
+  function updateFromScroll() {
+    var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
+    var nextDesired = timeForTrack(track);
+    var direct = performance.now() < wheelUntil || performance.now() < keyUntil || touchActive;
+    desired = nextDesired;
+    clearTimeout(settleTimer);
+    if (direct) {
+      target = desired;
+      inputMode = 'direct';
+    } else {
+      target = clamp(target + (desired - target) * 0.4, 0, DURATION);
+      inputMode = 'scrollbar';
+      settleTimer = setTimeout(function () {
+        target = desired;
+        inputMode = 'settled';
+      }, 140);
     }
-    snapRun = setTimeout(tick, 0);
+    lastDesired = desired;
   }
 
-  function goToScene(index, direction) {
-    index = clamp(index, 0, SCENES.length - 1);
-    var scene = SCENES[index];
-    var entry = direction > 0 ? scene.t0 : direction < 0 ? scene.t1 : scene.t;
-    snapIndex = index;
-    animateTrack(currentTrack(), entry, scene.t);
-  }
-
-  function destinationFor(direction) {
-    var t = currentTrack();
-    var index = closestScene(t);
-    if (direction > 0) {
-      while (index < SCENES.length && SCENES[index].t <= t + 0.025) index++;
-      return index < SCENES.length ? index : -1;
+  function frame() {
+    if (Math.abs(target - lastPaint) > 0.0001) {
+      paint(target);
+      lastPaint = target;
     }
-    while (index >= 0 && SCENES[index].t >= t - 0.025) index--;
-    return index >= 0 ? index : -1;
-  }
+    if (ready && !video.seeking && Math.abs(video.currentTime - target) > DEAD_BAND) video.currentTime = target;
+    drawGhost();
 
-  function onWheel(e) {
-    if (reduced || e.ctrlKey || !inFlight()) return;
-    var direction = Math.sign(e.deltaY);
-    if (!direction) return;
-    var destination = destinationFor(direction);
-    if (destination < 0 && !snapRun) return;
-    e.preventDefault();
-    clearTimeout(wheelQuiet);
-    wheelQuiet = setTimeout(function () {
-      wheelSum = 0;
-      wheelCommitted = false;
-    }, 220);
-    if (snapRun || wheelCommitted) return;
-    wheelSum += e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? vhPx : 1);
-    if (Math.abs(wheelSum) < 18) return;
-    direction = Math.sign(wheelSum);
-    destination = destinationFor(direction);
-    if (destination < 0) return;
-    wheelCommitted = true;
-    goToScene(destination, direction);
-  }
-  addEventListener('wheel', onWheel, { passive: false });
-
-  addEventListener('touchstart', function (e) {
-    if (reduced || !inFlight() || !e.touches.length) return;
-    touchStartY = e.touches[0].clientY;
-    touchStartIndex = closestScene(currentTrack());
-  }, { passive: true });
-  addEventListener('touchend', function (e) {
-    if (reduced || !inFlight() || !e.changedTouches.length) return;
-    var distance = touchStartY - e.changedTouches[0].clientY;
-    if (Math.abs(distance) < 24) return;
-    var direction = Math.sign(distance);
-    var destination = clamp(touchStartIndex + direction, 0, SCENES.length - 1);
-    if (destination !== touchStartIndex) goToScene(destination, direction);
-  }, { passive: true });
-
-  /* ---------- the frame ---------- */
-  var lastT = -1, lastFx = '', lastBlend = -1;
-
-  function frame(force) {
-    var t = clamp((scrollY - trackTop) / vhPx, 0, T);
-
-    if (force || t !== lastT) {
-      target = Math.min(mapTime(t), 26.98);
-
-
-      var blend = ramp(t, T - 0.6, T);
-      if (blend !== lastBlend) { stage.style.setProperty('--blend', blend.toFixed(3)); lastBlend = blend; }
-
-      var fx = phoneQuery.matches ? keyed(FOCAL, t)[0].toFixed(1) + '%' : '50%';
-      if (fx !== lastFx) { stage.style.setProperty('--fx', fx); lastFx = fx; }
-
-      paintBeats(t, vwPx, vhPx);
-      paintPosters(t);
-      paintPlan(t);
-      lastT = t;
-    }
-
-    if (tiltOn) {
+    if (finePointer && !reduced) {
       mx += (tmx - mx) * 0.08;
       my += (tmy - my) * 0.08;
       stage.style.setProperty('--mx', mx.toFixed(3));
       stage.style.setProperty('--my', my.toFixed(3));
     }
-
-    stepPlayhead();
+    requestAnimationFrame(frame);
   }
 
-  function loop() { frame(false); requestAnimationFrame(loop); }
+  rooms.forEach(function (button) {
+    button.addEventListener('click', function () {
+      var scene = SCENES.find(function (item) { return item.room === button.dataset.room; });
+      if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  });
+
+  if (finePointer && !reduced) {
+    addEventListener('pointermove', function (event) {
+      tmx = clamp(event.clientX / innerWidth * 2 - 1, -1, 1);
+      tmy = clamp(event.clientY / innerHeight * 2 - 1, -1, 1);
+    }, { passive: true });
+  }
+
+  function nearestRestTime(time) {
+    var best = SCENES[0], bestDist = Infinity;
+    for (var i = 0; i < SCENES.length; i++) {
+      var dist = Math.abs(SCENES[i].rest - time);
+      if (dist < bestDist) { bestDist = dist; best = SCENES[i]; }
+    }
+    return best.rest;
+  }
+
+  var restSettleTimer = 0;
+  var restSettling = false;
+  function scheduleRestSettle() {
+    if (!phone || restSettling) return;
+    clearTimeout(restSettleTimer);
+    restSettleTimer = setTimeout(function () {
+      var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
+      if (track <= 0 || track >= TRACK_VH) return;
+      var restTime = nearestRestTime(timeForTrack(track));
+      restSettling = true;
+      window.scrollTo({ top: trackTop + trackForTime(restTime) * vh, behavior: reduced ? 'auto' : 'smooth' });
+      setTimeout(function () { restSettling = false; }, 500);
+    }, 120);
+  }
+
+  addEventListener('wheel', function () { wheelUntil = performance.now() + 350; }, { passive: true, capture: true });
+  addEventListener('touchstart', function () { touchActive = true; clearTimeout(restSettleTimer); }, { passive: true, capture: true });
+  addEventListener('touchend', function () { touchActive = false; }, { passive: true, capture: true });
+  addEventListener('touchcancel', function () { touchActive = false; }, { passive: true, capture: true });
+  addEventListener('keydown', function () { keyUntil = performance.now() + 350; }, { capture: true });
+  addEventListener('scroll', updateFromScroll, { passive: true });
+  addEventListener('scroll', scheduleRestSettle, { passive: true });
+
+  addEventListener('resize', layout);
+  addEventListener('load', layout);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
 
   layout();
-  frame(true);
-  requestAnimationFrame(loop);
-  if (document.readyState === 'complete') loadClip();
-  else addEventListener('load', loadClip);
+  updateFromScroll();
+  paint(0);
+  requestAnimationFrame(frame);
+  if (document.readyState === 'complete') loadClip(); else addEventListener('load', loadClip);
 
-  // For lab/care-check.mjs: read only, nothing on the page depends on it.
   window.__flight = {
-    T: T, legs: LEGS, scenes: SCENES,
+    T: TRACK_VH,
+    scenes: SCENES,
     state: function () {
-      return { t: clamp((scrollY - trackTop) / vhPx, 0, T), target: target, play: play,
-               current: video ? video.currentTime : 0, ready: clipReady, painted: lastT, vh: vhPx, top: trackTop };
+      var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
+      return { t: track, progress: track / TRACK_VH, target: target, desired: desired, inputMode: inputMode,
+        current: video.currentTime || 0, ready: reduced || ready, vh: vh, top: trackTop,
+        duration: DURATION, trackVh: TRACK_VH };
     },
-    scrollToT: function (t) { window.scrollTo({ top: trackTop + t * vhPx, behavior: 'instant' }); },
-    goToScene: function (index) {
-      var direction = index >= closestScene(currentTrack()) ? 1 : -1;
-      goToScene(index, direction);
-    },
-    snapState: function () { return { index: snapIndex, animating: !!snapRun }; }
+    scrollToT: function (track) { window.scrollTo({ top: trackTop + clamp(track, 0, TRACK_VH) * vh, behavior: 'instant' }); },
+    scrollToTime: function (time) { window.scrollTo({ top: trackTop + trackForTime(time) * vh, behavior: 'instant' }); }
   };
 })();
