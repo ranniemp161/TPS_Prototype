@@ -111,15 +111,10 @@
 }
 .beat.is-live { pointer-events: auto; }
 
-/* A soft plate of the page ground behind the words and nowhere else. Its
-   edge dissolves, so it reads as light in the room rather than a box. */
-.beat::before {
-  content: "";
-  position: absolute;
-  inset: -3.2rem -4.4rem;
-  z-index: -1;
-  background: radial-gradient(closest-side, rgba(243, 239, 236, .9), rgba(243, 239, 236, .72) 58%, rgba(243, 239, 236, 0));
-}
+/* The old plate behind caption words: dropped. No .beat carries visible
+   text any more, the route bar and the phone cards do that job now, so
+   there is nothing left for it to protect and it only showed as a stray
+   soft patch of canvas colour with nothing on it. */
 
 .beat__title { margin: 0; }
 .beat__line {
@@ -154,65 +149,93 @@
   width: max-content;
   text-align: center;
 }
-.beat--close::before { inset: -4rem -6rem; }
 .beat__script { margin: 0 0 1.8rem; }
 
-/* ---------- the floor plan ---------- */
+/* ---------- the cards: one system, desktop and phone ----------
+   Section 12's language (small uppercase Montserrat, wide tracking, a
+   hairline) carried into one glass panel per scene. home-flight.js sets
+   each panel's top/left to the zone chosen for that frame (SCENES[i].zone)
+   and slides it in from its own edge on arrival (SCENES[i].from), so the
+   panel always lands where that shot leaves room for it, not in one fixed
+   strip low on the video. Grey ink throughout: TJ's own call on contrast
+   against the video, no scrim behind it. */
 
-.plan {
+.cards {
   position: absolute;
-  right: var(--gutter);
-  bottom: 24px;
-  width: 200px;
-  height: 150px;
-  box-sizing: content-box;
-  padding: 10px;
-  background: rgba(243, 239, 236, .86);
-  border: 1px solid var(--hairline-firm);
-  border-radius: var(--r-card);
-  opacity: var(--plan-o, 0);
-  visibility: var(--plan-v, hidden);
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: var(--cards-o, 0);
+  visibility: var(--cards-v, hidden);
+  /* Explicit, because a <video> element can ignore plain DOM paint order
+     and sit above a later sibling that only has z-index: auto. See
+     flight__film and flight__aurora, which hit the same thing. */
+  z-index: 2;
+}
+.cards.is-live { pointer-events: auto; }
+
+.cards__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-.plan__house {
+/* top/left are set inline per scene, to that scene's own zone; this rule
+   only handles the centring and the slide-in offset around that point. */
+.cards__card {
   position: absolute;
-  inset: 10px;
-  width: 200px;
-  height: 150px;
-  overflow: visible;
-}
-.plan__wall  { fill: none; stroke: var(--ink); stroke-width: 1; opacity: .55; }
-.plan__route { fill: none; stroke: var(--ember); stroke-width: 1; stroke-dasharray: 2 4; opacity: .7; }
-.plan__dot   { fill: var(--ember); }
-
-.plan__room {
-  position: absolute;
+  width: min(480px, calc(100vw - var(--gutter) * 2));
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 6px 2px 0;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform: translate(calc(-50% + var(--card-x, 0%)), calc(-50% + var(--card-y, 0%)));
+  opacity: var(--card-o, 0);
+  transition: transform 620ms var(--ease-out), opacity 420ms var(--ease-out);
+  will-change: transform, opacity;
+}
+.cards__card:not(.is-live) { pointer-events: none; }
+.cards__card[data-room] { cursor: pointer; }
+
+.cards__name {
+  margin: 0;
   font-family: var(--f-body);
-  font-size: .56rem;
-  font-weight: 600;
+  font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+  font-weight: 500;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--ink-mute);
-  cursor: pointer;
-  transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
+  color: rgba(90, 82, 79, .9);
+  white-space: nowrap;
 }
-.plan__room:hover { color: var(--ink); background: rgba(166, 76, 69, .06); }
-.plan__room[aria-current="true"] { color: var(--ember-deep); background: rgba(166, 76, 69, .1); }
-.plan__room:focus-visible { outline: 2px solid var(--ember); outline-offset: 1px; }
+.cards__line {
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin: 16px 0;
+  background: rgba(90, 82, 79, .38);
+}
+.cards__desc {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--f-read);
+  font-size: clamp(.85rem, 1.15vw, .98rem);
+  line-height: 1.55;
+  color: rgba(90, 82, 79, .78);
+}
 
-/* Positions follow the drawing: 200 by 150 box, ground floor from y 98 to
-   140, upstairs from 62 to 98, party wall at x 100. */
-.plan__room--living  { left: calc(10px + 20px);  top: calc(10px + 98px); width: 80px; height: 42px; }
-.plan__room--kitchen { left: calc(10px + 100px); top: calc(10px + 98px); width: 80px; height: 42px; }
-.plan__room--nursery { left: calc(10px + 20px);  top: calc(10px + 62px); width: 80px; height: 36px; }
-.plan__room--bedroom { left: calc(10px + 100px); top: calc(10px + 62px); width: 80px; height: 36px; }
+/* Desktop: each card sits on the nav's own glass (same tint, blur and
+   saturation as .tab), so the grey ink has a ground over whatever the
+   frame is doing underneath it. */
+@media (min-width: 768px) {
+  .cards__card {
+    box-sizing: border-box;
+    padding: clamp(22px, 3vh, 32px) clamp(28px, 3vw, 44px);
+    border-radius: var(--r-card);
+    background: rgba(243, 239, 236, .62);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  }
+}
 
 /* ---------- after the house ---------- */
 
@@ -371,37 +394,34 @@
     opacity: 1;
   }
 
-  /* Every scene's words will sit in one lower band, over the aurora
-     field rather than a photo crop. */
-  .beat,
-  .beat--kitchen, .beat--living, .beat--nursery, .beat--bedroom {
-    left: var(--gutter);
-    right: var(--gutter);
-    top: auto;
-    bottom: calc(28px + env(safe-area-inset-bottom));
-    max-width: none;
-    text-align: left;
+  /* The old per-scene captions carry no visible text on phone any more;
+     only the final CTA remains, centred low over the cards below it. */
+  .beat--close {
+    left: 50%; right: auto; top: auto; bottom: calc(48px + env(safe-area-inset-bottom));
+    width: calc(100% - var(--gutter) * 2); text-align: center;
   }
-  .beat .beat__line { margin-left: 0; }
-  /* The aurora field now supplies the background under the words, so
-     the plate that used to fade to plain canvas is dropped here. */
-  .beat::before { content: none; }
-  .beat--close { left: 50%; right: auto; top: 50%; bottom: auto; width: calc(100% - var(--gutter) * 2); text-align: center; }
 
-  /* The plan shrinks to a mark riding just above the words. Up by the bar
-     it sat over the carer's face in two of the rooms; this band of the
-     frame is hands and furniture. Room names stay in the buttons for screen
-     readers and are hidden from sight. */
-  .plan {
-    top: auto;
-    bottom: calc(210px + env(safe-area-inset-bottom));
-    right: 12px;
-    padding: 6px;
-    transform: scale(.52);
-    transform-origin: right bottom;
+  /* Phone gets the same one-panel-per-zone system as desktop, at phone
+     scale: nearly the full width, dark grey since it sits on the pale
+     field rather than on the photograph, and a bigger, bolder name than
+     desktop reads because there is no video detail to compete with here.
+     No glass pane here: the fuchsia field is already the panel's ground. */
+  .cards__card { width: calc(100vw - var(--gutter) * 1.5); }
+  .cards__name {
+    font-size: clamp(1.3rem, 7vw, 1.7rem);
+    color: var(--ink);
   }
-  .plan__room { font-size: 0; }
-  .plan__room[aria-current="true"] { background: rgba(166, 76, 69, .16); }
+  .cards__line {
+    width: min(240px, 58vw);
+    height: 2px;
+    margin: 18px 0;
+    background: rgba(10, 10, 10, .32);
+  }
+  .cards__desc {
+    max-width: 30ch;
+    font-size: 1rem;
+    color: var(--ink-soft);
+  }
 
   .care-close__list { grid-template-columns: 1fr; gap: 22px; }
 }

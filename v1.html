@@ -179,50 +179,68 @@
 
     <div class="flight__blend" data-blend aria-hidden="true"></div>
 
+    <!-- The old per-scene titles are gone: the route bar (desktop) and the
+         card sweep (phone) now carry that copy, in the section 12 language.
+         These markers stay only for data-section/data-section-name, which
+         the dev panel and lab/state.mjs read for section tracking; they
+         carry no visible text of their own except the final CTA. -->
     <div class="flight__copy">
       <div class="beat beat--handover" data-beat="handover" data-section="baby-handover" data-section-name="Baby Handover" data-dev-scroll-t="0" aria-label="Baby Handover"></div>
-
-      <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Exterior" data-dev-scroll-t="1.06">
-        <h1 class="display display--xl beat__title">The Care</h1>
-        <p class="beat__line">Scroll and come in.</p>
-      </div>
-
-      <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="3.28">
-        <h2 class="display display--lg beat__title">We cook for you</h2>
-        <p class="beat__line">Warm, nourishing meals made in your own kitchen, so you eat well without lifting a thing.</p>
-      </div>
-
-      <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="5.28">
-        <h2 class="display display--lg beat__title">We keep the house</h2>
-        <p class="beat__line">Laundry, ironing and the small daily jobs. The house keeps running while you rest.</p>
-      </div>
-
-      <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="7.47">
-        <h2 class="display display--lg beat__title">We care for your baby</h2>
-        <p class="beat__line">Feeds, settling and the long nights, so you can finally sleep.</p>
-      </div>
-
-      <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="9.79">
-        <h2 class="display display--lg beat__title">We care for you</h2>
-        <p class="beat__line">Postpartum treatments at home, to help your body recover.</p>
-      </div>
-
+      <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Exterior" data-dev-scroll-t="1.06"></div>
+      <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="3.28"></div>
+      <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="5.28"></div>
+      <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="7.47"></div>
+      <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="9.79"></div>
       <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="12">
-        <p class="script beat__script">All of it, in one pair of hands.</p>
-        <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
+        <a class="btn btn--primary beat__cta" href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
       </div>
     </div>
 
-    <nav class="plan" data-plan aria-label="Rooms in the house">
-      <svg class="plan__house" viewBox="0 0 200 150" aria-hidden="true" focusable="false">
-        <path class="plan__wall" d="M10 62 L100 12 L190 62 M20 57 V140 H180 V57 M20 98 H180 M100 62 V140" />
-        <path class="plan__route" d="M112 148 L140 120 L60 120 L60 80 L140 80 L196 70" />
-        <circle class="plan__dot" data-plan-dot r="4" cx="112" cy="148" />
-      </svg>
-      <button class="plan__room plan__room--kitchen" type="button" data-room="kitchen">Kitchen</button>
-      <button class="plan__room plan__room--living" type="button" data-room="living">Living room</button>
-      <button class="plan__room plan__room--nursery" type="button" data-room="nursery">Nursery</button>
-      <button class="plan__room plan__room--bedroom" type="button" data-room="bedroom">Bedroom</button>
+    <!-- One system, desktop and phone: a bold centred name, a hairline,
+         a description, with the neighbouring rooms' own name-and-line
+         peeking in from the left and right edges. Scrolling (or a swipe
+         settling) slides the whole strip so the next card's line crosses
+         in and its name arrives centred, replacing both the old route bar
+         and the old single-card sweep. home-flight.js drives every
+         card's offset from the live one via --card-x/--card-o. -->
+    <nav class="cards" data-cards aria-label="Rooms in the house">
+      <div class="cards__track" data-cards-track>
+        <div class="cards__card" data-card="handover">
+          <p class="cards__name">Handover</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">A warm hand-off, in the first minutes home.</p>
+        </div>
+        <div class="cards__card" data-card="exterior">
+          <p class="cards__name">Arrival</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Scroll and come in.</p>
+        </div>
+        <div class="cards__card" data-card="kitchen" data-room="kitchen">
+          <p class="cards__name">Kitchen</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Warm, nourishing meals made in your own kitchen, so you eat well without lifting a thing.</p>
+        </div>
+        <div class="cards__card" data-card="living" data-room="living">
+          <p class="cards__name">Living Room</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Laundry, ironing and the small daily jobs. The house keeps running while you rest.</p>
+        </div>
+        <div class="cards__card" data-card="nursery" data-room="nursery">
+          <p class="cards__name">Nursery</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Feeds, settling and the long nights, so you can finally sleep.</p>
+        </div>
+        <div class="cards__card" data-card="treatment" data-room="bedroom">
+          <p class="cards__name">Treatment Room</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Postpartum treatments at home, to help your body recover.</p>
+        </div>
+        <div class="cards__card" data-card="exit">
+          <p class="cards__name">The Window</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">All of it, in one pair of hands.</p>
+        </div>
+      </div>
     </nav>
   </div>
 </section>
