@@ -196,13 +196,21 @@
       </div>
     </div>
 
-    <!-- One system, desktop and phone: a bold centred name, a hairline,
-         a description, with the neighbouring rooms' own name-and-line
-         peeking in from the left and right edges. Scrolling (or a swipe
-         settling) slides the whole strip so the next card's line crosses
-         in and its name arrives centred, replacing both the old route bar
-         and the old single-card sweep. home-flight.js drives every
-         card's offset from the live one via --card-x/--card-o. -->
+    <!-- Desktop: one panel that glides from its old zone straight to its
+         new one on every scene change (see SCENES[i].zone in
+         home-flight.js), text fading in once it has arrived. It has no
+         fixed content of its own; home-flight.js writes the current
+         scene's name and description into it. Hidden on phone. -->
+    <div class="deskcard" data-deskcard aria-hidden="true">
+      <p class="cards__name" data-deskcard-name></p>
+      <span class="cards__line"></span>
+      <p class="cards__desc" data-deskcard-desc></p>
+    </div>
+
+    <!-- Phone: one card per scene, always resting in the same fixed spot
+         (care.css), swept out to one side and the next swept in from the
+         other on a swipe, direction matching which way you swiped. Hidden
+         on desktop. home-flight.js drives which one is live. -->
     <nav class="cards" data-cards aria-label="Rooms in the house">
       <div class="cards__track" data-cards-track>
         <div class="cards__card" data-card="handover">

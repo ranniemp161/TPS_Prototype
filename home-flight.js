@@ -9,6 +9,9 @@
   var posters = [].slice.call(section.querySelectorAll('[data-poster]'));
   var beats = [].slice.call(section.querySelectorAll('[data-beat]'));
   var ghost = section.querySelector('[data-ghost]');
+  var deskcard = section.querySelector('[data-deskcard]');
+  var deskcardName = section.querySelector('[data-deskcard-name]');
+  var deskcardDesc = section.querySelector('[data-deskcard-desc]');
   var cards = section.querySelector('[data-cards]');
   var cardEls = [].slice.call(section.querySelectorAll('[data-card]'));
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -24,42 +27,36 @@
   function mix(a, b, amount) { return a + (b - a) * amount; }
   function smooth(value) { value = clamp(value, 0, 1); return value * value * (3 - 2 * value); }
 
-  // zone: where the glass panel rests on that frame, chosen for the one
-  // quiet area each shot leaves clear of its people. from: the edge it
-  // slides in from on a scene change, pointing toward where it lands.
-  // phoneZone: the photo only fills the top ~28% of the screen on a
-  // phone (see the mobile crop in care.css), so every phone zone sits on
-  // the fuchsia field below it, varying left/right for rhythm rather than
-  // top, which stays inside that field at every scene.
+  // zone: where the desktop glass panel rests on that frame, chosen for
+  // the one quiet area each shot leaves clear of its people. The panel
+  // glides in a straight line from its previous zone to this one; there
+  // is no per-scene entrance edge any more. treatment is where it ends:
+  // treatmentFadeAt (seconds) is when it disappears on the way to exit,
+  // before the practitioner's face would cross under it.
+  var PHONE_ZONE = { top: '62%', left: '50%' };
+  var TREATMENT_FADE_AT = tc(23, 15); // ~23.5s, tune against the footage
   var SCENES = [
     { name: 'handover', beat: 'handover', time: 0, rest: 0, fx: 50,
       desc: 'A warm hand-off, in the first minutes home.',
-      zone: { top: '14%', left: '62%' }, from: 'right',
-      phoneZone: { top: '46%', left: '50%' } },
+      zone: { top: '72%', left: '73%' } },
     { name: 'exterior', beat: 'exterior', time: tc(2, 11.5), rest: tc(2, 9), fx: 50,
       desc: 'Scroll and come in.',
-      zone: { top: '50%', left: '50%' }, from: 'bottom',
-      phoneZone: { top: '46%', left: '50%' } },
+      zone: { top: '86%', left: '34%' } },
     { name: 'kitchen', beat: 'kitchen', time: (tc(6, 28) + tc(7, 25)) / 2, rest: tc(6, 28), fx: 66, room: 'kitchen',
       desc: 'Warm, nourishing meals made in your own kitchen, so you eat well without lifting a thing.',
-      zone: { top: '32%', left: '20%' }, from: 'left',
-      phoneZone: { top: '44%', left: '38%' } },
+      zone: { top: '32%', left: '20%' } },
     { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 78, room: 'living',
       desc: 'Laundry, ironing and the small daily jobs. The house keeps running while you rest.',
-      zone: { top: '16%', left: '50%' }, from: 'top',
-      phoneZone: { top: '44%', left: '62%' } },
+      zone: { top: '24%', left: '28%' } },
     { name: 'nursery', beat: 'nursery', time: (tc(16, 8) + tc(17, 10)) / 2, rest: tc(16, 8), fx: 18, room: 'nursery',
       desc: 'Feeds, settling and the long nights, so you can finally sleep.',
-      zone: { top: '18%', left: '46%' }, from: 'top',
-      phoneZone: { top: '44%', left: '38%' } },
+      zone: { top: '52%', left: '77%' } },
     { name: 'treatment', beat: 'bedroom', time: (tc(21, 19) + tc(22, 12)) / 2, rest: tc(21, 19), fx: 52, room: 'bedroom',
       desc: 'Postpartum treatments at home, to help your body recover.',
-      zone: { top: '24%', left: '20%' }, from: 'left',
-      phoneZone: { top: '44%', left: '62%' } },
+      zone: { top: '20%', left: '20%' } },
     { name: 'exit', beat: 'sky', time: DURATION, rest: DURATION, fx: 50,
       desc: 'All of it, in one pair of hands.',
-      zone: { top: '50%', left: '50%' }, from: 'fade',
-      phoneZone: { top: '46%', left: '50%' } }
+      zone: { top: '20%', left: '20%' } }
   ];
 
   var vh = innerHeight;
@@ -153,80 +150,103 @@
     var pair = scenePair(time);
     var a = SCENES[pair.left], b = SCENES[pair.right];
 
-    // Live from the first frame: the handover has its own words now, so
-    // there is no reason for the panel to wait, only to leave with the
-    // frame as it goes white at the very end.
-    var cardsOpacity = 1 - smooth((time - 24.8) / 0.8);
-    stage.style.setProperty('--cards-o', cardsOpacity.toFixed(3));
-    stage.style.setProperty('--cards-v', cardsOpacity > 0.01 ? 'visible' : 'hidden');
-    if (cards) cards.classList.toggle('is-live', cardsOpacity > 0.5);
     stage.style.setProperty('--blend', smooth((time - 26.1) / 0.88).toFixed(3));
     stage.style.setProperty('--fx', phone ? mix(a.fx, b.fx, pair.amount).toFixed(1) + '%' : '50%');
 
-    paintCards(current);
+    if (phone) paintPhoneCards(current);
+    else paintDeskCard(current, time);
   }
 
-  // One glass panel at a time, parked at the zone chosen for that scene's
-  // own frame (SCENES[i].zone) rather than a fixed spot low on the video.
-  // No neighbours peeking in any more: a scene change hides the outgoing
-  // panel and slides the incoming one in from its own edge (SCENES[i].from),
-  // so the arrival always points toward where the words are about to rest.
-  var OFFSTAGE = { top: '160%', bottom: '-160%', left: '-160%', right: '160%' };
-  function placeCard(card, scene, offstageFrom) {
-    var zone = phone ? scene.phoneZone : scene.zone;
-    card.style.top = zone.top;
-    card.style.left = zone.left;
-    if (offstageFrom && offstageFrom !== 'fade') {
-      var axis = (offstageFrom === 'left' || offstageFrom === 'right') ? 'X' : 'Y';
-      var dist = offstageFrom === 'top' ? OFFSTAGE.top
-        : offstageFrom === 'bottom' ? OFFSTAGE.bottom
-        : offstageFrom === 'left' ? OFFSTAGE.left
-        : OFFSTAGE.right;
-      card.style.setProperty('--card-x', axis === 'X' ? dist : '0%');
-      card.style.setProperty('--card-y', axis === 'Y' ? dist : '0%');
-    } else {
-      card.style.setProperty('--card-x', '0%');
-      card.style.setProperty('--card-y', '0%');
-    }
+  // Desktop: one panel, gliding. It is live from the first frame and
+  // fades out approaching TREATMENT_FADE_AT, before the practitioner's
+  // face would cross under it on the way to the window scene; it never
+  // reappears after that, so exit has no panel of its own.
+  var deskLiveIndex = -1;
+  function paintDeskCard(current, time) {
+    if (!deskcard) return;
+    var visible = time < TREATMENT_FADE_AT;
+    var fadeOut = clamp(1 - (time - (TREATMENT_FADE_AT - 0.6)) / 0.6, 0, 1);
+    var opacity = visible ? fadeOut : 0;
+    stage.style.setProperty('--cards-o', opacity.toFixed(3));
+    stage.style.setProperty('--cards-v', opacity > 0.01 ? 'visible' : 'hidden');
+    deskcard.classList.toggle('is-live', opacity > 0.5);
+
+    var clamped = current > 5 ? 5 : current; // treatment (index 5) is the last stop
+    if (clamped === deskLiveIndex) return;
+    deskLiveIndex = clamped;
+    var scene = SCENES[clamped];
+    deskcard.style.top = scene.zone.top;
+    deskcard.style.left = scene.zone.left;
+    if (scene.room) deskcard.setAttribute('data-room', scene.room); else deskcard.removeAttribute('data-room');
+
+    // The words fade out fast, then back in once the glide has mostly
+    // arrived, so they never read as sliding across the frame with the
+    // panel; only the panel itself is understood to move.
+    deskcard.style.setProperty('--deskcard-text-o', 0);
+    deskcard.style.setProperty('--deskcard-text-delay', '0ms');
+    // Names live once, in the phone cards' own markup; read from there
+    // rather than duplicating a name map that could drift out of sync.
+    var sourceCard = cardEls.filter(function (c) { return c.dataset.card === scene.name; })[0];
+    var displayName = sourceCard ? sourceCard.querySelector('.cards__name').textContent : scene.name;
+    setTimeout(function () {
+      if (deskLiveIndex !== clamped) return; // a later scene has already taken over
+      deskcardName.textContent = displayName;
+      deskcardDesc.textContent = scene.desc;
+      deskcard.style.setProperty('--deskcard-text-o', 1);
+    }, 620);
   }
 
-  var cardLiveIndex = -1;
-  function paintCards(current) {
+  // Phone: one fixed spot (PHONE_ZONE). A scene change slides the old
+  // card out toward the side the swipe came from and the new one in from
+  // the other; the position itself never changes, only which card sits
+  // there and which side it arrived from.
+  var OFFSTAGE = { left: '-140%', right: '140%' };
+  function placePhoneCard(card, dir) {
+    card.style.top = PHONE_ZONE.top;
+    card.style.left = PHONE_ZONE.left;
+    card.style.setProperty('--card-x', dir === 'left' ? OFFSTAGE.left : dir === 'right' ? OFFSTAGE.right : '0%');
+    card.style.setProperty('--card-y', '0%');
+  }
+
+  var phoneLiveIndex = -1;
+  function paintPhoneCards(current) {
     if (!cards || !cardEls.length) return;
-    if (current === cardLiveIndex) return;
+    var cardsOpacity = 1 - smooth((SCENES[current].time - 24.8) / 0.8);
+    stage.style.setProperty('--cards-o', cardsOpacity.toFixed(3));
+    stage.style.setProperty('--cards-v', cardsOpacity > 0.01 ? 'visible' : 'hidden');
+    if (cards) cards.classList.toggle('is-live', cardsOpacity > 0.5);
+
+    if (current === phoneLiveIndex) return;
+    var forward = phoneLiveIndex >= 0 && current > phoneLiveIndex;
+    var backward = phoneLiveIndex >= 0 && current < phoneLiveIndex;
     var scene = SCENES[current];
     var card = cardEls.filter(function (c) { return c.dataset.card === scene.name; })[0];
-    var outgoing = cardLiveIndex >= 0
-      ? cardEls.filter(function (c) { return c.dataset.card === SCENES[cardLiveIndex].name; })[0]
+    var outgoing = phoneLiveIndex >= 0
+      ? cardEls.filter(function (c) { return c.dataset.card === SCENES[phoneLiveIndex].name; })[0]
       : null;
-    cardLiveIndex = current;
+    phoneLiveIndex = current;
     if (!card) return;
 
-    cardEls.forEach(function (c) { if (c !== card) c.classList.remove('is-live'); c.style.setProperty('--card-o', c === card ? 1 : 0); });
+    cardEls.forEach(function (c) { if (c !== card) c.classList.remove('is-live'); });
 
     if (outgoing && outgoing !== card) {
-      // The old panel leaves back the way an arrival would come from,
-      // i.e. the opposite of this scene's own entrance: if the new panel
-      // enters from the left, the old one is understood to have exited
-      // toward wherever off-frame made sense for its own scene. Simplest
-      // and least surprising: it just fades, since two panels animating
-      // position at once reads as a collision rather than a handoff.
+      // Leaves toward the side the swipe is heading, i.e. the opposite
+      // side the new card is arriving from.
+      placePhoneCard(outgoing, forward ? 'left' : backward ? 'right' : null);
       outgoing.style.setProperty('--card-o', 0);
     }
 
-    if (scene.from === 'fade' || cardLiveIndex === -1) {
-      placeCard(card, scene, null);
-    } else {
-      placeCard(card, scene, scene.from);
-      // Start from off-frame with transitions off, then release next
-      // frame so the browser actually animates the arrival rather than
-      // teleporting straight to rest.
+    if (forward || backward) {
       card.style.transition = 'none';
+      placePhoneCard(card, forward ? 'right' : 'left');
+      card.style.setProperty('--card-o', 1);
       requestAnimationFrame(function () {
         card.style.transition = '';
         card.style.setProperty('--card-x', '0%');
-        card.style.setProperty('--card-y', '0%');
       });
+    } else {
+      placePhoneCard(card, null);
+      card.style.setProperty('--card-o', 1);
     }
     card.classList.add('is-live');
   }
@@ -309,6 +329,15 @@
       if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
     });
   });
+
+  if (deskcard) {
+    deskcard.addEventListener('click', function () {
+      var room = deskcard.dataset.room;
+      if (!room) return;
+      var scene = SCENES.find(function (item) { return item.room === room; });
+      if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  }
 
   if (finePointer && !reduced) {
     addEventListener('pointermove', function (event) {
