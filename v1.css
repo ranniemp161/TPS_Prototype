@@ -607,6 +607,257 @@ main:focus { outline: none; }
 }
 .tab:active { transform: translateY(1px); }
 
+/* ---- Full-width glass bar (v1.html only, via .nav--glass) ----
+   The client's direction: the bar itself carries the glass, edge to edge
+   and fixed to the top, and the frosted chips go. Same material as the
+   chips had (page canvas at 62% over a 14px blur), moved from each tab
+   onto one strip behind the whole row. It is a pseudo-element the height
+   of the bar, not the nav itself, so the drop panel below it keeps its
+   own opaque paper ground and the lockup is free to overhang the bar
+   while the logo treatment is still being decided. Enquire is left
+   exactly as it was: solid, and the only filled control in the row.
+   Scoped to .nav--glass because about, care, programme and the rest load
+   this same stylesheet and keep the chip nav. */
+.nav--glass::before {
+  content: "";
+  position: absolute;
+  /* top and bottom, not a fixed height, so the strip follows the bar as
+     it changes height between the text lockup and the circle below. */
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background: rgba(243, 239, 236, .62);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  pointer-events: none;
+}
+/* Over the one dark frame the strip takes the dark glass the chips used. */
+.nav--glass.is-dark::before { background: rgba(140, 127, 121, .46); }
+
+/* Tabs become plain labels on the strip. */
+.nav--glass .tab:not(.tab--cta),
+.nav--glass.is-dark .tab:not(.tab--cta) {
+  background: transparent;
+  border-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .nav--glass .tab:not(.tab--cta):hover,
+  .nav--glass.is-dark .tab:not(.tab--cta):hover { background: transparent; color: var(--ember); }
+  .nav--glass.is-dark .tab:not(.tab--cta):hover { color: var(--blush); }
+}
+/* ---- Logo on the glass bar (v1.html only) ----
+   At the top of the page the logo is the wordmark alone, three lines
+   (The / Postpartum / Suite), centred inside a bar 10% taller than the
+   scrolled one, so nothing hangs below the glass. The circle is not shown
+   yet. On scroll the three lines collapse in toward the middle of the bar
+   and the TPS circle forms there at its scrolled size while the bar
+   settles back to --nav-h. Scrolling up runs it in reverse. The same
+   stagger the old lockup used, bottom line out first and the stack
+   rebuilding top line first once the circle has gone. */
+.nav--glass {
+  /* The one knob for the top-of-page bar. --bar-grow is how much taller
+     than the first cut (88px, itself 10% over --nav-h) the bar stands
+     while the wordmark is showing: 1.10, 1.15 or 1.20 are the three
+     candidates. The wordmark is sized from the bar, not the window, so
+     the text and its margins keep the same proportions at any value. */
+  --bar-grow: 1.15;
+  --bar-top-h: calc(var(--nav-h) * 1.1 * var(--bar-grow));
+}
+.nav--glass .nav__inner {
+  height: var(--bar-top-h);
+  transition: height 420ms var(--ease-out);
+}
+.nav--glass.is-scrolled .nav__inner { height: var(--nav-h); }
+
+/* Wordmark size: about 2.2 times the bar, which puts the three lines of
+   text at roughly 62% of the bar's height with equal air above and below.
+   The floor and the 38vw term hold it inside the gap between Menu and
+   Enquire on a phone, where the width, not the height, is the limit. */
+.nav--glass .nav__brand { --lockup-h: clamp(150px, 38vw, calc(var(--bar-top-h) * 2.2)); }
+
+/* The wordmark's three lines sit low in its box (the box was drawn under
+   the old circle), so shift the box until the block of text, not the box,
+   is centred on the bar. 0.80611 is the block's centre as a fraction of
+   --lockup-h, from the strip offsets above: (0.66444 + 0.94778) / 2. */
+.nav--glass .nav__wordmark { top: calc(50% - var(--lockup-h) * 0.80611); }
+
+/* Vector wordmark. The webp this replaces was 700 x 292 and about 1.7 KB:
+   lossy, chroma-subsampled, and downscaled four to five times in the bar,
+   which breaks thin serif strokes. This is the same three lines traced
+   from the lossless TPS Logo (final).PNG and fitted to the same 700 x 292
+   box, so every strip offset above still lands on the same line and the
+   bar needed no other change. It is a stopgap traced by hand: when the
+   designer's own vector file arrives, replace tps-wordmark.svg with it,
+   keeping the 700 x 292 viewBox and the line positions, and nothing else
+   has to change. */
+.nav--glass .wm-line { background-image: url('assets/img/tps-wordmark.svg'); }
+
+/* The circle waits, hidden and a little small, at the middle of the bar. */
+.nav--glass .nav__mark,
+.nav--glass.is-scrolled .nav__mark {
+  --mark-h: clamp(46px, 3.2vw, 56px);
+  top: 50%;
+  height: var(--mark-h);
+  transform: translate(-50%, -50%) scale(.55);
+  opacity: 0;
+  transition: opacity 260ms var(--ease-out), transform 420ms var(--ease-out), filter 280ms var(--ease-out);
+  transition-delay: 0ms;
+}
+.nav--glass.is-scrolled .nav__mark {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  /* Hangs back until the three lines have cleared. */
+  transition-delay: 240ms;
+}
+
+/* Four menu items now (What We Do, Our Offerings, About Us, Home) instead
+   of three, and with the chips gone there is no reason for them to share
+   one fixed width. Each tab fits its own label, with tight padding and a
+   small gap, so the row takes roughly 380px instead of the 470px the old
+   equal-width chips needed and stays clear of the centre wordmark. The
+   Enquire button keeps its own width. */
+.nav--glass .nav__tabs { gap: 2px; }
+.nav--glass .nav__tabs .tab {
+  width: auto;
+  padding: 0 clamp(9px, 1vw, 16px);
+}
+
+/* Corner mark and sliding tabs, wide screens only. At the top of the page
+   the circular logo sits in the far left corner and the three tabs stand
+   to its right. On scroll, all at once with the wordmark folding into the
+   centre circle: the corner mark fades and shrinks away, and the tabs
+   slide left into the space it leaves. Scrolling up runs it back. The
+   shift is a transform, not a width change, so nothing around it reflows.
+   1200px and up because below that the shifted tabs would run into the
+   centre wordmark; narrower screens keep the tabs where they are and
+   never show the corner mark. */
+.nav__corner { display: none; }
+@media (min-width: 1200px) {
+  .nav--glass {
+    --corner-h: clamp(46px, 3.2vw, 56px);
+    --corner-shift: calc(var(--corner-h) * 1.016 + 28px);
+  }
+  .nav--glass .nav__side--l { position: relative; }
+  .nav--glass .nav__corner {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: var(--corner-h);
+    width: auto;
+    max-width: none;
+    aspect-ratio: 567 / 558;
+    transform: translateY(-50%);
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity 420ms var(--ease-out), transform 520ms var(--ease-out), filter 280ms var(--ease-out);
+    /* Coming back, it waits a beat so the tabs have started to clear. */
+    transition-delay: 160ms;
+  }
+  .nav--glass.is-scrolled .nav__corner {
+    opacity: 0;
+    transform: translateY(-50%) scale(.55);
+    transition-delay: 0ms;
+  }
+  .nav--glass.is-dark .nav__corner { filter: brightness(0) invert(1); }
+
+  .nav--glass .nav__tabs {
+    transform: translateX(var(--corner-shift));
+    /* Slow and even on purpose: ease-in-out over 1.1s rather than the
+       sharp ease-out used elsewhere, which would have the tabs arrive in
+       the first third of the move. */
+    transition: transform 1100ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .nav--glass.is-scrolled .nav__tabs { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav--glass .nav__corner, .nav--glass .nav__tabs { transition-duration: .01s; transition-delay: 0ms; }
+}
+
+/* Leaving, the outer lines slide in toward the middle line as they fade,
+   so the text reads as folding into the place the circle appears. */
+.nav--glass.is-scrolled .wm-line--1 { transform: translateY(calc(var(--lockup-h) * 0.115)); }
+.nav--glass.is-scrolled .wm-line--2 { transform: scaleY(.4); }
+.nav--glass.is-scrolled .wm-line--3 { transform: translateY(calc(var(--lockup-h) * -0.115)); }
+
+/* The Menu control reads MENU in capitals. Only this one label: the
+   other items and Enquire keep their case. */
+.nav--glass .tab--menu { text-transform: uppercase; }
+
+/* ---- Phone menu (900px and under, v1.html only) ----
+   Tapping Menu used to drop the four items out as chips on a white strip.
+   Now the glass bar grows downward to take the row in, the items are
+   plain text on it in the same style as the desktop menu, and the white
+   panel starts underneath, where the glass ends. The item whose list is
+   open turns coral and gets a line the width of its label (a separate
+   line, not a text underline) sitting on the bottom edge of the glass, so
+   it joins the label to the list below. What We Do and Home open
+   nothing, so they never take the line. Selectors are deliberately
+   heavy: the phone block further down this file styles the same elements
+   and has to lose. */
+@media (max-width: 900px) {
+  /* 62px with 10px of padding under the text: the labels stay exactly
+     where they were (the extra height is all below them) and there is
+     about 10px more air between the text and the line on the glass edge. */
+  .nav--glass { --row-h: 62px; }
+  .nav--glass::before { transition: bottom 280ms var(--ease-out); }
+  .nav.nav--glass.is-open::before { bottom: calc(var(--row-h) * -1); }
+
+  .nav.nav--glass.is-open .nav__side--l .nav__tabs {
+    height: var(--row-h);
+    padding: 0 calc(var(--gutter) - 6px);
+    gap: 0;
+    background: transparent;
+    align-items: stretch;
+    justify-content: space-between;
+    animation: navRowIn 260ms var(--ease-out) both;
+  }
+  .nav.nav--glass.is-open .nav__side--l .nav__tabs .tab {
+    position: relative;
+    flex: 0 1 auto;
+    width: auto;
+    height: auto;
+    padding: 0 6px 10px;
+    background: transparent;
+    border-color: transparent;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .nav.nav--glass.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] {
+    background: transparent;
+    color: var(--action);
+  }
+  .nav.nav--glass.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"]::after {
+    content: "";
+    position: absolute;
+    left: 6px; right: 6px; bottom: 0;
+    height: 2px;
+    background: var(--action);
+  }
+  /* On the one dark frame the glass is dark, so the row reads light. */
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab { color: var(--paper); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] { color: var(--blush); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"]::after { background: var(--blush); }
+
+  /* The white panel starts where the glass ends, and no longer needs the
+     82px of top padding that used to leave room for the row overlapping it. */
+  .nav--glass .menu { top: calc(100% + var(--row-h)); }
+  .nav--glass .menu__panel { padding-top: clamp(24px, 4vw, 32px); }
+}
+@keyframes navRowIn { from { opacity: 0; } }
+
+/* The open tab (and the Menu control on a phone) lose their filled state
+   too: the open one shows in the action colour instead of a fill. */
+.nav--glass .tab[aria-expanded="true"]:not(.tab--cta),
+.nav--glass.is-dark .tab[aria-expanded="true"]:not(.tab--cta),
+.nav--glass .tab--menu[aria-expanded="true"],
+.nav--glass.is-dark .tab--menu[aria-expanded="true"] {
+  background: transparent;
+  color: var(--action);
+  font-weight: 600;
+}
+
 /* The menu control is a tab, not an icon. White Desert labels it in words
    and it sits in the left group where the section tabs were, so on a phone
    the row reads Menu, wordmark, Enquire rather than collapsing to a glyph

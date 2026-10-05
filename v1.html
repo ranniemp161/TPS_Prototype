@@ -63,22 +63,35 @@
      content, and this page has no other way past the bar. -->
 <a class="skip" href="#content">Skip to content</a>
 
-<header class="nav" data-nav>
+<header class="nav nav--glass" data-nav>
   <div class="nav__inner">
 
     <div class="nav__side nav__side--l">
+      <!-- The corner mark: the circular TPS logo in the far left corner
+           while the three-line wordmark is showing in the centre. Purely
+           decorative (the centre lockup is the real home link), so it is
+           hidden from assistive tech and not clickable. It leaves, and the
+           tabs slide left into its place, as the wordmark folds into the
+           centre circle; see the .nav--glass block in v1.css. Wide
+           screens only. -->
+      <img class="nav__corner" src="assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
       <!-- Reverted to the v1-ruined nav on TJ's call. Three section tabs,
            each opening its own panel, with the Menu chip taking their place
            below 900px. The single-chip version that replaced them on
            2026-09-07 is gone. -->
       <div class="nav__tabs" data-tabs>
-        <button class="tab" type="button" data-tab="care" aria-expanded="false" aria-controls="panel-care">Care</button>
-        <button class="tab" type="button" data-tab="programmes" aria-expanded="false" aria-controls="panel-programmes">Programmes</button>
-        <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About</button>
+        <!-- New menu, per the client: What We Do and Home are plain links;
+             Our Offerings and About Us are the only two that open a
+             submenu. The plain links carry no data-tab, so the menu
+             script leaves them alone. -->
+        <a class="tab" href="care.html">What We Do</a>
+        <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offerings</button>
+        <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
+        <a class="tab" href="v1.html">Home</a>
       </div>
       <!-- Takes the place of the three above it below 900px. A word, not a
            glyph, in the same chip as everything else. -->
-      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-care">Menu</button>
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-offerings">Menu</button>
     </div>
 
     <!-- #content, not #top. There has never been an element with id
@@ -112,37 +125,25 @@
          eventually mirror stay exactly where they are. A section on the
          homepage and a page of its own are two different things, and
          whether the former ever links to the latter is a later call. -->
-    <section class="menu__panel" id="panel-care" data-panel="care" hidden>
+    <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
       <div class="menu__group">
-        <h2 class="menu__head">What we do</h2>
-        <ul class="menu__list">
-          <li><a href="care.html">The Care</a></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="menu__panel" id="panel-programmes" data-panel="programmes" hidden>
-      <div class="menu__group">
-        <h2 class="menu__head">Programmes</h2>
+        <h2 class="menu__head">Our Offerings</h2>
         <ul class="menu__list">
           <li><a href="programmes.html">Programmes</a></li>
-          <li><a href="programme.html">Build your programme</a></li>
-          <li><a href="single-treatments.html">Single treatments</a></li>
+          <li><a href="programme.html">Bespoke Programmes</a></li>
+          <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+          <!-- No Gifts page exists yet, so it is a label, not a link. -->
+          <li><span class="menu__pending">Gifts</span></li>
         </ul>
       </div>
     </section>
 
     <section class="menu__panel" id="panel-about" data-panel="about" hidden>
       <div class="menu__group">
-        <h2 class="menu__head">The Postpartum Suite</h2>
+        <h2 class="menu__head">About Us</h2>
         <ul class="menu__list">
-          <li><a href="about.html">About</a></li>
-        </ul>
-      </div>
-      <div class="menu__group">
-        <h2 class="menu__head">Your specialist</h2>
-        <ul class="menu__list">
-          <li><a href="specialist.html">Who comes into your home</a></li>
+          <li><a href="about.html">The Suite</a></li>
+          <li><a href="specialist.html">Who Comes To Your Home</a></li>
         </ul>
       </div>
     </section>
@@ -182,8 +183,10 @@
     <!-- The old per-scene titles are gone: the route bar (desktop) and the
          card sweep (phone) now carry that copy, in the section 12 language.
          These markers stay only for data-section/data-section-name, which
-         the dev panel and lab/state.mjs read for section tracking; they
-         carry no visible text of their own except the final CTA. -->
+         the dev panel and lab/state.mjs read for section tracking; none
+         carry visible text of their own. The window-exit beat's Enquire
+         button that used to live here is gone too: the flight-enquire
+         button below now covers the whole video, this scene included. -->
     <div class="flight__copy">
       <div class="beat beat--handover" data-beat="handover" data-section="baby-handover" data-section-name="Baby Handover" data-dev-scroll-t="0" aria-label="Baby Handover"></div>
       <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Exterior" data-dev-scroll-t="1.06"></div>
@@ -191,10 +194,14 @@
       <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="5.28"></div>
       <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="7.47"></div>
       <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="9.79"></div>
-      <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="12">
-        <a class="btn btn--primary beat__cta" href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
-      </div>
+      <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="12"></div>
     </div>
+
+    <!-- One Enquire button for the whole video, first frame to last: desktop
+         centred on screen, phone fixed at the bottom. It does not move
+         once shown. The nav's own Enquire in the top right is never
+         hidden, so during the video both are on screen. -->
+    <a class="flight-enquire" data-flight-enquire href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
 
     <!-- Desktop: one panel that glides from its old zone straight to its
          new one on every scene change (see SCENES[i].zone in
