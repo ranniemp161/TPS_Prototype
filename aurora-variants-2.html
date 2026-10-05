@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Aurora variants 2</title>
+<!--
+  A colour study, no copy. The reverse of the site's Aurora: a DARK brand colour
+  is the ground and LIGHT brand colours are the movement drifting over it. The
+  site's original is pale ground with coral weather. Here the construction is
+  different (the light colour is the field itself, with transparent gaps that
+  let the dark ground through), so the bands read as light on dark, not as the
+  original at another strength. Brand colours only. Each band is its own
+  recipe. Same slow drift and blur as the original, stronger because light on
+  dark needs it to read.
+-->
+<style>
+  :root {
+    --canvas:    #F3EFEC;
+    --paper:     #FFFFFF;
+    --blush:     #E2CAC6;
+    --rose-mist: #D7C2C9;
+    --ink:       #0A0A0A;
+    --ink-soft:  #2C2C2C;
+    --ink-mute:  #5A524F;
+    --coral-mid:  #C86D58;
+    --coral-deep: #B95A4B;
+    --ember:      #A64C45;
+    --ember-deep: #8C362F;
+    --sand: #C9B9B5;
+    --haze: #E3D7D3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #000; }
+
+  .band { position: relative; height: 92vh; min-height: 560px; overflow: hidden; background: var(--ground); isolation: isolate; }
+  .aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+
+  /* The field is the light colour. Transparent stops are the gaps where the
+     ground shows through. */
+  .aurora__field {
+    position: absolute;
+    inset: -40px;
+    display: block;
+    background-image: repeating-linear-gradient(100deg, var(--a));
+    background-size: 300%;
+    background-position: 50% 50%;
+    filter: blur(var(--blur, 44px));
+    opacity: var(--op, .8);
+    mix-blend-mode: var(--blend, normal);
+    will-change: transform;
+    -webkit-mask-image: radial-gradient(ellipse 95% 80% at var(--at, 70% 40%), #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+    mask-image: radial-gradient(ellipse 95% 80% at var(--at, 70% 40%), #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  }
+  .aurora__field::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(123deg, var(--b));
+    background-size: 235%;
+    animation: aurora 62s linear infinite;
+  }
+  @keyframes aurora {
+    from { background-position: 50% 50%; }
+    to   { background-position: 350% 50%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .aurora__field::after { animation: none; } }
+
+  /* 1. Ember night: the deepest brand red, blush and canvas light on it */
+  .w1 { --ground: var(--ember-deep);
+    --a: transparent 0%, var(--blush) 7%, var(--canvas) 12%, transparent 22%, var(--rose-mist) 30%, transparent 40%;
+    --b: transparent 0%, var(--canvas) 6%, var(--blush) 12%, transparent 24%, var(--haze) 33%, transparent 46%; }
+
+  /* 2. Ember glow: the mid red ground, coral and haze light, a warmer band */
+  .w2 { --ground: var(--ember);
+    --a: transparent 0%, var(--coral-mid) 8%, var(--blush) 14%, transparent 24%, var(--haze) 32%, transparent 42%;
+    --b: transparent 0%, var(--blush) 6%, var(--coral-mid) 13%, transparent 26%, var(--canvas) 34%, transparent 48%; }
+
+  /* 3. Charcoal silk: the warm grey ground, blush and rose mist light */
+  .w3 { --ground: var(--ink-mute);
+    --a: transparent 0%, var(--blush) 8%, var(--rose-mist) 15%, transparent 25%, var(--haze) 33%, transparent 44%;
+    --b: transparent 0%, var(--rose-mist) 7%, var(--canvas) 13%, transparent 25%, var(--blush) 35%, transparent 48%; }
+
+  /* 4. Embers on black: the near black ground, ember and coral glowing */
+  .w4 { --ground: var(--ink); --blend: screen; --op: .9;
+    --a: transparent 0%, var(--ember) 8%, var(--coral-mid) 14%, transparent 26%, var(--ember-deep) 34%, transparent 46%;
+    --b: transparent 0%, var(--coral-deep) 7%, var(--blush) 12%, transparent 26%, var(--ember) 36%, transparent 50%; }
+
+  /* 5. Silk on coral: the coral ground, canvas and haze as pale light */
+  .w5 { --ground: var(--coral-deep);
+    --a: transparent 0%, var(--canvas) 7%, var(--haze) 13%, transparent 23%, var(--blush) 31%, transparent 42%;
+    --b: transparent 0%, var(--haze) 6%, var(--canvas) 12%, transparent 24%, var(--rose-mist) 34%, transparent 47%; }
+
+  /* 6. Warm and cool: the deepest red ground, coral against rose mist */
+  .w6 { --ground: var(--ember-deep);
+    --a: transparent 0%, var(--coral-mid) 8%, var(--coral-mid) 11%, transparent 21%, var(--rose-mist) 29%, var(--rose-mist) 33%, transparent 43%;
+    --b: transparent 0%, var(--rose-mist) 6%, var(--sand) 12%, transparent 24%, var(--coral-mid) 34%, transparent 47%; }
+
+  /* 7. Ink silk: the soft black ground, rose mist and blush as quiet light */
+  .w7 { --ground: var(--ink-soft); --blend: screen;
+    --a: transparent 0%, var(--rose-mist) 8%, var(--blush) 14%, transparent 26%, var(--sand) 33%, transparent 44%;
+    --b: transparent 0%, var(--blush) 6%, var(--haze) 12%, transparent 26%, var(--rose-mist) 35%, transparent 48%; }
+
+  /* 8. Ribbons: the turn. A mid light ground (rose mist) with deep ribbons */
+  .w8 { --ground: var(--rose-mist); --op: .85;
+    --a: transparent 0%, var(--ember-deep) 5%, var(--ember) 9%, transparent 20%, var(--coral-deep) 27%, transparent 36%;
+    --b: transparent 0%, var(--ember) 5%, var(--ember-deep) 9%, transparent 22%, var(--blush) 30%, transparent 44%; }
+
+  /* Band numbers, so a variant can be named by number. */
+  .n { position: absolute; top: 20px; left: 24px; z-index: 2; font: 500 28px/1 Montserrat, system-ui, sans-serif; letter-spacing: .04em; color: var(--n, #fff); }
+  .w8 { --n: #2C2C2C; } 
+
+  /* Calm twins: the same recipe, much quieter. Lower strength, softer blur, a slower drift. */
+  .calm { --op: .34; --blur: 70px; }
+  .calm .aurora__field::after { animation-duration: 140s; }
+</style>
+</head>
+<body>
+  <section class="band w1"><span class="n">1</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w1 calm"><span class="n">1 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w2"><span class="n">2</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w2 calm"><span class="n">2 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w3"><span class="n">3</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w3 calm"><span class="n">3 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w4"><span class="n">4</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w4 calm"><span class="n">4 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w5"><span class="n">5</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w5 calm"><span class="n">5 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w6"><span class="n">6</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w6 calm"><span class="n">6 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w7"><span class="n">7</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w7 calm"><span class="n">7 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w8"><span class="n">8</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band w8 calm"><span class="n">8 calm</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+</body>
+</html>

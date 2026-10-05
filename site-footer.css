@@ -1,0 +1,82 @@
+/* Site footer, shared by every page. Source: site-footer.html.
+   Ground and motion are band 3 ("Charcoal silk") from Fuchsia-variants.html:
+   the warm grey Ink Mute ground with Blush, Rose Mist and Haze drifting over
+   it. The light drift is held low so the ground stays dark enough for pale
+   text everywhere: measured at 5 to 1 or better at every point of the drift. Fallbacks are the brand
+   hex values, so it renders on pages that do not load v1.css. No shadows. */
+.sf {
+  --sf-ground: var(--ink-mute, #5A524F);
+  --sf-text: #FFFFFF;
+  --sf-soft: #FFFFFF;
+  --sf-mute: #FFFFFF;
+  --sf-rule: rgba(255, 255, 255, .4);
+  --sf-op: .55;
+  --sf-veil: 0;
+  position: relative; z-index: 1; isolation: isolate; overflow: hidden;
+  background: var(--sf-ground);
+  color: var(--sf-text);
+  font-family: var(--f-body, "Karla", system-ui, sans-serif);
+  padding: clamp(56px, 9vh, 96px) var(--gutter, 24px) 0;
+}
+
+/* Motion: same construction as the study. The light colour is the field, the
+   transparent stops let the ground through, a second gradient drifts across. */
+.sf__aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.sf__field {
+  position: absolute; inset: -40px; display: block;
+  background-image: repeating-linear-gradient(100deg,
+    transparent 0%, var(--blush, #E2CAC6) 8%, var(--rose-mist, #D7C2C9) 15%, transparent 25%, var(--haze, #E3D7D3) 33%, transparent 44%);
+  background-size: 300%; background-position: 50% 50%;
+  filter: blur(44px);
+  opacity: var(--sf-op);
+  will-change: transform;
+  -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+}
+.sf__field::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(123deg,
+    transparent 0%, var(--rose-mist, #D7C2C9) 7%, var(--canvas, #F3EFEC) 13%, transparent 25%, var(--blush, #E2CAC6) 35%, transparent 48%);
+  background-size: 235%;
+  animation: sf-aurora 62s linear infinite;
+}
+/* A thin pale veil lifts the dark patches of the drift so ink text holds contrast. */
+.sf__aurora::after { content: ""; position: absolute; inset: 0; background: var(--canvas, #F3EFEC); opacity: var(--sf-veil); }
+@keyframes sf-aurora { from { background-position: 50% 50%; } to { background-position: 350% 50%; } }
+@media (prefers-reduced-motion: reduce) { .sf__field::after { animation: none; } }
+
+.sf__inner, .sf__base { position: relative; z-index: 1; }
+.sf a { color: var(--sf-soft); text-decoration: none; }
+.sf a:hover, .sf a:focus-visible { color: var(--sf-text); text-decoration: underline; text-underline-offset: 3px; }
+.sf ul { list-style: none; margin: 0; padding: 0; }
+.sf__inner {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: clamp(32px, 5vw, 72px);
+  padding-bottom: clamp(40px, 7vh, 72px);
+}
+/* Black line art on transparent, turned white for white text. */
+.sf__logo { display: block; width: clamp(190px, 22vw, 260px); height: auto; filter: brightness(0) invert(1);  }
+.sf__tag { margin: 1.1rem 0 0; max-width: 28ch; font-size: 1rem; line-height: 1.55; color: var(--sf-soft); }
+.sf__head {
+  margin: 0 0 1.1rem; font: 500 .72rem/1 var(--f-ui, "Montserrat", system-ui, sans-serif);
+  letter-spacing: .16em; text-transform: uppercase; color: var(--sf-mute);
+}
+.sf__col li + li { margin-top: .7rem; }
+.sf__col a { font-size: 1rem; line-height: 1.4; }
+.sf__base {
+  max-width: 1080px; margin: 0 auto; padding: 22px 0 28px;
+  border-top: 1px solid var(--sf-rule);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 32px;
+  font-size: .84rem; color: var(--sf-mute);
+}
+.sf__copy { margin: 0; }
+.sf__legal { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.sf__legal a { color: var(--sf-mute); }
+.sf__legal a:hover, .sf__legal a:focus-visible { color: var(--sf-text); }
+@media (max-width: 760px) {
+  .sf__inner { grid-template-columns: 1fr 1fr; }
+  .sf__brand { grid-column: 1 / -1; }
+}
+@media (max-width: 460px) {
+  .sf__inner { grid-template-columns: 1fr; }
+}

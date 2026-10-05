@@ -26,16 +26,9 @@
    earned rather than assumed, and booking.js adds is-grounded once the
    photograph has gone by. programme.css reaches the same place for the
    builder, which simply never has a hero to float over. */
-.page--booking .nav {
-  border-bottom: 1px solid transparent;
-  transition: background-color 220ms var(--ease-out),
-              border-color 220ms var(--ease-out);
-}
-
-.page--booking .nav.is-grounded {
-  background: var(--canvas);
-  border-bottom-color: var(--hairline);
-}
+/* The bar here used to be transparent over the photograph and then take a solid
+   ground once the form scrolled under it. Every page has the same glass header
+   now (TJ, 5 Oct 2026), so the page no longer styles it. */
 
 /* The page holds a form, so it gives up the inner-stub centring and runs
    as a normal column. .page--inner's flex centring would otherwise pin a
@@ -145,7 +138,7 @@
    file. At 6.25rem those caps render about 7px tall, which is about as far
    as this artwork goes before the wordmark stops being read and starts
    being texture. */
-.bk-hero { --logo-w: clamp(6.25rem, 3.25rem + 8.2vw, 8.5rem); }
+.bk-hero { --logo-w: clamp(6.25rem, 3.25rem + 8.2vw, 8.5rem); padding-top: var(--hero-top); }
 
 /* The band is a fixed strip, and that is the whole trick.
 
@@ -1472,4 +1465,13 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   line-height: 1.5;
   color: var(--ink-mute);
   text-align: center;
+}
+
+/* The photograph starts below the tall header and its top edge fades into the
+   page colour, as on the homepage: no line at the top of the page. */
+.bk-hero__strip { position: relative; }
+.bk-hero__strip::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 55%;
+  pointer-events: none;
+  background: linear-gradient(to bottom, var(--canvas) 0%, rgba(243, 239, 236, .78) 38%, rgba(243, 239, 236, 0) 100%);
 }

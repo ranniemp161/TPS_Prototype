@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
 <link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="site-footer.css" />
 </head>
 <body>
 
@@ -118,14 +119,14 @@
 <main id="top">
 
 <!-- ============ OPENING FRAME ============ -->
-<section class="hero" data-hero>
+<section class="hero" data-hero data-section="hero" data-section-name="Hero">
   <div class="hero__media">
     <img data-focus src="assets/img/s2-handoff.webp" alt="A specialist passing the swaddled baby to the mother resting in bed" width="2000" height="1116" />
   </div>
   <div class="grade grade--hero"></div>
   <div class="hero__copy">
     <p class="kicker" data-fade>Live-in postpartum care</p>
-    <h1 class="display display--xl" data-kinetic>The baby is held. So are you.</h1>
+    <h1 class="display display--xl" data-kinetic>The baby is held. So are you</h1>
     <p class="lede" data-fade>A trained specialist stays with you, from five days to thirty, so your own recovery is the thing being looked after.</p>
     <a class="btn btn--primary" href="#book" data-fade>Book a consultation</a>
   </div>
@@ -136,7 +137,7 @@
      One pinned frame. Eight scenes cross-dissolve under it while a
      caption and a clock change beneath. The scroll is the day.
      ============================================================ -->
-<section class="day" id="day" data-day>
+<section class="day" id="day" data-day data-section="day" data-section-name="A Day">
   <div class="day__stage" data-day-stage>
 
     <div class="day__scenes">
@@ -200,11 +201,11 @@
 </section>
 
 <!-- ============ FOUR KINDS OF CARE ============ -->
-<section class="pillars" id="pillars">
+<section class="pillars" id="pillars" data-section="pillars" data-section-name="Pillars">
   <div class="wrap">
     <header class="sec-head" data-in>
       <p class="kicker kicker--ink">Every programme</p>
-      <h2 class="display display--lg">Four kinds of care,<br />every single day.</h2>
+      <h2 class="display display--lg">Four kinds of care,<br />every single day</h2>
       <p class="body body--wide">The same four, whichever programme you choose. What changes is how long they last.</p>
     </header>
   </div>
@@ -246,11 +247,11 @@
 </section>
 
 <!-- ============ PROGRAMMES ============ -->
-<section class="programmes" id="programmes">
+<section class="programmes" id="programmes" data-section="programmes" data-section-name="Programmes">
   <div class="wrap">
     <header class="sec-head" data-in>
       <p class="kicker kicker--ink">Programmes</p>
-      <h2 class="display display--lg">Same care. Longer stay.</h2>
+      <h2 class="display display--lg">Same care. Longer stay</h2>
       <p class="body body--wide">Every programme includes the same four areas of care. The longer ones give your recovery more time, and repeat the treatments more often as it progresses.</p>
     </header>
 
@@ -278,13 +279,13 @@
 </section>
 
 <!-- ============ CLOSE ============ -->
-<section class="close" id="book">
+<section class="close" id="book" data-section="close" data-section-name="Book">
   <div class="close__media">
     <img src="assets/img/s3-rest.webp" alt="A mother resting in bed while her specialist sits with the baby" width="1792" height="1858" loading="lazy" />
   </div>
   <div class="close__panel" data-in>
     <p class="kicker kicker--ink">Ready when you are</p>
-    <h2 class="display display--lg">Start with a conversation.</h2>
+    <h2 class="display display--lg">Start with a conversation</h2>
     <p class="body">Tell us your due date and what the weeks after look like from where you are standing. Nothing is booked on that call.</p>
     <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
   </div>
@@ -292,15 +293,52 @@
 
 </main>
 
-<footer class="foot">
-  <div class="wrap foot__inner">
-    <img class="foot__mark" src="assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="110" height="110" />
-    <p class="micro">The Postpartum Suite &middot; Prototype v2 &middot; <a href="v1.html">see version 1</a></p>
+<footer class="sf" data-section="site-footer" data-section-name="Footer">
+  <div class="sf__aurora" aria-hidden="true"><span class="sf__field"></span></div>
+  <div class="sf__inner">
+
+    <div class="sf__brand">
+      <a href="v1.html" aria-label="The Postpartum Suite, home">
+        <img class="sf__logo" src="assets/img/logo-inline.webp" alt="The Postpartum Suite" width="1603" height="487" loading="lazy" />
+      </a>
+      <p class="sf__tag">The care mothers deserve, at home.</p>
+    </div>
+
+    <nav class="sf__col" aria-label="Footer">
+      <h2 class="sf__head">Explore</h2>
+      <ul>
+        <li><a href="care.html">What We Do</a></li>
+        <li><a href="programmes.html">Programmes</a></li>
+        <li><a href="programme.html">Bespoke Programmes</a></li>
+        <li><a href="single-treatments.html">Signature Treatments</a></li>
+        <li><a href="about.html">The Suite</a></li>
+        <li><a href="specialist.html">Who Comes To Your Home</a></li>
+      </ul>
+    </nav>
+
+    <div class="sf__col">
+      <h2 class="sf__head">Contact</h2>
+      <ul>
+        <li><a href="mailto:info@thepostpartumsuite.com">info@thepostpartumsuite.com</a></li>
+        <li><a href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a></li>
+      </ul>
+    </div>
+
   </div>
+
+  <div class="sf__base">
+    <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
+    <ul class="sf__legal">
+      <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
+      <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
+    </ul>
+  </div>
+  <script>document.querySelectorAll('[data-year]').forEach(function (e) { e.textContent = new Date().getFullYear(); });</script>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="main.js"></script>
+<script src="lab/devpanel-loader.js"></script>
 </body>
 </html>

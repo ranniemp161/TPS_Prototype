@@ -1,0 +1,97 @@
+/* Concept previews for Tailored To You (5 Oct 2026). Not production. Loads the
+   site's own CSS first (v1.css, care.css, what-we-do.css) so type, ground and
+   tokens are the real ones. Each concept is one frame: the height of the window
+   below the 80px header, no scroll inside it. */
+html, body { margin: 0; background: var(--canvas); }
+.fx-hdr { height: 80px; display: flex; align-items: center; padding-inline: var(--gutter); font: 500 .72rem/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); border-bottom: 1px solid var(--hairline); }
+.fx-note { padding: 18px var(--gutter); font: 400 .9rem/1.5 var(--f-body); color: var(--ink-soft); max-width: 90ch; }
+.fx-note b { color: var(--ink); }
+
+/* The frame. Reuses the real .tail ground (band 5 silk, veil, ink). */
+.tail.fx { --fh: max(640px, calc(100svh - 80px)); height: var(--fh); padding-block: 0; display: grid; align-items: center; }
+.fx .wide { position: relative; z-index: 1; width: 100%; height: 100%; padding-block: clamp(20px, 3.4vh, 40px); }
+.fx-script { margin: 0; font-family: var(--f-script); font-weight: 400; color: #fff; font-size: clamp(2.1rem, 3.5vw, 3.3rem); line-height: 1.02; max-width: 22ch; }
+
+/* shared accordion language: fine rules, a marker, plain text. */
+.fx-acc { border-top: 1px solid var(--tl-rule); }
+.fx-row { position: relative; border-bottom: 1px solid var(--tl-rule); }
+.fx-row::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--ink); transform: scaleY(0); transform-origin: top; transition: transform 420ms var(--ease-out); }
+.fx-row.is-open::before { transform: scaleY(1); }
+.fx-row > button { all: unset; box-sizing: border-box; display: block; width: 100%; cursor: pointer; padding: clamp(9px, 1.5vh, 14px) 28px clamp(9px, 1.5vh, 14px) clamp(14px, 1.4vw, 22px); position: relative; }
+.fx-row > button:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+.fx-q { margin: 0; font-family: var(--f-display); font-size: clamp(1.1rem, 1.55vw, 1.4rem); line-height: 1.18; color: var(--ink); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.fx-row.is-open .fx-q { -webkit-line-clamp: unset; }
+.fx-row > button::after { content: "+"; position: absolute; right: 6px; top: 50%; transform: translateY(-50%); font: 400 1.2rem/1 var(--f-body); color: var(--ink); transition: transform 300ms var(--ease-out); }
+.fx-row.is-open > button::after { transform: translateY(-50%) rotate(45deg); }
+.fx-more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 480ms var(--ease-out); }
+.fx-row.is-open .fx-more { grid-template-rows: 1fr; }
+.fx-more > div { overflow: hidden; }
+.fx-more p { margin: 0; padding: 0 28px clamp(10px, 1.6vh, 16px) clamp(14px, 1.4vw, 22px); font-size: clamp(.86rem, .95vw, .98rem); line-height: 1.55; color: var(--ink); max-width: 62ch; opacity: 0; transform: translateY(6px); transition: opacity 360ms var(--ease-out), transform 360ms var(--ease-out); }
+.fx-row.is-open .fx-more p { opacity: 1; transform: none; transition-delay: 120ms; }
+
+/* shared stay: scale on a rule, numerals at true positions, counts as figures. */
+.fx-stay { display: grid; gap: clamp(8px, 1.4vh, 14px); }
+.fx-scale { position: relative; height: clamp(62px, 9.5vh, 96px); }
+.fx-scale button { all: unset; box-sizing: border-box; cursor: pointer; position: absolute; top: 0; left: calc(var(--at) / 30 * 100%); transform: translateX(-50%); padding: 2px 6px 12px; font-family: var(--f-display); font-size: clamp(2rem, 3.6vw, 3.3rem); line-height: 1; color: var(--ink); opacity: .5; transition: opacity 280ms var(--ease-out); }
+.fx-scale button[data-days="30"] { transform: translateX(-100%); padding-right: 0; }
+.fx-scale button:hover { opacity: .85; }
+.fx-scale button[aria-checked="true"] { opacity: 1; }
+.fx-scale button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.fx-rail { position: absolute; left: 0; right: 0; bottom: 0; height: 16px; pointer-events: none; }
+.fx-ticks, .fx-lit { position: absolute; inset: 0; }
+.fx-ticks { border-bottom: 1px solid var(--tl-rule); background: repeating-linear-gradient(90deg, rgba(10,10,10,.42) 0, rgba(10,10,10,.42) 1px, transparent 1px, transparent calc(100% / 30)) left bottom / 100% 7px no-repeat; }
+.fx-lit { border-bottom: 2px solid var(--ink); background: repeating-linear-gradient(90deg, var(--ink) 0, var(--ink) 1px, transparent 1px, transparent calc(100% / 30)) left bottom / 100% 11px no-repeat; clip-path: inset(0 calc(100% - var(--sel) / 30 * 100%) 0 0); transition: clip-path 650ms cubic-bezier(.215, .61, .355, 1); }
+.fx-sum { margin: 0; font-weight: 500; font-size: .92rem; }
+.fx-sum b { font-family: var(--f-mono); font-weight: 500; }
+.fx-out { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.fx-out div { display: grid; gap: 6px; padding-right: 18px; }
+.fx-out div + div { padding-left: clamp(14px, 2vw, 28px); border-left: 1px solid var(--tl-rule); }
+.fx-out b { font-family: var(--f-mono); font-weight: 400; font-size: clamp(2rem, 3.6vw, 3.3rem); line-height: 1; letter-spacing: -.02em; color: #fff; }
+.fx-out span { font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
+
+/* ---------- Concept A: Rooms. Text accordion left, photograph right. ---------- */
+.fxa { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(28px, 4.4vw, 72px); height: 100%; align-items: stretch; }
+.fxa__text { display: grid; align-content: space-between; gap: clamp(10px, 1.8vh, 20px); min-height: 0; }
+.fxa__h { font-size: clamp(2.4rem, 4.2vw, 4rem); }
+.fxa__head { display: grid; gap: clamp(8px, 1.4vh, 14px); }
+.fxa__pics { position: relative; margin: 0; border-radius: var(--r-media); overflow: hidden; background: var(--haze); min-height: 0; }
+.fxa__pics img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity 900ms var(--ease-out), transform 1400ms var(--ease-out); }
+.fxa__pics img.is-on { opacity: 1; transform: none; }
+
+/* ---------- Concept B: Strips. Three photographs open like drawers. ---------- */
+.fxb { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: clamp(12px, 2.2vh, 24px); height: 100%; }
+.fxb__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; }
+.fxb__head > div { display: grid; gap: clamp(6px, 1vh, 12px); }
+.fxb__head .wh2 { font-size: clamp(2.4rem, 4.2vw, 4rem); }
+.fxb__strips { display: flex; gap: 10px; min-height: 0; }
+.fxb__strip { all: unset; box-sizing: border-box; cursor: pointer; position: relative; flex: 1 1 0; min-width: 0; border-radius: var(--r-media); overflow: hidden; transition: flex-grow 800ms cubic-bezier(.23, 1, .32, 1); color: #fff; }
+.fxb__strip.is-open { flex-grow: 3.6; }
+.fxb__strip:focus-visible { outline: 2px solid #fff; outline-offset: -4px; }
+.fxb__strip img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1200ms var(--ease-out); }
+.fxb__strip.is-open img { transform: scale(1.03); }
+.fxb__strip::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,.66) 0%, rgba(10,10,10,.34) 38%, rgba(10,10,10,0) 70%); pointer-events: none; }
+.fxb__copy { position: absolute; z-index: 1; left: clamp(16px, 1.6vw, 26px); right: clamp(16px, 1.6vw, 26px); bottom: clamp(14px, 2.2vh, 24px); display: grid; gap: 8px; }
+.fxb__copy .fx-q { color: #fff; font-size: clamp(1.1rem, 1.5vw, 1.4rem); -webkit-line-clamp: 3; }
+.fxb__strip.is-open .fxb__copy .fx-q { -webkit-line-clamp: unset; }
+.fxb__copy p.fxb__rest { margin: 0; color: #fff; font-size: clamp(.84rem, .92vw, .96rem); line-height: 1.5; max-width: 54ch; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 600ms var(--ease-out), opacity 400ms var(--ease-out) 150ms; }
+.fxb__strip.is-open .fxb__rest { max-height: 160px; opacity: 1; }
+.fxb__stay { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: end; }
+.fxb__stay .fx-stay { gap: 8px; }
+.fxb__stay .fx-scale { height: clamp(54px, 8vh, 80px); }
+
+/* ---------- Concept C: The Letter. Type only, the numbers live in the sentence. ---------- */
+.fxc { display: grid; grid-template-rows: auto auto auto minmax(0, 1fr); gap: clamp(14px, 2.6vh, 30px); height: 100%; align-content: space-between; }
+.fxc__top { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 64px); align-items: end; }
+.fxc__top .wh2 { font-size: clamp(2.4rem, 4.2vw, 4rem); }
+.fxc__top > div { display: grid; gap: clamp(6px, 1vh, 12px); }
+.fxc__state { margin: 0; font-family: var(--f-display); font-size: clamp(1.6rem, 3vw, 2.8rem); line-height: 1.12; max-width: 30ch; }
+.fxc__state button { all: unset; cursor: pointer; display: inline-block; position: relative; padding: 0 .08em; opacity: .55; transition: opacity 280ms var(--ease-out); }
+.fxc__state button::after { content: ""; position: absolute; left: 0; right: 0; bottom: -.04em; height: 2px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform 420ms var(--ease-out); }
+.fxc__state button:hover { opacity: .85; }
+.fxc__state button[aria-checked="true"] { opacity: 1; }
+.fxc__state button[aria-checked="true"]::after { transform: scaleX(1); }
+.fxc__state button:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.fxc__two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 64px); }
+.fxc__two p { margin: 0; padding-top: 12px; border-top: 1px solid var(--tl-rule); font-size: clamp(.84rem, .95vw, .96rem); line-height: 1.55; max-width: 56ch; }
+.fxc .fx-out b { font-size: clamp(2.6rem, 5.4vw, 5rem); }
+.fxc .fx-rail { position: relative; height: 16px; }

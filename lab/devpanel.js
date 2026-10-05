@@ -17,6 +17,8 @@
   if (!/(^|[?&])dev($|[=&])/.test(location.search)) return;
 
   const STORE = 'tps-devpanel-open';
+  const SIZE = 'tps-devpanel-wide';
+  const FILE = decodeURIComponent(location.pathname.split('/').pop() || 'index.html');
 
   /* Identity comes from data-section. The fallback reads it off the act--x
      class so the panel still works on a section that has not been given one,
@@ -83,7 +85,7 @@
 <style>
   :host { all: initial; }
   .wrap {
-    position: fixed; left: 16px; bottom: 16px; z-index: 2147483647;
+    position: fixed; right: 16px; bottom: 16px; z-index: 2147483647;
     font: 400 12px/1.4 ui-monospace, "IBM Plex Mono", Menlo, monospace;
     color: #EDE8E4;
   }
@@ -95,13 +97,14 @@
   }
   .dot:hover { transform: scale(1.25); }
   .panel {
-    position: absolute; left: 0; bottom: 0; width: 238px;
+    position: absolute; right: 0; bottom: 0; width: 238px;
     background: rgba(28,24,22,.93);
     backdrop-filter: blur(10px);
     border-radius: 10px; padding: 10px;
-    transform-origin: left bottom;
-    transition: opacity .18s ease, transform .18s ease;
+    transform-origin: right bottom;
+    transition: opacity .18s ease, transform .18s ease, width .22s ease;
   }
+  .wrap[data-wide="true"] .panel { width: min(420px, calc(100vw - 32px)); }
   .wrap[data-open="false"] .panel {
     opacity: 0; transform: scale(.9) translateY(6px); pointer-events: none;
   }
@@ -111,12 +114,18 @@
     padding: 0 2px 8px; letter-spacing: .08em; text-transform: uppercase;
     font-size: 9px; color: #9A8F88;
   }
-  .close {
+  .close, .grow {
     background: none; border: 0; color: #9A8F88; cursor: pointer;
     font: inherit; font-size: 13px; line-height: 1; padding: 0 2px;
   }
-  .close:hover { color: #EDE8E4; }
-  ul { list-style: none; margin: 0; padding: 0; }
+  .close:hover, .grow:hover { color: #EDE8E4; }
+  .btns { display: flex; gap: 8px; }
+  ul { list-style: none; margin: 0; padding: 0; max-height: min(62vh, 560px); overflow-y: auto; }
+  .key, .len { display: none; margin-left: auto; color: #7E736D; font-size: 10px; white-space: nowrap; }
+  .wrap[data-wide="true"] .key, .wrap[data-wide="true"] .len { display: inline; }
+  .wrap[data-wide="true"] .len { margin-left: 10px; min-width: 40px; text-align: right; }
+  .nm { min-width: 0; }
+  .toast { color: #E2CAC6; }
   li button {
     width: 100%; display: flex; gap: 8px; align-items: baseline;
     background: none; border: 0; border-radius: 5px; cursor: pointer;
@@ -132,12 +141,12 @@
     letter-spacing: .05em; display: flex; justify-content: space-between;
   }
 </style>
-<div class="wrap" data-open="false">
+<div class="wrap" data-open="false" data-wide="false">
   <button class="dot" title="Sections"></button>
   <div class="panel">
-    <div class="head"><span class="page">Sections</span><button class="close">&times;</button></div>
+    <div class="head"><span class="page">Sections</span><span class="btns"><button class="grow" title="Expand or shrink">&#x2922;</button><button class="close" title="Close">&times;</button></span></div>
     <ul></ul>
-    <div class="foot"><span class="pos"></span><span>click to copy</span></div>
+    <div class="foot"><span class="pos"></span><span class="hint">click to jump and copy</span></div>
   </div>
 </div>`;
 
@@ -145,7 +154,9 @@
   const list = root.querySelector('ul');
   const pos = root.querySelector('.pos');
   const page = root.querySelector('.page');
+  const hint = root.querySelector('.hint');
   let sections = [];
+  let hintT;
 
   const build = () => {
     sections = readSections();
@@ -157,12 +168,17 @@
     for (const s of sections) {
       const li = document.createElement('li');
       const b = document.createElement('button');
-      b.innerHTML = `<span class="n">${s.n}</span><span class="${s.loose ? 'loose' : ''}">${s.name}</span>`;
+      const vh = (s.el.offsetHeight / innerHeight).toFixed(1);
+      b.innerHTML = `<span class="n">${s.n}</span><span class="nm ${s.loose ? 'loose' : ''}">${s.name}</span><span class="key">${s.key}</span><span class="len">${vh}vh</span>`;
       b.title = s.loose ? 'no data-section, name read from the class' : 'copy section identity';
       b.onclick = () => {
         if (s.timeline !== null && window.__flight) window.__flight.scrollToT(s.timeline);
         else s.el.scrollIntoView({ block: 'start' });
-        copy(`Section ${s.n}: ${s.name} [${s.key}]`);
+        copy(`${FILE}, Section ${s.n}: ${s.name} [${s.key}]`);
+        hint.textContent = 'copied: ' + s.name;
+        hint.className = 'hint toast';
+        clearTimeout(hintT);
+        hintT = setTimeout(() => { hint.textContent = 'click to jump and copy'; hint.className = 'hint'; }, 1600);
       };
       li.append(b);
       list.append(li);
@@ -187,6 +203,12 @@
 
   root.querySelector('.dot').onclick = () => open(true);
   root.querySelector('.close').onclick = () => open(false);
+  const wide = state => {
+    wrap.dataset.wide = state;
+    try { localStorage.setItem(SIZE, state); } catch {}
+    if (wrap.dataset.open === 'true') build();
+  };
+  root.querySelector('.grow').onclick = () => wide(wrap.dataset.wide !== 'true');
   addEventListener('keydown', e => {
     if (e.key === 'Escape' && wrap.dataset.open === 'true') open(false);
   });
@@ -204,7 +226,8 @@
   const attach = () => {
     document.body.append(host);
     const title = document.querySelector('h1')?.textContent.replace(/\s+/g, ' ').trim();
-    page.textContent = title ? `${title} sections` : 'Sections';
+    page.textContent = title ? `${title} sections` : `${FILE} sections`;
+    try { wrap.dataset.wide = localStorage.getItem(SIZE) === 'true'; } catch {}
     let was = 'false';
     try { was = localStorage.getItem(STORE) || 'false'; } catch {}
     open(was === 'true');

@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="color-scheme" content="light only" />
+<title>The Postpartum Suite, site structure</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@300;400;500;600&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+
+<style>
+:root{
+  color-scheme: light only;
+
+  --canvas:#F3EFEC; --paper:#FFFFFF;
+  --blush:#E2CAC6;  --rose-mist:#D7C2C9;
+  --ink:#0A0A0A;    --ink-soft:#2C2C2C; --ink-mute:#5A524F;
+  --coral-deep:#B95A4B; --ember:#A64C45; --ember-deep:#8C362F;
+  --dusty-rose:#CA8882; --sand:#C9B9B5; --haze:#E3D7D3;
+  --hairline:rgba(10,10,10,.08);
+  --hairline-firm:rgba(10,10,10,.16);
+
+  --r-badge:6px; --r-input:8px; --r-card:10px; --r-media:16px;
+
+  --serif:"Instrument Serif", Georgia, serif;
+  --ui:"Montserrat", system-ui, sans-serif;
+  --body:"Karla", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, monospace;
+
+  --gutter:48px;
+  --max:1080px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+
+html{ background:var(--canvas); }
+
+body{
+  margin:0;
+  background:var(--canvas);
+  color:var(--ink-soft);
+  font-family:var(--body);
+  font-size:15px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+.wrap{ max-width:var(--max); margin:0 auto; padding:0 var(--gutter); }
+
+/* ---------- type ---------- */
+
+h1,h2,h3{ font-family:var(--serif); font-weight:400; color:var(--ink); margin:0; letter-spacing:.002em; }
+h1{ font-size:clamp(38px,5.4vw,60px); line-height:1.04; }
+h2{ font-size:clamp(26px,3.2vw,34px); line-height:1.12; }
+h3{ font-size:19px; line-height:1.24; }
+
+.eyebrow{
+  font-family:var(--ui); font-size:10.5px; font-weight:600;
+  letter-spacing:.17em; text-transform:uppercase; color:var(--ember);
+  margin:0 0 18px;
+}
+
+.script{ font-family:var(--serif); font-style:italic; color:var(--coral-deep); }
+
+.lede{
+  font-size:16.5px; line-height:1.66; color:var(--ink-mute);
+  max-width:62ch; margin:20px 0 0;
+}
+
+.n{ font-family:var(--mono); font-size:11px; font-weight:500; color:var(--dusty-rose); }
+
+/* ---------- masthead ---------- */
+
+.mast{ padding:72px 0 40px; border-bottom:1px solid var(--hairline-firm); }
+.mast__meta{
+  display:flex; flex-wrap:wrap; gap:28px;
+  margin-top:34px; padding-top:20px;
+  border-top:1px solid var(--hairline);
+  font-family:var(--ui); font-size:11px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-mute);
+}
+.mast__meta b{ font-weight:600; color:var(--ink); }
+
+/* ---------- section shell ---------- */
+
+.band{ padding:56px 0; border-bottom:1px solid var(--hairline); }
+.band:last-of-type{ border-bottom:0; }
+
+.band__head{ margin-bottom:34px; }
+.band__head .lede{ margin-top:14px; }
+
+/* ============================================================
+   THE MAP
+   Structure only. Deliberately carries no visit colour, because
+   the legend for that sits further down and a reader should not
+   meet a colour key before being told what it means.
+   ============================================================ */
+
+.map{ margin-top:6px; }
+
+.map__home{
+  padding:0 0 22px; margin-bottom:26px;
+  border-bottom:1px solid var(--hairline-firm);
+}
+
+.map__grid{
+  display:grid; grid-template-columns:1fr 1fr;
+  column-gap:56px; row-gap:34px;
+}
+
+.map__branch{ break-inside:avoid; }
+
+.map__label{
+  font-family:var(--serif); font-size:23px; color:var(--ink);
+  margin:0 0 12px; padding-bottom:9px;
+  border-bottom:1px solid var(--hairline-firm);
+  display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+}
+.map__label span{
+  font-family:var(--ui); font-size:9.5px; font-weight:500;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--sand);
+  white-space:nowrap;
+}
+
+.map__pages{
+  list-style:none; margin:0; padding:2px 0 0 18px;
+  border-left:1px solid var(--hairline);
+}
+
+.map__row{
+  display:flex; align-items:baseline; gap:13px;
+  padding:4.5px 0;
+}
+.map__n{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  color:var(--dusty-rose); flex:0 0 22px;
+}
+.map__name{ font-size:14.5px; color:var(--ink); line-height:1.35; }
+.map__note{
+  font-family:var(--ui); font-size:9.5px; font-weight:500;
+  letter-spacing:.08em; text-transform:uppercase; color:var(--sand);
+  margin-left:auto; padding-left:12px; text-align:right; flex:0 0 auto;
+}
+
+.map__group{
+  font-family:var(--ui); font-size:10px; font-weight:600;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ember);
+  margin:16px 0 6px; padding-top:2px;
+}
+.map__group:first-child{ margin-top:2px; }
+
+.map__sub{
+  list-style:none; margin:2px 0 4px; padding:0 0 0 35px;
+}
+.map__sub li{
+  font-size:13px; color:var(--ink-mute); padding:2px 0;
+}
+.map__sub li::before{ content:"· "; color:var(--sand); }
+
+.map__row--link .map__n,
+.map__row--link .map__name{ color:var(--ink-mute); }
+
+.map__empty{
+  padding:8px 0 4px 18px; border-left:1px solid var(--hairline);
+  font-size:13.5px; color:var(--sand);
+}
+.map__branch--none .map__label{ color:var(--sand); }
+
+/* ---------- the journey strip ---------- */
+
+.visits{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--hairline-firm); border-radius:var(--r-card);
+  background:var(--paper); overflow:hidden;
+}
+.visit{ padding:24px 22px; border-right:1px solid var(--hairline); }
+.visit:last-child{ border-right:0; }
+.visit__n{
+  font-family:var(--mono); font-size:10.5px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--ember);
+  display:block; margin-bottom:10px;
+}
+.visit h3{ font-size:17px; margin-bottom:8px; }
+.visit p{ margin:0; font-size:13.5px; line-height:1.55; color:var(--ink-mute); }
+.visit__asks{
+  margin:14px 0 0; padding:12px 0 0; border-top:1px solid var(--hairline);
+  font-family:var(--ui); font-size:11.5px; font-style:normal;
+  color:var(--ink-soft); line-height:1.5;
+}
+
+/* ---------- legend ---------- */
+
+.legend{ display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+
+.key{
+  font-family:var(--ui); font-size:10.5px; font-weight:500;
+  letter-spacing:.07em; text-transform:uppercase;
+  padding:5px 11px; border-radius:var(--r-badge);
+  border:1px solid var(--hairline-firm); color:var(--ink-mute);
+  background:var(--paper);
+}
+.key--v1{ background:var(--haze); }
+.key--v2{ background:var(--blush); }
+.key--v3{ background:var(--rose-mist); }
+.key--v4{ background:var(--sand); }
+.key--built{ border-color:var(--ember); color:var(--ember-deep); }
+
+/* ---------- areas ---------- */
+
+.area{ padding:52px 0; border-bottom:1px solid var(--hairline); }
+.area:last-of-type{ border-bottom:0; }
+
+.area__head{
+  display:flex; align-items:baseline; gap:16px;
+  padding-bottom:14px; margin-bottom:26px;
+  border-bottom:1px solid var(--hairline-firm);
+}
+.area__head h2{ flex:1 1 auto; }
+.area__count{
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  color:var(--ink-mute); letter-spacing:.04em; white-space:nowrap;
+}
+.area__note{
+  font-size:14px; color:var(--ink-mute); max-width:62ch;
+  margin:-14px 0 26px;
+}
+
+.grouplabel{
+  font-family:var(--ui); font-size:10.5px; font-weight:600;
+  letter-spacing:.13em; text-transform:uppercase; color:var(--ember);
+  margin:30px 0 0; padding-bottom:8px;
+  border-bottom:1px solid var(--hairline);
+}
+.grouplabel:first-of-type{ margin-top:0; }
+
+.pages{
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(258px,1fr));
+  gap:0; border-top:1px solid var(--hairline);
+}
+.grouplabel + .pages{ border-top:0; }
+
+.page{
+  background:var(--paper);
+  border-right:1px solid var(--hairline);
+  border-bottom:1px solid var(--hairline);
+  padding:18px 20px 20px;
+  display:flex; flex-direction:column; gap:7px;
+  break-inside:avoid;
+}
+
+.page__top{ display:flex; align-items:center; gap:9px; }
+.page__tag{
+  width:9px; height:9px; border-radius:2px; flex:0 0 auto;
+  border:1px solid var(--hairline-firm);
+}
+.tag--v1{ background:var(--haze); }
+.tag--v2{ background:var(--blush); }
+.tag--v3{ background:var(--rose-mist); }
+.tag--v4{ background:var(--sand); }
+
+.page h3{ font-size:17.5px; margin:0; }
+.page p{ margin:0; font-size:13.2px; line-height:1.5; color:var(--ink-mute); }
+
+.page__merged{
+  font-family:var(--ui); font-size:10px; font-weight:500;
+  letter-spacing:.07em; text-transform:uppercase; color:var(--dusty-rose);
+  margin:0;
+}
+
+.page__state{
+  margin-top:auto; padding-top:10px;
+  font-family:var(--ui); font-size:10px; font-weight:500;
+  letter-spacing:.09em; text-transform:uppercase; color:var(--sand);
+}
+.page__state--built{ color:var(--ember); }
+.page__state--part{ color:var(--dusty-rose); }
+
+/* the safety group is the differentiator, so it carries the accent */
+.pages--trust .page{ background:#FBF7F6; }
+
+/* ---------- argument map ---------- */
+
+.args{ border-top:1px solid var(--hairline-firm); }
+.arg{
+  display:grid; grid-template-columns:minmax(190px,.9fr) 2fr;
+  gap:28px; padding:20px 0;
+  border-bottom:1px solid var(--hairline);
+  break-inside:avoid;
+}
+.arg h3{ font-size:18px; }
+.arg__where{ margin:0; font-size:13.5px; color:var(--ink-mute); }
+.arg__where b{ font-family:var(--ui); font-size:11px; font-weight:600;
+  letter-spacing:.05em; text-transform:uppercase; color:var(--ink); }
+
+/* ---------- phases ---------- */
+
+.phases{ display:grid; grid-template-columns:repeat(3,1fr); gap:0;
+  border:1px solid var(--hairline-firm); border-radius:var(--r-card);
+  overflow:hidden; background:var(--paper); }
+.phase{ padding:24px 22px; border-right:1px solid var(--hairline); }
+.phase:last-child{ border-right:0; }
+.phase h3{ font-size:17px; margin-bottom:10px; }
+.phase ol{ margin:0; padding-left:17px; font-size:13.4px; line-height:1.62; color:var(--ink-mute); }
+.phase li{ margin-bottom:5px; }
+
+/* ---------- open questions ---------- */
+
+.flags{ margin:0; padding:0; list-style:none; border-top:1px solid var(--hairline); }
+.flags li{
+  padding:15px 0; border-bottom:1px solid var(--hairline);
+  font-size:14px; line-height:1.55; max-width:74ch; break-inside:avoid;
+}
+.flags b{ font-family:var(--ui); font-size:11px; font-weight:600;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--ember);
+  display:block; margin-bottom:4px; }
+
+/* ---------- foot ---------- */
+
+.foot{
+  padding:40px 0 64px; border-top:1px solid var(--hairline-firm);
+  font-family:var(--ui); font-size:11px; letter-spacing:.05em;
+  color:var(--sand); text-transform:uppercase;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width:980px){
+  :root{ --gutter:24px; }
+  .map__grid{ grid-template-columns:1fr; row-gap:30px; }
+  .visits{ grid-template-columns:repeat(2,1fr); }
+  .visit:nth-child(2){ border-right:0; }
+  .visit:nth-child(-n+2){ border-bottom:1px solid var(--hairline); }
+  .phases{ grid-template-columns:1fr; }
+  .phase{ border-right:0; border-bottom:1px solid var(--hairline); }
+  .phase:last-child{ border-bottom:0; }
+  .arg{ grid-template-columns:1fr; gap:6px; }
+}
+@media (max-width:560px){
+  .visits{ grid-template-columns:1fr; }
+  .visit{ border-right:0; border-bottom:1px solid var(--hairline); }
+  .visit:last-child{ border-bottom:0; }
+  .map__note{ display:none; }
+}
+
+/* ---------- print ---------- */
+
+@media print{
+  :root{ --gutter:0; }
+  body{ font-size:10.5pt; }
+  .band,.area{ padding:22px 0; }
+  .mast{ padding:0 0 22px; }
+  .area,.arg,.page,.phase,.flags li,.map__branch{ break-inside:avoid; }
+  .area__head,.grouplabel{ break-after:avoid; }
+  .band--map{ break-after:page; }
+  .pages{ grid-template-columns:repeat(3,1fr); }
+  h1{ font-size:30pt; }
+  h2{ font-size:18pt; }
+  h3{ font-size:12pt; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ============ MASTHEAD ============ -->
+  <header class="mast">
+    <p class="eyebrow">The Postpartum Suite</p>
+    <h1>Site structure,<br /><span class="script">and what each page says.</span></h1>
+    <p class="lede">
+      Thirty two pages across five areas. The homepage carries the feeling and sends
+      people onward. Everything behind it exists because a real person, deciding
+      slowly over several weeks, asks that exact question and currently finds no
+      answer.
+    </p>
+    <div class="mast__meta">
+      <span><b>Draft</b> six</span>
+      <span><b>Date</b> 17 September 2026</span>
+      <span><b>Pages</b> 32</span>
+      <span><b>Status</b> for review</span>
+    </div>
+  </header>
+
+  <!-- ============ THE MAP ============ -->
+  <section class="band band--map">
+    <div class="band__head">
+      <p class="eyebrow">The map</p>
+      <h2>Four menus, and everything under them.</h2>
+    </div>
+
+    <div class="map">
+
+      <div class="map__home">
+        <ul class="map__pages" style="border-left:0; padding-left:0;">
+          <li class="map__row">
+            <span class="map__n">01</span>
+            <span class="map__name">Home</span>
+            <span class="map__note">The logo, no menu</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="map__grid">
+
+        <div class="map__branch">
+          <h3 class="map__label">Care</h3>
+          <ul class="map__pages">
+            <li class="map__row"><span class="map__n">02</span><span class="map__name">The Care</span></li>
+            <li class="map__row"><span class="map__n">03</span><span class="map__name">Recovery treatments</span></li>
+            <li class="map__row"><span class="map__n">04</span><span class="map__name">Meals and nourishment</span></li>
+            <li class="map__row"><span class="map__n">05</span><span class="map__name">Your home</span></li>
+            <li class="map__row"><span class="map__n">06</span><span class="map__name">A day, hour by hour</span></li>
+            <li class="map__row"><span class="map__n">07</span><span class="map__name">Night care</span></li>
+            <li class="map__row"><span class="map__n">08</span><span class="map__name">Living with your specialist</span></li>
+            <li class="map__row map__row--link">
+              <span class="map__n">22</span>
+              <span class="map__name">What confinement is</span>
+              <span class="map__note">Lives under Guidance</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="map__branch">
+          <h3 class="map__label">Programmes</h3>
+          <ul class="map__pages">
+            <li class="map__row"><span class="map__n">09</span><span class="map__name">Programmes</span></li>
+            <li class="map__row"><span class="map__n">10</span><span class="map__name">Live in care</span></li>
+            <li class="map__row"><span class="map__n">11</span><span class="map__name">Live out care</span></li>
+            <li class="map__row"><span class="map__n">12</span><span class="map__name">Build your programme</span></li>
+            <li class="map__row"><span class="map__n">13</span><span class="map__name">Single treatments</span></li>
+            <li class="map__row"><span class="map__n">14</span><span class="map__name">How it works</span></li>
+          </ul>
+        </div>
+
+        <div class="map__branch">
+          <h3 class="map__label">About</h3>
+          <ul class="map__pages">
+
+            <li class="map__group">The Postpartum Suite</li>
+            <li class="map__row"><span class="map__n">15</span><span class="map__name">About</span></li>
+            <li>
+              <ul class="map__sub">
+                <li>Founder's story</li>
+                <li>Areas we cover</li>
+                <li>Contact</li>
+              </ul>
+            </li>
+
+            <li class="map__group">Your specialist</li>
+            <li class="map__row"><span class="map__n">16</span><span class="map__name">Who comes into your home</span></li>
+            <li class="map__row"><span class="map__n">17</span><span class="map__name">If it is not the right match</span></li>
+
+            <li class="map__group">Safety and privacy</li>
+            <li class="map__row"><span class="map__n">18</span><span class="map__name">Vetting and background checks</span></li>
+            <li class="map__row"><span class="map__n">19</span><span class="map__name">Confidentiality and your privacy</span></li>
+            <li class="map__row"><span class="map__n">20</span><span class="map__name">Health, hygiene and safeguarding</span></li>
+            <li class="map__row"><span class="map__n">21</span><span class="map__name">Insurance and liability</span></li>
+
+          </ul>
+        </div>
+
+        <div class="map__branch">
+          <h3 class="map__label">Guidance</h3>
+          <ul class="map__pages">
+            <li class="map__row"><span class="map__n">22</span><span class="map__name">What confinement is</span></li>
+            <li class="map__row"><span class="map__n">23</span><span class="map__name">A caesarean or a difficult birth</span></li>
+            <li class="map__row"><span class="map__n">24</span><span class="map__name">If your dates change</span></li>
+            <li class="map__row"><span class="map__n">25</span><span class="map__name">When you already have children</span></li>
+            <li class="map__row"><span class="map__n">26</span><span class="map__name">Twins and multiples</span></li>
+            <li class="map__row"><span class="map__n">27</span><span class="map__name">Nourishment and feeding</span></li>
+            <li class="map__row"><span class="map__n">28</span><span class="map__name">Sleep in the first month</span></li>
+            <li class="map__row"><span class="map__n">29</span><span class="map__name">Your body in the fourth trimester</span></li>
+            <li class="map__row"><span class="map__n">30</span><span class="map__name">Preparing your home</span></li>
+            <li class="map__row"><span class="map__n">31</span><span class="map__name">What to ask before you hire anyone</span></li>
+            <li class="map__row"><span class="map__n">32</span><span class="map__name">Frequently asked</span></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ THE JOURNEY ============ -->
+  <section class="band">
+    <div class="band__head">
+      <p class="eyebrow">How the site is travelled</p>
+      <h2>Nobody reads this in the order of the menu.</h2>
+      <p class="lede">
+        This is a decision made over weeks, not minutes, and it is made by more than
+        one person. Each page is written for the visit it will actually be read on. A
+        page written for the first visit and read on the fourth feels thin. A page
+        written for the fourth and met on the first is exhausting.
+      </p>
+    </div>
+
+    <div class="visits">
+      <div class="visit">
+        <span class="visit__n">Visit one</span>
+        <h3>What is this?</h3>
+        <p>She has never heard of confinement care. She is feeling something rather than evaluating it.</p>
+        <p class="visit__asks">Is this a real thing, and is it for someone like me?</p>
+      </div>
+      <div class="visit">
+        <span class="visit__n">Visit two</span>
+        <h3>What actually happens?</h3>
+        <p>Now she wants the detail. The day, the food, the treatments, the person.</p>
+        <p class="visit__asks">What would this be like in my house?</p>
+      </div>
+      <div class="visit">
+        <span class="visit__n">Visit three</span>
+        <h3>Can I trust them?</h3>
+        <p>Scrutiny. Who is this woman, who checked her, what happens to my privacy, what about my situation.</p>
+        <p class="visit__asks">What could go wrong, and what happens if it does?</p>
+      </div>
+      <div class="visit">
+        <span class="visit__n">Visit four</span>
+        <h3>Let us do it.</h3>
+        <p>Shape, fee, dates. Often with a partner who has seen none of the above.</p>
+        <p class="visit__asks">What exactly are we buying, and how do we start?</p>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span class="key key--v1">Visit one</span>
+      <span class="key key--v2">Visit two</span>
+      <span class="key key--v3">Visit three</span>
+      <span class="key key--v4">Visit four</span>
+      <span class="key key--built">Built or partly built</span>
+    </div>
+  </section>
+
+  <!-- ============ HOME ============ -->
+  <section class="area">
+    <div class="area__head">
+      <h2>Home</h2>
+      <span class="area__count">1 page</span>
+    </div>
+    <div class="pages">
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v1"></span><span class="n">01</span></div>
+        <h3>Home</h3>
+        <p>Establishes the world, makes the proposition, and sends people onward. Keeps the scroll story. Gains the magnitude moment and a door out of every section.</p>
+        <p class="page__state page__state--part">Built, needs routing</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ CARE ============ -->
+  <section class="area">
+    <div class="area__head">
+      <h2>Care</h2>
+      <span class="area__count">7 pages</span>
+    </div>
+    <p class="area__note">
+      What actually arrives. This is the area that answers scope, and scope is the
+      argument that wins against every cheaper alternative.
+    </p>
+    <div class="pages">
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v1"></span><span class="n">02</span></div>
+        <h3>The Care</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>The four kinds of care in one view, led by the one that is the actual product: what she does for your baby, and what she does for you. The place to say plainly that this is not a cleaning service.</p>
+        <p class="page__state page__state--part">Rail exists</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">03</span></div>
+        <h3>Recovery treatments</h3>
+        <p>Every treatment, what it is, what it feels like, and how often it repeats on each length. Repetition is a value argument hiding in a service description.</p>
+        <p class="page__state page__state--part">Partly built</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">04</span></div>
+        <h3>Meals and nourishment</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>Three meals cooked in your kitchen, herbal teas, lactation drinks, and how it is tailored to allergies, culture and preference. Carries a real week of menus, so the food becomes something you can picture on a plate.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">05</span></div>
+        <h3>Your home</h3>
+        <p>The kitchen, the living room, wherever the baby sleeps, one bathroom. The boundary is the selling point: a specialist cleaning the whole house is not caring for you.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">06</span></div>
+        <h3>A day, hour by hour</h3>
+        <p>What happens between arrival and evening. The most read page by the researcher, and the cheapest one to make persuasive, because detail is inherently reassuring.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">07</span></div>
+        <h3>Night care</h3>
+        <p>Starts at one, settles at seven, takes the baby from half eleven, hands back at six, so you sleep through. The homepage promises this and currently goes nowhere.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">08</span></div>
+        <h3>Living with your specialist</h3>
+        <p>Keys and access, where she sleeps, what she uses, house rules, and who else ever comes through the door. Removes the awkward conversation by having it first. Renamed to clear the clash with page 05.</p>
+        <p class="page__state">To write</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ PROGRAMMES ============ -->
+  <section class="area">
+    <div class="area__head">
+      <h2>Programmes</h2>
+      <span class="area__count">6 pages</span>
+    </div>
+    <p class="area__note">
+      Shape and fee. The two care formats have a page each rather than sharing one.
+      Put side by side they invite a question about why one costs more. Presented
+      separately, each stands on what it offers.
+    </p>
+    <div class="pages">
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">09</span></div>
+        <h3>Programmes</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>The four lengths, what changes between them, and the exhaustive list of what is included with nothing implied. Carries the magnitude argument: six times the care for 3.2 times the fee.</p>
+        <p class="page__state page__state--part">Section exists</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">10</span></div>
+        <h3>Live in care</h3>
+        <p>The full form of the service. She is there when you wake at three, with no handover and no gap.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">11</span></div>
+        <h3>Live out care</h3>
+        <p>For households who would rather have their home to themselves at night. Framed on what you keep, never on what it costs us to arrange.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v4"></span><span class="n">12</span></div>
+        <h3>Build your programme</h3>
+        <p>The indicative builder. Specification complete and the maths reconciles. Wants restyling, the fee demoted beneath the magnitude, and a way to send the plan onward.</p>
+        <p class="page__state page__state--built">Built, restyle due</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">13</span></div>
+        <h3>Single treatments</h3>
+        <p>One session visits, booked directly. The low commitment way in for someone not ready for a programme, and the existing booking system brought inside the site.</p>
+        <p class="page__state page__state--built">Built</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v4"></span><span class="n">14</span></div>
+        <h3>How it works</h3>
+        <p>From first enquiry to the morning she arrives. Dates, deposits, what we need from you, and what happens if your baby has other ideas. Name still open, see the foot of this page.</p>
+        <p class="page__state">To write</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="area">
+    <div class="area__head">
+      <h2>About</h2>
+      <span class="area__count">7 pages</span>
+    </div>
+    <p class="area__note">
+      Three groups, reading as who we are, who our people are, and how you are
+      protected. The safety group is the differentiator: a woman is letting a
+      stranger live in her home for thirty days, with her newborn, and no competitor
+      publishes any of this.
+    </p>
+
+    <p class="grouplabel">The Postpartum Suite</p>
+    <div class="pages">
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">15</span></div>
+        <h3>About</h3>
+        <p class="page__merged">Was three pages</p>
+        <p>One page in three sections. Founder's story, where Amidat was the customer before she was the founder, which is the strongest trust asset the business owns. Then areas covered, and every route to reach you.</p>
+        <p class="page__state">To write</p>
+      </article>
+    </div>
+
+    <p class="grouplabel">Your specialist</p>
+    <div class="pages">
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">16</span></div>
+        <h3>Who comes into your home</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>Profiles, and the standard behind them. Qualifications, experience, languages, what it takes to be accepted onto the team, and what she is like as a person, because at this price that matters as much as the certificate.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">17</span></div>
+        <h3>If it is not the right match</h3>
+        <p>How a specialist is changed, without awkwardness and without argument. The unspoken fear of every person considering this, and answering it openly is disarming.</p>
+        <p class="page__state">To write</p>
+      </article>
+    </div>
+
+    <p class="grouplabel">Safety and privacy</p>
+    <div class="pages pages--trust">
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">18</span></div>
+        <h3>Vetting and background checks</h3>
+        <p>Enhanced DBS, references taken up, right to work, identity, qualifications verified. Say the process, not just the word "vetted".</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">19</span></div>
+        <h3>Confidentiality and your privacy</h3>
+        <p>Signed confidentiality agreements. No photographs, no social media, nothing about your household discussed anywhere. For this clientele this may be the page that closes the sale.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">20</span></div>
+        <h3>Health, hygiene and safeguarding</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>Illness policy, food hygiene certification, and what happens if she or anyone in the house is unwell. Paediatric first aid, infant resuscitation, and exactly what happens if something goes wrong at three in the morning.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v4"></span><span class="n">21</span></div>
+        <h3>Insurance and liability</h3>
+        <p>What is covered and by whom. A page the partner reads and nobody else.</p>
+        <p class="page__state">To write</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ GUIDANCE ============ -->
+  <section class="area">
+    <div class="area__head">
+      <h2>Guidance</h2>
+      <span class="area__count">11 pages</span>
+    </div>
+    <p class="area__note">
+      The research layer. Every page here exists because a real person types that
+      question at three in the morning. Reached from wherever the worry comes up
+      rather than from an article index, and this is the area that grows over time.
+    </p>
+    <div class="pages">
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v1"></span><span class="n">22</span></div>
+        <h3>What confinement is</h3>
+        <p class="page__merged">Was three pages</p>
+        <p>The category named and explained, where forty days comes from, and how this sits against a doula, a maternity nurse and a night nanny. Explain the thing, then place yourself inside it. You cannot sell something the buyer has no word for.</p>
+        <p class="page__state page__state--part">Section exists</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">23</span></div>
+        <h3>A caesarean or a difficult birth</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>What a harder recovery asks for, what changes about the care, and the limits of what a specialist can do rather than a clinician.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">24</span></div>
+        <h3>If your dates change</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>Early, late, or nothing like the plan. Care alongside a neonatal stay at one end, a booking that waits at the other, and why neither becomes a penalty.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">25</span></div>
+        <h3>When you already have children</h3>
+        <p>A second or third baby into a house that is already running. Arguably the strongest case for the service, and nobody in the space makes it.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">26</span></div>
+        <h3>Twins and multiples</h3>
+        <p>What changes, and whether one specialist is enough.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">27</span></div>
+        <h3>Nourishment and feeding</h3>
+        <p class="page__merged">Was two pages</p>
+        <p>Macronutrients, vitamins and what a recovering body is actually asking for, alongside support with feeding whichever way it goes and no position taken on how anyone should do it. Written carefully: health claims on food are regulated.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">28</span></div>
+        <h3>Sleep in the first month</h3>
+        <p>What is normal, what is survivable, and what night care actually changes.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">29</span></div>
+        <h3>Your body in the fourth trimester</h3>
+        <p>What is happening physically, week by week, told honestly rather than brightly.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v2"></span><span class="n">30</span></div>
+        <h3>Preparing your home</h3>
+        <p>What to sort in the house before the birth, whether or not anyone is hired. Useful enough to be worth reading on its own.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v3"></span><span class="n">31</span></div>
+        <h3>What to ask before you hire anyone</h3>
+        <p>Arms the buyer with the right questions, including the ones competitors answer badly. Confidence reads as credibility, and this page quietly positions you without naming anyone.</p>
+        <p class="page__state">To write</p>
+      </article>
+      <article class="page">
+        <div class="page__top"><span class="page__tag tag--v4"></span><span class="n">32</span></div>
+        <h3>Frequently asked</h3>
+        <p>The overflow. Everything that does not earn a page of its own.</p>
+        <p class="page__state">To write</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ ARGUMENT MAP ============ -->
+  <section class="band">
+    <div class="band__head">
+      <p class="eyebrow">Where the arguments land</p>
+      <h2>What is communicated, and where.</h2>
+      <p class="lede">
+        Five arguments carry the whole site. They are not the same argument and they
+        should not share a device. The governing rule beneath all of them: be generous
+        with knowledge, silent about cost structure.
+      </p>
+    </div>
+
+    <div class="args">
+      <div class="arg">
+        <h3>Magnitude delivered</h3>
+        <p class="arg__where">
+          The counterweight to a large fee is never a small unit price. It is a large
+          delivery, itemised until the volume becomes physical. Three hundred and thirty
+          hours. Ninety meals. Thirty baths.<br />
+          <b>Home, Programmes, the builder's summary panel</b>
+        </p>
+      </div>
+      <div class="arg">
+        <h3>The unpriced line</h3>
+        <p class="arg__where">
+          Three or four countable lines with figures, then one line with no figure at
+          all and no label. The absence is the device.<br />
+          <b>Home, and the close of every major page</b>
+        </p>
+      </div>
+      <div class="arg">
+        <h3>The one window</h3>
+        <p class="arg__where">
+          A holiday can be rebooked. You get one first month with this baby, and it is
+          happening now whether or not it is protected. The only genuine scarcity for a
+          buyer who has money.<br />
+          <b>Home hero, About, What confinement is</b>
+        </p>
+      </div>
+      <div class="arg">
+        <h3>One person, not four</h3>
+        <p class="arg__where">
+          To replicate the scope a household hires four people. For this clientele the
+          argument is not the combined cost, it is the coordination: one relationship
+          instead of four rotas, in the month she is least able to run them.<br />
+          <b>The Care, What confinement is</b>
+        </p>
+      </div>
+      <div class="arg">
+        <h3>Discretion</h3>
+        <p class="arg__where">
+          Never asked out loud, and decisive. Who she is, who checked her, what is never
+          discussed outside your home, and what happens if it is not working.<br />
+          <b>Safety and privacy, under About</b>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STAGE ONE ============ -->
+  <section class="band band--stage">
+    <div class="band__head">
+      <p class="eyebrow">Stage one</p>
+      <h2>Seven pages, built first.</h2>
+      <p class="lede">
+        The same pages as above, not temporary versions of them. Same numbers, same
+        addresses, nothing built twice. Stage one opens to a waiting list who already
+        know you exist, so this is a conversion problem rather than a discovery one,
+        which is why the eleven Guidance pages, your search strategy, come last
+        despite being the largest block of work.
+      </p>
+    </div>
+
+    <div class="map">
+
+      <div class="map__home">
+        <ul class="map__pages" style="border-left:0; padding-left:0;">
+          <li class="map__row">
+            <span class="map__n">01</span>
+            <span class="map__name">Home</span>
+            <span class="map__note">Exists. Needs doors out</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="map__grid">
+
+        <div class="map__branch">
+          <h3 class="map__label">Care <span>6 more later</span></h3>
+          <ul class="map__pages">
+            <li class="map__row">
+              <span class="map__n">02</span>
+              <span class="map__name">The Care</span>
+              <span class="map__note">Rail exists</span>
+            </li>
+          </ul>
+          <p class="map__empty">Written as a hub, so its sections become the children later rather than being rewritten.</p>
+        </div>
+
+        <div class="map__branch">
+          <h3 class="map__label">Programmes <span>3 more later</span></h3>
+          <ul class="map__pages">
+            <li class="map__row">
+              <span class="map__n">09</span>
+              <span class="map__name">Programmes</span>
+              <span class="map__note">Section exists</span>
+            </li>
+            <li class="map__row">
+              <span class="map__n">12</span>
+              <span class="map__name">Build your programme</span>
+              <span class="map__note">Built, restyle due</span>
+            </li>
+            <li class="map__row">
+              <span class="map__n">13</span>
+              <span class="map__name">Single treatments</span>
+              <span class="map__note">Live already</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="map__branch">
+          <h3 class="map__label">About <span>5 more later</span></h3>
+          <ul class="map__pages">
+            <li class="map__row">
+              <span class="map__n">15</span>
+              <span class="map__name">About</span>
+              <span class="map__note">From nothing</span>
+            </li>
+            <li>
+              <ul class="map__sub">
+                <li>Founder's story</li>
+                <li>Areas we cover</li>
+                <li>Contact</li>
+              </ul>
+            </li>
+            <li class="map__row">
+              <span class="map__n">16</span>
+              <span class="map__name">Who comes into your home</span>
+              <span class="map__note">From nothing</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="map__branch map__branch--none">
+          <h3 class="map__label">Guidance <span>11 later</span></h3>
+          <p class="map__empty">Nothing at stage one. Nobody arrives through search when the audience is already a waiting list.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="lede" style="margin-top:34px;">
+      Five of the seven already exist in some form and are assembly rather than
+      writing. Only About and Who comes into your home start from nothing, and both
+      need Amidat rather than a writer, which is what decides the timeline. The three
+      tab menu stage one needs is the one already sitting in the prototype, so the
+      navigation is extended later rather than rebuilt.
+    </p>
+
+      </section>
+
+  <footer class="foot">
+    The Postpartum Suite &middot; Site structure &middot; Draft six &middot; For review
+  </footer>
+
+</div>
+
+</body>
+</html>
