@@ -160,6 +160,155 @@
    strip low on the video. Grey ink throughout: TJ's own call on contrast
    against the video, no scrim behind it. */
 
+/* Shared type: the name/line/desc rules both .deskcard and .cards__card
+   use. Colour and glass differ between the two below, since one sits on
+   the video and the other on the fuchsia field. */
+.cards__name {
+  margin: 0;
+  font-family: var(--f-body);
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.cards__line {
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin: 16px 0;
+}
+.cards__desc {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--f-read);
+  line-height: 1.55;
+}
+
+/* ---------- desktop: one panel, gliding between zones ----------
+   A single element, not one per scene: home-flight.js moves it straight
+   from its old top/left to its new one (a real position transition, not
+   a swap of which element is shown), then swaps the name/line/desc text
+   in once it has arrived. The treatment room is where it ends; it fades
+   out before the window scene rather than gliding anywhere else. */
+/* ---------- the flight's own Enquire ----------
+   One button, up for the whole video, first frame to last: no motion of
+   its own, no glide, it is either shown in its resting spot or it isn't.
+   Desktop centres it on the screen; phone pins it to the bottom edge.
+   The nav's own Enquire in the top right is never hidden, so for the
+   length of the video there are two. */
+.flight-enquire {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(56px, 9vh, 96px);
+  transform: translateX(-50%);
+  z-index: 3;
+  display: inline-block;
+  font-family: var(--f-read);
+  font-weight: 500;
+  text-decoration: none;
+  text-align: center;
+  background: var(--action);
+  color: var(--paper);
+  border-radius: var(--r-button);
+  font-size: 1.05rem;
+  padding: 16px 34px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: background-color 140ms var(--ease-out), opacity 200ms linear;
+}
+.flight-enquire.is-live {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+@media (hover: hover) and (pointer: fine) {
+  .flight-enquire:hover { background: var(--action-hover); }
+}
+@media (min-width: 768px) {
+  .flight-enquire {
+    /* Centred horizontally, sitting in the lower quarter of the screen
+       rather than dead centre. */
+    top: auto;
+    bottom: 12.5vh;
+    transform: translateX(-50%);
+    font-size: 1.15rem;
+    padding: 18px 40px;
+  }
+}
+
+.deskcard {
+  display: none;
+}
+@media (min-width: 768px) {
+  .deskcard {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: min(480px, calc(100vw - var(--gutter) * 2));
+    box-sizing: border-box;
+    padding: clamp(22px, 3vh, 32px) clamp(28px, 3vw, 44px);
+    border-radius: var(--r-card);
+    background: rgba(243, 239, 236, .62);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    /* top/left animate directly, a real glide from position to position;
+       transform only ever does the centring plus the height pinch below,
+       never an offstage offset. The starting top/left matches handover's
+       own zone in home-flight.js, so the very first paint has no stale
+       auto-to-value jump to animate. */
+    top: 72%;
+    left: 73%;
+    /* --panel-h is the shape curve: home-flight.js drives it every frame
+       during the glide (thin for most of the trip, curving open only in
+       the last 15%), on the same scroll-linked clock as the top/left
+       transition itself, not a separate wall-clock timer. scaleY, not a
+       height transition, so this stays compositor-only; the origin sits
+       at the panel's own vertical centre so it pinches evenly rather than
+       hinging off one edge. */
+    transform: translate(-50%, -50%) scaleY(var(--panel-h, 1));
+    transform-origin: 50% 50%;
+    opacity: var(--cards-o, 0);
+    visibility: var(--cards-v, hidden);
+    /* Eases in and out of the glide itself, rather than the constant-speed
+       --ease-out used elsewhere for arrivals: this panel is already on
+       screen and moving, not entering, so it should read as accelerating
+       away and settling in, not as a fade-style ease. */
+    transition: top 900ms cubic-bezier(0.65, 0, 0.35, 1), left 900ms cubic-bezier(0.65, 0, 0.35, 1), opacity 420ms var(--ease-out);
+    will-change: top, left, opacity, transform;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .deskcard.is-live { pointer-events: auto; }
+  .deskcard[data-room] { cursor: pointer; }
+  .deskcard .cards__name {
+    font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+    color: rgba(90, 82, 79, .9);
+    /* The glide moves the panel; only the words fade, on their own timer
+       so they never appear mid-flight over the wrong background. */
+    opacity: var(--deskcard-text-o, 0);
+    transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
+  }
+  .deskcard .cards__line {
+    background: rgba(90, 82, 79, .38);
+    opacity: var(--deskcard-text-o, 0);
+    transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
+  }
+  .deskcard .cards__desc {
+    font-size: clamp(.85rem, 1.15vw, .98rem);
+    color: rgba(90, 82, 79, .78);
+    opacity: var(--deskcard-text-o, 0);
+    transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
+  }
+}
+
+/* ---------- phone: one fixed spot, swiped in place ----------
+   Every scene's card rests in the same centred zone (SCENES[i].phoneZone
+   is one shared point, not per scene); a swipe slides the outgoing card
+   off to the side it came from and the incoming one in from the other,
+   the position itself never moving. */
 .cards {
   position: absolute;
   inset: 0;
@@ -173,6 +322,9 @@
   z-index: 2;
 }
 .cards.is-live { pointer-events: auto; }
+@media (min-width: 768px) {
+  .cards { display: none; }
+}
 
 .cards__track {
   position: relative;
@@ -196,45 +348,14 @@
 }
 .cards__card:not(.is-live) { pointer-events: none; }
 .cards__card[data-room] { cursor: pointer; }
-
-.cards__name {
-  margin: 0;
-  font-family: var(--f-body);
+.cards__card .cards__name {
   font-size: clamp(1.1rem, 2.6vw, 1.8rem);
-  font-weight: 500;
-  letter-spacing: .12em;
-  text-transform: uppercase;
   color: rgba(90, 82, 79, .9);
-  white-space: nowrap;
 }
-.cards__line {
-  display: block;
-  width: 56px;
-  height: 1px;
-  margin: 16px 0;
-  background: rgba(90, 82, 79, .38);
-}
-.cards__desc {
-  margin: 0;
-  max-width: 34ch;
-  font-family: var(--f-read);
+.cards__card .cards__line { background: rgba(90, 82, 79, .38); }
+.cards__card .cards__desc {
   font-size: clamp(.85rem, 1.15vw, .98rem);
-  line-height: 1.55;
   color: rgba(90, 82, 79, .78);
-}
-
-/* Desktop: each card sits on the nav's own glass (same tint, blur and
-   saturation as .tab), so the grey ink has a ground over whatever the
-   frame is doing underneath it. */
-@media (min-width: 768px) {
-  .cards__card {
-    box-sizing: border-box;
-    padding: clamp(22px, 3vh, 32px) clamp(28px, 3vw, 44px);
-    border-radius: var(--r-card);
-    background: rgba(243, 239, 236, .62);
-    backdrop-filter: blur(14px) saturate(1.2);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  }
 }
 
 /* ---------- after the house ---------- */
@@ -316,7 +437,10 @@
   .flight__poster,
   .flight__video {
     object-fit: cover;
-    object-position: 50% 50%;
+    /* Was a flat 50% 50%, ignoring --fx entirely; each room now pans to
+       keep its own subject in frame within the fixed 10%-per-side crop,
+       the same --fx values home-flight.js already computes per scene. */
+    object-position: var(--fx) 50%;
   }
 
   /* The photo's own bottom edge dissolves into the aurora beneath it,
@@ -401,25 +525,27 @@
     width: calc(100% - var(--gutter) * 2); text-align: center;
   }
 
-  /* Phone gets the same one-panel-per-zone system as desktop, at phone
-     scale: nearly the full width, dark grey since it sits on the pale
-     field rather than on the photograph, and a bigger, bolder name than
-     desktop reads because there is no video detail to compete with here.
-     No glass pane here: the fuchsia field is already the panel's ground. */
+  /* Phone: one fixed spot, swiped in place, dark grey since it sits on
+     the pale field rather than on the photograph, and a bigger, bolder
+     name than desktop reads because there is no video detail to compete
+     with here. No glass pane: the fuchsia field is already the ground.
+     Selectors match .cards__card .cards__name's own specificity so this
+     genuinely overrides it rather than losing on specificity while
+     appearing to win on source order. */
   .cards__card { width: calc(100vw - var(--gutter) * 1.5); }
-  .cards__name {
-    font-size: clamp(1.3rem, 7vw, 1.7rem);
+  .cards__card .cards__name {
+    font-size: clamp(1.6rem, 9vw, 2.1rem);
     color: var(--ink);
   }
-  .cards__line {
-    width: min(240px, 58vw);
+  .cards__card .cards__line {
+    width: min(300px, 72vw);
     height: 2px;
-    margin: 18px 0;
+    margin: 20px 0;
     background: rgba(10, 10, 10, .32);
   }
-  .cards__desc {
+  .cards__card .cards__desc {
     max-width: 30ch;
-    font-size: 1rem;
+    font-size: 1.15rem;
     color: var(--ink-soft);
   }
 
