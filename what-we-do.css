@@ -411,3 +411,17 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
     calc(10 + (255 - 10) * var(--nd)));
   transition: none;
 }
+
+
+/* ---- placeholders (5 Oct 2026, TJ): the photographs above the housekeeping zones,
+   and in The Postpartum Suite Experience and Your Postpartum Specialist, are
+   replaced by the hero's grey shape with its crossed lines, so only text
+   surfaces. The frames around them are unchanged. ---- */
+.ph { position: absolute; inset: 0; display: block; background: var(--haze); overflow: hidden; }
+.ph::before, .ph::after { content: ""; position: absolute; left: 50%; top: 50%; width: 150%; height: 2px; background: rgba(0, 0, 0, .08); transform: translate(-50%, -50%) rotate(38deg); }
+.ph::after { transform: translate(-50%, -50%) rotate(-38deg); }
+.di__thumb.ph { display: none; }
+@media (max-width: 860px) {
+  .sc > .ph { position: relative; inset: auto; height: 46svh; min-height: 280px; }
+  .di__thumb.ph { display: block; position: relative; inset: auto; width: 100%; aspect-ratio: 4 / 3; border-radius: var(--r-media); margin-bottom: .6rem; }
+}
