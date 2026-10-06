@@ -51,18 +51,26 @@
 .sf ul { list-style: none; margin: 0; padding: 0; }
 .sf__inner {
   max-width: 1080px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: clamp(32px, 5vw, 72px);
-  padding-bottom: clamp(40px, 7vh, 72px);
+  /* Three blocks grouped in the middle with equal gaps between the visible edges, all starting at the same height. */
+  display: flex; justify-content: center; align-items: flex-start; gap: clamp(48px, 7vw, 104px);
+  padding-bottom: clamp(32px, 5vh, 56px);
 }
 /* Black line art on transparent, turned white for white text. */
-.sf__logo { display: block; width: clamp(190px, 22vw, 260px); height: auto; filter: brightness(0) invert(1);  }
-.sf__tag { margin: 1.1rem 0 0; max-width: 28ch; font-size: 1rem; line-height: 1.55; color: var(--sf-soft); }
+/* The logo sits in the middle of the row, shorter than the text beside it so there is air above and below. */
+.sf__brand { align-self: flex-start; }
+/* The logo file has clear space round the artwork (about 5% above, 10% each side). Pull it in so the visible circle starts level with the column headings and the gaps are measured from the artwork. */
+.sf__brand a { display: block; margin: -.564rem -.864rem 0 -.876rem; }
+/* Optical, not mathematical: the logo is a compact block beside two ragged text columns, so it is nudged left to read as evenly spaced to the eye. */
+.sf__brand a { transform: translateX(-2.75rem); }
+.sf__logo { display: block; width: auto; height: 10.8rem; max-width: 100%; filter: brightness(0) invert(1); }
+/* The tagline: Quentin, white, the full width of the footer, centred above the closing line. */
+.sf__tagline { position: relative; z-index: 1; white-space: nowrap; max-width: 1080px; margin: 0 auto; padding: clamp(20px, 3.4vh, 36px) 0 clamp(20px, 3vh, 32px); text-align: center; font-family: var(--f-script, "Quentin", cursive); font-weight: 400; font-size: clamp(2.2rem, 4vw, 3.6rem); line-height: 1.05; color: var(--sf-text); }
 .sf__head {
-  margin: 0 0 1.1rem; font: 500 .72rem/1 var(--f-ui, "Montserrat", system-ui, sans-serif);
-  letter-spacing: .16em; text-transform: uppercase; color: var(--sf-mute);
+  margin: 0 0 1.1rem; font: 600 .92rem/1 var(--f-ui, "Montserrat", system-ui, sans-serif);
+  letter-spacing: .16em; text-transform: uppercase; color: var(--sf-text);
 }
-.sf__col li + li { margin-top: .7rem; }
-.sf__col a { font-size: 1rem; line-height: 1.4; }
+.sf__col li + li { margin-top: .55rem; }
+.sf__col a { font-size: .84rem; font-weight: 400; line-height: 1.4; }
 .sf__base {
   max-width: 1080px; margin: 0 auto; padding: 22px 0 28px;
   border-top: 1px solid var(--sf-rule);
@@ -73,10 +81,13 @@
 .sf__legal { display: flex; flex-wrap: wrap; gap: 8px 24px; }
 .sf__legal a { color: var(--sf-mute); }
 .sf__legal a:hover, .sf__legal a:focus-visible { color: var(--sf-text); }
+/* Phones and tablets: the circle with the one line wordmark beside it, centred at the top;
+   Explore, then Contact, stacked and centred under it; then the tagline, which stays on one line. */
 @media (max-width: 760px) {
-  .sf__inner { grid-template-columns: 1fr 1fr; }
-  .sf__brand { grid-column: 1 / -1; }
-}
-@media (max-width: 460px) {
-  .sf__inner { grid-template-columns: 1fr; }
+  .sf__inner { display: grid; grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 32px; }
+  .sf__brand { justify-self: center; }
+  .sf__brand picture { display: block; }
+  .sf__brand a { display: block; margin: 0; transform: none; }
+  .sf__logo { width: min(84vw, 330px); height: auto; }
+  .sf__tagline { white-space: nowrap; font-size: calc((100vw - 3rem) / 15); }
 }
