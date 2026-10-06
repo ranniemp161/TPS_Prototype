@@ -165,8 +165,8 @@
      copy states: three freshly cooked meals a day, a herbal bath every day,
      belly binding every day. Nothing about price. */
   function ledger() {
-    var root = document.querySelector('[data-ledger]');
-    if (!root) return;
+    var roots = [].slice.call(document.querySelectorAll('[data-ledger]'));
+    roots.forEach(function (root) {
     var buttons = [].slice.call(root.querySelectorAll('[data-days]'));
     var STOPS = [5, 7, 14, 30];
     var out = {};
@@ -254,25 +254,41 @@
           setTimeout(function () { go(5, 1400); }, 350);
         });
       }, { threshold: 0.6 });
-      io.observe(root);
+      io.observe(root.querySelector('.tl-scale') || root);
     }
+    });
   }
 
   /* ---------- Tailored To You: rooms ----------
      The three paragraphs open one at a time; the photograph beside them follows. */
   function tailRooms() {
-    var acc = document.querySelector('[data-tl-acc]');
-    if (!acc) return;
+    var accs = [].slice.call(document.querySelectorAll('[data-tl-acc]'));
+    accs.forEach(function (acc) {
     var items = [].slice.call(acc.querySelectorAll('[data-tl-item]'));
-    var pics = [].slice.call(document.querySelectorAll('.tl__pics img'));
+    var section = acc.closest('.tail');
+    var pics = [].slice.call(section.querySelectorAll('.tl__pics img'));
+    var focused = -1;
+    function placeFocus() {
+      if (!section.classList.contains('tail--proposal') || focused < 0) { acc.classList.remove('has-focus'); return; }
+      var item = items[focused];
+      acc.style.setProperty('--tl-focus-y', item.offsetTop + 'px');
+      acc.style.setProperty('--tl-focus-h', item.offsetHeight + 'px');
+      acc.classList.add('has-focus');
+    }
     // Every room starts closed, on every screen. A tap opens one (the others
     // close) and a tap on the open one closes it. The photograph follows the
     // room opened last and stays on it when all are closed.
     function open(i) {
+      focused = i;
       items.forEach(function (it, k) {
         it.classList.toggle('is-open', k === i);
         it.querySelector('button').setAttribute('aria-expanded', String(k === i));
       });
+      requestAnimationFrame(function () { requestAnimationFrame(placeFocus); });
+      if (section.classList.contains('tail--wall-palette')) {
+        var palettePic = pics[i + 1] || pics[0];
+        section.style.setProperty('--tl-ground', palettePic.getAttribute('data-ground'));
+      }
       // photograph 0 is for all closed, 1 to 3 for the rooms, so every change of state changes the picture
       pics.forEach(function (p, k) { p.classList.toggle('is-on', k === i + 1); });
     }
@@ -282,8 +298,78 @@
       });
     });
     open(-1);
+    if ('ResizeObserver' in window) {
+      var focusObserver = new ResizeObserver(placeFocus);
+      items.forEach(function (item) { focusObserver.observe(item); });
+    }
+    window.addEventListener('resize', placeFocus, { passive: true });
+    });
   }
 
+  function tailReadMore() {
+    var panels = [].slice.call(document.querySelectorAll('[data-tl-readmore]'));
+    panels.forEach(function (panel) {
+      var toggle = panel.querySelector('.tl-readmore__toggle');
+      var section = panel.closest('.tail');
+      var pics = [].slice.call(section.querySelectorAll('.tl__pics img'));
+      if (!toggle) return;
+      function setMedia(open) {
+        var active = open ? 1 : 0;
+        pics.forEach(function (pic, index) { pic.classList.toggle('is-on', index === active); });
+        section.style.setProperty('--tl-ground', pics[active].getAttribute('data-ground'));
+      }
+      setMedia(false);
+      toggle.addEventListener('click', function () {
+        var open = !panel.classList.contains('is-open');
+        panel.classList.toggle('is-open', open);
+        panel.classList.toggle('has-focus', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        setMedia(open);
+        setTimeout(function () { ScrollTrigger.refresh(); }, 520);
+      });
+    });
+  }
+  function tailoredMotion() {
+    var section = document.querySelector('#tailored');
+    if (!section || reduced) return;
+    var text = section.querySelector('.tl__text');
+    var pictures = section.querySelector('.tl__pics');
+    if (!text || !pictures) return;
+
+    var media = gsap.matchMedia();
+    media.add('(min-width: 901px)', function () {
+      var shift = function () { return Math.min(window.innerWidth * .18, 260); };
+      var timeline = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: .55,
+          refreshPriority: -10,
+          invalidateOnRefresh: true
+        }
+      });
+      timeline
+        .fromTo(text, { x: shift, opacity: .68 }, { x: 0, opacity: 1, duration: .48 }, 0)
+        .fromTo(pictures, { xPercent: 38, opacity: 0, scale: 1.025 }, { xPercent: 0, opacity: 1, scale: 1, duration: .48 }, 0)
+        .to(pictures, { scale: 1.012, duration: .16 }, .48)
+        .to(text, { x: function () { return shift() * .55; }, opacity: .72, duration: .36 }, .64)
+        .to(pictures, { xPercent: 38, opacity: 0, scale: 1.025, duration: .36 }, .64);
+    });
+
+    media.add('(max-width: 900px)', function () {
+      var timeline = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: { trigger: section, start: 'top 92%', end: 'bottom 18%', scrub: .45 }
+      });
+      timeline
+        .fromTo(text, { x: 24, opacity: .76 }, { x: 0, opacity: 1, duration: .24 }, 0)
+        .fromTo(pictures, { xPercent: 12, opacity: .58 }, { xPercent: 0, opacity: 1, duration: .24 }, 0)
+        .to(text, { x: 18, opacity: .76, duration: .28 }, .72)
+        .to(pictures, { xPercent: 12, opacity: .56, duration: .28 }, .72);
+    });
+  }
   /* ---------- FAQ scroll spy ---------- */
   function faqSpy() {
     var nav = document.querySelector('.faq__nav');
@@ -308,6 +394,8 @@
     day();
     ledger();
     tailRooms();
+    tailReadMore();
+    tailoredMotion();
     faqSpy();
     ScrollTrigger.refresh();
   }
