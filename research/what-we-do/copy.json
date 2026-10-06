@@ -1,0 +1,386 @@
+{
+ "source": "what we do copy.png (client copy screenshot), verified word for word on 5 Oct 2026: three OCR passes plus manual reading of every region the OCR could not read. Nothing in the PNG is missing; the three chat reply buttons at the foot of the PNG are not copy and are excluded.",
+ "mother_and_baby": {
+  "title": "Mother and Baby Care",
+  "promise": "Hands on support with your baby, and thoughtful care for you, every day.",
+  "intro": "The weeks after birth are not meant to be managed alone. Your dedicated postpartum specialist stays with you, taking time to learn the routine of your home, your baby's cues and the way you like things done. Her care is there in the quiet early hours as much as in the busy ones, and it is guided by two priorities: your baby's comfort and your rest.",
+  "items": [
+   {
+    "title": "Care for your baby while you rest",
+    "body": "Whether you need an uninterrupted sleep after a long night or a moment to bathe in peace, your baby is in attentive, experienced hands. Your specialist takes care of changing, winding, settling, bathing support, and feeding with expressed or formula milk. If you are breastfeeding, she brings your baby to you for each feed and settles them again afterwards, so your energy is kept for the moments that matter most. On selected programmes this care continues through the night. Along the way she gently shares what she observes, from feeding cues to sleep patterns, so your confidence grows with each day."
+   },
+   {
+    "title": "Accompanying you and baby on outings",
+    "body": "Those first trips out of the house should feel effortless. Your specialist can accompany you to GP appointments, baby clinic weigh ins or a gentle stroll in the park. She prepares the changing bag, manages the car seat and pram, and holds your baby while you are seen, so you step out feeling composed and cared for."
+   }
+  ]
+ },
+ "treatments": {
+  "title": "Treatments",
+  "promise": "Hands on care that repeats through your stay, not offered once as a treat.",
+  "intro": "Elsewhere, postpartum treatments are often booked as a single indulgence. Inspired by Malaysian confinement traditions, ours are woven into your stay, so warmth, support and restoration build gently day after day. Every treatment takes place in the comfort of your home, at a time that suits you and your baby.",
+  "items": [
+   {
+    "title": "Postpartum massage and hot stone therapy, several times a week",
+    "body": "At the heart of your recovery is postpartum massage, carried out several times each week. Slow, warming strokes ease the tension of pregnancy, birth and early feeding, while heated stones bring a deep, soothing warmth to the body. Each session is tailored to how you are feeling, leaving you relaxed, restored and wonderfully cared for."
+   },
+   {
+    "title": "Belly binding, daily",
+    "body": "Your tummy wrap is applied once your massage or hot stone therapy is complete, while your body is warm and relaxed, so it supports and holds the benefits of your treatment. This gives your core and lower back a reassuring, held feeling as your body recovers, and extra support as you lift, carry and feed your baby. Each wrap is adjusted to your comfort. After a caesarean birth, we follow the guidance of your midwife or doctor on when to begin."
+   },
+   {
+    "title": "Herbal baths for you, daily",
+    "body": "Each day your specialist prepares a warm bath infused with fresh herbs and leaves, such as lemongrass and pandan. It is a calming feeling that soothes tired muscles, refreshes the skin and offers a quiet moment that is entirely yours."
+   },
+   {
+    "title": "Thermal blanket treatment",
+    "body": "You rest comfortably wrapped in a heated blanket as a deep, steady warmth builds, leaving you free to simply relax. Each session is tailored to how you are feeling that day."
+   },
+   {
+    "title": "Foot massage, reflexology and full body scrub",
+    "body": "On the days between your massages, your care continues with a soothing foot massage and reflexology or a gentle full body scrub, so there is always something restorative in your day."
+   }
+  ]
+ },
+ "meals": {
+  "title": "Meals",
+  "promise": "Three fresh meals a day, cooked in your own kitchen, for you and your family.",
+  "intro": "In postpartum care, also known as confinement, food is an essential part of healing. Rather than meals arriving in delivery boxes, your specialist shops and cooks in your kitchen each day, so every dish is served hot, fresh and suited to that stage of your recovery. The menu is guided by Malaysian confinement principles, using warming ingredients such as ginger, turmeric and black pepper, slow simmered broths, and gentle dishes that are easy to digest. Cold and raw foods are avoided in the early weeks. Your family dines from the same table, and dietary requirements, allergies and preferences are discussed with you before we arrive.",
+  "items": [
+   {
+    "title": "Fresh postpartum meals, 3 a day",
+    "body": "Breakfast, lunch and dinner are prepared from scratch each day. Dishes might include ginger fish soup, chicken braised in ginger and herbs, comforting rice porridge, slow cooked broths and greens stir fried with garlic. The menu evolves throughout your stay as your body recovers."
+   },
+   {
+    "title": "Herbal teas",
+    "body": "Your specialist brews tea fresh throughout the day as required. Warm drinks are favoured over cold, so there is always something warm within reach."
+   },
+   {
+    "title": "Lactation support drinks",
+    "body": "Warm drinks made with ingredients traditionally given to nursing mothers, such as oats, dates and fenugreek, are prepared fresh each day. If you are not breastfeeding, we prepare other nourishing warm drinks in their place."
+   }
+  ]
+ },
+ "home_support": {
+  "title": "Home Support",
+  "promise": "Everyday life, taken care of from the moment we arrive.",
+  "intro": "A new baby brings more laundry, more dishes and more errands almost overnight. Your specialist attends to these quietly and discreetly, so your home remains calm and ordered and your only focus is rest. This is not a visiting service that comes and goes. It is care woven into the whole day.",
+  "items": [
+   {
+    "title": "Laundry and ironing",
+    "body": "Your laundry is taken care of throughout your stay. Your clothes and your baby's are washed, beautifully pressed and put away, and your bed is made fresh each day so it is always inviting when you return to rest."
+   },
+   {
+    "title": "Light house cleaning, organising baby wardrobe",
+    "body": "The kitchen is left spotless after every meal, and the areas of your home you use most are hoovered and mopped, so everything stays fresh and orderly. Your baby's wardrobe is kept neatly organised, so every outfit, muslin and essential is exactly where you need it."
+   },
+   {
+    "title": "Grocery collection",
+    "body": "Your specialist collects your groceries along with the fresh produce and specialist ingredients for your meals, so the kitchen is always well stocked and nobody needs to make a last minute trip to the shops."
+   }
+  ]
+ },
+ "experience": {
+  "title": "The Postpartum Suite Experience"
+ },
+ "a_day_with_us": {
+  "title": "A Day With Us",
+  "promise": "Every day is shaped around you and your baby. This is how one might unfold.",
+  "rows": [
+   {
+    "time": "7am",
+    "title": "A gentle start",
+    "body": "Your specialist arrives in the kitchen as the house wakes."
+   },
+   {
+    "time": "7.30am",
+    "title": "Your herbal bath",
+    "body": "A warm bath infused with fresh herbs is prepared for you."
+   },
+   {
+    "time": "8am",
+    "title": "Breakfast",
+    "body": "A nourishing breakfast is served, cooked fresh in your kitchen. While you eat, your baby is cared for beside you."
+   },
+   {
+    "time": "9am",
+    "title": "Rest",
+    "body": "You sleep, read or simply rest while your baby is cared for."
+   },
+   {
+    "time": "10am",
+    "title": "Baby care",
+    "body": "Your specialist cares for your baby and prepares everything for bath time, supporting you as you bathe your baby together."
+   },
+   {
+    "time": "11am",
+    "title": "Home support",
+    "body": "While you rest, laundry is washed, pressed and folded away."
+   },
+   {
+    "time": "1pm",
+    "title": "Lunch",
+    "body": "Lunch is served, along with a lactation support drink or a fresh tea."
+   },
+   {
+    "time": "2.30pm",
+    "title": "Your treatment",
+    "body": "On massage days, you are treated to a restorative postpartum massage and hot stone therapy in the comfort of your own room. Your belly binder is then applied while your body is warm and relaxed. On other days you will enjoy a foot massage and reflexology, the thermal blanket treatment and a full body scrub."
+   },
+   {
+    "time": "4pm",
+    "title": "Fresh air or quiet time",
+    "body": "This might be a gentle stroll in the park, an appointment your specialist accompanies you to, or an afternoon of rest at home."
+   },
+   {
+    "time": "6pm",
+    "title": "Dinner",
+    "body": "Dinner is served for you and your family, with your baby cared for close by."
+   },
+   {
+    "time": "7pm",
+    "title": "Settled for the evening",
+    "body": "The kitchen is left spotless, dishes washed, and the hoovering and mopping all taken care of, so you can wind down with your baby."
+   }
+  ],
+  "closing_line": "Every day is tailored to you. Treatments, meals and rest are arranged around your baby's rhythm and how you are feeling."
+ },
+ "specialist": {
+  "title": "Your Postpartum Specialist",
+  "promise": "One dedicated person in your home, chosen with care.",
+  "paragraphs": [
+   "The person who looks after you is the heart of your stay. Every specialist at The Postpartum Suite has extensive experience in caring for mothers and newborns and is trained in our approach to recovery, from treatments and binding to the preparation of postpartum meals. Before anyone joins us, they go through an enhanced DBS check, reference checks and an interview process. All of our specialists are fully insured and hold infant first aid and safeguarding training.",
+   "Your specialist takes time to understand your home, your routine and the kind of support you want. You will know who is arriving before your stay begins, and you will have the same specialist throughout, so the care feels personal from the first day to the last."
+  ]
+ },
+ "tailored": {
+  "title": "Tailored To You",
+  "promise": "No two recoveries are the same, so no two stays are either.",
+  "paragraphs": [
+   "Your care begins well before your postpartum specialist arrives. We start with a consultation to understand your birth plan, your home and family, and what you most want from your recovery. Your pre-programme form then lets you share your dietary needs, preferences and the details that make your home yours.",
+   "From there, your stay is shaped around you: when your treatments take place, what is cooked, how your baby's day runs and how much quiet time you would like. If your birth or recovery plan changes, your care adapts with you, following the guidance of your midwife or doctor.",
+   "You can stay with us for 5, 7, 14 or 30 days, with care from 7am to 7pm each day and night support available if required."
+  ]
+ },
+ "faq": {
+  "title": "Frequently Asked Questions",
+  "groups": [
+   {
+    "name": "About The Postpartum Suite",
+    "id": "faq-about",
+    "questions": [
+     {
+      "q": "What is The Postpartum Suite?",
+      "a": "The Postpartum Suite provides bespoke, in-home postpartum care inspired by Malaysian traditions. Your care includes postpartum treatments, freshly prepared meals, protected time to rest and recover, newborn support, laundry and light household support."
+     },
+     {
+      "q": "What makes The Postpartum Suite different?",
+      "a": "We offer a level of expertise and care that sets us apart. Our specialists are trained in traditional postpartum care, take great pride in what they do, and each has extensive experience in the field. Rather than offering treatments as a one off, we make recovery part of every day, with one dedicated specialist caring for you and your baby in your own home."
+     },
+     {
+      "q": "Where do you provide care?",
+      "a": "We provide care across England."
+     },
+     {
+      "q": "Are you insured?",
+      "a": "Yes, we are fully insured."
+     },
+     {
+      "q": "Do you have reviews?",
+      "a": "Yes. We are proud of the feedback we receive from the families we care for, and we are happy to share reviews with you."
+     },
+     {
+      "q": "Is my privacy protected?",
+      "a": "Absolutely. Confidentiality and discretion are fundamental to the way we care for every family. The personal details you share with us during your consultation and throughout your care are held securely and treated in the strictest confidence. We never sell or share your information with third parties, and it is only ever disclosed where we are required to do so by law. Our specialists understand the trust that comes with being welcomed into your home, and they care for you and your family with complete discretion at all times. Full details are in our privacy policy."
+     }
+    ]
+   },
+   {
+    "name": "Programmes and Personalisation",
+    "id": "faq-programmes",
+    "questions": [
+     {
+      "q": "What programmes do you offer?",
+      "a": "We offer 5, 7, 14 and 30 day programmes. Every programme includes the same standard of care. The difference is how long your support is in place."
+     },
+     {
+      "q": "What is included in a programme?",
+      "a": "Every programme is centred on your recovery. It includes postpartum treatments, three freshly cooked meals a day, postpartum drinks and teas, protected time to rest, newborn support, laundry and ironing, and light household support."
+     },
+     {
+      "q": "How is my care personalised?",
+      "a": "Before your programme begins, we take time to understand your recovery, feeding preferences, household routine, dietary requirements and the areas where you would most value support. Your specialist then shapes each day around these priorities."
+     },
+     {
+      "q": "Can the day be adapted around me and my baby?",
+      "a": "Yes. Each day is arranged around your recovery, your baby's routine and the times when you would benefit most from support. Reasonable changes to agreed start and finish times can also be discussed."
+     },
+     {
+      "q": "Can I extend my programme after it has started?",
+      "a": "Yes, subject to availability. This includes moving from a 14 day programme to 30 days or longer. We recommend letting us know as early as possible. We always aim to keep the same specialist with you, but we cannot guarantee her availability for an extended period."
+     },
+     {
+      "q": "Can I book a single treatment instead of a programme?",
+      "a": "Yes. Alongside our programmes, we offer standalone in-home treatments, including postpartum massage, so you can enjoy restorative care in the comfort of your own home without booking a full programme. Please contact us to arrange a treatment at a time that suits you."
+     },
+     {
+      "q": "Do you care for twins?",
+      "a": "Yes. Caring for twins needs additional support, so each stay is tailored to your family and priced on a bespoke basis. We will talk through the details with you during your consultation."
+     },
+     {
+      "q": "Can I give a programme as a gift?",
+      "a": "Yes. Gift vouchers are available for our programmes and treatments, and they make a thoughtful gift for an expectant mother."
+     }
+    ]
+   },
+   {
+    "name": "Booking and Payment",
+    "id": "faq-booking",
+    "questions": [
+     {
+      "q": "When should I book?",
+      "a": "We recommend booking as early as possible, ideally in your second trimester, particularly if you would like live in care. If your baby has already arrived, please get in touch and we will do our very best to help. We care for mothers and babies from birth up to four months."
+     },
+     {
+      "q": "What if you are fully booked?",
+      "a": "Our programmes do become fully booked. If your dates are unavailable, you are welcome to join our waiting list, and a member of our concierge team will contact you as soon as availability opens."
+     },
+     {
+      "q": "How do I secure my booking?",
+      "a": "A 10% reservation deposit secures your dates. The balance can be paid in instalments, with the final payment due four weeks before your due date, as set out in our Client Service Agreement."
+     },
+     {
+      "q": "What happens if my baby arrives early or late?",
+      "a": "Your specialist is on standby from two weeks before to two weeks after your estimated due date. Please keep us updated as your due date approaches so we can coordinate the start of your care smoothly."
+     },
+     {
+      "q": "What is your cancellation policy?",
+      "a": "Once your booking is confirmed, we hold your specialist for your dates and turn away other families. For this reason, all payments, including the deposit, are non-refundable after confirmation. Full details are in our terms."
+     }
+    ]
+   },
+   {
+    "name": "Our Specialists",
+    "id": "faq-specialists",
+    "questions": [
+     {
+      "q": "Who are your specialists?",
+      "a": "Our specialists are experienced in postpartum care, postpartum treatments, traditional confinement care, feeding support and newborn care. Each has extensive experience and takes great pride in her work. Every specialist is carefully selected for her experience, qualifications and suitability, and all work to the standards of care and service set by The Postpartum Suite."
+     },
+     {
+      "q": "What checks and training do your specialists have?",
+      "a": "Every specialist is enhanced DBS checked, has her references verified and is fully insured. All hold infant first aid and safeguarding training, alongside the care qualifications relevant to their role."
+     },
+     {
+      "q": "What is the difference between live in and live out care?",
+      "a": "With live in care, your specialist stays in your home for the length of your programme. With live out care, she stays nearby and arrives each morning at 7am. Live out care depends on your location, and additional accommodation or travel costs may apply. We recommend live in care, as your specialist becomes a natural part of your household and its rhythm."
+     },
+     {
+      "q": "What do I need to provide for live in care?",
+      "a": "A private room should be available for your specialist."
+     },
+     {
+      "q": "What are the hours of care?",
+      "a": "Your specialist cares for you and your baby from 7am to 7pm, including a break during the day that is timed around you and your baby. Care continues at weekends according to your agreed schedule."
+     },
+     {
+      "q": "How does 24 hour care work?",
+      "a": "Where 24 hour care has been arranged, support follows an agreed rota that gives your specialist appropriate rest while making sure care is available throughout. We agree the arrangement with you before your programme begins."
+     },
+     {
+      "q": "Can I share preferences about my specialist, or speak to her beforehand?",
+      "a": "Yes. You are welcome to share any preferences during your consultation. Where possible, we can also arrange an introductory call before your care begins."
+     },
+     {
+      "q": "What happens if my specialist becomes unwell?",
+      "a": "We arrange another fully trained specialist to continue your care, and we contact you promptly to confirm the arrangements."
+     }
+    ]
+   },
+   {
+    "name": "Treatments",
+    "id": "faq-treatments",
+    "questions": [
+     {
+      "q": "Which treatments are included?",
+      "a": "Your programme includes postpartum massage and hot stone therapy several times a week, daily belly binding applied after your massage or hot stone treatment, daily herbal baths and thermal blanket treatments. On other days, your care also includes foot massage and reflexology and a full body scrub."
+     },
+     {
+      "q": "I had a caesarean. Can I still have treatments?",
+      "a": "Yes, with care. Treatments and belly binding are adapted to your recovery and begin in line with the guidance of your midwife or doctor."
+     }
+    ]
+   },
+   {
+    "name": "Mother and Baby Care",
+    "id": "faq-mother",
+    "questions": [
+     {
+      "q": "How will I be supported?",
+      "a": "Your specialist makes sure you have protected time to rest, sleep and recover. She takes care of your baby while you rest, prepares your meals and drinks, and is on hand throughout the day so you never feel you are managing alone."
+     },
+     {
+      "q": "How will my baby be cared for?",
+      "a": "Your specialist takes care of nappy changes, winding, settling and feeding, and supports you with bathing your baby. She also shares what she notices about feeding and sleep, so your confidence grows each day."
+     },
+     {
+      "q": "Do you support breastfeeding and bottle feeding?",
+      "a": "Yes. If you are breastfeeding, your specialist brings your baby to you for each feed and settles them again afterwards. If you are bottle feeding, she prepares bottles and feeds your baby so you can rest."
+     },
+     {
+      "q": "Will my specialist come with me when I go out?",
+      "a": "Yes. Your specialist can come with you to the doctor, to the shops or on a gentle walk. She prepares the changing bag, manages the pram and car seat, and cares for your baby while you are seen."
+     },
+     {
+      "q": "Is The Postpartum Suite a replacement for my midwife or health visitor?",
+      "a": "No. Our care works alongside your NHS or private medical care, not in place of it. If anything concerns us, we will always encourage you to speak with your midwife, health visitor or GP."
+     }
+    ]
+   },
+   {
+    "name": "Food and Drinks",
+    "id": "faq-food",
+    "questions": [
+     {
+      "q": "What type of food do you prepare?",
+      "a": "We cook Malaysian, Chinese, Indian and Western dishes, alongside traditional postpartum meals such as nourishing soups, broths and warming, protein rich dishes. Food is a central part of recovery, so we always recommend what is best for your health. We are also happy to follow your own recipes."
+     },
+     {
+      "q": "Can meals be tailored to my dietary needs and family?",
+      "a": "Yes. Menus are adapted around your dietary requirements, allergies and preferences. Meals are prepared for your family too, with your postpartum needs always at the centre of the menu."
+     },
+     {
+      "q": "What drinks are included?",
+      "a": "Your specialist prepares drinks to support your recovery, including red date tea, ginger infusions, herbal teas, lactation drinks and fresh smoothies."
+     },
+     {
+      "q": "Are snacks included?",
+      "a": "Yes, on request. Your specialist will happily prepare simple, healthy snacks for you whenever you ask."
+     },
+     {
+      "q": "Who pays for groceries?",
+      "a": "You cover the cost of groceries. Your specialist collects everything needed and prepares every meal fresh in your kitchen."
+     }
+    ]
+   },
+   {
+    "name": "Household Support",
+    "id": "faq-household",
+    "questions": [
+     {
+      "q": "What household support is included?",
+      "a": "Your specialist takes care of the laundry for you and your baby, irons it and puts it away. She also makes your bed each day, keeps the kitchen spotless after every meal, and hoovers and mops the areas you use most. Baby items are washed and sterilised, your baby's clothes are kept organised, and your groceries are collected."
+     },
+     {
+      "q": "Can the specialist clean other rooms in my house?",
+      "a": "Our care is devoted to you and your baby, so household support focuses on the areas that support your recovery. Deep cleaning is not included, as it would take time away from the care you came to us for."
+     },
+     {
+      "q": "Can my family be at home during the programme?",
+      "a": "Of course. Your specialist works respectfully around partners, children and other family members, while keeping your recovery and your baby's care at the heart of every day."
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -595,31 +595,21 @@
   overflow: hidden;
 }
 
-/* The film sits right of centre so the words own the left. Its ground is
-   already the paper colour (lab/zones-encode.mjs bakes it in), so there is
-   no box round it and no blending is needed. */
+/* The film fills the whole stage and the house sits in the middle of it, as
+   large as the window allows (the plan is almost the full height of the
+   film). Its ground is already the paper colour (lab/zones-encode.mjs bakes
+   it in), so there is no box and no feather. Because it is covered edge to
+   edge, the two floors really do arrive from, and leave to, outside the
+   screen: the film opens on an empty page and the upper floor flies in from
+   the top left while the lower flies in from the bottom right, and at the
+   end they leave the same way. (5 Oct 2026, TJ.) */
 .zones__film {
   position: absolute;
-  /* Exactly the film's shape, centred in the space under the bar, so the
-     feather below lands on the film's own edges. */
-  top: calc(var(--nav-h) + (100svh - var(--nav-h)) / 2);
-  translate: 0 -50%;
-  right: 1vw;
-  width: min(66vw, (100svh - var(--nav-h) - 4svh) * 1.7937);
-  aspect-ratio: 1600 / 892;
+  /* Starts under the header, not behind it, so the frosted bar never smudges
+     the top of the house: the floors slide in from, and out to, beneath it. */
+  inset: var(--nav-h) 0 0 0;
   background: var(--canvas);
-  /* The source ground is the paper to within a point, but the house's own
-     drop shadow reaches the bottom edge under the steps and is cut there.
-     A feather on all four edges means no frame can ever show as a box.
-     The house sits inside 4% to 95% of the height, so nothing is lost. */
-  -webkit-mask-image:
-    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
-    linear-gradient(to bottom, transparent, #000 3%, #000 96%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image:
-    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
-    linear-gradient(to bottom, transparent, #000 3%, #000 96%, transparent);
-  mask-composite: intersect;
+  overflow: hidden;
 }
 .zones__poster,
 .zones__video {
@@ -627,8 +617,31 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: 50% 50%;
   display: block;
+}
+/* In a window wider than the film (1600 by 892), "cover" would scale to the
+   width and cut the top and bottom off the house. Wider than that, the film is
+   contained instead: the whole plan stays in view and the sides fill with the
+   paper colour the film already has as its ground. */
+.zones__film { container-type: size; }
+@container (min-aspect-ratio: 1600 / 892) {
+  /* The picture is sized to its own shape and centred, and its outer few
+     percent fade to the page, because the render's ground is a shade or two
+     off the page colour and a hard edge would show as a faint box. */
+  .zones__poster, .zones__video {
+    inset: 0 auto 0 50%;
+    width: auto;
+    height: 100%;
+    aspect-ratio: 1600 / 892;
+    translate: -50% 0;
+    object-fit: fill;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent), linear-gradient(to bottom, transparent, #000 2.5%, #000 97.5%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent, #000 7%, #000 93%, transparent), linear-gradient(to bottom, transparent, #000 2.5%, #000 97.5%, transparent);
+    mask-composite: intersect;
+  }
 }
 .zones__poster { opacity: 0; transition: opacity 500ms var(--ease-out); }
 .zones__poster.is-on { opacity: 1; }
@@ -636,93 +649,194 @@
 .zones__stage.has-clip .zones__video { opacity: 1; }
 .zones__stage.has-clip .zones__poster { opacity: 0; transition: none; }
 
+/* The words keep to the left, over the empty paper beside the house. No
+   buttons, no cards, no boxes (TJ's direction for the whole site: delicate
+   text and a fine line, as in the header tabs and the house cards on the
+   phone homepage). */
 .zones__copy {
   position: absolute;
-  left: calc(var(--gutter) + 2vw);
+  left: max(24px, 2vw);
   top: 50%;
   translate: 0 -50%;
-  width: min(34vw, 36rem);
+  width: clamp(240px, 21vw, 380px);
 }
-
-/* The intro and the sentence share one spot and cross over. */
-.zones__intro,
+/* The title never changes. Both blocks fade as the house enters and leaves. */
+.zones__title,
 .zones__line {
   opacity: 0;
   visibility: hidden;
   will-change: opacity, transform;
 }
-.zones__intro { position: absolute; left: 0; right: 0; top: 50%; translate: 0 -50%; }
-.zones__intro .beat__line { max-width: 30ch; }
-
-.zones__sentence {
-  margin: 0;
+.zones__title { position: relative; }
+.zones__h { margin: 0; font-weight: 400; }
+.zones__script {
+  display: block;
+  font-family: var(--f-script);
+  font-size: clamp(2.1rem, 2.9vw, 3.1rem);
+  line-height: 1;
+  color: var(--ember);
+  margin-bottom: .18em;
+}
+.zones__caps {
+  display: block;
   font-family: var(--f-display);
   text-transform: uppercase;
-  font-size: clamp(2rem, 3.5vw, 3.3rem);
-  line-height: 1.06;
+  font-size: clamp(1.45rem, 2vw, 2.15rem);
+  line-height: 1.04;
   letter-spacing: .02em;
   color: var(--ink);
-}
-.zones__fixed { display: block; }
-
-/* Every ending stacked in one grid cell, so the sentence holds the height
-   of its longest ending and nothing below it jumps as the words change. */
-.zones__swap { display: grid; }
-.zones__phrase {
-  grid-area: 1 / 1;
-  opacity: 0;
   text-wrap: balance;
-  will-change: opacity, transform;
 }
-.zones__phrase em { font-style: normal; color: var(--ember-deep); }
-
+/* The rooms: small spaced capitals on a fine vertical line. The room in view
+   is marked on the line by a short ember rule that slides from room to room,
+   and its few words open beneath its name like an accordion (TJ, 5 Oct 2026).
+   No buttons, no cards. */
 .zones__rooms {
   list-style: none;
-  margin: clamp(28px, 5vh, 48px) 0 0;
+  margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 10px;
+  border-left: 1px solid var(--hairline-firm);
 }
+.zones__room { position: relative; }
 .zones__rooms button {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
   font-family: var(--f-body);
   font-size: .7rem;
-  font-weight: 600;
-  letter-spacing: .14em;
+  font-weight: 500;
+  letter-spacing: .16em;
   text-transform: uppercase;
   color: var(--ink-mute);
   background: transparent;
-  border: 1px solid var(--hairline-firm);
-  border-radius: var(--r-badge);
-  padding: 9px 12px;
+  border: 0;
+  border-radius: 0;
+  padding: 14px 0 14px 22px;
   cursor: pointer;
-  transition: color 160ms var(--ease-out), border-color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+  transition: color 200ms var(--ease-out);
 }
-.zones__rooms button:hover { color: var(--ink); border-color: var(--ink-mute); }
-.zones__rooms button[aria-current="true"] { color: var(--ember-deep); border-color: var(--ember); background: rgba(166, 76, 69, .07); }
-.zones__rooms button:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+.zones__room::before {
+  content: "";
+  position: absolute;
+  left: -1px; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--ember);
+  transform: scaleY(0);
+  transform-origin: 50% 0;
+  transition: transform 420ms var(--ease-out);
+}
+.zones__room.is-open::before { transform: scaleY(1); }
+.zones__rooms button:hover,
+.zones__room.is-open button { color: var(--ink); }
+.zones__rooms button:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
 
-@media (max-width: 767px) {
-  /* The phone clip is cropped to the house (about 9 by 10), so it takes
-     the upper part of the screen and the words sit under it. */
-  /* No feather: the phone crop brings the house close to its edges. */
-  .zones__film { left: 0; right: 0; top: calc(var(--nav-h) + 4px); translate: none; width: auto; aspect-ratio: auto; height: 50svh; -webkit-mask-image: none; mask-image: none; }
-  .zones__copy {
-    left: var(--gutter);
-    right: var(--gutter);
-    width: auto;
-    top: auto;
-    bottom: calc(24px + env(safe-area-inset-bottom));
-    translate: none;
-    min-height: 38svh;
+/* The words for the room, opening beneath its name. */
+.zones__more {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 520ms var(--ease-out);
+}
+.zones__more > div { overflow: hidden; min-height: 0; }
+.zones__more p {
+  margin: 0;
+  padding: 0 0 16px 22px;
+  font-family: var(--f-body);
+  font-size: .9rem;
+  line-height: 1.55;
+  color: var(--ink-mute);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 360ms var(--ease-out), transform 520ms var(--ease-out);
+}
+.zones__room.is-open .zones__more { grid-template-rows: 1fr; }
+.zones__room.is-open .zones__more p { opacity: 1; transform: none; transition-delay: 120ms; }
+
+/* Wide screens: the title keeps the left, and the rooms take the empty paper
+   on the right of the house. */
+@media (min-width: 1100px) {
+  .zones__copy { inset: 0; width: auto; translate: none; pointer-events: none; }
+  .zones__title {
+    position: absolute;
+    /* Sits a short gap off the left edge of the house, which is about 0.424 of
+       the film height either side of the centre. */
+    --zw: clamp(220px, 18.8vw, 360px);
+    width: var(--zw);
+    left: max(24px, calc(50vw - .424 * (100svh - var(--nav-h)) - 28px - var(--zw)));
+    top: 50%;
+    translate: 0 -50%;
   }
-  .zones__intro { top: auto; bottom: 0; translate: none; }
-  .zones__line { position: absolute; left: 0; right: 0; bottom: 0; }
-  .zones__sentence { font-size: clamp(1.7rem, 8vw, 2.3rem); }
-  .zones__rooms { margin-top: 18px; gap: 6px; }
-  .zones__rooms button { padding: 10px 10px; font-size: .64rem; }
+  /* Pinned by its top, so opening a room never moves the list. */
+  .zones__line {
+    pointer-events: auto;
+    position: absolute;
+    right: max(24px, 2vw);
+    top: calc(50% - 90px);
+    width: clamp(240px, 21vw, 380px);
+  }
 }
 
+/* Phones and tablets: not scroll driven. The section is an ordinary block, the
+   title above the house and the rooms as tabs below it. The house plays its
+   arrival once when it comes into view, then a tap on a room lights it and
+   swaps the words (zones.js builds the tabs from the accordion's own text,
+   so the copy lives in one place). TJ, 5 Oct 2026. */
+.zones__stills { display: none; }
+@media (max-width: 1099px) {
+  .zones { height: auto !important; padding: clamp(48px, 8vh, 80px) 0 clamp(56px, 9vh, 96px); }
+  .zones__stage { position: relative; top: auto; height: auto; overflow: visible; display: flex; flex-direction: column; }
+  .zones__copy { display: contents; }
+  .zones__title { order: 1; position: relative; padding: 0 var(--gutter); }
+  .zones__film { order: 2; position: relative; inset: auto; container-type: normal; width: min(100%, 62svh * .8955); aspect-ratio: 720 / 804; margin: 18px auto 14px; }
+  .zones__line { order: 3; position: relative; left: auto; right: auto; top: auto; width: auto; padding: 0 var(--gutter); }
+  /* The render's shadow runs to the picture's edge, so the edge is feathered
+     away: left and right, a little top and bottom. */
+  .zones__film {
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent), linear-gradient(to bottom, transparent, #000 3%, #000 94%, transparent);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to right, transparent, #000 9%, #000 91%, transparent), linear-gradient(to bottom, transparent, #000 3%, #000 94%, transparent);
+    mask-composite: intersect;
+  }
+  .zones__poster { display: none; }
+  .zones__video { object-fit: cover; }
+  .zones__script { font-size: clamp(2rem, 8.4vw, 2.8rem); }
+  .zones__caps { font-size: clamp(1.25rem, 5.6vw, 1.7rem); }
+
+  .zones__stills { display: block; position: absolute; inset: 0; }
+  .zones__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 0; transition: opacity 520ms var(--ease-out); }
+  .zones__still.is-prev { opacity: 1; z-index: 1; transition: none; }
+  .zones__still.is-on { opacity: 1; z-index: 2; }
+  .zones__stage.has-clip .zones__still[data-zstill="intro"] { opacity: 0; transition: none; }
+
+  /* Words arrive after the house has begun to play. */
+  .zones--tap .zones__title,
+  .zones--tap .zones__line { transform: translateY(10px); transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out), visibility 0s linear 800ms; }
+  .zones--tap .zones__title.is-in,
+  .zones--tap .zones__line.is-in { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+
+  /* The tabs: small spaced capitals on a fine horizontal line, an ember
+     marker sliding under the open one. No pills, no cards. */
+  .zones__tabs { position: relative; display: grid; grid-template-columns: 1fr auto 1fr; column-gap: 12px; border-bottom: 1px solid var(--hairline-firm); }
+  .zones__tab:nth-of-type(1) { justify-self: start; }
+  .zones__tab:nth-of-type(2) { justify-self: center; }
+  .zones__tab:nth-of-type(3) { justify-self: end; }
+  .zones__tab {
+    font-family: var(--f-body); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-mute); background: transparent; border: 0; border-radius: 0; padding: 14px 0 15px; min-height: 44px; cursor: pointer;
+    transition: color 200ms var(--ease-out); -webkit-tap-highlight-color: transparent;
+  }
+  .zones__tab[aria-selected="true"] { color: var(--ink); }
+  .zones__tab:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+  .zones__marker { position: absolute; left: 0; bottom: -1px; height: 2px; width: var(--mw, 0px); background: var(--ember); transform: translateX(var(--mx, 0px)); transition: transform 440ms var(--ease-out), width 440ms var(--ease-out); pointer-events: none; }
+
+  /* The words for the open room appear and expand beneath. The box takes the
+     height of the open panel (set by zones.js), so a longer text opens the
+     space and a shorter one closes it. */
+  .zones__panels { position: relative; margin-top: 18px; overflow: hidden; transition: height 460ms var(--ease-out); }
+  .zones__panel { position: absolute; left: 0; right: 0; top: 0; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 360ms var(--ease-out), transform 460ms var(--ease-out), visibility 0s linear 360ms; }
+  .zones__panel.is-active { opacity: 1; visibility: visible; transform: none; transition-delay: 120ms, 120ms, 0s; }
+  .zones__panel p { margin: 0; text-align: center; text-wrap: balance; font-family: var(--f-body); font-size: 1rem; line-height: 1.6; color: var(--ink-mute); }
+}
 @media (prefers-reduced-motion: reduce) {
   .zones__poster { transition: opacity 700ms linear; }
 }

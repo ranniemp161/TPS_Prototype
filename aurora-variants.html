@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex" />
+<title>Aurora variants</title>
+<!--
+  A colour study, no copy. Section 1 is the site's original Aurora, copied
+  exactly from v1.css (opacity .46, the same blur, the same two masks, the same
+  white layer, the same two travelling layers). Every other section keeps all of
+  that identical and changes ONLY the colours (sections 2 to 6), the corner the
+  weather comes from (7) or the ground it sits on (8). Brand colours only.
+-->
+<style>
+  :root {
+    --canvas:    #F3EFEC;
+    --paper:     #FFFFFF;
+    --blush:     #E2CAC6;
+    --rose-mist: #D7C2C9;
+    --coral-mid:  #C86D58;
+    --coral-deep: #B95A4B;
+    --ember:      #A64C45;
+    --ember-deep: #8C362F;
+    --sand: #C9B9B5;
+    --haze: #E3D7D3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--canvas); }
+
+  /* One band per variant. The field fades to plain canvas at the top and the
+     bottom of its section, so the seams between bands carry no edge. */
+  .band { position: relative; height: 92vh; min-height: 560px; overflow: hidden; background: var(--ground, var(--canvas)); }
+
+  /* ---------- the Aurora, as in v1.css ---------- */
+  .aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .aurora__field,
+  .aurora__field::after {
+    --aurora-light: repeating-linear-gradient(100deg,
+      #FFFFFF 0%, #FFFFFF 6%, transparent 9%, transparent 15%, #FFFFFF 19%);
+    --aurora-colour: repeating-linear-gradient(100deg, var(--stops-a));
+  }
+  .aurora__field {
+    position: absolute;
+    inset: -40px;
+    display: block;
+    background-image: var(--aurora-light), var(--aurora-colour);
+    background-size: 300%, 200%;
+    background-position: 50% 50%, 50% 50%;
+    filter: blur(46px);
+    opacity: .46;
+    will-change: transform;
+    -webkit-mask-image:
+      linear-gradient(to bottom, transparent 0%, #000 24%, #000 58%, transparent 86%),
+      radial-gradient(ellipse 90% 70% at var(--at, 72% 30%), #000 12%, rgba(0,0,0,.35) 62%, transparent 88%);
+    mask-image:
+      linear-gradient(to bottom, transparent 0%, #000 24%, #000 58%, transparent 86%),
+      radial-gradient(ellipse 90% 70% at var(--at, 72% 30%), #000 12%, rgba(0,0,0,.35) 62%, transparent 88%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+  .aurora__field::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(123deg,
+        #FFFFFF 0%, #FFFFFF 8%, transparent 11%, transparent 18%, #FFFFFF 23%),
+      repeating-linear-gradient(123deg, var(--stops-b));
+    background-size: 235%, 128%;
+    animation: aurora 62s linear infinite;
+  }
+  @keyframes aurora {
+    from { background-position: 50% 50%, 50% 50%; }
+    to   { background-position: 350% 50%, 350% 50%; }
+  }
+  @media (prefers-reduced-motion: reduce) { .aurora__field::after { animation: none; } }
+
+  /* ---------- 1. Original ---------- */
+  .v1 {
+    --stops-a: var(--ember) 8%, var(--coral-mid) 14%, var(--blush) 20%, var(--rose-mist) 26%, var(--coral-deep) 32%;
+    --stops-b: var(--coral-deep) 6%, var(--rose-mist) 13%, var(--haze) 21%, var(--coral-mid) 28%, var(--ember-deep) 37%;
+  }
+  /* ---------- 2. Blush mist: the pale inverse, all soft grounds ---------- */
+  .v2 {
+    --stops-a: var(--blush) 8%, var(--rose-mist) 14%, var(--haze) 20%, var(--sand) 26%, var(--coral-mid) 32%;
+    --stops-b: var(--rose-mist) 6%, var(--haze) 13%, var(--blush) 21%, var(--sand) 28%, var(--rose-mist) 37%;
+  }
+  /* ---------- 3. Deep ember: the dark inverse, the deep end leads ---------- */
+  .v3 {
+    --stops-a: var(--ember-deep) 8%, var(--ember) 14%, var(--coral-deep) 20%, var(--ember) 26%, var(--ember-deep) 32%;
+    --stops-b: var(--ember) 6%, var(--ember-deep) 13%, var(--coral-deep) 21%, var(--ember) 28%, var(--rose-mist) 37%;
+  }
+  /* ---------- 4. Rose dusk: cooler, mauve led, ember only as a thread ---------- */
+  .v4 {
+    --stops-a: var(--rose-mist) 8%, var(--ember-deep) 14%, var(--haze) 20%, var(--rose-mist) 26%, var(--blush) 32%;
+    --stops-b: var(--ember-deep) 6%, var(--rose-mist) 13%, var(--haze) 21%, var(--blush) 28%, var(--rose-mist) 37%;
+  }
+  /* ---------- 5. Coral dawn: warm, peach and coral, no mauve ---------- */
+  .v5 {
+    --stops-a: var(--coral-mid) 8%, var(--blush) 14%, var(--sand) 20%, var(--coral-mid) 26%, var(--haze) 32%;
+    --stops-b: var(--coral-mid) 6%, var(--blush) 13%, var(--haze) 21%, var(--coral-deep) 28%, var(--blush) 37%;
+  }
+  /* ---------- 6. Sand ash: the neutral, earth led, one coral thread ---------- */
+  .v6 {
+    --stops-a: var(--sand) 8%, var(--haze) 14%, var(--blush) 20%, var(--sand) 26%, var(--coral-deep) 32%;
+    --stops-b: var(--haze) 6%, var(--sand) 13%, var(--blush) 21%, var(--haze) 28%, var(--sand) 37%;
+  }
+  /* ---------- 7. Original, weather from the lower left instead ---------- */
+  .v7 {
+    --stops-a: var(--ember) 8%, var(--coral-mid) 14%, var(--blush) 20%, var(--rose-mist) 26%, var(--coral-deep) 32%;
+    --stops-b: var(--coral-deep) 6%, var(--rose-mist) 13%, var(--haze) 21%, var(--coral-mid) 28%, var(--ember-deep) 37%;
+    --at: 24% 72%;
+  }
+  /* ---------- 8. Inverse ground: pale weather on a blush ground ---------- */
+  .v8 {
+    --ground: linear-gradient(to bottom, var(--canvas) 0%, var(--blush) 16%, var(--blush) 84%, var(--canvas) 100%);
+    --stops-a: var(--canvas) 8%, var(--haze) 14%, var(--rose-mist) 20%, var(--canvas) 26%, var(--coral-mid) 32%;
+    --stops-b: var(--haze) 6%, var(--canvas) 13%, var(--rose-mist) 21%, var(--canvas) 28%, var(--coral-deep) 37%;
+  }
+  .v8 { background: var(--ground); }
+  .v8 .aurora__field {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 24%, #000 58%, transparent 86%), radial-gradient(ellipse 90% 70% at 72% 30%, #000 12%, rgba(0,0,0,.35) 62%, transparent 88%);
+  }
+
+  /* Band numbers, so a variant can be named by number. */
+  .n { position: absolute; top: 20px; left: 24px; z-index: 2; font: 500 28px/1 Montserrat, system-ui, sans-serif; letter-spacing: .04em; color: var(--n, #fff); }
+  .band { --n: #2C2C2C; } 
+</style>
+</head>
+<body>
+  <section class="band v1"><span class="n">1</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band v2"><span class="n">2</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band v3"><span class="n">3</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band v4"><span class="n">4</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band v5"><span class="n">5</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band v6"><span class="n">6</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band v7"><span class="n">7</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+  <section class="band v8"><span class="n">8</span><div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div></section>
+</body>
+</html>

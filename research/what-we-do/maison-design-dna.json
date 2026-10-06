@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "name": "MaisonFav (reference only)",
+    "description": "Architectural place finding template on Aura. A reference for moves and proportions. Not a source of code, and not the TPS brand.",
+    "source_references": ["https://maisonfav.aura.build/ (public page, read in a browser on 5 Oct 2026)"],
+    "created_at": "2026-10-05"
+  },
+  "design_system": {
+    "color": {
+      "palette_type": "monochromatic neutral with one pale accent",
+      "primary": { "hex": "#090B0C", "role": "ink, buttons, dark cards" },
+      "secondary": { "hex": "#E9E8E4", "role": "card and band fill" },
+      "accent": { "hex": "#B9E5F3", "role": "small pale blue highlight" },
+      "neutral": { "scale": ["#FFFFFF", "#F5F5F2", "#E9E8E4", "rgba(0,0,0,.45)", "rgba(0,0,0,.55)", "#090B0C"], "usage": "page ground #F5F5F2, text #090B0C, secondary text black at 45 to 65 percent" },
+      "semantic": { "success": "not observed", "warning": "not observed", "error": "not observed", "info": "#B9E5F3" },
+      "surface": { "background": "#F5F5F2", "card": "#E9E8E4", "elevated": "#FFFFFF" },
+      "contrast_strategy": "near black on warm off white, secondary text as translucent black",
+      "measurement": "computed styles read from the live page, not sampled from pixels"
+    },
+    "typography": {
+      "type_scale": {
+        "display": { "size": "103.68px", "weight": "600", "line_height": "0.85", "tracking": "-0.075em" },
+        "heading_1": { "size": "72px", "weight": "600", "line_height": "1.0", "tracking": "-0.06em" },
+        "heading_2": { "size": "60px", "weight": "400", "line_height": "1.05", "tracking": "-0.04em" },
+        "heading_3": { "size": "24px", "weight": "500", "line_height": "1.15", "tracking": "-0.02em" },
+        "body": { "size": "14px", "weight": "400", "line_height": "1.6", "tracking": "0" },
+        "body_small": { "size": "12px", "weight": "400", "line_height": "1.33", "tracking": "0" },
+        "caption": { "size": "12px", "weight": "400", "line_height": "1.33", "tracking": "0.02em" },
+        "overline": { "size": "12px", "weight": "400", "line_height": "1.33", "tracking": "0.21em" }
+      },
+      "font_families": { "heading": "DM Sans, with Instrument Serif italic for one phrase", "body": "DM Sans", "mono": "none observed" },
+      "font_style_notes": "very tight tracked grotesque headlines with one slanted serif phrase per statement. Tiny tracked uppercase labels."
+    },
+    "spacing": {
+      "base_unit": "4px",
+      "scale": ["4", "8", "12", "16", "24", "32", "48", "64", "96", "144", "160"],
+      "content_density": "spacious",
+      "section_rhythm": "160px above and below most sections, 96 to 144 on others, cards pulled up by 8vh"
+    },
+    "layout": {
+      "grid_system": "single column sections with 2 column heading and caption rows",
+      "max_content_width": "896px for text, wider for photo cards",
+      "columns": "12",
+      "gutter": "24px",
+      "breakpoints": ["640", "768", "1024", "1280"],
+      "alignment_tendency": "mixed: centred hero, left aligned sections"
+    },
+    "shape": {
+      "border_radius": { "small": "8px", "medium": "12px", "large": "16px, top corners only on stacked cards", "pill": "9999px" },
+      "border_usage": "subtle 1px hairlines",
+      "divider_style": "hairline rules and a short line before overline labels"
+    },
+    "elevation": {
+      "shadow_style": "none",
+      "levels": { "low": "none", "medium": "none", "high": "none" },
+      "depth_cues": "overlapping sticky layers, translucent white glass on the bar"
+    },
+    "iconography": { "style": "outline", "stroke_weight": "1.5px", "size_scale": ["16", "20"], "preferred_set": "Iconify line icons, arrow in a circle" },
+    "motion": {
+      "easing": "cubic-bezier(0.22, 1, 0.36, 1) and cubic-bezier(0.4, 0, 0.2, 1)",
+      "duration_scale": { "micro": "150ms", "normal": "400ms", "macro": "900ms" },
+      "entrance_pattern": "soft rise and fade on scroll (inferred)",
+      "exit_pattern": "none",
+      "philosophy": "calm, unhurried, scroll led"
+    },
+    "components": {
+      "button_style": "black pill, 44px tall, 12px label, a 32px white circle with an arrow inside on the right",
+      "input_style": "not observed on the studied sections",
+      "card_style": "photo cards 72vh tall with 16px top corners, sticky, stacked with offsets of about 66px",
+      "navigation_pattern": "slim bar, logo left, four tracked links, one pill button",
+      "modal_style": "none",
+      "list_style": "hairline rows",
+      "component_notes": "the stacked photo card is the signature component: each card sticks lower than the one before so the top edges stay visible"
+    }
+  },
+  "design_style": {
+    "aesthetic": {
+      "mood": "calm, confident, quiet luxury",
+      "visual_metaphor": "an architect's studio",
+      "era_influence": "2020s editorial minimal",
+      "genre": "boutique property and hospitality",
+      "personality_traits": ["restrained", "tactile", "assured"],
+      "adjectives": ["airy", "precise", "spacious", "refined"]
+    },
+    "visual_language": {
+      "complexity": "low",
+      "ornamentation": "almost none",
+      "whitespace_usage": "generous, used as the main luxury signal",
+      "visual_weight_distribution": "photography carries the weight, type stays light",
+      "focal_strategy": "one large image or statement per screen",
+      "contrast_level": "high between ink and ground, low between neighbouring greys",
+      "texture_usage": "none"
+    },
+    "composition": {
+      "hierarchy_method": "scale contrast between a huge headline and 12px labels",
+      "balance_type": "asymmetric",
+      "flow_direction": "vertical, with one horizontal accordion",
+      "grouping_strategy": "heading left, caption right, content below",
+      "negative_space_role": "pacing, gives each moment room"
+    },
+    "imagery": {
+      "photo_treatment": "full colour architectural photography, soft light, no filters",
+      "illustration_style": "none",
+      "graphic_elements": "pill buttons, numbered cards",
+      "pattern_usage": "none",
+      "image_shape": "rounded rectangles"
+    },
+    "interaction_feel": {
+      "feedback_style": "subtle",
+      "hover_behavior": "arrow chip moves, cards open",
+      "transition_personality": "smooth and weighted",
+      "loading_style": "not observed",
+      "microinteraction_density": "low"
+    },
+    "brand_voice_in_ui": {
+      "tone": "assured and understated",
+      "formality": "semi formal",
+      "cta_style": "short verbs: Begin a search, View residence",
+      "empty_state_approach": "not observed",
+      "error_tone": "not observed"
+    }
+  },
+  "visual_effects": {
+    "overview": {
+      "effect_intensity": "low",
+      "performance_tier": "light",
+      "fallback_strategy": "cards fall back to normal flow on small screens (inferred)",
+      "primary_technology": "CSS sticky positioning, Tailwind, small amounts of script"
+    },
+    "background_effects": {
+      "type": "soft mist gradient under the hero photograph",
+      "description": "the hero image fades into the page ground with a white fog",
+      "technology": "CSS gradient",
+      "params": { "color_palette": ["#F5F5F2", "#FFFFFF"], "speed": "static", "density": "low", "opacity": "0.8", "blend_mode": "normal" }
+    },
+    "particle_systems": { "enabled": false, "type": "none", "description": "none", "technology": "none", "params": { "count": "0", "shape": "none", "size_range": "none", "movement_pattern": "none", "color_behavior": "none", "interaction": "none", "spawn_area": "none" } },
+    "3d_elements": { "enabled": false, "type": "none", "description": "none", "technology": "none", "params": { "renderer": "none", "lighting": "none", "camera": "none", "materials": "none", "geometry": "none", "post_processing": "none", "interaction_model": "none" } },
+    "shader_effects": { "enabled": false, "type": "none", "description": "none", "technology": "none", "params": { "uniforms": "none", "vertex_manipulation": "none", "fragment_output": "none", "noise_type": "none", "distortion": "none" } },
+    "scroll_effects": {
+      "parallax": { "enabled": true, "layers": "photo inside its card", "depth_range": "small", "speed_curve": "linear" },
+      "scroll_triggered_animations": { "enabled": true, "trigger_points": "section enters viewport", "animation_type": "soft rise and fade", "scrub_behavior": "not scrubbed except the sticky stack" },
+      "scroll_morphing": { "enabled": true, "description": "stacked cards slide over each other, each sticky at a lower offset" }
+    },
+    "text_effects": {
+      "type": "mixed typeface headline",
+      "description": "tight grotesque with one slanted serif phrase",
+      "technology": "plain CSS",
+      "params": { "split_strategy": "none", "animation_per_unit": "none", "stagger": "none", "effect_style": "static" }
+    },
+    "cursor_effects": {
+      "enabled": true,
+      "type": "dot that follows the pointer",
+      "description": "12px circle, white with difference blending so it shows dark on light. TJ does not want this on TPS.",
+      "params": { "shape": "circle", "size": "12px", "blend_mode": "difference", "trail": "none", "interaction_zone": "whole page" }
+    },
+    "image_effects": {
+      "type": "plain cover crop",
+      "description": "photographs fill rounded cards",
+      "technology": "CSS object fit",
+      "params": { "filter_pipeline": "none", "hover_transform": "none observed", "reveal_animation": "none observed", "distortion_type": "none" }
+    },
+    "glassmorphism_neumorphism": {
+      "enabled": true,
+      "style": "light frosted bar",
+      "params": { "blur_radius": "small", "transparency": "0.8 white", "border_treatment": "1px hairline below", "shadow_type": "none", "light_source_angle": "none" }
+    },
+    "canvas_drawings": { "enabled": false, "type": "none", "description": "none", "technology": "none", "params": { "draw_method": "none", "animation_loop": "none", "color_scheme": "none", "responsiveness": "none", "interaction": "none" } },
+    "svg_animations": { "enabled": false, "type": "none", "description": "none", "params": { "animation_method": "none", "path_morphing": "none", "stroke_animation": "none", "filter_effects": "none" } },
+    "composite_notes": "The look comes from restraint, scale contrast and space, not from effects. Only the sticky stack and the hero fog are distinctive. Everything else is typography and photography. Items marked inferred were not directly observed."
+  }
+}

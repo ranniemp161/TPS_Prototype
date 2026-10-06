@@ -480,6 +480,10 @@
   addEventListener('resize', layout);
   addEventListener('load', layout);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+  // The hero and bath now sit above the flight, and their pin spacers are
+  // added or resized whenever ScrollTrigger refreshes. Re-measure the
+  // flight's start then too, or trackTop is left pointing at the old origin.
+  if (window.ScrollTrigger) ScrollTrigger.addEventListener('refresh', layout);
 
   layout();
   updateFromScroll();

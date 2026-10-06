@@ -63,6 +63,9 @@
   --gutter:  24px;
   --section: 96px;
   --nav-h:   80px;
+  /* The tall (top of page) header bar: --nav-h x 1.1 x --bar-grow (1.15).
+     The hero photograph starts below it. */
+  --hero-top: calc(var(--nav-h) * 1.265);
 
   /* The nav is the one row that belongs to the window rather than to the
      article column, so it carries its own two numbers. The inset is how
@@ -1098,6 +1101,25 @@ main:focus { outline: none; }
    At the shared 2.9rem cap it needed 761px in 724 and orphaned "too." */
 .act--hero .script { font-size: clamp(1.5rem, 2.6vw, 2.5rem); }
 .act--hero .btn--primary { margin-top: 1.8rem; }
+/* The header band (TJ, 5 Oct 2026). At the top of the page the tall header
+   sits on the page colour, not on the photograph, and the photograph begins
+   below it with its top edge fading into that colour, so there is no line
+   anywhere. The pinned stage still spans the whole window, so the pin and
+   the steam handoff are exactly as they were; only the photograph sits lower.
+   The photograph keeps its full width. object-position leans down so the
+   bottom of the picture is kept and the top (which the fade covers) is what
+   gives way. */
+.act--hero .stage { background: var(--canvas); }
+.act--hero .stage__media { inset: var(--hero-top) 0 0 0; overflow: hidden; }
+.act--hero .stage__media img { object-position: 62% 68%; }
+.act--hero .stage__media::after {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0;
+  height: clamp(96px, 15svh, 160px);
+  pointer-events: none; z-index: 1;
+  background: linear-gradient(to bottom,
+    var(--canvas) 0%, rgba(243, 239, 236, .78) 38%, rgba(243, 239, 236, 0) 100%);
+}
 
 /* Kinetic lines: each line rises from behind a mask.
    Masks reserve descender room so g, y, p and j keep their tails. */
@@ -2118,6 +2140,8 @@ main:focus { outline: none; }
     aspect-ratio: 4 / 3;
   }
   .act--hero .stage__media img { object-position: 60% center; }
+  .act--hero .stage { padding-top: var(--hero-top); }
+  .act--hero .stage__media { overflow: hidden; }
   .act--hero .scrim--lead { display: none; }
   .act--hero .stage__copy {
     flex: 1 1 auto;

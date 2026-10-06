@@ -1,0 +1,52 @@
+<!--
+  SITE FOOTER: the one source of truth.
+  Every page's footer is stamped from this file by sync-site-footer.py.
+  Edit the footer HERE, then run:
+      python sync-site-footer.py            (writes every page)
+      python sync-site-footer.py --check    (reports any page that has drifted)
+  Styles live in site-footer.css. The year in the copyright line is filled in
+  by the page when it loads, so it rolls over on 1 January with no edit.
+  This comment block is not copied into the pages.
+-->
+<footer class="sf" data-section="site-footer" data-section-name="Footer">
+  <div class="sf__aurora" aria-hidden="true"><span class="sf__field"></span></div>
+  <div class="sf__inner">
+
+    <div class="sf__brand">
+      <a href="v1.html" aria-label="The Postpartum Suite, home">
+        <img class="sf__logo" src="assets/img/logo-inline.webp" alt="The Postpartum Suite" width="1603" height="487" loading="lazy" />
+      </a>
+      <p class="sf__tag">The care mothers deserve, at home.</p>
+    </div>
+
+    <nav class="sf__col" aria-label="Footer">
+      <h2 class="sf__head">Explore</h2>
+      <ul>
+        <li><a href="care.html">What We Do</a></li>
+        <li><a href="programmes.html">Programmes</a></li>
+        <li><a href="programme.html">Bespoke Programmes</a></li>
+        <li><a href="single-treatments.html">Signature Treatments</a></li>
+        <li><a href="about.html">The Suite</a></li>
+        <li><a href="specialist.html">Who Comes To Your Home</a></li>
+      </ul>
+    </nav>
+
+    <div class="sf__col">
+      <h2 class="sf__head">Contact</h2>
+      <ul>
+        <li><a href="mailto:info@thepostpartumsuite.com">info@thepostpartumsuite.com</a></li>
+        <li><a href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="sf__base">
+    <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
+    <ul class="sf__legal">
+      <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
+      <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
+    </ul>
+  </div>
+  <script>document.querySelectorAll('[data-year]').forEach(function (e) { e.textContent = new Date().getFullYear(); });</script>
+</footer>

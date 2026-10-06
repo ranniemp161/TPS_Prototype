@@ -46,14 +46,15 @@ html { background: var(--canvas); }
 .page--builder {
   /* The nav is fixed and carries no background of its own, so the page
      has to hold its own content clear of it. */
-  padding-top: var(--nav-h);
+  padding-top: var(--hero-top);
 }
 
 /* The bar sits over pale grounds the whole way down this page, so the
    scrolled treatment is the only one it ever needs. v1 earns the morph
    by travelling through a photographic hero; there is nothing here for
    the full lockup to sit on. */
-.page--builder .nav { background: var(--canvas); border-bottom: 1px solid var(--hairline); }
+/* The builder used to give the bar a solid ground and a border. Every page now
+   has the same glass header (TJ, 5 Oct 2026), so that override is gone. */
 
 
 /* ============================================================

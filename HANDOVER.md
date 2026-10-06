@@ -134,7 +134,7 @@ The `act--x` class names are historical and several are now misleading:
 `act--turn` holds the confinement explainer, `act--peak` holds the dissolve.
 They stay as styling hooks. Do not reason from them.
 
-**The dev panel.** Open `v1.html?dev` and a small dot appears in the bottom left.
+**The dev panel.** Open `v1.html?dev` and a small dot appears in the bottom right. The arrows button expands it to show each section key and height. Every page loads it through `lab/devpanel-loader.js`.
 Click it and it lists every section in order, highlights whichever one is
 filling the frame as you scroll, and copies a name when you click it. Escape
 closes it, and it remembers whether it was open.

@@ -1,0 +1,44 @@
+[
+ {
+  "id": "care.html:faq",
+  "page": "care.html",
+  "section": "faq",
+  "date": "2026-10-05",
+  "note": "TJ: the FAQ is how he likes it (5 Oct 2026)"
+ },
+ {
+  "id": "care.html:housekeeping-zones",
+  "page": "care.html",
+  "section": "housekeeping-zones",
+  "date": "2026-10-05",
+  "note": "TJ: keep the housekeeping zones the same (5 Oct 2026)"
+ },
+ {
+  "id": "care.html:site-header",
+  "page": "care.html",
+  "section": "site-header",
+  "date": "2026-10-05",
+  "note": "TJ: likes it, universal across the site (5 Oct 2026)"
+ },
+ {
+  "id": "care.html:site-footer",
+  "page": "care.html",
+  "section": "site-footer",
+  "date": "2026-10-05",
+  "note": "TJ: likes it, universal across the site (5 Oct 2026)"
+ },
+ {
+  "id": "v1.html:site-header",
+  "page": "v1.html",
+  "section": "site-header",
+  "date": "2026-10-05",
+  "note": "TJ: likes it, universal across the site (5 Oct 2026)"
+ },
+ {
+  "id": "v1.html:site-footer",
+  "page": "v1.html",
+  "section": "site-footer",
+  "date": "2026-10-05",
+  "note": "TJ: likes it, universal across the site (5 Oct 2026)"
+ }
+]
