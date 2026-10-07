@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What We Do hero studies</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="v1.css" />
+<link rel="stylesheet" href="what-we-do.css" />
+<style>
+/* ============================================================
+   WHAT WE DO hero studies, round one (7 Oct 2026)
+   Four rough answers to one question: what does arriving look like?
+   Each study is the hero plus the hand into the client's paragraph.
+   Throwaway. Nothing here is on care.html. No header, no footer.
+   Copy is the client's; the one stay line is her Tailored sentence cut.
+   ============================================================ */
+body { margin: 0; background: var(--canvas); color: var(--ink); }
+.lab-tag { position: fixed; left: 16px; top: 16px; z-index: 50; font: 500 .72rem/1 var(--f-body); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); background: rgba(243,239,236,.8); padding: 10px 12px; border-radius: 6px; pointer-events: none; }
+.divider { height: 60vh; display: grid; place-items: center; background: var(--canvas); }
+.divider p { margin: 0; font: 500 .72rem/1 var(--f-body); letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); }
+.divider p b { display: block; margin-top: 12px; font: 400 2rem/1 var(--f-display); text-transform: uppercase; letter-spacing: 0; color: var(--ink); }
+
+/* shared stage and copy */
+.st { position: relative; }
+.st__stage { position: relative; height: 100svh; min-height: 560px; overflow: hidden; background: var(--canvas); }
+.st__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.st__copy { position: absolute; inset: 0; display: grid; align-content: center; gap: 18px; padding: 0 var(--gutter); max-width: 920px; margin: 0 auto; pointer-events: none; }
+.st__q { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.4rem, 5.6vw, 5.4rem); line-height: .95; letter-spacing: -.012em; text-wrap: balance; }
+.st__we { margin: 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(3rem, 7vw, 6.4rem); line-height: 1; }
+.st__line { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(.95rem, .85rem + .3vw, 1.1rem); line-height: 1.5; max-width: 46ch; }
+.st__line + .st__line { margin-top: -8px; }
+.st__after { position: relative; padding: clamp(56px, 10vh, 120px) 0; background: var(--canvas); }
+.st__after .wide { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+.st__after .wp { max-width: 60ch; }
+.st__figs { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.st__figs b { font-family: var(--f-mono); font-weight: 500; font-size: 1.05rem; display: block; }
+.st__figs span { font-family: var(--f-body); font-size: .78rem; color: var(--ink-soft); }
+@media (max-width: 860px) { .st__after .wide { grid-template-columns: 1fr; } }
+
+/* ---- A. Through the glass: the room is behind frosted glass; scroll clears it ---- */
+.a .st__pane { position: absolute; inset: 0; background: rgba(243,239,236,.70); backdrop-filter: blur(22px) saturate(1.2); -webkit-backdrop-filter: blur(22px) saturate(1.2); }
+.a .st__pane--l { right: 50%; } .a .st__pane--r { left: 50%; }
+.a .st__copy { color: var(--ink); text-align: center; justify-items: center; }
+.a .st__line { max-width: 52ch; }
+/* once the doors are open the copy sits on one strip of glass at the foot */
+.a .st__copy.is-strip { inset: auto var(--gutter) 6vh; max-width: 640px; padding: 24px 28px; align-content: start; text-align: left; justify-items: start; border-radius: var(--r-card); }
+.a .st__copy.is-strip .st__we { font-size: clamp(2rem, 3.6vw, 3rem); }
+
+/* ---- B. Mist clears: Canvas steam over the room thins from the middle out ---- */
+.b .st__mist { position: absolute; inset: -20%; background: radial-gradient(ellipse 40% 40% at 50% 55%, rgba(243,239,236,0) 0, rgba(243,239,236,.92) 60%, var(--canvas) 100%); filter: blur(0px); transform: scale(1); }
+.b .st__mist2 { position: absolute; inset: 0; background: linear-gradient(to top, var(--canvas) 0, rgba(243,239,236,0) 55%); }
+.b .st__copy { text-align: center; justify-items: center; }
+
+/* ---- C. Step inside: a framed photograph grows until you are in the room ---- */
+.c .st__frame { position: absolute; left: 50%; top: 50%; width: 38vw; aspect-ratio: 4/5; max-height: 70svh; transform: translate(-50%, -50%); border-radius: var(--r-media); overflow: hidden; }
+.c .st__frame img { width: 100%; height: 100%; object-fit: cover; object-position: 46% 40%; }
+.c .st__copy { max-width: none; grid-template-columns: 1fr 1fr; align-items: center; }
+.c .st__copy > div { display: grid; gap: 18px; }
+.c .st__glass { position: absolute; left: var(--gutter); bottom: 6vh; max-width: 560px; padding: 28px 32px; opacity: 0; display: grid; gap: 14px; }
+.c .st__glass .st__line + .st__line { margin-top: 0; }
+
+/* ---- D. Seven in the morning: the room is dim; scroll brings the morning in ---- */
+.d .st__night { position: absolute; inset: 0; background: var(--ink-mute); mix-blend-mode: multiply; opacity: .72; }
+.d .st__light { position: absolute; inset: 0; background: linear-gradient(100deg, rgba(243,239,236,.0) 0%, rgba(243,239,236,.0) 40%, rgba(243,239,236,.0) 100%); }
+.d .st__copy { color: #fff; }
+.d .st__copy.is-day { color: var(--ink); }
+.d .st__we { color: #fff; }
+</style>
+</head>
+<body>
+<p class="lab-tag">Hero studies, round one</p>
+
+<!-- ============ A ============ -->
+<div class="divider"><p>Study A<b>Through the glass</b></p></div>
+<section class="st a" data-study="a">
+  <div class="st__stage" data-stage>
+    <img class="st__img" src="assets/img/s2-handoff.webp" alt="" style="object-position:46% 40%" />
+    <div class="st__pane st__pane--l" data-pane-l></div>
+    <div class="st__pane st__pane--r" data-pane-r></div>
+    <div class="st__copy" data-copy>
+      <h1 class="st__q" data-q>After birth, who looks after mum?</h1>
+      <p class="st__we" data-we>We do.</p>
+      <p class="st__line" data-l1>Stay with us for 5, 7, 14 or 30 days, with care from 7am to 7pm and night support if required.</p>
+      <p class="st__line" data-l2>Care for you and your baby, restorative treatments, fresh meals and help around your home.</p>
+    </div>
+  </div>
+  <div class="st__after"><div class="wide">
+    <p class="wp" data-para>The weeks that follow birth are some of the most important of a mother's life. Your body is healing from pregnancy and birth, your energy is being rebuilt, and the care you receive now can shape how you feel for months to come. Yet this is often the time when a mother's own recovery comes last. At The Postpartum Suite, we put it first. From your very first days at home with your baby, we care for you in four ways: support with you and your baby, restorative postpartum treatments, fresh nourishing meals and help around your home. Together, they give you what every new mother deserves: the time and space to truly heal.</p>
+    <ul class="st__figs"><li><b>7am to 7pm</b><span>care each day</span></li><li><b>3</b><span>fresh meals a day</span></li><li><b>5 7 14 30</b><span>day programmes</span></li></ul>
+  </div></div>
+</section>
+
+<!-- ============ B ============ -->
+<div class="divider"><p>Study B<b>Mist clears</b></p></div>
+<section class="st b" data-study="b">
+  <div class="st__stage" data-stage>
+    <img class="st__img" src="assets/img/s2-handoff.webp" alt="" style="object-position:46% 40%" />
+    <div class="st__mist" data-mist></div>
+    <div class="st__mist2" data-mist2></div>
+    <div class="st__copy" data-copy>
+      <h1 class="st__q" data-q>After birth, who looks after mum?</h1>
+      <p class="st__we" data-we>We do.</p>
+      <p class="st__line" data-l1>Stay with us for 5, 7, 14 or 30 days, with care from 7am to 7pm and night support if required.</p>
+      <p class="st__line" data-l2>Care for you and your baby, restorative treatments, fresh meals and help around your home.</p>
+    </div>
+  </div>
+  <div class="st__after"><div class="wide">
+    <p class="wp" data-para>The weeks that follow birth are some of the most important of a mother's life. Your body is healing from pregnancy and birth, your energy is being rebuilt, and the care you receive now can shape how you feel for months to come. Yet this is often the time when a mother's own recovery comes last. At The Postpartum Suite, we put it first. From your very first days at home with your baby, we care for you in four ways: support with you and your baby, restorative postpartum treatments, fresh nourishing meals and help around your home. Together, they give you what every new mother deserves: the time and space to truly heal.</p>
+    <ul class="st__figs"><li><b>7am to 7pm</b><span>care each day</span></li><li><b>3</b><span>fresh meals a day</span></li><li><b>5 7 14 30</b><span>day programmes</span></li></ul>
+  </div></div>
+</section>
+
+<!-- ============ C ============ -->
+<div class="divider"><p>Study C<b>Step inside</b></p></div>
+<section class="st c" data-study="c">
+  <div class="st__stage" data-stage>
+    <div class="st__frame" data-frame><img src="assets/img/mother-and-carer-on-sofa-with-baby-no-hijab.webp" alt="" /></div>
+    <div class="st__copy" data-copy>
+      <div data-left>
+        <h1 class="st__q" data-q>After birth, who looks after mum?</h1>
+        <p class="st__we" data-we>We do.</p>
+      </div>
+      <div></div>
+    </div>
+    <div class="st__glass glass" data-glass>
+      <p class="st__line" data-l1>Stay with us for 5, 7, 14 or 30 days, with care from 7am to 7pm and night support if required.</p>
+      <p class="st__line" data-l2>Care for you and your baby, restorative treatments, fresh meals and help around your home.</p>
+    </div>
+  </div>
+  <div class="st__after"><div class="wide">
+    <p class="wp" data-para>The weeks that follow birth are some of the most important of a mother's life. Your body is healing from pregnancy and birth, your energy is being rebuilt, and the care you receive now can shape how you feel for months to come. Yet this is often the time when a mother's own recovery comes last. At The Postpartum Suite, we put it first. From your very first days at home with your baby, we care for you in four ways: support with you and your baby, restorative postpartum treatments, fresh nourishing meals and help around your home. Together, they give you what every new mother deserves: the time and space to truly heal.</p>
+    <ul class="st__figs"><li><b>7am to 7pm</b><span>care each day</span></li><li><b>3</b><span>fresh meals a day</span></li><li><b>5 7 14 30</b><span>day programmes</span></li></ul>
+  </div></div>
+</section>
+
+<!-- ============ D ============ -->
+<div class="divider"><p>Study D<b>Seven in the morning</b></p></div>
+<section class="st d" data-study="d">
+  <div class="st__stage" data-stage>
+    <img class="st__img" src="assets/img/s2-handoff.webp" alt="" style="object-position:46% 40%" />
+    <div class="st__night" data-night></div>
+    <div class="st__copy" data-copy>
+      <h1 class="st__q" data-q>After birth, who looks after mum?</h1>
+      <p class="st__we" data-we>We do.</p>
+      <p class="st__line" data-l1>Stay with us for 5, 7, 14 or 30 days, with care from 7am to 7pm and night support if required.</p>
+      <p class="st__line" data-l2>Care for you and your baby, restorative treatments, fresh meals and help around your home.</p>
+    </div>
+  </div>
+  <div class="st__after"><div class="wide">
+    <p class="wp" data-para>The weeks that follow birth are some of the most important of a mother's life. Your body is healing from pregnancy and birth, your energy is being rebuilt, and the care you receive now can shape how you feel for months to come. Yet this is often the time when a mother's own recovery comes last. At The Postpartum Suite, we put it first. From your very first days at home with your baby, we care for you in four ways: support with you and your baby, restorative postpartum treatments, fresh nourishing meals and help around your home. Together, they give you what every new mother deserves: the time and space to truly heal.</p>
+    <ul class="st__figs"><li><b>7am to 7pm</b><span>care each day</span></li><li><b>3</b><span>fresh meals a day</span></li><li><b>5 7 14 30</b><span>day programmes</span></li></ul>
+  </div></div>
+</section>
+
+<div class="divider"><p>End of round one</p></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const vh = () => window.innerHeight;
+function study(sel, build, len) {
+  const el = document.querySelector(sel);
+  const stage = el.querySelector('[data-stage]');
+  const q = s => el.querySelector(s);
+  const tl = gsap.timeline({ defaults: { ease: 'none' } });
+  build(tl, q, el);
+  ScrollTrigger.create({ trigger: el, start: 'top top', end: () => '+=' + Math.round(vh() * len), pin: stage, scrub: .9, animation: tl, invalidateOnRefresh: true });
+  // the hand into the paragraph: it rises and settles as the stage releases
+  gsap.fromTo(q('[data-para]'), { opacity: 0, y: 28 }, { opacity: 1, y: 0, ease: 'power2.out', scrollTrigger: { trigger: el.querySelector('.st__after'), start: 'top 85%', end: 'top 45%', scrub: .6 } });
+}
+
+/* A. Through the glass. At rest the room is behind two panes of frosted glass
+   with the question on them. Scroll: the answer lands, then the two panes
+   part like doors and the room is clear; the two lines settle on the picture
+   on a strip of glass at the foot. */
+study('[data-study="a"]', (tl, q) => {
+  gsap.set([q('[data-we]'), q('[data-l1]'), q('[data-l2]')], { opacity: 0, y: 14 });
+  tl.to(q('[data-we]'), { opacity: 1, y: 0, duration: .3, ease: 'power2.out' }, .15)
+    .to(q('[data-pane-l]'), { xPercent: -100, duration: 1.2, ease: 'power2.inOut' }, .7)
+    .to(q('[data-pane-r]'), { xPercent: 100, duration: 1.2, ease: 'power2.inOut' }, .7)
+    .to(q('[data-q]'), { opacity: 0, y: -24, duration: .4 }, .8)
+    .to(q('[data-we]'), { scale: 1.35, duration: .9 }, .9)
+    .to(q('[data-copy]'), { className: 'st__copy glass is-strip', duration: .01 }, 1.5)
+    .to(q('[data-l1]'), { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.6)
+    .to(q('[data-l2]'), { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.8)
+    .to({}, { duration: .5 });
+}, 3.2);
+
+/* B. Mist clears. The room sits under Canvas steam; only a soft window in the
+   middle is clear, holding the question. Scroll: the window widens as the
+   mist thins, the answer appears in the clearing, the lines follow, and the
+   steam that remains at the foot is the ground of the paragraph. */
+study('[data-study="b"]', (tl, q) => {
+  gsap.set([q('[data-we]'), q('[data-l1]'), q('[data-l2]')], { opacity: 0, y: 14 });
+  gsap.set(q('[data-mist]'), { scale: 1 });
+  tl.to(q('[data-mist]'), { scale: 3.2, opacity: .35, duration: 2.2, ease: 'power1.inOut' }, 0)
+    .to(q('[data-we]'), { opacity: 1, y: 0, duration: .3, ease: 'power2.out' }, .3)
+    .to(q('[data-q]'), { opacity: 0, y: -24, duration: .4 }, 1.0)
+    .to(q('[data-l1]'), { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.3)
+    .to(q('[data-l2]'), { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.5)
+    .to({}, { duration: .5 });
+}, 3.2);
+
+/* C. Step inside. A framed photograph on the right, the question on the
+   left, pale ground. Scroll: the frame grows until you are in the room, the
+   question gives way to the answer, and the two lines arrive on a glass
+   panel at the foot. The picture then scrolls away under the paragraph. */
+study('[data-study="c"]', (tl, q) => {
+  gsap.set(q('[data-we]'), { opacity: 0, y: 14 });
+  gsap.set(q('[data-frame]'), { xPercent: 30 });
+  tl.to(q('[data-frame]'), { xPercent: 0, width: '100vw', maxHeight: '100svh', height: '100svh', borderRadius: 0, duration: 1.6, ease: 'power2.inOut' }, .2)
+    .to(q('[data-q]'), { opacity: 0, y: -24, duration: .4 }, .9)
+    .to(q('[data-we]'), { opacity: 1, y: 0, duration: .4, ease: 'power2.out' }, 1.2)
+    .to(q('[data-left]'), { x: '6vw', duration: 1, ease: 'power2.inOut' }, .9)
+    .to(q('[data-glass]'), { opacity: 1, duration: .4, ease: 'power2.out' }, 1.7)
+    .to({}, { duration: .5 });
+}, 3.2);
+
+/* D. Seven in the morning. The room is dim, the question in white. Scroll
+   brings the morning in: the dark lifts, the answer lands as the light does,
+   the copy turns to ink with the room, and the lines follow. The reverse of
+   The Promise, which is the day ending. */
+study('[data-study="d"]', (tl, q) => {
+  gsap.set([q('[data-we]'), q('[data-l1]'), q('[data-l2]')], { opacity: 0, y: 14 });
+  // the question leaves in white while it is still night; the answer and the
+  // lines arrive in ink once the room is light, so nothing is read mid grey
+  gsap.set([q('[data-we]'), q('[data-l1]'), q('[data-l2]')], { color: '#0A0A0A' });
+  tl.to(q('[data-night]'), { opacity: 0, duration: 2, ease: 'power1.inOut' }, 0)
+    .to(q('[data-q]'), { opacity: 0, y: -24, duration: .4 }, .5)
+    .to(q('[data-we]'), { opacity: 1, y: 0, duration: .4, ease: 'power2.out' }, 1.3)
+    .to(q('[data-l1]'), { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.6)
+    .to(q('[data-l2]'), { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.8)
+    .to({}, { duration: .5 });
+}, 3.2);
+
+window.addEventListener('load', () => ScrollTrigger.refresh());
+</script>
+</body>
+</html>
