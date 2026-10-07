@@ -11,7 +11,7 @@ import re, sys, pathlib
 
 HERE = pathlib.Path(__file__).resolve().parent
 PAGES = ["v1.html", "care.html", "programmes.html", "single-treatments.html",
-         "about.html", "specialist.html", "programme.html", "index.html"]
+         "about.html", "specialist.html", "programme.html", "faqs.html", "index.html"]
 LINK = '<link rel="stylesheet" href="site-footer.css" />'
 
 raw = (HERE / "site-footer.html").read_text(encoding="utf-8")
