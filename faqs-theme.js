@@ -3,76 +3,45 @@
 
   var page = document.querySelector(".page--faqs");
   var faq = document.querySelector(".faq--morph");
-  var nav = document.querySelector("[data-nav]");
-  var groups = faq ? Array.prototype.slice.call(faq.querySelectorAll(".faq__group")) : [];
-  if (!page || !faq || !nav || groups.length !== 8 || !window.gsap || !window.ScrollTrigger) return;
+  if (!page || !faq || !window.gsap || !window.ScrollTrigger) return;
 
   gsap.registerPlugin(ScrollTrigger);
 
-  var states = [
-    { ground: "#F3EFEC", night: 0 },
-    { ground: "#E2CAC6", night: 0 },
-    { ground: "#CD8E81", night: 0 },
-    { ground: "#A64C45", night: 1 },
-    { ground: "#5A524F", night: 1 },
-    { ground: "#A64C45", night: 1 },
-    { ground: "#CD8E81", night: 0 },
-    { ground: "#E2CAC6", night: 0 },
-    { ground: "#F3EFEC", night: 0 }
-  ];
-  var anchors = [];
+  /* One constant palette and scroll driven motion (TJ, 7 Oct 2026).
+     The colours never change: the light top of the page (Canvas with coral
+     and blush streaks, the defaults in what-we-do.css) holds the whole way
+     down, and the copy stays Ink. What scroll changes is the drift's motion,
+     on top of its own slow 62 second travel:
+       turn   the two streak layers rotate, in opposite senses at different
+              rates, so they slide across each other
+       travel the field wanders across the window on a slow curve
+       breathe it swells a little toward the middle of the page and settles
+       glow   the bright centre of the drift moves from right to left and
+              rises and falls
+     Every value is a smooth function of how far down the page you are, so
+     it moves only while you scroll, at your speed, and reverses on the way
+     up. Reduced motion keeps the drift still. */
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var max = 1;
 
-  function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+  function clamp(value, min, top) { return Math.min(top, Math.max(min, value)); }
   function smooth(value) {
     value = clamp(value, 0, 1);
     return value * value * (3 - 2 * value);
   }
-  function rgb(hex) {
-    return [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
-  }
-  function mix(from, to, amount) {
-    var a = rgb(from), b = rgb(to);
-    return "rgb(" + a.map(function (value, index) {
-      return Math.round(value + (b[index] - value) * amount);
-    }).join(", ") + ")";
-  }
   function measure() {
-    var offset = window.innerHeight * .45;
-    anchors = [faq.offsetTop];
-    for (var index = 1; index < groups.length; index += 1) {
-      anchors.push(groups[index].getBoundingClientRect().top + window.scrollY - offset);
-    }
-    anchors.push(Math.max(anchors[anchors.length - 1] + 1, faq.offsetTop + faq.offsetHeight - window.innerHeight * .55));
-  }
-  function stateAt(y) {
-    if (y <= anchors[0]) return states[0];
-    for (var index = 0; index < anchors.length - 1; index += 1) {
-      if (y <= anchors[index + 1]) {
-        var amount = smooth((y - anchors[index]) / Math.max(1, anchors[index + 1] - anchors[index]));
-        return {
-          ground: mix(states[index].ground, states[index + 1].ground, amount),
-          night: states[index].night + (states[index + 1].night - states[index].night) * amount
-        };
-      }
-    }
-    return states[states.length - 1];
+    max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   }
   function apply() {
-    var state = stateAt(window.scrollY);
-    var night = smooth(state.night);
-    page.style.setProperty("--faq-ground", state.ground);
-    page.style.setProperty("--faq-night", night.toFixed(3));
-    page.classList.toggle("is-night-copy", night >= .55);
-
-    if (night <= .001) {
-      nav.removeAttribute("data-nd");
-      nav.style.removeProperty("--nd");
-      nav.classList.remove("is-dark");
-    } else {
-      nav.setAttribute("data-nd", "");
-      nav.style.setProperty("--nd", night.toFixed(3));
-      nav.classList.toggle("is-dark", night >= .55);
-    }
+    if (reduced) return;
+    var p = clamp(window.scrollY / max, 0, 1), e = smooth(p);
+    var w = window.innerWidth, h = window.innerHeight;
+    page.style.setProperty("--fw-rot", (e * 38).toFixed(2) + "deg");
+    page.style.setProperty("--fw-x", (Math.sin(p * Math.PI * 1.5) * w * .09).toFixed(1) + "px");
+    page.style.setProperty("--fw-y", (Math.sin(p * Math.PI * 2) * h * -.06).toFixed(1) + "px");
+    page.style.setProperty("--fw-scale", (1 + Math.sin(p * Math.PI) * .16).toFixed(3));
+    page.style.setProperty("--fw-mx", (70 - e * 40).toFixed(2) + "%");
+    page.style.setProperty("--fw-my", (40 + Math.sin(p * Math.PI) * 18).toFixed(2) + "%");
   }
   function refresh() {
     measure();

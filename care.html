@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="v1.css" />
 <link rel="stylesheet" href="care.css" />
 <link rel="stylesheet" href="what-we-do.css" />
+<link rel="stylesheet" href="hero-wwd.css" />
 <link rel="stylesheet" href="site-footer.css" />
 <link rel="preload" as="image" href="assets/img/care-bedroom.webp" />
 <script>document.documentElement.classList.add('js');</script>
@@ -128,6 +129,65 @@
         <span class="hx__btn"></span>
       </div>
       <div class="hx__img" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: hero proposal (7 Oct 2026) ============
+       A question, the answer, four claims on four photographs that rise
+       column by column with the scroll. See hero-wwd.css. Sits under the
+       placeholder hero for comparison until TJ chooses. -->
+  <section class="hw" data-hw data-section="hero-proposal" data-section-name="Hero (proposal)">
+    <div class="hw__stage" data-hw-stage>
+      <div class="hw__photo" data-hw-photo data-src="assets/img/s2-handoff.webp" data-pos="46% 40%" data-alt="A postpartum specialist handing a swaddled newborn to a mother resting in bed" aria-hidden="true"></div>
+      <div class="hw__photo" data-hw-photo data-src="assets/img/s4-massage.webp" data-pos="55% 50%" aria-hidden="true"></div>
+      <div class="hw__photo" data-hw-photo data-src="assets/img/s6-meal.webp" data-pos="42% 50%" aria-hidden="true"></div>
+      <div class="hw__photo" data-hw-photo data-src="assets/img/s7-home.webp" data-pos="60% 50%" aria-hidden="true"></div>
+      <div class="hw__veil" data-hw-veil aria-hidden="true"></div>
+
+      <div class="hw__ask" data-hw-ask>
+        <h1>After birth, who looks after mum?</h1>
+      </div>
+      <p class="hw__we" data-hw-we aria-hidden="true">We do.</p>
+
+      <div class="hw__panel glass" data-hw-panel>
+        <p class="hw__small">We do.</p>
+        <div class="hw__claims">
+          <div class="hw__claim" data-hw-claim>
+            <p class="wlabel">Mother and Baby Care</p>
+            <p>Hands on support with your baby, and thoughtful care for you, every day.</p>
+          </div>
+          <div class="hw__claim" data-hw-claim>
+            <p class="wlabel">Treatments</p>
+            <p>Hands on care that repeats through your stay, not offered once as a treat.</p>
+          </div>
+          <div class="hw__claim" data-hw-claim>
+            <p class="wlabel">Meals</p>
+            <p>Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
+          </div>
+          <div class="hw__claim" data-hw-claim>
+            <p class="wlabel">Home Support</p>
+            <p>Everyday life, taken care of from the moment we arrive.</p>
+          </div>
+        </div>
+        <div class="hw__ticks" aria-hidden="true"><span data-hw-tick class="is-on"></span><span data-hw-tick></span><span data-hw-tick></span><span data-hw-tick></span></div>
+      </div>
+    </div>
+
+    <div class="hw__after">
+      <div class="wide">
+        <div class="hw__copy" data-hw-copy data-folded>
+          <p class="wp">The weeks that follow birth are some of the most important of a mother's life. Your body is healing from pregnancy and birth, your energy is being rebuilt, and the care you receive now can shape how you feel for months to come. Yet this is often the time when a mother's own recovery comes last. At The Postpartum Suite, we put it first. From your very first days at home with your baby, we care for you in four ways: support with you and your baby, restorative postpartum treatments, fresh nourishing meals and help around your home. Together, they give you what every new mother deserves: the time and space to truly heal.</p>
+          <button class="hw__more" type="button" data-hw-more aria-expanded="false">Read more</button>
+        </div>
+        <div class="hw__act">
+          <ul class="wfigs" aria-label="At a glance">
+            <li><b>7am to 7pm</b><span>care each day</span></li>
+            <li><b>3</b><span>fresh meals a day</span></li>
+            <li><b>5 7 14 30</b><span>day programmes</span></li>
+          </ul>
+          <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -333,15 +393,15 @@
           <ul class="zones__rooms" aria-label="Rooms">
             <li class="zones__room" data-zitem="living">
               <button type="button" data-zroom="living" aria-expanded="false" aria-controls="zones-more-living">Living room</button>
-              <div class="zones__more" id="zones-more-living"><div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div></div>
+              <div class="zones__more" id="zones-more-living"><div><p>The living room is where your days with your baby unfold, so we keep it feeling restful and composed. Throughout the day the space is quietly tidied, and the floors are hoovered and mopped so the room always feels fresh. Whenever you come down to sit with your baby or welcome family, it is serene, orderly and ready for you, as though it has been waiting.</p></div></div>
             </li>
             <li class="zones__room" data-zitem="kitchen">
               <button type="button" data-zroom="kitchen" aria-expanded="false" aria-controls="zones-more-kitchen">Kitchen</button>
-              <div class="zones__more" id="zones-more-kitchen"><div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div></div>
+              <div class="zones__more" id="zones-more-kitchen"><div><p>Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery. Your groceries are collected, warm teas and lactation drinks are prepared throughout the day, and your baby's bottles and feeding items are washed and sterilised. After l meals, the kitchen is restored, with surfaces cleaned and floors hoovered and mopped, so it is never something you have to think about.</p></div></div>
             </li>
             <li class="zones__room" data-zitem="nursery">
               <button type="button" data-zroom="nursery" aria-expanded="false" aria-controls="zones-more-nursery">Nursery</button>
-              <div class="zones__more" id="zones-more-nursery"><div><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div></div>
+              <div class="zones__more" id="zones-more-nursery"><div><p>Your clothes and your baby's are washed, beautifully pressed and put away, with your baby's wardrobe sorted and neatly organised. Every essential, from nappies to muslins, is kept stocked and within easy reach. Whether it is a 3am feed or an afternoon change, you step into a room that is peaceful, considered and already prepared, with nothing to search for.</p></div></div>
             </li>
           </ul>
         </div>
@@ -549,6 +609,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="inner-nav.js"></script>
+<script src="hero-wwd.js"></script>
 <script src="zones.js"></script>
 <script src="what-we-do.js"></script>
 <script src="promise.js"></script>

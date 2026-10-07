@@ -607,11 +607,6 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 /* ---------- FAQ page colour arc (7 Oct 2026, TJ) ---------- */
 .page--faqs {
   --faq-ground: #F3EFEC;
-  --faq-text: #0A0A0A;
-  --faq-text-soft: #2C2C2C;
-  --faq-rule: rgba(10, 10, 10, .14);
-  --faq-accent: #A64C45;
-  --faq-night: 0;
   background: var(--faq-ground);
   color: var(--faq-text);
 }
@@ -628,52 +623,51 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
   overflow: hidden;
   pointer-events: none;
 }
-.page--faqs .faq__weather::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--ink-soft);
-  opacity: calc(var(--faq-night) * .24);
+/* One drift for the whole page (TJ, 7 Oct 2026): the footer's construction
+   exactly (site-footer.css .sf__field): same stops, sizes, angles, 44px blur,
+   mask and 62 second travel. Only the colours change with scroll, set by
+   faqs-theme.js: --fw-a1..3 on the still layer, --fw-b1..3 on the moving one,
+   --fw-op for its strength. Defaults are the light palette. */
+.page--faqs {
+  --fw-a1: #C86D58; --fw-a2: #D7C2C9; --fw-a3: #E2CAC6;
+  --fw-b1: #D7C2C9; --fw-b2: #B95A4B; --fw-b3: #E2CAC6;
+  --fw-op: .46;
+  /* Scroll driven motion (TJ, 7 Oct 2026), set by faqs-theme.js: the two
+     layers turn (at different rates, so they move against each other), the
+     field travels and breathes, and the glow's centre wanders. */
+  --fw-rot: 0deg; --fw-x: 0px; --fw-y: 0px; --fw-scale: 1;
+  --fw-mx: 70%; --fw-my: 40%;
 }
+/* The field is oversized so it can travel and breathe without showing an
+   edge; anything uncovered is the same Canvas as the gaps in the drift. */
 .page--faqs .faq__weather-field {
-  position: absolute;
-  inset: -60px;
-  display: block;
-  filter: blur(70px);
-  background-size: 300%, 200%;
-  background-position: 50% 50%, 50% 50%;
-  -webkit-mask-image: radial-gradient(ellipse 100% 88% at 70% 42%, #000 12%, rgba(0,0,0,.58) 66%, rgba(0,0,0,.2) 100%);
-  mask-image: radial-gradient(ellipse 100% 88% at 70% 42%, #000 12%, rgba(0,0,0,.58) 66%, rgba(0,0,0,.2) 100%);
-  will-change: background-position, opacity;
+  position: absolute; inset: -12vmax; display: block;
+  background-image: repeating-linear-gradient(calc(100deg + var(--fw-rot)),
+    transparent 0%, var(--fw-a1) 8%, var(--fw-a2) 15%, transparent 25%, var(--fw-a3) 33%, transparent 44%);
+  background-size: 300%; background-position: 50% 50%;
+  filter: blur(44px);
+  opacity: var(--fw-op);
+  transform: translate3d(var(--fw-x), var(--fw-y), 0) scale(var(--fw-scale));
+  will-change: transform;
+  -webkit-mask-image: radial-gradient(ellipse 80% 66% at var(--fw-mx) var(--fw-my), #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  mask-image: radial-gradient(ellipse 80% 66% at var(--fw-mx) var(--fw-my), #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
 }
 .page--faqs .faq__weather-field::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-size: 235%, 128%;
-  animation: faq-weather 140s linear infinite;
-}
-.page--faqs .faq__weather-field--day {
-  opacity: calc((1 - var(--faq-night)) * .46);
-  background-image:
-    repeating-linear-gradient(100deg, #FFFFFF 0%, #FFFFFF 6%, transparent 9%, transparent 15%, #FFFFFF 19%),
-    repeating-linear-gradient(100deg, var(--ember) 8%, var(--coral-mid) 14%, var(--blush) 20%, var(--rose-mist) 26%, var(--coral-deep) 32%);
-}
-.page--faqs .faq__weather-field--day::after {
-  background-image:
-    repeating-linear-gradient(123deg, #FFFFFF 0%, #FFFFFF 8%, transparent 11%, transparent 18%, #FFFFFF 23%),
-    repeating-linear-gradient(123deg, var(--coral-deep) 6%, var(--rose-mist) 13%, var(--haze) 21%, var(--coral-mid) 28%, var(--ember-deep) 37%);
-}
-.page--faqs .faq__weather-field--night {
-  opacity: calc(var(--faq-night) * .34);
-  background-image: repeating-linear-gradient(100deg,
-    transparent 0%, var(--blush) 8%, var(--rose-mist) 15%, transparent 25%, var(--haze) 33%, transparent 44%);
-}
-.page--faqs .faq__weather-field--night::after {
-  background-image: repeating-linear-gradient(123deg,
-    transparent 0%, var(--rose-mist) 7%, var(--canvas) 13%, transparent 25%, var(--blush) 35%, transparent 48%);
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(calc(123deg - var(--fw-rot) * 1.4),
+    transparent 0%, var(--fw-b1) 7%, var(--fw-b2) 13%, transparent 25%, var(--fw-b3) 35%, transparent 48%);
+  background-size: 235%;
+  animation: faq-weather 62s linear infinite;
 }
 .page--faqs .faq--morph > .wrap { position: relative; z-index: 1; }
+
+/* One text colour, Ink, the whole way down (TJ, 7 Oct 2026): the ground only
+   ever reaches a soft clay, so the copy never changes colour. No coral text:
+   the active group is marked by weight alone. */
+.page--faqs {
+  --faq-text: var(--ink);
+  --faq-rule: var(--hairline-firm);
+}
 .page--faqs .faq__nav,
 .page--faqs .faq__nav a,
 .page--faqs .faq__group > .wwd-h3,
@@ -683,44 +677,26 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 .page--faqs .faq__nav a span,
 .page--faqs .faq__group > .wwd-h3,
 .page--faqs .q summary,
-.page--faqs .q summary::after { color: var(--faq-text); }
-.page--faqs .q p { color: var(--faq-text-soft); }
-.page--faqs .faq__nav a { transition: padding-left 260ms var(--ease-out); }
-.page--faqs .faq__nav a.is-active { color: var(--faq-accent); }
-.page--faqs.is-night-copy {
-  --faq-text: #F3EFEC;
-  --faq-text-soft: #F3EFEC;
-  --faq-rule: rgba(243, 239, 236, .3);
-  --faq-accent: #FFFFFF;
-}
-.page--faqs .faq__side .wwd-h2,
-.page--faqs .faq__nav a,
-.page--faqs .faq__nav a span,
-.page--faqs .faq__group > .wwd-h3,
-.page--faqs .q summary,
 .page--faqs .q summary::after,
-.page--faqs .q p { transition: color 360ms var(--ease-out); }
-.page--faqs .faq__nav,
-.page--faqs .faq__group > .wwd-h3,
-.page--faqs .q { transition: border-color 360ms var(--ease-out); }
-.page--faqs .nav[data-nd] .tab:not(.tab--cta) {
-  color: var(--ink);
-  transition: color 360ms var(--ease-out);
+.page--faqs .q p { color: var(--faq-text); }
+.page--faqs .faq__nav a { font-weight: 400; transition: padding-left 260ms var(--ease-out); }
+.page--faqs .faq__nav a.is-active { color: var(--faq-text); font-weight: 700; }
+.page--faqs .faq__nav a span { font-weight: 400; }
+
+/* Header edge (TJ, 7 Oct 2026): at the very top of the FAQ page the glass strip
+   is gone, so header and page are one surface with no line between them. The
+   strip, and its edge, fades in as the page scrolls and the header folds
+   (.is-scrolled, set by nav-fold.js). An open menu keeps the strip. */
+.page--faqs .nav--glass::before {
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out);
 }
-.page--faqs.is-night-copy .nav[data-nd] .tab:not(.tab--cta) { color: var(--paper); }
-.page--faqs .nav[data-nd] .nav__mark,
-.page--faqs .nav[data-nd] .wm-line,
-.page--faqs .nav--glass[data-nd] .nav__corner {
-  filter: brightness(0) invert(0);
-  transition-property: opacity, transform, filter;
-}
-.page--faqs.is-night-copy .nav[data-nd] .nav__mark,
-.page--faqs.is-night-copy .nav[data-nd] .wm-line,
-.page--faqs.is-night-copy .nav--glass[data-nd] .nav__corner { filter: brightness(0) invert(1); }
+.page--faqs .nav--glass.is-scrolled::before,
+.page--faqs .nav--glass.is-open::before { opacity: 1; }
 
 @keyframes faq-weather {
-  from { background-position: 50% 50%, 50% 50%; }
-  to { background-position: 350% 50%, 350% 50%; }
+  from { background-position: 50% 50%; }
+  to { background-position: 350% 50%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .page--faqs .faq__weather-field::after { animation: none; }
