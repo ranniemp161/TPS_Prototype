@@ -172,13 +172,16 @@
     var out = {};
     [].slice.call(root.querySelectorAll('[data-out]')).forEach(function (el) { out[el.getAttribute('data-out')] = el; });
     var shown = { days: 5, meals: 15, baths: 5, binds: 5 };
-    var raf = 0, started = false;
+    var raf = 0, started = false, currentDay = 5, countTarget = 5;
     function set(k, v) { out[k].textContent = String(Math.round(v)); }
     function paint() { Object.keys(shown).forEach(function (k) { set(k, shown[k]); }); }
-    function go(days, dur) {
-      var to = { days: days, meals: days * 3, baths: days, binds: days };
+    function setMarker(days, dur) {
       root.style.setProperty('--tl-dur', dur + 'ms');
       root.style.setProperty('--sel', String(days));
+    }
+    function countTo(days, dur) {
+      countTarget = days;
+      var to = { days: days, meals: days * 3, baths: days, binds: days };
       cancelAnimationFrame(raf);
       if (reduced) { Object.keys(to).forEach(function (k) { shown[k] = to[k]; set(k, to[k]); }); return; }
       var from = { days: shown.days, meals: shown.meals, baths: shown.baths, binds: shown.binds };
@@ -190,24 +193,52 @@
         else Object.keys(to).forEach(function (k) { shown[k] = to[k]; set(k, to[k]); });
       })(t0);
     }
-    function pick(btn, dur) {
+    function go(days, dur) {
+      setMarker(days, dur);
+      countTo(days, dur);
+    }
+    function pick(btn, dur, moveMarker) {
       started = true;
+      currentDay = parseInt(btn.getAttribute('data-days'), 10);
       buttons.forEach(function (b) { b.setAttribute('aria-checked', String(b === btn)); b.tabIndex = b === btn ? 0 : -1; });
-      go(parseInt(btn.getAttribute('data-days'), 10), dur || 650);
+      if (moveMarker === false) countTo(currentDay, dur || 420);
+      else go(currentDay, dur || 650);
     }
     function nearest(v) {
       return STOPS.reduce(function (a, b) { return Math.abs(b - v) < Math.abs(a - v) ? b : a; });
     }
     function buttonFor(d) { return buttons.filter(function (b) { return parseInt(b.getAttribute('data-days'), 10) === d; })[0]; }
+    function choose(btn, dur) {
+      var days = parseInt(btn.getAttribute('data-days'), 10);
+      if (typeof root._tlSeekDay === 'function' && root._tlSeekDay(days)) return;
+      pick(btn, dur);
+    }
+
+    root._tlLedger = {
+      arrive: function (days) {
+        started = true;
+        setMarker(days, 1);
+        cancelAnimationFrame(raf);
+        shown = { days: days, meals: days * 3, baths: days, binds: days };
+        countTarget = days;
+        paint();
+      },
+      scrub: function (markerDays, activeDays) {
+        started = true;
+        setMarker(markerDays, 1);
+        if (activeDays !== currentDay) pick(buttonFor(activeDays), 420, false);
+        else if (countTarget !== activeDays) countTo(activeDays, 420);
+      }
+    };
 
     buttons.forEach(function (b, i) {
       b.tabIndex = b.getAttribute('aria-checked') === 'true' ? 0 : -1;
-      b.addEventListener('click', function () { pick(b); });
+      b.addEventListener('click', function () { choose(b); });
       b.addEventListener('keydown', function (e) {
         var n = null;
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = buttons[(i + 1) % buttons.length];
         if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = buttons[(i + buttons.length - 1) % buttons.length];
-        if (n) { e.preventDefault(); pick(n); n.focus(); }
+        if (n) { e.preventDefault(); choose(n); n.focus(); }
       });
     });
 
@@ -230,19 +261,23 @@
       var end = function (e) {
         if (!root.classList.contains('is-drag')) return;
         root.classList.remove('is-drag');
-        pick(buttonFor(nearest(frac(e) * 30)));
+        choose(buttonFor(nearest(frac(e) * 30)));
       };
       handle.addEventListener('pointerup', end);
       handle.addEventListener('pointercancel', end);
       rail.addEventListener('click', function (e) {
         if (e.target === handle) return;
-        pick(buttonFor(nearest(frac(e) * 30)));
+        choose(buttonFor(nearest(frac(e) * 30)));
       });
     }
 
-    // On arrival the marker travels from 0 to 5 and the counts climb with it,
-    // so it reads as something that moves.
-    if (!reduced) {
+    // On phones the marker still travels from 0 to 5 once on arrival. Desktop
+    // scroll owns the same arrival so the two controls never fight each other.
+    if (!reduced && window.matchMedia('(min-width: 901px)').matches) {
+      shown = { days: 0, meals: 0, baths: 0, binds: 0 };
+      paint();
+      setMarker(0, 1);
+    } else if (!reduced) {
       shown = { days: 0, meals: 0, baths: 0, binds: 0 };
       paint();
       root.style.setProperty('--tl-dur', '1ms');
@@ -258,7 +293,6 @@
     }
     });
   }
-
   /* ---------- Tailored To You: rooms ----------
      The three paragraphs open one at a time; the photograph beside them follows. */
   function tailRooms() {
@@ -336,38 +370,137 @@
     var pictures = section.querySelector('.tl__pics');
     if (!text || !pictures) return;
 
+    var head = section.querySelector('.tl__head');
+    var scale = section.querySelector('.tl-scale');
+    var stay = section.querySelector('.tl-stay');
+    var glass = section.querySelector('.tl-acc');
     var media = gsap.matchMedia();
+
     media.add('(min-width: 901px)', function () {
       var shift = function () { return Math.min(window.innerWidth * .18, 260); };
-      var timeline = gsap.timeline({
-        defaults: { ease: 'none' },
+      var ledger = text._tlLedger;
+      var stops = [5, 7, 14, 30];
+      var milestones = [0, 1 / 3, 2 / 3, 1];
+      var pinTrigger;
+      var entry = gsap.timeline({
         scrollTrigger: {
           trigger: section,
           start: 'top bottom',
-          end: 'bottom top',
+          end: 'top 80px',
+          scrub: 1.15,
+          refreshPriority: -10,
+          invalidateOnRefresh: true,
+          onEnter: function () { if (ledger) ledger.arrive(0); },
+          onUpdate: function (self) { if (ledger && self.isActive) ledger.arrive(self.progress * 5); },
+          onLeave: function () { if (ledger) ledger.arrive(5); },
+          onEnterBack: function () { if (ledger) ledger.arrive(5); },
+          onLeaveBack: function () { if (ledger) ledger.arrive(0); }
+        }
+      });
+      entry
+        .fromTo(head, { x: shift, opacity: .62, force3D: true }, { x: 0, opacity: 1, duration: .34, ease: 'power3.out' }, 0)
+        .fromTo(scale, { x: function () { return shift() * .9; }, opacity: .58, force3D: true }, { x: 0, opacity: 1, duration: .36, ease: 'power3.out' }, .035)
+        .fromTo(stay, { x: function () { return shift() * .78; }, opacity: .54, force3D: true }, { x: 0, opacity: 1, duration: .37, ease: 'power3.out' }, .07)
+        .fromTo(glass, { x: function () { return shift() * .65; }, opacity: .48, force3D: true }, { x: 0, opacity: 1, duration: .38, ease: 'power3.out' }, .1)
+        .fromTo(pictures, { xPercent: 44, opacity: 0, scale: 1.035, force3D: true }, { xPercent: 0, opacity: 1, scale: 1, duration: .46, ease: 'power2.out' }, .08)
+        .to(pictures, { scale: 1.01, duration: .14, ease: 'sine.inOut' }, .54);
+
+      function dayAt(progress) {
+        if (progress >= 1) return 30;
+        var segment = Math.min(2, Math.floor(progress * 3));
+        var local = progress * 3 - segment;
+        var eased = local * local * (3 - 2 * local);
+        return stops[segment] + (stops[segment + 1] - stops[segment]) * eased;
+      }
+      function activeAt(progress) {
+        if (progress < 1 / 6) return 5;
+        if (progress < 1 / 2) return 7;
+        if (progress < 5 / 6) return 14;
+        return 30;
+      }
+
+      var scrollState = { progress: 0 };
+      var scrub = gsap.to(scrollState, {
+        progress: 1,
+        ease: 'none',
+        onUpdate: function () {
+          if (ledger && pinTrigger && window.scrollY >= pinTrigger.start - 1) ledger.scrub(dayAt(scrollState.progress), activeAt(scrollState.progress));
+        },
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 80px',
+          end: function () { return '+=' + Math.round(window.innerHeight * 1.5); },
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
           scrub: .55,
+          refreshPriority: -10,
+          invalidateOnRefresh: true,
+          onEnter: function () { if (ledger) ledger.scrub(5, 5); },
+          onRefresh: function (self) {
+            if (!ledger || self.progress <= 0) return;
+            scrollState.progress = self.progress;
+            ledger.scrub(dayAt(self.progress), activeAt(self.progress));
+          }
+        }
+      });
+      pinTrigger = scrub.scrollTrigger;
+
+      text._tlSeekDay = function (days) {
+        var index = stops.indexOf(days);
+        if (index < 0 || !pinTrigger) return false;
+        var target = pinTrigger.start + milestones[index] * (pinTrigger.end - pinTrigger.start);
+        window.scrollTo({ top: target, behavior: 'smooth' });
+        return true;
+      };
+
+      var exit = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: function () { return pinTrigger.end; },
+          end: function () { return pinTrigger.end + window.innerHeight; },
+          scrub: 1.05,
           refreshPriority: -10,
           invalidateOnRefresh: true
         }
       });
-      timeline
-        .fromTo(text, { x: shift, opacity: .68 }, { x: 0, opacity: 1, duration: .48 }, 0)
-        .fromTo(pictures, { xPercent: 38, opacity: 0, scale: 1.025 }, { xPercent: 0, opacity: 1, scale: 1, duration: .48 }, 0)
-        .to(pictures, { scale: 1.012, duration: .16 }, .48)
-        .to(text, { x: function () { return shift() * .55; }, opacity: .72, duration: .36 }, .64)
-        .to(pictures, { xPercent: 38, opacity: 0, scale: 1.025, duration: .36 }, .64);
+      exit
+        .to(pictures, { xPercent: 44, opacity: 0, scale: 1.035, duration: .55, ease: 'power2.in' }, 0)
+        .to(glass, { x: function () { return shift() * .34; }, opacity: .68, duration: .46, ease: 'power2.in' }, .08)
+        .to(stay, { x: function () { return shift() * .4; }, opacity: .7, duration: .43, ease: 'power2.in' }, .13)
+        .to(scale, { x: function () { return shift() * .46; }, opacity: .72, duration: .39, ease: 'power2.in' }, .18)
+        .to(head, { x: function () { return shift() * .55; }, opacity: .74, duration: .34, ease: 'power2.in' }, .23);
+
+      return function () {
+        delete text._tlSeekDay;
+        [entry, scrub, exit].forEach(function (animation) {
+          if (animation.scrollTrigger) animation.scrollTrigger.kill();
+          animation.kill();
+        });
+      };
     });
 
     media.add('(max-width: 900px)', function () {
       var timeline = gsap.timeline({
-        defaults: { ease: 'none' },
-        scrollTrigger: { trigger: section, start: 'top 92%', end: 'bottom 18%', scrub: .45 }
+        scrollTrigger: {
+          trigger: section,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: .85,
+          refreshPriority: -10
+        }
       });
       timeline
-        .fromTo(text, { x: 24, opacity: .76 }, { x: 0, opacity: 1, duration: .24 }, 0)
-        .fromTo(pictures, { xPercent: 12, opacity: .58 }, { xPercent: 0, opacity: 1, duration: .24 }, 0)
-        .to(text, { x: 18, opacity: .76, duration: .28 }, .72)
-        .to(pictures, { xPercent: 12, opacity: .56, duration: .28 }, .72);
+        .fromTo(head, { x: 22, opacity: .7, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, 0)
+        .fromTo(scale, { x: 18, opacity: .68, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, .03)
+        .fromTo(stay, { x: 14, opacity: .66, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, .06)
+        .fromTo(glass, { x: 10, opacity: .64, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, .09)
+        .fromTo(pictures, { xPercent: 16, opacity: .5, scale: 1.02, force3D: true }, { xPercent: 0, opacity: 1, scale: 1, duration: .32, ease: 'power2.out' }, .05)
+        .to(pictures, { xPercent: 14, opacity: .58, scale: 1.02, duration: .25, ease: 'power2.in' }, .75)
+        .to(glass, { x: 10, opacity: .74, duration: .21, ease: 'power2.in' }, .79)
+        .to(stay, { x: 12, opacity: .76, duration: .19, ease: 'power2.in' }, .81)
+        .to(scale, { x: 14, opacity: .78, duration: .17, ease: 'power2.in' }, .83)
+        .to(head, { x: 16, opacity: .8, duration: .15, ease: 'power2.in' }, .85);
     });
   }
   /* ---------- FAQ scroll spy ---------- */
