@@ -1,5 +1,8 @@
 [
  "care.html:housekeeping-zones",
  "care.html:site-footer",
- "v1.html:site-footer"
+ "v1.html:site-footer",
+ "care.html:site-header",
+ "v1.html:site-header",
+ "care.html:faq"
 ]

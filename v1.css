@@ -714,12 +714,11 @@ main:focus { outline: none; }
   transition-delay: 240ms;
 }
 
-/* Four menu items now (What We Do, Our Offerings, About Us, Home) instead
-   of three, and with the chips gone there is no reason for them to share
-   one fixed width. Each tab fits its own label, with tight padding and a
-   small gap, so the row takes roughly 380px instead of the 470px the old
-   equal-width chips needed and stays clear of the centre wordmark. The
-   Enquire button keeps its own width. */
+/* Five menu items now (Home, What We Do, Our Offering, About Us, Faqs),
+   and with the chips gone there is no reason for them to share one fixed
+   width. Each tab fits its own label, with tight padding and a small gap
+   and stays clear of the centre wordmark. The Enquire button keeps its
+   own width. */
 .nav--glass .nav__tabs { gap: 2px; }
 .nav--glass .nav__tabs .tab {
   width: auto;
@@ -788,7 +787,7 @@ main:focus { outline: none; }
    other items and Enquire keep their case. */
 .nav--glass .tab--menu { text-transform: uppercase; }
 
-/* ---- Phone menu (900px and under, v1.html only) ----
+/* ---- Compact menu (1100px and under) ----
    Tapping Menu used to drop the four items out as chips on a white strip.
    Now the glass bar grows downward to take the row in, the items are
    plain text on it in the same style as the desktop menu, and the white
@@ -799,7 +798,7 @@ main:focus { outline: none; }
    nothing, so they never take the line. Selectors are deliberately
    heavy: the phone block further down this file styles the same elements
    and has to lose. */
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
   /* 62px with 10px of padding under the text: the labels stay exactly
      where they were (the extra height is all below them) and there is
      about 10px more air between the text and the line on the glass edge. */
@@ -865,8 +864,8 @@ main:focus { outline: none; }
    and it sits in the left group where the section tabs were, so on a phone
    the row reads Menu, wordmark, Enquire rather than collapsing to a glyph
    and dropping the call to action entirely, which is what it did before. */
-/* Hidden on desktop, where the three section tabs are the left group. It
-   takes their place below 900px. */
+/* Hidden on desktop, where the five menu items are the left group. It
+   takes their place below 1100px. */
 .tab--menu { display: none; }
 
 /* ---- Drop panel ---- */
@@ -987,10 +986,9 @@ main:focus { outline: none; }
   opacity: 0;
 }
 
-/* 900, not 860. At 861 the three left tabs finished 8px short of the
-   centred wordmark, which does not collide but reads as a squeeze. At 901
-   there is 27px. Anything narrower is a tablet and gets the Menu button. */
-@media (max-width: 900px) {
+/* Five menu items need the compact Menu control through 1100px. At 1101px
+   the full row clears the centred wordmark; narrower widths would overlap. */
+@media (max-width: 1100px) {
   .nav__tabs { display: none; }
   /* Only Menu and Enquire are on screen here and both are short words, so
      the chip can be narrower than the desktop minimum, which Programmes
@@ -999,7 +997,7 @@ main:focus { outline: none; }
   .tab--menu { display: inline-flex; }
   /* Enquire is the one thing that never leaves. */
   .nav__side--r .tab--cta { display: inline-flex; }
-  /* Opening the Menu chip drops the three section tabs out as a row under
+  /* Opening the Menu chip drops the five menu items out as a row under
      the bar, and the panel for whichever is active hangs below them. */
   .nav.is-open .nav__side--l .nav__tabs {
     display: flex;
