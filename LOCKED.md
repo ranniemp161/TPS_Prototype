@@ -7,7 +7,7 @@ This replaces the hero only guard. It covers any section on any page.
 
 ## What is locked right now
 Run `node lab/lockcheck.mjs list` for the live list. At the time of writing:
-- care.html: faq (TJ: the FAQ is how he likes it)
+- care.html: faq (TJ: the FAQ is how he likes it). STALE: on 7 Oct 2026 the FAQ moved to faqs.html (DESIGN.md section 26). Once TJ approves the new page, release this entry and record faqs.html:faq instead.
 - care.html: housekeeping-zones (TJ: keep the housekeeping zones the same)
 - care.html and v1.html: site-header and site-footer (TJ, 5 Oct 2026: likes both, universal). Edit site-header.html / site-footer.html and run the sync scripts, after unlocking.
 

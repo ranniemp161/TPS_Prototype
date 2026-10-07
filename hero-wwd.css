@@ -1,0 +1,111 @@
+/* ============================================================
+   WHAT WE DO hero, proposal (7 Oct 2026, TJ)
+
+   A question, then the answer, then four claims, each one revealed through
+   its own photograph. The photographs arrive the way the 21st.dev "Stepped
+   Morph Image Slider" does, column by column in a stepped skyline, but here
+   the scroll is the timing: nothing autoplays, the reader pulls each picture
+   up. Code is ours, the mechanic is the reference.
+
+   Materials from the site: Instrument Serif capitals for the question and the
+   claims, Quentin for "We do.", the .glass recipe for the panel over the
+   photographs, Ember for the one real action. No shadows, no dark section.
+   The copy is the client's: the question and answer and the paragraph from
+   her hero copy, the four claims are her promise lines for the four kinds of
+   care. Nothing is invented.
+
+   Loads after what-we-do.css. hero-wwd.js drives it; without script the
+   section reads as the question, the answer, the four claims and the
+   paragraph, in order, on the last photograph.
+   ============================================================ */
+
+.hw { position: relative; background: var(--canvas); }
+
+/* The pinned stage: one window tall. The fixed header sits over it. */
+.hw__stage {
+  position: relative; height: 100svh; min-height: 560px; overflow: hidden;
+  background: var(--canvas);
+}
+
+/* ---- Photographs, each cut into columns ----
+   Every photograph is a stack of N full size copies, each clipped to its own
+   vertical strip (--l and --r, set by hero-wwd.js, with a hair of overlap so
+   no seam shows) and from the top (--t). hero-wwd.js moves each strip's --t
+   with a different lead, which is what makes the stepped edge. */
+.hw__photo { position: absolute; inset: 0; pointer-events: none; }
+.hw__col { position: absolute; inset: 0; --t: 100%; clip-path: inset(var(--t) var(--r) 0 var(--l)); will-change: clip-path; }
+.hw__col img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); max-width: none; }
+/* The soft veil that keeps the glass and the small type readable whatever the
+   photograph does under them: a little Canvas rising from the foot. */
+.hw__veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, rgba(243, 239, 236, .55) 0, rgba(243, 239, 236, 0) 46%); opacity: 0; }
+
+/* ---- The question ---- */
+.hw__ask {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: calc(var(--hero-top) + 24px) var(--gutter) 24px;
+  text-align: center;
+}
+.hw__ask h1 {
+  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(2.6rem, 7.2vw, 7rem); line-height: .95; letter-spacing: -.012em; max-width: 12ch; text-wrap: balance;
+}
+
+/* ---- The answer, large ---- */
+.hw__we {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: var(--hero-top) var(--gutter) 0; pointer-events: none;
+  font-family: var(--f-script); font-weight: 400; font-size: clamp(4.4rem, 14vw, 13rem); line-height: 1; color: #fff;
+  opacity: 0;
+}
+
+/* ---- The panel of claims, on glass ---- */
+.hw__panel {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(24px, 5vh, 48px);
+  max-width: 560px; padding: clamp(22px, 3vw, 34px) clamp(22px, 3vw, 36px);
+  opacity: 0;
+}
+.hw__panel .glass { border-radius: var(--r-card); }
+.hw__small { margin: 0 0 10px; font-family: var(--f-script); font-weight: 400; font-size: clamp(1.9rem, 3.4vw, 2.8rem); line-height: 1; color: var(--ink); }
+.hw__claims { position: relative; display: grid; }
+.hw__claim { grid-area: 1 / 1; opacity: 0; will-change: opacity, transform; }
+.hw__claim .wlabel { margin-bottom: 12px; }
+.hw__claim p {
+  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(1.45rem, 2.4vw, 2.15rem); line-height: 1.08; letter-spacing: -.005em; text-wrap: balance;
+}
+/* Four fine ticks, the one in view drawn longer and in Ember. Weight and
+   length, not a counter. */
+.hw__ticks { display: flex; gap: 8px; margin-top: 22px; }
+.hw__ticks span { display: block; width: 18px; height: 1px; background: var(--ink); opacity: .32; transition: width .4s var(--ease-out), opacity .4s var(--ease-out), background-color .4s var(--ease-out); }
+.hw__ticks span.is-on { width: 44px; opacity: 1; background: var(--ember); }
+
+/* ---- After the stage: her paragraph, folded, and the one action ---- */
+.hw__after { padding: clamp(40px, 7vh, 72px) 0 clamp(48px, 8vh, 88px); }
+.hw__after .wide { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+.hw__copy .wp { max-width: 62ch; }
+.hw__copy[data-folded] .wp { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.hw__more {
+  margin-top: 14px; padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--f-body); font-weight: 500; font-size: .85rem; letter-spacing: .04em; color: var(--ink);
+  border-bottom: 1px solid var(--ember); line-height: 1.6;
+}
+.hw__act { display: grid; gap: 18px; justify-items: start; }
+.hw__act .wfigs { display: flex; flex-wrap: wrap; gap: 16px clamp(20px, 3vw, 40px); margin: 0; padding: 0; list-style: none; }
+.hw__act .wfigs li { display: grid; gap: 2px; }
+.hw__act .wfigs b { font-family: var(--f-mono); font-weight: 500; font-size: 1.05rem; }
+.hw__act .wfigs span { font-family: var(--f-body); font-size: .78rem; color: var(--ink-soft); }
+
+@media (max-width: 860px) {
+  .hw__stage { min-height: 520px; }
+  .hw__panel { left: 16px; right: 16px; bottom: 18px; padding: 18px 18px 20px; }
+  .hw__after .wide { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The resolved page: the last photograph, the panel, every claim listed. */
+  .hw__col { --t: 0%; }
+  .hw__photo:not(:last-of-type) { display: none; }
+  .hw__ask, .hw__we { display: none; }
+  .hw__panel, .hw__veil { opacity: 1; }
+  .hw__claim { opacity: 1; position: static; }
+  .hw__claim + .hw__claim { margin-top: 18px; }
+  .hw__ticks { display: none; }
+}
