@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="v1.css" />
 <link rel="stylesheet" href="care.css" />
 <link rel="stylesheet" href="what-we-do.css" />
-<link rel="stylesheet" href="hero-wwd.css" />
+<link rel="stylesheet" href="opening.css" />
 <link rel="stylesheet" href="site-footer.css" />
 <link rel="preload" as="image" href="assets/img/care-bedroom.webp" />
 <script>document.documentElement.classList.add('js');</script>
@@ -114,98 +114,48 @@
        A title page: label, headline (the first sentence of the client's Mother
        and Baby copy), the booking button and three figures the copy itself
        states, then one large photograph that melts into the page. -->
-  <!-- ============ SECTION: hero (new, blank) ============
-       Placeholder for the redesign. Generic shapes only: a headline block,
-       paragraph lines, a button, and an image block. No copy, no assets. -->
-  <section class="hx" data-section="hero" data-section-name="Hero">
-    <div class="wide hx__grid">
-      <div class="hx__text" aria-hidden="true">
-        <span class="hx__bar hx__bar--label"></span>
-        <span class="hx__bar hx__bar--h1"></span>
-        <span class="hx__bar hx__bar--h1 hx__bar--short"></span>
-        <span class="hx__bar hx__bar--p"></span>
-        <span class="hx__bar hx__bar--p"></span>
-        <span class="hx__bar hx__bar--p hx__bar--short"></span>
-        <span class="hx__btn"></span>
+  <!-- ============ SECTION: the opening (7 Oct 2026, TJ chose study C) ============
+       Hero plus introduction, one pinned movement in two halves. The room
+       opens: a framed photograph grows until you are in it, while the
+       question stays and the answer and the two lines arrive on glass. Then
+       the room closes: the photograph pulls back into a frame and the
+       introduction (her full paragraph) arrives beside it. The aurora is the
+       ground from the first pixel and the header's glass strip fades in on
+       scroll, as on the FAQ page. Side by side at the start: the statement
+       of what the business does on the left, the photograph whole on the
+       right; the photograph grows to the full window and back. Phones: the
+       hero pins on its own and the introduction follows in flow.
+       Motion in opening.js, styles in opening.css. Copy is the client's; the
+       stay line is her Tailored sentence cut (TJ, 7 Oct 2026). -->
+  <section class="op" data-op data-section="hero" data-section-name="Hero">
+    <div class="op__stage" data-op-stage>
+      <div class="aurora op__aurora" data-op-aurora aria-hidden="true"><span class="aurora__field"></span></div>
+      <div class="op__frame" data-op-frame>
+        <img src="assets/img/s4-massage.webp" alt="A postpartum specialist's hands settling soft linen over a mother resting in bed" width="2000" height="1116" fetchpriority="high" />
+        <span class="op__scrim" data-op-scrim aria-hidden="true"></span>
+        <span class="op__dim" data-op-dim aria-hidden="true"></span>
       </div>
-      <div class="hx__img" aria-hidden="true"></div>
-    </div>
-  </section>
-
-  <!-- ============ SECTION: hero proposal (7 Oct 2026) ============
-       A question, the answer, four claims on four photographs that rise
-       column by column with the scroll. See hero-wwd.css. Sits under the
-       placeholder hero for comparison until TJ chooses. -->
-  <section class="hw" data-hw data-section="hero-proposal" data-section-name="Hero (proposal)">
-    <div class="hw__stage" data-hw-stage>
-      <div class="hw__photo" data-hw-photo data-src="assets/img/s2-handoff.webp" data-pos="46% 40%" data-alt="A postpartum specialist handing a swaddled newborn to a mother resting in bed" aria-hidden="true"></div>
-      <div class="hw__photo" data-hw-photo data-src="assets/img/s4-massage.webp" data-pos="55% 50%" aria-hidden="true"></div>
-      <div class="hw__photo" data-hw-photo data-src="assets/img/s6-meal.webp" data-pos="42% 50%" aria-hidden="true"></div>
-      <div class="hw__photo" data-hw-photo data-src="assets/img/s7-home.webp" data-pos="60% 50%" aria-hidden="true"></div>
-      <div class="hw__veil" data-hw-veil aria-hidden="true"></div>
-
-      <div class="hw__ask" data-hw-ask>
-        <h1>After birth, who looks after mum?</h1>
-      </div>
-      <p class="hw__we" data-hw-we aria-hidden="true">We do.</p>
-
-      <div class="hw__panel glass" data-hw-panel>
-        <p class="hw__small">We do.</p>
-        <div class="hw__claims">
-          <div class="hw__claim" data-hw-claim>
-            <p class="wlabel">Mother and Baby Care</p>
-            <p>Hands on support with your baby, and thoughtful care for you, every day.</p>
-          </div>
-          <div class="hw__claim" data-hw-claim>
-            <p class="wlabel">Treatments</p>
-            <p>Hands on care that repeats through your stay, not offered once as a treat.</p>
-          </div>
-          <div class="hw__claim" data-hw-claim>
-            <p class="wlabel">Meals</p>
-            <p>Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
-          </div>
-          <div class="hw__claim" data-hw-claim>
-            <p class="wlabel">Home Support</p>
-            <p>Everyday life, taken care of from the moment we arrive.</p>
-          </div>
-        </div>
-        <div class="hw__ticks" aria-hidden="true"><span data-hw-tick class="is-on"></span><span data-hw-tick></span><span data-hw-tick></span><span data-hw-tick></span></div>
+      <div class="op__copy" data-op-copy>
+        <h1 class="op__h" data-op-h>
+          <span class="op__kicker" data-op-k>What we do</span>
+          <span class="op__head" data-op-hd><span class="op__hl">Live in postpartum care</span> <span class="op__hl op__hl--em">in your home</span></span>
+        </h1>
+        <ul class="op__rows" data-op-l>
+          <li class="op__kinds"><span>Home Support</span><span>Fresh Meals</span><span>Baby Care</span><span>Restorative Treatments</span></li>
+          <li><b>5, 7, 14 or 30 day</b> programmes</li>
+          <li><b>7am to 7pm</b> (night support if required)</li>
+        </ul>
       </div>
     </div>
-
-    <div class="hw__after">
-      <div class="wide">
-        <div class="hw__copy" data-hw-copy data-folded>
-          <p class="wp">The weeks that follow birth are some of the most important of a mother's life. Your body is healing from pregnancy and birth, your energy is being rebuilt, and the care you receive now can shape how you feel for months to come. Yet this is often the time when a mother's own recovery comes last. At The Postpartum Suite, we put it first. From your very first days at home with your baby, we care for you in four ways: support with you and your baby, restorative postpartum treatments, fresh nourishing meals and help around your home. Together, they give you what every new mother deserves: the time and space to truly heal.</p>
-          <button class="hw__more" type="button" data-hw-more aria-expanded="false">Read more</button>
-        </div>
-        <div class="hw__act">
-          <ul class="wfigs" aria-label="At a glance">
-            <li><b>7am to 7pm</b><span>care each day</span></li>
-            <li><b>3</b><span>fresh meals a day</span></li>
-            <li><b>5 7 14 30</b><span>day programmes</span></li>
-          </ul>
+    <div class="op__intro" data-op-intro data-section="introduction" data-section-name="Introduction">
+      <div class="aurora op__aurora op__aurora--intro" aria-hidden="true"><span class="aurora__field"></span></div>
+      <div class="op__intro-in">
+        <p class="wp" data-op-para>The weeks that follow birth are some of the most important of a mother's life. Your body is healing from pregnancy and birth, your energy is being rebuilt, and the care you receive now can shape how you feel for months to come. Yet this is often the time when a mother's own recovery comes last. At The Postpartum Suite, we put it first. From your very first days at home with your baby, we care for you in four ways: support with you and your baby, restorative postpartum treatments, fresh nourishing meals and help around your home. Together, they give you what every new mother deserves: the time and space to truly heal.</p>
+        <div class="op__act" data-op-act>
           <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- the page's previous opening, kept below the new hero for reference -->
-  <section class="wh" data-section="intro-previous" data-section-name="Previous Intro (old hero)">
-    <div class="wide wh__top">
-      <p class="wlabel">What we do</p>
-      <h1 data-kin data-kin-now>The weeks after birth are not meant to be managed alone</h1>
-      <div class="wh__row">
-        <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
-        <ul class="wfigs" aria-label="At a glance">
-          <li><b>7am to 7pm</b><span>care each day</span></li>
-          <li><b>3</b><span>fresh meals a day</span></li>
-          <li><b>5 7 14 30</b><span>day programmes</span></li>
-        </ul>
-      </div>
-    </div>
-    <div class="wh__photo"><span class="ph" aria-hidden="true"></span></div>
   </section>
 
   <!-- ============ SECTION: the four kinds of care ============
@@ -609,7 +559,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="inner-nav.js"></script>
-<script src="hero-wwd.js"></script>
+<script src="opening.js"></script>
 <script src="zones.js"></script>
 <script src="what-we-do.js"></script>
 <script src="promise.js"></script>
