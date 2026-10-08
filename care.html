@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="what-we-do.css" />
 <link rel="stylesheet" href="opening.css" />
 <link rel="stylesheet" href="day-night.css" />
+<link rel="stylesheet" href="day-timeline.css" />
 <link rel="stylesheet" href="site-footer.css" />
 <link rel="preload" as="image" href="assets/img/care-bedroom.webp" />
 <script>document.documentElement.classList.add('js');</script>
@@ -534,8 +535,9 @@
 
 
   <!-- ============ SECTION: experience ============ -->
-  <div class="xwrap">
-    <section class="wx" id="experience" data-section="experience" data-section-name="The Postpartum Suite Experience">
+  <div class="xwrap" hidden>
+    <!-- Retired 8 Oct 2026 (TJ): the title now opens A Day With Us below, over the arrival photograph. Kept hidden as a backup. -->
+    <section class="wx" id="experience-original" data-section="experience-original" data-section-name="The Postpartum Suite Experience (original)" hidden>
       <span class="ph" aria-hidden="true"></span>
       <div class="wx__scrim" aria-hidden="true"></div>
       <div class="wx__title"><h2 class="wh2" data-kin>The Postpartum Suite Experience</h2></div>
@@ -545,7 +547,86 @@
   <!-- ============ SECTION: a day with us ============
        A plain timetable. A thin line draws itself down the page as the day
        passes. No scroll clock (TJ). -->
-  <section class="wd" id="day-with-us" data-section="a-day-with-us" data-section-name="A Day With Us">
+    <!-- ============ SECTION: a day with us, vertical timeline (TJ, 8 Oct 2026) ============
+       A vertical adaptation of the 21st.dev Product Timeline (hyperiux): the
+       section holds while the line draws down and the track slides up, each
+       hour grows a stem and a dot and its words rise out of masked lines. The
+       title sits on frosted glass where that component has its image.
+       Copy is the client's, verbatim. The original list section follows
+       directly below as the backup (id day-with-us-original). -->
+  <section class="vt" id="day-with-us" data-vt data-section="a-day-with-us" data-section-name="The Postpartum Suite Experience: A Day With Us">
+    <div class="vt__stage">
+      <div class="vt__aurora" aria-hidden="true"><span class="vt__field"></span></div>
+      <!-- The arrival photograph opens the section full screen under the title,
+           then shrinks into its slot beside the glass card (day-timeline.js). -->
+      <div class="vt__photo">
+        <img src="assets/img/hero_arrival_v2_swapped.webp" alt="The specialist arriving at the front door in the morning, greeted by a smiling mother holding her newborn" width="2400" height="1340" decoding="async" />
+        <span class="vt__photo-veil" aria-hidden="true"></span>
+        <p class="vt__photo-title" aria-hidden="true">The Postpartum Suite Experience</p>
+      </div>
+      <div class="vt__track">
+        <div class="vt__head">
+          <span class="vt__slot" aria-hidden="true"></span>
+          <div class="vt__card glass">
+            <h2 class="wh2">The Postpartum Suite Experience</h2>
+            <h3 class="vt__sub">A Day With Us</h3>
+            <p class="wlead">Every day is shaped around you and your baby. This is how one might unfold.</p>
+          </div>
+        </div>
+        <div class="vt__items">
+          <span class="vt__axis" aria-hidden="true"><span class="vt__fill"></span><span class="vt__cap"></span></span>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>7am</time><h3 data-vt-t>A gentle start</h3><p data-vt-t>Your specialist arrives in the kitchen as the house wakes.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>7.30am</time><h3 data-vt-t>Your herbal bath</h3><p data-vt-t>A warm bath infused with fresh herbs is prepared for you.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>8am</time><h3 data-vt-t>Breakfast</h3><p data-vt-t>A nourishing breakfast is served, cooked fresh in your kitchen. While you eat, your baby is cared for beside you.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>9am</time><h3 data-vt-t>Rest</h3><p data-vt-t>You sleep, read or simply rest while your baby is cared for.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>10am</time><h3 data-vt-t>Baby care</h3><p data-vt-t>Your specialist cares for your baby and prepares everything for bath time, supporting you as you bathe your baby together.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>11am</time><h3 data-vt-t>Home support</h3><p data-vt-t>While you rest, laundry is washed, pressed and folded away.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>1pm</time><h3 data-vt-t>Lunch</h3><p data-vt-t>Lunch is served, along with a lactation support drink or a fresh tea.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>2.30pm</time><h3 data-vt-t>Your treatment</h3><p data-vt-t>On massage days, you are treated to a restorative postpartum massage and hot stone therapy in the comfort of your own room. Your belly binder is then applied while your body is warm and relaxed. On other days you will enjoy a foot massage and reflexology, the thermal blanket treatment and a full body scrub.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>4pm</time><h3 data-vt-t>Fresh air or quiet time</h3><p data-vt-t>This might be a gentle stroll in the park, an appointment your specialist accompanies you to, or an afternoon of rest at home.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>6pm</time><h3 data-vt-t>Dinner</h3><p data-vt-t>Dinner is served for you and your family, with your baby cared for close by.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>7pm</time><h3 data-vt-t>Settled for the evening</h3><p data-vt-t>The kitchen is left spotless, dishes washed, and the hoovering and mopping all taken care of, so you can wind down with your baby.</p></div>
+        </article>
+          <p class="vt__close" data-vt-t>Every day is tailored to you. Treatments, meals and rest are arranged around your baby's rhythm and how you are feeling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Original list version of A Day With Us. Retired and hidden 8 Oct 2026 (TJ); kept in the markup as the backup. -->
+  <section class="wd" id="day-with-us-original" data-section="a-day-with-us-original" data-section-name="A Day With Us (original)" hidden>
     <div class="wide wd__grid">
       <div class="wd__head">
         <p class="wlabel">The day</p>
@@ -625,6 +706,7 @@
 <script src="zones.js"></script>
 <script src="what-we-do.js"></script>
 <script src="promise.js"></script>
+<script src="day-timeline.js"></script>
 <script src="nav-fold.js"></script>
 <script src="lab/devpanel-loader.js"></script>
 </body>
