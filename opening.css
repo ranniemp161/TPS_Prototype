@@ -87,6 +87,12 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
    work. */
 .op__rows { margin: 0; padding: 0; list-style: none; display: grid; gap: clamp(10px, 1.6vh, 16px); max-width: 40em; font-family: var(--f-body); font-weight: 400; font-size: clamp(1.02rem, min(.78rem + .8vw, 2.7vh), 1.45rem); line-height: 1.45; color: var(--ink); }
 .op__rows b { font-weight: 600; }
+/* The numerals are coral (TJ, 7 Oct 2026), the same coral as "What we do". On the
+   cream copy over the photograph they go cream with the rest. On phones the
+   darker Ember, so the 16px bold numerals keep 4.5 to 1 on the pale ground. */
+.op__n { font-style: normal; color: var(--coral-deep); }
+.op__copy--light .op__n { color: #F3EFEC; }
+@media (max-width: 860px) { .op__n { color: var(--ember); } }
 /* The four kinds of care (TJ, 7 Oct 2026), two words each, on one line with a
    fine coral dash between; on phones one per line, the dash leading each. */
 .op__kinds { display: flex; flex-wrap: wrap; align-items: center; font-weight: 500; }
@@ -105,15 +111,26 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
    half 2 while the section is pinned. */
 .op__intro { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .op__intro-in {
-  position: absolute; left: clamp(24px, 5vw, 72px); top: 50%; width: min(640px, 46vw);
-  transform: translateY(-50%); display: grid; gap: clamp(22px, 3.2vh, 34px); pointer-events: auto;
+  position: absolute; left: clamp(24px, 5vw, 72px); top: 50%; width: min(60vw, 860px);
+  transform: translateY(-50%); display: grid; gap: clamp(14px, 2.2vh, 24px); pointer-events: auto;
 }
 .op__intro .wp { color: var(--ink); max-width: 60ch; }
-.op__act { display: grid; gap: 22px; justify-items: start; }
-@media (min-width: 861px) {
-  .op__act .wfigs { flex-wrap: nowrap; gap: 0 clamp(22px, 2.6vw, 40px); }
-  .op__act .wfigs b { font-size: clamp(1.15rem, 1.6vw, 1.5rem); }
-}
+/* Who is it for (TJ, 8 Oct 2026): the question in Quentin, coral, the mirror
+   of "What we do". It arrives at full screen in cream, opposite the
+   statement, and turns coral along the photograph's edge on the way out (the
+   cream copy of the introduction, opening.js, is clipped to the photograph
+   as the statement's is). The answer unfolds beneath it in short blocks, no
+   lines, no button. */
+/* Sized as "What we do" is (TJ, 8 Oct 2026): the first question has been answered
+   and the hero hands over to this one, so the two read as a pair. */
+.op__who { margin: 0; font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: clamp(3.6rem, min(7.6vw, 12.4vh), 7rem); line-height: 1; color: var(--coral-deep); white-space: nowrap; justify-self: start; width: max-content; }
+.op__more { overflow: hidden; }
+/* Quieter at rest (TJ, 8 Oct 2026): 15 percent smaller than hero rows scale,
+   Montserrat 400, longer lines so the five blocks read as less text. */
+.op__more .wp { margin-top: 0; max-width: 30em; font-family: var(--f-body); font-weight: 400; font-size: clamp(.92rem, min(.646rem + .7225vw, 2.38vh), 1.275rem); line-height: 1.5; color: var(--ink); text-wrap: pretty; }
+.op__more .wp + .wp { margin-top: clamp(12px, 1.9vh, 18px); }
+.op__intro-in--light { pointer-events: none !important; clip-path: inset(100% 0 0 0); }
+.op__intro-in--light .op__who, .op__intro-in--light .wp { color: #F3EFEC; }
 
 /* ---- Phones and small tablets: statement on top, photograph beneath ---- */
 @media (max-width: 860px) {
@@ -129,6 +146,10 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
   .op__intro { position: relative; inset: auto; z-index: auto; padding: 48px 0 64px; overflow: hidden; }
   .op__intro-in { position: relative; z-index: 1; left: auto; top: auto; width: auto; transform: none; padding: 0 var(--gutter); }
   .op__aurora--intro { display: block; }
+  .op__intro-in--light { display: none; }
+  .op__who { font-size: clamp(2.8rem, 13.4vw, 3.8rem); }
+  .op__more .wp { max-width: none; font-size: .94rem; }
+  .op__more { margin-top: -10px; }
 }
 
 /* Before script, and with reduced motion: the resolved hero, the photograph

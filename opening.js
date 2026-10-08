@@ -4,15 +4,25 @@
    her two lines) sits large on the left and arrives on load, one part after
    another. The photograph sits whole on the right.
 
-   Desktop (861px and wider): the whole section pins for 4.2 windows.
+   Desktop (861px and wider): the whole section pins.
      0.00 to 1.40  the photograph grows from its frame to the full window
      0.15 to 0.85  the soft darkening rises at its foot, inside the photograph
      0.30 to 1.20  the statement moves to the lower left, smaller; every frame
                    a cream copy is clipped to the photograph, so each letter
                    turns cream exactly where the photograph is behind it
-     2.30 to 3.20  the room closes: the photograph pulls back to the right,
-                   the statement leaves, the introduction arrives
-     3.20 to 3.80  hold
+     1.10 to 1.45  as the photograph reaches full screen, "Who is it for?"
+                   arrives at the lower right in Quentin, cream, opposite
+                   "What we do" (TJ, 8 Oct 2026)
+     1.45 to 2.00  the hinge: both on the picture together
+     2.00 to 2.40  the statement leaves; the sentence is left on its own
+     2.60 to 3.50  the mirror of half 1: the photograph pulls back to its
+                   frame on the right, the introduction travels left to its
+                   place, crossing it
+                   and turns ink along the photograph's edge, and the rest of
+                   the paragraph unfolds beneath its first sentence
+     3.15 to 3.95  the answer unfolds beneath the question, block by block
+                   (TJ, 8 Oct 2026); then a short hold
+   The pin is 4.8 windows.
    Phones: the stage pins for 1.8 windows and plays only the first half; the
    introduction follows in normal flow.
 
@@ -54,13 +64,47 @@
   var intro = op.querySelector('[data-op-intro]');
   var introIn = intro.querySelector('.op__intro-in');
 
+  /* The introduction gets its own cream copy (TJ, 7 Oct 2026), the mirror of
+     the statement's: it meets the statement at full screen in cream and turns
+     ink along the photograph's edge as the photograph pulls back. */
+  var introLight = introIn.cloneNode(true);
+  introLight.classList.add('op__intro-in--light');
+  introLight.setAttribute('aria-hidden', 'true');
+  Array.prototype.forEach.call(introLight.querySelectorAll('a'), function (a) { a.setAttribute('tabindex', '-1'); });
+  introIn.parentNode.insertBefore(introLight, introIn.nextSibling);
+  var introBoth = [introIn, introLight];
+  var leads = [introIn.querySelector('[data-op-lead]'), introLight.querySelector('[data-op-lead]')];
+  var mores = [introIn.querySelector('[data-op-more]'), introLight.querySelector('[data-op-more]')];
+  var blocks = [introIn, introLight].map(function (el) { return Array.prototype.slice.call(el.querySelectorAll('.op__more .wp')); });
+  var allBlocks = blocks[0].concat(blocks[1]);
+
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     op.classList.add('op--static');
     if (light.parentNode) light.parentNode.removeChild(light);
+    if (introLight.parentNode) introLight.parentNode.removeChild(introLight);
     return;
   }
 
   var img = frame.querySelector('img');
+
+  /* The zoom (TJ, 8 Oct 2026). Small, the frame shows the whole wide
+     photograph: the room, the mother, the baby in the Moses basket. Full
+     screen, the photograph zooms into the moment itself: the hands tucking
+     the linen and the mother's sleeping face, the baby and the window out of
+     frame. FOCUS is that moment in image pixels (centre, and either its width
+     or its height); the zoom is the scale that makes it fill the window, about
+     a transform origin chosen so it lands in the centre. */
+  var IW = +img.getAttribute('width'), IHt = +img.getAttribute('height');
+  var FOCUS = { desktop: { cx: 800, cy: 380, w: 840 }, phone: { cx: 760, cy: 450, h: 760 } };
+  function zoomFor(f, w, h) {
+    var a = w / h, rw = f.w || f.h * a, rh = f.h || f.w / a;
+    var c = Math.max(w / IW, h / IHt);                 // object-fit cover at scale 1
+    var S = Math.max(1, Math.max(w / rw, h / rh) / c);
+    var px = (f.cx - IW / 2) * c + w / 2, py = (f.cy - IHt / 2) * c + h / 2;
+    var ox = S === 1 ? w / 2 : (w / 2 - S * px) / (1 - S), oy = S === 1 ? h / 2 : (h / 2 - S * py) / (1 - S);
+    ox = Math.min(w, Math.max(0, ox)); oy = Math.min(h, Math.max(0, oy));
+    return { scale: S, origin: (ox / w * 100).toFixed(2) + '% ' + (oy / h * 100).toFixed(2) + '%' };
+  }
   var RATIO = (+img.getAttribute('width')) / (+img.getAttribute('height'));
   var CREAM = '#F3EFEC';
   var W = function () { return window.innerWidth; };
@@ -79,8 +123,10 @@
   /* Clip the cream copy to the photograph. The copy is scaled, and clip-path
      works in its own unscaled box, so the photograph's edges are converted
      into that box. */
-  function clipLight() {
+  function clipLight() { clipTo(light); clipTo(introLight); }
+  function clipTo(light) {
     var c = light.getBoundingClientRect(), f = frame.getBoundingClientRect();
+    if (!c.width) return;
     var s = c.width / (light.offsetWidth || 1);
     if (!s) return;
     var t = (f.top - c.top) / s, l = (f.left - c.left) / s, r = (c.right - f.right) / s, b = (c.bottom - f.bottom) / s;
@@ -129,28 +175,86 @@
       var bw = Math.min(W() - margin - (fullRight + 60), (H() - TOP()) * .8 * RATIO), bh = bw / RATIO;
       if (bw > sw) small = { left: W() - margin - bw, top: mid - bh / 2, width: bw, height: bh };
       gsap.set(frame, { left: small.left, top: small.top, width: small.width, height: small.height, right: 'auto', bottom: 'auto', borderRadius: 16, autoAlpha: 1 });
+      /* Where the photograph comes back to, placed as in the first hero (TJ,
+         8 Oct 2026): the question is the long line, so the photograph tucks in
+         under it, 60px right of the answer blocks, its foot level with the
+         foot of the text, shown whole; on a wide window, if beside the whole
+         block gives a larger photograph, that is used instead. Measured with
+         the answer fully open, then collapsed for the animation. */
+      var ih = introIn.offsetHeight;
+      var restTop = TOP() + (H() - TOP()) / 2 - ih / 2;
+      var whoEl = leads[0];
+      var whoBottom = restTop + whoEl.offsetTop + whoEl.offsetHeight;
+      var textBottom = restTop + ih;
+      var rightOfI = function (el) {
+        var r = document.createRange(), m = 0; r.selectNodeContents(el);
+        Array.prototype.forEach.call(r.getClientRects(), function (c) { m = Math.max(m, c.right); });
+        return m - st.left;
+      };
+      var blocksRight = Math.max.apply(null, Array.prototype.slice.call(introIn.querySelectorAll('.op__more .wp')).map(rightOfI));
+      var whoRight = rightOfI(whoEl);
+      var el0 = blocksRight + 60;
+      var ew = W() - margin - el0, eh = ew / RATIO;
+      var eroom = textBottom - (whoBottom + 12);
+      if (eh > eroom) { eh = eroom; ew = eh * RATIO; el0 = W() - margin - ew; }
+      var end = { left: el0, top: textBottom - eh, width: ew, height: eh };
+      var wideW = Math.min(W() - margin - (Math.max(whoRight, blocksRight) + 60), (H() - TOP()) * .8 * RATIO), wideH = wideW / RATIO;
+      if (wideW > ew) end = { left: W() - margin - wideW, top: TOP() + (H() - TOP()) / 2 - wideH / 2, width: wideW, height: wideH };
       gsap.set(scrim, { opacity: 0 });
-      gsap.set(introIn, { opacity: 0, y: 36 });
+      /* The introduction waits at the statement's full screen position, the
+         lower left, showing only its first sentence once it arrives. */
+      /* At full screen it shares the picture with the statement (TJ, 7 Oct
+         2026): its first sentence sits at the lower right, its last line
+         level with the statement's last line, its right edge on the page
+         margin, so the two balance across the photograph. */
+      var foot = -Math.round(H() * .07);
+      gsap.set(mores, { height: 0 });
+      gsap.set(allBlocks, { opacity: 0, y: 12 });
+      var lead0 = leads[0];
+      // the question is one line that never wraps, so its box is its width
+      var lw = lead0.getBoundingClientRect().width;
+      var below = introIn.offsetHeight - (lead0.offsetTop + lead0.offsetHeight);
+      var hingeX = Math.round((W() - margin) - (introIn.offsetLeft + lw));
+      gsap.set(introBoth, { top: H(), yPercent: -100, y: foot + below, x: hingeX, opacity: 1 });
+      gsap.set(leads, { opacity: 0, y: 18 });
       arrive();
 
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
       // half 1: the room opens
+      var zd = zoomFor(FOCUS.desktop, W(), H());
+      gsap.set(img, { scale: 1, transformOrigin: zd.origin });
+      tl.fromTo(img, { scale: 1 }, { scale: zd.scale, duration: 1.4, ease: 'power2.inOut', immediateRender: false }, 0);
       tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1.4, ease: 'power2.inOut' }, 0)
         .to(scrim, { opacity: 1, duration: .7, ease: 'power1.inOut' }, .15)
         .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .25, ease: 'power1.inOut', immediateRender: false }, .05)
         .to(dim, { opacity: 0, duration: .4, ease: 'power1.inOut' }, 1.05)
         .to(both, { top: '100%', yPercent: -100, y: -Math.round(H() * .07), scale: .72, duration: .9, ease: 'power2.inOut' }, .3)
-        .to({}, { duration: .55 }, 1.4)
-        // half 2: the room closes
-        .to(both, { opacity: 0, y: '-=40', duration: .45, ease: 'power2.in' }, 2.3)
-        // back to the same size and column, centred on the introduction
-        .to(frame, { left: small.left, top: H() / 2 - small.height / 2, width: small.width, height: small.height, borderRadius: 16, duration: .9, ease: 'power2.inOut' }, 2.3)
-        .to(scrim, { opacity: 0, duration: .6 }, 2.3)
-        .to(introIn, { opacity: 1, y: 0, duration: .55, ease: 'power2.out' }, 2.75)
-        .to({}, { duration: .6 }, 3.3);
+        // the first sentence arrives as the photograph reaches full screen
+        .to(leads, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.1)
+        // the hinge: both on the picture together
+        .to({}, { duration: .55 }, 1.45)
+        // the statement leaves and the sentence is left on its own
+        .to(both, { opacity: 0, y: '-=30', duration: .4, ease: 'power2.in' }, 2.0)
+        // half 2, the mirror of half 1: the photograph pulls back to its frame
+        // while the introduction travels to its place on the left, turning ink
+        // along the photograph's edge, and the rest of the paragraph unfolds
+        .to(frame, { left: end.left, top: end.top, width: end.width, height: end.height, borderRadius: 16, duration: .9, ease: 'power2.inOut' }, 2.6)
+        .to(img, { scale: 1, duration: .9, ease: 'power2.inOut' }, 2.6)
+        .to(scrim, { opacity: 0, duration: .6 }, 2.6)
+        .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .2, ease: 'power1.inOut', immediateRender: false }, 2.55)
+        .to(dim, { opacity: 0, duration: .35, ease: 'power1.inOut' }, 3.2)
+        .to(introBoth, { top: TOP() + (H() - TOP()) / 2, yPercent: -50, y: 0, x: 0, duration: .9, ease: 'power2.inOut' }, 2.6)
+        .to(mores, { height: 'auto', duration: .65, ease: 'power1.inOut' }, 2.85)
+        // the answer unfolds beneath the question, one block after another,
+        // each block arriving together with its cream twin
+        ;
+      blocks[0].forEach(function (el, i) {
+        tl.to([el, blocks[1][i]], { opacity: 1, y: 0, duration: .32, ease: 'power2.out' }, 3.15 + i * .17);
+      });
+      tl.to({}, { duration: .5 }, 3.15 + blocks[0].length * .17 + .32);
 
       ScrollTrigger.create({
-        trigger: op, start: 'top top', end: '+=' + Math.round(H() * 4.2),
+        trigger: op, start: 'top top', end: '+=' + Math.round(H() * 4.8),
         pin: op, scrub: .9, animation: tl, refreshPriority: 10
       });
     });
@@ -172,6 +276,9 @@
       arrive();
 
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
+      var zp = zoomFor(FOCUS.phone, W(), H());
+      gsap.set(img, { scale: 1, transformOrigin: zp.origin });
+      tl.fromTo(img, { scale: 1 }, { scale: zp.scale, duration: 1.2, ease: 'power2.inOut', immediateRender: false }, 0);
       tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1.2, ease: 'power2.inOut' }, 0)
         .to(scrim, { opacity: 1, duration: .6, ease: 'power1.inOut' }, .1)
         .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .2, ease: 'power1.inOut', immediateRender: false }, .05)
@@ -184,12 +291,14 @@
         pin: stage, scrub: .7, animation: tl
       });
       gsap.fromTo(introIn, { opacity: 0, y: 24 }, { opacity: 1, y: 0, ease: 'power2.out', scrollTrigger: { trigger: intro, start: 'top 85%', end: 'top 50%', scrub: .6 } });
+      gsap.fromTo(blocks[0], { opacity: 0, y: 12 }, { opacity: 1, y: 0, ease: 'power2.out', stagger: .12, scrollTrigger: { trigger: introIn.querySelector('.op__more'), start: 'top 88%', end: 'top 55%', scrub: .6 } });
     });
   }
 
   function rebuild() {
     if (mm) mm.revert();
     gsap.set(frame, { clearProps: 'all' });
+    gsap.set(img, { clearProps: 'transform,transformOrigin' });
     build();
     ScrollTrigger.refresh();
   }
