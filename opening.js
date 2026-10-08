@@ -86,6 +86,25 @@
   }
 
   var img = frame.querySelector('img');
+
+  /* The zoom (TJ, 8 Oct 2026). Small, the frame shows the whole wide
+     photograph: the room, the mother, the baby in the Moses basket. Full
+     screen, the photograph zooms into the moment itself: the hands tucking
+     the linen and the mother's sleeping face, the baby and the window out of
+     frame. FOCUS is that moment in image pixels (centre, and either its width
+     or its height); the zoom is the scale that makes it fill the window, about
+     a transform origin chosen so it lands in the centre. */
+  var IW = +img.getAttribute('width'), IHt = +img.getAttribute('height');
+  var FOCUS = { desktop: { cx: 800, cy: 380, w: 840 }, phone: { cx: 760, cy: 450, h: 760 } };
+  function zoomFor(f, w, h) {
+    var a = w / h, rw = f.w || f.h * a, rh = f.h || f.w / a;
+    var c = Math.max(w / IW, h / IHt);                 // object-fit cover at scale 1
+    var S = Math.max(1, Math.max(w / rw, h / rh) / c);
+    var px = (f.cx - IW / 2) * c + w / 2, py = (f.cy - IHt / 2) * c + h / 2;
+    var ox = S === 1 ? w / 2 : (w / 2 - S * px) / (1 - S), oy = S === 1 ? h / 2 : (h / 2 - S * py) / (1 - S);
+    ox = Math.min(w, Math.max(0, ox)); oy = Math.min(h, Math.max(0, oy));
+    return { scale: S, origin: (ox / w * 100).toFixed(2) + '% ' + (oy / h * 100).toFixed(2) + '%' };
+  }
   var RATIO = (+img.getAttribute('width')) / (+img.getAttribute('height'));
   var CREAM = '#F3EFEC';
   var W = function () { return window.innerWidth; };
@@ -202,6 +221,9 @@
 
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
       // half 1: the room opens
+      var zd = zoomFor(FOCUS.desktop, W(), H());
+      gsap.set(img, { scale: 1, transformOrigin: zd.origin });
+      tl.fromTo(img, { scale: 1 }, { scale: zd.scale, duration: 1.4, ease: 'power2.inOut', immediateRender: false }, 0);
       tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1.4, ease: 'power2.inOut' }, 0)
         .to(scrim, { opacity: 1, duration: .7, ease: 'power1.inOut' }, .15)
         .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .25, ease: 'power1.inOut', immediateRender: false }, .05)
@@ -217,6 +239,7 @@
         // while the introduction travels to its place on the left, turning ink
         // along the photograph's edge, and the rest of the paragraph unfolds
         .to(frame, { left: end.left, top: end.top, width: end.width, height: end.height, borderRadius: 16, duration: .9, ease: 'power2.inOut' }, 2.6)
+        .to(img, { scale: 1, duration: .9, ease: 'power2.inOut' }, 2.6)
         .to(scrim, { opacity: 0, duration: .6 }, 2.6)
         .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .2, ease: 'power1.inOut', immediateRender: false }, 2.55)
         .to(dim, { opacity: 0, duration: .35, ease: 'power1.inOut' }, 3.2)
@@ -253,6 +276,9 @@
       arrive();
 
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
+      var zp = zoomFor(FOCUS.phone, W(), H());
+      gsap.set(img, { scale: 1, transformOrigin: zp.origin });
+      tl.fromTo(img, { scale: 1 }, { scale: zp.scale, duration: 1.2, ease: 'power2.inOut', immediateRender: false }, 0);
       tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1.2, ease: 'power2.inOut' }, 0)
         .to(scrim, { opacity: 1, duration: .6, ease: 'power1.inOut' }, .1)
         .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .2, ease: 'power1.inOut', immediateRender: false }, .05)
@@ -272,6 +298,7 @@
   function rebuild() {
     if (mm) mm.revert();
     gsap.set(frame, { clearProps: 'all' });
+    gsap.set(img, { clearProps: 'transform,transformOrigin' });
     build();
     ScrollTrigger.refresh();
   }
