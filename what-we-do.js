@@ -465,7 +465,18 @@
         }
       });
       exit
-        .to(pictures, { xPercent: 44, opacity: 0, scale: 1.035, duration: .55, ease: 'power2.in' }, 0)
+        // The photograph leaves right off the screen at full strength, early (TJ,
+        // 8 Oct 2026), so the clay below Tailored (The Promise's gap now takes
+        // Tailored's ground) has the whole background to itself. It used to
+        // slide 44 percent and fade, which left it cut across the foot.
+        .to(pictures, { xPercent: 112, scale: 1.02, duration: .24, ease: 'power2.in' }, 0)
+        // the pale silk band behind the Days row dissolves into the clay as the
+        // section leaves (TJ, 8 Oct 2026): its lower edge was a full width line
+        // against the clay now beneath it. Off the held look entirely: it only
+        // starts to fade once the exit begins and returns when scrolled back.
+        .to(section.querySelector('.tail__field'), { opacity: 0, duration: .16, ease: 'power1.inOut' }, 0)
+        // and its foot fades into the clay below as the section's edge rises into view
+        .fromTo(pictures, { '--tl-foot': 0 }, { '--tl-foot': 1, duration: .018, ease: 'power1.out', immediateRender: false }, 0)
         .to(glass, { x: function () { return shift() * .34; }, opacity: .68, duration: .46, ease: 'power2.in' }, .08)
         .to(stay, { x: function () { return shift() * .4; }, opacity: .7, duration: .43, ease: 'power2.in' }, .13)
         .to(scale, { x: function () { return shift() * .46; }, opacity: .72, duration: .39, ease: 'power2.in' }, .18)
