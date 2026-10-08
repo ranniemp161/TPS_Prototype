@@ -394,6 +394,27 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
   mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,.16) 9%, rgba(0,0,0,.58) 20%, rgba(0,0,0,.9) 29%, #000 36%);
 }
 .tail--proposal .tl__pics img { filter: saturate(.86) sepia(.06) contrast(1.03); }
+
+/* The photograph's foot, as the section leaves (TJ, 8 Oct 2026): the clay now
+   continues below Tailored (The Promise's gap takes its ground), and the
+   photograph ended in a straight, dark edge against it. This fades the
+   photograph's foot into that same clay, the ground mixed with the Ember Deep
+   tint Tailored lays over its foot. It is off while the section is pinned (the
+   photograph bleeds off the bottom as designed), brought in by the exit
+   timeline in what-we-do.js (--tl-foot, 0 to 1), and moves off with the
+   photograph. Desktop only; on phones the photograph is at the top. */
+@media (min-width: 901px) {
+  .tail--wall-palette .tl__pics::after {
+    --tl-foot-c: color-mix(in srgb, var(--tl-ground) 80%, #8C362F 20%);
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 36%; pointer-events: none;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--tl-foot-c) 38%, transparent) 30%,
+      color-mix(in srgb, var(--tl-foot-c) 78%, transparent) 62%,
+      var(--tl-foot-c) 100%);
+    opacity: var(--tl-foot, 0);
+  }
+}
 .tail--proposal .tl-scale { height: clamp(52px, 7.6vh, 78px); }
 .tail--proposal .tl-scale button { opacity: .38; }
 .tail--proposal .tl-scale button:hover { opacity: .72; }

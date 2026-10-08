@@ -90,9 +90,7 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
 /* The numerals are coral (TJ, 7 Oct 2026), the same coral as "What we do". On the
    cream copy over the photograph they go cream with the rest. On phones the
    darker Ember, so the 16px bold numerals keep 4.5 to 1 on the pale ground. */
-.op__n { font-style: normal; color: var(--coral-deep); }
-.op__copy--light .op__n { color: #F3EFEC; }
-@media (max-width: 860px) { .op__n { color: var(--ember); } }
+
 /* The four kinds of care (TJ, 7 Oct 2026), two words each, on one line with a
    fine coral dash between; on phones one per line, the dash leading each. */
 .op__kinds { display: flex; flex-wrap: wrap; align-items: center; font-weight: 500; }
