@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           failed=0
-          for path in "" v1.css v1.js index.html assets/img/cover.webp assets/font/Quentin.otf build-info.json; do
+          for path in "" index/index.html index/css/site.css index/js/home.js assets/img/cover.webp assets/font/Quentin.otf build-info.json; do
             code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "${SITE}${path}")
             printf '%-34s %s\n' "/${path}" "$code"
             [ "$code" = "200" ] || failed=1
