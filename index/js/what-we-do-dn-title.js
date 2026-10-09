@@ -3,7 +3,7 @@
    down the centre of the page from Tailored For You to become the sun. Once the
    circle has passed below the title, the title glides to the centre, and it
    glides back if the reader scrolls up past that point again. It shrinks to
-   half its size over the same glide. Read live every
+   0.6 of its size over the same glide. Read live every
    frame from where the circle actually is, so it holds whatever the sections
    above are doing. Reduced motion: centred from the start. Its colours and its
    exit are in what-we-do-day-night.css. */
@@ -33,11 +33,11 @@
     if (cur === shown) return;
     shown = cur;
     var dx = (window.innerWidth - title.offsetWidth) / 2 - title.offsetLeft;
-    // Half its size once settled in the centre (TJ, 9 Oct 2026), shrinking
-    // smoothly over the same glide.
+    // Settled in the centre it is 0.6 of its starting size (TJ, 9 Oct 2026: half,
+    // then 20 percent larger than half), shrinking smoothly over the same glide.
     var e = smooth(cur);
     wrap.style.setProperty('--dn-tx', (dx * e).toFixed(1) + 'px');
-    wrap.style.setProperty('--dn-ts', (1 - 0.5 * e).toFixed(4));
+    wrap.style.setProperty('--dn-ts', (1 - 0.4 * e).toFixed(4));
   }
   gsap.ticker.add(frame);
   window.addEventListener('resize', function () { shown = -1; });
