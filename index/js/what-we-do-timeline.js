@@ -29,7 +29,10 @@
   var head = sec.querySelector('.vt__head');
   var slot = sec.querySelector('.vt__slot');
   var photo = sec.querySelector('.vt__photo');
-  var cardTexts = [].slice.call(card.querySelectorAll('.wh2, .vt__sub, .wlead'));
+  var cardTexts = [].slice.call(card.querySelectorAll('.wh2, .wlead'));
+  var sub = card.querySelector('.vt__sub');
+  var inkT = sec.querySelector('.vt__photo-title--ink');
+  var coralT = sec.querySelector('.vt__photo-title--coral');
   cardTexts.forEach(function (el) { el.dataset.src = el.textContent; });
   var tl = null, lastW = 0;
 
@@ -69,6 +72,7 @@
     items.forEach(function (i) { i.style.opacity = ''; i.style.height = ''; });
     ['--vt-ci', '--ph-t', '--ph-r', '--ph-b', '--ph-l', '--ph-rad', '--ph-tv', '--ph-to', '--ph-ty'].forEach(function (p) { sec.style.removeProperty(p); });
     photo.style.transform = '';
+    [inkT, coralT].forEach(function (t) { if (t) t.style.transform = ''; });
     var pimg = photo.querySelector('img');
     pimg.style.width = ''; pimg.style.height = ''; pimg.style.transform = '';
     revert();
@@ -119,6 +123,12 @@
     // Measured at the card's resting place, not its lowered entrance start.
     sec.style.setProperty('--vt-ci', '1');
     var headR = head.getBoundingClientRect();
+    // The title's journey (TJ, 9 Oct 2026): from its place on the photograph to
+    // where "A Day With Us" sits in the card, shrinking to that size (both copies
+    // measured with the track at rest and the card in place).
+    var t0 = inkT.getBoundingClientRect(), subR = sub.getBoundingClientRect();
+    var tX = subR.left - t0.left, tY = subR.top - t0.top;
+    var tSf = parseFloat(getComputedStyle(sub).fontSize) / parseFloat(getComputedStyle(inkT).fontSize);
     var lineStart = headR.bottom - trackTop;
     var lineEnd = ys[ys.length - 1];
     axis.style.top = (lineStart - boxTop) + 'px';
@@ -159,7 +169,14 @@
     gsap.set(cardLines, { yPercent: 112 });
     gsap.set(sec, { '--vt-ci': 0 });
     var ph = { a: 0 }, curE = 0, curTy = 0;
-    var photoY = function () { photo.style.transform = 'translateY(' + (curTy * curE).toFixed(1) + 'px)'; };
+    var photoY = function () {
+      photo.style.transform = 'translateY(' + (curTy * curE).toFixed(1) + 'px)';
+      // The black copy rides inside the photograph, which carries it with the track;
+      // the coral one, outside it, is carried here, so the two always coincide.
+      var base = 'translate(' + (tX * curE).toFixed(1) + 'px,' + (tY * curE).toFixed(1) + 'px) scale(' + (1 + (tSf - 1) * curE).toFixed(4) + ')';
+      inkT.style.transform = base;
+      coralT.style.transform = 'translateY(' + (curTy * curE).toFixed(1) + 'px) ' + base;
+    };
     var smooth = function (x) { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
     function applyPhoto() {
       var a = ph.a, e = a < .5 ? 2 * a * a : 1 - Math.pow(-2 * a + 2, 2) / 2;
@@ -171,8 +188,6 @@
       sec.style.setProperty('--ph-rad', (e * RAD).toFixed(1) + 'px');
       var x = r0.x + (r1.x - r0.x) * e, y = r0.y + (r1.y - r0.y) * e, w = r0.w + (r1.w - r0.w) * e;
       img.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + (w / BASE).toFixed(4) + ')';
-      sec.style.setProperty('--ph-to', (1 - smooth(a / 0.42)).toFixed(3));
-      sec.style.setProperty('--ph-ty', (-36 * smooth(a / 0.42)).toFixed(1) + 'px');
       sec.style.setProperty('--ph-tv', (1 - smooth((a - 0.15) / 0.5)).toFixed(3));
     }
 
