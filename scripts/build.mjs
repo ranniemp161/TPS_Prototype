@@ -38,8 +38,36 @@ function isIgnoredName(name) {
   return ignoreDirs.has(name) || ignoreFiles.has(name);
 }
 
+function rewritePathsInFile(filePath) {
+  const content = fs.readFileSync(filePath, 'utf8');
+  const rewritten = content.replace(/\.\.\/assets/g, 'assets');
+  if (rewritten !== content) {
+    fs.writeFileSync(filePath, rewritten, 'utf8');
+  }
+}
+
+function rewriteIndexAssetPaths(indexDir) {
+  const queue = [indexDir];
+
+  while (queue.length > 0) {
+    const current = queue.pop();
+    if (!current) continue;
+
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const full = path.join(current, entry.name);
+      if (entry.isDirectory()) {
+        queue.push(full);
+      } else if (entry.isFile()) {
+        const ext = path.extname(entry.name).toLowerCase();
+        if (['.html', '.css', '.js', '.svg', '.json'].includes(ext)) {
+          rewritePathsInFile(full);
+        }
+      }
+    }
+  }
+}
+
 function copySite() {
-  // Copy everything from root except ignored items
   for (const entry of fs.readdirSync(projectRoot, { withFileTypes: true })) {
     const source = path.join(projectRoot, entry.name);
     const target = path.join(siteRoot, entry.name);
@@ -55,9 +83,10 @@ function copySite() {
     }
   }
 
-  // If index/ exists, flatten it to _site root (matching GitHub Pages workflow)
   const indexDir = path.join(siteRoot, 'index');
   if (fs.existsSync(indexDir)) {
+    rewriteIndexAssetPaths(indexDir);
+
     for (const entry of fs.readdirSync(indexDir, { withFileTypes: true })) {
       const source = path.join(indexDir, entry.name);
       const target = path.join(siteRoot, entry.name);
@@ -71,7 +100,6 @@ function copySite() {
     fs.rmSync(indexDir, { recursive: true });
   }
 
-  // Write build info
   const buildInfo = {
     sha: process.env.GITHUB_SHA || 'local',
     built: new Date().toISOString(),
