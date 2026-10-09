@@ -166,8 +166,9 @@
 /* Read at the hinge, while it is still night, then gives way to the copy. */
 .dnf__lede {
   /* The paragraph's own font, in capitals (TJ, 9 Oct 2026: the serif did not sit
-     well), bold, a quarter larger and more open, so it reads as the title over it. */
-  margin: 0 0 clamp(12px, 1.8vh, 18px); font-family: var(--f-read); font-weight: 700; text-transform: uppercase;
+     well), a quarter larger and more open, so it reads as the title over it; not
+     bold (TJ), and "you need most" on a line of its own. */
+  margin: 0 0 clamp(12px, 1.8vh, 18px); font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
   font-size: clamp(1.12rem, 1.02rem + .42vw, 1.4rem); line-height: 1.25; letter-spacing: .08em; max-width: none;
   color: rgb(var(--dnt-c));
 }
@@ -224,6 +225,8 @@
   .dnf__cols { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr 1fr; }
   .dnf__opt { padding: 16px var(--gutter) 22px; gap: 6px; }
   .dnf__note { left: var(--gutter); right: var(--gutter); width: auto; bottom: 28px; }
+  /* Small enough that "Care arranged around the hours" holds one line. */
+  .dnf__lede { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
   .dnf__opt--day { padding-top: calc(var(--nav-h) + 12px); }
   .dnf__name { font-size: clamp(1.5rem, 7vw, 2rem); }
   .dn-wrap { --dn-lines: 4; }
