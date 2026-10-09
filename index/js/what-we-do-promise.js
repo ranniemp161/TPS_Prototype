@@ -8,21 +8,25 @@
 gsap.registerPlugin(ScrollTrigger);
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const PEAK_PIN_VH = 1.92;
+// The sunset (TJ, 9 Oct 2026): the descent is longer (was 1.92) and the beat
+// held on full night after it shorter (was 1.3), the total unchanged, because
+// night now falls during the descent rather than after it.
+const PEAK_PIN_VH = 2.4;
 // Day and Night Care (TJ, 8 Oct 2026): after the two options land, a glass
 // phase (DN_GLASS_VH) frosts and splits the frame and opens both columns, then
 // the hold lets them be read. The hold was .6 before the merge.
-const DN_BEAT_VH = 1.3;
+const DN_BEAT_VH = 0.82;
 const DN_GLASS_VH = 1.3;
 const PEAK_HOLD_VH = 1.0;
-// One white change for everything (TJ, 8 Oct 2026): the header ink and the small
-// title and paragraph blend dark to white on the same curve, set in one place, in
-// scroll (vh into the pin). It runs while the photograph passes from about half
-// to about 85 percent night (night is full at DN_BEAT_VH after the clock), so
-// white type lands on a picture that is dark enough to carry it.
-const ND_FROM = 0.55, ND_TO = 0.95;
+// The sun is the clock (TJ, 9 Oct 2026). Night, and the one change from dark to
+// cream for everything on the frame and the header's menu, are worked out from
+// where the sun is, not from scroll, so the three can never drift apart: night
+// has fully fallen when the sun's lower edge touches the horizon line, the
+// change to cream runs from half way to nine tenths of the way there, so the sun
+// is already cream when it touches the line, and the dip under it is the last
+// beat. creamNow is that change, 0 to 1, read by the header (navTheme).
 const ndSmooth = x => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
-const ndAt = vh => ndSmooth((vh / PEAK_PIN_VH - ND_FROM) / (ND_TO - ND_FROM));
+let creamNow = 0, navSync = null;
 
 function actPeak() {
   const act = document.querySelector('.act--peak');
@@ -213,9 +217,6 @@ function actPeak() {
   const TOTAL_VH = PEAK_PIN_VH + DN_BEAT_VH + DN_GLASS_VH + PEAK_HOLD_VH;
   const MOTION_FRAC = PEAK_PIN_VH / TOTAL_VH;
   const GLASS_FROM = (PEAK_PIN_VH + DN_BEAT_VH) / TOTAL_VH;
-  // Full night is reached 0.2 vh after the clock, then held (DN_BEAT_VH minus
-  // that) so the night room is seen before the glass starts.
-  const NIGHT_FULL = (PEAK_PIN_VH + 0.2) / TOTAL_VH;
   const GLASS_TO = (PEAK_PIN_VH + DN_BEAT_VH + DN_GLASS_VH) / TOTAL_VH;
 
   // Where each beat sits on the motion's own 0 to 1, before the hold is
@@ -229,12 +230,11 @@ function actPeak() {
 
   const between = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 
-  // Night is fully fallen by the time the glass starts (TJ, 8 Oct 2026): it used
-  // to ease across the whole pin, so it was still only partly dark when the glass
-  // arrived. The beat after the clock (DN_BEAT_VH) now holds on full night.
-  gsap.to(night, {
-    opacity: 1,
-    ease: p => Math.min(1, p / NIGHT_FULL),
+  // The pin. Its tween carries nothing of its own: night, like everything else
+  // on the frame, is set from the sun in onUpdate below, so it all runs on one
+  // clock (TJ, 9 Oct 2026).
+  gsap.to({ v: 0 }, {
+    v: 1,
     scrollTrigger: {
       trigger: frame,
       start: 'top top',
@@ -277,6 +277,13 @@ function actPeak() {
         const sky = sun.parentElement.offsetHeight;
         const travel = between(m, CLOCK_IN, CLOCK_OUT);
         sun.style.transform = `translateY(${travel * sky}px)`;
+        // Where the sun's lower edge touches the line, as a share of its travel.
+        const touch = sky > 0 ? Math.max(0.3, (sky - sun.offsetHeight) / sky) : 0.6;
+        const N = ndSmooth(travel / touch);
+        const C = ndSmooth((travel - 0.5 * touch) / (0.4 * touch));
+        night.style.opacity = N.toFixed(3);
+        creamNow = C;
+        if (navSync) navSync();
 
         // Four states across the same travel. Each peaks as its own quarter
         // passes and falls away either side, so attention slides along the
@@ -315,11 +322,12 @@ function actPeak() {
         // read), and give way as the glass arrives (see the stylesheet, which
         // reads --dn-g). The foot band behind them follows the night: light in
         // the afternoon so dark type reads, deep at night so cream does.
-        const n = Math.min(1, self.progress / NIGHT_FULL), ne = ndAt(self.progress * TOTAL_VH);
+        const n = N, ne = C;
         const bt = Math.min(1, Math.max(0, (n - 0.04) / 0.18));
         // The small title and the paragraph wait for the dark (TJ, 9 Oct 2026):
-        // they lift in once night has fully fallen, over the next third of a screen.
-        const it = between(self.progress, NIGHT_FULL, NIGHT_FULL + 0.3 / TOTAL_VH), ie = 1 - Math.pow(1 - it, 3);
+        // they lift in once the sun has gone under the line and the clock has
+        // cleared.
+        const it = between(m, GONE, GONE + 0.1), ie = 1 - Math.pow(1 - it, 3);
         if (wrap) {
           wrap.style.setProperty('--dn-in', ie.toFixed(3));
           wrap.style.setProperty('--dn-nv', n.toFixed(3));
@@ -365,14 +373,9 @@ function navTheme() {
     bar.classList.toggle('is-dark', t > 0.5);
   };
 
-  // The pinned dissolve as a fraction of the whole peak act, from the real
-  // measured height, re-read on every refresh.
-  let dissolveSpan = 1;
-  const measure = () => {
-    dissolveSpan = (window.innerHeight * PEAK_PIN_VH) / peak.offsetHeight;
-  };
-  measure();
-
+  // In: the same change to cream as everything on the frame, from the sun
+  // (creamNow, set by the pin in actPeak), so the menu and the frame turn together.
+  navSync = () => { tIn = creamNow; apply(); };
   ScrollTrigger.create({
     trigger: peak,
     start: 'top top',
@@ -380,11 +383,7 @@ function navTheme() {
     invalidateOnRefresh: true,
     // After the pin (-11), so it measures the section with the pin spacer in it.
     refreshPriority: -12,
-    onRefresh: measure,
-    onUpdate: self => {
-      tIn = ndAt(self.progress / dissolveSpan * PEAK_PIN_VH);
-      apply();
-    },
+    onUpdate: () => { tIn = creamNow; apply(); },
     onLeave: () => { tIn = 1; apply(); },
     onLeaveBack: () => { tIn = 0; apply(); }
   });
