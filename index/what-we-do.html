@@ -1,0 +1,922 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>What We Do &middot; The Postpartum Suite</title>
+<meta name="description" content="Hands on support for you and your baby, postpartum treatments that repeat through your stay, three fresh meals a day and everyday home support, from one dedicated specialist." />
+<link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
+<meta name="color-scheme" content="light only" />
+<meta name="theme-color" content="#F3EFEC" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/house-flight.css" />
+<link rel="stylesheet" href="css/what-we-do.css" />
+<link rel="stylesheet" href="css/what-we-do-opening.css" />
+<link rel="stylesheet" href="css/what-we-do-day-night.css" />
+<link rel="stylesheet" href="css/what-we-do-timeline.css" />
+<link rel="stylesheet" href="css/what-we-do-kinds.css" />
+<link rel="stylesheet" href="css/what-we-do-hands.css" />
+<link rel="stylesheet" href="css/footer.css" />
+<link rel="preload" as="image" href="../assets/img/care-bedroom.webp" />
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="page--wwd">
+
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="nav nav--glass" data-nav data-section="site-header" data-section-name="Header">
+  <div class="nav__inner">
+
+    <div class="nav__side nav__side--l">
+      <!-- The corner mark: the circular TPS logo in the far left corner
+           while the three-line wordmark is showing in the centre. Purely
+           decorative (the centre lockup is the real home link), so it is
+           hidden from assistive tech and not clickable. It leaves, and the
+           tabs slide left into its place, as the wordmark folds into the
+           centre circle; see the .nav--glass block in site.css. Wide
+           screens only. -->
+      <img class="nav__corner" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
+      <!-- The five main menu items share one row, with the Menu chip taking
+           their place below 1100px. Our Offering and About Us open panels;
+           Home, What We Do and Faqs are page links. -->
+      <div class="nav__tabs" data-tabs>
+        <a class="tab" href="index.html">Home</a>
+        <a class="tab" href="what-we-do.html">What We Do</a>
+        <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
+        <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
+        <a class="tab" href="faqs.html">Faqs</a>
+      </div>
+      <!-- Takes the place of the five above it below 1100px. A word, not a
+           glyph, in the same chip as everything else. -->
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-offerings">Menu</button>
+    </div>
+
+    <!-- #content, not #top. There has never been an element with id
+         "top" on this page, so the lockup was a dead link too: the one
+         control every visitor tries first did nothing. #content is the
+         main landmark, which is where home means on a single page. -->
+    <a class="nav__brand" href="index.html" aria-label="The Postpartum Suite, home">
+      <img class="nav__mark" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" />
+      <span class="nav__wordmark" aria-hidden="true">
+        <span class="wm-line wm-line--1"></span>
+        <span class="wm-line wm-line--2"></span>
+        <span class="wm-line wm-line--3"></span>
+      </span>
+    </a>
+
+    <div class="nav__side nav__side--r">
+      <a class="tab tab--cta" href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
+    </div>
+
+  </div>
+
+  <div class="menu" data-menu hidden>
+
+    <!-- Stage one only, rebuilt 2026-09-21. The site structure names
+         thirty two pages across four menus; these are the seven built
+         first, so the menu lists exactly those and nothing else. Every
+         entry points at a real file. The rest return here as they are
+         built, group by group.
+
+         Nothing else on this page changed: the sections these pages will
+         eventually mirror stay exactly where they are. A section on the
+         homepage and a page of its own are two different things, and
+         whether the former ever links to the latter is a later call. -->
+    <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">Our Offerings</h2>
+        <ul class="menu__list">
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+          <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+          <!-- No Gifts page exists yet, so it is a label, not a link. -->
+          <li><span class="menu__pending">Gifts</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="menu__panel" id="panel-about" data-panel="about" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">About Us</h2>
+        <ul class="menu__list">
+          <li><a href="about.html">The Suite</a></li>
+          <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </header>
+
+<div class="veil" data-veil hidden></div>
+
+<main id="content" tabindex="-1">
+
+  <!-- ============ SECTION: hero ============
+       A title page: label, headline (the first sentence of the client's Mother
+       and Baby copy), the booking button and three figures the copy itself
+       states, then one large photograph that melts into the page. -->
+  <!-- ============ SECTION: the opening (7 Oct 2026, TJ chose study C) ============
+       Hero plus introduction, one pinned movement in two halves. The room
+       opens: a framed photograph grows until you are in it, while the
+       question stays and the answer and the two lines arrive on glass. Then
+       the room closes: the photograph pulls back into a frame and the
+       introduction (her full paragraph) arrives beside it. The aurora is the
+       ground from the first pixel and the header's glass strip fades in on
+       scroll, as on the FAQ page. Side by side at the start: the statement
+       of what the business does on the left, the photograph whole on the
+       right; the photograph grows to the full window and back. Phones: the
+       hero pins on its own and the introduction follows in flow.
+       Motion in what-we-do-opening.js, styles in what-we-do-opening.css. Copy is the client's; the
+       stay line is her Tailored sentence cut (TJ, 7 Oct 2026). -->
+  <section class="op" data-op data-section="hero" data-section-name="Hero">
+    <div class="op__stage" data-op-stage>
+      <div class="aurora op__aurora" data-op-aurora aria-hidden="true"><span class="aurora__field"></span></div>
+      <div class="op__frame" data-op-frame>
+        <img src="../assets/img/postpartum-bedroom-wide.webp" alt="A postpartum specialist tucking soft linen over a mother resting in bed, her newborn asleep in a Moses basket beside them" width="1536" height="1024" fetchpriority="high" />
+        <span class="op__scrim" data-op-scrim aria-hidden="true"></span>
+        <span class="op__dim" data-op-dim aria-hidden="true"></span>
+      </div>
+      <div class="op__copy" data-op-copy>
+        <h1 class="op__h" data-op-h>
+          <span class="op__kicker" data-op-k>What we do</span>
+          <span class="op__head" data-op-hd><span class="op__hl">Live in postpartum care</span> <span class="op__hl op__hl--em">in your home</span></span>
+        </h1>
+        <ul class="op__rows" data-op-l>
+          <li class="op__kinds"><span>Home Support</span><span>Fresh Meals</span><span>Baby Care</span><span>Restorative Treatments</span></li>
+          <li><b>5, 7, 14 or 30 day</b> programmes</li>
+          <li><b>7am to 7pm</b> (night support if required)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="op__intro" data-op-intro data-section="introduction" data-section-name="Introduction">
+      <div class="aurora op__aurora op__aurora--intro" aria-hidden="true"><span class="aurora__field"></span></div>
+      <div class="op__intro-in">
+        <h2 class="op__who" data-op-lead>Who is it for?</h2>
+        <div class="op__more" data-op-more>
+          <p class="wp">If you are expecting, and wondering how a life that is already full will hold a baby too.</p>
+          <p class="wp">The nights. The meals. The washing. A home that still needs running while your body is asking to rest.</p>
+          <p class="wp">For those first weeks, a specialist in postpartum recovery takes all of it. You heal, you feed, you sleep.</p>
+          <p class="wp">And every day, a treatment to restore you: massage, hot stones, belly binding, in your home.</p>
+          <p class="wp">Nine months of carrying. Now let yourself be cared for.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: specialist ============ -->
+  <section class="spec" id="specialist" data-section="your-postpartum-specialist" data-section-name="Your Postpartum Specialist">
+    <div class="wide spec__grid">
+      <div class="spec__frame"><span class="ph" aria-hidden="true"></span></div>
+      <div class="spec__copy" data-reveal>
+        <p class="wlabel">One person</p>
+        <h2 class="wh2" data-kin>Your Postpartum Specialist</h2>
+        <p class="wlead">One dedicated person in your home, chosen with care.</p>
+        <p class="wp">The person who looks after you is the heart of your stay. Every specialist at The Postpartum Suite has extensive experience in caring for mothers and newborns and is trained in our approach to recovery, from treatments and binding to the preparation of postpartum meals. Before anyone joins us, they go through an enhanced DBS check, reference checks and an interview process. All of our specialists are fully insured and hold infant first aid and safeguarding training.</p>
+        <p class="wp">Your specialist takes time to understand your home, your routine and the kind of support you want. You will know who is arriving before your stay begins, and you will have the same specialist throughout, so the care feels personal from the first day to the last.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: the four kinds of care ============
+       MaisonFav's stacked cards (geometry measured, code ours). Each card
+       carries its chapter name on the strip that stays visible once the next
+       card has slid over it. -->
+  <!-- ============ SECTION: the four kinds of care, held stage (TJ, 8 Oct 2026) ============
+       Adapted from the 21st.dev Services Stack (ivarunchaudhary), code ours: one
+       held stage, the four kinds as frosted glass cards. Each new card slides up
+       over the last, and the last dissolves back into the room behind it (fades,
+       shrinks a little, drifts up) while the ground, the card's own photograph
+       blurred, cross fades to the next. The kind's name changes on the left.
+       Portrait photographs are placeholders from the site's own set. The chips
+       are the detail sections' own headings. The old stacked cards follow,
+       hidden, as the backup. -->
+  <!-- ============ SECTION: the four kinds of care, one pair of hands (TJ, 8 Oct 2026) ============
+       One held stage. The specialist stands still in profile on the right; as
+       the reader scrolls, the room changes around her and what she carries
+       changes with it: the baby, the tungku, the soup, the laundry. Her head is
+       in the same place in all four photographs, so only the scene moves. The
+       kind's name, promise and paragraph sit on the left; its detail items open
+       in place (the four detail sections are hidden, copy moved here verbatim).
+       Motion: what-we-do-hands.js. Styles: what-we-do-hands.css. -->
+  <section class="hd hd--hands" data-hd data-section="four-kinds-of-care" data-section-name="The Four Kinds of Care" aria-label="The four kinds of care">
+    <div class="hd__stage">
+      <!-- Each kind is two layers (TJ, 8 Oct 2026): the room with her removed, and the
+           hands with what they hold, cut out. The hands lower out and the next lift in. -->
+      <div class="hd__pics">
+        <div class="hd__scene" data-hd-scene>
+          <img class="hd__plate" data-hd-plate src="../assets/img/hands-plate-mother-baby.webp" alt="" width="2880" height="1920" decoding="async" />
+          <img class="hd__cut" data-hd-cut src="../assets/img/hands-cut-mother-baby.webp" alt="The specialist's hands cradling a sleeping newborn swaddled in a cream knitted blanket, beside the cot" width="2880" height="1920" decoding="async" />
+        </div>
+        <div class="hd__scene" data-hd-scene>
+          <img class="hd__plate" data-hd-plate src="../assets/img/hands-plate-treatments.webp" alt="" width="2880" height="1920" decoding="async" loading="lazy" />
+          <img class="hd__cut" data-hd-cut src="../assets/img/hands-cut-treatments.webp" alt="The specialist's hands holding a tungku, a heated stone wrapped in red batik cloth, in the bedroom" width="2880" height="1920" decoding="async" loading="lazy" />
+        </div>
+        <div class="hd__scene" data-hd-scene>
+          <img class="hd__plate" data-hd-plate src="../assets/img/hands-plate-meals.webp" alt="" width="2880" height="1920" decoding="async" loading="lazy" />
+          <img class="hd__cut" data-hd-cut src="../assets/img/hands-cut-meals.webp" alt="The specialist's hands carrying a wooden tray with a bowl of soup through the kitchen" width="2880" height="1920" decoding="async" loading="lazy" />
+        </div>
+        <div class="hd__scene" data-hd-scene>
+          <img class="hd__plate" data-hd-plate src="../assets/img/hands-plate-home-support.webp" alt="" width="2880" height="1920" decoding="async" loading="lazy" />
+          <img class="hd__cut" data-hd-cut src="../assets/img/hands-cut-home-support.webp" alt="The specialist's hands carrying a stack of freshly folded laundry in the laundry room" width="2880" height="1920" decoding="async" loading="lazy" />
+        </div>
+      </div>
+      <div class="hd__veil" aria-hidden="true"></div>
+      <div class="hd__copy">
+        <article class="hd__kind" data-hd-kind aria-labelledby="hd-h0">
+          <h2 class="hd__name" id="hd-h0" data-hd-split>Mother and Baby Care</h2>
+          <p class="hd__promise" data-hd-split>Hands on support with your baby, and thoughtful care for you, every day.</p>
+          <p class="hd__para" data-hd-split>The weeks after birth are not meant to be managed alone. Your dedicated postpartum specialist stays with you, taking time to learn the routine of your home, your baby's cues and the way you like things done. Her care is there in the quiet early hours as much as in the busy ones, and it is guided by two priorities: your baby's comfort and your rest.</p>
+          <ul class="hd__items" data-hd-fade>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-0-0">Care for your baby while you rest</button>
+              <div class="hd__more" id="hd-0-0"><p>Whether you need an uninterrupted sleep after a long night or a moment to bathe in peace, your baby is in attentive, experienced hands. Your specialist takes care of changing, winding, settling, bathing support, and feeding with expressed or formula milk. If you are breastfeeding, she brings your baby to you for each feed and settles them again afterwards, so your energy is kept for the moments that matter most. On selected programmes this care continues through the night. Along the way she gently shares what she observes, from feeding cues to sleep patterns, so your confidence grows with each day.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-0-1">Accompanying you and baby on outings</button>
+              <div class="hd__more" id="hd-0-1"><p>Those first trips out of the house should feel effortless. Your specialist can accompany you to GP appointments, baby clinic weigh ins or a gentle stroll in the park. She prepares the changing bag, manages the car seat and pram, and holds your baby while you are seen, so you step out feeling composed and cared for.</p></div>
+            </li>
+          </ul>
+        </article>
+        <article class="hd__kind" data-hd-kind aria-labelledby="hd-h1">
+          <h2 class="hd__name" id="hd-h1" data-hd-split>Treatments</h2>
+          <p class="hd__promise" data-hd-split>Hands on care that repeats through your stay, not offered once as a treat.</p>
+          <p class="hd__para" data-hd-split>Elsewhere, postpartum treatments are often booked as a single indulgence. Inspired by Malaysian confinement traditions, ours are woven into your stay, so warmth, support and restoration build gently day after day. Every treatment takes place in the comfort of your home, at a time that suits you and your baby.</p>
+          <ul class="hd__items" data-hd-fade>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-0">Postpartum massage and hot stone therapy, several times a week</button>
+              <div class="hd__more" id="hd-1-0"><p>At the heart of your recovery is postpartum massage, carried out several times each week. Slow, warming strokes ease the tension of pregnancy, birth and early feeding, while heated stones bring a deep, soothing warmth to the body. Each session is tailored to how you are feeling, leaving you relaxed, restored and wonderfully cared for.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-1">Belly binding, daily</button>
+              <div class="hd__more" id="hd-1-1"><p>Your tummy wrap is applied once your massage or hot stone therapy is complete, while your body is warm and relaxed, so it supports and holds the benefits of your treatment. This gives your core and lower back a reassuring, held feeling as your body recovers, and extra support as you lift, carry and feed your baby. Each wrap is adjusted to your comfort. After a caesarean birth, we follow the guidance of your midwife or doctor on when to begin.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-2">Herbal baths for you, daily</button>
+              <div class="hd__more" id="hd-1-2"><p>Each day your specialist prepares a warm bath infused with fresh herbs and leaves, such as lemongrass and pandan. It is a calming feeling that soothes tired muscles, refreshes the skin and offers a quiet moment that is entirely yours.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-3">Thermal blanket treatment</button>
+              <div class="hd__more" id="hd-1-3"><p>You rest comfortably wrapped in a heated blanket as a deep, steady warmth builds, leaving you free to simply relax. Each session is tailored to how you are feeling that day.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-4">Foot massage, reflexology and full body scrub</button>
+              <div class="hd__more" id="hd-1-4"><p>On the days between your massages, your care continues with a soothing foot massage and reflexology or a gentle full body scrub, so there is always something restorative in your day.</p></div>
+            </li>
+          </ul>
+        </article>
+        <article class="hd__kind" data-hd-kind aria-labelledby="hd-h2">
+          <h2 class="hd__name" id="hd-h2" data-hd-split>Meals</h2>
+          <p class="hd__promise" data-hd-split>Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
+          <p class="hd__para" data-hd-split>In postpartum care, also known as confinement, food is an essential part of healing. Rather than meals arriving in delivery boxes, your specialist shops and cooks in your kitchen each day, so every dish is served hot, fresh and suited to that stage of your recovery. The menu is guided by Malaysian confinement principles, using warming ingredients such as ginger, turmeric and black pepper, slow simmered broths, and gentle dishes that are easy to digest. Cold and raw foods are avoided in the early weeks. Your family dines from the same table, and dietary requirements, allergies and preferences are discussed with you before we arrive.</p>
+          <ul class="hd__items" data-hd-fade>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-2-0">Fresh postpartum meals, 3 a day</button>
+              <div class="hd__more" id="hd-2-0"><p>Breakfast, lunch and dinner are prepared from scratch each day. Dishes might include ginger fish soup, chicken braised in ginger and herbs, comforting rice porridge, slow cooked broths and greens stir fried with garlic. The menu evolves throughout your stay as your body recovers.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-2-1">Herbal teas</button>
+              <div class="hd__more" id="hd-2-1"><p>Your specialist brews tea fresh throughout the day as required. Warm drinks are favoured over cold, so there is always something warm within reach.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-2-2">Lactation support drinks</button>
+              <div class="hd__more" id="hd-2-2"><p>Warm drinks made with ingredients traditionally given to nursing mothers, such as oats, dates and fenugreek, are prepared fresh each day. If you are not breastfeeding, we prepare other nourishing warm drinks in their place.</p></div>
+            </li>
+          </ul>
+        </article>
+        <article class="hd__kind" data-hd-kind aria-labelledby="hd-h3">
+          <h2 class="hd__name" id="hd-h3" data-hd-split>Home Support</h2>
+          <p class="hd__promise" data-hd-split>Everyday life, taken care of from the moment we arrive.</p>
+          <p class="hd__para" data-hd-split>A new baby brings more laundry, more dishes and more errands almost overnight. Your specialist attends to these quietly and discreetly, so your home remains calm and ordered and your only focus is rest. This is not a visiting service that comes and goes. It is care woven into the whole day.</p>
+          <ul class="hd__items" data-hd-fade>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-3-0">Laundry and ironing</button>
+              <div class="hd__more" id="hd-3-0"><p>Your laundry is taken care of throughout your stay. Your clothes and your baby's are washed, beautifully pressed and put away, and your bed is made fresh each day so it is always inviting when you return to rest.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-3-1">Light house cleaning, organising baby wardrobe</button>
+              <div class="hd__more" id="hd-3-1"><p>The kitchen is left spotless after every meal, and the areas of your home you use most are hoovered and mopped, so everything stays fresh and orderly. Your baby's wardrobe is kept neatly organised, so every outfit, muslin and essential is exactly where you need it.</p></div>
+            </li>
+            <li class="hd__item">
+              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-3-2">Grocery collection</button>
+              <div class="hd__more" id="hd-3-2"><p>Your specialist collects your groceries along with the fresh produce and specialist ingredients for your meals, so the kitchen is always well stocked and nobody needs to make a last minute trip to the shops.</p></div>
+            </li>
+          </ul>
+        </article>
+      </div>
+      <div class="hd__rail" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    </div>
+  </section>
+
+  <!-- Card stage version of the four kinds, retired 8 Oct 2026 (TJ: too generic); kept hidden as a backup. -->
+  <section class="kc" data-kc data-section="four-kinds-of-care-cards" data-section-name="The Four Kinds of Care (cards)" hidden aria-label="The four kinds of care">
+    <div class="kc__stage">
+      <div class="kc__grounds" aria-hidden="true">
+        <img class="kc__ground" data-kc-ground src="../assets/img/kc-mother-baby.webp" alt="" width="893" height="1116" decoding="async" />
+        <img class="kc__ground" data-kc-ground src="../assets/img/kc-treatments.webp" alt="" width="1200" height="1500" decoding="async" />
+        <img class="kc__ground" data-kc-ground src="../assets/img/kc-meals.webp" alt="" width="893" height="1116" decoding="async" />
+        <img class="kc__ground" data-kc-ground src="../assets/img/kc-home-support.webp" alt="" width="858" height="1072" decoding="async" />
+      </div>
+      <div class="kc__names" aria-hidden="true">
+        <span class="kc__name" data-kc-name><span>Mother and Baby Care</span></span>
+        <span class="kc__name" data-kc-name><span>Treatments</span></span>
+        <span class="kc__name" data-kc-name><span>Meals</span></span>
+        <span class="kc__name" data-kc-name><span>Home Support</span></span>
+      </div>
+      <div class="kc__deck">
+        <article class="kc__card glass" data-kc-card aria-labelledby="kc-h0">
+          <figure class="kc__pic"><img src="../assets/img/kc-mother-baby.webp" alt="The specialist handing the newborn to the mother, who is resting in bed" width="893" height="1116" decoding="async" /></figure>
+          <div class="kc__copy">
+            <h2 class="kc__h" id="kc-h0">Mother and Baby Care</h2>
+            <p class="kc__promise">Hands on support with your baby, and thoughtful care for you, every day.</p>
+            <p class="wp">The weeks after birth are not meant to be managed alone. Your dedicated postpartum specialist stays with you, taking time to learn the routine of your home, your baby's cues and the way you like things done. Her care is there in the quiet early hours as much as in the busy ones, and it is guided by two priorities: your baby's comfort and your rest.</p>
+            <ul class="kc__chips" aria-label="Included">
+              <li>Care for your baby while you rest</li>
+              <li>Accompanying you and baby on outings</li>
+            </ul>
+            <a class="sc__link" href="#mother-baby">Read the detail</a>
+          </div>
+        </article>
+        <article class="kc__card glass" data-kc-card aria-labelledby="kc-h1">
+          <figure class="kc__pic"><img src="../assets/img/kc-treatments.webp" alt="A mother receiving a postpartum back massage, her hair wrapped in a towel" width="1200" height="1500" decoding="async" /></figure>
+          <div class="kc__copy">
+            <h2 class="kc__h" id="kc-h1">Treatments</h2>
+            <p class="kc__promise">Hands on care that repeats through your stay, not offered once as a treat.</p>
+            <p class="wp">Elsewhere, postpartum treatments are often booked as a single indulgence. Inspired by Malaysian confinement traditions, ours are woven into your stay, so warmth, support and restoration build gently day after day. Every treatment takes place in the comfort of your home, at a time that suits you and your baby.</p>
+            <ul class="kc__chips" aria-label="Included">
+              <li>Postpartum massage and hot stone therapy, several times a week</li>
+              <li>Belly binding, daily</li>
+              <li>Herbal baths for you, daily</li>
+              <li>Thermal blanket treatment</li>
+              <li>Foot massage, reflexology and full body scrub</li>
+            </ul>
+            <a class="sc__link" href="#treatments">Read the detail</a>
+          </div>
+        </article>
+        <article class="kc__card glass" data-kc-card aria-labelledby="kc-h2">
+          <figure class="kc__pic"><img src="../assets/img/kc-meals.webp" alt="The specialist setting down a tray of freshly cooked soup and rice in the living room" width="893" height="1116" decoding="async" /></figure>
+          <div class="kc__copy">
+            <h2 class="kc__h" id="kc-h2">Meals</h2>
+            <p class="kc__promise">Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
+            <p class="wp">In postpartum care, also known as confinement, food is an essential part of healing. Rather than meals arriving in delivery boxes, your specialist shops and cooks in your kitchen each day, so every dish is served hot, fresh and suited to that stage of your recovery. The menu is guided by Malaysian confinement principles, using warming ingredients such as ginger, turmeric and black pepper, slow simmered broths, and gentle dishes that are easy to digest. Cold and raw foods are avoided in the early weeks. Your family dines from the same table, and dietary requirements, allergies and preferences are discussed with you before we arrive.</p>
+            <ul class="kc__chips" aria-label="Included">
+              <li>Fresh postpartum meals, 3 a day</li>
+              <li>Herbal teas</li>
+              <li>Lactation support drinks</li>
+            </ul>
+            <a class="sc__link" href="#meals">Read the detail</a>
+          </div>
+        </article>
+        <article class="kc__card glass" data-kc-card aria-labelledby="kc-h3">
+          <figure class="kc__pic"><img src="../assets/img/kc-home-support.webp" alt="The specialist ironing at the dining table while the baby sleeps in a basket beside her" width="858" height="1072" decoding="async" /></figure>
+          <div class="kc__copy">
+            <h2 class="kc__h" id="kc-h3">Home Support</h2>
+            <p class="kc__promise">Everyday life, taken care of from the moment we arrive.</p>
+            <p class="wp">A new baby brings more laundry, more dishes and more errands almost overnight. Your specialist attends to these quietly and discreetly, so your home remains calm and ordered and your only focus is rest. This is not a visiting service that comes and goes. It is care woven into the whole day.</p>
+            <ul class="kc__chips" aria-label="Included">
+              <li>Laundry and ironing</li>
+              <li>Light house cleaning, organising baby wardrobe</li>
+              <li>Grocery collection</li>
+            </ul>
+            <a class="sc__link" href="#home-support">Read the detail</a>
+          </div>
+        </article>
+      </div>
+      <div class="kc__rail" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+    </div>
+  </section>
+
+  <!-- Original stacked cards, retired 8 Oct 2026 (TJ); kept hidden as the backup. -->
+  <section class="stack" data-section="four-kinds-of-care-original" data-section-name="The Four Kinds of Care (original)" hidden aria-label="The four kinds of care">
+    <div class="wide stack__cards">
+      <article class="sc" style="--i:0; --pos:62% 50%" data-card>
+        <span class="ph" aria-hidden="true"></span>
+        <h2 class="sc__tab glass">Mother and Baby Care</h2>
+        <div class="sc__panel glass">
+          <p class="sc__promise">Hands on support with your baby, and thoughtful care for you, every day.</p>
+          <p class="wp">The weeks after birth are not meant to be managed alone. Your dedicated postpartum specialist stays with you, taking time to learn the routine of your home, your baby's cues and the way you like things done. Her care is there in the quiet early hours as much as in the busy ones, and it is guided by two priorities: your baby's comfort and your rest.</p>
+          <a class="sc__link" href="#mother-baby">Read the detail</a>
+        </div>
+      </article>
+      <article class="sc" style="--i:1; --pos:50% 42%" data-card>
+        <span class="ph" aria-hidden="true"></span>
+        <h2 class="sc__tab glass">Treatments</h2>
+        <div class="sc__panel glass">
+          <p class="sc__promise">Hands on care that repeats through your stay, not offered once as a treat.</p>
+          <p class="wp">Elsewhere, postpartum treatments are often booked as a single indulgence. Inspired by Malaysian confinement traditions, ours are woven into your stay, so warmth, support and restoration build gently day after day. Every treatment takes place in the comfort of your home, at a time that suits you and your baby.</p>
+          <a class="sc__link" href="#treatments">Read the detail</a>
+        </div>
+      </article>
+      <article class="sc" style="--i:2; --pos:50% 55%" data-card>
+        <span class="ph" aria-hidden="true"></span>
+        <h2 class="sc__tab glass">Meals</h2>
+        <div class="sc__panel glass">
+          <p class="sc__promise">Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
+          <p class="wp">In postpartum care, also known as confinement, food is an essential part of healing. Rather than meals arriving in delivery boxes, your specialist shops and cooks in your kitchen each day, so every dish is served hot, fresh and suited to that stage of your recovery. The menu is guided by Malaysian confinement principles, using warming ingredients such as ginger, turmeric and black pepper, slow simmered broths, and gentle dishes that are easy to digest. Cold and raw foods are avoided in the early weeks. Your family dines from the same table, and dietary requirements, allergies and preferences are discussed with you before we arrive.</p>
+          <a class="sc__link" href="#meals">Read the detail</a>
+        </div>
+      </article>
+      <article class="sc" style="--i:3; --pos:55% 50%" data-card>
+        <span class="ph" aria-hidden="true"></span>
+        <h2 class="sc__tab glass">Home Support</h2>
+        <div class="sc__panel glass">
+          <p class="sc__promise">Everyday life, taken care of from the moment we arrive.</p>
+          <p class="wp">A new baby brings more laundry, more dishes and more errands almost overnight. Your specialist attends to these quietly and discreetly, so your home remains calm and ordered and your only focus is rest. This is not a visiting service that comes and goes. It is care woven into the whole day.</p>
+          <a class="sc__link" href="#home-support">Read the detail</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: mother-baby detail ============ -->
+  <section class="det" id="mother-baby" data-section="mother-baby-detail" data-section-name="Mother and Baby Care" hidden>
+    <div class="wide det__grid">
+      <div class="det__media" data-det-media aria-hidden="true"><span class="ph" aria-hidden="true"></span></div>
+      <div class="det__col">
+        <p class="wlabel">Mother and Baby Care</p>
+        <article class="di" data-di="0" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Care for your baby while you rest</h3>
+          <p class="wp">Whether you need an uninterrupted sleep after a long night or a moment to bathe in peace, your baby is in attentive, experienced hands. Your specialist takes care of changing, winding, settling, bathing support, and feeding with expressed or formula milk. If you are breastfeeding, she brings your baby to you for each feed and settles them again afterwards, so your energy is kept for the moments that matter most. On selected programmes this care continues through the night. Along the way she gently shares what she observes, from feeding cues to sleep patterns, so your confidence grows with each day.</p>
+        </article>
+        <article class="di" data-di="1" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Accompanying you and baby on outings</h3>
+          <p class="wp">Those first trips out of the house should feel effortless. Your specialist can accompany you to GP appointments, baby clinic weigh ins or a gentle stroll in the park. She prepares the changing bag, manages the car seat and pram, and holds your baby while you are seen, so you step out feeling composed and cared for.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: treatments detail ============ -->
+  <section class="det det--blush" id="treatments" data-section="treatments-detail" data-section-name="Treatments" hidden>
+    <div class="wide det__grid">
+      <div class="det__media" data-det-media aria-hidden="true"><span class="ph" aria-hidden="true"></span></div>
+      <div class="det__col">
+        <p class="wlabel">Treatments</p>
+        <article class="di" data-di="0" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Postpartum massage and hot stone therapy, several times a week</h3>
+          <p class="wp">At the heart of your recovery is postpartum massage, carried out several times each week. Slow, warming strokes ease the tension of pregnancy, birth and early feeding, while heated stones bring a deep, soothing warmth to the body. Each session is tailored to how you are feeling, leaving you relaxed, restored and wonderfully cared for.</p>
+        </article>
+        <article class="di" data-di="1" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Belly binding, daily</h3>
+          <p class="wp">Your tummy wrap is applied once your massage or hot stone therapy is complete, while your body is warm and relaxed, so it supports and holds the benefits of your treatment. This gives your core and lower back a reassuring, held feeling as your body recovers, and extra support as you lift, carry and feed your baby. Each wrap is adjusted to your comfort. After a caesarean birth, we follow the guidance of your midwife or doctor on when to begin.</p>
+        </article>
+        <article class="di" data-di="2" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Herbal baths for you, daily</h3>
+          <p class="wp">Each day your specialist prepares a warm bath infused with fresh herbs and leaves, such as lemongrass and pandan. It is a calming feeling that soothes tired muscles, refreshes the skin and offers a quiet moment that is entirely yours.</p>
+        </article>
+        <article class="di" data-di="3" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Thermal blanket treatment</h3>
+          <p class="wp">You rest comfortably wrapped in a heated blanket as a deep, steady warmth builds, leaving you free to simply relax. Each session is tailored to how you are feeling that day.</p>
+        </article>
+        <article class="di" data-di="4" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Foot massage, reflexology and full body scrub</h3>
+          <p class="wp">On the days between your massages, your care continues with a soothing foot massage and reflexology or a gentle full body scrub, so there is always something restorative in your day.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: meals detail ============ -->
+  <section class="det" id="meals" data-section="meals-detail" data-section-name="Meals" hidden>
+    <div class="wide det__grid">
+      <div class="det__media" data-det-media aria-hidden="true"><span class="ph" aria-hidden="true"></span></div>
+      <div class="det__col">
+        <p class="wlabel">Meals</p>
+        <article class="di" data-di="0" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Fresh postpartum meals, 3 a day</h3>
+          <p class="wp">Breakfast, lunch and dinner are prepared from scratch each day. Dishes might include ginger fish soup, chicken braised in ginger and herbs, comforting rice porridge, slow cooked broths and greens stir fried with garlic. The menu evolves throughout your stay as your body recovers.</p>
+        </article>
+        <article class="di" data-di="1" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Herbal teas</h3>
+          <p class="wp">Your specialist brews tea fresh throughout the day as required. Warm drinks are favoured over cold, so there is always something warm within reach.</p>
+        </article>
+        <article class="di" data-di="2" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Lactation support drinks</h3>
+          <p class="wp">Warm drinks made with ingredients traditionally given to nursing mothers, such as oats, dates and fenugreek, are prepared fresh each day. If you are not breastfeeding, we prepare other nourishing warm drinks in their place.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: home-support detail ============ -->
+  <section class="det det--blush" id="home-support" data-section="home-support-detail" data-section-name="Home Support" hidden>
+    <div class="wide det__grid">
+      <div class="det__media" data-det-media aria-hidden="true"><span class="ph" aria-hidden="true"></span></div>
+      <div class="det__col">
+        <p class="wlabel">Home Support</p>
+        <article class="di" data-di="0" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Laundry and ironing</h3>
+          <p class="wp">Your laundry is taken care of throughout your stay. Your clothes and your baby's are washed, beautifully pressed and put away, and your bed is made fresh each day so it is always inviting when you return to rest.</p>
+        </article>
+        <article class="di" data-di="1" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Light house cleaning, organising baby wardrobe</h3>
+          <p class="wp">The kitchen is left spotless after every meal, and the areas of your home you use most are hoovered and mopped, so everything stays fresh and orderly. Your baby's wardrobe is kept neatly organised, so every outfit, muslin and essential is exactly where you need it.</p>
+        </article>
+        <article class="di" data-di="2" data-reveal>
+          <span class="ph di__thumb" aria-hidden="true"></span>
+          <h3 class="wh3">Grocery collection</h3>
+          <p class="wp">Your specialist collects your groceries along with the fresh produce and specialist ingredients for your meals, so the kitchen is always well stocked and nobody needs to make a last minute trip to the shops.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="zones-wrap">
+  <section class="zones" data-zones data-section="housekeeping-zones" data-section-name="Housekeeping Zones" aria-labelledby="zones-title">
+    <div class="zones__stage" data-zones-stage>
+
+      <div class="zones__film">
+        <img class="zones__poster is-on" data-zposter="0" src="../assets/img/zones-day.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="1" src="../assets/img/zones-living.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="2" src="../assets/img/zones-kitchen.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="3" src="../assets/img/zones-nursery.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <img class="zones__poster" data-zposter="4" src="../assets/img/zones-all.webp" alt="" width="1600" height="892" loading="lazy" decoding="async" />
+        <div class="zones__stills" aria-hidden="true">
+          <img class="zones__still is-on" data-zstill="intro" src="../assets/img/zones-m-intro.webp" alt="" width="720" height="804" loading="lazy" decoding="async" />
+          <img class="zones__still" data-zstill="living" src="../assets/img/zones-m-living.webp" alt="" width="720" height="804" loading="lazy" decoding="async" />
+          <img class="zones__still" data-zstill="kitchen" src="../assets/img/zones-m-kitchen.webp" alt="" width="720" height="804" loading="lazy" decoding="async" />
+          <img class="zones__still" data-zstill="nursery" src="../assets/img/zones-m-nursery.webp" alt="" width="720" height="804" loading="lazy" decoding="async" />
+        </div>
+        <video class="zones__video" data-zvideo
+               data-src="../assets/video/zones.mp4"
+               data-src-mobile="../assets/video/zones-m.mp4"
+               muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      </div>
+
+      <div class="zones__copy">
+
+        <!-- Fixed for the whole section: the existing line, split so that
+             "While you rest" carries the script face (Quentin) and the rest
+             the title face. -->
+        <div class="zones__title" data-zbeat="title">
+          <h2 class="zones__h" id="zones-title"><span class="zones__script">While you rest</span> <span class="zones__caps">the rooms you live in are looked after</span></h2>
+        </div>
+
+        <div class="zones__line" data-zbeat="line">
+          <ul class="zones__rooms" aria-label="Rooms">
+            <li class="zones__room" data-zitem="living">
+              <button type="button" data-zroom="living" aria-expanded="false" aria-controls="zones-more-living">Living room</button>
+              <div class="zones__more" id="zones-more-living"><div><p>The living room is where your days with your baby unfold, so we keep it feeling restful and composed. Throughout the day the space is quietly tidied, and the floors are hoovered and mopped so the room always feels fresh. Whenever you come down to sit with your baby or welcome family, it is serene, orderly and ready for you, as though it has been waiting.</p></div></div>
+            </li>
+            <li class="zones__room" data-zitem="kitchen">
+              <button type="button" data-zroom="kitchen" aria-expanded="false" aria-controls="zones-more-kitchen">Kitchen</button>
+              <div class="zones__more" id="zones-more-kitchen"><div><p>Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery. Your groceries are collected, warm teas and lactation drinks are prepared throughout the day, and your baby's bottles and feeding items are washed and sterilised. After l meals, the kitchen is restored, with surfaces cleaned and floors hoovered and mopped, so it is never something you have to think about.</p></div></div>
+            </li>
+            <li class="zones__room" data-zitem="nursery">
+              <button type="button" data-zroom="nursery" aria-expanded="false" aria-controls="zones-more-nursery">Nursery</button>
+              <div class="zones__more" id="zones-more-nursery"><div><p>Your clothes and your baby's are washed, beautifully pressed and put away, with your baby's wardrobe sorted and neatly organised. Every essential, from nappies to muslins, is kept stocked and within easy reach. Whether it is a 3am feed or an afternoon change, you step into a room that is peaceful, considered and already prepared, with nothing to search for.</p></div></div>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+  </div>
+
+  <!-- ============ SECTION: tailored ============
+       Rebuilt 5 Oct 2026, one frame. Ground is band 5 of Fuchsia-variants.html
+       (Silk on coral). Quentin is the heading, in white. Rooms: the three
+       paragraphs open one at a time on fine lines. The photograph bleeds off
+       the right edge, top and bottom and dissolves toward the text, following
+       the open row. The marker on the rule travels 0 to 5 on arrival and can be
+       dragged. Copy is the client's, verbatim; the sentence and labels around
+       the counts are the only additions. No glass, no cards, no buttons. -->
+  <section class="tail tail--proposal tail--wall-palette" id="tailored" data-section="tailored-for-you" data-section-name="Tailored For You">
+    <div class="tail__silk" aria-hidden="true"><span class="tail__field"></span></div>
+    <figure class="tl__pics"><img data-pic="0" data-ground="#885136" src="../assets/img/hero_night-shift_v1.webp" alt="The specialist settling the baby in the nursery at night while the mother sleeps in the next room" width="1920" height="1080" /><img data-pic="1" data-ground="#A37E62" src="../assets/img/care-kitchen.webp" alt="The specialist preparing fresh food in a bright family kitchen" width="1920" height="1080" loading="lazy" /><img data-pic="2" data-ground="#956548" src="../assets/img/care-living.webp" alt="A mother resting on the sofa while her specialist irons and her baby sleeps in a basket nearby" width="1920" height="1080" loading="lazy" /><img data-pic="3" data-ground="#A27E64" src="../assets/img/mother-and-carer-on-sofa-with-baby-no-hijab.webp" alt="A mother and postpartum specialist sitting together on a sofa with the baby" width="2752" height="1536" loading="lazy" /></figure>
+    <div class="wide tl">
+      <div class="tl__text" data-ledger style="--sel: 5">
+        <div class="tl__head" data-reveal>
+          <h2 class="tl__h">Tailored To You</h2>
+          <p class="tl__lead"><span>No two recoveries are the same,</span><span>so no two stays are either</span></p>
+        </div>
+        <div class="tl-scale" role="radiogroup" aria-label="Length of stay in days"><span class="tl-scale__unit" aria-hidden="true">Days</span><button type="button" role="radio" aria-checked="true" data-days="5" style="--at: 5">5</button><button type="button" role="radio" aria-checked="false" data-days="7" style="--at: 7">7</button><button type="button" role="radio" aria-checked="false" data-days="14" style="--at: 14">14</button><button type="button" role="radio" aria-checked="false" data-days="30" style="--at: 30">30</button><div class="tl-rail"><i class="tl-stop" style="--at: 5"></i><i class="tl-stop" style="--at: 7"></i><i class="tl-stop" style="--at: 14"></i><i class="tl-stop" style="--at: 30"></i><span class="tl-ticks"></span><span class="tl-lit"></span><span class="tl-handle" aria-hidden="true"></span></div></div>
+        <div class="tl-stay" data-reveal>
+          <p class="tl-sum" aria-live="polite">In <b data-out="days">5</b> days, your specialist will have given you:</p>
+          <div class="tl-out">
+            <div><b data-out="meals">15</b><span>freshly cooked meals</span></div>
+            <div><b data-out="baths">5</b><span>herbal baths</span></div>
+            <div><b data-out="binds">5</b><span>belly binding sessions</span></div>
+          </div>
+        </div>
+        <div class="tl-acc tl-readmore" data-tl-readmore data-reveal>
+          <div class="tl-readmore__copy">
+            <p>Your care begins well before your postpartum specialist arrives.</p>
+            <p>We start with a consultation to understand your birth plan, your home and family, and what you most want from your recovery. Your pre-programme form then lets you share your dietary needs, preferences and the details that make your home yours.</p>
+            <div class="tl-readmore__extra" id="tailored-more-copy"><div>
+              <p>From there, your stay is shaped around you: when your treatments take place, what is cooked, how your baby's day runs and how much quiet time you would like.</p>
+              <p>If your birth or recovery plan changes, your care adapts with you, following the guidance of your midwife or doctor.</p>
+              <p>You can stay with us for 5, 7, 14 or 30 days, with care from 7am to 7pm each day and night support available if required.</p>
+            </div></div>
+          </div>
+          <button class="tl-readmore__toggle" type="button" aria-expanded="false" aria-controls="tailored-more-copy"><span class="when-closed">Read more</span><span class="when-open">Read less</span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: the promise ============
+       Moved here from the homepage on 5 Oct 2026 (TJ). It answers the line
+       in Tailored To You about night support, and follows A Day With Us,
+       which ends at 7pm. The motion lives in what-we-do-promise.js, lifted unchanged
+       from home.js (actPeak and navTheme). Markup is as it was on the homepage. -->
+  <!-- ============ SECTION: Day and Night Care (8 Oct 2026, TJ) ============
+       The Promise and the day and night copy merged into one section: the
+       question, the dissolve from afternoon to night, the answer as the two
+       options, then the detail beneath in the same two columns. Styles for
+       the merge are in what-we-do-day-night.css (this page only; site.css is untouched).
+       Restore point: lab/snapshot-before-day-night-merge/. -->
+<div class="dn-wrap" data-section="day-and-night-care" data-section-name="Day and Night Care">
+  <h2 class="dn-sr">Day and Night Care</h2>
+<section class="act act--peak" data-act>
+  <!-- The question, moved outside the figure 2026-09-17. It was nested
+       inside the wiped element, which meant it was clipped to nothing
+       before the wipe even started, so it could never be visible on the
+       plain ground first as TJ wanted. It now sits on the section's own
+       background, in the exact spot it occupies once the photograph
+       covers it, so the wipe passing over it reads as the swipe itself
+       changing its colour rather than two things happening at once. -->
+
+  <div class="peak__hold" data-stage>
+    <figure class="frame frame--bleed peak__frame" data-reveal="up">
+      <img class="dissolve__day"   src="../assets/img/care.webp"  alt="A mother resting on the sofa in the afternoon while her specialist holds the baby beside her" width="1920" height="1072" />
+      <img class="dissolve__night" src="../assets/img/night.webp" alt="The same sofa in the evening, the mother still resting, the specialist still holding the baby" width="1920" height="1072" />
+
+      <!-- Density only where type sits. Small type directly on this
+           photograph measures about 2.8 to 1 over the bright afternoon
+           sofa, which is the contrast trap the old text plate existed to
+           solve; these two bands are the lighter fix. -->
+      <div class="peak__band peak__band--top"></div>
+      <div class="peak__band"></div>
+
+      <!-- The clock: a sun descending through a horizon line, and the
+           four states below it. Both clear away once the light has gone,
+           so the answer lands on an uncluttered frame. -->
+      <div class="peak__clock" data-peak-clock>
+        <div class="sundial">
+          <div class="sundial__sky"><div class="sundial__sun" data-peak-sun></div></div>
+          <div class="sundial__line"></div>
+        </div>
+        <div class="peak__states" data-peak-states>
+          <span>Every morning</span>
+          <span>Every afternoon</span>
+          <span>Every evening</span>
+          <span>Every night</span>
+        </div>
+      </div>
+
+      <!-- The glass (TJ, 8 Oct 2026): after the two options land, frosted
+           glass builds over the whole night frame and splits, light on the
+           left for Day Care and dusk on the right for Day and Night Care. The
+           photograph stays underneath. what-we-do-promise.js drives it from the pin. -->
+      <div class="dng" data-dng aria-hidden="true">
+        <span class="dng__half dng__half--day"></span>
+        <span class="dng__half dng__half--night"></span>
+      </div>
+
+      <!-- The answer is the fork: the two options land on the night frame in
+           the answer slot (data-peak-answer, timed by what-we-do-promise.js as "Yes, we
+           do." was), then each column opens on the glass with the client's
+           copy, verbatim. Both columns show the same height of text with Read
+           more beneath. -->
+      <div class="peak__answer dnf" data-peak-answer>
+        <div class="dnf__cols">
+          <div class="dnf__opt dnf__opt--day" data-dn-side="day">
+            <!-- The small title and the paragraph (TJ, 8 Oct 2026): together at the
+                 bottom left from the moment the photograph lands, dark on the
+                 afternoon and easing to cream as night falls; they give way to
+                 the options when the glass arrives. -->
+            <p class="dnf__lede" data-dn-title>Care arranged around the hours you need most</p>
+            <p class="dnf__intro" data-dn-intro>For some mothers, the days feel full and the nights are manageable. For others, it is the 3am feed that tests them most. You choose when your specialist is with you, and the care she brings is the same either way.</p>
+            <div class="dnf__heads" data-dn-heads>
+              <h3 class="dnf__name">Day Care</h3>
+              <p class="dnf__hours">7am to 7pm</p>
+            </div>
+            <div class="dnf__body" data-dn-body id="dn-body-day">
+              <div class="dnf__text">
+                <p>Twelve hours of care from the moment your home wakes until the evening. Your day begins with a warm herbal bath and a nourishing breakfast, and continues with time to rest while your baby is cared for, your daily treatment, freshly cooked lunch and dinner, and your laundry and home taken care of. By 7pm the kitchen is spotless and you are ready to settle into the evening with your baby.</p>
+                <p class="dnf__ideal">Ideal if you would like full support through the day and prefer to spend the nights with your baby yourselves.</p>
+              </div>
+            </div>
+            <button class="dnf__more" type="button" data-dn-more aria-expanded="false" aria-controls="dn-body-day">Read more</button>
+          </div>
+          <div class="dnf__opt dnf__opt--night" data-dn-side="night">
+            <div class="dnf__heads" data-dn-heads>
+              <h3 class="dnf__name">Day and Night Care</h3>
+              <p class="dnf__hours">12pm to 6pm, then 12am to 6am</p>
+            </div>
+            <div class="dnf__body" data-dn-body id="dn-body-night">
+              <div class="dnf__text">
+                <p>Six hours of care through the afternoon and six hours through the night, so you are supported when rest matters most.</p>
+                <p><b>Afternoon, 12pm to 6pm.</b> Your specialist arrives in time to prepare a freshly cooked lunch, along with a lactation support drink or fresh tea. In the afternoon you enjoy your treatment, whether that is a restorative postpartum massage with hot stone therapy followed by your belly binding, or another treatment from your programme. While you rest, your baby is cared for and your laundry and home are taken care of. Before she finishes at 6pm, dinner is cooked and ready for you and your family, and the kitchen is left spotless.</p>
+                <p><b>Through the night, 12am to 6am.</b> As the house goes quiet, your specialist takes over your baby's care. She settles your baby to sleep, wakes for every feed, and handles the nappy changes, winding and resettling in between. If you are breastfeeding, she brings your baby to you for each feed and settles them again afterwards, so you can return to sleep straight away. If you are bottle feeding, she feeds your baby herself so you can rest through the night. At 6am she hands your baby back to you with a short note on the night's feeds and sleep.</p>
+                <p class="dnf__ideal">Ideal if the nights feel like the hardest part, and you would like unbroken rest alongside your treatments and meals.</p>
+              </div>
+            </div>
+            <button class="dnf__more" type="button" data-dn-more aria-expanded="false" aria-controls="dn-body-night">Read more</button>
+          </div>
+        </div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+</div>
+
+
+
+
+  <!-- ============ SECTION: experience ============ -->
+  <div class="xwrap" hidden>
+    <!-- Retired 8 Oct 2026 (TJ): the title now opens A Day With Us below, over the arrival photograph. Kept hidden as a backup. -->
+    <section class="wx" id="experience-original" data-section="experience-original" data-section-name="The Postpartum Suite Experience (original)" hidden>
+      <span class="ph" aria-hidden="true"></span>
+      <div class="wx__scrim" aria-hidden="true"></div>
+      <div class="wx__title"><h2 class="wh2" data-kin>The Postpartum Suite Experience</h2></div>
+    </section>
+  </div>
+
+  <!-- ============ SECTION: a day with us ============
+       A plain timetable. A thin line draws itself down the page as the day
+       passes. No scroll clock (TJ). -->
+    <!-- ============ SECTION: a day with us, vertical timeline (TJ, 8 Oct 2026) ============
+       A vertical adaptation of the 21st.dev Product Timeline (hyperiux): the
+       section holds while the line draws down and the track slides up, each
+       hour grows a stem and a dot and its words rise out of masked lines. The
+       title sits on frosted glass where that component has its image.
+       Copy is the client's, verbatim. The original list section follows
+       directly below as the backup (id day-with-us-original). -->
+  <section class="vt" id="day-with-us" data-vt data-section="a-day-with-us" data-section-name="The Postpartum Suite Experience: A Day With Us">
+    <div class="vt__stage">
+      <div class="vt__aurora" aria-hidden="true"><span class="vt__field"></span></div>
+      <!-- The arrival photograph opens the section full screen under the title,
+           then shrinks into its slot beside the glass card (what-we-do-timeline.js). -->
+      <div class="vt__photo">
+        <img src="../assets/img/hero_arrival_v2_swapped.webp" alt="The specialist arriving at the front door in the morning, greeted by a smiling mother holding her newborn" width="2400" height="1340" decoding="async" />
+        <span class="vt__photo-veil" aria-hidden="true"></span>
+        <p class="vt__photo-title" aria-hidden="true">The Postpartum Suite Experience</p>
+      </div>
+      <div class="vt__track">
+        <div class="vt__head">
+          <span class="vt__slot" aria-hidden="true"></span>
+          <div class="vt__card glass">
+            <h2 class="wh2">The Postpartum Suite Experience</h2>
+            <h3 class="vt__sub">A Day With Us</h3>
+            <p class="wlead">Every day is shaped around you and your baby. This is how one might unfold.</p>
+          </div>
+        </div>
+        <div class="vt__items">
+          <span class="vt__axis" aria-hidden="true"><span class="vt__fill"></span><span class="vt__cap"></span></span>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>7am</time><h3 data-vt-t>A gentle start</h3><p data-vt-t>Your specialist arrives in the kitchen as the house wakes.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>7.30am</time><h3 data-vt-t>Your herbal bath</h3><p data-vt-t>A warm bath infused with fresh herbs is prepared for you.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>8am</time><h3 data-vt-t>Breakfast</h3><p data-vt-t>A nourishing breakfast is served, cooked fresh in your kitchen. While you eat, your baby is cared for beside you.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>9am</time><h3 data-vt-t>Rest</h3><p data-vt-t>You sleep, read or simply rest while your baby is cared for.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>10am</time><h3 data-vt-t>Baby care</h3><p data-vt-t>Your specialist cares for your baby and prepares everything for bath time, supporting you as you bathe your baby together.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>11am</time><h3 data-vt-t>Home support</h3><p data-vt-t>While you rest, laundry is washed, pressed and folded away.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>1pm</time><h3 data-vt-t>Lunch</h3><p data-vt-t>Lunch is served, along with a lactation support drink or a fresh tea.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>2.30pm</time><h3 data-vt-t>Your treatment</h3><p data-vt-t>On massage days, you are treated to a restorative postpartum massage and hot stone therapy in the comfort of your own room. Your belly binder is then applied while your body is warm and relaxed. On other days you will enjoy a foot massage and reflexology, the thermal blanket treatment and a full body scrub.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>4pm</time><h3 data-vt-t>Fresh air or quiet time</h3><p data-vt-t>This might be a gentle stroll in the park, an appointment your specialist accompanies you to, or an afternoon of rest at home.</p></div>
+        </article>
+        <article class="vt__item vt__item--r" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>6pm</time><h3 data-vt-t>Dinner</h3><p data-vt-t>Dinner is served for you and your family, with your baby cared for close by.</p></div>
+        </article>
+        <article class="vt__item vt__item--l" data-vt-item>
+          <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
+          <div class="vt__body"><time data-vt-t>7pm</time><h3 data-vt-t>Settled for the evening</h3><p data-vt-t>The kitchen is left spotless, dishes washed, and the hoovering and mopping all taken care of, so you can wind down with your baby.</p></div>
+        </article>
+          <p class="vt__close" data-vt-t>Every day is tailored to you. Treatments, meals and rest are arranged around your baby's rhythm and how you are feeling.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- Original list version of A Day With Us. Retired and hidden 8 Oct 2026 (TJ); kept in the markup as the backup. -->
+  <section class="wd" id="day-with-us-original" data-section="a-day-with-us-original" data-section-name="A Day With Us (original)" hidden>
+    <div class="wide wd__grid">
+      <div class="wd__head">
+        <p class="wlabel">The day</p>
+        <h2 class="wh2" data-kin>A Day With Us</h2>
+        <p class="wlead">Every day is shaped around you and your baby. This is how one might unfold.</p>
+      </div>
+      <div class="wd__list" data-day>
+        <span class="wd__line" aria-hidden="true"></span>
+          <div class="wd__row" data-row><time>7am</time><div><h3>A gentle start</h3><p>Your specialist arrives in the kitchen as the house wakes.</p></div></div>
+          <div class="wd__row" data-row><time>7.30am</time><div><h3>Your herbal bath</h3><p>A warm bath infused with fresh herbs is prepared for you.</p></div></div>
+          <div class="wd__row" data-row><time>8am</time><div><h3>Breakfast</h3><p>A nourishing breakfast is served, cooked fresh in your kitchen. While you eat, your baby is cared for beside you.</p></div></div>
+          <div class="wd__row" data-row><time>9am</time><div><h3>Rest</h3><p>You sleep, read or simply rest while your baby is cared for.</p></div></div>
+          <div class="wd__row" data-row><time>10am</time><div><h3>Baby care</h3><p>Your specialist cares for your baby and prepares everything for bath time, supporting you as you bathe your baby together.</p></div></div>
+          <div class="wd__row" data-row><time>11am</time><div><h3>Home support</h3><p>While you rest, laundry is washed, pressed and folded away.</p></div></div>
+          <div class="wd__row" data-row><time>1pm</time><div><h3>Lunch</h3><p>Lunch is served, along with a lactation support drink or a fresh tea.</p></div></div>
+          <div class="wd__row" data-row><time>2.30pm</time><div><h3>Your treatment</h3><p>On massage days, you are treated to a restorative postpartum massage and hot stone therapy in the comfort of your own room. Your belly binder is then applied while your body is warm and relaxed. On other days you will enjoy a foot massage and reflexology, the thermal blanket treatment and a full body scrub.</p></div></div>
+          <div class="wd__row" data-row><time>4pm</time><div><h3>Fresh air or quiet time</h3><p>This might be a gentle stroll in the park, an appointment your specialist accompanies you to, or an afternoon of rest at home.</p></div></div>
+          <div class="wd__row" data-row><time>6pm</time><div><h3>Dinner</h3><p>Dinner is served for you and your family, with your baby cared for close by.</p></div></div>
+          <div class="wd__row" data-row><time>7pm</time><div><h3>Settled for the evening</h3><p>The kitchen is left spotless, dishes washed, and the hoovering and mopping all taken care of, so you can wind down with your baby.</p></div></div>
+        <p class="wd__close">Every day is tailored to you. Treatments, meals and rest are arranged around your baby's rhythm and how you are feeling.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="sf" data-section="site-footer" data-section-name="Footer">
+  <div class="sf__aurora" aria-hidden="true"><span class="sf__field"></span></div>
+  <div class="sf__inner">
+
+    <div class="sf__brand">
+      <a href="index.html" aria-label="The Postpartum Suite, home">
+        <picture>
+          <source media="(max-width: 760px)" srcset="../assets/img/logo-inline.webp" />
+          <img class="sf__logo" src="../assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="700" height="900" decoding="async" />
+        </picture>
+      </a>
+    </div>
+
+    <nav class="sf__col" aria-label="Footer">
+      <h2 class="sf__head">Explore</h2>
+      <ul>
+        <li><a href="what-we-do.html">What We Do</a></li>
+        <li><a href="programmes.html">Programmes</a></li>
+        <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+        <li><a href="single-treatments.html">Signature Treatments</a></li>
+        <li><a href="about.html">The Suite</a></li>
+        <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+      </ul>
+    </nav>
+
+    <div class="sf__col">
+      <h2 class="sf__head">Contact</h2>
+      <ul>
+        <li><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p class="sf__tagline">The care mothers deserve, at home</p>
+
+  <div class="sf__base">
+    <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
+    <ul class="sf__legal">
+      <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
+      <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
+    </ul>
+  </div>
+  <script>document.querySelectorAll('[data-year]').forEach(function (e) { e.textContent = new Date().getFullYear(); });</script>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/inner-nav.js"></script>
+<script src="js/what-we-do-opening.js"></script>
+<script src="js/what-we-do-zones.js"></script>
+<script src="js/what-we-do.js"></script>
+<script src="js/what-we-do-promise.js"></script>
+<script src="js/what-we-do-timeline.js"></script>
+<script src="js/what-we-do-kinds.js"></script>
+<script src="js/what-we-do-hands.js"></script>
+<script src="js/nav-fold.js"></script>
+<script src="../lab/devpanel-loader.js"></script>
+</body>
+</html>

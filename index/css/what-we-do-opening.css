@@ -1,0 +1,161 @@
+/* ============================================================
+   WHAT WE DO, the opening (7 Oct 2026)
+
+   Hero plus introduction as one movement. Side by side at the start: the
+   statement of what the business does, big, on the left, straight on the
+   aurora with no panel; the photograph whole on the right. Scroll grows the
+   photograph to the full window while the words move to the foot of it and
+   turn cream over a soft darkening; further on the photograph pulls back to
+   the right and the introduction (her full paragraph) arrives on the left.
+   The ground: the aurora runs under the page from the first pixel, so the
+   header and the hero are one surface; the header's glass strip fades in on
+   scroll, as on the FAQ page.
+   Phones: the statement on top, the photograph as a card beneath, growing to
+   fill the phone (pinned), then the introduction follows in flow.
+
+   Geometry of the frame is set by what-we-do-opening.js. Without script the section
+   reads as the statement over the photograph, then the introduction.
+   Loads after what-we-do.css.
+   ============================================================ */
+
+.op { position: relative; background: var(--canvas); }
+.op__stage { position: relative; height: 100vh; height: 100svh; min-height: 600px; overflow: hidden; background: var(--canvas); }
+
+/* ---- The header at the top of the page: one surface with the hero ---- */
+.page--wwd .nav--glass::before { opacity: 0; transition: opacity 320ms var(--ease-out); }
+.page--wwd .nav--glass.is-scrolled::before,
+.page--wwd .nav--glass.is-open::before { opacity: 1; }
+
+/* ---- The aurora, from the first pixel ----
+   site.css's field, strong from the very top (no seam above the hero),
+   weighted right, fading out only at the foot of the stage. */
+.op__aurora { z-index: 0; }
+.op__aurora .aurora__field {
+  opacity: .5;
+  -webkit-mask-image:
+    linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%),
+    radial-gradient(ellipse 95% 80% at 64% 38%, #000 12%, rgba(0,0,0,.45) 64%, rgba(0,0,0,.18) 100%);
+  mask-image:
+    linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%),
+    radial-gradient(ellipse 95% 80% at 64% 38%, #000 12%, rgba(0,0,0,.45) 64%, rgba(0,0,0,.18) 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.op__aurora--intro { display: none; }
+
+/* ---- The frame ---- positioned in px by what-we-do-opening.js, hidden until then. */
+.op__frame { position: absolute; inset: 0; z-index: 1; overflow: hidden; border-radius: var(--r-media); will-change: left, top, width, height; }
+html.js .op__frame { opacity: 0; }
+.op__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; max-width: none; }
+/* The soft darkening at the foot of the full photograph that lets cream words
+   read, as on the homepage hero. It lives in the frame, so it follows it. */
+/* An even dimming over the photograph only while its edge is crossing the
+   statement, so the cream letters read on the bright window; gone once the
+   photograph fills the screen and the foot darkening takes over. */
+.op__dim { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: rgba(10, 10, 10, .26); }
+.op__scrim { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: linear-gradient(to top, rgba(10, 10, 10, .62) 0%, rgba(10, 10, 10, .32) 38%, rgba(10, 10, 10, 0) 72%); }
+
+/* ---- The statement ---- big, on the left, no panel. */
+.op__copy {
+  position: absolute; z-index: 2; left: clamp(24px, 5vw, 72px); top: 50%;
+  width: min(63vw, 940px); display: grid; gap: clamp(16px, 2.4vh, 28px);
+  text-align: left; transform: none; transform-origin: left bottom;
+}
+html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { opacity: 0; }
+/* The cream copy over the photograph (what-we-do-opening.js clips it every frame). */
+.op__copy--light { z-index: 3; pointer-events: none; clip-path: inset(100% 0 0 0); }
+.op__copy--light .op__kicker, .op__copy--light .op__head, .op__copy--light .op__line,
+.op__copy--light .op__kicker, .op__copy--light .op__head, .op__copy--light .op__line, .op__copy--light .op__rows { color: #F3EFEC; }
+.op__h { margin: 0; display: grid; gap: clamp(6px, 1vh, 12px); font-weight: 400; }
+/* Hero scale (TJ, 7 Oct 2026): the text is the hero. Sized from the width and
+   the height, so a short laptop window still fits it. "What we do" is coral. */
+.op__kicker { display: block; font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: clamp(3.6rem, min(7.6vw, 12.4vh), 7rem); line-height: 1; color: var(--coral-deep); }
+.op__head {
+  display: block; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(2.4rem, min(5.3vw, 8.8vh), 5.2rem); line-height: .98; letter-spacing: .02em;
+}
+/* Two lines (TJ, 7 Oct 2026): LIVE IN POSTPARTUM CARE / IN YOUR HOME, the second in
+   Instrument Serif's italic, a softer voice in the same headline. */
+.op__hl { display: block; white-space: nowrap; }
+.op__hl--em { font-style: italic; letter-spacing: .015em; }
+/* The facts as figures (TJ, 7 Oct 2026): the site's at a glance device, large.
+   IBM Plex Mono figures with a small Montserrat label, then the four kinds of
+   care as one quiet line. Nothing in prose. */
+/* Three plain rows (TJ, 7 Oct 2026): a bold lead and regular text after it, one
+   size, no bullets, the way a list reads in conversation. Big and small text
+   side by side read as templated, so there is one size and the weight does the
+   work. */
+.op__rows { margin: 0; padding: 0; list-style: none; display: grid; gap: clamp(10px, 1.6vh, 16px); max-width: 40em; font-family: var(--f-body); font-weight: 400; font-size: clamp(1.02rem, min(.78rem + .8vw, 2.7vh), 1.45rem); line-height: 1.45; color: var(--ink); }
+.op__rows b { font-weight: 600; }
+/* The numerals are coral (TJ, 7 Oct 2026), the same coral as "What we do". On the
+   cream copy over the photograph they go cream with the rest. On phones the
+   darker Ember, so the 16px bold numerals keep 4.5 to 1 on the pale ground. */
+
+/* The four kinds of care (TJ, 7 Oct 2026), two words each, on one line with a
+   fine coral dash between; on phones one per line, the dash leading each. */
+.op__kinds { display: flex; flex-wrap: wrap; align-items: center; font-weight: 500; }
+.op__kinds span { white-space: nowrap; }
+.op__kinds span + span::before { content: ""; display: inline-block; width: 12px; height: 1px; background: var(--coral-deep); vertical-align: middle; margin: 0 .6em; }
+.op__copy--light .op__kinds span::before { background: #F3EFEC; }
+/* Below 1360px wide the four will not sit on one line, so they stack, as on phones. */
+@media (max-width: 1359px) {
+  .op__kinds { display: grid; gap: 4px; }
+  .op__kinds span { display: flex; align-items: center; }
+  .op__kinds span::before, .op__kinds span + span::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--coral-deep); margin: 0 .7em 0 0; vertical-align: middle; flex: none; }
+}
+.op__line { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.02rem, min(.8rem + .75vw, 2.7vh), 1.4rem); line-height: 1.5; color: var(--ink); max-width: 38ch; }
+
+/* The introduction. Desktop: laid over the stage on the left, revealed in
+   half 2 while the section is pinned. */
+.op__intro { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.op__intro-in {
+  position: absolute; left: clamp(24px, 5vw, 72px); top: 50%; width: min(60vw, 860px);
+  transform: translateY(-50%); display: grid; gap: clamp(14px, 2.2vh, 24px); pointer-events: auto;
+}
+.op__intro .wp { color: var(--ink); max-width: 60ch; }
+/* Who is it for (TJ, 8 Oct 2026): the question in Quentin, coral, the mirror
+   of "What we do". It arrives at full screen in cream, opposite the
+   statement, and turns coral along the photograph's edge on the way out (the
+   cream copy of the introduction, what-we-do-opening.js, is clipped to the photograph
+   as the statement's is). The answer unfolds beneath it in short blocks, no
+   lines, no button. */
+/* Sized as "What we do" is (TJ, 8 Oct 2026): the first question has been answered
+   and the hero hands over to this one, so the two read as a pair. */
+.op__who { margin: 0; font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: clamp(3.6rem, min(7.6vw, 12.4vh), 7rem); line-height: 1; color: var(--coral-deep); white-space: nowrap; justify-self: start; width: max-content; }
+.op__more { overflow: hidden; }
+/* Quieter at rest (TJ, 8 Oct 2026): 15 percent smaller than hero rows scale,
+   Montserrat 400, longer lines so the five blocks read as less text. */
+.op__more .wp { margin-top: 0; max-width: 30em; font-family: var(--f-body); font-weight: 400; font-size: clamp(.92rem, min(.646rem + .7225vw, 2.38vh), 1.275rem); line-height: 1.5; color: var(--ink); text-wrap: pretty; }
+.op__more .wp + .wp { margin-top: clamp(12px, 1.9vh, 18px); }
+.op__intro-in--light { pointer-events: none !important; clip-path: inset(100% 0 0 0); }
+.op__intro-in--light .op__who, .op__intro-in--light .wp { color: #F3EFEC; }
+
+/* ---- Phones and small tablets: statement on top, photograph beneath ---- */
+@media (max-width: 860px) {
+  .op__stage { min-height: 560px; }
+  .op__copy { left: 16px; right: 16px; top: auto; width: auto; gap: 14px; }
+  .op__kicker { font-size: clamp(2.8rem, min(14vw, 6.4vh), 3.8rem); }
+  .op__head { font-size: clamp(1.7rem, min(8.6vw, 4.1vh), 2.6rem); }
+  .op__hl { display: block; white-space: normal; }
+  .op__line { font-size: clamp(.9rem, min(4.1vw, 2.2vh), 1.05rem); max-width: none; }
+  .op__kinds { display: grid; gap: 4px; }
+  .op__kinds span { display: flex; align-items: center; }
+  .op__kinds span::before, .op__kinds span + span::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--coral-deep); margin: 0 .7em 0 0; vertical-align: middle; flex: none; }
+  .op__intro { position: relative; inset: auto; z-index: auto; padding: 48px 0 64px; overflow: hidden; }
+  .op__intro-in { position: relative; z-index: 1; left: auto; top: auto; width: auto; transform: none; padding: 0 var(--gutter); }
+  .op__aurora--intro { display: block; }
+  .op__intro-in--light { display: none; }
+  .op__who { font-size: clamp(2.8rem, 13.4vw, 3.8rem); }
+  .op__more .wp { max-width: none; font-size: .94rem; }
+  .op__more { margin-top: -10px; }
+}
+
+/* Before script, and with reduced motion: the resolved hero, the photograph
+   full bleed under the statement in cream, then the introduction. */
+html:not(.js) .op__frame, .op--static .op__frame { inset: 0; border-radius: 0; opacity: 1; }
+html:not(.js) .op__scrim, .op--static .op__scrim { opacity: 1; }
+html:not(.js) .op__copy, .op--static .op__copy { top: auto; bottom: 6vh; color: #F3EFEC; }
+html:not(.js) .op__line, .op--static .op__line, html:not(.js) .op__rows, .op--static .op__rows { color: #F3EFEC; }
+.op--static .op__kicker, .op--static .op__head, .op--static .op__line, .op--static .op__rows { opacity: 1; }
+html:not(.js) .op__intro, .op--static .op__intro { position: relative; inset: auto; padding: 56px 0 72px; }
+html:not(.js) .op__intro-in, .op--static .op__intro-in { position: static; transform: none; width: auto; max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter); }

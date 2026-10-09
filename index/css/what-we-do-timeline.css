@@ -1,0 +1,139 @@
+/* ============================================================
+   A DAY WITH US, vertical timeline (TJ, 8 Oct 2026)
+   Adapted from the 21st.dev Product Timeline (hyperiux): a held stage, a line
+   that draws as you scroll, a track that slides while it does, a stem and dot
+   for each hour, words rising out of masked lines. Turned vertical: the track
+   moves up, the hours branch left and right of the axis. The title sits on
+   frosted glass where the component has its image.
+   Ground: the site's light Aurora (the FAQ page palette) on Canvas.
+   Without script it reads as a plain two sided list; what-we-do-timeline.js adds
+   .is-live (held stage) or .is-static (reduced motion).
+   ============================================================ */
+.vt {
+  --vt-a1: #C86D58; --vt-a2: #D7C2C9; --vt-a3: #E2CAC6;
+  --vt-b1: #D7C2C9; --vt-b2: #B95A4B; --vt-b3: #E2CAC6;
+  --vt-op: .40; --vt-veil: .16;
+  --vt-ax: 50%; --vt-stem: clamp(28px, 4vw, 64px); --vt-gap: 16px;
+  --vt-pitch: clamp(92px, 11.5vh, 124px); --vt-pitch-gap: 22px;
+  --vt-line: var(--ember-deep);
+  position: relative; isolation: isolate; background: var(--canvas); color: var(--ink);
+}
+.vt__stage { position: relative; overflow: hidden; }
+.vt.is-live { height: 780vh; }
+.vt.is-live .vt__stage { position: sticky; top: 0; height: 100vh; height: 100svh; }
+
+/* ---- Aurora: the footer's construction, light palette ---- */
+.vt__aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.vt__field {
+  position: absolute; inset: -40px; display: block;
+  background-image: repeating-linear-gradient(100deg,
+    transparent 0%, var(--vt-a1) 8%, var(--vt-a2) 15%, transparent 25%, var(--vt-a3) 33%, transparent 44%);
+  background-size: 300%; background-position: 50% 50%;
+  filter: blur(44px); opacity: var(--vt-op);
+  -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+}
+.vt__field::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(123deg,
+    transparent 0%, var(--vt-b1) 7%, var(--vt-b2) 13%, transparent 25%, var(--vt-b3) 35%, transparent 48%);
+  background-size: 235%;
+  animation: vt-aurora 62s linear infinite;
+}
+.vt__aurora::after { content: ""; position: absolute; inset: 0; background: var(--canvas); opacity: var(--vt-veil); }
+@keyframes vt-aurora { from { background-position: 50% 50%; } to { background-position: 350% 50%; } }
+@media (prefers-reduced-motion: reduce) { .vt__field::after { animation: none; } }
+
+/* ---- The track ---- */
+.vt__track { position: relative; z-index: 1; padding: calc(var(--nav-h) + clamp(28px, 6vh, 64px)) var(--gutter, 24px) clamp(80px, 14vh, 160px); will-change: transform; }
+.vt__card { padding: clamp(26px, 3vw, 42px); display: grid; gap: .9rem; align-content: center; }
+.vt__card .wh2 { margin: 0; }
+.vt__sub { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.35rem, 1.9vw, 1.75rem); line-height: 1.1; color: var(--ink); }
+
+/* The head row (TJ, 8 Oct 2026): the arrival photograph's slot and the glass
+   card side by side, the seam between them on the axis, so the line grows out
+   from between the picture and the title, as in the component. */
+.vt__head { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(16px, 2vw, 28px); max-width: 1160px; margin: 0 auto; }
+.vt__slot { display: block; aspect-ratio: 4 / 3; border-radius: var(--r-card); }
+
+/* The photograph. Full screen over everything while the section arrives; the
+   script then closes a clip down onto the slot (no stretching: the picture
+   stays put and the window shrinks over it) and carries it off with the track. */
+.vt__photo { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none;
+  clip-path: inset(var(--ph-t, 0px) var(--ph-r, 0px) var(--ph-b, 0px) var(--ph-l, 0px) round var(--ph-rad, 0px)); will-change: transform, clip-path; }
+.vt__photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
+/* Live, the script sizes the picture itself and moves it from covering the
+   screen to covering the slot, so the whole scene lands in the card. */
+.vt.is-live .vt__photo img { inset: auto; left: 0; top: 0; max-width: none; max-height: none; object-fit: fill; transform-origin: 0 0; will-change: transform; }
+.vt__photo-veil { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10, 10, 10, .52) 0%, rgba(10, 10, 10, .22) 34%, rgba(10, 10, 10, 0) 60%); opacity: var(--ph-tv, 1); }
+.vt__photo-title { position: absolute; left: var(--gutter, 24px); bottom: clamp(40px, 9vh, 96px); margin: 0; max-width: 11ch;
+  font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.8rem, 6.6vw, 6.8rem); line-height: .94; letter-spacing: .005em;
+  color: var(--canvas); opacity: var(--ph-to, 1); transform: translateY(var(--ph-ty, 0px)); }
+.vt__card .wlead { margin: 0; }
+/* The card's entrance (TJ, 8 Oct 2026): as the photograph closes down into
+   its slot, the glass lifts in beside it and its lines rise out of masks.
+   Driven by what-we-do-timeline.js. */
+.vt.is-live .vt__card { opacity: var(--vt-ci, 0); transform: translateY(calc((1 - var(--vt-ci, 0)) * 18px)); }
+.vt__items { position: relative; margin: clamp(48px, 9vh, 96px) auto 0; max-width: 1280px; }
+
+.vt__axis { position: absolute; left: var(--vt-ax); top: 0; width: 1px; height: 0; background: rgba(10, 10, 10, .12); transform: translateX(-.5px); }
+.vt__fill { position: absolute; inset: 0; background: var(--vt-line); transform-origin: 50% 0; transform: scaleY(1); }
+/* The line starts at the card (TJ, 8 Oct 2026), as the component's line starts
+   at its picture: a dot sits on the card's lower edge and the line grows out
+   of it, so the card is the first stop and is carried off with the track. */
+.vt__cap { position: absolute; left: 50%; top: 0; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--vt-line); }
+
+.vt__item { position: relative; height: var(--vt-pitch); }
+/* what-we-do-timeline.js sets each hour's height: the pitch, or more where its own
+   text would otherwise run into the next hour on the same side. */
+.vt__stem { position: absolute; top: 0; height: 1px; width: var(--vt-stem); background: var(--vt-line); }
+.vt__dot { position: absolute; top: 0; left: var(--vt-ax); width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--vt-line); }
+.vt__item--r .vt__stem { left: var(--vt-ax); transform-origin: 0 50%; }
+.vt__item--l .vt__stem { right: calc(100% - var(--vt-ax)); transform-origin: 100% 50%; }
+.vt__body { position: absolute; top: -.55rem; width: min(40ch, calc(50% - var(--vt-stem) - var(--vt-gap) - 8px)); display: grid; gap: .45rem; }
+.vt__item--r .vt__body { left: calc(var(--vt-ax) + var(--vt-stem) + var(--vt-gap)); }
+.vt__item--l .vt__body { right: calc(100% - var(--vt-ax) + var(--vt-stem) + var(--vt-gap)); }
+.vt__body time { font-family: var(--f-mono); font-size: .85rem; font-weight: 500; letter-spacing: .02em; color: var(--ink); }
+.vt__body h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1.08; color: var(--ink); }
+.vt__body p { margin: 0; color: var(--ink-soft); font-size: clamp(.95rem, .9rem + .2vw, 1.05rem); line-height: 1.55; }
+
+.vt__close { margin: 0 0 0 auto; width: min(52ch, 100%); padding-top: 12px; text-align: center; font-style: italic; color: var(--ink-soft); position: relative; left: 0; margin-inline: auto; }
+
+/* masked lines for the rise (built by what-we-do-timeline.js) */
+.vt-line { display: block; overflow: hidden; padding-bottom: .14em; margin-bottom: -.14em; }
+.vt-line > span { display: block; will-change: transform; }
+
+/* ---- Phones: the axis down the left edge, every hour on its right ---- */
+@media (max-width: 860px) {
+  .vt { --vt-ax: 12px; --vt-stem: 18px; --vt-gap: 12px; --vt-op: .46; }
+  .vt.is-live { height: 900vh; }
+  .vt__item { height: auto !important; padding: 0 0 clamp(22px, 4vh, 34px); }
+  .vt__item--l .vt__stem { right: auto; left: var(--vt-ax); transform-origin: 0 50%; }
+  .vt__body, .vt__item--l .vt__body, .vt__item--r .vt__body {
+    position: static; width: auto; max-width: 40ch; margin-left: calc(var(--vt-ax) + var(--vt-stem) + var(--vt-gap));
+  }
+  .vt__body { padding-top: 0; }
+  .vt__items { padding-top: 6px; }
+  .vt__close { text-align: left; margin-left: calc(var(--vt-ax) + var(--vt-stem) + var(--vt-gap)); }
+  .vt__head { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .vt__slot { aspect-ratio: 16 / 11; }
+  .vt__photo img { object-position: 64% 50%; }
+  .vt__photo-title { font-size: clamp(2.4rem, 11vw, 3.4rem); bottom: clamp(36px, 7vh, 64px); }
+}
+
+/* ---- Static (reduced motion, or before the script runs): plain list, line complete ---- */
+.vt.is-static .vt__track { padding-top: calc(var(--nav-h) + 40px); }
+.vt:not(.is-live) .vt__fill { transform: scaleY(1); }
+.vt:not(.is-live) .vt__photo { position: relative; height: 72vh; clip-path: none; }
+.vt:not(.is-live) .vt__head { grid-template-columns: minmax(0, 1fr); max-width: 720px; }
+.vt:not(.is-live) .vt__slot { display: none; }
+
+/* Short phones: a wider, shorter slot so the photograph lands clear of the header. */
+@media (max-width: 860px) and (max-height: 720px) {
+  .vt__slot { aspect-ratio: 2 / 1; }
+  .vt__card { padding: 20px 22px; gap: .6rem; }
+}
+
+/* The retired Experience title card (TJ, 8 Oct 2026): its own display rules
+   would override the hidden attribute, so hiding is stated outright. */
+.xwrap[hidden], .wx[hidden], .wd[hidden] { display: none !important; }

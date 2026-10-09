@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>The Postpartum Suite — Live-in postpartum care</title>
+<meta name="description" content="Live-in postpartum care for you and your baby. A trained specialist stays with you, from five days to thirty, so your own recovery is the thing being looked after." />
+<link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
+
+<!-- A page whose whole argument is made in photographs was unfurling in
+     messages and DMs as a bare grey link. The handover frame is the one
+     image that carries the proposition on its own. Relative paths resolve
+     against the document, which is enough for the crawlers that matter;
+     they become absolute when this gets a domain. -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="The Postpartum Suite — Live-in postpartum care" />
+<meta property="og:description" content="A trained specialist stays with you, from five days to thirty, so your own recovery is the thing being looked after." />
+<meta property="og:image" content="../assets/img/s2-handoff.webp" />
+<meta property="og:image:alt" content="A specialist passing the swaddled baby to the mother resting in bed" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#F3EFEC" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/house-flight.css" />
+<link rel="stylesheet" href="css/footer.css" />
+<link rel="preload" as="image" href="../assets/img/home-handover.webp" />
+</head>
+<body>
+
+<!-- The WebGL mesh drift field was removed on 2026-09-07 and the aurora
+     took over the one act it still served. It was a fixed canvas, one
+     shader, about 270 lines of GLSL and a fade timed against the bath, and
+     the aurora does the same job in CSS with no context to hold, no draw
+     loop to sleep and wake, and nothing to keep off the seam by timing.
+     That also closes the open item about the field drawing across eleven
+     viewport-heights it could not be seen through. -->
+
+<!-- ============================================================
+     NAVIGATION
+     Mechanic adapted from white-desert.com: a row of equal-width flat
+     tabs, the open one taking the accent while its siblings go neutral,
+     and a panel dropping beneath them with italic group headings over
+     plain link lists.
+
+     Retuned to the Brand Pack rather than copied: the nav bar itself is
+     the specified sticky paper bar at 72px with a single bottom hairline,
+     the tab pair is the documented badge treatment (Ember carrying white,
+     Haze carrying ink), the panel is a card at 10px with hairline
+     dividers and no shadow, and the logo stays left where the Brand Pack
+     puts it rather than centred where White Desert puts it.
+     ============================================================ -->
+<!-- ============================================================
+     NAVIGATION, centred lockup (shared with v2)
+     Tab group left, mark in the middle, tab group right. The bar
+     itself carries no background: the chips and the lockup carry
+     their own contrast instead, and the whole set flips to a light
+     treatment over the one dark frame on the page.
+     ============================================================ -->
+<!-- Fourteen viewport-heights of scroll story sit between the nav and the
+     programmes. A keyboard user should not have to travel it to reach the
+     content, and this page has no other way past the bar. -->
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="nav nav--glass" data-nav data-section="site-header" data-section-name="Header">
+  <div class="nav__inner">
+
+    <div class="nav__side nav__side--l">
+      <!-- The corner mark: the circular TPS logo in the far left corner
+           while the three-line wordmark is showing in the centre. Purely
+           decorative (the centre lockup is the real home link), so it is
+           hidden from assistive tech and not clickable. It leaves, and the
+           tabs slide left into its place, as the wordmark folds into the
+           centre circle; see the .nav--glass block in site.css. Wide
+           screens only. -->
+      <img class="nav__corner" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
+      <!-- The five main menu items share one row, with the Menu chip taking
+           their place below 1100px. Our Offering and About Us open panels;
+           Home, What We Do and Faqs are page links. -->
+      <div class="nav__tabs" data-tabs>
+        <a class="tab" href="index.html">Home</a>
+        <a class="tab" href="what-we-do.html">What We Do</a>
+        <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
+        <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
+        <a class="tab" href="faqs.html">Faqs</a>
+      </div>
+      <!-- Takes the place of the five above it below 1100px. A word, not a
+           glyph, in the same chip as everything else. -->
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-offerings">Menu</button>
+    </div>
+
+    <!-- #content, not #top. There has never been an element with id
+         "top" on this page, so the lockup was a dead link too: the one
+         control every visitor tries first did nothing. #content is the
+         main landmark, which is where home means on a single page. -->
+    <a class="nav__brand" href="#content" aria-label="The Postpartum Suite, home">
+      <img class="nav__mark" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" />
+      <span class="nav__wordmark" aria-hidden="true">
+        <span class="wm-line wm-line--1"></span>
+        <span class="wm-line wm-line--2"></span>
+        <span class="wm-line wm-line--3"></span>
+      </span>
+    </a>
+
+    <div class="nav__side nav__side--r">
+      <a class="tab tab--cta" href="#programmes">Enquire</a>
+    </div>
+
+  </div>
+
+  <div class="menu" data-menu hidden>
+
+    <!-- Stage one only, rebuilt 2026-09-21. The site structure names
+         thirty two pages across four menus; these are the seven built
+         first, so the menu lists exactly those and nothing else. Every
+         entry points at a real file. The rest return here as they are
+         built, group by group.
+
+         Nothing else on this page changed: the sections these pages will
+         eventually mirror stay exactly where they are. A section on the
+         homepage and a page of its own are two different things, and
+         whether the former ever links to the latter is a later call. -->
+    <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">Our Offerings</h2>
+        <ul class="menu__list">
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+          <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+          <!-- No Gifts page exists yet, so it is a label, not a link. -->
+          <li><span class="menu__pending">Gifts</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="menu__panel" id="panel-about" data-panel="about" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">About Us</h2>
+        <ul class="menu__list">
+          <li><a href="about.html">The Suite</a></li>
+          <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </header>
+
+<div class="veil" data-veil hidden></div>
+
+<main id="content" tabindex="-1">
+
+  <!-- ============ SECTION: hero ============
+       pin + focus pull + kinetic lines. The room resolves out of blur. -->
+  <section class="act act--hero" id="day" data-act data-section="hero" data-section-name="Hero">
+    <div class="stage" data-stage>
+      <div class="stage__media">
+        <img data-focus src="../assets/img/s2-handoff.webp" alt="A specialist passing the swaddled baby to the mother resting in bed" width="2000" height="1116" />
+      </div>
+      <div class="scrim scrim--lead"></div>
+      <div class="stage__copy">
+        <h1 class="display display--xl" data-kinetic>Live-in postpartum care,<br />for you and your baby</h1>
+        <p class="script" data-fade="0.2">Because mum needs looking after too.</p>
+        <p class="lede" data-fade="0.35">Rooted in Malaysian confinement traditions, our certified specialists provide dedicated in-home care for mother and baby for 5 to 30 days.</p>
+        <a class="btn btn--primary" href="#programmes" data-fade="0.5">Book a consultation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       THE MIST HANDOFF
+       A fixed fog bank, so it spans the seam between the hero and the
+       bath rather than being clipped by either section. Three copies of
+       the same plate drift on their own clocks at different speeds and
+       scales, which is what reads as volume: each layer is rigid, but
+       their overlap churns and never repeats.
+       ============================================================ -->
+  <!-- ============================================================
+       THE MIST HANDOFF
+
+       Two jobs, split, because trying to make one thing do both is what put
+       lines across the frame twice.
+
+       The veil is density. It is exactly the viewport and only its opacity
+       ever changes, so it has no boundary inside the frame and cannot draw
+       an edge at any scroll position or window size. That is a property of
+       the geometry, not a margin anyone has to get right.
+
+       The plate is contour and texture. It is larger than the frame on every
+       side and travels a short distance, so no box edge of it ever crosses a
+       visible pixel either. It carries no responsibility for covering
+       anything, which is what lets it stay soft.
+
+       One plate, not three. Three copies of the same texture at different
+       offsets average each other out, which is literally a blur: the alpha
+       structure smooths and what is left reads as uniform density rather
+       than as smoke with a shape. Depth from parallax is not worth losing
+       the shape, because the shape is the thing being looked at.
+
+       Measured with lab/shoot-handoff.mjs and lab/edges.py. The build this
+       replaced put a visible band in 19 frames out of 22.
+       ============================================================ -->
+  <!-- The fog is now inside the bath photograph itself, so there is no
+       separate plate to rise and no gradient mask to feather it. Only the
+       veil is left, and only for the beat before the steam is on screen. -->
+  <div class="fog" data-fog aria-hidden="true">
+    <div class="fog__veil" data-fog-veil></div>
+  </div>
+
+  <!-- ============ SECTION: bath ============
+       Pulled up over the hero's pin spacer in CSS so the scene is already
+       sitting in position by the time the fog is dense. The whole scene
+       carries one opacity, so nothing leaks over the hero while it waits. -->
+  <section class="act act--bath" data-act data-section="bath" data-section-name="Postpartum Treatment">
+    <div class="bath" data-bath>
+      <!-- The ground the steam finally dissolves into. It arrives late and
+           underneath, once the steam above it is dense enough to hide the
+           change, and it is what the room is replaced by rather than the
+           hero still sitting there behind thin steam. -->
+      <div class="bath__ground" data-bath-ground></div>
+      <!-- One photograph carrying the steam and the bath together. Its top is
+           genuinely transparent and its steam feathers into that transparency
+           in camera, so the leading edge of the rise is real dissolving steam
+           rather than a gradient mask pretending to be one. Set to the width
+           of the window and allowed to overflow above it: the surplus steam
+           is clipped by .bath and never seen, because its only job is the
+           transition. Bottom rests where the old bath's bottom rested. -->
+      <img class="bath__img" data-bath-img src="../assets/img/bath-steam.webp" alt="A mother resting in a warm herbal bath, steam rising around her" width="2400" height="2260" />
+      <div class="scrim scrim--bath" data-bath-scrim></div>
+      <div class="bath__copy">
+        <!-- data-bath-line moved onto the wrapper so both lines rise and fade
+             as one. mistHandoff() takes a single element, and splitting the
+             copy in two without this would have animated the display line and
+             left the handwriting behind. -->
+        <div class="bath__lines" data-bath-line>
+          <p class="say">They say rest and recover.</p>
+          <p class="script">We make it possible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<!-- ============ HOMEPAGE HOUSE FLIGHT ============
+     Seven scroll beats. Baby handover is intentionally copy-free for now;
+     the six established Care beats retain their approved copy. -->
+<section class="flight flight--home" data-flight aria-label="From baby handover through the home">
+  <div class="flight__stage" data-stage>
+    <div class="flight__film" data-film>
+      <div class="flight__tilt" data-tilt>
+        <img class="flight__poster is-on" data-poster="0" src="../assets/img/home-handover.webp" alt="" width="1920" height="1080" />
+        <img class="flight__poster" data-poster="1" src="../assets/img/home-exterior.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="2" src="../assets/img/home-kitchen.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="3" src="../assets/img/home-living.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="4" src="../assets/img/home-nursery.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="5" src="../assets/img/home-treatment.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="6" src="../assets/img/home-window-exit.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <video class="flight__video" data-video
+               data-src="../assets/video/home-flight.mp4"
+               data-src-mobile="../assets/video/home-flight-m.mp4"
+               muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      </div>
+    </div>
+
+    <div class="aurora flight__aurora" aria-hidden="true"><span class="aurora__field"></span></div>
+    <canvas class="flight__ghost" data-ghost aria-hidden="true"></canvas>
+
+    <div class="flight__blend" data-blend aria-hidden="true"></div>
+
+    <!-- The old per-scene titles are gone: the route bar (desktop) and the
+         card sweep (phone) now carry that copy, in the section 12 language.
+         These markers stay only for data-section/data-section-name, which
+         the dev panel and lab/state.mjs read for section tracking; none
+         carry visible text of their own. The window-exit beat's Enquire
+         button that used to live here is gone too: the flight-enquire
+         button below now covers the whole video, this scene included. -->
+    <div class="flight__copy">
+      <div class="beat beat--handover" data-beat="handover" data-section="baby-handover" data-section-name="Baby Handover" data-dev-scroll-t="0" aria-label="Baby Handover"></div>
+      <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Exterior" data-dev-scroll-t="1.06"></div>
+      <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="3.28"></div>
+      <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="5.28"></div>
+      <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="7.47"></div>
+      <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="9.79"></div>
+      <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="12"></div>
+    </div>
+
+    <!-- One Enquire button for the whole video, first frame to last: desktop
+         centred on screen, phone fixed at the bottom. It does not move
+         once shown. The nav's own Enquire in the top right is never
+         hidden, so during the video both are on screen. -->
+    <a class="flight-enquire" data-flight-enquire href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
+
+    <!-- Desktop: one panel that glides from its old zone straight to its
+         new one on every scene change (see SCENES[i].zone in
+         home-flight.js), text fading in once it has arrived. It has no
+         fixed content of its own; home-flight.js writes the current
+         scene's name and description into it. Hidden on phone. -->
+    <div class="deskcard" data-deskcard aria-hidden="true">
+      <p class="cards__name" data-deskcard-name></p>
+      <span class="cards__line"></span>
+      <p class="cards__desc" data-deskcard-desc></p>
+    </div>
+
+    <!-- Phone: one card per scene, always resting in the same fixed spot
+         (house-flight.css), swept out to one side and the next swept in from the
+         other on a swipe, direction matching which way you swiped. Hidden
+         on desktop. home-flight.js drives which one is live. -->
+    <nav class="cards" data-cards aria-label="Rooms in the house">
+      <div class="cards__track" data-cards-track>
+        <div class="cards__card" data-card="handover">
+          <p class="cards__name">Handover</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">A warm hand-off, in the first minutes home.</p>
+        </div>
+        <div class="cards__card" data-card="exterior">
+          <p class="cards__name">Arrival</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Scroll and come in.</p>
+        </div>
+        <div class="cards__card" data-card="kitchen" data-room="kitchen">
+          <p class="cards__name">Kitchen</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Warm, nourishing meals made in your own kitchen, so you eat well without lifting a thing.</p>
+        </div>
+        <div class="cards__card" data-card="living" data-room="living">
+          <p class="cards__name">Living Room</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Laundry, ironing and the small daily jobs. The house keeps running while you rest.</p>
+        </div>
+        <div class="cards__card" data-card="nursery" data-room="nursery">
+          <p class="cards__name">Nursery</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Feeds, settling and the long nights, so you can finally sleep.</p>
+        </div>
+        <div class="cards__card" data-card="treatment" data-room="bedroom">
+          <p class="cards__name">Treatment Room</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">Postpartum treatments at home, to help your body recover.</p>
+        </div>
+        <div class="cards__card" data-card="exit">
+          <p class="cards__name">The Window</p>
+          <span class="cards__line"></span>
+          <p class="cards__desc">All of it, in one pair of hands.</p>
+        </div>
+      </div>
+    </nav>
+  </div>
+</section>
+
+<!-- ============ THE TURN ============
+     The seam between the story and the answer.
+
+     Redesigned 2026-09-07 onto the split-stage device the treatment act
+     used to own: text and photograph in one row, not a text block with a
+     photograph waiting below it. The old stacked layout put a scroll gap
+     between the definition and the frame that answers it; this removes
+     the gap by putting both on screen together. The treatment act itself
+     is retired (see below), so this is the split-stage's only home on the
+     page now, not a repeated device. -->
+<section class="act act--turn" data-act data-section="confinement" data-section-name="What Is Confinement" aria-labelledby="confinement-heading">
+
+  <!-- Same aurora as the programmes act, tuned for this one. It replaced
+       the WebGL mesh field here on 2026-09-07. -->
+  <div class="aurora aurora--turn" aria-hidden="true"><span class="aurora__field"></span></div>
+
+  <div class="stage stage--split" data-stage>
+    <div class="stage__side">
+      <!-- The heading now carries the kinetic assembly, matching what the
+           treatment act did. The standfirst held that job before; moving
+           it here means the heading and the photograph's own drift read as
+           one arrival instead of two unrelated devices (a mask reveal on
+           the copy, a clip-path wipe on the frame) doing the same job
+           differently. -->
+      <h2 class="display display--lg" id="confinement-heading" data-kinetic>What is Confinement?</h2>
+      <p class="turn__standfirst">In Malaysian and Southeast Asian traditions, the first month after birth, known as the confinement period, is a sacred window dedicated entirely to maternal rest, healing, and bonding.</p>
+      <p class="body">Rather than expecting a mother to navigate the postpartum transition alone, confinement surrounds her with skilled daily support, nourishing food, and restorative bodywork.</p>
+      <!-- The turn from what the tradition is to what you do with it. It
+           carries a hairline rather than a heading, because depth on this
+           brand is edges and overlap, and because a second heading here
+           would compete with the question above. -->
+      <p class="body body--mute turn__trail">At The Postpartum Suite, we bring this time-honoured practice into your home through dedicated live-in care from morning to evening.</p>
+    </div>
+
+    <!-- The one photograph the act already had, not the treatment act's
+         three treatment stills: those show specific services and belong
+         to programmes, not to the act that defines the tradition. The
+         source frame is wide (a room, a doorway, the mother visible
+         through it) so the box is wider than the treatment act's portrait
+         4/3 stills, to keep both the specialist and the doorway in frame
+         rather than cropping down to a tight portrait. -->
+    <div class="stage__frame stage__frame--turn">
+        <img class="xfade__img" src="../assets/img/s8-confinement-arrival.webp" alt="A postpartum specialist in soft rose uniform arriving at the home, greeted warmly by the mother holding her newborn" width="1228" height="1536" loading="lazy" />
+    </div>
+  </div>
+
+  <!-- ============ VOICES ============
+       Merged into the confinement act on 2026-09-07. Both were white once
+       the testimonials came off canvas, so the join between them had
+       nothing to mark it and the two read as one section that had lost its
+       middle. They are one section now, on one aurora, with a short rule
+       standing between them instead of a full width edge: it says the
+       subject has changed without cutting the ground in two, which a rule
+       running the whole width would.
+
+       The block itself is the 21st.dev "clean-testimonial" component TJ
+       supplied as v2, ported on the source's own numbers and its own
+       neutral palette rather than the Brand Pack's, so he could judge the
+       mechanism first.
+
+       One quote at a time. Click anywhere to advance. A custom cursor
+       follows the pointer on a spring and opens into an 80px disc reading
+       "Next", the quote reassembles word by word out of blur, the author's
+       rule draws itself downward, and a progress bar tracks position.
+
+       Two deliberate departures, both because the source is a React demo
+       living alone on a page rather than a block inside a document:
+         1. Nothing here uses ScrollTrigger and nothing transforms its own
+            box. The hero to bath handoff measures the whole document, so
+            this stays out of that measurement entirely. Its entrance runs
+            off an IntersectionObserver instead.
+         2. The click target also answers the keyboard and hides its custom
+            cursor on touch, where "cursor: none" would strand the visitor.
+
+       NOTE: quotes, names and faces are PLACEHOLDER. The avatars are the
+       stock images the source component shipped with. Replace with cleared
+       client testimonials before this is shown publicly. -->
+  <hr class="seam" aria-hidden="true" />
+
+  <div class="voices" aria-labelledby="voices-heading">
+  <div class="tv2" data-tv2>
+
+    <header class="tv2__head">
+      <h2 class="tv2__title" id="voices-heading">Testimonials</h2>
+      <p class="tv2__script">What our clients say about us.</p>
+    </header>
+
+    <!-- The faces and the counter used to be pinned into the top corners,
+         above everything. They are a row in the normal flow now, sitting
+         under the title, faces left and counter right. -->
+    <div class="tv2__row">
+      <div class="tv2__pips" data-tv2-pips aria-hidden="true"></div>
+      <p class="tv2__index" aria-hidden="true">
+        <span class="tv2__now" data-tv2-now>01</span><span class="tv2__sep">/</span><span class="tv2__total" data-tv2-total>03</span>
+      </p>
+    </div>
+
+    <!-- Two real buttons, so the keyboard and screen readers get this for
+         free. They sit outside the text column on a wide window and tuck
+         back inside it when there is no room. -->
+    <button class="tv2__nav tv2__nav--prev" type="button" data-tv2-prev aria-label="Previous testimonial">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
+    </button>
+    <button class="tv2__nav tv2__nav--next" type="button" data-tv2-next aria-label="Next testimonial">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
+    </button>
+
+    <div class="tv2__main">
+      <blockquote class="tv2__quote" data-tv2-quote></blockquote>
+
+      <div class="tv2__by">
+        <div class="tv2__face" data-tv2-faces><span class="tv2__ring" aria-hidden="true"></span></div>
+        <div class="tv2__meta" data-tv2-meta>
+          <span class="tv2__rule" aria-hidden="true"></span>
+          <span class="tv2__name" data-tv2-name></span>
+          <span class="tv2__role" data-tv2-role></span>
+        </div>
+      </div>
+
+      <div class="tv2__bar" aria-hidden="true"><span class="tv2__fill" data-tv2-fill></span></div>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ============ SECTION: care · four kinds of care ============
+     pan. Lateral travel reads as breadth. -->
+<section class="act act--pan band" id="care" data-act data-section="care" data-section-name="Four Kinds of Care">
+  <div class="stage" data-stage>
+    <div class="rail" data-rail>
+
+      <div class="rail__intro rail__item">
+        <h2 class="display display--lg">Four kinds of care,<br />every single day</h2>
+      </div>
+
+      <!-- Title, then photograph, then description. The counters came off
+           on 2026-09-07: four cards in a rail the reader can see the whole
+           of do not need to be numbered, and the hard rules ban a section
+           counter anyway. The hairline the number carried moved onto the
+           title, so each card still opens on an edge rather than floating
+           on the band. -->
+      <article class="rail__item card">
+        <h3 class="card__title">Mother and baby</h3>
+        <figure class="card__media"><img src="../assets/img/hero_night-shift_v1.webp" alt="A specialist settling the baby into the cot at night while the mother sleeps in the room next door" width="1920" height="1072" /></figure>
+        <p class="body">Hands-on support for your baby throughout the day so you can rest completely. Your dedicated specialist takes care of your newborn while you nap, recover, and bond, and is on hand to accompany you and your baby on outings.</p>
+      </article>
+
+      <article class="rail__item card">
+        <h3 class="card__title">Treatments</h3>
+        <figure class="card__media"><img src="../assets/img/stones.webp" alt="Hot stones laid out ready for a postpartum massage" width="1920" height="2384" /></figure>
+        <p class="body">Hands-on therapeutic care integrated directly into your stay, not offered as a one-off treat. Every programme includes daily traditional belly binding, daily herbal baths, thermal blanket treatments, and scheduled postpartum massages with hot stone therapy, foot reflexology, and herbal foot spas.</p>
+      </article>
+
+      <article class="rail__item card">
+        <h3 class="card__title">Meals</h3>
+        <figure class="card__media"><img src="../assets/img/meal.webp" alt="A warm postpartum recovery meal of salmon and vegetables" width="1920" height="1072" /></figure>
+        <p class="body">Three fresh, tailored postpartum meals cooked daily in your own kitchen for you and your family. Your nutrition is supported throughout the day with traditional herbal teas and lactation drinks designed to restore your energy and assist feeding.</p>
+      </article>
+
+      <article class="rail__item card">
+        <h3 class="card__title">Home</h3>
+        <figure class="card__media"><img src="../assets/img/hero_household-wide_v2_ironing.webp" alt="A specialist ironing and folding laundry in the living room while the mother rests on the sofa and the baby sleeps in a moses basket" width="1920" height="1072" /></figure>
+        <p class="body">Day-to-day household demands handled from the moment we arrive. Your specialist takes care of light housekeeping, organizing the baby&rsquo;s wardrobe, grocery collection, and daily laundry and ironing.</p>
+      </article>
+
+      <div class="rail__item rail__close">
+        <p class="say say--sm">The same four, whichever programme you choose.<br />What changes is how long they last.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION: programmes ============
+     flow + in. The story is over. This answers the question it raised. -->
+<section class="act act--programmes" id="programmes" data-act data-section="programmes" data-section-name="Programmes">
+
+  <!-- The aurora, this section only. Ported from the component TJ supplied
+       in Faurora-background.txt. Two layers rather than one: the field is
+       held still and its ::after travels across it, and the two sliding
+       against each other is what stops the repeat reading as stripes. See
+       the note in site.css for what was changed from the source and why. -->
+  <div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div>
+
+  <div class="wrap">
+
+    <header class="sec-head" data-in>
+      <span class="eyebrow">Programmes</span>
+      <h2 class="display display--lg">Same care. Longer stay</h2>
+      <p class="body body--wide">Every programme includes the same four areas of care. The longer ones give your recovery more time, and repeat the treatments more often as it progresses.</p>
+    </header>
+
+    <!-- The programme picker, rebuilt 2026-09-07. It was a six item
+         treatments gallery; it carries the four programme lengths now, so
+         the section picks a length rather than listing treatments that are
+         already listed in the care rail above.
+
+         Three columns: the lengths run down the left, the copy sits in the
+         middle, and the chosen frame plays on the right inside a ring.
+         Clicking a length flies its frame in from slightly deeper in the
+         page rather than crossfading it flat.
+
+         The 01 / 06 counter came off with the rebuild. Four items the
+         reader can see all of do not need counting, and a section counter
+         is a hard rule ban in scroll-craft. The breadcrumb line under the
+         heading came off with it: it read "Treatments", which is no longer
+         what this is, and it was the one line in the act that the aurora
+         cost contrast on.
+
+         Each length carries its own focal point in data-pos. The frames
+         crop to 4:5 here and 4:3 on a phone.
+
+         NOTE: the four photographs are placeholders. No image in the set
+         shows a length of stay, because a photograph cannot; these are
+         chosen to read as recovery progressing. They want naming properly,
+         the way the care rail images were. -->
+    <div class="gal" data-gallery>
+
+    <div class="gal__picker">
+      <ul class="gal__list">
+        <li class="gal__row">
+          <button class="gal__thumb is-active" type="button" data-gal-item
+            data-index="01" data-title="5 days of care"
+            data-body="The first week home, covered. Your specialist is there for the days when everything is new, so you are not learning it alone."
+            data-img="../assets/img/s3-rest.webp" data-pos="50% 45%"
+            data-alt="A mother resting back against the pillows while her specialist settles the baby"
+            aria-pressed="true" aria-label="5 days of care">
+            <img src="../assets/img/s3-rest.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="02" data-title="7 days of care"
+            data-body="A full week, with treatments running through it. Long enough for a rhythm to start, and for the difference to be something you feel rather than something you are told."
+            data-img="../assets/img/bind.webp" data-pos="50% 50%"
+            data-alt="A binding cloth rolled and folded on the bed beside a bowl of warm oil"
+            aria-pressed="false" aria-label="7 days of care">
+            <img src="../assets/img/bind.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="03" data-title="14 days of care"
+            data-body="Two weeks, and the treatments move to a weekly rhythm. This is where recovery stops being something you are waiting on and starts being something already underway."
+            data-img="../assets/img/massage.webp" data-pos="50% 45%"
+            data-alt="A specialist working along a mother's back and shoulders with warm oil"
+            aria-pressed="false" aria-label="14 days of care">
+            <img src="../assets/img/massage.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="04" data-title="30 days of care"
+            data-body="The full confinement period, kept the way tradition intends. Thirty days of daily support, all four areas of care, with the treatments repeating throughout."
+            data-img="../assets/img/stones.webp" data-pos="50% 50%"
+            data-alt="Hot stones warming on a folded blanket at the end of the bed, with oil beside them"
+            aria-pressed="false" aria-label="30 days of care">
+            <img src="../assets/img/stones.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- The heading is the changing element as of 2026-09-07. It carried a
+         static "Choose a length." with the chosen length repeated as a small
+         line under the description; the length is the heading itself now and
+         the description sits under it, so the reader is told what they are
+         looking at before they read about it rather than after. -->
+    <div class="gal__copy">
+      <h2 class="display display--lg gal__heading" data-gal-title>5 days of care</h2>
+      <p class="body gal__body" data-gal-body>The first week home, covered. Your specialist is there for the days when everything is new, so you are not learning it alone.</p>
+    </div>
+
+    <div class="gal__frame">
+      <div class="gal__ring"></div>
+      <div class="gal__media">
+        <img class="gal__img" data-gal-img src="../assets/img/s3-rest.webp" alt="A mother resting back against the pillows while her specialist settles the baby" />
+        <img class="gal__img" data-gal-img alt="" aria-hidden="true" />
+      </div>
+    </div>
+
+    </div>
+
+    <!-- ============================================================
+         DURATION, DRAWN
+         The one thing this page claims no competitor does is make the
+         length of live-in care legible. Four equal columns said the
+         opposite of that: they gave thirty days exactly as much room on
+         the page as five, so the layout argued against its own sentence.
+
+         The programmes are measured against one shared thirty-day scale
+         now. The week rules run through every track at the same pitch,
+         seven days wide, so "two weeks" is a place on the page rather
+         than a number to convert. Thirty carries the accent because it
+         is the traditional confinement period, not because it is the one
+         being sold hardest.
+
+         The bars are a drawing of the numbers beside them, which is why
+         they are aria-hidden: the figure and the unit already carry the
+         whole fact for anyone not looking at it.
+         ============================================================ -->
+    <div class="dur" data-in>
+
+      <div class="dur__scale" aria-hidden="true">
+        <span class="dur__pad"></span>
+        <span class="dur__ruler">
+          <span class="dur__mark" style="--at: 7">1 week</span>
+          <span class="dur__mark" style="--at: 14">2 weeks</span>
+          <span class="dur__mark" style="--at: 21">3 weeks</span>
+          <span class="dur__mark" style="--at: 28">4 weeks</span>
+        </span>
+        <span class="dur__pad"></span>
+      </div>
+
+      <ol class="dur__list">
+        <li class="dur__row" style="--days: 5">
+          <p class="dur__head"><span class="dur__n">5</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">The first week home, covered.</p>
+        </li>
+        <li class="dur__row" style="--days: 7">
+          <p class="dur__head"><span class="dur__n">7</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">A full week, with treatments through it.</p>
+        </li>
+        <li class="dur__row" style="--days: 14">
+          <p class="dur__head"><span class="dur__n">14</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">Treatments move to a weekly rhythm.</p>
+        </li>
+        <li class="dur__row dur__row--full" style="--days: 30">
+          <p class="dur__head"><span class="dur__n">30</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">The full confinement period, as it is traditionally kept.</p>
+        </li>
+      </ol>
+
+    </div>
+
+    <!-- The way out of this act. It used to be a note saying pricing lived
+         on a page that did not exist yet; build-your-programme.html is that page, so
+         the line is a door now rather than an apology. -->
+    <div class="dur__out" data-in>
+      <p class="body">Every length above is a published programme. If the shape you want sits between them, build it and see an indicative fee as you go.</p>
+      <a class="btn btn--primary" href="build-your-programme.html">Build your programme</a>
+    </div>
+
+  </div>
+</section>
+
+  <!-- ============ SECTION: TREATMENTS, HORIZONTAL ACCORDION ============
+       Replaced the old stepped concertina outright 2026-09-21. That
+       version and this one lived side by side for a few days as
+       "section 6" and "section 6b" so TJ could compare them on the live
+       page; he picked this one, so the old markup, its four comment
+       headers recording past iterations of the same idea, and its class
+       names are gone rather than kept for reference. Its four treatment
+       photographs, copy and prices carry over unchanged.
+
+       Mechanic: a row of panels, one open at a time, widths animated on
+       click with overflow: hidden doing the cropping, no reflow.
+       Prototyped and approved in lab/accordion-options.html (label
+       option one: short distinguishing words, open panel split into
+       photograph plus copy).
+
+       Real copy is from the live booking system
+       (booking.thepostpartumsuite.com, screenshotted by TJ 2026-09-17):
+       four single-session massages that escalate, Postpartum,
+       Traditional (the non-postpartum option), then two tiers that each
+       add one thing to the Postpartum massage. The section title TJ set
+       directly: "Try one of our single-session massage treatments."
+       Panel labels are Set A from that conversation, agreed to avoid the
+       word "massage" repeating four times: the title's own wording
+       absorbs it once for the whole group.
+
+       Responsive note: TJ asked for this to become a VERTICAL accordion
+       on mobile rather than a squeezed horizontal one. Not yet built;
+       see the open item in HANDOVER.md. -->
+<section class="act act--treatments-b" id="standalone-treatments" data-act data-section="treatments" data-section-name="Single Treatments">
+  <div class="wrap treatments-b-wrap">
+
+    <header class="sec-head" data-in>
+      <h2 class="display display--md">Try one of our single-session massage treatments</h2>
+    </header>
+
+    <div class="tb-acc" data-tb-acc data-in>
+
+      <button type="button" class="tb-acc__panel is-open" data-tb-panel="0" aria-expanded="true" aria-label="Postpartum Massage">
+        <img src="../assets/img/tb-postpartum.webp" alt="A specialist giving a postpartum facial and shoulder massage" width="1856" height="2304" loading="lazy" />
+        <span class="tb-acc__label">Postpartum</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="../assets/img/tb-postpartum.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">60 minutes &middot; &pound;120</span>
+            <h3>Postpartum Massage</h3>
+            <p>A full body massage working through the back, shoulders and hips, with warm oils used throughout. Eases the tension that builds from feeding and carrying, and supports your body's recovery after birth.</p>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="tb-acc__panel" data-tb-panel="1" aria-expanded="false" aria-label="Traditional Massage">
+        <img src="../assets/img/tb-traditional.webp" alt="A traditional back massage with heated stones" width="900" height="900" loading="lazy" />
+        <span class="tb-acc__label">Traditional</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="../assets/img/tb-traditional.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">60 minutes &middot; &pound;120</span>
+            <h3>Traditional Massage</h3>
+            <p>A classic full body massage using warm oils. Available to everyone, whether or not you've recently had a baby.</p>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="tb-acc__panel" data-tb-panel="2" aria-expanded="false" aria-label="Postpartum Massage with Traditional Hot Stone">
+        <img src="../assets/img/tb-hotstone.webp" alt="A specialist applying a heated herbal compress during a postpartum treatment" width="900" height="900" loading="lazy" />
+        <span class="tb-acc__label">Hot Stone</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="../assets/img/tb-hotstone.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">90 minutes &middot; &pound;150</span>
+            <h3>Postpartum Massage with Traditional Hot Stone</h3>
+            <p>Our full postpartum massage combined with traditional hot stone therapy. Heated stones are worked along the entire body, releasing the tension held through the neck, shoulders and back.</p>
+          </div>
+        </div>
+      </button>
+
+      <button type="button" class="tb-acc__panel" data-tb-panel="3" aria-expanded="false" aria-label="Postpartum Massage with Traditional Hot Stone and Belly Binding">
+        <img src="../assets/img/tb-bellybinding.webp" alt="Traditional cotton belly binding wrapped around the abdomen" width="800" height="800" loading="lazy" />
+        <span class="tb-acc__label">Belly Binding</span>
+        <div class="tb-acc__open">
+          <div class="tb-acc__open-media"><img src="../assets/img/tb-bellybinding.webp" alt="" /></div>
+          <div class="tb-acc__open-copy">
+            <span class="tb-acc__meta">120 minutes &middot; &pound;180</span>
+            <h3>Postpartum Massage with Traditional Hot Stone and Belly Binding</h3>
+            <p>The complete recovery treatment. Our full postpartum massage and hot stone therapy, finished with traditional cloth belly binding wrapped to support the abdomen and lower back.</p>
+          </div>
+        </div>
+      </button>
+
+    </div>
+
+    <p class="treatments-addon">Want more? Add a body scrub to any session. <a class="treatments-addon__link" href="https://calendly.com/thepostpartumsuite/30min">Learn more.</a></p>
+
+  </div>
+</section>
+
+<!-- ============ THE CLOSE ============
+     Lifted out of the programmes act on 2026-09-06 so the two can be
+     placed independently. The markup inside it is untouched; it only has
+     a section and a wrap of its own now, and the ground and vertical
+     padding the programmes act used to give it. -->
+<section class="act act--close" data-act data-section="close" data-section-name="Book a Consultation">
+  <div class="wrap">
+    <!-- The decision. A statement and an action as two objects rather
+         than three lines stacked in a column, on paper inside a hairline
+         so the page ends on something with an edge instead of fading out
+         into the same ground it has been on since the turn. -->
+    <div class="close" data-in>
+      <div class="close__say">
+        <h2 class="display display--md">Ready to talk it through?</h2>
+        <p class="script script--sm">Start with a conversation.</p>
+      </div>
+      <div class="close__act">
+        <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
+        <p class="close__meta">Thirty minutes, by phone or video.<br />Nothing is booked on the call.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</main>
+
+<footer class="sf" data-section="site-footer" data-section-name="Footer">
+  <div class="sf__aurora" aria-hidden="true"><span class="sf__field"></span></div>
+  <div class="sf__inner">
+
+    <div class="sf__brand">
+      <a href="index.html" aria-label="The Postpartum Suite, home">
+        <picture>
+          <source media="(max-width: 760px)" srcset="../assets/img/logo-inline.webp" />
+          <img class="sf__logo" src="../assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="700" height="900" decoding="async" />
+        </picture>
+      </a>
+    </div>
+
+    <nav class="sf__col" aria-label="Footer">
+      <h2 class="sf__head">Explore</h2>
+      <ul>
+        <li><a href="what-we-do.html">What We Do</a></li>
+        <li><a href="programmes.html">Programmes</a></li>
+        <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+        <li><a href="single-treatments.html">Signature Treatments</a></li>
+        <li><a href="about.html">The Suite</a></li>
+        <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+      </ul>
+    </nav>
+
+    <div class="sf__col">
+      <h2 class="sf__head">Contact</h2>
+      <ul>
+        <li><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p class="sf__tagline">The care mothers deserve, at home</p>
+
+  <div class="sf__base">
+    <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
+    <ul class="sf__legal">
+      <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
+      <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
+    </ul>
+  </div>
+  <script>document.querySelectorAll('[data-year]').forEach(function (e) { e.textContent = new Date().getFullYear(); });</script>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/home.js"></script>
+<script src="js/home-flight.js"></script>
+
+<script src="../lab/devpanel-loader.js"></script>
+</body>
+</html>

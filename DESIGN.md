@@ -512,3 +512,36 @@ Replaces the lift in, lower out (TJ: lowering the hands showed a headless torso;
 Scale first, then move: rooms at 1.08 (4 percent spare each side), travel +2 to -2 percent and zoom to 1.10 over the whole time each room is on screen, including its changes, so motion carries through. Hands at 1.12 (6 percent spare), drifting 4 points right to left while their kind holds. At a change nothing leaves the frame: the outgoing hands slide 3.5 points further left and fade (first half), the room cross fades behind, the incoming hands fade in from 4 points right and 1.15 scale, settling into place (second part, power2.out). Per kind extra shift right (0, 3, 8, 10 points for baby, tungku, tray, laundry) keeps every object clear of the words; the text column narrowed to min(36vw, 520px). Moving the hands right only exposes the cut out's transparent side; only leftward travel is bounded.
 Measured at 41 scroll points at 1920x1080, 1440x900 and 1280x720: no visible layer ever exposes an edge inside the stage, no errors. Backup of the previous script: lab/hands.before-parallax.js.bak.
 - Sub-header (.hd__promise) moved from Instrument Serif mixed case to Montserrat 500 (TJ, 8 Oct 2026): Instrument Serif is for capitals only.
+
+## Folder tidy: the site lives in index/ (TJ, 9 Oct 2026)
+TJ asked for one clean place to open the site, every old version moved to an archive, and tidy names. Nothing was deleted; every move was a git rename. Media folders (assets, lab, research, Video Archive for TPS, scrollcraft) were left exactly where they were; TJ counts them as active.
+
+Open the site at index/index.html. Pages load their styles from index/css/, their scripts from index/js/, and media from ../assets/.
+
+Earlier sections of this file use the old names. The map:
+
+| Old name | New name |
+|---|---|
+| v1.html | index/index.html (Home) |
+| care.html | index/what-we-do.html |
+| programme.html | index/build-your-programme.html |
+| specialist.html | index/who-comes-into-your-home.html |
+| about.html, faqs.html, programmes.html, single-treatments.html | same names, in index/ |
+| v1.css | index/css/site.css |
+| care.css | index/css/house-flight.css |
+| site-footer.css | index/css/footer.css |
+| inner.css | index/css/inner-pages.css |
+| opening, day-night, day-timeline, kinds, hands (.css) | index/css/what-we-do-opening, -day-night, -timeline, -kinds, -hands |
+| programme.css | index/css/build-your-programme.css |
+| what-we-do.css, booking.css | same names, in index/css/ |
+| v1.js | index/js/home.js |
+| opening, zones, promise, day-timeline, kinds, hands (.js) | index/js/what-we-do-opening, -zones, -promise, -timeline, -kinds, -hands |
+| faqs-theme.js | index/js/faqs.js |
+| programme.js, programme-pricing.js | index/js/build-your-programme.js, build-your-programme-pricing.js |
+| what-we-do.js, home-flight.js, inner-nav.js, nav-fold.js, booking.js, booking-m25.js | same names, in index/js/ |
+| site-header.html, site-footer.html | index/partials/ |
+| sync-site-header.py, sync-site-footer.py | index/partials/sync-header.py, sync-footer.py |
+
+Archived to archive/: the old homepage (index.html, styles.css, main.js) in old-homepage/; v1-ruined.* in v1-ruined/; aurora-variants, aurora-variants-2, hero-studies and the unused care.js in experiments/; site-structure and site-structure-pdf in site-structure/; HANDOVER.md, HANDOVER-NEXT-CHAT.md, STATE.md and the transcript in notes/. Archived pages are kept as a record and are not expected to render, since the files they loaded moved.
+
+Section locks were renamed to the new paths (lab/locks), and the stop hook now watches index/. Verified: all eight pages at 1440 and 390 wide, same text, same computed styles, same media loaded, no new errors, before and after.
