@@ -1,0 +1,82 @@
+/* ============================================================
+   WHAT WE DO, Your Postpartum Specialist (TJ, 9 Oct 2026)
+
+   The one place on the page where you meet her: the Four Kinds of Care that
+   follows only ever shows her hands. Quiet on purpose.
+
+   The portrait opens from a narrow slot to the full frame as the section
+   scrolls in, and settles from a slight zoom while it does (scrubbed on
+   desktop, a single soft opening on phones; what-we-do-specialist.js).
+   Once it has settled, the checks from her copy draw in on the site's fine
+   line language: small spaced capitals beside a hairline that draws in
+   Ember and cools to the hairline colour. No cards, no chips, no buttons.
+
+   Loads after what-we-do.css, which still holds .spec, .spec__grid and the
+   frame's size and radius. Without script, or with reduced motion, the
+   frame is simply open and the checks are simply there.
+   ============================================================ */
+
+.spec__frame { background: var(--canvas); }
+.spec__zoom { position: absolute; inset: 0; overflow: hidden; transform-origin: 50% 40%; }
+
+/* Closed state, only when the script is running and will open it. */
+html.js .spec__frame.is-armed { clip-path: inset(0 36% 0 36% round var(--r-media)); }
+html.js .spec__frame.is-armed .spec__zoom { transform: scale(1.16); }
+
+/* Phones: no scrub, one soft opening when the frame arrives. */
+html.js .spec__frame.is-armed.is-soft { transition: clip-path 1.4s var(--ease-out); }
+html.js .spec__frame.is-armed.is-soft .spec__zoom { transition: transform 1.8s var(--ease-out); }
+html.js .spec__frame.is-armed.is-open { clip-path: inset(0 0 0 0 round var(--r-media)); }
+html.js .spec__frame.is-armed.is-open .spec__zoom { transform: scale(1.02); }
+
+/* ---- The checks ---- */
+.spec__checks {
+  list-style: none;
+  margin: .6rem 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 0 clamp(28px, 4vw, 56px);
+}
+.spec__checks li {
+  position: relative;
+  padding: 11px 0 11px 20px;
+  font-family: var(--f-body);
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.spec__checks li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--hairline-firm);
+}
+
+html.js .spec__checks li { opacity: 0; transform: translateY(6px); }
+html.js .spec__checks li::before { background: var(--ember); transform: scaleY(0); transform-origin: 50% 0; }
+html.js .spec__checks.is-in li {
+  opacity: 1; transform: none;
+  transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 110ms + 120ms);
+}
+html.js .spec__checks.is-in li::before {
+  transform: scaleY(1);
+  background: var(--hairline-firm);
+  transition: transform .6s var(--ease-out), background-color 1.4s ease;
+  transition-delay: calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms + .9s);
+}
+
+@media (max-width: 860px) {
+  .spec__checks { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .spec__frame.is-armed { clip-path: none; }
+  html.js .spec__frame.is-armed .spec__zoom { transform: none; }
+  html.js .spec__checks li { opacity: 1; transform: none; }
+  html.js .spec__checks li::before { transform: none; background: var(--hairline-firm); }
+}

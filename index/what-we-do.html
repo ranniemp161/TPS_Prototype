@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="css/what-we-do-timeline.css" />
 <link rel="stylesheet" href="css/what-we-do-kinds.css" />
 <link rel="stylesheet" href="css/what-we-do-hands.css" />
+<link rel="stylesheet" href="css/what-we-do-specialist.css" />
 <link rel="stylesheet" href="css/footer.css" />
 <link rel="preload" as="image" href="../assets/img/care-bedroom.webp" />
 <script>document.documentElement.classList.add('js');</script>
@@ -169,13 +170,30 @@
   <!-- ============ SECTION: specialist ============ -->
   <section class="spec" id="specialist" data-section="your-postpartum-specialist" data-section-name="Your Postpartum Specialist">
     <div class="wide spec__grid">
-      <div class="spec__frame"><span class="ph" aria-hidden="true"></span></div>
+      <!-- The one place on the page where you meet her (TJ, 9 Oct 2026). The
+           portrait opens from a narrow slot to the full frame as the section
+           scrolls in (what-we-do-specialist.js), and the checks from her copy
+           draw in on a fine line once it settles. -->
+      <div class="spec__frame" data-spec-frame>
+        <div class="spec__zoom" data-spec-zoom>
+          <img src="../assets/img/specialist-portrait.webp" alt="A postpartum specialist in her pink uniform, smiling, standing in a sunlit living room" width="1200" height="1490" loading="lazy" decoding="async" data-par="4" />
+        </div>
+      </div>
       <div class="spec__copy" data-reveal>
         <p class="wlabel">One person</p>
         <h2 class="wh2" data-kin>Your Postpartum Specialist</h2>
         <p class="wlead">One dedicated person in your home, chosen with care.</p>
         <p class="wp">The person who looks after you is the heart of your stay. Every specialist at The Postpartum Suite has extensive experience in caring for mothers and newborns and is trained in our approach to recovery, from treatments and binding to the preparation of postpartum meals. Before anyone joins us, they go through an enhanced DBS check, reference checks and an interview process. All of our specialists are fully insured and hold infant first aid and safeguarding training.</p>
         <p class="wp">Your specialist takes time to understand your home, your routine and the kind of support you want. You will know who is arriving before your stay begins, and you will have the same specialist throughout, so the care feels personal from the first day to the last.</p>
+        <!-- The checks, in the client's own words from the paragraph above. -->
+        <ul class="spec__checks" data-spec-checks aria-hidden="true">
+          <li>Enhanced DBS check</li>
+          <li>Reference checks</li>
+          <li>Interview process</li>
+          <li>Fully insured</li>
+          <li>Infant first aid</li>
+          <li>Safeguarding training</li>
+        </ul>
       </div>
     </div>
   </section>
@@ -916,6 +934,7 @@
 <script src="js/what-we-do-timeline.js"></script>
 <script src="js/what-we-do-kinds.js"></script>
 <script src="js/what-we-do-hands.js"></script>
+<script src="js/what-we-do-specialist.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
 </body>
