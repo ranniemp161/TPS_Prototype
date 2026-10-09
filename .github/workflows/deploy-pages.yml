@@ -48,13 +48,17 @@ jobs:
             --exclude '.vercelignore' \
             ./ _site/
 
-          # The Pages root expects the rendered pages and their linked assets to be
-          # at the site root. The repo now keeps the public site under index/, so
-          # flatten that folder into _site before publishing.
-          if [ -d _site/index ]; then
-            cp -a _site/index/. _site/
-            rm -rf _site/index
-          fi
+          # The pages reference ../assets/..., so index/ must stay beside assets/.
+          # Flattening it breaks every image and font. Instead, keep the layout
+          # and make the Pages root redirect to the real home page.
+          cat > _site/index.html <<'HTML'
+<!doctype html>
+<meta charset="utf-8">
+<title>Redirecting</title>
+<meta http-equiv="refresh" content="0; url=index/index.html">
+<link rel="canonical" href="index/index.html">
+<a href="index/index.html">Continue</a>
+HTML
 
           # A stamp the staleness alarm can read back over HTTP to learn which
           # commit the live site was actually built from. Without it we could
