@@ -1,9 +1,9 @@
 # Publishes the prototype to GitHub Pages.
 #
 # Pages has no rewrite engine -- it serves index.html at the root and that is
-# that -- so the "show index at the root" decision has to happen at build time.
-# We copy index/index.html over index.html in the artifact only, never in the repo, so
-# upstream can change index.html freely without ever conflicting with us.
+# that -- so the "show the index page at the root" decision has to happen at
+# build time. We copy the site root files into the artifact only, never in the
+# repo, so upstream can change the pages freely without ever conflicting with us.
 name: Deploy to Pages
 
 on:
@@ -47,7 +47,15 @@ jobs:
             --exclude 'vercel.json' \
             --exclude '.vercelignore' \
             ./ _site/
-          cp _site/index/index.html _site/index.html
+
+          # The Pages root expects the rendered pages and their linked assets to be
+          # at the site root. The repo now keeps the public site under index/, so
+          # flatten that folder into _site before publishing.
+          if [ -d _site/index ]; then
+            cp -a _site/index/. _site/
+            rm -rf _site/index
+          fi
+
           # A stamp the staleness alarm can read back over HTTP to learn which
           # commit the live site was actually built from. Without it we could
           # only check that the fork looks right, not that Pages is serving it.
