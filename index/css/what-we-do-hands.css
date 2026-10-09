@@ -1,0 +1,101 @@
+/* ============================================================
+   THE FOUR KINDS OF CARE: ONE PAIR OF HANDS (TJ, 8 Oct 2026)
+   One held stage. The specialist stands still in profile on the right of a
+   full screen photograph; the room and what she carries change around her as
+   the reader scrolls (four photographs, her head in the same place in each).
+   The kind's name, promise and paragraph sit on the left over a soft light
+   veil; its detail items open in place. Live (desktop, motion allowed)
+   what-we-do-hands.js adds .is-live; otherwise (phones, reduced motion) each kind is a
+   photograph followed by its words.
+   ============================================================ */
+.hd { position: relative; isolation: isolate; background: var(--canvas); color: var(--ink); }
+.hd[hidden], .det[hidden] { display: none !important; }
+.hd__stage { position: relative; }
+
+/* ---- Photographs ---- */
+.hd__pics { position: relative; }
+.hd__pic { display: block; width: 100%; height: auto; max-width: none; }
+
+/* ---- Words ---- */
+.hd__name { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.6rem, 5vw, 5.6rem); line-height: .92; letter-spacing: .005em; color: var(--ink); text-wrap: balance; }
+/* Instrument Serif is for capitals only (TJ, 8 Oct 2026), so the sub-header is
+   Montserrat: medium weight, larger than the paragraph, smaller than the title. */
+.hd__promise { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.02rem, .9rem + .45vw, 1.3rem); line-height: 1.35; letter-spacing: -.005em; color: var(--ink); text-wrap: balance; }
+.hd__para { margin: 0; font-family: var(--f-read); font-size: clamp(.92rem, .84rem + .2vw, 1.02rem); line-height: 1.6; color: var(--ink-soft); }
+.hd__kind { display: grid; gap: clamp(12px, 1.6vh, 18px); }
+
+/* ---- Detail items: quiet rows, each opening its paragraph in place ---- */
+.hd__items { list-style: none; margin: clamp(4px, .8vh, 10px) 0 0; padding: 0; border-top: 1px solid rgba(10, 10, 10, .14); }
+.hd__item { border-bottom: 1px solid rgba(10, 10, 10, .14); }
+.hd__toggle { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 11px 2px; font-family: var(--f-read); font-size: .95rem; line-height: 1.3; color: var(--ink); }
+.hd__toggle::after { content: "+"; flex: none; font-size: 1.15rem; line-height: 1; color: var(--ink-mute); transition: transform 280ms var(--ease-out); }
+.hd__toggle[aria-expanded="true"]::after { transform: rotate(45deg); }
+.hd__toggle:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+.hd__more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 420ms var(--ease-out); }
+.hd__more > p { overflow: hidden; margin: 0; font-family: var(--f-read); font-size: .92rem; line-height: 1.6; color: var(--ink-soft); }
+.hd__item.is-open .hd__more { grid-template-rows: 1fr; }
+.hd__item.is-open .hd__more > p { padding: 0 2px 14px; }
+
+/* ---- Static (phones, reduced motion, before script): photograph then words ---- */
+.hd:not(.is-live) .hd__stage { display: grid; }
+.hd:not(.is-live) .hd__pics { display: contents; }
+.hd:not(.is-live) .hd__veil, .hd:not(.is-live) .hd__rail { display: none; }
+.hd:not(.is-live) .hd__copy { display: contents; }
+.hd:not(.is-live) .hd__pic:nth-child(1) { order: 1; } .hd:not(.is-live) .hd__kind:nth-child(1) { order: 2; }
+.hd:not(.is-live) .hd__pic:nth-child(2) { order: 3; } .hd:not(.is-live) .hd__kind:nth-child(2) { order: 4; }
+.hd:not(.is-live) .hd__pic:nth-child(3) { order: 5; } .hd:not(.is-live) .hd__kind:nth-child(3) { order: 6; }
+.hd:not(.is-live) .hd__pic:nth-child(4) { order: 7; } .hd:not(.is-live) .hd__kind:nth-child(4) { order: 8; }
+.hd:not(.is-live) .hd__pic { aspect-ratio: 4 / 3; object-fit: cover; object-position: 72% 40%; height: auto; }
+.hd:not(.is-live) .hd__kind { padding: clamp(28px, 6vw, 48px) var(--gutter, 24px) clamp(44px, 9vw, 72px); max-width: 640px; }
+
+/* ---- Live: the held stage ---- */
+.hd.is-live { height: calc(100vh * var(--hd-len, 5)); }
+.hd.is-live .hd__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.hd.is-live .hd__pics { position: absolute; inset: 0; }
+.hd.is-live .hd__pic { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 66% 35%; opacity: 0; will-change: opacity; }
+.hd.is-live .hd__pic:first-child { opacity: 1; }
+/* A soft light veil over the left, where the words sit, fading out before her. */
+.hd.is-live .hd__veil { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(to right, rgba(243, 239, 236, .82) 0%, rgba(243, 239, 236, .66) 30%, rgba(243, 239, 236, .28) 46%, rgba(243, 239, 236, 0) 58%); }
+.hd.is-live .hd__copy { position: absolute; z-index: 2; left: var(--gutter, 24px); top: var(--nav-h); bottom: 0; width: min(36vw, 520px); }
+.hd.is-live .hd__kind { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); visibility: hidden; }
+.hd.is-live .hd__kind.is-on { visibility: visible; }
+.hd.is-live .hd__rail { display: flex; position: absolute; z-index: 2; left: var(--gutter, 24px); bottom: clamp(24px, 5vh, 48px); gap: 8px; }
+.hd.is-live .hd__rail span { width: 26px; height: 2px; background: rgba(10, 10, 10, .2); transition: background-color 300ms var(--ease-out); }
+.hd.is-live .hd__rail span.is-on { background: var(--ember); }
+/* Tight screens: the paragraph shortens to three lines, the rest one tap away. */
+.hd.is-tight .hd__para { max-height: calc(3 * 1.6em); overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent); mask-image: linear-gradient(to bottom, #000 60%, transparent); }
+.hd.is-tight .hd__name { font-size: clamp(2.2rem, 4vw, 4.2rem); }
+
+/* masked lines for the rise (built by what-we-do-hands.js) */
+.hd-line { display: block; overflow: hidden; padding-bottom: .1em; margin-bottom: -.1em; }
+.hd-line > span { display: block; will-change: transform; }
+.hd.is-tight .hd__para.is-full { max-height: none; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+.hd.is-tight .hd__para { cursor: pointer; }
+
+/* Hands only test (TJ, 8 Oct 2026): crops of the four photographs, hands and
+   object on the right; no face. Frame on the hands, not on her head. */
+.hd--hands.is-live .hd__pic { object-position: 60% 55%; }
+.hd--hands:not(.is-live) .hd__pic { object-position: 64% 50%; }
+
+/* ---- Two layers per kind (TJ, 8 Oct 2026): the room plate and the hands cut out.
+   Both are the same crop, so they share one box and one object position and
+   line up exactly. The hands are lowered out of the bottom of the frame and
+   the next pair lifted in; the plates cross fade behind. ---- */
+.hd__scene { position: relative; }
+.hd__plate, .hd__cut { display: block; width: 100%; height: auto; max-width: none; }
+.hd__cut { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hd--hands .hd__plate, .hd--hands .hd__cut { object-position: 60% 55%; }
+/* static: the scene is the picture */
+.hd:not(.is-live) .hd__scene { aspect-ratio: 4 / 3; overflow: hidden; }
+.hd:not(.is-live) .hd__plate { height: 100%; object-fit: cover; }
+.hd:not(.is-live) .hd__scene:nth-child(1) { order: 1; } .hd:not(.is-live) .hd__scene:nth-child(2) { order: 3; }
+.hd:not(.is-live) .hd__scene:nth-child(3) { order: 5; } .hd:not(.is-live) .hd__scene:nth-child(4) { order: 7; }
+.hd--hands:not(.is-live) .hd__plate, .hd--hands:not(.is-live) .hd__cut { object-position: 64% 50%; }
+/* live: scenes stacked full screen; plates fade, cuts move */
+.hd.is-live .hd__scene { position: absolute; inset: 0; }
+.hd.is-live .hd__plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; will-change: opacity; }
+.hd.is-live .hd__scene:first-child .hd__plate { opacity: 1; }
+.hd.is-live .hd__cut { will-change: transform; }
+/* A soft shadow under the hands so they sit in the room, not on it. */
+.hd.is-live .hd__cut { filter: drop-shadow(0 18px 28px rgba(10, 10, 10, .12)); }

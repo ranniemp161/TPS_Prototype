@@ -1,0 +1,370 @@
+/* ============================================================
+   WHAT WE DO (rebuilt 5 Oct 2026)
+   Loads after site.css and house-flight.css. Brand Pack tokens throughout (Instrument
+   Serif, Montserrat, Karla, IBM Plex Mono), headlines in capitals, Ember
+   buttons with soft corners, no shadows, no dark sections, no cursor effect.
+
+   Design language: MaisonFav as a reference for proportions and moves only.
+   The stacked photo cards use its measured geometry (rounded top corners,
+   sticky, each one a little lower than the last). All code is ours.
+
+   Every section reads fully with no script. what-we-do.js adds the motion.
+   ============================================================ */
+
+.page--wwd { background: var(--canvas); }
+
+/* The one glass recipe on the site: canvas at 70 percent, 14px blur. */
+.glass {
+  background: rgba(243, 239, 236, .70);
+  border: 1px solid rgba(255, 255, 255, .6);
+  backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-radius: var(--r-card);
+}
+
+/* ---------- Shared type ---------- */
+.wlabel {
+  display: flex; align-items: center; gap: 12px; margin: 0;
+  font-family: var(--f-body); font-size: .72rem; font-weight: 500;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
+}
+.wlabel::before { content: ""; flex: none; width: 28px; height: 1px; background: var(--ember); }
+.wh2, .wwd-h2 {
+  margin: 0; font-family: var(--f-display); font-weight: 400;
+  font-size: clamp(2.4rem, 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
+  text-transform: uppercase; text-wrap: balance;
+}
+.wh3, .wwd-h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 1.95rem); line-height: 1.12; text-wrap: balance; }
+.wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(.98rem, .9rem + .3vw, 1.12rem); line-height: 1.5; color: var(--ink); max-width: 44ch; }
+.wp { margin: 0; color: var(--ink-soft); max-width: 60ch; line-height: 1.65; }
+.wp + .wp { margin-top: 1em; }
+.wide { max-width: 1280px; margin-inline: auto; padding-inline: var(--gutter); }
+:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+
+/* Kinetic headings: the hero's own mask and rise (kinRise is in site.css). */
+.kin-line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.kin-line > span { display: block; will-change: transform, opacity; }
+.is-split .kin-line > span { transform: translateY(108%); opacity: 0; }
+.is-split.is-in .kin-line > span { animation: kinRise 1s var(--ease-out) both; animation-delay: calc(var(--i, 0) * .09s); }
+html.js [data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity .8s var(--ease-out), transform .8s var(--ease-out); transition-delay: calc(var(--i, 0) * 80ms); }
+html.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* ---------- 1. Hero: a title page, then one large photograph ---------- */
+.wh { padding-top: calc(var(--hero-top) + clamp(24px, 6vh, 72px)); background: var(--canvas); }
+.wh__top { display: grid; gap: clamp(22px, 3.6vh, 36px); }
+.wh h1 {
+  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(2.7rem, 6vw, 5.4rem); line-height: .95; letter-spacing: -.012em; max-width: 24ch; text-wrap: balance;
+}
+.wh__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px 56px; }
+.wfigs { display: flex; flex-wrap: wrap; gap: 20px clamp(24px, 4.4vw, 64px); margin: 0; padding: 0; list-style: none; }
+.wfigs li { display: grid; gap: 4px; }
+.wfigs b { font-family: var(--f-mono); font-weight: 400; font-size: clamp(1.3rem, 2.2vw, 1.8rem); line-height: 1; letter-spacing: -.01em; }
+.wfigs span { font-family: var(--f-body); font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.wh__photo { position: relative; margin: clamp(32px, 6vh, 64px) var(--gutter) 0; height: min(76svh, 760px); border-radius: var(--r-media); overflow: hidden; background: var(--haze); }
+.wh__photo img { position: absolute; left: 0; top: -4%; width: 100%; height: 108%; object-fit: cover; object-position: 55% 50%; will-change: transform; }
+/* The mist: the photograph melts into the page ground, as MaisonFav's does. */
+.wh__photo::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top, var(--canvas) 0%, rgba(243,239,236,.82) 14%, rgba(243,239,236,0) 46%); }
+
+/* ---------- 2. The four kinds of care: stacked photograph cards ----------
+   Geometry measured from MaisonFav: sticky, rounded top corners, each card
+   sticks about 64px lower than the one before so every earlier card keeps a
+   visible strip along the top. That strip carries its chapter name, so the
+   stack is also an index. */
+.stack { padding-block: clamp(24px, 4vh, 48px) clamp(56px, 10vh, 120px); background: var(--canvas); }
+.stack__cards { --card-h: clamp(440px, calc(100svh - var(--nav-h) - 236px), 700px); }
+.sc {
+  position: sticky;
+  top: calc(var(--nav-h) + 12px + var(--i, 0) * 64px);
+  height: var(--card-h);
+  margin-top: clamp(24px, 6svh, 56px);
+  border-radius: var(--r-media) var(--r-media) 0 0;
+  overflow: hidden; background: var(--haze); transform-origin: 50% 0;
+  will-change: transform;
+}
+.sc:first-child { margin-top: 0; }
+.sc > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
+.sc__tab { position: absolute; z-index: 2; top: 14px; left: 14px; margin: 0; padding: 9px 14px;
+  font-family: var(--f-display); font-weight: 400; font-size: 1.05rem; line-height: 1; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
+.sc__panel { position: absolute; z-index: 2; left: 14px; bottom: 14px; width: min(640px, calc(100% - 28px));
+  padding: clamp(18px, 2.6vw, 30px); display: grid; gap: .8rem; }
+.sc__promise { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.4rem, 2.5svh + .6vw, 2rem); line-height: 1.12; color: var(--ink); text-wrap: balance; }
+.sc__panel .wp { color: var(--ink); font-size: clamp(.84rem, 1.5svh + .2vw, .95rem); line-height: 1.55; }
+.sc__link { justify-self: start; font-family: var(--f-body); font-size: .85rem; font-weight: 500; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+@media (max-width: 860px) {
+  .sc { position: relative; top: auto; height: auto; border-radius: var(--r-media); margin-top: 20px; display: grid; }
+  .sc > img { position: relative; height: 46svh; min-height: 280px; }
+  .sc__tab { top: 12px; }
+  .sc__panel { position: relative; left: auto; bottom: auto; width: auto; margin: -28px 12px 12px; }
+}
+
+/* ---------- 3. The detail: rows beside a held photograph ----------
+   The picture changes with the row in view: a clip wipe and a slow scale,
+   the transition language of 21st.dev's Sticky Content Wrapper, without its
+   snapping (no snapping, no dead scroll on this site). */
+.det { padding-block: clamp(64px, 11vh, 120px); background: var(--sheet, var(--canvas)); }
+.det--blush { --sheet: var(--blush); }
+.det__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+.det__media { position: sticky; top: calc(var(--nav-h) + 40px); height: min(72svh, 660px); border-radius: var(--r-media); overflow: hidden; background: var(--haze); }
+.det__media img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  clip-path: inset(100% 0 0 0); transform: scale(1.18);
+  transition: clip-path 1000ms cubic-bezier(.22, 1, .36, 1), transform 1500ms cubic-bezier(.22, 1, .36, 1);
+}
+.det__media img:first-child, .det__media img.is-on { clip-path: inset(0 0 0 0); transform: scale(1); }
+.det__col { display: grid; gap: clamp(40px, 8vh, 88px); }
+.det__col > .wlabel { margin-bottom: -.4rem; }
+.di { display: grid; gap: .7rem; padding-bottom: clamp(28px, 5vh, 56px); border-bottom: 1px solid var(--hairline-firm); }
+.di:last-child { border-bottom: 0; padding-bottom: 0; }
+.di .wp { font-size: 1.02rem; }
+.di__thumb { display: none; }
+@media (max-width: 860px) {
+  .det__grid { grid-template-columns: minmax(0, 1fr); }
+  .det__media { display: none; }
+  .di__thumb { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r-media); margin-bottom: .6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .det__media img { clip-path: none; opacity: 0; transform: none; transition: opacity 400ms linear; }
+  .det__media img:first-child, .det__media img.is-on { opacity: 1; }
+}
+.zones-wrap { position: relative; z-index: 3; background: var(--canvas); }
+
+/* ---------- 4. Experience: a quiet title page ---------- */
+.wx { position: relative; margin: 0 var(--gutter); height: min(80svh, 760px); border-radius: var(--r-media); overflow: hidden; display: flex; align-items: flex-end; background: var(--haze); }
+.wx > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 62%; will-change: transform; }
+.wx__scrim { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(100deg, rgba(243,239,236,.88) 0%, rgba(243,239,236,.6) 32%, rgba(243,239,236,.12) 60%, rgba(243,239,236,0) 76%); }
+.wx__title { position: relative; z-index: 2; padding: 0 clamp(20px, 3.4vw, 48px) clamp(24px, 5vh, 56px); }
+.wx__title .wh2 { font-size: clamp(2.8rem, 6.6vw, 5.8rem); max-width: 16ch; color: var(--ink); }
+.xwrap { padding-block: clamp(56px, 10vh, 112px) 0; background: var(--canvas); }
+
+/* ---------- 5. A Day With Us: a plain timetable, and a line that draws the day ---------- */
+.wd { padding-block: clamp(72px, 12vh, 128px); background: var(--canvas); }
+.wd__grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+.wd__head { position: sticky; top: calc(var(--nav-h) + 40px); display: grid; gap: 1.2rem; }
+.wd__list { position: relative; padding-left: clamp(28px, 4vw, 48px); }
+.wd__line { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--hairline-firm); }
+.wd__line::after { content: ""; position: absolute; inset: 0; background: var(--ember); transform-origin: 50% 0; transform: scaleY(var(--p, 0)); }
+.wd__row { position: relative; display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 18px; padding: 26px 0; border-bottom: 1px solid var(--hairline-firm); }
+.wd__row::before { content: ""; position: absolute; left: calc(clamp(28px, 4vw, 48px) * -1 - 4px); top: 2.1rem; width: 9px; height: 9px; border-radius: 50%; background: var(--canvas); border: 1px solid var(--ink-mute); transition: background-color 300ms var(--ease-out), border-color 300ms var(--ease-out); }
+.wd__row.is-past::before { background: var(--ember); border-color: var(--ember); }
+.wd__row time { font-family: var(--f-mono); font-size: .8rem; font-weight: 500; color: var(--ink-soft); padding-top: .5rem; letter-spacing: .02em; }
+.wd__row h3 { margin: 0 0 .35rem; font-family: var(--f-display); font-weight: 400; font-size: 1.6rem; line-height: 1.15; }
+.wd__row p { margin: 0; color: var(--ink-soft); max-width: 56ch; }
+.wd__close { margin: 0; padding: 28px 0 0; font-style: italic; color: var(--ink-soft); max-width: 52ch; }
+@media (max-width: 860px) {
+  .wd__grid { grid-template-columns: minmax(0, 1fr); }
+  .wd__head { position: static; }
+  .wd__row { grid-template-columns: 4.2rem minmax(0, 1fr); gap: 12px; }
+}
+
+/* ---------- 6. Specialist ---------- */
+.spec { padding-block: clamp(64px, 11vh, 120px); background: var(--canvas); }
+.spec__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+.spec__frame { aspect-ratio: 4 / 5; border-radius: var(--r-media); overflow: hidden; position: relative; max-width: 460px; background: var(--haze); }
+.spec__frame img { position: absolute; left: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; object-position: 50% 30%; will-change: transform; }
+.spec__copy { display: grid; gap: 1.2rem; }
+@media (max-width: 860px) { .spec__grid { grid-template-columns: minmax(0, 1fr); } .spec__frame { max-width: 360px; } }
+
+/* ---------- 9. Tailored to you: rebuilt 9 Oct 2026 (TJ) in what-we-do-tailored.css ---------- */
+
+/* ---------- 10. FAQ ---------- */
+.faq { padding-block: var(--section); background: var(--canvas); }
+.page--faqs .faq { padding-top: calc(var(--nav-h) + var(--section)); }
+.faq__grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+.faq__side { position: sticky; top: calc(var(--nav-h) + 76px); display: grid; gap: 1.4rem; }
+.faq__nav { display: grid; border-top: 1px solid var(--hairline-firm); }
+.faq__nav a {
+  display: flex; justify-content: space-between; gap: 12px; padding: 13px 0;
+  border-bottom: 1px solid var(--hairline-firm);
+  font-family: var(--f-body); font-size: .9rem; color: var(--ink); text-decoration: none;
+  transition: color 180ms var(--ease-out), padding-left 260ms var(--ease-out);
+}
+.faq__nav a span { font-family: var(--f-mono); font-size: .75rem; color: var(--ink-mute); }
+.faq__nav a.is-active { color: var(--ember); font-weight: 600; padding-left: 10px; }
+.faq__groups { display: grid; gap: clamp(40px, 7vh, 72px); }
+.faq__group { scroll-margin-top: calc(var(--nav-h) + 76px); }
+.faq__side .wwd-h2 { font-size: clamp(2rem, 3.4vw, 3.1rem); }
+.faq__group > .wwd-h3 { padding-bottom: 14px; border-bottom: 1px solid var(--ember); margin-bottom: 4px; }
+.q { border-bottom: 1px solid var(--hairline-firm); }
+.q summary {
+  list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+  padding: 20px 0; font-family: var(--f-display); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.2;
+}
+.q summary::-webkit-details-marker { display: none; }
+.q summary::after { content: "+"; font-family: var(--f-body); font-size: 1.3rem; color: var(--ink-mute); transition: transform 260ms var(--ease-out); flex: none; }
+.q[open] summary::after { transform: rotate(45deg); }
+.q > div { padding: 0 0 22px; }
+.q p { margin: 0; color: var(--ink-soft); max-width: 62ch; }
+@media (max-width: 860px) {
+  .faq__grid { grid-template-columns: minmax(0, 1fr); }
+  .faq__side { position: static; }
+}
+
+
+@media (prefers-reduced-motion: reduce) { html.js [data-reveal] { transition: none; } .is-split .kin-line > span { transform: none; opacity: 1; } .is-split.is-in .kin-line > span { animation: none; } }
+
+
+/* ---- hero (blank placeholder for the redesign) ---- */
+.hx { padding-top: calc(var(--hero-top) + clamp(24px, 6vh, 72px)); padding-bottom: clamp(32px, 6vh, 64px); background: var(--canvas); }
+.hx__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: center; min-height: min(70svh, 640px); }
+.hx__text { display: grid; gap: 18px; justify-items: start; }
+.hx__bar { display: block; height: 14px; width: 100%; border-radius: 999px; background: var(--haze); }
+.hx__bar--label { width: 28%; height: 10px; }
+.hx__bar--h1 { height: clamp(28px, 4vw, 52px); border-radius: 10px; }
+.hx__bar--short { width: 62%; }
+.hx__bar--p { max-width: 92%; }
+.hx__bar--p.hx__bar--short { width: 55%; }
+.hx__btn { width: 190px; height: 52px; border-radius: 999px; background: var(--haze); margin-top: 10px; }
+.hx__img { position: relative; width: 100%; aspect-ratio: 4 / 5; max-height: min(70svh, 640px); border-radius: var(--r-media); background: var(--haze); overflow: hidden; justify-self: end; }
+.hx__img::before, .hx__img::after { content: ""; position: absolute; left: 50%; top: 50%; width: 140%; height: 2px; background: rgba(0,0,0,.08); transform: translate(-50%, -50%) rotate(var(--a, 38deg)); }
+.hx__img::after { --a: -38deg; }
+@media (max-width: 800px) {
+  .hx__grid { grid-template-columns: 1fr; min-height: 0; }
+  .hx__img { aspect-ratio: 4 / 3; justify-self: stretch; }
+}
+
+
+/* ---- header ink eased through the night frame (The Promise) ----
+   what-we-do-promise.js sets --nd (0 day, 1 night) from scroll and adds [data-nd] while
+   it is between the two. Every value below is the day value mixed toward the
+   value site.css gives .is-dark, so the header blends with the light instead of
+   cutting. Absent [data-nd], none of this applies and the header is exactly
+   as site.css draws it. No transitions: the scroll is the timing. */
+.nav[data-nd] .nav__mark,
+.nav[data-nd] .wm-line,
+.nav--glass[data-nd] .nav__corner { filter: brightness(0) invert(var(--nd)); }
+/* The logo's colour change used to carry its own 280ms ease and, on the circle,
+   a 240ms delay, so it trailed the menu text. Dropping filter from the
+   transitioned properties (the first two durations and delays stay with
+   opacity and transform) ties it to the scroll exactly as the text is. */
+.nav[data-nd] .nav__mark,
+.nav[data-nd] .wm-line,
+.nav--glass[data-nd] .nav__corner { transition-property: opacity, transform; }
+.nav--glass[data-nd]::before {
+  background: rgba(
+    calc(243 + (140 - 243) * var(--nd)),
+    calc(239 + (127 - 239) * var(--nd)),
+    calc(236 + (121 - 236) * var(--nd)),
+    calc(.62 + (.46 - .62) * var(--nd)));
+}
+.nav[data-nd] .tab:not(.tab--cta) {
+  color: rgb(
+    calc(10 + (255 - 10) * var(--nd)),
+    calc(10 + (255 - 10) * var(--nd)),
+    calc(10 + (255 - 10) * var(--nd)));
+  transition: none;
+}
+
+
+/* ---- placeholders (5 Oct 2026, TJ): the photographs above the housekeeping zones,
+   and in The Postpartum Suite Experience and Your Postpartum Specialist, are
+   replaced by the hero's grey shape with its crossed lines, so only text
+   surfaces. The frames around them are unchanged. ---- */
+.ph { position: absolute; inset: 0; display: block; background: var(--haze); overflow: hidden; }
+.ph::before, .ph::after { content: ""; position: absolute; left: 50%; top: 50%; width: 150%; height: 2px; background: rgba(0, 0, 0, .08); transform: translate(-50%, -50%) rotate(38deg); }
+.ph::after { transform: translate(-50%, -50%) rotate(-38deg); }
+.di__thumb.ph { display: none; }
+@media (max-width: 860px) {
+  .sc > .ph { position: relative; inset: auto; height: 46svh; min-height: 280px; }
+  .di__thumb.ph { display: block; position: relative; inset: auto; width: 100%; aspect-ratio: 4 / 3; border-radius: var(--r-media); margin-bottom: .6rem; }
+}
+
+
+/* ---------- FAQ page colour arc (7 Oct 2026, TJ) ---------- */
+.page--faqs {
+  --faq-ground: #F3EFEC;
+  background: var(--faq-ground);
+  color: var(--faq-text);
+}
+.page--faqs .faq--morph {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  color: var(--faq-text);
+}
+.page--faqs .faq__weather {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+/* One drift for the whole page (TJ, 7 Oct 2026): the footer's construction
+   exactly (footer.css .sf__field): same stops, sizes, angles, 44px blur,
+   mask and 62 second travel. Only the colours change with scroll, set by
+   faqs.js: --fw-a1..3 on the still layer, --fw-b1..3 on the moving one,
+   --fw-op for its strength. Defaults are the light palette. */
+.page--faqs {
+  --fw-a1: #C86D58; --fw-a2: #D7C2C9; --fw-a3: #E2CAC6;
+  --fw-b1: #D7C2C9; --fw-b2: #B95A4B; --fw-b3: #E2CAC6;
+  --fw-op: .46;
+  /* Scroll driven motion (TJ, 7 Oct 2026), set by faqs.js: the two
+     layers turn (at different rates, so they move against each other), the
+     field travels and breathes, and the glow's centre wanders. */
+  --fw-rot: 0deg; --fw-x: 0px; --fw-y: 0px; --fw-scale: 1;
+  --fw-mx: 70%; --fw-my: 40%;
+}
+/* The field is oversized so it can travel and breathe without showing an
+   edge; anything uncovered is the same Canvas as the gaps in the drift. */
+.page--faqs .faq__weather-field {
+  position: absolute; inset: -12vmax; display: block;
+  background-image: repeating-linear-gradient(calc(100deg + var(--fw-rot)),
+    transparent 0%, var(--fw-a1) 8%, var(--fw-a2) 15%, transparent 25%, var(--fw-a3) 33%, transparent 44%);
+  background-size: 300%; background-position: 50% 50%;
+  filter: blur(44px);
+  opacity: var(--fw-op);
+  transform: translate3d(var(--fw-x), var(--fw-y), 0) scale(var(--fw-scale));
+  will-change: transform;
+  -webkit-mask-image: radial-gradient(ellipse 80% 66% at var(--fw-mx) var(--fw-my), #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  mask-image: radial-gradient(ellipse 80% 66% at var(--fw-mx) var(--fw-my), #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+}
+.page--faqs .faq__weather-field::after {
+  content: ""; position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(calc(123deg - var(--fw-rot) * 1.4),
+    transparent 0%, var(--fw-b1) 7%, var(--fw-b2) 13%, transparent 25%, var(--fw-b3) 35%, transparent 48%);
+  background-size: 235%;
+  animation: faq-weather 62s linear infinite;
+}
+.page--faqs .faq--morph > .wrap { position: relative; z-index: 1; }
+
+/* One text colour, Ink, the whole way down (TJ, 7 Oct 2026): the ground only
+   ever reaches a soft clay, so the copy never changes colour. No coral text:
+   the active group is marked by weight alone. */
+.page--faqs {
+  --faq-text: var(--ink);
+  --faq-rule: var(--hairline-firm);
+}
+.page--faqs .faq__nav,
+.page--faqs .faq__nav a,
+.page--faqs .faq__group > .wwd-h3,
+.page--faqs .q { border-color: var(--faq-rule); }
+.page--faqs .faq__side .wwd-h2,
+.page--faqs .faq__nav a,
+.page--faqs .faq__nav a span,
+.page--faqs .faq__group > .wwd-h3,
+.page--faqs .q summary,
+.page--faqs .q summary::after,
+.page--faqs .q p { color: var(--faq-text); }
+.page--faqs .faq__nav a { font-weight: 400; transition: padding-left 260ms var(--ease-out); }
+.page--faqs .faq__nav a.is-active { color: var(--faq-text); font-weight: 700; }
+.page--faqs .faq__nav a span { font-weight: 400; }
+
+/* Header edge (TJ, 7 Oct 2026): at the very top of the FAQ page the glass strip
+   is gone, so header and page are one surface with no line between them. The
+   strip, and its edge, fades in as the page scrolls and the header folds
+   (.is-scrolled, set by nav-fold.js). An open menu keeps the strip. */
+.page--faqs .nav--glass::before {
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out);
+}
+.page--faqs .nav--glass.is-scrolled::before,
+.page--faqs .nav--glass.is-open::before { opacity: 1; }
+
+@keyframes faq-weather {
+  from { background-position: 50% 50%; }
+  to { background-position: 350% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page--faqs .faq__weather-field::after { animation: none; }
+}

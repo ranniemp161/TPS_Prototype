@@ -1,0 +1,93 @@
+<!--
+  SITE HEADER: the one source of truth.
+  Every page's <header class="nav ..."> is stamped from this file by
+  sync-header.py. Edit the header HERE, then run:
+      python sync-header.py            (writes every page)
+      python sync-header.py --check    (reports any page that has drifted)
+  Placeholders: {{SCROLLED}} (" is-scrolled" on pages that open on paper),
+  {{BRAND}} and {{ENQUIRE}} (the homepage points both at itself; every
+  other page points the lockup at index.html and Enquire at the booking link).
+  This comment block is not copied into the pages.
+-->
+<header class="nav nav--glass{{SCROLLED}}" data-nav data-section="site-header" data-section-name="Header">
+  <div class="nav__inner">
+
+    <div class="nav__side nav__side--l">
+      <!-- The corner mark: the circular TPS logo in the far left corner
+           while the three-line wordmark is showing in the centre. Purely
+           decorative (the centre lockup is the real home link), so it is
+           hidden from assistive tech and not clickable. It leaves, and the
+           tabs slide left into its place, as the wordmark folds into the
+           centre circle; see the .nav--glass block in site.css. Wide
+           screens only. -->
+      <img class="nav__corner" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
+      <!-- The five main menu items share one row, with the Menu chip taking
+           their place below 1100px. Our Offering and About Us open panels;
+           Home, What We Do and Faqs are page links. -->
+      <div class="nav__tabs" data-tabs>
+        <a class="tab" href="index.html">Home</a>
+        <a class="tab" href="what-we-do.html">What We Do</a>
+        <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
+        <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
+        <a class="tab" href="faqs.html">Faqs</a>
+      </div>
+      <!-- Takes the place of the five above it below 1100px. A word, not a
+           glyph, in the same chip as everything else. -->
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-offerings">Menu</button>
+    </div>
+
+    <!-- #content, not #top. There has never been an element with id
+         "top" on this page, so the lockup was a dead link too: the one
+         control every visitor tries first did nothing. #content is the
+         main landmark, which is where home means on a single page. -->
+    <a class="nav__brand" href="{{BRAND}}" aria-label="The Postpartum Suite, home">
+      <img class="nav__mark" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" />
+      <span class="nav__wordmark" aria-hidden="true">
+        <span class="wm-line wm-line--1"></span>
+        <span class="wm-line wm-line--2"></span>
+        <span class="wm-line wm-line--3"></span>
+      </span>
+    </a>
+
+    <div class="nav__side nav__side--r">
+      <a class="tab tab--cta" href="{{ENQUIRE}}">Enquire</a>
+    </div>
+
+  </div>
+
+  <div class="menu" data-menu hidden>
+
+    <!-- Stage one only, rebuilt 2026-09-21. The site structure names
+         thirty two pages across four menus; these are the seven built
+         first, so the menu lists exactly those and nothing else. Every
+         entry points at a real file. The rest return here as they are
+         built, group by group.
+
+         Nothing else on this page changed: the sections these pages will
+         eventually mirror stay exactly where they are. A section on the
+         homepage and a page of its own are two different things, and
+         whether the former ever links to the latter is a later call. -->
+    <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">Our Offerings</h2>
+        <ul class="menu__list">
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+          <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+          <!-- No Gifts page exists yet, so it is a label, not a link. -->
+          <li><span class="menu__pending">Gifts</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="menu__panel" id="panel-about" data-panel="about" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">About Us</h2>
+        <ul class="menu__list">
+          <li><a href="about.html">The Suite</a></li>
+          <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </header>

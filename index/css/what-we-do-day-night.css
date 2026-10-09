@@ -1,0 +1,240 @@
+/* ============================================================
+   WHAT WE DO, Day and Night Care (8 Oct 2026, TJ)
+
+   The Promise and the day and night copy merged into one section. The
+   Promise keeps its mechanics (the wipe, the sun falling through morning,
+   afternoon, evening, night). Its answer is now the fork: the two options
+   land on the night frame, then frosted glass builds over the whole picture
+   and splits, light on the left for Day Care and dusk on the right for Day
+   and Night Care. The photograph stays underneath. Each column opens on its
+   own side with the client's copy, the same height of text on both sides,
+   Read more beneath. The day column turns from cream to ink as its side
+   lightens. Phones split top (day) and bottom (night).
+
+   This page only: The Promise's own styles live in site.css, which the
+   homepage shares, so every change is here, scoped to .dn-wrap. what-we-do-promise.js
+   drives the glass. Restore points: lab/snapshot-before-day-night-merge/
+   (before any merge) and lab/snapshot-day-night-merge-v1/ (the first merge,
+   detail below the picture).
+   ============================================================ */
+
+@property --dn-band-n { syntax: '<number>'; inherits: true; initial-value: .42; }
+
+.dn-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.dn-wrap {
+  --dn-pad: clamp(24px, 4vw, 72px);       /* inner padding of each half */
+  --dn-ink: 243, 239, 236;                /* day column text, cream to ink, set by what-we-do-promise.js */
+  --dn-g: 0;                              /* glass progress 0 to 1, set by what-we-do-promise.js */
+  --dn-lines: 7;                          /* the even, closed height of both bodies */
+}
+
+/* ---- The night keeps a little of the day on the left ---- */
+.dn-wrap .act--peak .dissolve__night {
+  -webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, .55) 28%, #000 62%);
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, .55) 0%, rgba(0, 0, 0, .55) 28%, #000 62%);
+}
+/* The foot band follows the night (TJ, 8 Oct 2026): the small title and the
+   paragraph sit at the bottom left, dark on the afternoon (a light band, so
+   they read) and cream at night (a deep band), so what-we-do-promise.js ramps --dn-bb. */
+.dn-wrap .act--peak .peak__band:not(.peak__band--top) {
+  height: 52%;
+  background: linear-gradient(to top, rgba(10, 10, 10, var(--dn-bb, .12)) 0%, rgba(10, 10, 10, calc(var(--dn-bb, .12) * .55)) 45%, rgba(10, 10, 10, 0) 100%);
+}
+
+/* ---- The glass: two frosted halves meeting in a soft seam ---- */
+/* The glass grows by its own amounts, never by fading its container (TJ, 8 Oct
+   2026): in Chrome a frosted layer inside a part transparent parent cannot
+   see behind it, so the blur only switched on at full opacity, a visible snap.
+   Now the blur radius and the tint both scale with the scroll, smoothly. The
+   blur follows --dn-b, an eased curve of --dn-g (what-we-do-promise.js), because blur
+   is seen on a curve: the first pixel of blur changes the picture far more
+   than the last, so a straight ramp would front load the change. */
+.dng { position: absolute; inset: 0; pointer-events: none; }
+.dng__half {
+  position: absolute; top: 0; bottom: 0; width: 58%;
+  backdrop-filter: blur(calc(18px * var(--dn-b, 0))) saturate(calc(1 + .15 * var(--dn-g)));
+  -webkit-backdrop-filter: blur(calc(18px * var(--dn-b, 0))) saturate(calc(1 + .15 * var(--dn-g)));
+}
+.dng__half--day {
+  left: 0;
+  background: rgba(243, 239, 236, calc(.66 * var(--dn-g)));
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 78%, transparent 100%);
+}
+/* Lighter glass between the title and the text on the day side (TJ, 8 Oct
+   2026): a second, vertical mask lets more of the room through in the middle
+   band, ramping in and out with no hard edge. Desktop only. */
+@media (min-width: 861px) {
+  .dng__half--day {
+    -webkit-mask-image:
+      linear-gradient(to right, #000 0%, #000 78%, transparent 100%),
+      linear-gradient(to bottom, rgba(0, 0, 0, .42) 0%, rgba(0, 0, 0, .42) 39%, #000 53%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, #000 0%, #000 78%, transparent 100%),
+      linear-gradient(to bottom, rgba(0, 0, 0, .42) 0%, rgba(0, 0, 0, .42) 39%, #000 53%, #000 100%);
+    mask-composite: intersect;
+  }
+  /* The same band on the night half (TJ, 8 Oct 2026). Its strength is a
+     registered property so it can ease: while the night column is open, the
+     band fills back to full frost (the long text rises into it), and returns
+     when it closes. The day half keeps its band, its text never reaches it.
+     (.dng prefix: the base rule for this half comes later in the file.) */
+  .dng .dng__half--night {
+    -webkit-mask-image:
+      linear-gradient(to left, #000 0%, #000 78%, transparent 100%),
+      linear-gradient(to bottom, rgba(0, 0, 0, var(--dn-band-n)) 0%, rgba(0, 0, 0, var(--dn-band-n)) 39%, #000 53%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to left, #000 0%, #000 78%, transparent 100%),
+      linear-gradient(to bottom, rgba(0, 0, 0, var(--dn-band-n)) 0%, rgba(0, 0, 0, var(--dn-band-n)) 39%, #000 53%, #000 100%);
+    mask-composite: intersect;
+    transition: --dn-band-n 700ms var(--ease-out);
+  }
+  .dn-wrap:has(.dnf__opt--night.is-open) .dng .dng__half--night { --dn-band-n: 1; }
+}
+.dng__half--night {
+  right: 0;
+  background: rgba(38, 30, 28, calc(.50 * var(--dn-g)));
+  -webkit-mask-image: linear-gradient(to left, #000 0%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to left, #000 0%, #000 78%, transparent 100%);
+}
+
+/* ---- The fork: two halves, each column at the foot of its half ---- */
+.dn-wrap .act--peak .peak__answer.dnf { inset: 0; right: 0; bottom: 0; display: block; text-align: left; }
+.dnf__cols { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
+.dnf__opt {
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; min-width: 0;
+  padding: calc(var(--nav-h) + clamp(40px, 7vh, 72px)) var(--dn-pad) clamp(28px, 4.5vh, 96px);
+}
+.dnf__opt > * { max-width: 34em; }
+.dnf__opt--day { color: rgb(var(--dn-ink)); }
+.dnf__opt--night { color: var(--paper); }
+
+/* The clay under the gap (TJ, 8 Oct 2026): the stretch below Tailored For You,
+   where the photograph has not yet wiped in, takes Tailored's own ground, so
+   the section appears to carry on and the photograph rises over it. what-we-do-promise.js
+   sets --dn-clay from Tailored's live ground (it changes with the open row),
+   mixed with the same Ember Deep tint Tailored lays over its foot. */
+.dn-wrap .act--peak { background: var(--dn-clay, #7C4A35); }
+/* The frame has its own wipe, so the page's fade up reveal (opacity 0 and a 14px
+   drop) is switched off for it. It was measured at refresh while still 14px
+   down, so the pinned stage sat 14px too high and a strip of the ground showed
+   under the photograph. */
+.dn-wrap .act--peak .peak__frame[data-reveal] { opacity: 1; transform: none; transition: none; }
+
+/* ---- The title (TJ, 9 Oct 2026) ----
+   Quentin, twice: the white copy under the photograph (on the grey), the ink
+   copy inside it, so the rising edge of the photograph turns each letter from
+   white to dark exactly where it passes. The ink copy then eases to cream on the
+   header's own curve (--dnt-c). --dn-tx is the glide from the left to the
+   centre once the falling circle has passed (what-we-do-dn-title.js). Both
+   leave as the glass arrives. */
+.dn-wrap .act--peak .peak__frame { z-index: 1; }
+.dn-title {
+  position: absolute; left: var(--gutter); top: calc(var(--nav-h) + clamp(12px, 3vh, 34px)); z-index: 0; margin: 0;
+  /* Sized so that, at the left, it ends short of the centre line the circle falls down. */
+  font-family: var(--f-script); font-weight: 400; font-size: clamp(2.4rem, 4.4vw, 4.6rem); line-height: 1.05;
+  white-space: nowrap; color: #fff; pointer-events: none;
+  /* Scaled about its own top centre, so it shrinks toward its centred place. */
+  transform: translateX(var(--dn-tx, 0px)) scale(var(--dn-ts, 1)); transform-origin: 50% 0; will-change: transform;
+  opacity: clamp(0, calc(1 - var(--dn-g) * 1.8), 1);
+}
+.dn-title--ink { z-index: 2; color: rgb(var(--dnt-c)); }
+.dn-br { display: none; }
+
+/* One colour for everything on the frame (TJ, 9 Oct 2026): the sun, its horizon
+   line and the four times of day are dark on the afternoon photograph, as the
+   title is, and ease to cream on the same curve as the title and the header's
+   menu as night falls (--dnt-c, what-we-do-promise.js). The falling circle that
+   becomes the sun turns dark where the photograph's rising edge passes over it
+   (what-we-do-tailored.js), so it lands already the sun's colour. */
+.dn-wrap .act--peak .sundial__sun { background: rgb(var(--dnt-c)); }
+.dn-wrap .act--peak .sundial__line { background: rgb(var(--dnt-c)); }
+.dn-wrap .act--peak .peak__states { color: rgb(var(--dnt-c)); }
+/* Phones: two short lines, so it still ends short of the centre line. */
+@media (max-width: 860px) {
+  .dn-br { display: inline; }
+  .dn-title { font-size: clamp(1.7rem, 7.6vw, 2.2rem); line-height: 1.1; text-align: center; }
+}
+
+/* The small title and the paragraph, bottom right (TJ, 9 Oct 2026). */
+.dnf__note { position: absolute; right: var(--dn-pad); bottom: clamp(28px, 4.5vh, 96px); width: min(34em, 42%); z-index: 1; }
+.dnf__note .dnf__intro { margin-bottom: 0; }
+
+/* Read at the hinge, while it is still night, then gives way to the copy. */
+.dnf__lede {
+  /* The paragraph's own font, in capitals (TJ, 9 Oct 2026: the serif did not sit
+     well), a quarter larger and more open, so it reads as the title over it; not
+     bold (TJ), and "you need most" on a line of its own. */
+  margin: 0 0 clamp(12px, 1.8vh, 18px); font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(1.12rem, 1.02rem + .42vw, 1.4rem); line-height: 1.25; letter-spacing: .08em; max-width: none;
+  color: rgb(var(--dnt-c));
+}
+.dnf__intro { margin: 0 0 clamp(14px, 2.4vh, 26px); font-family: var(--f-read); font-size: clamp(.95rem, .85rem + .3vw, 1.08rem); line-height: 1.6; color: rgb(var(--dnt-c)); }
+/* Both give way as the glass arrives. Hidden until the photograph lands:
+   what-we-do-promise.js lifts them in (opacity and a short rise) once it is in place. */
+.dnf__lede, .dnf__intro { opacity: calc(var(--dn-in, 0) * (1 - var(--dn-g) * 1.6)); transform: translateY(calc((1 - var(--dn-in, 0)) * 14px)); }
+/* The names and hours arrive later (after the clock), and take their room
+   with them, so the title and paragraph sit low, under the clock, until then. */
+.dnf__heads { display: grid; gap: 10px; overflow: hidden; height: calc(var(--dn-hh, 0) * 1px); opacity: var(--dn-ha, 0); }
+.dn-wrap { --dnt-c: 10, 10, 10; }
+.dnf__name {
+  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(1.7rem, 3vw, 2.8rem); line-height: 1; letter-spacing: .02em; color: inherit;
+}
+.dnf__hours { margin: 0; font-family: var(--f-mono); font-size: clamp(.82rem, .95vw, 1rem); letter-spacing: .02em; opacity: .86; }
+
+/* The body: both columns closed to the same height, a soft fade at the foot,
+   Read more beneath. what-we-do-promise.js opens it with the glass. */
+.dnf__body {
+  --dn-closed: calc(var(--dn-lines) * 1.62em);
+  position: relative; overflow: hidden; max-height: 0;
+  font-family: var(--f-read); font-size: clamp(.92rem, .82rem + .3vw, 1.04rem); line-height: 1.62;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
+  margin-top: 6px;
+}
+.dnf__text p { margin: 0; }
+.dnf__text p + p { margin-top: .8em; }
+.dnf__text b { font-weight: 700; }
+.dnf__ideal { font-style: italic; }
+.dnf__opt.is-open .dnf__body {
+  max-height: calc(100svh - var(--nav-h) - 260px) !important; overflow-y: auto;
+  -webkit-mask-image: none; mask-image: none;
+}
+.dnf__more {
+  align-self: flex-start; margin-top: 4px; padding: 0; border: 0; background: none; cursor: pointer;
+  font-family: var(--f-body); font-size: .82rem; font-weight: 500; letter-spacing: .04em; color: inherit;
+  border-bottom: 1px solid currentColor; line-height: 1.6;
+  opacity: clamp(0, calc((var(--dn-g) - .65) * 2.86), 1); pointer-events: none;
+  max-height: calc(var(--dn-g) * 40px); overflow: hidden;
+}
+.dn-wrap.is-glass .dnf__more { pointer-events: auto; }
+
+/* ---- Phones and small tablets: day on top, night below ---- */
+@media (max-width: 860px) {
+  .dng__half { width: 100%; height: 58%; top: auto; bottom: auto; }
+  .dng__half--day { top: 0; left: 0;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%); }
+  .dng__half--night { bottom: 0; right: 0;
+    -webkit-mask-image: linear-gradient(to top, #000 0%, #000 78%, transparent 100%);
+    mask-image: linear-gradient(to top, #000 0%, #000 78%, transparent 100%); }
+  .dnf__cols { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr 1fr; }
+  .dnf__opt { padding: 16px var(--gutter) 22px; gap: 6px; }
+  .dnf__note { left: var(--gutter); right: var(--gutter); width: auto; bottom: 28px; }
+  /* Small enough that "Care arranged around the hours" holds one line. */
+  .dnf__lede { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
+  .dnf__opt--day { padding-top: calc(var(--nav-h) + 12px); }
+  .dnf__name { font-size: clamp(1.5rem, 7vw, 2rem); }
+  .dn-wrap { --dn-lines: 4; }
+  .dnf__intro { font-size: .85rem; line-height: 1.5; }
+  .dnf__opt.is-open .dnf__body { max-height: calc(50svh - 150px) !important; }
+}
+
+/* Deeper night (TJ, 8 Oct 2026): the night photograph is darkened further as the
+   night completes, so the sofa and room read as night, not dusk, before the glass.
+   --dn-nv is 0 to 1 with the night (what-we-do-promise.js). */
+.dn-wrap .dissolve__night { filter: brightness(calc(1 - .34 * var(--dn-nv, 0))) saturate(calc(1 - .08 * var(--dn-nv, 0))); }
