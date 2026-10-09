@@ -129,7 +129,9 @@
     var t0 = inkT.getBoundingClientRect(), subR = sub.getBoundingClientRect();
     var tX = subR.left - t0.left, tY = subR.top - t0.top;
     var tSf = parseFloat(getComputedStyle(sub).fontSize) / parseFloat(getComputedStyle(inkT).fontSize);
-    var lineStart = headR.bottom - trackTop;
+    // A clear gap below the photograph and card before the first circle (TJ, 9 Oct 2026).
+    var LGAP = phone ? 20 : 28;
+    var lineStart = headR.bottom - trackTop + LGAP;
     var lineEnd = ys[ys.length - 1];
     axis.style.top = (lineStart - boxTop) + 'px';
     axis.style.height = (lineEnd - lineStart) + 'px';
@@ -138,9 +140,10 @@
     // The tip of the line holds here on screen; never above the head row's
     // foot, so the track does not move before the line has left the card.
     // On short screens it is capped at 72 percent, so the first hours never
-    // arrive off the bottom; the track then starts a little raised, and the
+    // arrive off the bottom (plus the gap, so the gap never lifts the head row);
+    // the track then starts a little raised, and the
     // photograph eases onto that offset as it shrinks (see photoY).
-    var TIP = Math.max(stageH * (phone ? 0.6 : 0.56), Math.min(lineStart, stageH * 0.72));
+    var TIP = Math.max(stageH * (phone ? 0.6 : 0.56), Math.min(lineStart, stageH * 0.72 + LGAP));
     var TIPEND = 0.86, W = 0.12;
 
     var allLines = lineSets.concat([closeLines]).reduce(function (a, b) { return a.concat(b); }, []);

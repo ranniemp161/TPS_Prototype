@@ -95,7 +95,7 @@
      or its height); the zoom is the scale that makes it fill the window, about
      a transform origin chosen so it lands in the centre. */
   var IW = +img.getAttribute('width'), IHt = +img.getAttribute('height');
-  var FOCUS = { desktop: { cx: 800, cy: 380, w: 840 }, phone: { cx: 760, cy: 450, h: 760 } };
+  var FOCUS = { desktop: { cx: 1376, cy: 768, w: 2752 }, phone: { cx: 1278, cy: 786, h: 1536 } };   // hands only, 2752 by 1536, shown whole: no zoom in, phones centred on the hands (TJ, 9 Oct 2026)
   function zoomFor(f, w, h) {
     var a = w / h, rw = f.w || f.h * a, rh = f.h || f.w / a;
     var c = Math.max(w / IW, h / IHt);                 // object-fit cover at scale 1

@@ -159,3 +159,17 @@ html:not(.js) .op__line, .op--static .op__line, html:not(.js) .op__rows, .op--st
 .op--static .op__kicker, .op--static .op__head, .op--static .op__line, .op--static .op__rows { opacity: 1; }
 html:not(.js) .op__intro, .op--static .op__intro { position: relative; inset: auto; padding: 56px 0 72px; }
 html:not(.js) .op__intro-in, .op--static .op__intro-in { position: static; transform: none; width: auto; max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter); }
+
+/* Phones, centred (TJ, 9 Oct 2026): the whole statement centred; the four kinds on
+   one line with the desktop's fine dash between them, sized to the screen so they
+   fit; the two rows beneath, centred. Desktop untouched (TJ). */
+@media (max-width: 860px) {
+  .op__copy { text-align: center; justify-items: center; transform-origin: center bottom; grid-template-columns: minmax(0, 1fr); }
+  .op__h { justify-items: center; }
+  .op__rows { justify-items: center; text-align: center; max-width: none; width: 100%; }
+  .op__kinds { display: flex; flex-wrap: nowrap; justify-content: center; gap: 0; font-size: min(calc((100vw - 32px) / 36.5), 1rem); letter-spacing: 0; }
+  .op__kinds span { display: inline; white-space: nowrap; }
+  .op__kinds span::before { content: none; }
+  .op__kinds span + span::before { content: ""; display: inline-block; width: 8px; height: 1px; background: var(--coral-deep); vertical-align: middle; margin: 0 .45em; flex: none; }
+  .op__copy--light .op__kinds span + span::before { background: #F3EFEC; }
+}
