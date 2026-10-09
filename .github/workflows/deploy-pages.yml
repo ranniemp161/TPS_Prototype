@@ -51,14 +51,7 @@ jobs:
           # The pages reference ../assets/..., so index/ must stay beside assets/.
           # Flattening it breaks every image and font. Instead, keep the layout
           # and make the Pages root redirect to the real home page.
-          cat > _site/index.html <<'HTML'
-<!doctype html>
-<meta charset="utf-8">
-<title>Redirecting</title>
-<meta http-equiv="refresh" content="0; url=index/index.html">
-<link rel="canonical" href="index/index.html">
-<a href="index/index.html">Continue</a>
-HTML
+          printf '%s\n' '<!doctype html><meta charset="utf-8"><title>Redirecting</title><meta http-equiv="refresh" content="0; url=index/index.html"><a href="index/index.html">Continue</a>' > _site/index.html
 
           # A stamp the staleness alarm can read back over HTTP to learn which
           # commit the live site was actually built from. Without it we could
