@@ -85,8 +85,10 @@
     function placeMarker() {
       var t = tabs.filter(function (b) { return b.dataset.key === active; })[0];
       if (!t) return;
-      tablist.style.setProperty('--mx', t.offsetLeft + 'px');
-      tablist.style.setProperty('--mw', t.offsetWidth + 'px');
+      // The line fills to the chosen room's centre, where the circle sits.
+      tablist.style.setProperty('--mc', (t.offsetLeft + t.offsetWidth / 2) + 'px');
+      var reached = true;
+      tabs.forEach(function (b) { b.classList.toggle('is-past', reached); if (b === t) reached = false; });
     }
     function sizePanels() {
       var pn = panelEls.filter(function (e) { return e.dataset.key === active; })[0];
@@ -266,13 +268,34 @@
 
   /* ---------- rooms ---------- */
   var roomBtns = [].slice.call(section.querySelectorAll('[data-zroom]'));
-  var roomOn = null;
+  var roomOn = null, stageOn = -2;
+  // The line in the room list (TJ, 9 Oct 2026): a fill and the circle at its
+  // tip, added here so the markup stays a plain list.
+  var roomList = section.querySelector('.zones__rooms');
+  if (roomList) {
+    var zFill = document.createElement('span'); zFill.className = 'zones__fill'; zFill.setAttribute('aria-hidden', 'true');
+    var zTip = document.createElement('span'); zTip.className = 'zones__tip'; zTip.setAttribute('aria-hidden', 'true');
+    roomList.appendChild(zFill); roomList.appendChild(zTip);
+  }
+  // Depths are taken from the closed rows (each row is its button), so the
+  // target is right even while the last room's words are still closing.
+  function placeLine(stage) {
+    if (!roomList || !roomBtns.length) return;
+    var bh = roomBtns[0].offsetHeight;
+    roomList.style.setProperty('--zh', bh + 'px');
+    var depth = stage < 0 ? 0 : stage >= roomBtns.length ? roomBtns.length * bh : stage * bh + bh / 2;
+    roomList.style.setProperty('--zf', depth + 'px');
+    roomBtns.forEach(function (b, i) { b.parentNode.classList.toggle('is-past', i <= stage); });
+  }
   function paintRooms(t) {
     var current = null;
     ['living', 'kitchen', 'nursery'].forEach(function (n) {
       if (t >= byName[n].s0 - 0.12) current = n;
     });
     if (t >= byName.all.s0 - 0.12) current = null;
+    // -1 before the first room, 0 to 2 the rooms, 3 once the whole house lights.
+    var stage = t >= byName.all.s0 - 0.12 ? 3 : current ? ['living', 'kitchen', 'nursery'].indexOf(current) : -1;
+    if (stage !== stageOn) { placeLine(stage); stageOn = stage; }
     if (current !== roomOn) {
       roomBtns.forEach(function (b) {
         var on = b.dataset.zroom === current;

@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="css/what-we-do-kinds.css" />
 <link rel="stylesheet" href="css/what-we-do-hands.css" />
 <link rel="stylesheet" href="css/what-we-do-specialist.css" />
+<link rel="stylesheet" href="css/what-we-do-tailored.css" />
 <link rel="stylesheet" href="css/footer.css" />
 <link rel="preload" as="image" href="../assets/img/care-bedroom.webp" />
 <script>document.documentElement.classList.add('js');</script>
@@ -614,26 +615,25 @@
        the open row. The marker on the rule travels 0 to 5 on arrival and can be
        dragged. Copy is the client's, verbatim; the sentence and labels around
        the counts are the only additions. No glass, no cards, no buttons. -->
-  <section class="tail tail--proposal tail--wall-palette" id="tailored" data-section="tailored-for-you" data-section-name="Tailored For You">
-    <div class="tail__silk" aria-hidden="true"><span class="tail__field"></span></div>
-    <figure class="tl__pics"><img data-pic="0" data-ground="#885136" src="../assets/img/hero_night-shift_v1.webp" alt="The specialist settling the baby in the nursery at night while the mother sleeps in the next room" width="1920" height="1080" /><img data-pic="1" data-ground="#A37E62" src="../assets/img/care-kitchen.webp" alt="The specialist preparing fresh food in a bright family kitchen" width="1920" height="1080" loading="lazy" /><img data-pic="2" data-ground="#956548" src="../assets/img/care-living.webp" alt="A mother resting on the sofa while her specialist irons and her baby sleeps in a basket nearby" width="1920" height="1080" loading="lazy" /><img data-pic="3" data-ground="#A27E64" src="../assets/img/mother-and-carer-on-sofa-with-baby-no-hijab.webp" alt="A mother and postpartum specialist sitting together on a sofa with the baby" width="2752" height="1536" loading="lazy" /></figure>
-    <div class="wide tl">
-      <div class="tl__text" data-ledger style="--sel: 5">
-        <div class="tl__head" data-reveal>
-          <h2 class="tl__h">Tailored To You</h2>
-          <p class="tl__lead"><span>No two recoveries are the same,</span><span>so no two stays are either</span></p>
-        </div>
-        <div class="tl-scale" role="radiogroup" aria-label="Length of stay in days"><span class="tl-scale__unit" aria-hidden="true">Days</span><button type="button" role="radio" aria-checked="true" data-days="5" style="--at: 5">5</button><button type="button" role="radio" aria-checked="false" data-days="7" style="--at: 7">7</button><button type="button" role="radio" aria-checked="false" data-days="14" style="--at: 14">14</button><button type="button" role="radio" aria-checked="false" data-days="30" style="--at: 30">30</button><div class="tl-rail"><i class="tl-stop" style="--at: 5"></i><i class="tl-stop" style="--at: 7"></i><i class="tl-stop" style="--at: 14"></i><i class="tl-stop" style="--at: 30"></i><span class="tl-ticks"></span><span class="tl-lit"></span><span class="tl-handle" aria-hidden="true"></span></div></div>
-        <div class="tl-stay" data-reveal>
-          <p class="tl-sum" aria-live="polite">In <b data-out="days">5</b> days, your specialist will have given you:</p>
-          <div class="tl-out">
-            <div><b data-out="meals">15</b><span>freshly cooked meals</span></div>
-            <div><b data-out="baths">5</b><span>herbal baths</span></div>
-            <div><b data-out="binds">5</b><span>belly binding sessions</span></div>
-          </div>
-        </div>
-        <div class="tl-acc tl-readmore" data-tl-readmore data-reveal>
-          <div class="tl-readmore__copy">
+  <!-- ============ SECTION: Tailored For You (TJ, 9 Oct 2026) ============
+       Rebuilt in the timeline language of A Day With Us (21st.dev Product
+       Timeline, hyperiux, code ours): a held stage on the footer's grey; the
+       photograph opens full screen under the title and closes onto the slot on
+       the left as the glass card lifts in beside it; then the line draws, led
+       by the circle, across the days (down the middle on phones) while the
+       three figures count. The circle at the end of the line lifts off and
+       becomes the sun in Day and Night (what-we-do-tailored.js). The day
+       counting is the ledger in what-we-do.js, unchanged. -->
+  <section class="ty" id="tailored" data-ty data-ground-sink="0" data-section="tailored-for-you" data-section-name="Tailored For You">
+    <div class="ty__stage">
+      <div class="ty__aurora" aria-hidden="true"><span class="ty__field"></span></div>
+      <div class="ty__track" data-ledger data-ty-driven style="--sel: 5">
+        <span class="ty__tslot" aria-hidden="true"></span>
+        <div class="ty__head">
+          <div class="ty__card glass">
+            <p class="ty__lead">No two recoveries are the same, so no two stays are either</p>
+            <div class="ty__more tl-readmore" data-tl-readmore>
+              <div class="tl-readmore__copy">
             <p>Your care begins well before your postpartum specialist arrives.</p>
             <p>We start with a consultation to understand your birth plan, your home and family, and what you most want from your recovery. Your pre-programme form then lets you share your dietary needs, preferences and the details that make your home yours.</p>
             <div class="tl-readmore__extra" id="tailored-more-copy"><div>
@@ -642,7 +642,40 @@
               <p>You can stay with us for 5, 7, 14 or 30 days, with care from 7am to 7pm each day and night support available if required.</p>
             </div></div>
           </div>
-          <button class="tl-readmore__toggle" type="button" aria-expanded="false" aria-controls="tailored-more-copy"><span class="when-closed">Read more</span><span class="when-open">Read less</span></button>
+              <button class="tl-readmore__toggle" type="button" aria-expanded="false" aria-controls="tailored-more-copy"><span class="when-closed">Read more</span><span class="when-open">Read less</span></button>
+            </div>
+          </div>
+          <span class="ty__slot" aria-hidden="true"></span>
+        </div>
+        <div class="ty__days" role="radiogroup" aria-label="Length of stay in days">
+          <span class="ty__unit" aria-hidden="true">Days</span>
+          <div class="ty__rail tl-rail">
+            <span class="ty__fill" aria-hidden="true"></span>
+            <i class="ty__stop" style="--at: 5" aria-hidden="true"></i><i class="ty__stop" style="--at: 7" aria-hidden="true"></i><i class="ty__stop" style="--at: 14" aria-hidden="true"></i><i class="ty__stop" style="--at: 30" aria-hidden="true"></i>
+            <span class="ty__tip tl-handle" data-ty-tip aria-hidden="true"></span>
+          </div>
+          <button type="button" class="ty__day" role="radio" aria-checked="true" data-days="5" style="--at: 5">5</button><button type="button" class="ty__day" role="radio" aria-checked="false" data-days="7" style="--at: 7">7</button><button type="button" class="ty__day" role="radio" aria-checked="false" data-days="14" style="--at: 14">14</button><button type="button" class="ty__day" role="radio" aria-checked="false" data-days="30" style="--at: 30">30</button>
+        </div>
+        <div class="ty__stay">
+          <p class="ty__sum" aria-live="polite">In <b data-out="days">5</b> days, your specialist will have given you:</p>
+          <div class="ty__out">
+            <div><b data-out="meals">15</b><span>freshly cooked meals</span></div>
+            <div><b data-out="baths">5</b><span>herbal baths</span></div>
+            <div><b data-out="binds">5</b><span>belly binding sessions</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- The photograph and the title (TJ, 9 Oct 2026): the title starts in
+           black on the light photograph and travels up to head the section,
+           white on the grey. As in the What We Do opening, it exists twice:
+           the white one sits under the photograph, the black one inside it,
+           so the photograph's own edge, closing in, turns each letter from
+           black to white exactly where it passes over it. -->
+      <div class="ty__hero">
+        <h2 class="ty__title" data-ty-title>Tailored To You</h2>
+        <div class="ty__photo">
+          <img src="../assets/img/tailored-bedroom.webp" alt="A mother resting in bed in a bright bedroom while her postpartum specialist settles the newborn in the bedside crib" width="2400" height="1340" decoding="async" />
+          <span class="ty__title ty__title--ink" data-ty-title aria-hidden="true">Tailored To You</span>
         </div>
       </div>
     </div>
@@ -671,6 +704,14 @@
        changing its colour rather than two things happening at once. -->
 
   <div class="peak__hold" data-stage>
+    <!-- The title (TJ, 9 Oct 2026), in Quentin, twice, as Tailored's is: this
+         white copy sits under the photograph on the grey, the other inside the
+         photograph, so the photograph's rising edge turns each letter from white
+         to black as it passes. It starts top left, out of the falling circle's
+         way, glides to the centre once the circle has passed it, eases to cream
+         with the header as night falls, and leaves as the glass arrives
+         (what-we-do-dn-title.js, what-we-do-day-night.css). -->
+    <p class="dn-title" data-dn-script aria-hidden="true">Day and<br class="dn-br" /> Night Care</p>
     <figure class="frame frame--bleed peak__frame" data-reveal="up">
       <img class="dissolve__day"   src="../assets/img/care.webp"  alt="A mother resting on the sofa in the afternoon while her specialist holds the baby beside her" width="1920" height="1072" />
       <img class="dissolve__night" src="../assets/img/night.webp" alt="The same sofa in the evening, the mother still resting, the specialist still holding the baby" width="1920" height="1072" />
@@ -681,6 +722,7 @@
            solve; these two bands are the lighter fix. -->
       <div class="peak__band peak__band--top"></div>
       <div class="peak__band"></div>
+      <p class="dn-title dn-title--ink" data-dn-script aria-hidden="true">Day and<br class="dn-br" /> Night Care</p>
 
       <!-- The clock: a sun descending through a horizon line, and the
            four states below it. Both clear away once the light has gone,
@@ -691,10 +733,10 @@
           <div class="sundial__line"></div>
         </div>
         <div class="peak__states" data-peak-states>
-          <span>Every morning</span>
-          <span>Every afternoon</span>
-          <span>Every evening</span>
-          <span>Every night</span>
+          <span>Morning</span>
+          <span>Afternoon</span>
+          <span>Evening</span>
+          <span>Night</span>
         </div>
       </div>
 
@@ -713,14 +755,15 @@
            copy, verbatim. Both columns show the same height of text with Read
            more beneath. -->
       <div class="peak__answer dnf" data-peak-answer>
+        <!-- The small title and the paragraph (TJ, 9 Oct 2026): bottom right, and
+             only once the sun has set and the room is at its darkest; they give
+             way to the two options as the glass arrives. -->
+        <div class="dnf__note">
+          <p class="dnf__lede" data-dn-title>Care arranged around the hours you need most</p>
+          <p class="dnf__intro" data-dn-intro>For some mothers, the days feel full and the nights are manageable. For others, it is the 3am feed that tests them most. You choose when your specialist is with you, and the care she brings is the same either way.</p>
+        </div>
         <div class="dnf__cols">
           <div class="dnf__opt dnf__opt--day" data-dn-side="day">
-            <!-- The small title and the paragraph (TJ, 8 Oct 2026): together at the
-                 bottom left from the moment the photograph lands, dark on the
-                 afternoon and easing to cream as night falls; they give way to
-                 the options when the glass arrives. -->
-            <p class="dnf__lede" data-dn-title>Care arranged around the hours you need most</p>
-            <p class="dnf__intro" data-dn-intro>For some mothers, the days feel full and the nights are manageable. For others, it is the 3am feed that tests them most. You choose when your specialist is with you, and the care she brings is the same either way.</p>
             <div class="dnf__heads" data-dn-heads>
               <h3 class="dnf__name">Day Care</h3>
               <p class="dnf__hours">7am to 7pm</p>
@@ -799,7 +842,7 @@
           </div>
         </div>
         <div class="vt__items">
-          <span class="vt__axis" aria-hidden="true"><span class="vt__fill"></span><span class="vt__cap"></span></span>
+          <span class="vt__axis" aria-hidden="true"><span class="vt__fill"></span><span class="vt__cap"></span><span class="vt__tip"></span></span>
         <article class="vt__item vt__item--l" data-vt-item>
           <span class="vt__stem" aria-hidden="true"></span><span class="vt__dot" aria-hidden="true"></span>
           <div class="vt__body"><time data-vt-t>7am</time><h3 data-vt-t>A gentle start</h3><p data-vt-t>Your specialist arrives in the kitchen as the house wakes.</p></div>
@@ -935,6 +978,8 @@
 <script src="js/what-we-do-kinds.js"></script>
 <script src="js/what-we-do-hands.js"></script>
 <script src="js/what-we-do-specialist.js"></script>
+<script src="js/what-we-do-tailored.js"></script>
+<script src="js/what-we-do-dn-title.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
 </body>

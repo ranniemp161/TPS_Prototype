@@ -124,6 +124,45 @@
    under the photograph. */
 .dn-wrap .act--peak .peak__frame[data-reveal] { opacity: 1; transform: none; transition: none; }
 
+/* ---- The title (TJ, 9 Oct 2026) ----
+   Quentin, twice: the white copy under the photograph (on the grey), the ink
+   copy inside it, so the rising edge of the photograph turns each letter from
+   white to dark exactly where it passes. The ink copy then eases to cream on the
+   header's own curve (--dnt-c). --dn-tx is the glide from the left to the
+   centre once the falling circle has passed (what-we-do-dn-title.js). Both
+   leave as the glass arrives. */
+.dn-wrap .act--peak .peak__frame { z-index: 1; }
+.dn-title {
+  position: absolute; left: var(--gutter); top: calc(var(--nav-h) + clamp(12px, 3vh, 34px)); z-index: 0; margin: 0;
+  /* Sized so that, at the left, it ends short of the centre line the circle falls down. */
+  font-family: var(--f-script); font-weight: 400; font-size: clamp(2.4rem, 4.4vw, 4.6rem); line-height: 1.05;
+  white-space: nowrap; color: #fff; pointer-events: none;
+  /* Scaled about its own top centre, so it shrinks toward its centred place. */
+  transform: translateX(var(--dn-tx, 0px)) scale(var(--dn-ts, 1)); transform-origin: 50% 0; will-change: transform;
+  opacity: clamp(0, calc(1 - var(--dn-g) * 1.8), 1);
+}
+.dn-title--ink { z-index: 2; color: rgb(var(--dnt-c)); }
+.dn-br { display: none; }
+
+/* One colour for everything on the frame (TJ, 9 Oct 2026): the sun, its horizon
+   line and the four times of day are dark on the afternoon photograph, as the
+   title is, and ease to cream on the same curve as the title and the header's
+   menu as night falls (--dnt-c, what-we-do-promise.js). The falling circle that
+   becomes the sun turns dark where the photograph's rising edge passes over it
+   (what-we-do-tailored.js), so it lands already the sun's colour. */
+.dn-wrap .act--peak .sundial__sun { background: rgb(var(--dnt-c)); }
+.dn-wrap .act--peak .sundial__line { background: rgb(var(--dnt-c)); }
+.dn-wrap .act--peak .peak__states { color: rgb(var(--dnt-c)); }
+/* Phones: two short lines, so it still ends short of the centre line. */
+@media (max-width: 860px) {
+  .dn-br { display: inline; }
+  .dn-title { font-size: clamp(1.7rem, 7.6vw, 2.2rem); line-height: 1.1; text-align: center; }
+}
+
+/* The small title and the paragraph, bottom right (TJ, 9 Oct 2026). */
+.dnf__note { position: absolute; right: var(--dn-pad); bottom: clamp(28px, 4.5vh, 96px); width: min(34em, 42%); z-index: 1; }
+.dnf__note .dnf__intro { margin-bottom: 0; }
+
 /* Read at the hinge, while it is still night, then gives way to the copy. */
 .dnf__lede {
   margin: 0 0 clamp(8px, 1.2vh, 12px); font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
@@ -182,7 +221,7 @@
     mask-image: linear-gradient(to top, #000 0%, #000 78%, transparent 100%); }
   .dnf__cols { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr 1fr; }
   .dnf__opt { padding: 16px var(--gutter) 22px; gap: 6px; }
-  .dnf__intro { margin-bottom: 40px; }
+  .dnf__note { left: var(--gutter); right: var(--gutter); width: auto; bottom: 28px; }
   .dnf__opt--day { padding-top: calc(var(--nav-h) + 12px); }
   .dnf__name { font-size: clamp(1.5rem, 7vw, 2rem); }
   .dn-wrap { --dn-lines: 4; }

@@ -78,7 +78,9 @@ function actPeak() {
     if (!tail || !wrap) return;
     const c = (getComputedStyle(tail).backgroundColor.match(/[\d.]+/g) || []).slice(0, 3).map(Number);
     if (c.length < 3) return;
-    const sink = [140, 54, 47], a = 0.2;
+    // Tailored For You's grey ground carries no tint (TJ, 9 Oct 2026), so the
+    // gap the sun falls into is the same grey: data-ground-sink="0".
+    const sink = [140, 54, 47], a = tail.dataset.groundSink != null ? parseFloat(tail.dataset.groundSink) : 0.2;
     wrap.style.setProperty('--dn-clay', 'rgb(' + c.map((v, i) => Math.round(v * (1 - a) + sink[i] * a)).join(', ') + ')');
   };
   setClay();
@@ -230,9 +232,6 @@ function actPeak() {
   // Night is fully fallen by the time the glass starts (TJ, 8 Oct 2026): it used
   // to ease across the whole pin, so it was still only partly dark when the glass
   // arrived. The beat after the clock (DN_BEAT_VH) now holds on full night.
-  // OLD_TOTAL keeps the page's earlier scroll proportions for the intro lift.
-  const OLD_TOTAL = PEAK_PIN_VH + 0.25 + DN_GLASS_VH + PEAK_HOLD_VH;
-  const KSCALE = OLD_TOTAL / TOTAL_VH;
   gsap.to(night, {
     opacity: 1,
     ease: p => Math.min(1, p / NIGHT_FULL),
@@ -318,7 +317,9 @@ function actPeak() {
         // the afternoon so dark type reads, deep at night so cream does.
         const n = Math.min(1, self.progress / NIGHT_FULL), ne = ndAt(self.progress * TOTAL_VH);
         const bt = Math.min(1, Math.max(0, (n - 0.04) / 0.18));
-        const it = between(self.progress * KSCALE, 0.012, 0.075), ie = 1 - Math.pow(1 - it, 3);
+        // The small title and the paragraph wait for the dark (TJ, 9 Oct 2026):
+        // they lift in once night has fully fallen, over the next third of a screen.
+        const it = between(self.progress, NIGHT_FULL, NIGHT_FULL + 0.3 / TOTAL_VH), ie = 1 - Math.pow(1 - it, 3);
         if (wrap) {
           wrap.style.setProperty('--dn-in', ie.toFixed(3));
           wrap.style.setProperty('--dn-nv', n.toFixed(3));

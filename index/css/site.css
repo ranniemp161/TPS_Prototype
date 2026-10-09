@@ -79,6 +79,20 @@
   --nav-max:   2100px;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* The timeline language (TJ, 9 Oct 2026), taken from A Day With Us and
+     shared by every line that progresses: a fine line that draws, a small
+     circle at each stop, and one larger circle at the point of motion that
+     leads the line. Ember Deep on light grounds, white on dark ones. Used by
+     A Day With Us, Tailored For You and the housekeeping zones' room list;
+     the circle at the end of Tailored's line becomes the sun in Day and
+     Night. */
+  --tline: 1px;
+  --tline-track: rgba(10, 10, 10, .12);
+  --tline-ink: var(--ember-deep);
+  --tdot: 11px;
+  --ttip: 15px;
+  --tease: cubic-bezier(.215, .61, .355, 1);
 }
 
 @media (min-width: 768px)  { :root { --gutter: 28px; } }

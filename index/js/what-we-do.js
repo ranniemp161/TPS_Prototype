@@ -245,9 +245,19 @@
     // The marker slides, and can be dragged along the rule; it settles on the nearest stop.
     var rail = root.querySelector('.tl-rail');
     var handle = root.querySelector('.tl-handle');
+    // The rule runs across on desktop and down on phones (TJ, 9 Oct 2026).
     function frac(e) {
       var r = rail.getBoundingClientRect();
-      return Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+      var f = r.height > r.width ? (e.clientY - r.top) / r.height : (e.clientX - r.left) / r.width;
+      f = Math.min(1, Math.max(0, f));
+      // Tailored's desktop line puts the 14 at its middle, so the pointer's
+      // place on the line is turned back into days piece by piece, and returned
+      // as days over 30, which is what the callers expect.
+      if (r.height <= r.width && rail.closest('.ty')) {
+        var d = f <= 7 / 30 ? f / 0.033333 : f <= 0.5 ? 7 + (f - 7 / 30) / 0.038095 : 14 + (f - 0.5) / 0.03125;
+        return d / 30;
+      }
+      return f;
     }
     if (rail && handle) {
       handle.addEventListener('pointerdown', function (e) {
@@ -273,7 +283,9 @@
 
     // On phones the marker still travels from 0 to 5 once on arrival. Desktop
     // scroll owns the same arrival so the two controls never fight each other.
-    if (!reduced && window.matchMedia('(min-width: 901px)').matches) {
+    // Tailored For You (TJ, 9 Oct 2026) is driven by scroll on every screen
+    // by what-we-do-tailored.js, which calls arrive() and scrub() below.
+    if (!reduced && (root.hasAttribute('data-ty-driven') || window.matchMedia('(min-width: 901px)').matches)) {
       shown = { days: 0, meals: 0, baths: 0, binds: 0 };
       paint();
       setMarker(0, 1);
@@ -344,10 +356,12 @@
     var panels = [].slice.call(document.querySelectorAll('[data-tl-readmore]'));
     panels.forEach(function (panel) {
       var toggle = panel.querySelector('.tl-readmore__toggle');
-      var section = panel.closest('.tail');
+      var section = panel.closest('.tail, .ty');
       var pics = [].slice.call(section.querySelectorAll('.tl__pics img'));
       if (!toggle) return;
       function setMedia(open) {
+        // Tailored For You now carries one photograph (TJ, 9 Oct 2026).
+        if (pics.length < 2) return;
         var active = open ? 1 : 0;
         pics.forEach(function (pic, index) { pic.classList.toggle('is-on', index === active); });
         section.style.setProperty('--tl-ground', pics[active].getAttribute('data-ground'));
@@ -359,161 +373,14 @@
         panel.classList.toggle('has-focus', open);
         toggle.setAttribute('aria-expanded', String(open));
         setMedia(open);
-        setTimeout(function () { ScrollTrigger.refresh(); }, 520);
+        // Tailored For You (TJ, 9 Oct 2026): the glass widens over the photograph.
+        section.classList.toggle('is-wide', open);
+        // Inside the held Tailored stage the card scrolls on its own; nothing moves.
+        if (!section.classList.contains('is-live')) setTimeout(function () { ScrollTrigger.refresh(); }, 520);
       });
     });
   }
-  function tailoredMotion() {
-    var section = document.querySelector('#tailored');
-    if (!section || reduced) return;
-    var text = section.querySelector('.tl__text');
-    var pictures = section.querySelector('.tl__pics');
-    if (!text || !pictures) return;
-
-    var head = section.querySelector('.tl__head');
-    var scale = section.querySelector('.tl-scale');
-    var stay = section.querySelector('.tl-stay');
-    var glass = section.querySelector('.tl-acc');
-    var media = gsap.matchMedia();
-
-    media.add('(min-width: 901px)', function () {
-      var shift = function () { return Math.min(window.innerWidth * .18, 260); };
-      var ledger = text._tlLedger;
-      var stops = [5, 7, 14, 30];
-      var milestones = [0, 1 / 3, 2 / 3, 1];
-      var pinTrigger;
-      var entry = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'top 80px',
-          scrub: 1.15,
-          refreshPriority: -10,
-          invalidateOnRefresh: true,
-          onEnter: function () { if (ledger) ledger.arrive(0); },
-          onUpdate: function (self) { if (ledger && self.isActive) ledger.arrive(self.progress * 5); },
-          onLeave: function () { if (ledger) ledger.arrive(5); },
-          onEnterBack: function () { if (ledger) ledger.arrive(5); },
-          onLeaveBack: function () { if (ledger) ledger.arrive(0); }
-        }
-      });
-      entry
-        .fromTo(head, { x: shift, opacity: .62, force3D: true }, { x: 0, opacity: 1, duration: .34, ease: 'power3.out' }, 0)
-        .fromTo(scale, { x: function () { return shift() * .9; }, opacity: .58, force3D: true }, { x: 0, opacity: 1, duration: .36, ease: 'power3.out' }, .035)
-        .fromTo(stay, { x: function () { return shift() * .78; }, opacity: .54, force3D: true }, { x: 0, opacity: 1, duration: .37, ease: 'power3.out' }, .07)
-        .fromTo(glass, { x: function () { return shift() * .65; }, opacity: .48, force3D: true }, { x: 0, opacity: 1, duration: .38, ease: 'power3.out' }, .1)
-        .fromTo(pictures, { xPercent: 44, opacity: 0, scale: 1.035, force3D: true }, { xPercent: 0, opacity: 1, scale: 1, duration: .46, ease: 'power2.out' }, .08)
-        .to(pictures, { scale: 1.01, duration: .14, ease: 'sine.inOut' }, .54);
-
-      function dayAt(progress) {
-        if (progress >= 1) return 30;
-        var segment = Math.min(2, Math.floor(progress * 3));
-        var local = progress * 3 - segment;
-        var eased = local * local * (3 - 2 * local);
-        return stops[segment] + (stops[segment + 1] - stops[segment]) * eased;
-      }
-      function activeAt(progress) {
-        if (progress < 1 / 6) return 5;
-        if (progress < 1 / 2) return 7;
-        if (progress < 5 / 6) return 14;
-        return 30;
-      }
-
-      var scrollState = { progress: 0 };
-      var scrub = gsap.to(scrollState, {
-        progress: 1,
-        ease: 'none',
-        onUpdate: function () {
-          if (ledger && pinTrigger && window.scrollY >= pinTrigger.start - 1) ledger.scrub(dayAt(scrollState.progress), activeAt(scrollState.progress));
-        },
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 80px',
-          end: function () { return '+=' + Math.round(window.innerHeight * 1.5); },
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          scrub: .55,
-          refreshPriority: -10,
-          invalidateOnRefresh: true,
-          onEnter: function () { if (ledger) ledger.scrub(5, 5); },
-          onRefresh: function (self) {
-            if (!ledger || self.progress <= 0) return;
-            scrollState.progress = self.progress;
-            ledger.scrub(dayAt(self.progress), activeAt(self.progress));
-          }
-        }
-      });
-      pinTrigger = scrub.scrollTrigger;
-
-      text._tlSeekDay = function (days) {
-        var index = stops.indexOf(days);
-        if (index < 0 || !pinTrigger) return false;
-        var target = pinTrigger.start + milestones[index] * (pinTrigger.end - pinTrigger.start);
-        window.scrollTo({ top: target, behavior: 'smooth' });
-        return true;
-      };
-
-      var exit = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: function () { return pinTrigger.end; },
-          end: function () { return pinTrigger.end + window.innerHeight; },
-          scrub: 1.05,
-          refreshPriority: -10,
-          invalidateOnRefresh: true
-        }
-      });
-      exit
-        // The photograph leaves right off the screen at full strength, early (TJ,
-        // 8 Oct 2026), so the clay below Tailored (The Promise's gap now takes
-        // Tailored's ground) has the whole background to itself. It used to
-        // slide 44 percent and fade, which left it cut across the foot.
-        .to(pictures, { xPercent: 112, scale: 1.02, duration: .24, ease: 'power2.in' }, 0)
-        // the pale silk band behind the Days row dissolves into the clay as the
-        // section leaves (TJ, 8 Oct 2026): its lower edge was a full width line
-        // against the clay now beneath it. Off the held look entirely: it only
-        // starts to fade once the exit begins and returns when scrolled back.
-        .to(section.querySelector('.tail__field'), { opacity: 0, duration: .16, ease: 'power1.inOut' }, 0)
-        // and its foot fades into the clay below as the section's edge rises into view
-        .fromTo(pictures, { '--tl-foot': 0 }, { '--tl-foot': 1, duration: .018, ease: 'power1.out', immediateRender: false }, 0)
-        .to(glass, { x: function () { return shift() * .34; }, opacity: .68, duration: .46, ease: 'power2.in' }, .08)
-        .to(stay, { x: function () { return shift() * .4; }, opacity: .7, duration: .43, ease: 'power2.in' }, .13)
-        .to(scale, { x: function () { return shift() * .46; }, opacity: .72, duration: .39, ease: 'power2.in' }, .18)
-        .to(head, { x: function () { return shift() * .55; }, opacity: .74, duration: .34, ease: 'power2.in' }, .23);
-
-      return function () {
-        delete text._tlSeekDay;
-        [entry, scrub, exit].forEach(function (animation) {
-          if (animation.scrollTrigger) animation.scrollTrigger.kill();
-          animation.kill();
-        });
-      };
-    });
-
-    media.add('(max-width: 900px)', function () {
-      var timeline = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: .85,
-          refreshPriority: -10
-        }
-      });
-      timeline
-        .fromTo(head, { x: 22, opacity: .7, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, 0)
-        .fromTo(scale, { x: 18, opacity: .68, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, .03)
-        .fromTo(stay, { x: 14, opacity: .66, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, .06)
-        .fromTo(glass, { x: 10, opacity: .64, force3D: true }, { x: 0, opacity: 1, duration: .25, ease: 'power2.out' }, .09)
-        .fromTo(pictures, { xPercent: 16, opacity: .5, scale: 1.02, force3D: true }, { xPercent: 0, opacity: 1, scale: 1, duration: .32, ease: 'power2.out' }, .05)
-        .to(pictures, { xPercent: 14, opacity: .58, scale: 1.02, duration: .25, ease: 'power2.in' }, .75)
-        .to(glass, { x: 10, opacity: .74, duration: .21, ease: 'power2.in' }, .79)
-        .to(stay, { x: 12, opacity: .76, duration: .19, ease: 'power2.in' }, .81)
-        .to(scale, { x: 14, opacity: .78, duration: .17, ease: 'power2.in' }, .83)
-        .to(head, { x: 16, opacity: .8, duration: .15, ease: 'power2.in' }, .85);
-    });
-  }
+  /* Tailored For You's motion lives in what-we-do-tailored.js (TJ, 9 Oct 2026). */
   /* ---------- FAQ scroll spy ---------- */
   function faqSpy() {
     var nav = document.querySelector('.faq__nav');
@@ -539,7 +406,6 @@
     ledger();
     tailRooms();
     tailReadMore();
-    tailoredMotion();
     faqSpy();
     ScrollTrigger.refresh();
   }

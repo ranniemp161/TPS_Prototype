@@ -15,7 +15,7 @@
   --vt-op: .40; --vt-veil: .16;
   --vt-ax: 50%; --vt-stem: clamp(28px, 4vw, 64px); --vt-gap: 16px;
   --vt-pitch: clamp(92px, 11.5vh, 124px); --vt-pitch-gap: 22px;
-  --vt-line: var(--ember-deep);
+  --vt-line: var(--tline-ink);
   position: relative; isolation: isolate; background: var(--canvas); color: var(--ink);
 }
 .vt__stage { position: relative; overflow: hidden; }
@@ -76,18 +76,22 @@
 .vt.is-live .vt__card { opacity: var(--vt-ci, 0); transform: translateY(calc((1 - var(--vt-ci, 0)) * 18px)); }
 .vt__items { position: relative; margin: clamp(48px, 9vh, 96px) auto 0; max-width: 1280px; }
 
-.vt__axis { position: absolute; left: var(--vt-ax); top: 0; width: 1px; height: 0; background: rgba(10, 10, 10, .12); transform: translateX(-.5px); }
+.vt__axis { position: absolute; left: var(--vt-ax); top: 0; width: var(--tline); height: 0; background: var(--tline-track); transform: translateX(-.5px); }
 .vt__fill { position: absolute; inset: 0; background: var(--vt-line); transform-origin: 50% 0; transform: scaleY(1); }
 /* The line starts at the card (TJ, 8 Oct 2026), as the component's line starts
    at its picture: a dot sits on the card's lower edge and the line grows out
    of it, so the card is the first stop and is carried off with the track. */
-.vt__cap { position: absolute; left: 50%; top: 0; width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--vt-line); }
+.vt__cap { position: absolute; left: 50%; top: 0; width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--vt-line); }
+/* The circle at the point of motion (TJ, 9 Oct 2026): it rides the tip of the
+   line as it draws, so the line is always led by a circle. */
+.vt__tip { position: absolute; left: 50%; top: 0; width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) 0 0 calc(var(--ttip) / -2); border-radius: 50%; background: var(--vt-line); will-change: transform; }
+.vt:not(.is-live) .vt__tip { display: none; }
 
 .vt__item { position: relative; height: var(--vt-pitch); }
 /* what-we-do-timeline.js sets each hour's height: the pitch, or more where its own
    text would otherwise run into the next hour on the same side. */
-.vt__stem { position: absolute; top: 0; height: 1px; width: var(--vt-stem); background: var(--vt-line); }
-.vt__dot { position: absolute; top: 0; left: var(--vt-ax); width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; border-radius: 50%; background: var(--vt-line); }
+.vt__stem { position: absolute; top: 0; height: var(--tline); width: var(--vt-stem); background: var(--vt-line); }
+.vt__dot { position: absolute; top: 0; left: var(--vt-ax); width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--vt-line); }
 .vt__item--r .vt__stem { left: var(--vt-ax); transform-origin: 0 50%; }
 .vt__item--l .vt__stem { right: calc(100% - var(--vt-ax)); transform-origin: 100% 50%; }
 .vt__body { position: absolute; top: -.55rem; width: min(40ch, calc(50% - var(--vt-stem) - var(--vt-gap) - 8px)); display: grid; gap: .45rem; }

@@ -21,6 +21,7 @@
   var itemsBox = sec.querySelector('.vt__items');
   var axis = sec.querySelector('.vt__axis');
   var fill = sec.querySelector('.vt__fill');
+  var tipDot = sec.querySelector('.vt__tip');
   var items = [].slice.call(sec.querySelectorAll('[data-vt-item]'));
   var textEls = [].slice.call(sec.querySelectorAll('[data-vt-t]'));
   var close = sec.querySelector('.vt__close');
@@ -64,7 +65,7 @@
     if (tl) { if (tl.scrollTrigger) tl.scrollTrigger.kill(); tl.kill(); tl = null; }
     var stems = items.map(function (i) { return i.querySelector('.vt__stem'); });
     var dots = items.map(function (i) { return i.querySelector('.vt__dot'); });
-    gsap.set([track, fill].concat(stems, dots), { clearProps: 'transform' });
+    gsap.set([track, fill, tipDot].concat(stems, dots).filter(Boolean), { clearProps: 'transform' });
     items.forEach(function (i) { i.style.opacity = ''; i.style.height = ''; });
     ['--vt-ci', '--ph-t', '--ph-r', '--ph-b', '--ph-l', '--ph-rad', '--ph-tv', '--ph-to', '--ph-ty'].forEach(function (p) { sec.style.removeProperty(p); });
     photo.style.transform = '';
@@ -181,6 +182,8 @@
       var tipY = lineStart + tip * (lineEnd - lineStart);
       var ty = Math.min(0, TIP - tipY);
       gsap.set(fill, { scaleY: tip });
+      // The circle at the point of motion rides the tip of the line.
+      if (tipDot) tipDot.style.transform = 'translateY(' + (tip * (lineEnd - lineStart)).toFixed(1) + 'px)';
       gsap.set(track, { y: ty });
       curTy = ty; photoY();
       // Hours that have travelled far above the tip give way softly.
