@@ -165,9 +165,10 @@
 
 /* Read at the hinge, while it is still night, then gives way to the copy. */
 .dnf__lede {
-  /* The paragraph's own font, in capitals (TJ, 9 Oct 2026: the serif did not sit well). */
-  margin: 0 0 clamp(8px, 1.2vh, 12px); font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(.9rem, .82rem + .34vw, 1.12rem); line-height: 1.3; letter-spacing: .06em; max-width: none;
+  /* The paragraph's own font, in capitals (TJ, 9 Oct 2026: the serif did not sit
+     well), bold, a quarter larger and more open, so it reads as the title over it. */
+  margin: 0 0 clamp(12px, 1.8vh, 18px); font-family: var(--f-read); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(1.12rem, 1.02rem + .42vw, 1.4rem); line-height: 1.25; letter-spacing: .08em; max-width: none;
   color: rgb(var(--dnt-c));
 }
 .dnf__intro { margin: 0 0 clamp(14px, 2.4vh, 26px); font-family: var(--f-read); font-size: clamp(.95rem, .85rem + .3vw, 1.08rem); line-height: 1.6; color: rgb(var(--dnt-c)); }
