@@ -4,6 +4,8 @@ A plan for fixing the phone experience of `index/what-we-do.html`, one item per 
 
 Read this whole file before starting an item. Then do only the item you were given.
 
+**Status, 9 Oct 2026:** all seven items built by Opus 5.5 in one session at TJ's request, each recorded in DESIGN.md as "Phone plan item N". The page went from 28.9 to 19.7 screens at 390x844, with no horizontal overflow and no console errors; the desktop guard (lab/desktop-diff.mjs and lab/desktop-compare.py) showed no desktop change apart from the removed "One person" label. Uncommitted, awaiting TJ's review. TJ's corrections go into DESIGN.md.
+
 ## Rules for every item
 
 These are TJ's rules unless marked otherwise.

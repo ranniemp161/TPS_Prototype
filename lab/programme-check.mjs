@@ -1,27 +1,17 @@
-/* Acceptance suite for the programme builder.
+/* Acceptance suite for the programme builder, Build 10 (10 Oct 2026).
  *
  *   node lab/programme-check.mjs
  *
- * Three things it proves, in the order they matter.
- *
- *   1. The reservation still reconciles. It is a solved plug, not a rate, so
- *      the moment anyone edits a unit rate, a treatment count or a standard
- *      rhythm, the four published prices drift and nothing else notices.
- *      Spec section 9.
- *   2. The fourteen scenarios in spec section 10 still return the published
- *      figures.
- *   3. The nine invariants hold across the whole combination space, swept
- *      exhaustively rather than sampled: 184,320 selections, which is every
- *      state the dependency rules in spec section 2 allow the page to reach.
- *      The six priority checkboxes are left out because they have no price
- *      effect and so cannot move any of these. Invariant 3 is checked against
- *      every single-option addition from every one of those states, not a
- *      representative handful, so the real assertion count is several times
- *      higher again.
- *
- * It prices through `programme-pricing.js` directly. It does not drive the
- * DOM, so it cannot catch a control wired to the wrong field. The dependency
- * rules in spec section 2 are checked in the browser instead.
+ * Checks index/js/build-your-programme-pricing.js against the spec
+ * "new md for build your own.md" (project root):
+ *   1. The reservation reconciles: each complete programme equals its
+ *      published price (spec 4.5 and section 7).
+ *   2. Every figure in the spec's section 5 tables.
+ *   3. The section 5 rules across every combination the page can reach:
+ *      removing anything never raises the fee, fewer massages never raise it,
+ *      daytime in-home is never cheaper than live-in, nothing is below the floor.
+ * It prices through the engine directly; the page's wiring is checked in the
+ * browser (lab/bespoke-check.mjs).
  */
 
 import { createRequire } from 'node:module';
@@ -30,168 +20,97 @@ import path from 'node:path';
 
 const require = createRequire(import.meta.url);
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const P = require(path.join(root, 'programme-pricing.js'));
+const P = require(path.join(root, 'index', 'js', 'build-your-programme-pricing.js'));
 
 const LENGTHS = [5, 7, 14, 30];
+const EXTRAS = P.COUNTED;
 let failures = 0;
-
 function check(name, got, want) {
   const ok = got === want;
   if (!ok) failures++;
   console.log(`${ok ? '  ok  ' : '  FAIL'}  ${name}${ok ? '' : `\n          got ${got}, want ${want}`}`);
 }
-
-function fee(sel) {
-  return Math.round(P.calculate(sel).fee);
-}
-
-/* ---------- 1. Reconciliation ---------- */
-
-console.log('\nReservation reconciles (spec section 9)');
-for (const d of LENGTHS) {
-  const solved = P.solveReservation(d);
-  check(`${d} days`, Number(solved.toFixed(2)), P.RESERVATION[d]);
-}
-
-/* ---------- 2. The scenario table ---------- */
-
+const fee = sel => Math.round(P.calculate(sel).fee);
 const complete = d => P.completeSelection(d);
-const liveOut  = d => ({ ...complete(d), format: 'out' });
+const noExtras = s => { const o = { ...s }; EXTRAS.forEach(k => { o[k] = false; }); return o; };
 
-// Everything a client can switch off, switched off. Grocery has no control
-// and is always charged, which is the point of the floor below.
-const bare = d => ({
-  days: d, format: 'in', shift: 'day',
-  breakfast: false, lunch: false, dinner: false,
-  bath: 'none',
-  massage: false, hotstone: false, binding: false,
-  scrub: false, reflex: false, facial: false, herbfoot: false, serum: false,
-  rhythm: P.STD_MFREQ[d]
-});
-
-console.log('\nScenarios (spec section 10)');
-
-check('complete, live-in, daytime, 5',   fee(complete(5)),  1995);
-check('complete, live-in, daytime, 7',   fee(complete(7)),  2495);
-check('complete, live-in, daytime, 14',  fee(complete(14)), 4495);
-check('complete, live-in, daytime, 30',  fee(complete(30)), 6399);
-
-check('complete, daytime in-home, 5',    fee(liveOut(5)),   2145);
-check('complete, daytime in-home, 7',    fee(liveOut(7)),   2705);
-check('complete, daytime in-home, 14',   fee(liveOut(14)),  4915);
-check('complete, daytime in-home, 30',   fee(liveOut(30)),  7299);
-
-const bareLiveIn  = { 5: 1795, 7: 2245, 14: 4045, 30: 5750 };
-const bareLiveOut = { 5: 1945, 7: 2455, 14: 4465, 30: 6650 };
-for (const d of LENGTHS) check(`stripped bare, live-in, ${d}`, fee(bare(d)), bareLiveIn[d]);
+console.log('\nReservation reconciles');
 for (const d of LENGTHS) {
-  check(`stripped bare, daytime in-home, ${d}`, fee({ ...bare(d), format: 'out' }), bareLiveOut[d]);
+  check(`${d} days, solved reservation`, Number(P.solveReservation(d).toFixed(2)), P.RESERVATION[d]);
+  check(`${d} days, complete equals introductory price`, fee(complete(d)), P.CONFIG.introPrice[d]);
 }
 
-check('30, live-in, night care, complete',
-  fee({ ...complete(30), shift: 'night', breakfast: false }), 6596);
-check('30, live-in, night care, stripped bare',
-  fee({ ...bare(30), shift: 'night' }), 5750);
-check('14, live-in, massage 4 times a week, all else complete',
-  fee({ ...complete(14), rhythm: 'w4' }), 4747);
-check('30, live-in, no massage at all',
-  fee({ ...complete(30), massage: false, hotstone: false }), 5750);
+console.log('\nSpec section 5, one change from complete');
+const T = {
+  5:  { night: 2016, out: 2145, nomeals: 1811, nomassage: 1802, noextras: 1868 },
+  7:  { night: 2528, out: 2705, nomeals: 2245, nomassage: 2245, noextras: 2369 },
+  14: { night: 4579, out: 4915, nomeals: 4045, nomassage: 4045, noextras: 4247 },
+  30: { night: 6596, out: 7299, nomeals: 5750, nomassage: 5750, noextras: 5980 }
+};
+for (const d of LENGTHS) {
+  check(`${d} + night care`, fee({ ...complete(d), shift: 'night' }), T[d].night);
+  check(`${d} daytime in-home`, fee({ ...complete(d), format: 'out' }), T[d].out);
+  check(`${d} no meals`, fee({ ...complete(d), meals: false }), T[d].nomeals);
+  check(`${d} no massage`, fee({ ...complete(d), massage: false }), T[d].nomassage);
+  check(`${d} extras all off`, fee(noExtras(complete(d))), T[d].noextras);
+}
 
-/* ---------- 3. The invariants, swept ---------- */
+console.log('\nSpec section 5, fewer massages');
+[[5, 's2', 1931], [7, 's3', 2431], [7, 's2', 2367], [14, 'w3', 4369], [14, 'w2', 4243], [30, 'w3', 6095], [30, 'w2', 5851]]
+  .forEach(([d, r, want]) => check(`${d} days ${P.rhythmTitle(r)}`, fee({ ...complete(d), rhythm: r }), want));
 
-console.log('\nInvariants across every combination (spec section 10)');
+console.log('\nSpec section 5, everything stripped out');
+const stripped = d => noExtras({ ...complete(d), meals: false, massage: false });
+const S = { 5: [1795, 1945], 7: [2245, 2455], 14: [4045, 4465], 30: [5750, 6650] };
+for (const d of LENGTHS) {
+  check(`${d} stripped, live-in`, fee(stripped(d)), S[d][0]);
+  check(`${d} stripped, daytime in-home`, fee({ ...stripped(d), format: 'out' }), S[d][1]);
+}
 
-const BATHS   = ['daily', 'eod', 'weekly', 'none'];
-const RHYTHMS = ['w4', 'w3', 'w2', 'w1'];
-const TREATS  = ['scrub', 'reflex', 'facial', 'herbfoot', 'serum'];
-
-// Every boolean-ish axis, so a sweep is a nested product rather than a
-// hand-written list that quietly loses an axis.
+console.log('\nRules across every reachable combination');
 function* every() {
   for (const days of LENGTHS)
   for (const format of ['in', 'out'])
   for (const shift of ['day', 'night'])
-  for (const breakfast of [true, false])
-  for (const lunch of [true, false])
-  for (const dinner of [true, false])
-  for (const bath of BATHS)
+  for (const meals of [true, false])
   for (const massage of [true, false])
-  for (const hotstone of [true, false])
-  for (const binding of [true, false])
-  for (const rhythm of RHYTHMS)
-  for (const mask of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-                      16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]) {
-    // The dependency rules in spec section 2 are what the page enforces, so
-    // the sweep only visits states the page can actually reach.
-    if (format === 'out' && shift === 'night') continue;          // rule 1
-    if (shift === 'night' && breakfast) continue;                 // rule 2
-    if (!massage && hotstone) continue;                           // rule 3
-    if (!massage && rhythm !== P.STD_MFREQ[days]) continue;       // rule 4
-
-    const sel = { days, format, shift, breakfast, lunch, dinner, bath,
-                  massage, hotstone, binding, rhythm };
-    TREATS.forEach((t, i) => { sel[t] = Boolean(mask & (1 << i)); });
+  for (const rhythm of P.RHYTHMS[days])
+  for (let mask = 0; mask < 32; mask++) {
+    if (format === 'out' && shift === 'night') continue;            // night care is live-in only
+    if (!massage && rhythm !== P.standardRhythm(days)) continue;    // no rhythm without massage
+    const sel = { days, format, shift, meals, massage, rhythm };
+    EXTRAS.forEach((k, i) => { sel[k] = Boolean(mask & (1 << i)); });
     yield sel;
   }
 }
-
-let seen = 0, bad = { finite: 0, floor: 0, monotonic: 0 };
-
+let seen = 0; const bad = { finite: 0, floor: 0, removal: 0, fewer: 0, outCheaper: 0 };
 for (const sel of every()) {
   seen++;
-  const r = P.calculate(sel);
-
-  // 1. No total is zero, negative, NaN or blank.
-  if (!Number.isFinite(r.fee) || r.fee <= 0) bad.finite++;
-
-  // 2. No total falls below minimumFee[days] + supplement.
-  const supplement = sel.format === 'out' ? P.CONFIG.liveOutDailySupplement * sel.days : 0;
-  if (r.fee < P.CONFIG.minimumFee[sel.days] + supplement - 0.5) bad.floor++;
-
-  // 3. Adding any option never lowers the price. Checked against every
-  //    single-option addition reachable from this state, which is stronger
-  //    than checking a handful of representative ones.
-  for (const add of neighbours(sel)) {
-    if (P.calculate(add).fee < r.fee - 0.5) bad.monotonic++;
+  const r = P.calculate(sel).fee;
+  if (!Number.isFinite(r) || r <= 0) bad.finite++;
+  const sup = sel.format === 'out' ? 30 * sel.days : 0;
+  if (r < P.CONFIG.minimumFee[sel.days] + sup - 0.5) bad.floor++;
+  // removing one thing never raises the fee
+  const removals = [];
+  if (sel.meals) removals.push({ ...sel, meals: false });
+  if (sel.massage) removals.push({ ...sel, massage: false, rhythm: P.standardRhythm(sel.days) });
+  EXTRAS.forEach(k => { if (sel[k]) removals.push({ ...sel, [k]: false }); });
+  if (sel.shift === 'night') removals.push({ ...sel, shift: 'day' });
+  removals.forEach(x => { if (P.calculate(x).fee > r + 0.5) bad.removal++; });
+  // fewer massages never raise it
+  if (sel.massage) {
+    const opts = P.RHYTHMS[sel.days], i = opts.indexOf(sel.rhythm);
+    for (let j = i + 1; j < opts.length; j++) if (P.calculate({ ...sel, rhythm: opts[j] }).fee > r + 0.5) bad.fewer++;
   }
+  // daytime in-home never cheaper than live-in
+  if (sel.format === 'out' && P.calculate({ ...sel, format: 'in' }).fee > r + 0.5) bad.outCheaper++;
 }
-
-// Each yields the same selection with exactly one more thing switched on,
-// or one frequency stepped up. Only states the page permits.
-function* neighbours(sel) {
-  const on = k => (sel[k] ? null : { ...sel, [k]: true });
-  const night = sel.shift === 'night';
-
-  for (const k of ['lunch', 'dinner', 'binding', ...TREATS]) {
-    const n = on(k); if (n) yield n;
-  }
-  if (!night) { const n = on('breakfast'); if (n) yield n; }
-  if (sel.massage && !sel.hotstone) yield { ...sel, hotstone: true };
-  if (!sel.massage) yield { ...sel, massage: true };
-
-  const b = BATHS.indexOf(sel.bath);                       // daily is richest
-  if (b > 0) yield { ...sel, bath: BATHS[b - 1] };
-  const m = RHYTHMS.indexOf(sel.rhythm);                   // w4 is most often
-  if (sel.massage && m > 0) yield { ...sel, rhythm: RHYTHMS[m - 1] };
-  if (sel.format === 'in' && !night) yield { ...sel, shift: 'night', breakfast: false };
-}
-
-check('combinations swept', seen, 184320);
-check('1. no fee is zero, negative or NaN', bad.finite, 0);
-check('2. no fee falls below the floor plus supplement', bad.floor, 0);
-check('3. adding an option never lowers the fee', bad.monotonic, 0);
-
-// 4, 5, 6: the sweep skips the states these forbid, so assert the pricing
-// would have been wrong had it reached them.
-check('4. night care is never priced with daytime in-home',
-  Math.round(P.calculate({ ...bare(30), format: 'out', shift: 'night' }).fee),
-  Math.round(P.calculate({ ...bare(30), format: 'out', shift: 'day' }).fee));
-check('5. breakfast is never charged under night care',
-  Math.round(P.calculate({ ...complete(30), shift: 'night', breakfast: true }).fee),
-  Math.round(P.calculate({ ...complete(30), shift: 'night', breakfast: false }).fee));
-check('6. hot stone is never charged without massage',
-  Math.round(P.calculate({ ...complete(14), massage: false, hotstone: true }).fee),
-  Math.round(P.calculate({ ...complete(14), massage: false, hotstone: false }).fee));
+check('combinations swept (the spec tested 2,880)', seen, 2880);
+check('no fee is zero, negative or NaN', bad.finite, 0);
+check('no fee below the floor plus supplement', bad.floor, 0);
+check('removing anything never raises the fee', bad.removal, 0);
+check('fewer massages never raise the fee', bad.fewer, 0);
+check('daytime in-home is never cheaper than live-in', bad.outCheaper, 0);
 
 console.log(`\n${failures === 0 ? 'All checks passed.' : failures + ' CHECK(S) FAILED.'}\n`);
 process.exit(failures === 0 ? 0 : 1);

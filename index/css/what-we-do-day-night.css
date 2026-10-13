@@ -156,7 +156,8 @@
 /* Phones: two short lines, so it still ends short of the centre line. */
 @media (max-width: 860px) {
   .dn-br { display: inline; }
-  .dn-title { font-size: clamp(1.7rem, 7.6vw, 2.2rem); line-height: 1.1; text-align: center; }
+  /* Doubled (TJ, 12 Oct 2026): was clamp(1.7rem, 7.6vw, 2.2rem). */
+  .dn-title { font-size: clamp(3.4rem, 15.2vw, 4.4rem); line-height: 1.05; text-align: center; }
 }
 
 /* The small title and the paragraph, bottom right (TJ, 9 Oct 2026). */
@@ -238,3 +239,52 @@
    night completes, so the sofa and room read as night, not dusk, before the glass.
    --dn-nv is 0 to 1 with the night (what-we-do-promise.js). */
 .dn-wrap .dissolve__night { filter: brightness(calc(1 - .34 * var(--dn-nv, 0))) saturate(calc(1 - .08 * var(--dn-nv, 0))); }
+
+/* Phone text floor (MOBILE-PLAN item 2): Morning, Afternoon, Evening, Night were 8px. */
+@media (max-width: 860px) {
+  .dn-wrap .act--peak .peak__states { font-size: .8125rem; letter-spacing: .14em; display: grid; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; gap: 8px 22px; max-width: none; }
+}
+
+/* ---- Phones: Day to Night on one line (TJ, 12 Oct 2026) ----
+   The sun and the four times of day give way to the site's progression line:
+   Day at the left end, Night at the right, the circle travelling between them
+   with the scrub (--dnl-t, 0 to 1, what-we-do-promise.js) and reaching Night as
+   night has fully fallen. Both ends are 44px tap targets; the line, circle and
+   words take the frame's own colour (--dnt-c), dark by day, cream by night. */
+.dnl { display: none; }
+@media (max-width: 860px) {
+  .dn-wrap .act--peak .sundial, .dn-wrap .act--peak .peak__states { display: none; }
+  .dnl { display: block; width: 100%; color: rgb(var(--dnt-c)); --dnl-t: 0; }
+  .dnl.is-live .dnl__end { pointer-events: auto; }
+  .dnl__ends { display: flex; justify-content: space-between; }
+  .dnl__end {
+    all: unset; box-sizing: border-box; cursor: pointer; min-height: 44px; padding: 12px 0;
+    font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+    color: inherit; pointer-events: none; -webkit-tap-highlight-color: transparent;
+  }
+  .dnl__end:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+  .dnl__rail { position: relative; height: 16px; }
+  .dnl__rail::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: currentColor; opacity: .32; }
+  .dnl__fill { position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: currentColor; transform-origin: 0 50%; transform: scaleX(var(--dnl-t)); }
+  .dnl__stop, .dnl__tip { position: absolute; top: 50%; border-radius: 50%; background: currentColor; }
+  .dnl__stop { width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); }
+  .dnl__stop--a { left: 0; }
+  .dnl__stop--b { left: 100%; opacity: calc(.45 + .55 * var(--dnl-t)); }
+  .dnl__tip { left: calc(var(--dnl-t) * 100%); width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) 0 0 calc(var(--ttip) / -2); }
+}
+/* The line sits over the answer layer, so its ends can be tapped; it has gone
+   (and stops taking taps) before the two options arrive on the glass. */
+@media (max-width: 860px) { .dn-wrap .act--peak .peak__clock { z-index: 3; } }
+/* The sunset on the line (TJ, 12 Oct 2026): the sun sits over the line's middle,
+   arrives with it, sets into it as the circle travels to Night (cut by the line,
+   as the sundial's was) and rises again on the way back to Day. It is the frame's
+   colour, so it turns from dark to cream with the title and the menu. */
+@media (max-width: 860px) {
+  /* 15 percent larger than the first 30px (TJ). The sky's height is set by
+     what-we-do-promise.js so the sun starts half way between the title and the
+     line and sets all the way into it. */
+  .dnl { --dnl-sky: 120px; --dnl-sun: 34.5px; }
+  .dnl__sky { position: absolute; left: 50%; bottom: 50%; width: calc(var(--dnl-sun) + 8px); height: var(--dnl-sky); margin-left: calc((var(--dnl-sun) + 8px) / -2); overflow: hidden; }
+  .dnl__sun { position: absolute; left: 4px; top: 0; width: var(--dnl-sun); height: var(--dnl-sun); border-radius: 50%; background: currentColor;
+    transform: translateY(calc(var(--dnl-t) * (var(--dnl-sky) + 2px))); }
+}

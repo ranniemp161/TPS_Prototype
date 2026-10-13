@@ -137,6 +137,7 @@
   .vt__photo img { object-position: 64% 50%; }
   .vt__photo-title { font-size: clamp(2.8rem, 14vw, 4.4rem); bottom: clamp(36px, 7vh, 64px); }
   .vt__sub { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .vt__body time { font-size: .85rem; }   /* phone text floor (MOBILE-PLAN item 2) */
 }
 
 /* ---- Static (reduced motion, or before the script runs): plain list, line complete ---- */
@@ -155,3 +156,61 @@
 /* The retired Experience title card (TJ, 8 Oct 2026): its own display rules
    would override the hidden attribute, so hiding is stated outright. */
 .xwrap[hidden], .wx[hidden], .wd[hidden] { display: none !important; }
+
+/* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 4): no held stage. The section is as tall
+   as its content; the photograph covers its first screen and closes into the slot;
+   the line draws beside the hours as the page scrolls (what-we-do-timeline.js). */
+@media (max-width: 860px) {
+  .vt.is-live.is-flow { height: auto; }
+  .vt.is-flow .vt__stage { position: relative; top: auto; height: auto; }
+  .vt.is-flow .vt__photo { bottom: auto; height: 100vh; height: 100svh; }
+  .vt.is-flow .vt__track { will-change: auto; }
+  /* The closing line kept its desktop width plus the phone indent and ran off the right edge. */
+  .vt__close { width: auto; max-width: 40ch; margin-right: 0; }
+}
+
+/* ---- Phones: settled photograph, glass merged into it, a next dot to tap (TJ, 12 Oct 2026) ----
+   The photograph no longer opens full screen and shrinks into a slot: it sits in
+   its final place from the start, close under the section above, framed evenly
+   like Tailored For You (the gutter on three sides, the foot open), with the glass
+   card merged into its foot (the card's frost fades upward into the picture, as
+   Tailored's does when Read more is open). "A Day With Us" simply sits in the card,
+   in coral. The hours still draw by scroll (what-we-do-timeline.js) and now also
+   by tap: the next hour's dot shows greyed on the line, and a tap on it carries
+   the page, and so the line, there. */
+.vt__go { display: none; }
+@media (max-width: 860px) {
+  .vt.is-flow { --vt-up: 120px; --vt-fade: 130px; }
+  .vt.is-flow .vt__photo {
+    position: relative; inset: auto; z-index: 2; height: auto; aspect-ratio: 6 / 7;
+    margin: var(--gutter, 24px) var(--gutter, 24px) 0; clip-path: none; transform: none; will-change: auto;
+    border-radius: var(--r-card) var(--r-card) 0 0; background: var(--haze);
+  }
+  .vt.is-flow .vt__photo img { position: absolute; inset: 0; left: 0; top: 0; width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; object-position: 49% 50%; transform: none; will-change: auto; }
+  .vt.is-flow .vt__photo-veil, .vt.is-flow .vt__photo-title { display: none; }
+  .vt.is-flow .vt__sub { color: var(--coral-deep); }
+  .vt.is-flow .vt__track { z-index: 3; padding-top: 0; margin-top: calc(var(--vt-up) * -1); }
+  .vt.is-flow .vt__head { gap: 0; }
+  .vt.is-flow .vt__slot { display: none; }
+  .vt.is-flow .vt__card { opacity: 1; transform: none; }
+  .vt.is-flow .vt__card.glass { background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; position: relative; isolation: isolate; padding-top: calc(clamp(26px, 3vw, 42px) + var(--vt-fade) * .62); }
+  .vt.is-flow .vt__card::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: rgba(243, 239, 236, .70); border: 1px solid rgba(255, 255, 255, .6); border-top: 0; border-radius: 0 0 var(--r-card) var(--r-card);
+    backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--vt-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--vt-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--vt-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--vt-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--vt-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--vt-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--vt-fade) * 0.875), rgba(0,0,0,1.000) var(--vt-fade));
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--vt-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--vt-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--vt-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--vt-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--vt-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--vt-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--vt-fade) * 0.875), rgba(0,0,0,1.000) var(--vt-fade));
+  }
+  .vt.is-flow .vt__items { margin-top: 0; }
+
+  /* The next hour's dot, greyed, on the line: the only one tappable. It sits where
+     the hour's real dot will be and gives way to it (which grows over it) once reached. */
+  .vt.is-flow .vt__go {
+    all: unset; box-sizing: border-box; display: block; position: absolute; z-index: 2; top: 0; left: var(--vt-ax);
+    width: 44px; height: 44px; margin: -22px 0 0 -22px; cursor: pointer; -webkit-tap-highlight-color: transparent;
+    opacity: 0; pointer-events: none; transition: opacity 350ms var(--ease-out);
+  }
+  .vt.is-flow .vt__go::before { content: ""; position: absolute; left: 50%; top: 50%; width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--vt-line); opacity: .38; }
+  .vt.is-flow .vt__go.is-next { opacity: 1; pointer-events: auto; }
+  .vt.is-flow .vt__go:focus-visible { outline: 2px solid var(--ember); outline-offset: -6px; border-radius: 50%; }
+}

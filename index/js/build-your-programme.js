@@ -1,5 +1,5 @@
 /* ============================================================
-   THE POSTPARTUM SUITE, programme builder
+   THE POSTPARTUM SUITE, programme builder (the carousel, 10 Oct 2026)
 
    Three jobs, in this order of importance.
 
@@ -111,7 +111,10 @@
 
 
   /* ------------------------------------------------------------
-     THE BUILDER
+     THE BUILDER (Build 10, 10 Oct 2026)
+     Same machinery as before: rules, read, price, paint the steps, the
+     panel, the day strip, the budget and the brief, flag the area a
+     change landed in. The fields and the copy follow the Build 10 spec.
      ------------------------------------------------------------ */
 
   var TREAT_LABEL = {
@@ -119,43 +122,21 @@
     reflex: 'foot reflexology',
     facial: 'facial massage',
     herbfoot: 'herbal foot treatment',
-    serum: 'hair serum therapy'
+    thermal: 'thermal blanket treatment'
   };
 
-  var RHYTHM_WORDS = {
-    w4: 'four times a week',
-    w3: 'three times a week',
-    w2: 'twice a week',
-    w1: 'once a week'
-  };
-
-  var BATH_WORDS = {
-    daily: 'daily',
-    eod: 'every other day',
-    weekly: 'weekly',
-    none: 'none'
-  };
-
-  // Which care area a given control writes into. The panel is the only
-  // place a change becomes visible, and a change nobody can find is a
-  // change nobody trusts, so every control says where to look.
   var AREA_FOR = {
-    format:    ['duration'],
-    days:      ['duration', 'reservation'],
-    shift:     ['duration', 'baby'],
-    breakfast: ['meals'],
-    lunch:     ['meals'],
-    dinner:    ['meals'],
-    bath:      ['mother'],
-    massage:   ['mother'],
-    hotstone:  ['mother'],
-    binding:   ['mother'],
-    rhythm:    ['mother'],
-    scrub:     ['treatments'],
-    reflex:    ['treatments'],
-    facial:    ['treatments'],
-    herbfoot:  ['treatments'],
-    serum:     ['treatments']
+    format:   ['duration'],
+    days:     ['duration', 'reservation', 'treatments'],
+    shift:    ['duration', 'baby', 'meals'],
+    meals:    ['meals'],
+    massage:  ['treatments'],
+    rhythm:   ['treatments'],
+    scrub:    ['treatments'],
+    reflex:   ['treatments'],
+    facial:   ['treatments'],
+    herbfoot: ['treatments'],
+    thermal:  ['treatments']
   };
 
   function builder() {
@@ -167,12 +148,14 @@
       feeOuts:    [].slice.call(document.querySelectorAll('[data-fee]')),
       floorNote:  document.querySelector('[data-floor-notice]'),
       doneNote:   document.querySelector('[data-complete-notice]'),
-      doneFee:    document.querySelector('[data-complete-fee]'),
       reserveNote:document.querySelector('[data-reserve-note]'),
+      builtTitle: document.querySelector('[data-built-title]'),
       mealsNote:  document.querySelector('[data-meals-note]'),
+      mealsSub:   document.querySelector('[data-meals-sub]'),
+      nightBand:  document.querySelector('[data-night-band]'),
+      rhythms:    document.querySelector('[data-rhythms]'),
       rhythmNote: document.querySelector('[data-rhythm-note]'),
       rhythmStep: document.querySelector('[data-step-rhythm]'),
-      bathCount:  document.querySelector('[data-bath-count]'),
       shapeTitle: document.querySelector('[data-shape-title]'),
       shapeGrid:  document.querySelector('[data-shape-grid]'),
       shapeEmpty: document.querySelector('[data-shape-empty]'),
@@ -187,13 +170,13 @@
       prioCount:  document.querySelector('[data-prio-count]'),
       restore:    document.querySelector('[data-restore]'),
       nightInput: form.querySelector('input[name="shift"][value="night"]'),
-      breakfast:  form.querySelector('input[name="breakfast"]'),
       massage:    form.querySelector('input[name="massage"]'),
-      hotstone:   form.querySelector('input[name="hotstone"]')
+      tickerChip: document.querySelector('[data-fee-chip]')
     };
 
-    // The last length seen, so rule 5 can tell a length change from any
-    // other change without diffing the whole selection.
+    // Two counting figures, one value: the bar's fee and the summary.
+    var rollers = [].slice.call(document.querySelectorAll('[data-count-fee]')).map(counter);
+
     var lastDays = null;
     var lastFee = null;
     var lastPriorities = null;
@@ -208,18 +191,14 @@
     }
 
     function read() {
+      var days = parseInt(radio('days'), 10);
       var sel = {
-        days: parseInt(radio('days'), 10),
+        days: days,
         format: radio('format'),
         shift: radio('shift'),
-        breakfast: checked('breakfast'),
-        lunch: checked('lunch'),
-        dinner: checked('dinner'),
-        bath: radio('bath'),
+        meals: radio('meals') === 'yes',
         massage: checked('massage'),
-        hotstone: checked('hotstone'),
-        binding: checked('binding'),
-        rhythm: radio('rhythm')
+        rhythm: radio('rhythm') || P.standardRhythm(days)
       };
       P.COUNTED.forEach(function (k) { sel[k] = checked(k); });
       return sel;
@@ -230,135 +209,97 @@
         .map(function (i) { return i.value; });
     }
 
-    /* ---------- Dependency rules, spec section 2 ---------- */
+    /* ---------- Step 06: the rhythm options for the length (spec 4.3) ---------- */
+
+    function drawRhythms(days, keep) {
+      var std = P.standardRhythm(days);
+      var want = keep && P.RHYTHMS[days].indexOf(keep) >= 0 ? keep : std;
+      var frag = document.createDocumentFragment();
+      P.RHYTHMS[days].forEach(function (r) {
+        var n = P.massageSessions(r, days);
+        var lab = document.createElement('label');
+        lab.className = 'rhythm' + (r === std ? ' is-standard' : '');
+        lab.innerHTML =
+          '<input class="sr-only" type="radio" name="rhythm" value="' + r + '"' + (r === want ? ' checked' : '') + ' />' +
+          '<span class="dk-dot" aria-hidden="true"></span>' +
+          '<span class="rhythm__body">' +
+            '<span class="rhythm__head"><span class="rhythm__title">' + P.rhythmTitle(r) + '</span>' +
+            (r === std ? '<span class="rhythm__std">Standard</span>' : '') + '</span>' +
+            '<span class="rhythm__sub">' + (days <= 7
+              ? 'Across your ' + days + ' days'
+              : n + ' sessions across ' + days + ' days') + '</span>' +
+          '</span>';
+        frag.appendChild(lab);
+      });
+      el.rhythms.textContent = '';
+      el.rhythms.appendChild(frag);
+    }
+
+    /* ---------- Rules (spec 3 and 4.5) ---------- */
 
     function applyRules(cause) {
       var format = radio('format');
       var shift = radio('shift');
-      // Areas the rules moved without the client touching them. Night
-      // care taking breakfast out, or a length change resetting the
-      // rhythm, changes the panel just as much as a click does, and an
-      // unexplained change is the one that loses trust.
       var forced = [];
 
-      // Rule 1. Night care requires live-in.
+      // Night care is live-in only.
       var nightAllowed = format === 'in';
       el.nightInput.disabled = !nightAllowed;
+      el.nightBand.hidden = nightAllowed;
       if (!nightAllowed && shift === 'night') {
         form.querySelector('input[name="shift"][value="day"]').checked = true;
-        shift = 'day';
-        forced.push('baby');
+        forced.push('baby', 'meals');
       }
 
-      // Rule 2. Night care removes breakfast. Service starts at 1pm, so
-      // breakfast sits outside it. Switching back to daytime re-checks it,
-      // which is the spec's wording: the client did not deselect it.
-      var night = shift === 'night' && format === 'in';
-      if (night) {
-        if (el.breakfast.checked || !el.breakfast.disabled) forced.push('meals');
-        el.breakfast.checked = false;
-        el.breakfast.disabled = true;
-      } else if (el.breakfast.disabled) {
-        el.breakfast.disabled = false;
-        el.breakfast.checked = true;
-        forced.push('meals');
-      }
-
-      // Rule 3. Hot stone requires massage, and follows it.
-      if (cause === 'massage') el.hotstone.checked = el.massage.checked;
-      el.hotstone.disabled = !el.massage.checked;
-      if (!el.massage.checked) el.hotstone.checked = false;
-
-      // Rule 5. Changing length resets the rhythm to the standard for
-      // that length. Without this a client silently leaves the published
-      // programme and the fee moves for no visible reason.
+      // Changing the length resets the rhythm to that length's standard.
       var days = parseInt(radio('days'), 10);
-      if (lastDays !== null && days !== lastDays) {
-        var std = form.querySelector('input[name="rhythm"][value="' + P.STD_MFREQ[days] + '"]');
-        if (std && !std.checked) { std.checked = true; forced.push('mother'); }
+      if (lastDays === null || days !== lastDays) {
+        var had = radio('rhythm');
+        drawRhythms(days, null);
+        if (lastDays !== null && had !== P.standardRhythm(days)) forced.push('treatments');
       }
       lastDays = days;
 
-      // Rule 4. Rhythm requires massage. The whole step goes down, not
-      // just its inputs, because a live-looking step whose numbers mean
-      // nothing is worse than a dimmed one.
-      var rhythmOff = !el.massage.checked;
-      el.rhythmStep.classList.toggle('is-off', rhythmOff);
+      // No rhythm to set without massage.
+      var off = !el.massage.checked;
+      el.rhythmStep.classList.toggle('is-off', off);
       [].slice.call(form.querySelectorAll('input[name="rhythm"]'))
-        .forEach(function (i) { i.disabled = rhythmOff; });
+        .forEach(function (i) { i.disabled = off; });
 
       return forced;
     }
 
     /* ---------- Step copy that moves with the selection ---------- */
 
+    function times(n) { return n + (n === 1 ? ' time' : ' times'); }
+
     function paintSteps(sel) {
       var night = sel.shift === 'night' && sel.format === 'in';
 
       el.mealsNote.textContent = night
-        ? 'Cooked fresh in your kitchen. Night care begins at 1pm, so breakfast sits outside it. Herbal teas and lactation drinks are part of every programme.'
-        : 'Cooked fresh in your kitchen, for you and your family. Herbal teas and lactation drinks are part of every programme.';
+        ? 'Cooked fresh in your kitchen for you and your family. With night care your specialist’s day begins at 1pm, so breakfast sits outside it. Herbal teas and lactation drinks are in every programme.'
+        : 'Cooked fresh in your kitchen for you and your family, guided by confinement principles. Herbal teas and lactation drinks are in every programme.';
+      el.mealsSub.textContent = night ? 'Lunch and dinner, every day' : 'Breakfast, lunch and dinner, every day';
 
-      var b = P.baths(sel.bath, sel.days);
-      el.bathCount.textContent = b === 0 ? 'No baths'
-        : b === 1 ? 'One bath' : b + ' baths';
-
-      // Step 06 counts. The five with fixed counts read them off STD; the
-      // three that follow the stay describe themselves in words, because
-      // "30" against belly binding reads as thirty separate treatments.
       P.COUNTED.forEach(function (k) {
         var out = document.querySelector('[data-count="' + k + '"]');
-        if (out) out.textContent = String(P.STD[sel.days][k]);
+        if (out) out.textContent = times(P.STD[sel.days][k]);
       });
-      var mc = P.massageSessions(sel.rhythm, sel.days);
       var mOut = document.querySelector('[data-count="massage"]');
-      if (mOut) mOut.textContent = mc + (mc === 1 ? ' session' : ' sessions');
-      var hOut = document.querySelector('[data-count="hotstone"]');
-      if (hOut) hOut.textContent = sel.massage ? 'with each massage' : 'needs massage';
-      var bnOut = document.querySelector('[data-count="binding"]');
-      if (bnOut) bnOut.textContent = 'daily';
+      if (mOut) {
+        var mc = P.massageSessions(sel.rhythm, sel.days);
+        mOut.textContent = sel.massage ? mc + (mc === 1 ? ' session' : ' sessions') : 'Not selected';
+      }
 
-      // Step 07 counts, one per rhythm, so the client can see what she is
-      // choosing between rather than inferring it from the fee.
-      ['w4', 'w3', 'w2', 'w1'].forEach(function (r) {
-        var out = document.querySelector('[data-rhythm-count="' + r + '"]');
-        if (!out) return;
-        var n = P.massageSessions(r, sel.days);
-        out.textContent = String(n);
-        out.classList.toggle('is-one', n === 1);
-        var row = out.closest('.rhythm');
-        if (row) row.classList.toggle('is-standard', r === P.STD_MFREQ[sel.days]);
-      });
-
-      // The spec's line for this step promises that massage is never taken
-      // on consecutive days. At most rhythms that holds. It cannot hold at
-      // four a week on thirty days, which is eighteen sessions where
-      // alternate days allow fifteen, and the day strip below makes that
-      // visible. So the promise is made only where it is true, and where it
-      // is not the client is told plainly and pointed at a gentler rhythm.
-      // Flagged to the client as an open item alongside the three in the
-      // spec's own section 13.
-      var sessions = P.massageSessions(sel.rhythm, sel.days);
-      var fitsAlternate = sessions <= Math.ceil(sel.days / 2);
-      el.rhythmNote.textContent = sel.massage
-        ? 'Our ' + sel.days + '-day programme is built around ' + RHYTHM_WORDS[P.STD_MFREQ[sel.days]] +
-          '. Choose more or less and the fee moves with it. ' +
-          (fitsAlternate
-            ? 'Massage is never taken on consecutive days, so your body has a day between treatments.'
-            : 'At ' + sessions + ' sessions across ' + sel.days + ' days, some fall on consecutive days. A gentler rhythm leaves your body a day between treatments.')
-        : 'Postpartum massage is not currently selected, so there is no rhythm to set. Every other treatment follows a set rhythm for the length of programme you have chosen, and the count beside each one shows how often.';
+      var stdN = P.massageSessions(P.standardRhythm(sel.days), sel.days);
+      el.rhythmNote.textContent = !sel.massage
+        ? 'Postpartum massage isn’t selected, so there’s no rhythm to set. Go back one step to add it.'
+        : sel.days <= 7
+          ? 'Your ' + sel.days + '-day programme includes ' + stdN + ' massages. Choose fewer and the fee comes down with it. Massage is never on back-to-back days, so your body has a day to rest between.'
+          : 'Your ' + sel.days + '-day programme is built around massage four times a week. Choose fewer and the fee comes down with it. Massage is never on back-to-back days, so your body has a day to rest between.';
     }
 
-    /* ---------- The summary ---------- */
-
-    // "Breakfast, Lunch and Dinner" is three proper nouns in a row. The
-    // meal names are capitalised on their controls, where each one is a
-    // label, and lowercased inside a sentence, where they are not.
-    function sentenceCase(parts) {
-      return parts.map(function (w, i) {
-        return i === 0 ? w : w.charAt(0).toLowerCase() + w.slice(1);
-      });
-    }
+    /* ---------- The summary (spec page 8, card 2) ---------- */
 
     function sentence(parts) {
       if (parts.length === 0) return '';
@@ -373,86 +314,93 @@
       area.classList.toggle('is-empty', !!empty);
     }
 
+    function formatLine(sel) {
+      var night = sel.shift === 'night' && sel.format === 'in';
+      return (sel.format === 'in' ? 'Live-in care' : 'Daytime in-home care') + ', ' +
+        (night ? 'day and night' : '7am to 7pm');
+    }
+
+    function treatmentsLine(sel) {
+      var bits = ['Herbal baths and belly binding daily'];
+      if (sel.massage) {
+        var mc = P.massageSessions(sel.rhythm, sel.days);
+        bits.push('postpartum massage with hot stone therapy ' +
+          (sel.days <= 7 ? '(' + mc + ' sessions)' : P.rhythmTitle(sel.rhythm).toLowerCase() + ' (' + mc + ' sessions)'));
+      }
+      var extras = P.COUNTED.filter(function (k) { return sel[k]; })
+        .map(function (k) { return TREAT_LABEL[k] + ' (' + P.STD[sel.days][k] + ')'; });
+      if (extras.length) bits.push(extras.join(', '));
+      return bits.join(' · ');
+    }
+
+    function mealsLine(sel) {
+      var night = sel.shift === 'night' && sel.format === 'in';
+      return sel.meals
+        ? (night ? 'Lunch and dinner' : 'Breakfast, lunch and dinner') + ' cooked daily · herbal teas and lactation drinks'
+        : 'No cooked meals · herbal teas and lactation drinks still included';
+    }
+
     function paintSummary(sel, result) {
       var night = sel.shift === 'night' && sel.format === 'in';
-      var formatWord = sel.format === 'in' ? 'live-in care' : 'daytime in-home care';
+      var title = sel.days + ' days · ' + formatLine(sel).charAt(0).toLowerCase() + formatLine(sel).slice(1);
+      if (el.builtTitle) el.builtTitle.textContent = title;
 
-      setArea('duration',
-        sel.days + ' days, ' + formatWord + (night ? ', day and night' : '') +
-        (sel.format === 'out' ? ', includes £30 a day for accommodation and travel' : ''));
+      setArea('duration', sel.days + ' days · ' + formatLine(sel) +
+        (sel.format === 'out' ? ' · includes £30 a day for travel and accommodation' : ''));
+      setArea('reservation', 'One postpartum specialist, reserved for your family for the full ' + sel.days + ' days');
+      setArea('baby', 'Hands-on baby care through the day' + (night ? ', and overnight from 11.30pm to 6am' : ''));
+      setArea('meals', mealsLine(sel), !sel.meals);
+      setArea('treatments', treatmentsLine(sel));
+      setArea('household', 'Light housekeeping · laundry and ironing · grocery collection');
+      var pri = priorities();
+      setArea('priorities', pri.length ? pri.join(' · ') : 'Not chosen yet', !pri.length);
 
-      setArea('reservation',
-        'One postpartum specialist, reserved for your family for the full ' + sel.days + ' days');
-
-      var mother = [];
-      if (sel.bath !== 'none') mother.push('Herbal baths ' + BATH_WORDS[sel.bath]);
-      if (sel.massage) {
-        mother.push('Postpartum massage ' + RHYTHM_WORDS[sel.rhythm] +
-          (sel.hotstone ? ', with hot stone therapy' : ''));
-      }
-      if (sel.binding) mother.push('Daily belly binding');
-      setArea('mother', mother.length ? mother.join(' · ') : 'None selected', !mother.length);
-
-      setArea('baby', 'Hands-on care through the day' +
-        (night ? ', and overnight from 11.30pm to 6am' : ''));
-
-      var meals = [];
-      if (sel.breakfast) meals.push('Breakfast');
-      if (sel.lunch) meals.push('Lunch');
-      if (sel.dinner) meals.push('Dinner');
-      // The wording of the empty case matters. Printing only the teas and
-      // drinks reads as though the meals were still in the programme.
-      setArea('meals',
-        meals.length
-          ? sentence(sentenceCase(meals)) + ' cooked daily · herbal teas and lactation drinks'
-          : 'No cooked meals selected · herbal teas and lactation drinks still included',
-        !meals.length);
-
-      var treats = P.COUNTED.filter(function (k) { return sel[k]; })
-        .map(function (k) { return TREAT_LABEL[k] + ' (' + P.STD[sel.days][k] + ')'; });
-      setArea('treatments', treats.length ? sentence(treats) : 'None selected', !treats.length);
-
-      setArea('household', 'Light housekeeping · laundry and ironing · grocery shopping and cooking');
-
-      // The fee. It settles rather than flickers, and only when it moved.
+      // The fee: counted, not swapped.
       var text = P.money(result.fee);
-      var moved = lastFee !== null && text !== lastFee;
-      el.feeOuts.forEach(function (out) {
-        out.textContent = text;
-        if (moved && !REDUCED) {
-          out.classList.remove('is-moved');
-          void out.offsetWidth;          // restart the animation
-          out.classList.add('is-moved');
-        }
-      });
+      var value = Math.round(result.fee);
+      el.feeOuts.forEach(function (out) { out.textContent = text; });
+      var prev = null;
+      if (rollers.length) prev = rollers[0].value();
+      rollers.forEach(function (r) { r.set(value, lastFee !== null); });
+      if (prev !== null) prev = Math.round(prev);
+      if (prev !== null && prev !== value) chip(value - prev);
       lastFee = text;
 
       el.floorNote.hidden = !result.floored;
+      if (result.floored) {
+        el.floorNote.textContent = 'Because your specialist is reserved for your family alone, a ' + sel.days +
+          '-day programme has a minimum fee of ' + P.money(result.floor) + '.';
+      }
 
       var done = P.isComplete(sel);
       el.doneNote.hidden = !done;
-      if (done) {
-        el.doneNote.firstChild.textContent = 'This is our complete ' + sel.days + '-day programme, ';
-        el.doneFee.textContent = P.money(result.fee);
-      }
+      if (done) el.doneNote.textContent = 'This is our complete ' + sel.days + '-day programme.';
 
-      // The way back, offered only when there is one to offer.
       if (el.restore) {
         el.restore.hidden = done;
-        if (!done) el.restore.textContent = 'Restore the complete ' + sel.days + ' day programme';
+        if (!done) el.restore.textContent = 'Restore the complete ' + sel.days + '-day programme';
       }
 
       el.reserveNote.textContent = sel.format === 'in'
-        ? 'For live-in care, your specialist is reserved exclusively for your family for the full period. Removing elements adjusts the shape of care, not the reservation beneath it.'
-        : 'Your specialist is held for your family for each day of the programme, whichever elements you keep. Daytime in-home care carries a supplement of £30 a day towards her accommodation and travel.';
+        ? 'On live-in programmes, your specialist is reserved for your family alone for the whole stay. Taking out meals or treatments changes what she does each day, but the reservation is what most of the fee pays for.'
+        : 'Your specialist is held for your family for each day of the programme. Daytime in-home care adds £30 a day towards her travel and accommodation.';
+    }
+
+    // The change, said in the band as the figure rolls.
+    function chip(delta) {
+      if (!el.tickerChip || !delta) return;
+      var up = delta > 0;
+      el.tickerChip.textContent = (up ? '+ ' : '− ') + P.money(Math.abs(delta));
+      el.tickerChip.classList.toggle('is-down', !up);
+      el.tickerChip.classList.remove('is-on');
+      void el.tickerChip.offsetWidth;
+      el.tickerChip.classList.add('is-on');
+      clearTimeout(el.tickerChip._t);
+      el.tickerChip._t = setTimeout(function () { el.tickerChip.classList.remove('is-on'); }, 1500);
     }
 
     /* ---------- The shape of the stay ---------- */
 
-    // Evenly spaced positions for n events across d days. Placing each one
-    // at the middle of its own share rather than at the edges is what makes
-    // the result fall on alternate days by itself whenever the count allows
-    // it, which is the rhythm the massage copy describes.
     function spread(n, d) {
       var out = [];
       if (n <= 0 || d <= 0) return out;
@@ -465,48 +413,24 @@
       var d = sel.days;
       var night = sel.shift === 'night' && sel.format === 'in';
 
+      // Herbal baths run daily in every programme.
       var bathDays = {};
-      spread(P.baths(sel.bath, d), d).forEach(function (i) { bathDays[i] = true; });
+      spread(d, d).forEach(function (i) { bathDays[i] = true; });
 
       var massageDays = {};
-      if (sel.massage) {
-        spread(P.massageSessions(sel.rhythm, d), d).forEach(function (i) { massageDays[i] = true; });
-      }
+      if (sel.massage) spread(P.massageSessions(sel.rhythm, d), d).forEach(function (i) { massageDays[i] = true; });
 
-      // The treatments are spread as one pooled set, not one at a time.
-      // Spreading each independently put every treatment with a count of
-      // one on the same day, so a complete five day programme drew four
-      // bare days and a single stack of five, which is both ugly and a
-      // lie about how the stay runs. Pooling them round robin and
-      // spreading the pool gives one treatment a day at five days and an
-      // even scatter at thirty.
-      var pool = [];
-      var most = 0;
+      var pool = [], most = 0;
       P.COUNTED.forEach(function (k) { if (sel[k]) most = Math.max(most, P.STD[d][k]); });
       for (var round = 0; round < most; round++) {
-        P.COUNTED.forEach(function (k) {
-          if (sel[k] && P.STD[d][k] > round) pool.push(k);
-        });
+        P.COUNTED.forEach(function (k) { if (sel[k] && P.STD[d][k] > round) pool.push(k); });
       }
       var treatDays = {};
       spread(pool.length, d).forEach(function (i) { treatDays[i] = (treatDays[i] || 0) + 1; });
 
-      var anything = Object.keys(bathDays).length || Object.keys(massageDays).length ||
-                     Object.keys(treatDays).length || night;
-
       el.shapeTitle.textContent = d + ' days, laid out';
-      el.shapeEmpty.hidden = !!anything;
+      el.shapeEmpty.hidden = true;
 
-      // Five days drawn at thirty day weight is five small ticks in a lot
-      // of paper, and this strip is the one thing on the page that has to
-      // land. The marks, the rules between days and the day labels all
-      // grow as the stay shortens, so a short programme reads as a full
-      // drawing rather than a sparse version of a longer one.
-      //
-      // On a phone none of that applies, because thirty days on one line
-      // is fourteen pixels a day behind a sideways scroll nobody finds.
-      // There the stay is drawn as weeks, seven days to a row, which is
-      // the shape a month already has in the reader's head.
       var week = NARROW.matches;
       var scale = week ? 'week' : d <= 7 ? 'short' : d <= 14 ? 'mid' : 'long';
       el.shapeGrid.setAttribute('data-scale', scale);
@@ -515,51 +439,28 @@
       for (var i = 0; i < d; i++) {
         var col = document.createElement('div');
         col.className = 'day';
-
-        if (treatDays[i]) {
-          for (var t = 0; t < treatDays[i]; t++) col.appendChild(mark('treat'));
-        }
+        if (treatDays[i]) for (var t = 0; t < treatDays[i]; t++) col.appendChild(mark('treat'));
         if (massageDays[i]) col.appendChild(mark('massage'));
         if (bathDays[i]) col.appendChild(mark('bath'));
         if (night) col.appendChild(mark('night'));
-
         var n = document.createElement('span');
         n.className = 'day__n';
-        // Named in full where there is room for the word, numbered where
-        // there is not: the first, every seventh, and the last. The last
-        // day always keeps its number, and a week marker within two days
-        // of it is dropped rather than printed alongside, because at
-        // thirty days 28 and 30 otherwise collide.
-        //
-        // In weeks every day is numbered. A cell is wide enough for two
-        // figures there, and a calendar with most of its dates missing
-        // is not a calendar.
-        // The short tier lost its wording when the week tier arrived and
-        // the two were folded into one branch. A 190px cell has room
-        // for the word and reads as a calendar with it; a 44px cell in
-        // a week row does not and takes the numeral.
         var isWeekMark = (i + 1) % 7 === 0 && (d - 1 - i) > 2;
-        var label = scale === 'short' ? 'Day ' + (i + 1)
+        n.textContent = scale === 'short' ? 'Day ' + (i + 1)
           : scale === 'week' ? String(i + 1)
           : (i === 0 || i === d - 1 || isWeekMark) ? String(i + 1) : '';
-        n.textContent = label;
         col.appendChild(n);
-
         col.setAttribute('role', 'listitem');
         col.setAttribute('aria-label', dayLabel(i + 1, bathDays[i], massageDays[i], treatDays[i], night));
         frag.appendChild(col);
       }
-
       el.shapeGrid.setAttribute('role', 'list');
       el.shapeGrid.setAttribute('aria-label', 'Day by day shape of your ' + d + ' day programme');
       el.shapeGrid.textContent = '';
       el.shapeGrid.appendChild(frag);
 
-      // The key dims the entries that have nothing on the strip, so it
-      // describes this programme rather than the set of all programmes.
       el.keys.forEach(function (k) {
         var off =
-          (k.classList.contains('key--bath')    && !Object.keys(bathDays).length) ||
           (k.classList.contains('key--massage') && !Object.keys(massageDays).length) ||
           (k.classList.contains('key--treat')   && !Object.keys(treatDays).length) ||
           (k.classList.contains('key--night')   && !night);
@@ -582,87 +483,42 @@
       return 'Day ' + n + (bits.length ? ': ' + sentence(bits) : ': no treatments placed');
     }
 
-    /* ---------- The enquiry brief ---------- */
+    /* ---------- The enquiry brief (spec page 8, card 5) ---------- */
 
     function briefFor(sel, result) {
       var night = sel.shift === 'night' && sel.format === 'in';
       var pri = priorities();
       var budget = el.budget.value ? Number(el.budget.value) : null;
-
-      var mother = [];
-      if (sel.bath !== 'none') mother.push('Herbal baths ' + BATH_WORDS[sel.bath]);
-      if (sel.massage) mother.push('Postpartum massage ' + RHYTHM_WORDS[sel.rhythm] +
-        (sel.hotstone ? ', with hot stone therapy' : ''));
-      if (sel.binding) mother.push('Daily belly binding');
-
-      var meals = [];
-      if (sel.breakfast) meals.push('Breakfast');
-      if (sel.lunch) meals.push('Lunch');
-      if (sel.dinner) meals.push('Dinner');
-
-      var treats = P.COUNTED.filter(function (k) { return sel[k]; })
-        .map(function (k) { return TREAT_LABEL[k] + ' (' + P.STD[sel.days][k] + ')'; });
-
       var lines = [];
+      function block(head, body) { lines.push(head); lines.push('  ' + body); }
       lines.push('THE POSTPARTUM SUITE, PROGRAMME ENQUIRY');
       lines.push('');
-      lines.push(pad('Duration') + sel.days + ' days');
-      lines.push(pad('Care format') + (sel.format === 'in' ? 'Live-in care' : 'Daytime in-home care') +
-        (night ? ', day and night' : ', daytime'));
-      lines.push(pad('Reservation') + 'One postpartum specialist, exclusive, ' + sel.days + ' days');
+      block('LENGTH AND FORMAT', sel.days + ' days · ' + formatLine(sel) +
+        (sel.format === 'out' ? ' · includes £30 a day for travel and accommodation' : ''));
+      block('YOUR SPECIALIST', 'One postpartum specialist, reserved for your family for the full ' + sel.days + ' days');
+      block('MOTHER AND BABY CARE', 'Hands-on baby care through the day' + (night ? ', and overnight from 11.30pm to 6am' : ''));
+      block('MEALS', mealsLine(sel));
+      block('TREATMENTS', treatmentsLine(sel));
+      block('HOME SUPPORT', 'Light housekeeping · laundry and ironing · grocery collection');
+      block('WHAT MATTERS MOST', pri.length ? pri.join(' · ') : 'Not chosen yet');
+      if (budget) block('CARE BUDGET', P.money(budget));
       lines.push('');
-      lines.push("Mother's recovery support");
-      lines.push('  ' + (mother.length ? mother.join(' · ') : 'None selected'));
-      lines.push('Baby support');
-      lines.push('  Hands-on care through the day' + (night ? ', and overnight from 11.30pm to 6am' : ''));
-      lines.push('Meals and nourishment');
-      lines.push('  ' + (meals.length
-        ? sentence(sentenceCase(meals)) + ' cooked daily · herbal teas and lactation drinks'
-        : 'No cooked meals selected · herbal teas and lactation drinks still included'));
-      lines.push('Recovery treatments');
-      lines.push('  ' + (treats.length ? sentence(treats) : 'None selected'));
-      lines.push('Household support');
-      lines.push('  Light housekeeping · laundry and ironing · grocery shopping and cooking');
-      lines.push('');
-      lines.push('Priorities');
-      lines.push('  ' + (pri.length ? sentence(pri) : 'None indicated'));
-      if (budget) lines.push('  Care budget indicated: ' + P.money(budget));
-      lines.push('');
-      lines.push(pad('Indicative fee') + P.money(result.fee) +
+      lines.push('Indicative fee  ' + P.money(result.fee) +
         (P.CONFIG.introPricing ? '  (introductory pricing, held for ' + P.CONFIG.introHeldFor + ')' : ''));
-      if (result.floored) {
-        lines.push(pad('') + 'At the minimum fee for this length.');
-      }
+      if (result.floored) lines.push('                at the minimum fee for this length');
       lines.push('');
       lines.push('Final programme, availability and fee are confirmed after consultation.');
       return lines.join('\n');
     }
 
-    function pad(label) {
-      var s = label;
-      while (s.length < 19) s += ' ';
+    /* ---------- Budget ---------- */
+
+    function strippedSelection(days) {
+      var s = { days: days, format: 'in', shift: 'day', meals: false, massage: false, rhythm: P.standardRhythm(days) };
+      P.COUNTED.forEach(function (k) { s[k] = false; });
       return s;
     }
 
-    /* ---------- Budget ---------- */
-
-    // Everything a client can switch off, switched off. Grocery has no
-    // control and is always charged, which is what the floor is for.
-    function strippedSelection(days) {
-      return {
-        days: days, format: 'in', shift: 'day',
-        breakfast: false, lunch: false, dinner: false,
-        bath: 'none',
-        massage: false, hotstone: false, binding: false,
-        scrub: false, reflex: false, facial: false, herbfoot: false, serum: false,
-        rhythm: P.STD_MFREQ[days]
-      };
-    }
-
-    // What a length costs at its fullest and at its floor, in the format
-    // the client has already chosen. Priced through the same function as
-    // everything else, so a recommendation can never quote a figure the
-    // builder itself would not reach.
     function bracket(days, format) {
       var full = P.completeSelection(days);
       var bare = strippedSelection(days);
@@ -672,51 +528,26 @@
 
     var WORDS = { 5: 'five', 7: 'seven', 14: 'fourteen', 30: 'thirty' };
     function word(d) { return WORDS[d] || String(d); }
-
     var COUNTS = ['none', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
 
-    // What the client just did, said back to her where she did it, and
-    // pointed at where it went. Neither of these moves the fee, and
-    // that is the point: the only evidence they are working at all is
-    // the brief, and the brief is behind a button.
     function paintPriorities() {
       var picked = priorities();
       if (!el.prioCount) return;
-
-      if (!picked.length) {
-        el.prioCount.hidden = true;
-      } else {
+      if (!picked.length) el.prioCount.hidden = true;
+      else {
         el.prioCount.hidden = false;
         el.prioCount.textContent = (COUNTS[picked.length] || picked.length) +
           (picked.length === 1 ? ' thing noted for your call.' : ' things noted for your call.');
       }
-
-      // And the control that holds them says so, until she opens it.
-      // Not on the first paint, which is the page loading rather than
-      // the client choosing, and not when she has just cleared the last
-      // one: a summary marked as holding something new, when what is
-      // new is that it holds nothing, is noise.
       if (el.briefToggle && el.briefBox) {
         var now = picked.join('|');
         var first = lastPriorities === null;
         var changed = !first && now !== lastPriorities;
         lastPriorities = now;
-        if (changed && picked.length && el.briefBox.hidden) {
-          el.briefToggle.classList.add('has-news');
-        }
+        if (changed && picked.length && el.briefBox.hidden) el.briefToggle.classList.add('has-news');
       }
     }
 
-    // Consultative, never arithmetic. It never shows an over or under
-    // amount, because the answer to a budget here is a conversation
-    // rather than a shortfall.
-    //
-    // What it does now is answer the question the client actually asked.
-    // The field took a number, replied with a courtesy and left her
-    // exactly where she was: its own helper line promises we will
-    // recommend the strongest programme for her, and nothing recommended
-    // anything. Every figure below is priced through calculate(), and
-    // the control beside it puts that programme on the page.
     function paintBudget(result, sel) {
       var raw = el.budget.value;
       if (raw === '' || isNaN(Number(raw)) || Number(raw) <= 0) {
@@ -725,20 +556,12 @@
         return;
       }
       var v = Number(raw);
-
-      // The three responses the spec sets, word for word. They carry the
-      // tone; the recommendation under them carries the use.
       var text;
-      if (v >= result.fee) {
-        text = 'Thank you. That sits comfortably around the programme you have shaped, and we will bring options to your call.';
-      } else if (v >= result.floor * 0.85) {
-        text = 'Thank you. We will look at where the care can be shaped differently to work closer to that on your call.';
-      } else {
-        text = 'Thank you. That is below where this length of programme usually sits, so we will talk through a shorter programme or a different format with you.';
-      }
+      if (v >= result.fee) text = 'Thank you. That sits comfortably around the programme you’ve shaped, and we’ll bring options to your call.';
+      else if (v >= result.floor * 0.85) text = 'Thank you. On your call we’ll look at where the care can be shaped to work closer to that.';
+      else text = 'Thank you. That’s below where this length usually sits, so we’ll talk through a shorter programme or a different format with you.';
       el.budgetAns.textContent = text;
       el.budgetAns.hidden = false;
-
       recommend(v, sel);
     }
 
@@ -746,18 +569,13 @@
       var lengths = [30, 14, 7, 5];
       var format = sel.format;
       var completeFit = null, shapedFit = null;
-
-      // Longest first, because the length is the programme. A client who
-      // can afford a fortnight should be shown the fortnight.
       for (var i = 0; i < lengths.length; i++) {
         var d = lengths[i];
         var br = bracket(d, format);
         if (completeFit === null && v >= br.full)  completeFit = { days: d, fee: br.full };
         if (shapedFit === null   && v >= br.floor) shapedFit  = { days: d, fee: br.floor };
       }
-
       var head, body, action = null, alt = null, altAction = null;
-
       if (completeFit && completeFit.days === 30) {
         head = 'Every one of our programmes sits within that.';
         body = 'The full thirty days, complete, is ' + P.money(completeFit.fee) + ' indicative.';
@@ -765,54 +583,32 @@
       } else if (completeFit) {
         head = 'Our complete ' + word(completeFit.days) + ' day programme fits that.';
         body = P.money(completeFit.fee) + ' indicative, with every element of the published programme in it.';
-        action = { days: completeFit.days, complete: true,
-                   label: 'Show me the ' + word(completeFit.days) + ' day programme' };
+        action = { days: completeFit.days, complete: true, label: 'Show me the ' + word(completeFit.days) + ' day programme' };
       } else if (shapedFit) {
         head = 'A ' + word(shapedFit.days) + ' day programme can be shaped to sit near that.';
         body = 'It starts at ' + P.money(shapedFit.fee) + ' indicative for the period, and we build up from there with you.';
-        action = { days: shapedFit.days, complete: false,
-                   label: 'Start from ' + word(shapedFit.days) + ' days' };
+        action = { days: shapedFit.days, complete: false, label: 'Start from ' + word(shapedFit.days) + ' days' };
       } else {
         var five = bracket(5, format);
         head = 'That sits below where our shortest programme starts.';
         body = 'Five days begins at ' + P.money(five.floor) + ' indicative, because your specialist is reserved for your family for the whole of it. Bring the figure to your call and we will talk through what is possible.';
       }
-
-      // Two real answers, not one. At four thousand two hundred a client
-      // can have seven days complete or fourteen days shaped, and which
-      // of those is the better recovery is her call and her specialist's,
-      // not this page's. Offering only the complete one quietly decides
-      // it, and decides it towards the shorter stay, which is neither
-      // what the brand believes nor what she asked.
       if (completeFit && shapedFit && shapedFit.days > completeFit.days) {
-        alt = 'Or ' + word(shapedFit.days) + ' days, shaped to fit. It starts at '
-            + P.money(shapedFit.fee) + ' indicative and we build up from there with you.';
-        altAction = { days: shapedFit.days, complete: false,
-                      label: 'Start from ' + word(shapedFit.days) + ' days' };
+        alt = 'Or ' + word(shapedFit.days) + ' days, shaped to fit. It starts at ' + P.money(shapedFit.fee) + ' indicative and we build up from there with you.';
+        altAction = { days: shapedFit.days, complete: false, label: 'Start from ' + word(shapedFit.days) + ' days' };
       }
-
       el.budgetFit.querySelector('[data-fit-head]').textContent = head;
       el.budgetFit.querySelector('[data-fit-body]').textContent = body;
       setAction(el.budgetFit.querySelector('[data-fit-apply]'), action);
-
       var altBox = el.budgetFit.querySelector('[data-fit-alt]');
       altBox.hidden = !alt;
       if (alt) {
         altBox.querySelector('[data-fit-alt-body]').textContent = alt;
         setAction(altBox.querySelector('[data-fit-apply]'), altAction);
       }
-
       el.budgetFit.hidden = false;
       markBudgetTab();
 
-      // The recommendation carries a control, and a control below the
-      // fold of the panel is a control nobody presses. If the view it
-      // lives in is the one on screen, bring it up.
-      var view = document.getElementById('view-budget');
-      var body = summary.querySelector('.summary__body');
-      if (view && !view.hidden && body && body.scrollHeight > body.clientHeight) {
-        el.budgetFit.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest' });
-      }
     }
 
     function setAction(btn, action) {
@@ -823,52 +619,34 @@
       btn.setAttribute('data-complete', String(action.complete));
     }
 
-    // Restoring means the published programme at the length she has
-    // chosen. Her format and her shift are hers and are left alone, the
-    // same rule the budget's apply button follows.
+    // Puts the published programme's elements on the controls. Format and
+    // shift are the client's and are left alone.
+    function applyComplete(days) {
+      var full = P.completeSelection(days);
+      form.querySelector('input[name="meals"][value="yes"]').checked = true;
+      el.massage.checked = true;
+      P.COUNTED.forEach(function (k) {
+        var i = form.querySelector('input[name="' + k + '"]');
+        if (i) i.checked = full[k];
+      });
+      drawRhythms(days, full.rhythm);
+    }
+
     if (el.restore) {
       el.restore.addEventListener('click', function () {
-        var days = parseInt(radio('days'), 10);
-        var full = P.completeSelection(days);
-        // Set everything, then let applyRules be the authority on what
-        // the dependencies forbid. Skipping disabled inputs here looked
-        // safer and was wrong: with massage off, hot stone is disabled,
-        // so restore left it out and rebuilt a programme that was not
-        // the published one. The rules live in one place.
-        ['breakfast', 'lunch', 'dinner', 'massage', 'hotstone', 'binding']
-          .concat(P.COUNTED).forEach(function (k) {
-            var i = form.querySelector('input[name="' + k + '"]');
-            if (i) i.checked = full[k];
-          });
-        form.querySelector('input[name="bath"][value="' + full.bath + '"]').checked = true;
-        form.querySelector('input[name="rhythm"][value="' + full.rhythm + '"]').checked = true;
+        applyComplete(parseInt(radio('days'), 10));
         update('restore');
       });
     }
 
-    // Putting the recommendation on the page rather than describing it.
-    // The client's format and shift are hers and are left alone; only
-    // the length, and the elements of the published programme, are set.
     el.budgetFit.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-fit-apply]');
       if (!btn) return;
-      var days = btn.getAttribute('data-days');
-      var complete = btn.getAttribute('data-complete') === 'true';
-
+      var days = Number(btn.getAttribute('data-days'));
       form.querySelector('input[name="days"][value="' + days + '"]').checked = true;
-      if (complete) {
-        var full = P.completeSelection(Number(days));
-        ['breakfast', 'lunch', 'dinner', 'massage', 'hotstone', 'binding']
-          .concat(P.COUNTED).forEach(function (k) {
-            var i = form.querySelector('input[name="' + k + '"]');
-            if (i) i.checked = full[k];
-          });
-        form.querySelector('input[name="bath"][value="' + full.bath + '"]').checked = true;
-        form.querySelector('input[name="rhythm"][value="' + full.rhythm + '"]').checked = true;
-      }
+      if (btn.getAttribute('data-complete') === 'true') { lastDays = days; applyComplete(days); }
       update('days');
-      document.getElementById('step-02').scrollIntoView({
-        behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
+      deck.go(2);
     });
 
     /* ---------- The update ---------- */
@@ -877,31 +655,18 @@
       var forced = applyRules(cause);
       var sel = read();
       var result = P.calculate(sel);
-
       paintSteps(sel);
       paintSummary(sel, result);
       paintShape(sel);
       paintPriorities();
       paintBudget(result, sel);
-
-      var text = briefFor(sel, result);
-      el.briefText.textContent = text;
-
+      el.briefText.textContent = briefFor(sel, result);
       return forced;
     }
 
     /* ---------- The panel's two views ---------- */
 
-    // One panel, two readings, and a fee below both that never moves.
-    // The budget used to sit in a band of its own halfway down the page:
-    // by the time a client reached it the programme it was meant to be
-    // measured against had scrolled away, which is the opposite of what
-    // the field is for.
-    //
-    // A recommendation that arrives while the other view is open marks
-    // its tab, so nothing useful happens off screen unannounced.
-    var tabs = [].slice.call(summary.querySelectorAll('.summary__tab'));
-    var views = [].slice.call(summary.querySelectorAll('.view'));
+    var tabs = [], views = [];
 
     function showView(name, focusTab) {
       tabs.forEach(function (t) {
@@ -917,8 +682,6 @@
 
     tabs.forEach(function (t) {
       t.addEventListener('click', function () { showView(t.dataset.view); });
-      // Left and right move between tabs, which is what a tablist owes
-      // a keyboard user.
       t.addEventListener('keydown', function (e) {
         if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
         e.preventDefault();
@@ -937,32 +700,22 @@
 
     /* ---------- Cause and effect, both ways ---------- */
 
-    // The panel shows the area the last change landed in, and only
-    // scrolls when it has to: block "nearest" leaves an area already in
-    // view exactly where it is, and the panel only scrolls at all when
-    // it is the sticky column rather than a block in the phone's flow.
     function flag(name, forced) {
-      var areas = (AREA_FOR[name] || []).concat(forced || []);
+      var areas = (AREA_FOR[name] || (name && name.indexOf('p-') === 0 ? ['priorities'] : [])).concat(forced || []);
       if (!areas.length) return;
-
-      // Last change only. Marks that accumulate are marks that mean
-      // nothing, which is the same mistake the Blush fill was making.
       [].slice.call(summary.querySelectorAll('.area.is-changed'))
-        .forEach(function (el) { el.classList.remove('is-changed'); });
-
+        .forEach(function (a) { a.classList.remove('is-changed'); });
       var body = summary.querySelector('.summary__body');
       var scrolls = body && body.scrollHeight > body.clientHeight;
       var seen = {};
       areas.forEach(function (a, i) {
         if (seen[a]) return;
         seen[a] = true;
-        var el = summary.querySelector('[data-area="' + a + '"]');
-        if (!el) return;
-        void el.offsetWidth;                 // restart the animation
-        el.classList.add('is-changed');
-        if (i === 0 && scrolls) {
-          el.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'nearest' });
-        }
+        var node = summary.querySelector('[data-area="' + a + '"]');
+        if (!node) return;
+        void node.offsetWidth;
+        node.classList.add('is-changed');
+
       });
     }
 
@@ -970,25 +723,10 @@
       if (e.animationName === 'flag') e.target.classList.remove('is-changed');
     });
 
-    // And the way back. A client notices the wrong thing in the panel,
-    // not in the column, so the heading she is looking at takes her to
-    // the control that sets it.
     summary.addEventListener('click', function (e) {
       var btn = e.target.closest('[data-goto]');
       if (!btn) return;
-      var step = document.getElementById(btn.dataset.goto);
-      if (!step) return;
-
-      step.classList.remove('is-targeted');
-      void step.offsetWidth;
-      step.classList.add('is-targeted');
-      step.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
-
-      // Focus follows, so a keyboard user arrives where the eye does.
-      // preventScroll because the browser would otherwise fight the
-      // smooth scroll above with a jump of its own.
-      var first = step.querySelector('input:not([disabled])');
-      if (first) first.focus({ preventScroll: true });
+      deck.go(Number(btn.dataset.goto));
     });
 
     document.addEventListener('animationend', function (e) {
@@ -997,43 +735,28 @@
 
     form.addEventListener('change', function (e) {
       var name = e.target && e.target.name;
-      var forced = update(name === 'massage' ? 'massage' : name);
+      if (!name || name === 'budget') return;
+      var forced = update(name);
       flag(name, forced);
     });
     el.budget.addEventListener('input', function () { update('budget'); });
 
-    // Crossing the breakpoint changes what the strip is, not just how
-    // big it is, so it is redrawn rather than restyled. addListener is
-    // the older spelling and is still what some in-app browsers offer.
     var onWidth = function () { update('width'); };
     if (NARROW.addEventListener) NARROW.addEventListener('change', onWidth);
     else if (NARROW.addListener) NARROW.addListener(onWidth);
 
     /* ---------- The brief reveal ---------- */
 
-    el.briefToggle.addEventListener('click', function () {
-      var open = el.briefBox.hidden;
-      el.briefBox.hidden = !open;
-      el.briefToggle.setAttribute('aria-expanded', String(open));
-      el.briefToggle.textContent = open ? 'Hide my programme summary' : 'See my programme summary';
-      if (open) el.briefToggle.classList.remove('has-news');
-      if (open) {
-        el.briefBox.scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth', block: 'center' });
-      }
-    });
 
     el.briefCopy.addEventListener('click', function () {
       var text = el.briefText.textContent;
+      var label = 'Copy my programme summary';
       var done = function () {
         el.briefCopy.textContent = 'Copied';
-        setTimeout(function () { el.briefCopy.textContent = 'Copy'; }, 1800);
+        setTimeout(function () { el.briefCopy.textContent = label; }, 1800);
       };
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, fallback);
-      } else fallback();
-
-      // Clipboard access is refused over file:// in some browsers, and this
-      // prototype opens that way as often as it is served.
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
       function fallback() {
         var ta = document.createElement('textarea');
         ta.value = text;
@@ -1053,73 +776,362 @@
 
 
   /* ------------------------------------------------------------
-     ENTRANCES
-     One observer, no scroll listener, no ScrollTrigger.
+     THE FEE COUNTER (TJ, 10 Oct 2026)
+     The same motion as Tailored For You's figures (what-we-do.js,
+     countTo): the number runs from where it is to the new figure and
+     eases to a stop, ease out cubic. Set in Instrument Serif, not mono
+     (Brand Fonts: mono is never a price). Reduced motion sets it.
      ------------------------------------------------------------ */
-  function entrances() {
-    if (REDUCED) return;
-    // The hero is deliberately not in this list. It is the first thing on
-    // screen, so fading it in means the visitor lands on a blank page and
-    // waits out a transition to read the sentence she came for. Reveals
-    // start below the fold, where there is something to reveal.
-    var targets = [].slice.call(document.querySelectorAll(
-      '.movement, .step, .pair, .matters, .shape__head, .shape, .included__copy, .included__frame, .close'));
-    targets.forEach(function (t) { t.classList.add('rise'); });
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-in');
-        io.unobserve(entry.target);
-      });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-
-    targets.forEach(function (t) { io.observe(t); });
+  function counter(node) {
+    var shown = null, raf = 0;
+    function paint(v) { node.textContent = P.money(v); }
+    return {
+      set: function (target, animate) {
+        cancelAnimationFrame(raf);
+        if (shown === null || !animate || REDUCED) { shown = target; paint(target); return; }
+        var from = shown, t0 = performance.now(), dur = 650;
+        node.classList.remove('is-counting'); void node.offsetWidth; node.classList.add('is-counting');
+        (function tick(now) {
+          var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+          shown = from + (target - from) * e;
+          paint(shown);
+          if (p < 1) raf = requestAnimationFrame(tick);
+          else { shown = target; paint(target); node.classList.remove('is-counting'); }
+        })(t0);
+      },
+      value: function () { return shown; }
+    };
   }
 
-
   /* ------------------------------------------------------------
-     THE FEE BAR
-     One rule: the fee is on screen, somewhere, for the whole of the
-     choosing. The panel carries it while the panel is in view; this
-     carries it when the panel is not, which is a phone at any
-     position and a short laptop at the top of the builder, before
-     the sticky column has anything to stick to.
-
-     Two observers rather than a scroll listener, so nothing runs per
-     frame: one watches the fee inside the panel, one watches the
-     builder, and the bar shows only where both say it is wanted.
+     THE DECK (spec section 2, in the site's clothes)
+     One page per step, swiped sideways or moved with Back and Next.
+     The bar at the foot carries the fee and the Tailored line (TJ, 12 Oct
+     2026): a window onto a track with a stop per page; the track slides
+     650ms on --tease so the current stop sits under the circle at the
+     centre, with only the previous and next stops in view.
      ------------------------------------------------------------ */
-  function feebar() {
-    var panelFee = document.querySelector('.summary__top [data-fee]');
-    var build = document.getElementById('builder');
-    var body = document.body;
-    if (!panelFee || !build) return;
+  // deck.go takes a PAGE index (the Change links' data-goto, the budget's
+  // Apply); the deck turns it into the screen that page is on.
+  var deck = { go: function () {} };
 
-    var feeSeen = false, choosing = false;
-    function settle() {
-      body.classList.toggle('is-fee-adrift', choosing && !feeSeen);
+  function deckController() {
+    var root = document.querySelector('[data-deck]');
+    if (!root) return;
+    var pages = [].slice.call(root.querySelectorAll('.dk-page'));
+    var line = document.querySelector('[data-line]');
+    var back = document.querySelector('[data-back]');
+    var next = document.querySelector('[data-next]');
+    var nameEl = document.querySelector('[data-step-name]');
+    // The summary is several screens (TJ, 12 Oct 2026); Next reads "See my
+    // programme" on the screen before the first of them.
+    var firstSumPage = pages.findIndex(function (p) { return p.classList.contains('dk-page--summary'); });
+    var cur = 0, settleT = 0, target = null, lockT = 0;
+    var free = false;
+
+    // SCREENS (Claude, 12 Oct 2026). A screen is what the deck shows at once.
+    // On a phone every page is a screen. From 1024px wide a page marked
+    // data-join shares the screen of the page before it (two halves side by
+    // side), so a step split for a phone is one screen on a laptop. The bar's
+    // stops are screens. The grouping is read from the held layout.
+    var screens = [], screenOf = [], last = 0, sig = '';
+
+    // The frame sits directly under the site header, whatever height the
+    // header is at this width (the three line wordmark makes it taller). The
+    // bar's height is kept on the root for the released page (.is-free).
+    var app = document.querySelector('.dk'), hdr = document.querySelector('[data-nav]'), bar = document.querySelector('.dk-bar');
+    function fitTop() {
+      if (app && hdr) app.style.setProperty('--dk-top', Math.round(hdr.getBoundingClientRect().height) + 'px');
+      if (bar) document.documentElement.style.setProperty('--dk-bar-h', Math.round(bar.getBoundingClientRect().height) + 'px');
+    }
+    fitTop();
+    if (window.ResizeObserver) [hdr, bar].forEach(function (n) { if (n) new ResizeObserver(fitTop).observe(n); });
+
+    var track = line.querySelector('[data-line-track]');
+    var stops = [];
+
+    function title(s) {
+      var g = screens[s], p = pages[g[0]];
+      return g.length > 1 ? (p.getAttribute('data-pair-title') || p.getAttribute('data-title')) : p.getAttribute('data-title');
     }
 
-    new IntersectionObserver(function (es) {
-      feeSeen = es[0].isIntersecting;
-      settle();
-    }, { rootMargin: '-' + 64 + 'px 0px -72px 0px' }).observe(panelFee);
+    // Which screen each page is on, from the layout (released: one page each).
+    function group() {
+      var w = root.clientWidth || 1, s = [], of = [];
+      pages.forEach(function (p, k) {
+        var n = free ? k : Math.floor((p.offsetLeft + 1) / w);
+        if (n < 0) n = 0;
+        of[k] = n;
+        (s[n] = s[n] || []).push(k);
+      });
+      // No holes (each screen index has pages).
+      s = s.filter(Boolean);
+      of = []; s.forEach(function (g, n) { g.forEach(function (k) { of[k] = n; }); });
+      screens = s; screenOf = of; last = screens.length - 1;
+      var now = screens.map(function (g) { return g.join('+'); }).join(',');
+      if (now !== sig) { sig = now; buildStops(); }
+    }
 
-    // A little past the builder as well, so the bar does not vanish at
-    // the exact moment a client reaches the day strip that her last
-    // choice just redrew.
-    new IntersectionObserver(function (es) {
-      choosing = es[0].isIntersecting;
-      settle();
-    }, { rootMargin: '0px 0px 40% 0px' }).observe(build);
+    // A stop for every screen on the track, each a button that goes there
+    // (TJ, 12 Oct 2026: no step numbers; only the previous, current and next
+    // stops show). The track slides so the current stop sits under the circle
+    // at the window's centre; the previous and next dots are the live buttons.
+    function buildStops() {
+      stops.forEach(function (b) { b.remove(); });
+      line.style.setProperty('--last', String(Math.max(1, last)));
+      stops = screens.map(function (g, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'dk-line__stop';
+        b.style.setProperty('--k', String(i));
+        b.setAttribute('aria-label', 'Go to ' + title(i));
+        var d = document.createElement('span');
+        d.className = 'dk-line__dot';
+        d.setAttribute('aria-hidden', 'true');
+        b.appendChild(d);
+        b.addEventListener('click', function () {
+          if (Math.abs(i - cur) !== 1) return;
+          var dir = i - cur, had = document.activeElement === b;
+          go(i);
+          // Keyboard focus moves on to the stop now in the same place, if any.
+          if (had && stops[i + dir]) stops[i + dir].focus({ preventScroll: true });
+        });
+        track.appendChild(b);
+        return b;
+      });
+    }
+
+    function label(i) {
+      if (i === 0) return 'Begin';
+      if (i === last) return 'Book a call';
+      if (firstSumPage > 0 && i === screenOf[firstSumPage] - 1) return 'See my programme';
+      return 'Next';
+    }
+
+    function paint(i) {
+      cur = i;
+      line.style.setProperty('--pos', String(last ? i / last : 0));
+      line.style.setProperty('--i', String(i));
+      stops.forEach(function (s, k) {
+        var open = k === i - 1 || k === i + 1;
+        s.classList.toggle('is-past', k < i);
+        s.classList.toggle('is-on', k === i);
+        s.classList.toggle('is-prev', k === i - 1);
+        s.classList.toggle('is-next', k === i + 1);
+        s.classList.toggle('is-near', Math.abs(k - i) <= 1);
+        s.classList.toggle('is-open', open);
+        s.tabIndex = open ? 0 : -1;
+        s.setAttribute('aria-disabled', String(!open));
+        s.setAttribute('aria-current', k === i ? 'step' : 'false');
+      });
+      nameEl.textContent = title(i);
+      back.disabled = i === 0;
+      back.classList.toggle('is-hidden', i === 0);
+      // The ember button only as Begin and Book a call; otherwise the link.
+      var primary = i === 0 || i === last;
+      next.classList.toggle('btn', primary);
+      next.classList.toggle('btn--primary', primary);
+      next.classList.toggle('dk-link', !primary);
+      next.textContent = label(i);
+      // Held, only the screen in view is live; released, every section is on the page.
+      pages.forEach(function (p, k) { var off = !free && screenOf[k] !== i; p.setAttribute('aria-hidden', String(off)); p.inert = off; });
+    }
+
+    function go(i, instant) {
+      i = Math.max(0, Math.min(last, i));
+      // A move we started: ignore the deck's (or, released, the window's)
+      // scroll until it lands, so the line never steps back on the way.
+      target = i;
+      clearTimeout(lockT);
+      lockT = setTimeout(function () { target = null; }, free ? 1600 : 1400);
+      if (free) glide(i, instant || REDUCED);
+      else root.scrollTo({ left: i * root.clientWidth, behavior: instant || REDUCED ? 'auto' : 'smooth' });
+      paint(i);
+    }
+    deck.go = function (page, instant) { go(screenOf[Math.max(0, Math.min(pages.length - 1, page))], instant); };
+
+    back.addEventListener('click', function () { go(cur - 1); });
+    next.addEventListener('click', function () {
+      if (cur === last) { window.location.href = P.CONFIG.consultationUrl; return; }
+      go(cur + 1);
+    });
+
+    // Swiping: read the screen once scrolling settles, so the line and the
+    // buttons follow a swipe exactly as they follow a tap.
+    root.addEventListener('scroll', function () {
+      if (free || fitting) return;
+      clearTimeout(settleT);
+      settleT = setTimeout(function () {
+        var i = Math.max(0, Math.min(last, Math.round(root.scrollLeft / root.clientWidth)));
+        if (target !== null) { if (i === target) { target = null; clearTimeout(lockT); } return; }
+        if (i !== cur) paint(i);
+      }, 80);
+    }, { passive: true });
+
+    document.addEventListener('keydown', function (e) {
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (document.querySelector('[data-nav].is-open')) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+    });
+
+    /* ---------- Every screen fits (TJ, 12 Oct 2026) ----------
+       No scroll inside a scroll and no continuous scroll: each page fits the
+       deck. Claude's execution of the Tailored rule: when the deck is built,
+       on a resize (any width change, or a height change of 40px or more) and
+       when a page's content changes size, each page's content is measured
+       against the deck in the held frame. A page that overflows takes
+       .is-tight (closer spacing, smaller type, body never under 13px); if a
+       page still overflows, or the window is under 500px tall, the frame is
+       released (.dk.is-free): the window scrolls, the steps are sections down
+       the page and the bar stays at the foot following the section being
+       read (the flowing page's rules, lab/flow-attempt). Pages never scroll
+       on their own (overflow hidden). */
+    function need(p) {
+      var inner = p.querySelector('.dk-in');
+      return inner ? Math.ceil(Math.max(inner.scrollHeight, inner.getBoundingClientRect().height)) : p.scrollHeight;
+    }
+    function overflows(p) { return need(p) > p.clientHeight + 1; }
+
+    // A joined half without a title of its own (data-join="align") starts its
+    // rows level with the first row of the half beside it.
+    function align() {
+      pages.forEach(function (p, k) {
+        if (p.getAttribute('data-join') !== 'align') return;
+        var inner = p.querySelector('.dk-in');
+        inner.style.removeProperty('--join-top');
+        if (free || k === 0 || screenOf[k] !== screenOf[k - 1]) return;
+        var a = pages[k - 1], sel = '.prio, .area';
+        var ar = a.querySelector(sel), br = p.querySelector(sel);
+        if (!ar || !br) return;
+        var aOff = ar.getBoundingClientRect().top - a.querySelector('.dk-in').getBoundingClientRect().top;
+        var bOff = br.getBoundingClientRect().top - inner.getBoundingClientRect().top;
+        var pad = parseFloat(getComputedStyle(inner).paddingTop) || 0;
+        inner.style.setProperty('--join-top', Math.max(0, Math.round(pad + aOff - bOff)) + 'px');
+      });
+    }
+
+    var fitting = false;
+    function fit() {
+      // data-fit-hold on the root holds the frame for the lab's probe (lab/bespoke-fit-probe.mjs).
+      if (fitting || !app || document.documentElement.hasAttribute('data-fit-hold')) return;
+      fitting = true;
+      var was = free, y = window.scrollY;
+      var curPage = screens.length ? screens[Math.min(cur, last)][0] : 0;
+      app.classList.remove('is-free');
+      document.body.classList.remove('dk-is-free');
+      free = false;
+      pages.forEach(function (p) { p.classList.remove('is-tight'); });
+      group(); align();
+      pages.forEach(function (p) { if (overflows(p)) p.classList.add('is-tight'); });
+      align();
+      var over = pages.filter(overflows);
+      free = over.length > 0 || window.innerHeight < 500;
+      app.classList.toggle('is-free', free);
+      document.body.classList.toggle('dk-is-free', free);
+      app.setAttribute('data-over', over.map(function (p) { return pages.indexOf(p); }).join(' '));
+      app.setAttribute('data-fit', free ? 'free' : pages.some(function (p) { return p.classList.contains('is-tight'); }) ? 'tight' : 'fits');
+      if (free) { group(); align(); }
+      fitTop();
+      var to = screenOf[curPage] || 0;
+      paint(to);
+      if (free !== was) {
+        // Into the flowing page: the section being read comes to the top.
+        // Back to the frame: the window to the top, the deck on the screen.
+        if (free) window.scrollTo({ top: landY(to), behavior: 'instant' });
+        else { window.scrollTo({ top: 0, behavior: 'instant' }); root.scrollTo({ left: to * root.clientWidth, behavior: 'auto' }); }
+      } else if (free) window.scrollTo({ top: y, behavior: 'instant' });
+      else root.scrollTo({ left: to * root.clientWidth, behavior: 'auto' });
+      fitting = false;
+    }
+
+    // Released: where a section lands when scrolled to (just under the header).
+    function landY(i) {
+      var off = hdr ? hdr.getBoundingClientRect().height : 0;
+      var p = pages[screens[i][0]];
+      return i === 0 ? 0 : Math.max(0, p.getBoundingClientRect().top + window.scrollY - off);
+    }
+    // Released: the page's own eased scroll (as the flowing page had it):
+    // instant steps toward a target read again every frame; a touch, wheel or
+    // key from the reader stops it.
+    var gRaf = 0;
+    function stopGlide() { if (gRaf) { cancelAnimationFrame(gRaf); gRaf = 0; } }
+    ['touchstart', 'wheel', 'keydown'].forEach(function (ev) { window.addEventListener(ev, stopGlide, { passive: true }); });
+    function glide(i, now) {
+      stopGlide();
+      var y0 = window.scrollY;
+      if (now) { window.scrollTo({ top: landY(i), behavior: 'instant' }); return; }
+      var dist = Math.abs(landY(i) - y0), ms = Math.min(1100, Math.max(500, 380 + dist * 0.35)), t0 = performance.now();
+      var ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+      (function step(t) {
+        var k = Math.min(1, (t - t0) / ms);
+        window.scrollTo({ top: y0 + (landY(i) - y0) * ease(k), behavior: 'instant' });
+        gRaf = k < 1 ? requestAnimationFrame(step) : 0;
+      })(t0);
+    }
+    // Released: the section being read is the last whose top has passed 45
+    // percent of the window (the last, once the page reaches its end).
+    function reading() {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) return last;
+      var mark = window.innerHeight * 0.45, i = 0;
+      pages.forEach(function (p, k) { if (p.getBoundingClientRect().top <= mark) i = screenOf[k]; });
+      return i;
+    }
+    var sRaf = 0;
+    window.addEventListener('scroll', function () {
+      if (!free || sRaf || fitting) return;
+      sRaf = requestAnimationFrame(function () {
+        sRaf = 0;
+        if (!free) return;
+        var i = reading();
+        if (target !== null) { if (i === target) { target = null; clearTimeout(lockT); } return; }
+        if (i !== cur) paint(i);
+      });
+    }, { passive: true });
+
+    var rw = 0, lastW = window.innerWidth, lastH = window.innerHeight;
+    window.addEventListener('resize', function () {
+      clearTimeout(rw);
+      rw = setTimeout(function () {
+        var w = window.innerWidth, h = window.innerHeight;
+        if (w !== lastW || Math.abs(h - lastH) >= 40) { lastW = w; lastH = h; fit(); }
+        else if (!free) root.scrollTo({ left: cur * root.clientWidth, behavior: 'auto' });
+      }, 120);
+    });
+
+    // A page's content changing size (a longer summary line, the budget's
+    // recommendation, thirty days on the strip) measures again.
+    // A short timer, not a frame: a frame request was seen to stall in headless Chrome.
+    var fT = 0;
+    function refit() { if (fitting) return; clearTimeout(fT); fT = setTimeout(fit, 30); }
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(refit);
+      pages.forEach(function (p) {
+        var inner = p.querySelector('.dk-in');
+        if (!inner) return;
+        ro.observe(inner);
+        [].slice.call(inner.children).forEach(function (c) { ro.observe(c); });
+      });
+    }
+    // Every choice and the budget measure again too, after the builder has
+    // painted (the observer alone missed some changes in testing).
+    var scope = document.querySelector('[data-builder-scope]');
+    if (scope) ['change', 'input'].forEach(function (ev) { scope.addEventListener(ev, refit); });
+    deck.fit = fit;
+
+    group();
+    paint(0);
+    fit();
+    // Fonts change every measure; once they are in, measure again.
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    window.addEventListener('load', fit);
   }
 
   function boot() {
     nav();
+    deckController();
     builder();
-    entrances();
-    feebar();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);

@@ -8,7 +8,8 @@
      the rail's tick moves on and any open item closes.
    Each kind holds for a beat. The first kind's words rise in as the section
    arrives. Items open in place on click, one at a time per kind. Desktop
-   with motion only; phones and reduced motion get photograph then words.
+   with motion only; phones get photograph then words, each photograph zooming
+   gently in its frame as it crosses the screen; reduced motion gets them still.
    Rebuilds on width change only. */
 (function () {
   'use strict';
@@ -55,7 +56,23 @@
   var HOLD = 1, MOVE = 1;
   var UNITS = kinds.length * HOLD + (kinds.length - 1) * MOVE;
   var VH_PER_UNIT = 0.7;
-  var tl = null, intro = null, lastW = 0, current = 0;
+  var tl = null, intro = null, lastW = 0, current = 0, zooms = [];
+
+  /* Phones (TJ, 11 Oct 2026): each picture keeps its frame while the photograph
+     inside grows as it crosses the screen, 1 to 1.2, about the hands, reaching
+     full zoom while the picture is still on screen.
+     Room and hands are scaled together from the same origin, so they stay
+     lined up. */
+  var ZOOM = { to: 1.2, origin: '62% 46%' };   // 1.08 first; TJ asked for more (11 Oct 2026)
+  function phoneZoom() {
+    [].slice.call(sec.querySelectorAll('[data-hd-scene]')).forEach(function (scene) {
+      var layers = [].slice.call(scene.querySelectorAll('[data-hd-plate], [data-hd-cut]'));
+      zooms.push(gsap.fromTo(layers, { scale: 1, transformOrigin: ZOOM.origin }, {
+        scale: ZOOM.to, ease: 'none',
+        scrollTrigger: { trigger: scene, start: 'top 92%', end: 'bottom 35%', scrub: 0.6, invalidateOnRefresh: true }
+      }));
+    });
+  }
 
   function splitLines(el) {
     var words = el.dataset.src.trim().split(/\s+/);
@@ -90,6 +107,8 @@
   function teardown() {
     [tl, intro].forEach(function (t) { if (t) { if (t.scrollTrigger) t.scrollTrigger.kill(); t.kill(); } });
     tl = intro = null;
+    zooms.forEach(function (z) { if (z.scrollTrigger) z.scrollTrigger.kill(); z.kill(); });
+    zooms = [];
     revert();
     gsap.set(plates.concat(cuts, kinds, [].slice.call(sec.querySelectorAll('[data-hd-fade]'))), { clearProps: 'all' });
     sec.classList.remove('is-live', 'is-tight');
@@ -101,7 +120,8 @@
   function build() {
     teardown();
     lastW = window.innerWidth;
-    if (reduced || !wide.matches) return;
+    if (reduced) return;
+    if (!wide.matches) { phoneZoom(); return; }
     sec.classList.add('is-live');
     sec.style.setProperty('--hd-len', (1 + UNITS * VH_PER_UNIT).toFixed(2));
 

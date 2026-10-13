@@ -8,7 +8,11 @@
      SplitText is needed);
      the closing line is the last stop.
    Entry windows overlap by half, as in the component. Reduced motion shows
-   the finished list. Rebuilds when the width changes, never the height. */
+   the finished list. Rebuilds when the width changes, never the height.
+   Phones (TJ, 12 Oct 2026): the photograph is settled in its final place from the
+   start with the glass merged into it (css), and the line, still drawn by scroll,
+   can also be driven by tap: the next hour's dot shows greyed and a tap on it
+   carries the page, and so the line, to that hour. */
 (function () {
   'use strict';
   var sec = document.querySelector('[data-vt]');
@@ -34,7 +38,37 @@
   var inkT = sec.querySelector('.vt__photo-title--ink');
   var coralT = sec.querySelector('.vt__photo-title--coral');
   cardTexts.forEach(function (el) { el.dataset.src = el.textContent; });
-  var tl = null, lastW = 0;
+  var tl = null, ptl = null, lastW = 0;
+
+  /* Phones: one button per hour, over its dot, only the next one showing. */
+  var goBtns = items.map(function (it) {
+    var b = it.querySelector('.vt__go');
+    if (!b) {
+      b = document.createElement('button'); b.type = 'button'; b.className = 'vt__go';
+      var t = it.querySelector('time'), h = it.querySelector('h3');
+      b.setAttribute('aria-label', 'Show ' + (t ? t.textContent : '') + ', ' + (h ? h.textContent : ''));
+      it.insertBefore(b, it.firstChild);
+    }
+    return b;
+  });
+  var scrollRaf = 0;
+  function stopScroll() { if (scrollRaf) { cancelAnimationFrame(scrollRaf); scrollRaf = 0; } }
+  ['touchstart', 'wheel', 'keydown'].forEach(function (ev) { window.addEventListener(ev, stopScroll, { passive: true }); });
+  // Carries the page to y over ms with an ease at both ends. Instant steps: the page's own
+  // smooth scrolling would restart every frame (site.css sets html { scroll-behavior: smooth }).
+  function glideTo(y1, ms) {
+    stopScroll();
+    var y0 = window.scrollY;
+    if (Math.abs(y1 - y0) < 2) return;
+    if (reduced) { window.scrollTo({ top: y1, behavior: 'instant' }); return; }
+    var t0 = performance.now();
+    var ease = function (t) { return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+    (function step(now) {
+      var k = Math.min(1, (now - t0) / ms);
+      window.scrollTo({ top: y0 + (y1 - y0) * ease(k), behavior: 'instant' });
+      scrollRaf = k < 1 ? requestAnimationFrame(step) : 0;
+    })(t0);
+  }
 
   textEls.forEach(function (el) { el.dataset.src = el.textContent; });
 
@@ -66,6 +100,10 @@
 
   function teardown() {
     if (tl) { if (tl.scrollTrigger) tl.scrollTrigger.kill(); tl.kill(); tl = null; }
+    if (ptl) { if (ptl.closeT) { ptl.closeT.scrollTrigger.kill(); ptl.closeT.kill(); } if (ptl.scrollTrigger) ptl.scrollTrigger.kill(); ptl.kill(); ptl = null; }
+    sec.classList.remove('is-flow');
+    goBtns.forEach(function (b) { b.classList.remove('is-next'); });
+    if (coralT) { coralT.style.top = ''; coralT.style.bottom = ''; }
     var stems = items.map(function (i) { return i.querySelector('.vt__stem'); });
     var dots = items.map(function (i) { return i.querySelector('.vt__dot'); });
     gsap.set([track, fill, tipDot].concat(stems, dots).filter(Boolean), { clearProps: 'transform' });
@@ -85,6 +123,13 @@
     sec.classList.remove('is-static'); sec.classList.add('is-live');
 
     var phone = window.innerWidth <= 860;
+    /* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 4): no held stage. The section is
+       a page that scrolls (.is-flow): the arrival photograph closes into its slot
+       as the section comes in, then the hours sit in the page and the line draws
+       down beside them, its tip held at 62 percent of the screen, each hour
+       growing its stem and dot and raising its words as the tip reaches it.
+       Desktop keeps the held stage below, unchanged. */
+    if (phone) sec.classList.add('is-flow');
     var stems = items.map(function (i) { return i.querySelector('.vt__stem'); });
     var dots = items.map(function (i) { return i.querySelector('.vt__dot'); });
     var lineSets = items.map(function (i) {
@@ -126,6 +171,8 @@
     // The title's journey (TJ, 9 Oct 2026): from its place on the photograph to
     // where "A Day With Us" sits in the card, shrinking to that size (both copies
     // measured with the track at rest and the card in place).
+    // On phones the coral copy sits in the tall stage, so it is placed where the
+    // black copy sits on the photograph's first screen.
     var t0 = inkT.getBoundingClientRect(), subR = sub.getBoundingClientRect();
     var tX = subR.left - t0.left, tY = subR.top - t0.top;
     var tSf = parseFloat(getComputedStyle(sub).fontSize) / parseFloat(getComputedStyle(inkT).fontSize);
@@ -154,6 +201,9 @@
 
     // The photograph's slot, relative to the stage, with the track at rest.
     var stageR = stage.getBoundingClientRect();
+    // On phones the photograph covers the first screen of the section, not the
+    // whole (tall) stage, so its slot is measured against the photograph's box.
+    if (phone) stageR = photo.getBoundingClientRect();
     var slotR = slot.getBoundingClientRect();
     var sl = { t: slotR.top - stageR.top, l: slotR.left - stageR.left, r: stageR.right - slotR.right, b: stageR.bottom - slotR.bottom };
     var RAD = parseFloat(getComputedStyle(slot).borderTopLeftRadius) || 10;
@@ -168,9 +218,9 @@
     var r0 = cover(-SW * .03, -SH * .03, SW * 1.06, SH * 1.06, phone ? .64 : .5);
     var r1 = cover(sl.l, sl.t, SW - sl.l - sl.r, SH - sl.t - sl.b, .5);
     var BASE = r0.w;
-    img.style.width = BASE + 'px'; img.style.height = (BASE / A) + 'px';
-    gsap.set(cardLines, { yPercent: 112 });
-    gsap.set(sec, { '--vt-ci': 0 });
+    if (!phone) { img.style.width = BASE + 'px'; img.style.height = (BASE / A) + 'px'; }
+    gsap.set(cardLines, { yPercent: phone ? 0 : 112 });
+    gsap.set(sec, { '--vt-ci': phone ? 1 : 0 });
     var ph = { a: 0 }, curE = 0, curTy = 0;
     var photoY = function () {
       photo.style.transform = 'translateY(' + (curTy * curE).toFixed(1) + 'px)';
@@ -210,6 +260,47 @@
         var k = Math.min(1, Math.max(0, (ys[i] + ty - top0) / (top1 - top0)));
         it.style.opacity = (0.28 + 0.72 * k).toFixed(3);
       });
+    }
+
+    if (phone) {
+      var trackOff = trackTop - stage.getBoundingClientRect().top;
+      var a0 = Math.round(trackOff + lineStart), a1 = Math.round(trackOff + lineEnd);
+      // The photograph and card are settled (css); nothing opens or travels. The
+      // line: its tip is held at half the screen as the page moves, so the next
+      // hour's dot is always in view below it.
+      var at0s = items.map(function (it, i) { return Math.min(0.93, Math.max(0, (ys[i] - lineStart) / (lineEnd - lineStart) - 0.02)); });
+      var nextIdx = -2;
+      var flowApply = function () {
+        if (tipDot) tipDot.style.transform = 'translateY(' + (st.p * (lineEnd - lineStart)).toFixed(1) + 'px)';
+        gsap.set(fill, { scaleY: st.p });
+        // The next hour is the first not yet reached; its dot shows greyed and tappable.
+        var n = 0; while (n < items.length && st.p >= at0s[n] + 0.003) n++;
+        if (n !== nextIdx) { nextIdx = n; goBtns.forEach(function (b, i) { b.classList.toggle('is-next', i === n); }); }
+      };
+      tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: stage, start: 'top+=' + a0 + ' 50%', end: 'top+=' + a1 + ' 50%', scrub: 0.3, refreshPriority: -13 } });
+      tl.to(st, { p: 1, duration: 1, onUpdate: flowApply }, 0);
+      items.forEach(function (it, i) {
+        var sub = gsap.timeline();
+        sub.fromTo(stems[i], { scaleX: 0 }, { scaleX: 1, duration: 0.4 }, 0)
+           .fromTo(dots[i], { scale: 0 }, { scale: 1, duration: 0.4 }, 0)
+           .fromTo(lineSets[i], { yPercent: 112 }, { yPercent: 0, duration: 1, stagger: 0.035, ease: 'power2.out' }, 0.2);
+        sub.duration(0.07);
+        tl.add(sub, at0s[i]);
+      });
+      if (closeLines.length) {
+        ptl = gsap.timeline();
+        ptl.closeT = gsap.fromTo(closeLines, { yPercent: 112 }, { yPercent: 0, ease: 'power2.out', stagger: 0.05, scrollTrigger: { trigger: close, start: 'top 92%', end: 'top 72%', scrub: 0.4 } });
+      }
+      // A tap on the next dot carries the page to where that hour has just been drawn.
+      goBtns.forEach(function (b, i) {
+        b.onclick = function () {
+          // Just far enough that this hour has risen, never so far that the next one starts.
+          var stt = tl.scrollTrigger, p = Math.min(1, at0s[i] + 0.075, i + 1 < items.length ? at0s[i + 1] - 0.004 : 1);
+          glideTo(stt.start + p * (stt.end - stt.start), 1100);
+        };
+      });
+      flowApply();
+      return;
     }
 
     tl = gsap.timeline({

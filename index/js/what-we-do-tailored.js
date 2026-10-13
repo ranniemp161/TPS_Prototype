@@ -6,14 +6,18 @@
      0.24 to 0.34  the line draws from nothing to 5 days, led by the circle
      0.34 to 0.90  5, 7, 14, 30: the circle travels and rests at each stop
                    while the figures count (the ledger in what-we-do.js)
-   Phones: the photograph closes onto its frame as it scrolls in; the line
-   runs down the middle and its circle holds at 72 percent of the screen
-   while the line draws past it, as the tip does in A Day With Us.
+   Phones: the photograph closes onto its frame as it scrolls in, the glass
+   card joined to its foot (Read more lifts the glass up into it); the line
+   runs across, as on desktop, and is tapped, not scrolled (TJ, 12 Oct 2026,
+   swiping does not work well on a phone): a tap on 5, 7, 14 or 30, or on the
+   line, slides the circle there on the housekeeping rooms' easing, and the
+   ledger in what-we-do.js counts the figures. It rests on the 5 day stay.
 
-   Then the sun: once the line is complete and the section is leaving, the
-   circle lifts off the line and drifts down into Day and Night, growing as it
-   goes, and lands on the sun at the moment the clock begins, where the sun
-   takes over. Across and down on desktop; straight down the centre on phones.
+   Then the sun, desktop only (TJ, 12 Oct 2026: removed on phones): once the
+   line is complete and the section is leaving, the 14 day circle lifts off
+   the line, which has it at the page's centre, and drifts straight down into
+   Day and Night, growing as it goes, and lands on the sun at the moment the
+   clock begins, where the sun takes over.
    Reduced motion: the line complete at five days, no flight. */
 (function () {
   'use strict';
@@ -35,7 +39,7 @@
   var stop14 = sec.querySelector('.ty__stop[style*="--at: 14"]');
   var STOPS = [5, 7, 14, 30], MILESTONES = [0, 1 / 3, 2 / 3, 1];
   var PH = 0.2, L0 = 0.24, L1 = 0.34, L2 = 0.9;
-  var lastW = 0, phone = false;
+  var lastW = 0, lastH = 0, phone = false;
   // One driver per mode, run every frame. Positions are read live from the
   // page rather than measured once, because the sections above change height
   // after load (the zones size themselves late) and a stored position drifts.
@@ -53,8 +57,6 @@
     return STOPS[seg] + (STOPS[seg + 1] - STOPS[seg]) * smooth(local);
   }
   function activeAt(q) { return q < 1 / 6 ? 5 : q < 1 / 2 ? 7 : q < 5 / 6 ? 14 : 30; }
-  // Phones: the line is drawn straight from scroll, so the stop is the last one passed.
-  function activeFor(d) { var a = 5; STOPS.forEach(function (s) { if (d >= s - 0.01) a = s; }); return a; }
 
   function setDays(d, active) {
     var L = ledger(); if (!L) return;
@@ -63,48 +65,95 @@
 
   function teardown() {
     drive = null;
-    sec.classList.remove('is-live', 'is-flow');
+    sec.classList.remove('is-live', 'is-flow', 'is-calm', 'is-tight');
+    if (sec._tyRo) { sec._tyRo.disconnect(); sec._tyRo = null; }
     ['--ty-ci', '--ty-di', '--ty-sw', '--ph-t', '--ph-r', '--ph-b', '--ph-l', '--ph-rad'].forEach(function (p) { sec.style.removeProperty(p); });
     titles.forEach(function (t) { t.style.transform = ''; }); tslot.style.height = '';
     img.style.width = ''; img.style.height = ''; img.style.transform = '';
     delete track._tlSeekDay;
   }
 
-  /* ---------- Desktop: the held stage ---------- */
+  /* ---------- Desktop: the held stage ----------
+     Short windows (TJ, 12 Oct 2026). The held stage has to fit the title, the card,
+     the line and the figures on one screen, so it is sized from the window's
+     height, and on a short window (or a zoomed in browser) the open Read more text
+     spilled out of the card. Now, before anything is drawn, the card is measured
+     with Read more open and closed: if the words do not fit, the card tightens
+     (.is-tight); if they still do not fit, or the window is under 540px tall, the
+     section stops holding still (.is-calm) and scrolls with the page in its
+     finished desktop layout, photograph beside the card and the line across,
+     tapped as on phones; the card then grows with its words. No scrollbar inside
+     the card, ever. */
+  var CALM_H = 540;
+  // Does the card hold its words, open and closed? Measured with transitions off
+  // and put back before they are switched on again, so nothing animates.
+  function cardFits() {
+    var card = sec.querySelector('.ty__card'), panel = sec.querySelector('[data-tl-readmore]');
+    var wasOpen = panel.classList.contains('is-open'), wasWide = sec.classList.contains('is-wide');
+    sec.classList.add('ty-measure');
+    var ok = true;
+    [false, true].forEach(function (open) {
+      panel.classList.toggle('is-open', open); sec.classList.toggle('is-wide', open);
+      // The words' own extent: the card centres its content, so words that do not
+      // fit spill above it as well as below, where scrollHeight cannot see them.
+      // They may run into the card's padding (the approved 1440 by 900 layout does),
+      // but must keep at least 14px clear of its edge.
+      var kids = [].slice.call(card.children);
+      var top = Math.min.apply(null, kids.map(function (k) { return k.getBoundingClientRect().top; }));
+      var bot = Math.max.apply(null, kids.map(function (k) { return k.getBoundingClientRect().bottom; }));
+      var need = bot - top + 28;
+      if (need > card.clientHeight + 2) ok = false;
+    });
+    panel.classList.toggle('is-open', wasOpen); sec.classList.toggle('is-wide', wasWide);
+    void card.offsetHeight;
+    sec.classList.remove('ty-measure');
+    return ok;
+  }
+
   function desktop() {
     sec.classList.add('is-live');
-    // The title comes to rest centred over both cards, 20 percent narrower
-    // than the two of them together (TJ, 9 Oct 2026): the resting line is as
-    // wide as the cards and as tall as the title is at that size, before
-    // anything is measured.
-    var headW = sec.querySelector('.ty__head').getBoundingClientRect().width;
-    var tW = title.offsetWidth, tH = title.offsetHeight;
-    var tS = 0.8 * headW / tW;
-    tslot.style.height = Math.ceil(tH * tS) + 'px';
-    var stageR = stage.getBoundingClientRect();
-    var slotR = slot.getBoundingClientRect();
-    var sl = { t: slotR.top - stageR.top, l: slotR.left - stageR.left, r: stageR.right - slotR.right, b: stageR.bottom - slotR.bottom };
-    var RAD = parseFloat(getComputedStyle(slot).borderTopLeftRadius) || 10;
-    sec.style.setProperty('--ty-sw', (stageR.width - sl.l - sl.r).toFixed(1) + 'px');
-    // The picture's own rectangle: covering the screen at the start (a touch
-    // larger) and covering the slot at the end, framed on her at the cot.
-    var A = (img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 1920 / 1072;
+    var calm = window.innerHeight < CALM_H;
+    if (!calm && !cardFits()) { sec.classList.add('is-tight'); if (!cardFits()) calm = true; }
+    if (calm) sec.classList.add('is-calm');
+
+    var tW, tH, tS, sl, RAD, A, SW, SH, r0, r1, BASE, tX, tY;
     var cover = function (bx, by, bw, bh, fx) { var w = Math.max(bw, bh * A), h = w / A; return { x: bx + (bw - w) * fx, y: by + (bh - h) / 2, w: w, h: h }; };
-    var SW = stageR.width, SH = stageR.height;
-    var r0 = cover(-SW * .03, -SH * .03, SW * 1.06, SH * 1.06, .5);
-    // In the slot the crop sits on the three of them, right of centre.
-    var r1 = cover(sl.l, sl.t, SW - sl.l - sl.r, SH - sl.t - sl.b, .8);
-    var BASE = r0.w;
-    img.style.width = BASE + 'px'; img.style.height = (BASE / A) + 'px';
+    // Everything is measured from the layout at rest; on a calm section it is
+    // measured again whenever the head row changes height (Read more, resize).
+    function geom() {
+      titles.forEach(function (t) { t.style.transform = ''; }); img.style.transform = '';
+      // The title comes to rest centred over both cards, 20 percent narrower
+      // than the two of them together (TJ, 9 Oct 2026): the resting line is as
+      // wide as the cards and as tall as the title is at that size, before
+      // anything is measured.
+      var headW = sec.querySelector('.ty__head').getBoundingClientRect().width;
+      tW = title.offsetWidth; tH = title.offsetHeight;
+      tS = 0.8 * headW / tW;
+      tslot.style.height = Math.ceil(tH * tS) + 'px';
+      var stageR = stage.getBoundingClientRect();
+      var slotR = slot.getBoundingClientRect();
+      sl = { t: slotR.top - stageR.top, l: slotR.left - stageR.left, r: stageR.right - slotR.right, b: stageR.bottom - slotR.bottom };
+      RAD = parseFloat(getComputedStyle(slot).borderTopLeftRadius) || 10;
+      sec.style.setProperty('--ty-sw', (stageR.width - sl.l - sl.r).toFixed(1) + 'px');
+      // The picture's own rectangle: covering the screen at the start (a touch
+      // larger) and covering the slot at the end, framed on her at the cot.
+      A = (img.naturalWidth && img.naturalHeight) ? img.naturalWidth / img.naturalHeight : 1920 / 1072;
+      SW = stageR.width; SH = stageR.height;
+      r0 = cover(-SW * .03, -SH * .03, SW * 1.06, SH * 1.06, .5);
+      // In the slot the crop sits on the three of them, right of centre.
+      r1 = cover(sl.l, sl.t, SW - sl.l - sl.r, SH - sl.t - sl.b, .8);
+      BASE = r0.w;
+      img.style.width = BASE + 'px'; img.style.height = (BASE / A) + 'px';
+      // The title (TJ, 9 Oct 2026): from its place on the photograph, bottom
+      // left, to the line above the photograph and the card, centred and
+      // shrinking, on the photograph's own curve. Its two copies take the same
+      // transform; which one shows where is decided by the photograph's edge.
+      var t0 = title.getBoundingClientRect(), ts = tslot.getBoundingClientRect();
+      tX = ts.left - t0.left + (ts.width - tW * tS) / 2; tY = ts.top - t0.top;
+    }
+    geom();
 
-    // The title (TJ, 9 Oct 2026): from its place on the photograph, bottom
-    // left, to the line above the photograph and the card, centred and
-    // shrinking, on the photograph's own curve. Its two copies take the same
-    // transform; which one shows where is decided by the photograph's edge.
-    var t0 = title.getBoundingClientRect(), ts = tslot.getBoundingClientRect();
-    var tX = ts.left - t0.left + (ts.width - tW * tS) / 2, tY = ts.top - t0.top;
-
-    function render(p) {
+    function render(p, keepDays) {
       var a = clamp(p / PH, 0, 1), e = a < .5 ? 2 * a * a : 1 - Math.pow(-2 * a + 2, 2) / 2;
       sec.style.setProperty('--ph-t', (e * sl.t).toFixed(1) + 'px');
       sec.style.setProperty('--ph-r', (e * sl.r).toFixed(1) + 'px');
@@ -117,9 +166,26 @@
       titles.forEach(function (t) { t.style.transform = tf; });
       sec.style.setProperty('--ty-ci', smooth((p - PH * 0.5) / (PH * 0.45)).toFixed(3));
       sec.style.setProperty('--ty-di', smooth((p - PH * 0.8) / (PH * 0.4)).toFixed(3));
+      if (keepDays) return;
       if (p < L0) setDays(0, 5);
       else if (p < L1) setDays(5 * (p - L0) / (L1 - L0), 5);
       else { var q = clamp((p - L1) / (L2 - L1), 0, 1); setDays(dayAt(q), activeAt(q)); }
+    }
+
+    if (calm) {
+      // Finished from the start: the photograph in its slot, the title on its line,
+      // the card and the line in place, resting on 5 days; a tap on a day, on the
+      // line or a drag of the circle moves it (the ledger in what-we-do.js).
+      render(1, true);
+      var L = ledger(); if (L) L.arrive(5);
+      var head = sec.querySelector('.ty__head'), hH = head.offsetHeight;
+      var ro = new ResizeObserver(function () {
+        if (Math.abs(head.offsetHeight - hH) < 1) return;
+        hH = head.offsetHeight; geom(); render(1, true);
+      });
+      ro.observe(head);
+      sec._tyRo = ro;
+      return;
     }
 
     var live = function () { return clamp(-sec.getBoundingClientRect().top / (sec.offsetHeight - window.innerHeight), 0, 1); };
@@ -142,35 +208,33 @@
   }
 
   /* ---------- Phones: the line down the middle ---------- */
-  // The circle holds low on the screen, so the figures above stay in view.
-  var HOLD = 0.72;
+  /* Phones: the photograph closes as it scrolls in; the line is the ledger's own,
+     driven by taps (what-we-do.js: a tap on a day, a tap on the line or a drag of
+     the circle slides it there over 650ms on --tease and counts the figures). It
+     rests on the 5 day stay, so the figures never read zero (MOBILE-PLAN item 6).
+     Nothing drops from it into Day and Night on phones (TJ, 12 Oct 2026). */
   function flow() {
     sec.classList.add('is-flow');
     var gut = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 24;
     // The photograph closes onto its frame between its top at 85 percent of
-    // the screen and at 12 percent; the line draws past the hold point.
+    // the screen and at 12 percent.
     var livePh = function () { var vh = window.innerHeight; return clamp((0.85 * vh - photo.getBoundingClientRect().top) / (0.73 * vh), 0, 1); };
-    var liveLn = function () { return clamp((HOLD * window.innerHeight - days.getBoundingClientRect().top) / days.offsetHeight, 0, 1); };
-    var a = livePh(), q = liveLn(), shownA = -1, shownQ = -1;
+    var a = livePh(), shownA = -1;
+    var L0 = ledger(); if (L0) L0.arrive(5);
     var paint = function () {
       if (a !== shownA) {
         var e = smooth(a);
+        // An even frame (TJ, 12 Oct 2026): the top closes in by the same gutter as
+        // the sides; the foot stays open, where the glass card joins the photograph.
+        sec.style.setProperty('--ph-t', (e * gut).toFixed(1) + 'px');
         sec.style.setProperty('--ph-l', (e * gut).toFixed(1) + 'px');
         sec.style.setProperty('--ph-r', (e * gut).toFixed(1) + 'px');
         sec.style.setProperty('--ph-rad', (e * 10).toFixed(1) + 'px');
         shownA = a;
       }
-      if (q !== shownQ) { var d = q * 30; setDays(d, activeFor(d)); shownQ = q; }
     };
-    drive = function () { a = ease(a, livePh()); q = ease(q, liveLn()); paint(); };
+    drive = function () { a = ease(a, livePh()); paint(); };
     paint();
-
-    track._tlSeekDay = function (d) {
-      if (STOPS.indexOf(d) < 0) return false;
-      var top = days.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: top + (d / 30) * days.offsetHeight - HOLD * window.innerHeight + 1, behavior: 'smooth' });
-      return true;
-    };
   }
 
   /* ---------- The sun ----------
@@ -186,7 +250,7 @@
   // percent of a screen into it. Both read live, in distance still to scroll.
   function progress() {
     var vh = window.innerHeight;
-    var toStart = phone ? days.getBoundingClientRect().bottom - HOLD * vh : sec.getBoundingClientRect().bottom - vh;
+    var toStart = sec.getBoundingClientRect().bottom - vh;
     var holder = peakStage.parentElement && peakStage.parentElement.classList.contains('pin-spacer') ? peakStage.parentElement : peakStage;
     var toEnd = Math.max(toStart + vh * 0.3, holder.getBoundingClientRect().top + 0.08 * vh);
     return -toStart / (toEnd - toStart);
@@ -194,15 +258,14 @@
   function centre(el) { var r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: r.width }; }
   function fly() {
     if (!sun) return;
-    var p = progress();
+    var p = phone ? 0 : progress();   // phones: no fall, the circle stays on its line
     if (p <= 0) {
       twin.style.display = 'none'; tip.classList.remove('is-lifted'); stop14.classList.remove('is-lifted'); sun.style.visibility = '';
       return;
     }
-    // The circle that drops: on desktop the 14 day stop, which sits at the page's
-    // centre, so it falls straight down; on phones the circle at the line's foot,
-    // which sits on the centred line.
-    src = phone ? tip : stop14;
+    // The circle that drops is the 14 day stop: it sits at the page's centre, so
+    // it falls straight down.
+    src = stop14;
     src.classList.add('is-lifted');
     if (p >= 1) { twin.style.display = 'none'; sun.style.visibility = ''; return; }
     sun.style.visibility = 'hidden';
@@ -245,7 +308,7 @@
 
   function build() {
     teardown();
-    lastW = window.innerWidth;
+    lastW = window.innerWidth; lastH = window.innerHeight;
     phone = window.innerWidth <= 860;
     if (reduced) { var L = ledger(); if (L) L.arrive(5); return; }
     if (phone) flow(); else desktop();
@@ -255,7 +318,9 @@
   window.addEventListener('resize', function () {
     clearTimeout(resizeT);
     resizeT = setTimeout(function () {
-      if (window.innerWidth === lastW) return;
+      // Width changes rebuild; on desktop so does a real height change (the fit
+      // and the calm switch depend on it). Phones ignore height (the URL bar).
+      if (window.innerWidth === lastW && (window.innerWidth <= 860 || Math.abs(window.innerHeight - lastH) < 40)) return;
       build(); ScrollTrigger.refresh();
     }, 200);
   });

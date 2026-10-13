@@ -6,7 +6,11 @@
    0.6 of its size over the same glide. Read live every
    frame from where the circle actually is, so it holds whatever the sections
    above are doing. Reduced motion: centred from the start. Its colours and its
-   exit are in what-we-do-day-night.css. */
+   exit are in what-we-do-day-night.css.
+   Phones (TJ, 12 Oct 2026): no circle falls, so the title sits centred at its
+   full size from the start and simply crosses onto the photograph as it rises
+   (the two copies do that); no glide, no growth (TJ tried small to large and
+   preferred it to stay the same size). */
 (function () {
   'use strict';
   var wrap = document.querySelector('.dn-wrap');
@@ -14,6 +18,7 @@
   if (!titles.length || !window.gsap) return;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var title = titles[0];
+  var phone = window.matchMedia('(max-width: 860px)');
   var cur = reduced ? 1 : 0, shown = -1;
   var smooth = function (x) { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
 
@@ -29,6 +34,16 @@
     return document.querySelector('.ty .is-lifted') ? 1 : 0;
   }
   function frame() {
+    if (phone.matches) {
+      // Centred from its own measured box every frame (fonts and layout settle late).
+      var dx = Math.round((window.innerWidth - title.offsetWidth) / 2 - title.offsetLeft);
+      var k = 'p' + dx;
+      if (k === shown) return;
+      shown = k;
+      wrap.style.setProperty('--dn-tx', dx + 'px');
+      wrap.style.setProperty('--dn-ts', '1');
+      return;
+    }
     if (!reduced) { var target = passed(), d = target - cur; cur = Math.abs(d) < 0.001 ? target : cur + d * 0.18; }
     if (cur === shown) return;
     shown = cur;
