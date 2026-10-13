@@ -23,12 +23,7 @@
 }
 
 /* ---------- Shared type ---------- */
-.wlabel {
-  display: flex; align-items: center; gap: 12px; margin: 0;
-  font-family: var(--f-body); font-size: .72rem; font-weight: 500;
-  letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft);
-}
-.wlabel::before { content: ""; flex: none; width: 28px; height: 1px; background: var(--ember); }
+/* .wlabel removed (TJ, 9 Oct 2026): the small spaced label with a coral dash was an invented eyebrow, not the client's copy. */
 .wh2, .wwd-h2 {
   margin: 0; font-family: var(--f-display); font-weight: 400;
   font-size: clamp(2.4rem, 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
@@ -114,7 +109,6 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 }
 .det__media img:first-child, .det__media img.is-on { clip-path: inset(0 0 0 0); transform: scale(1); }
 .det__col { display: grid; gap: clamp(40px, 8vh, 88px); }
-.det__col > .wlabel { margin-bottom: -.4rem; }
 .di { display: grid; gap: .7rem; padding-bottom: clamp(28px, 5vh, 56px); border-bottom: 1px solid var(--hairline-firm); }
 .di:last-child { border-bottom: 0; padding-bottom: 0; }
 .di .wp { font-size: 1.02rem; }
@@ -367,4 +361,10 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .page--faqs .faq__weather-field::after { animation: none; }
+}
+
+/* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 7): the specialist section ended in about
+   90px of empty canvas before the Four Kinds' first picture. */
+@media (max-width: 860px) {
+  .spec { padding-bottom: 54px; }
 }

@@ -95,6 +95,9 @@
 .ty.is-live.is-wide .tl-readmore__copy p { font-size: clamp(.76rem, .72rem + .14vw, .88rem); line-height: 1.45; }
 .ty.is-live.is-wide .tl-readmore__toggle { margin-top: 8px; }
 .ty.is-live.is-wide .tl-readmore__extra > div { gap: 6px; }
+/* The lead in two lines on phones (TJ, 12 Oct 2026): no comma, the second line led
+   by an ellipsis. Desktop reads as before: one sentence, the comma, no ellipsis. */
+.ty__lead-dots { display: none; }
 .ty__lead { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.15rem, min(1.8vw, 2.9vh), 1.75rem); line-height: 1.06; letter-spacing: .005em; color: var(--ink); text-wrap: balance; }
 .ty .tl-readmore__copy { display: grid; gap: clamp(8px, 1.2vh, 12px); }
 .ty .tl-readmore__copy p { margin: 0; font-family: var(--f-read); font-size: clamp(.84rem, .8rem + .16vw, .95rem); line-height: 1.55; color: var(--ink-soft); }
@@ -157,6 +160,7 @@
 
 /* ---- The figures ---- */
 .ty__stay { display: grid; gap: clamp(8px, 1.3vh, 14px); }
+.ty__br { display: none; }
 .ty__sum { margin: 0; font-family: var(--f-body); font-weight: 600; letter-spacing: .02em; font-size: clamp(.92rem, .82rem + .3vw, 1.08rem); color: var(--ty-ink); }
 .ty__sum b { font-family: var(--f-mono); font-weight: 500; }
 .ty__out { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(14px, 2.4vw, 32px); }
@@ -207,8 +211,9 @@
 .ty.is-live .ty__title { will-change: transform; }
 .ty.is-live .ty__photo img { inset: auto; left: 0; top: 0; max-width: none; max-height: none; object-fit: fill; transform-origin: 0 0; will-change: transform; }
 
-/* Short laptops: a little tighter so the whole frame fits. */
-@media (min-width: 861px) and (max-height: 760px) {
+/* Short laptops: a little tighter so the whole frame fits. Up to 860px tall (TJ, 12 Oct 2026; was 760px:
+   just above 760 the cards dropped to 249px of room and the words spilled out). */
+@media (min-width: 861px) and (max-height: 860px) {
   .ty__track { gap: 14px; padding-bottom: 22px; max-width: min(1160px, calc((100svh - 316px) * 2.03 + var(--gutter) * 2)); }
   .ty__days { height: 70px; }
   .ty__card { gap: 8px; }
@@ -235,18 +240,50 @@
      line the whole time it draws. */
   .ty__out { gap: 0 14px; }
   .ty__out b { font-size: clamp(1.5rem, 7vw, 2rem); }
-  .ty__sum { font-size: .9rem; }
+  /* 20 percent larger than the 13px it was (TJ, 12 Oct 2026), in two set lines, so a
+     two digit stay never changes its height and moves the line under a tapping thumb. */
+  .ty__sum { font-size: .975rem; letter-spacing: 0; }
+  .ty__br { display: inline; }
 
-  /* The line, vertical and centred: the last circle sits on the sun's axis. */
-  .ty__days { order: 3; height: clamp(230px, 32svh, 290px); margin-top: 30px; }
-  .ty__unit { left: 50%; bottom: auto; top: -32px; transform: translateX(-50%); }
-  .ty__rail { left: 50%; right: auto; top: 0; bottom: 0; width: 30px; height: auto; margin-left: -15px; }
-  .ty__rail::before { left: 50%; right: auto; top: 0; bottom: 0; width: var(--tline); height: auto; }
-  .ty__fill { left: 50%; right: auto; top: 0; bottom: 0; width: var(--tline); height: auto; transform-origin: 50% 0; transform: scaleY(calc(var(--sel) / 30)); }
-  .ty__stop { left: 50%; top: calc(var(--at) / 30 * 100%); }
-  .ty__tip { left: 50%; top: calc(var(--sel) / 30 * 100%); transition: top var(--tl-dur) var(--tease), transform 200ms var(--ease-out); }
-  .ty__day { top: calc(var(--at) / 30 * 100%); left: auto; right: calc(50% + 22px); transform: translateY(-50%); font-size: clamp(2rem, 9vw, 2.8rem); }
-  .ty__day[data-days="7"], .ty__day[data-days="30"] { right: auto; left: calc(50% + 22px); transform: translateY(-50%); padding-right: 6px; }
+  /* The line, across (TJ, 12 Oct 2026): the vertical one did not work. The same
+     line as desktop, the full width of the card, 5, 7, 14 and 30 above it, the 14
+     at the exact middle so the circle that drops to become the sun falls straight
+     down the page's centre. The figures sit above it; tapped, not scrolled
+     (what-we-do.js ledger). 44px tall to touch, drag or tap. */
+  .ty__days { order: 3; height: 108px; margin-top: 8px; }
+  .ty__rail { height: 44px; }
+  .ty__day { font-size: clamp(1.9rem, 8.2vw, 2.6rem); padding: 10px 3px; min-width: 22px; text-align: center; }
+  .ty__day[data-days="30"] { padding-right: 0; }
+  /* All four stops stay on the line, reached ones solid, the rest faint, so the
+     14 is always there to drop into the sun, whatever stay is chosen. */
+  .ty.is-flow .ty__stop { transform: none; opacity: clamp(.45, calc((var(--sel) - var(--at)) * 3 + .45), 1); transition: opacity 300ms var(--ease-out); }
+  /* Phone text floor 13px and a 44px tap target (MOBILE-PLAN item 2). */
+  .ty__unit { font-size: .8125rem; }
+  .ty__out span { font-size: .8125rem; }
+  .ty .tl-readmore__toggle { font-size: .8125rem; display: inline-flex; align-items: center; min-height: 44px; margin-top: 2px; }
+
+  /* One framed block (TJ, 12 Oct 2026): the photograph closes in evenly on all
+     sides but its foot (what-we-do-tailored.js), and the glass card sits against
+     that foot at the same width, rounded only at the bottom, so the two read as
+     one. Read more is the desktop's merge turned vertical: --ty-g runs 0 to 1, the
+     card rises --ty-up into the photograph, and its frost fades out toward the top,
+     eased, so there is no edge; the words keep to the solid part below. */
+  .ty.is-flow { --ty-up: 24svh; --ty-fade: 120px; transition: --ty-g 800ms var(--tease); }
+  .ty.is-flow.is-wide { --ty-g: 1; }
+  .ty.is-flow .ty__photo { clip-path: inset(var(--ph-t, 0px) var(--ph-r, 0px) 0px var(--ph-l, 0px) round var(--ph-rad, 0px) var(--ph-rad, 0px) 0px 0px); }
+  .ty.is-flow .ty__track { z-index: 3; padding-top: 0; }
+  .ty.is-flow .ty__head > .ty__card { margin-top: calc(var(--ty-g) * -1 * var(--ty-up)); padding-top: calc(clamp(22px, 2.6vw, 38px) + var(--ty-g) * var(--ty-fade) * .7); }
+  .ty.is-flow .ty__card > * { max-width: none; }
+  /* As large as the card allows: the first line, the longer, is 13 ems and fills it. */
+  .ty__lead { font-size: var(--ty-lead-fs, min(calc((100vw - 92px) / 13.1), 1.75rem)); text-wrap: nowrap; }
+  .ty__lead-a, .ty__lead-b { display: block; white-space: nowrap; }
+  .ty__lead-comma { display: none; }
+  .ty__lead-dots { display: inline; }
+  .ty.is-flow .ty__card::before {
+    border-top: 0; border-radius: 0 0 var(--r-card) var(--r-card);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--ty-g) * var(--ty-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--ty-g) * var(--ty-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--ty-g) * var(--ty-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--ty-g) * var(--ty-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--ty-g) * var(--ty-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--ty-g) * var(--ty-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--ty-g) * var(--ty-fade) * 0.875), rgba(0,0,0,1.000) calc(var(--ty-g) * var(--ty-fade) * 1));
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--ty-g) * var(--ty-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--ty-g) * var(--ty-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--ty-g) * var(--ty-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--ty-g) * var(--ty-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--ty-g) * var(--ty-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--ty-g) * var(--ty-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--ty-g) * var(--ty-fade) * 0.875), rgba(0,0,0,1.000) calc(var(--ty-g) * var(--ty-fade) * 1));
+  }
 }
 
 /* ---- Static (reduced motion, or no script): the photograph above the card,
@@ -258,4 +295,32 @@
 .ty:not(.is-live):not(.is-flow) .ty__head > .ty__card { height: auto; min-height: 0; }
 @media (prefers-reduced-motion: reduce) {
   .ty__fill, .ty__tip, .ty__stop { transition: none; }
+}
+
+/* ---- Desktop, short windows (TJ, 12 Oct 2026): fit first, then let it scroll ----
+   what-we-do-tailored.js measures the card with Read more open and closed before
+   the stage is drawn (.ty-measure: the open state with its transitions off). If the
+   words do not fit, .is-tight sets them a little closer; if they still do not, or
+   the window is under 540px tall, .is-calm: the section stops holding still and
+   scrolls with the page in its finished layout, and the card grows with its words.
+   Never a scrollbar inside the card. */
+@media (min-width: 861px) {
+  .ty.ty-measure, .ty.ty-measure * { transition: none !important; }
+  .ty.ty-measure.is-wide { --ty-g: 1; }
+
+  .ty.is-live.is-tight .ty__card { padding-block: 14px; gap: 6px; }
+  .ty.is-live.is-tight .ty__lead { font-size: clamp(.95rem, 1.4vw, 1.2rem); }
+  .ty.is-live.is-tight .tl-readmore__copy { gap: 6px; }
+  .ty.is-live.is-tight .tl-readmore__copy p { font-size: .78rem; line-height: 1.42; }
+  .ty.is-live.is-tight.is-wide .tl-readmore__copy p { font-size: .75rem; line-height: 1.38; }
+  .ty.is-live.is-tight .tl-readmore__extra > div { gap: 6px; }
+  .ty.is-live.is-tight .tl-readmore__toggle { margin-top: 6px; }
+
+  .ty.is-live.is-calm { height: auto; }
+  .ty.is-live.is-calm .ty__stage { position: relative; top: auto; height: auto; }
+  .ty.is-live.is-calm .ty__track { height: auto; max-width: min(1160px, 100%); padding-bottom: clamp(48px, 9vh, 96px); }
+  .ty.is-calm .ty__head > .ty__card { height: auto; min-height: 100%; }
+  /* All four stops stay on the line, reached ones solid, the rest faint (as on
+     phones), so the 14 is there to drop into the sun whatever stay is chosen. */
+  .ty.is-calm .ty__stop { transform: none; opacity: clamp(.45, calc((var(--sel) - var(--at)) * 3 + .45), 1); transition: opacity 300ms var(--ease-out); }
 }

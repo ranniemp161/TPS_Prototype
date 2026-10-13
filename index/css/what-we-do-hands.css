@@ -99,3 +99,9 @@
 .hd.is-live .hd__cut { will-change: transform; }
 /* A soft shadow under the hands so they sit in the room, not on it. */
 .hd.is-live .hd__cut { filter: drop-shadow(0 18px 28px rgba(10, 10, 10, .12)); }
+
+/* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 7): each kind's picture 16:10 instead of
+   4:3, about 60px shorter, still framed on the hands and what they hold. */
+@media (max-width: 860px) {
+  .hd:not(.is-live) .hd__scene { aspect-ratio: 16 / 10; }
+}

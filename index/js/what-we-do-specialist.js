@@ -18,6 +18,19 @@
   var checks = document.querySelector('[data-spec-checks]');
   if (!frame || !zoom) return;
 
+  /* Phones: the title above the portrait (TJ, 11 Oct 2026). The heading moves
+     out of the copy to sit before the frame; back in the copy on desktop. */
+  var title = document.querySelector('.spec__copy > .wh2');
+  var copyEl = title && title.parentNode;
+  var phone = window.matchMedia('(max-width: 860px)');
+  function place() {
+    if (!title) return;
+    if (phone.matches) { if (title.nextElementSibling !== frame) frame.parentNode.insertBefore(title, frame); }
+    else if (title.parentNode !== copyEl) copyEl.insertBefore(title, copyEl.firstChild);
+  }
+  place();
+  if (phone.addEventListener) phone.addEventListener('change', place); else phone.addListener(place);
+
   [].slice.call(checks ? checks.children : []).forEach(function (li, i) { li.style.setProperty('--i', i); });
   var showChecks = function () { if (checks) checks.classList.add('is-in'); };
 
@@ -33,8 +46,9 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
-        frame.classList.add('is-open');
-        setTimeout(showChecks, 700);
+        // a beat after the title has started sliding in above it
+        setTimeout(function () { frame.classList.add('is-open'); }, 300);
+        setTimeout(showChecks, 1000);
         io.disconnect();
       });
     }, { rootMargin: '0px 0px -15% 0px', threshold: 0.05 });

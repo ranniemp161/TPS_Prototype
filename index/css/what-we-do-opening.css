@@ -159,3 +159,41 @@ html:not(.js) .op__line, .op--static .op__line, html:not(.js) .op__rows, .op--st
 .op--static .op__kicker, .op--static .op__head, .op--static .op__line, .op--static .op__rows { opacity: 1; }
 html:not(.js) .op__intro, .op--static .op__intro { position: relative; inset: auto; padding: 56px 0 72px; }
 html:not(.js) .op__intro-in, .op--static .op__intro-in { position: static; transform: none; width: auto; max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter); }
+
+/* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 3). Desktop untouched (TJ).
+   The statement centred: "What we do", the headline, the four kinds on two lines
+   with the desktop's fine dash between each pair, the two rows beneath, all a
+   size up. The photograph takes everything from under the text to the foot of
+   the first screen (what-we-do-opening.js). On scroll it grows to the full screen,
+   the statement fades up and away, and "Who is it for?" arrives alone on the
+   photograph; the introduction's own heading is then kept for screen readers
+   only, so the question is seen once. No travelling cream copy on phones. */
+@media (max-width: 860px) {
+  .op__copy { text-align: center; justify-items: center; transform-origin: center bottom; grid-template-columns: minmax(0, 1fr); }
+  .op__copy--light { display: none; }
+  .op__h { justify-items: center; }
+  .op__kicker { font-size: clamp(2.8rem, min(15vw, 7vh), 4rem); }
+  .op__rows { justify-items: center; text-align: center; max-width: none; width: 100%; font-size: min(1.125rem, 4.6vw); gap: 10px; }
+  /* "Baby Care" and "Restorative Treatments" need about 22 times the type size in width, so
+     the kinds take 4.1vw (16px at 390 wide, 18px from 440) and each pair holds one line. */
+  .op__kinds { display: flex; flex-wrap: wrap; justify-content: center; row-gap: 2px; font-size: min(1.125rem, 4.1vw); }
+  .op__kinds::after { content: ""; flex-basis: 100%; order: 2; }
+  .op__kinds span:nth-child(n+3) { order: 3; }
+  .op__kinds span { display: inline; white-space: nowrap; }
+  .op__kinds span::before, .op__kinds span + span:nth-child(odd)::before { content: none; }
+  .op__kinds span + span:nth-child(2n)::before { content: ""; display: inline-block; width: 12px; height: 1px; background: var(--coral-deep); vertical-align: middle; margin: 0 .55em; }
+  /* A short phone: the text steps down a size so the photograph keeps 160px. */
+  .op--tight .op__kicker { font-size: clamp(2.4rem, min(12.5vw, 5.8vh), 3.4rem); }
+  .op--tight .op__head { font-size: clamp(1.5rem, min(7.6vw, 3.6vh), 2.2rem); }
+  .op--tight .op__rows { font-size: min(1rem, 4.2vw); gap: 6px; }
+  .op--tight .op__kinds { font-size: min(1rem, 3.9vw); }
+  .op--tight .op__copy { gap: 10px; }
+  /* The question and its answer on the photograph, cream on the darkening (TJ,
+     11 Oct 2026): one held screen, then the next section. */
+  .op__on { position: absolute; left: 16px; right: 16px; bottom: max(7svh, 40px); z-index: 4; display: grid; gap: min(12px, 1.5svh); text-align: center; pointer-events: none; }
+  .op__ask { margin: 0 0 min(10px, 1.2svh); font-family: var(--f-script); font-weight: 400; font-size: clamp(3rem, min(15vw, 8svh), 4.4rem); line-height: 1; white-space: nowrap; color: #F3EFEC; opacity: 0; }
+  .op__on-p { margin: 0; font-family: var(--f-body); font-weight: 400; font-size: min(.94rem, 2.3svh); line-height: 1.5; color: #F3EFEC; text-wrap: pretty; opacity: 0; }
+  /* The real introduction stays in the page for screen readers only. */
+  .op--phone .op__intro { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+}
+@media (min-width: 861px) { .op__on { display: none; } }

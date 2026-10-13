@@ -808,8 +808,8 @@
   }
   .zones__poster { display: none; }
   .zones__video { object-fit: cover; }
-  .zones__script { font-size: clamp(2rem, 8.4vw, 2.8rem); }
-  .zones__caps { font-size: clamp(1.25rem, 5.6vw, 1.7rem); }
+  .zones__script { font-size: clamp(2.6rem, 10.92vw, 3.64rem); }
+  .zones__caps { font-size: clamp(1.4375rem, 6.44vw, 1.955rem); }
 
   .zones__stills { display: block; position: absolute; inset: 0; }
   .zones__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 0; transition: opacity 520ms var(--ease-out); }
@@ -833,7 +833,7 @@
   .zones__tab:nth-of-type(2) { justify-self: center; }
   .zones__tab:nth-of-type(3) { justify-self: end; }
   .zones__tab {
-    font-family: var(--f-body); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+    font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
     color: var(--ink-mute); background: transparent; border: 0; border-radius: 0; padding: 14px 0 15px; min-height: 44px; cursor: pointer;
     transition: color 200ms var(--ease-out); -webkit-tap-highlight-color: transparent;
     position: relative;
@@ -842,6 +842,19 @@
   .zones__tab.is-past::after { transform: scale(1); }
   .zones__tab[aria-selected="true"] { color: var(--ink); }
   .zones__tab:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+  /* A start before the rooms (TJ, 11 Oct 2026): an empty stretch on the left where
+     the line rests, a short length already drawn with the circle at its tip
+     (what-we-do-zones.js); the three rooms closer together, evenly spaced, to the
+     right. The row reaches 16px from the screen's edge on phones to make room. */
+  .zones__tabs { display: flex; justify-content: space-between; padding-left: 12%; margin-inline: calc(16px - var(--gutter)); column-gap: 0; }
+  .zones__tab { letter-spacing: .07em; }
+  /* The start circle (TJ, 11 Oct 2026): a room stop's size, smaller than the moving
+     circle, where the line rests; tapping it returns to no room. Hidden under the
+     moving circle while nothing is chosen. A 44px tap area around it. */
+  .zones__home { all: unset; position: absolute; z-index: 1; left: var(--mr, 0px); bottom: 0; width: 44px; height: 44px; margin: 0 0 -22px -22px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+  .zones__home::after { content: ""; position: absolute; left: 50%; top: 50%; width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--tline-ink); }
+  .zones__home:focus-visible { outline: 2px solid var(--ember); outline-offset: -8px; border-radius: 50%; }
+  .zones__marker { z-index: 2; }
   .zones__marker { position: absolute; left: 0; bottom: 0; height: var(--tline); width: var(--mc, 0px); background: var(--tline-ink); transition: width 640ms var(--tease); pointer-events: none; }
   .zones__marker::after { content: ""; position: absolute; right: 0; top: 50%; width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) calc(var(--ttip) / -2) 0 0; border-radius: 50%; background: var(--tline-ink); }
 

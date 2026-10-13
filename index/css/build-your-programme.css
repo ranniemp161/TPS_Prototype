@@ -141,7 +141,6 @@ html { background: var(--canvas); }
 }
 .matters .movement { margin-top: 0; border-bottom-color: var(--sand); }
 .matters .step { border-top: none; padding: 0; }
-.matters .prio { background: var(--paper); }
 .matters .step__n { color: var(--ember-deep); }
 @media (max-width: 700px) { .matters { padding: 1.4rem 1.2rem 1.6rem; } }
 
@@ -394,343 +393,17 @@ html { background: var(--canvas); }
 
 /* ---------- 02: lengths ---------- */
 
-.lengths { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
-
-.length {
-  border: 1px solid var(--hairline-firm);
-  background: var(--paper);
-  padding: 1.1rem .6rem;
-  text-align: center;
-}
-.length:hover { border-color: var(--sand); }
-.length:has(input:checked) { border-color: var(--ember); background: var(--blush); }
-
-.length__n {
-  display: block;
-  font-family: var(--f-display);
-  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
-  line-height: 1;
-  color: var(--ink);
-}
-.length__unit {
-  display: block;
-  font-family: var(--f-body);
-  font-size: .7rem;
-  font-weight: 600;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  margin-top: .5rem;
-}
-
-/* ---------- 04: meals ---------- */
-
-.meals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-
-.meal { border: 1px solid var(--hairline-firm); background: var(--paper); padding: .9rem 1rem .9rem 2.9rem; }
-.meal:hover:not(:has(input:disabled)) { border-color: var(--sand); }
-
-.meal__title {
-  font-family: var(--f-body);
-  font-size: .9rem;
-  font-weight: 500;
-  color: var(--ink);
-}
-
-
-/* ---------- Included, rather than selected ----------
-   The eleven meal and treatment checkboxes used to carry the same
-   Ember border and Blush fill as the radios. Every one of them is on
-   by default, so the page opened with sixteen of its thirty three
-   controls filled: the column read as a field of pink, and a state
-   that almost everything is in tells the eye nothing.
-
-   These are not options being chosen between. They are things already
-   in the programme that a client may take out, which is a different
-   proposition and now looks like one. Included is paper with a ticked
-   box; taken out is canvas with the tick gone and the type gone quiet.
-   The tick is the cue that does not depend on colour.
-
-   The Blush fill stays where it belongs, on the five radio groups,
-   where one of several really is being picked. */
-
-/* Meals keep their boxes: three of them, side by side, reading as
-   three things you can pick up and put down. Treatments are a list of
-   eight and read as a list. */
-.meal {
-  position: relative;
-  background: var(--canvas);
-  border-color: var(--hairline);
-}
-.treat { position: relative; }
-
-/* The box. 4px rather than the 6px badge radius: the scale is held by
-   ratio, and 6px on a 17px affordance reads as a circle. */
-.meal::before, .treat::before {
-  content: "";
-  position: absolute;
-  left: 1.1rem;
-  top: 50%;
-  width: 17px; height: 17px;
-  margin-top: -8.5px;
-  border: 1px solid var(--sand);
-  border-radius: 4px;
-  background: var(--paper);
-  transition: background-color var(--t-state) var(--ease-out), border-color var(--t-state) var(--ease-out);
-}
-
-/* The tick, drawn from two borders rather than carried in as an icon. */
-.meal::after, .treat::after {
-  content: "";
-  position: absolute;
-  left: calc(1.1rem + 4px);
-  top: 50%;
-  width: 8px; height: 4px;
-  margin-top: -4px;
-  border-left: 2px solid var(--paper);
-  border-bottom: 2px solid var(--paper);
-  transform: rotate(-45deg);
-  opacity: 0;
-  transition: opacity var(--t-flip) var(--ease-out);
-}
-
-.meal:has(input:checked) {
-  background: var(--paper);
-  border-color: var(--hairline-firm);
-}
-.meal:has(input:checked)::before, .treat:has(input:checked)::before {
-  background: var(--ember);
-  border-color: var(--ember);
-}
-.meal:has(input:checked)::after, .treat:has(input:checked)::after { opacity: 1; }
-
-/* Taken out. The type goes quiet as well as the ground, so the state
-   survives a greyscale print and a colour blind reader. */
-.meal:not(:has(input:checked)) .meal__title,
-.treat:not(:has(input:checked)) .treat__title { color: var(--ink-mute); font-weight: 400; }
-.treat:not(:has(input:checked)) .treat__thumb { opacity: .4; }
-/* The description does NOT go quiet with the rest. It was set in Sand,
-   which measures 1.66 to 1 on paper: a client cannot read what she took
-   out, which is exactly the moment she most needs to. The tick, the
-   title and the photograph carry the state between them. */
-
-/* ---------- 05: the bath scale ---------- */
-
-/* One hairline running the width of the step with four stops on it. The
-   line is drawn behind the ticks, which is why the ticks carry a fill of
-   their own rather than sitting transparent. */
-.scale {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0;
-  padding-top: 4px;
-}
-.scale::before {
-  content: "";
-  position: absolute;
-  left: 12.5%; right: 12.5%;
-  top: 10px;
-  height: 1px;
-  background: var(--rule);
-}
-
-.stop { padding: 0 .2rem 0; text-align: center; border-radius: var(--r-badge); }
-.stop__body { display: block; }
-
-/* Square, at the data radius. It was the only circle on a page whose
-   brand has none: the buttons are rectangles, the badges are
-   rectangles, and a tick on a scale is a mark on a measurement, so it
-   now shares its shape with the marks on the day strip. */
-.stop__tick {
-  position: relative;
-  display: block;
-  width: 13px; height: 13px;
-  margin: 0 auto;
-  border-radius: var(--r-mark);
-  border: 1px solid var(--sand);
-  background: var(--canvas);
-  transition: border-color var(--t-state) var(--ease-out), background-color var(--t-state) var(--ease-out);
-}
-.stop:hover .stop__tick { border-color: var(--ink-mute); }
-.stop:has(input:checked) .stop__tick { border-color: var(--ember); background: var(--ember); }
-
-.stop__label {
-  display: block;
-  font-family: var(--f-body);
-  font-size: .76rem;
-  line-height: 1.35;
-  color: var(--ink-mute);
-  margin-top: .7rem;
-}
-.stop:has(input:checked) .stop__label { color: var(--ink); font-weight: 600; }
-
-/* ---------- 06: treatments ---------- */
-
-/* One column, not two. A thumbnail and a line of description need the
-   width, and this is the step that carries eight of the client's
-   decisions: it has earned the room.
-
-   Not eight boxes, though. The page was thirty three outlined
-   rectangles, and when every control is a card no card means anything;
-   the brand pack's own line is that structure comes from hairline
-   rules rather than boxes. These are a ruled list: one rule between
-   rows, none around them, and the state lives in the tick, the title
-   and the photograph instead of in a border. */
-.treats {
-  display: grid;
-  gap: 0;
-  border-top: 1px solid var(--hairline);
-}
-
-.treat {
-  display: flex;
-  align-items: center;
-  gap: .9rem;
-  border: none;
-  border-bottom: 1px solid var(--hairline);
-  border-radius: 0;
-  background: transparent;
-  padding: .85rem 1.1rem .85rem 2.9rem;
-}
-/* The hover is the row lifting off the canvas rather than an edge
-   appearing, which is the move a ruled list has and a card does not. */
-.treat:hover:not(:has(input:disabled)) { background: var(--paper); }
-
-/* The photograph the homepage already uses for this treatment. Small,
-   square, and at the media radius rather than the card radius, because
-   it is an image inside a card and not a card of its own. */
-.treat__thumb {
-  flex: none;
-  width: 52px;
-  height: 52px;
-  object-fit: cover;
-  border-radius: var(--r-badge);
-  transition: opacity var(--t-state) var(--ease-out);
-}
-
-.treat__body { flex: 1; min-width: 0; }
-
-.treat__head {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: .8rem;
-}
-.treat__title {
-  font-family: var(--f-body);
-  font-size: .88rem;
-  font-weight: 500;
-  color: var(--ink);
-}
-.treat__count {
-  flex: none;
-  font-family: var(--f-mono);
-  font-size: .72rem;
-  font-weight: 500;
-  letter-spacing: .04em;
-  color: var(--ink-mute);
-  white-space: nowrap;
-}
-
-.treat__what {
-  display: block;
-  font-family: var(--f-read);
-  font-size: .78rem;
-  line-height: 1.45;
-  color: var(--ink-mute);
-  margin-top: .2rem;
-  text-wrap: pretty;
-}
-
-/* ---------- 07: rhythm ---------- */
-
-/* Four rows of one list, ruled rather than boxed, for the same reason
-   as the treatments above. The chosen one still takes the Blush fill
-   the brand pack specifies, run full width across the row: a
-   highlighted row in a list, which is what it is. */
-.rhythms {
-  display: grid;
-  gap: 0;
-  border-top: 1px solid var(--hairline);
-}
-
-.rhythm {
-  border: none;
-  border-bottom: 1px solid var(--hairline);
-  border-radius: 0;
-  background: transparent;
-  padding: .85rem 1.1rem;
-}
-.rhythm:hover:not(:has(input:disabled)) { background: var(--paper); }
-.rhythm:has(input:checked) { background: var(--blush); }
-
-.rhythm__body {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.rhythm__title {
-  font-family: var(--f-body);
-  font-size: .9rem;
-  font-weight: 500;
-  color: var(--ink);
-}
-/* The session count is the number that actually differs between these
-   four options, so it is set in the figures face and given room. */
-.rhythm__count {
-  font-family: var(--f-mono);
-  font-size: .95rem;
-  font-weight: 600;
-  color: var(--ink-soft);
-}
-.rhythm__count::after {
-  content: " sessions";
-  font-size: .68rem;
-  font-weight: 500;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-}
-.rhythm__count.is-one::after { content: " session"; }
-
-/* The rhythm the published programme for this length is built around. */
-/* Ember Deep, not Ember. The badge sits on Blush whenever the standard
-   rhythm is also the chosen one, which is the default, and Ember on
-   Blush measures 3.61 to 1. It had been failing since the badge was
-   written, because the contrast sweeps only read text nodes and this
-   is pseudo element content. lab/programme-contrast.mjs reads both. */
-.rhythm.is-standard .rhythm__title::after {
-  content: "Standard";
-  font-family: var(--f-body);
-  font-size: .62rem;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--ember-deep);
-  border: 1px solid var(--sand);
-  border-radius: var(--r-badge);
-  padding: 2px 6px;
-  margin-left: .6rem;
-  vertical-align: 2px;
-}
-
-
 /* ---------- Selected-state ink ----------
    Ember on the Blush fill measures 3.61 to 1, which is under AA for text
    at these sizes. Ember Deep on the same fill measures 5.03, so the three
    small figures that sit inside a selected control take the deeper tier.
    Measured on the composited page, not estimated from the tokens. */
-.length:has(input:checked) .length__unit,
 .rhythm:has(input:checked) .rhythm__count { color: var(--ember-deep); }
 /* On paper rather than Blush now, where plain Ember measures 5.61. */
 .treat:has(input:checked) .treat__count { color: var(--ember); }
 .treat:not(:has(input:checked)) .treat__count { color: var(--ink-mute); }
 
 /* ---------- 08: priorities ---------- */
-
-.priorities { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* Ember Deep, because this line lives on the Haze ground of the matters
    block, where plain Ember is under AA. */
@@ -743,17 +416,6 @@ html { background: var(--canvas); }
 }
 .prio__count[hidden] { display: none; }
 
-.prio {
-  border: 1px solid var(--hairline-firm);
-  background: var(--paper);
-  border-radius: var(--r-badge);
-  padding: .6rem .9rem;
-  font-family: var(--f-body);
-  font-size: .82rem;
-  color: var(--ink-soft);
-}
-.prio:hover { border-color: var(--sand); }
-.prio:has(input:checked) { border-color: var(--ember); background: var(--blush); color: var(--ink); font-weight: 500; }
 
 
 /* ============================================================
@@ -1049,9 +711,9 @@ html { background: var(--canvas); }
 /* The fee settles rather than flickers. A number that has just moved is
    worth a beat of attention; a number that flashes on every keystroke is
    noise. Transform and opacity only. */
-.fee__amount, .feebar__amount { will-change: transform; }
+.fee__amount { will-change: transform; }
 @media (prefers-reduced-motion: no-preference) {
-  .fee__amount.is-moved, .feebar__amount.is-moved {
+  .fee__amount.is-moved {
     animation: settle var(--t-move) var(--ease-out);
   }
 }
@@ -1532,60 +1194,6 @@ html { background: var(--canvas); }
 }
 
 
-/* ============================================================
-   THE FEE BAR
-   Not a phone component. It is the fallback for any window where the
-   panel's own fee is not on screen, which is a phone, and is also a
-   short laptop at the very top of the builder before the panel has
-   anything to stick to. The script watches the fee in the panel and
-   turns this on only while that one is out of sight, so the page
-   never shows the number twice and never shows it nowhere.
-   ============================================================ */
-
-.feebar {
-  display: none;
-  position: fixed;
-  left: 0; right: 0; bottom: 0;
-  z-index: 55;
-  background: var(--paper);
-  border-top: 1px solid var(--hairline-firm);
-  padding: 10px var(--gutter);
-  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-}
-.page--builder.is-fee-adrift .feebar { display: block; }
-
-.feebar__inner {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  max-width: var(--max);
-  margin-inline: auto;
-}
-.feebar__label {
-  display: block;
-  font-family: var(--f-body);
-  font-size: .6rem;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-}
-.feebar__amount {
-  flex: 1;
-  font-family: var(--f-display);
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 1;
-  color: var(--ink);
-  font-variant-numeric: tabular-nums;
-}
-.feebar .btn { flex: none; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .page--builder.is-fee-adrift .feebar { animation: barin var(--t-move) var(--ease-out); }
-}
-@keyframes barin { from { transform: translateY(100%); } to { transform: none; } }
-
 
 /* ============================================================
    ENTRANCES
@@ -1667,16 +1275,9 @@ html { background: var(--canvas); }
   /* Each pill sized to its own text made a staircase down the block.
      One per row reads as a list of six things to choose between, which
      is what it is. */
-  .priorities { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
-  .prio { padding: .75rem .9rem; }
 
-  .treat { gap: .7rem; padding-left: 2.6rem; }
-  .treat__thumb { width: 44px; height: 44px; }
-  .treat__head { display: block; }
-  .treat__count { display: block; margin-top: .1rem; }
 
   .choices--wide { grid-template-columns: minmax(0, 1fr); }
-  .lengths { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .meals { grid-template-columns: minmax(0, 1fr); }
   .scale { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.2rem; }
   /* The connecting line only makes sense while the stops are on one
@@ -1689,4 +1290,779 @@ html { background: var(--canvas); }
      parked off the right edge behind a gesture most readers never
      make. The week rows above replace it, and they fit. */
   .shape { overflow: visible; }
+}
+
+
+/* ============================================================
+   BUILD 10 (TJ, 10 Oct 2026)
+   The spec's steps in this page's language, and the fee ticker.
+   ============================================================ */
+
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* ---------- The ticker band ----------
+   Fixed under the header while she builds. Frosted glass over the
+   page, no border, no shadow, a hairline below. */
+.ticker {
+  position: fixed; left: 0; right: 0; top: var(--nav-h); z-index: 50;
+  background: rgba(243, 239, 236, .62);
+  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom: 1px solid var(--hairline);
+  transform: translateY(-110%); opacity: 0; pointer-events: none;
+  transition: transform var(--t-move) var(--ease-out), opacity var(--t-move) var(--ease-out);
+}
+body.is-ticking .ticker { transform: none; opacity: 1; pointer-events: auto; }
+.ticker__inner { display: flex; align-items: center; gap: 14px; max-width: var(--max, 1080px); margin-inline: auto; padding: 10px var(--gutter); min-height: 64px; }
+.ticker__label { font-family: var(--f-body); font-size: .62rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); }
+.ticker__fee { font-family: var(--f-display); font-size: 2.4rem; line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.ticker__chip {
+  font-family: var(--f-mono); font-size: .78rem; font-weight: 500; color: var(--ember-deep);
+  opacity: 0; transform: translateY(4px);
+  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+}
+.ticker__chip.is-down { color: var(--ink-mute); }
+.ticker__chip.is-on { opacity: 1; transform: none; }
+.ticker__note { margin-left: auto; font-family: var(--f-body); font-size: .72rem; color: var(--ink-mute); }
+.ticker__cta { flex: none; }
+/* The sticky panel clears the band. */
+body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
+@media (max-width: 860px) {
+  .ticker__inner { min-height: 56px; gap: 10px; }
+  .ticker__fee { font-size: 1.9rem; }
+  .ticker__note { display: none; }
+  .ticker__cta { margin-left: auto; }
+  .ticker__label { font-size: .8125rem; letter-spacing: .06em; }
+}
+@media (max-width: 420px) {
+  .ticker__label { display: none; }
+}
+
+/* ---------- The rolling figure (js/fee-ticker.js) ---------- */
+.roll { display: inline-flex; align-items: baseline; position: relative; }
+.roll__col { display: inline-block; height: 1em; line-height: 1; overflow: hidden; vertical-align: baseline; }
+.roll__strip { display: flex; flex-direction: column; will-change: transform; }
+.roll__g { display: block; height: 1em; line-height: 1; text-align: center; }
+.roll__fixed { display: inline-block; line-height: 1; }
+/* An ember line draws under the figure while it counts, then fades. */
+.roll::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px;
+  background: var(--ember); transform: scaleX(0); transform-origin: 0 50%; opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .roll.is-rolling::after { animation: rollLine 760ms var(--ease-out); }
+  .roll.is-rolling { animation: rollSettle 760ms var(--ease-out); }
+}
+@keyframes rollLine { 0% { transform: scaleX(0); opacity: 1; } 70% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+@keyframes rollSettle { 0%, 70% { transform: none; } 85% { transform: translateY(-2px); } 100% { transform: none; } }
+
+/* ---------- Step 02: sub line and complete programme price ---------- */
+
+/* ---------- Step 03: the night care rule ---------- */
+.band { margin: .9rem 0 0; padding: .8rem 1rem; border-radius: var(--r-card); font-family: var(--f-body); font-size: .85rem; line-height: 1.5; color: var(--ink-soft); }
+.band--haze { background: var(--haze); }
+.band[hidden] { display: none; }
+
+/* ---------- Step 05: the always included rows ---------- */
+.step__note--lead { margin: 0 0 1rem; }
+.treats--included { list-style: none; margin: 0 0 12px; padding: 0; }
+
+/* ---------- Step 06: rhythm sub line ---------- */
+.rhythm__body { flex-wrap: wrap; }
+.rhythm__sub { font-family: var(--f-body); font-size: .8125rem; color: var(--ink-mute); }
+.rhythm:has(input:checked) .rhythm__sub { color: var(--ink-soft); }
+
+/* ---------- Step 07: What matters most, Device D rows with the dot (restyle chat 6, 12 Oct 2026) ----------
+   The step 05 and 06 row recipe: no card, no border except a 1px hairline above each row
+   (none above the first in each column), the .dk-dot as the row's mark. The real checkboxes
+   stay in the DOM (.sr-only) and stay the source of truth. Two columns on desktop, one at 860px. */
+.priorities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 48px; row-gap: 0; }
+.prio {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; column-gap: 6px;
+  min-height: 44px; padding: 4px 0 8px; margin: 0;
+  background: none; border: 0; border-top: 1px solid var(--hairline); border-radius: 0;
+  transition: none; opacity: 1; transform: none;
+}
+.priorities .prio:nth-child(-n+2) { border-top: 0; }
+.prio:focus-within { outline: 0; }
+.prio .dk-dot { grid-column: 1; align-self: start; }
+.prio__body { grid-column: 2; display: block; min-width: 0; padding-top: 11px; }
+.prio__title {
+  display: block; font-family: var(--f-body); font-size: .8125rem; font-weight: 500; line-height: 1.4;
+  letter-spacing: 0; text-transform: none; color: var(--ink);
+}
+.prio__what {
+  display: block; margin-top: 2px; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--ink-soft);
+}
+@media (max-width: 860px) {
+  .priorities { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
+  .priorities .prio:nth-child(2) { border-top: 1px solid var(--hairline); }
+}
+@media (max-width: 620px) {
+  .prio__title { font-size: .875rem; }
+}
+
+/* ---------- The panel ---------- */
+.summary__title { margin: 0 0 .8rem; font-family: var(--f-body); font-size: .85rem; font-weight: 600; color: var(--ink); }
+.fee__amount.roll { display: inline-flex; }
+
+/* Included rows carry no tick box and read as on (Build 10). */
+.treat--included::before, .treat--included::after { display: none; }
+/* The panel prints its fee on phones again: the ticker band and the panel agree. */
+@media (max-width: 860px) { .build__summary .fee { display: block; } }
+
+
+/* ============================================================
+   THE CAROUSEL (TJ, 10 Oct 2026)
+   Build 10's swipe carousel in the site's clothes. Fee at the top,
+   counting; the deck in the middle; the Tailored line with Back and
+   Next at the foot. The frame is one screen tall under the site header;
+   the footer follows below it.
+   ============================================================ */
+
+.page--deck { background: var(--canvas); padding-top: 0 !important; }
+.dk {
+  position: relative; height: 100vh; height: 100dvh; min-height: 560px;
+  display: grid; grid-template-rows: minmax(0, 1fr) auto;
+  padding-top: var(--dk-top, var(--nav-h)); background: var(--canvas); overflow: hidden;
+  box-sizing: border-box;
+}
+.dk *, .dk *::before, .dk *::after { box-sizing: border-box; }
+
+/* ---------- The fee, in the bar (TJ, 12 Oct 2026: one layer at the foot) ----------
+   The band's label, rolling figure and change chip, moved into the bar. Claude:
+   the label sits over the figure so the fee takes one narrow column; the
+   "Introductory pricing, held for 2026" note did not fit the bar and is dropped
+   (it is on the summary and in the legal line). */
+.dk-fee { display: flex; flex-direction: column; justify-content: center; gap: 5px; min-width: 0; }
+.dk-fee__row { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+.dk-fee__label { font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-mute); line-height: 1; white-space: nowrap; }
+.dk-fee__amount { font-family: var(--f-display); font-weight: 400; font-size: clamp(2rem, 3vw, 2.6rem); line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.dk-fee__chip {
+  font-family: var(--f-body); font-size: .8125rem; font-weight: 600; color: var(--ember-deep);
+  opacity: 0; transform: translateY(4px); transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
+}
+.dk-fee__chip.is-down { color: var(--ink-mute); }
+.dk-fee__chip.is-on { opacity: 1; transform: none; }
+/* While it counts, a hairline of ember draws under the figure. */
+.dk-fee__amount, .dk-sumfee { position: relative; }
+.dk-fee__amount::after, .dk-sumfee::after { content: ""; position: absolute; left: 0; right: 0; bottom: -5px; height: 1px; background: var(--ember); transform: scaleX(0); transform-origin: 0 50%; opacity: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .is-counting::after { animation: dkCount 800ms var(--ease-out); }
+}
+@keyframes dkCount { 0% { transform: scaleX(0); opacity: 1; } 75% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+
+/* ---------- The deck ---------- */
+.dk-deck {
+  position: relative; z-index: 1; display: flex; overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none;
+}
+.dk-deck::-webkit-scrollbar { display: none; }
+.dk-page {
+  position: relative; flex: 0 0 100%; min-width: 0; height: 100%;
+  overflow-y: auto; overflow-x: hidden; scroll-snap-align: start; scroll-snap-stop: always;
+  overscroll-behavior-y: contain;
+}
+.dk-aurora { position: absolute; inset: 0; z-index: 0; }
+.dk-in { position: relative; z-index: 1; max-width: 760px; margin-inline: auto; padding: clamp(28px, 5vh, 56px) var(--gutter, 24px) clamp(40px, 6vh, 72px); }
+.dk-page .step { border: 0; padding: 0; margin: 0; min-width: 0; }
+
+/* Page titles: Instrument Serif capitals (the step numbers went, TJ, 12 Oct 2026). */
+.dk-step { display: flex; align-items: baseline; gap: 14px; padding: 0; margin: 0 0 1rem; }
+.dk-step__t { font-family: var(--f-display); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(2rem, 4vw, 3.2rem); color: var(--ink); }
+.dk-page .step__note--lead { margin: 0 0 1.6rem; max-width: 60ch; font-family: var(--f-read); font-size: clamp(.98rem, .94rem + .2vw, 1.08rem); line-height: 1.6; color: var(--ink-soft); }
+
+/* ---------- Start ---------- */
+/* The start page is one block (restyle chat 2, 12 Oct 2026): the photograph on
+   the right at 4:5, the copy on a glass card whose frost fades rightward into it
+   (What We Do's .ty__card::before, sideways). */
+.dk-start { --st-fade: 36%; max-width: 1080px; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); align-items: center; }
+/* The page's one Quentin line (TJ, restyle chat 1, 12 Oct 2026): What We Do's
+   .op__kicker, coral, above the capitals. */
+/* The page's one Quentin line (TJ, restyle chat 1, 12 Oct 2026): coral, above the
+   capitals. Sized (Claude, chat 2) to hold ONE line in the copy column, so a vw term. */
+.dk-kicker { display: block; white-space: nowrap; font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: clamp(2rem, 3.3vw, 2.85rem); line-height: 1.15; color: var(--coral-deep); }
+.dk-h1 { margin: .6rem 0 1.2rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .01em; font-size: clamp(2.4rem, 4.2vw, 4rem); color: var(--ink); }
+.dk-h1 em { display: block; font-style: italic; color: var(--ember); }
+.dk-lede { margin: 0 0 1.2rem; max-width: 52ch; font-family: var(--f-read); font-size: clamp(1.02rem, .98rem + .25vw, 1.18rem); line-height: 1.6; color: var(--ink-soft); }
+.dk-start__frame { grid-column: 7 / 13; grid-row: 1; position: relative; z-index: 0; margin: 0; border-radius: var(--r-card); overflow: hidden; aspect-ratio: 4 / 5; }
+.dk-start__copy { grid-column: 1 / 9; grid-row: 1; position: relative; z-index: 1; isolation: isolate; padding: clamp(24px, 3vw, 44px); padding-right: calc(var(--st-fade) * .55 + clamp(24px, 3vw, 44px)); }
+.dk-start__copy::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: rgba(243, 239, 236, .70); border: 0; border-radius: var(--r-card);
+  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1.000) calc(100% - var(--st-fade) * 1), rgba(0,0,0,0.957) calc(100% - var(--st-fade) * 0.875), rgba(0,0,0,0.844) calc(100% - var(--st-fade) * 0.75), rgba(0,0,0,0.684) calc(100% - var(--st-fade) * 0.625), rgba(0,0,0,0.500) calc(100% - var(--st-fade) * 0.5), rgba(0,0,0,0.316) calc(100% - var(--st-fade) * 0.375), rgba(0,0,0,0.156) calc(100% - var(--st-fade) * 0.25), rgba(0,0,0,0.043) calc(100% - var(--st-fade) * 0.125), rgba(0,0,0,0.000) 100%);
+  mask-image: linear-gradient(to right, rgba(0,0,0,1.000) calc(100% - var(--st-fade) * 1), rgba(0,0,0,0.957) calc(100% - var(--st-fade) * 0.875), rgba(0,0,0,0.844) calc(100% - var(--st-fade) * 0.75), rgba(0,0,0,0.684) calc(100% - var(--st-fade) * 0.625), rgba(0,0,0,0.500) calc(100% - var(--st-fade) * 0.5), rgba(0,0,0,0.316) calc(100% - var(--st-fade) * 0.375), rgba(0,0,0,0.156) calc(100% - var(--st-fade) * 0.25), rgba(0,0,0,0.043) calc(100% - var(--st-fade) * 0.125), rgba(0,0,0,0.000) 100%);
+}
+/* The "isn't a quote" note is plain Karla on the glass. */
+.dk-note { margin: 0; max-width: 52ch; font-family: var(--f-read); font-size: .95rem; line-height: 1.55; color: var(--ink-soft); }
+.dk-start__frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.band--mist { background: none; }
+.band--blush { background: var(--blush); }
+
+/* ---------- Summary (restyle chat 7, 12 Oct 2026) ----------
+   The fee is glass merged into the start page's photograph (Device C, the same
+   .dk-start__copy::before). Every other block is text on the ground under one
+   hairline and its capitals heading (Device D rows, Device E links). No card
+   keeps a background, a border or padding. */
+.dk-sum { max-width: 820px; display: grid; gap: clamp(18px, 3vh, 30px); }
+.dk-card { background: none; border: 0; border-radius: 0; padding: 0; }
+.dk-sum > .dk-card:not(.dk-card--fee) { position: relative; padding-top: clamp(22px, 3.4vh, 34px); }
+.dk-sum > .dk-card:not(.dk-card--fee)::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--hairline-firm); }
+.dk-card__label { margin: 0; font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-mute); }
+.dk-sumfee { display: inline-block; margin: .3rem 0 .4rem; font-family: var(--f-display); font-size: clamp(2.8rem, 5vw, 3.8rem); line-height: 1; color: var(--ember); font-variant-numeric: tabular-nums; }
+.dk-card__small { margin: 0 0 .8rem; font-family: var(--f-read); font-size: .8125rem; color: var(--ink-mute); }
+.dk-card--fee .dk-note { margin-top: .6rem; max-width: 46ch; font-size: .9rem; }
+.dk-card--fee .dk-note[hidden] { display: none; }
+.dk-h2 { display: block; margin: 0 0 1rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: 1.02; font-size: clamp(1.4rem, 2.4vw, 1.9rem); color: var(--ink); }
+.dk-p { margin: 0 0 1.2rem; font-family: var(--f-read); font-size: 1rem; line-height: 1.6; color: var(--ink-soft); }
+.dk-actions { display: flex; flex-wrap: wrap; gap: 4px 32px; margin-bottom: 1rem; }
+.dk-legal { margin: .4rem 0 0; font-family: var(--f-read); font-size: .8125rem; color: var(--ink-mute); }
+.dk-link[hidden] { display: none; }
+/* The photograph and the fee block: the start page's recipe, a wider crop. */
+.dk-sumhero.dk-start { max-width: none; }
+.dk-sumhero .dk-start__frame { grid-column: 6 / 13; aspect-ratio: 5 / 4; }
+.dk-sumhero .dk-start__copy { grid-column: 1 / 8; padding: clamp(24px, 3vw, 44px) 0; padding-right: calc(var(--st-fade) * .55 + clamp(24px, 3vw, 44px)); }
+/* What you have built: Device D rows, a left hairline each; Change is Device E. */
+.dk-sum .areas { margin: 0; display: grid; gap: .35rem; }
+.dk-sum .area { display: grid; grid-template-columns: 11rem minmax(0, 1fr) auto; gap: 6px 16px; align-items: baseline; padding: .55rem 0 .55rem 20px; border-top: 0; border-left: 1px solid var(--hairline-firm); }
+.dk-sum .area:first-child { padding-top: .55rem; }
+.dk-sum .area::before { left: -1px; width: 1px; }
+.dk-sum .area__label { margin: 0; font-family: var(--f-body); font-size: .7rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+.dk-sum .area__body { margin: 0; font-family: var(--f-read); font-size: .95rem; line-height: 1.5; color: var(--ink-soft); }
+.dk-sum .area.is-empty .area__body { color: var(--ink-mute); }
+.dk-sum .area__change { margin: 0; }
+.dk-sum .area__jump { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; min-height: 44px; font-family: var(--f-body); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px; -webkit-tap-highlight-color: transparent; }
+.dk-sum .area__jump:hover { color: var(--ember-deep); }
+.dk-sum .area__jump:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+.dk-sum .areas__restore { background: none; border: 0; border-radius: 0; padding: 0; width: auto; margin: 0 0 1rem; text-decoration: underline; text-underline-offset: 5px; }
+.dk-sum .included__list { margin: 0; gap: .35rem; }
+.dk-sum .included__list li { padding: .3rem 0 .3rem 20px; border-left: 1px solid var(--hairline-firm); }
+/* The budget: an underlined field, the recommendation a left rule in ember, Apply a link. */
+.dk-sum .budget { margin-top: 0; }
+.dk-sum .budget__label { font-family: var(--f-display); font-weight: 400; font-size: clamp(1.4rem, 2.4vw, 1.9rem); line-height: 1.02; text-transform: uppercase; margin: 0 0 1rem; }
+.dk-sum .budget__help { margin: 0 0 .8rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.6; color: var(--ink-soft); }
+.dk-sum .budget__field { background: none; border: 0; border-bottom: 1px solid var(--hairline-firm); border-radius: 0; max-width: 18rem; }
+.dk-sum .budget__field:focus-within { border-bottom-color: var(--ember); }
+.dk-sum .budget__prefix { padding-left: 0; }
+.dk-sum .budget__input { padding-left: .3rem; min-height: 44px; }
+/* Chat 8 (Claude's call, via the orchestrator): no native number spinner on the budget; type and behaviour unchanged. */
+.budget__input::-webkit-outer-spin-button, .budget__input::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; margin: 0; }
+.budget__input { -moz-appearance: textfield; appearance: textfield; }
+.dk-sum .budget__answer { margin: .8rem 0 0; font-family: var(--f-read); font-size: .9rem; color: var(--ink-soft); }
+.dk-sum .fit { background: none; border: 0; border-left: 1px solid var(--ember); border-radius: 0; padding: .2rem 0 .2rem 20px; margin-top: 1rem; }
+.dk-sum .fit__head { font-family: var(--f-body); font-weight: 500; font-size: .9rem; }
+.dk-sum .fit__body { font-family: var(--f-read); font-size: .9rem; }
+.dk-sum .fit__apply { margin-top: .4rem; }
+.dk-sum .fit__alt { border-top: 0; margin-top: .6rem; padding-top: 0; }
+.dk-sum .brief__text { margin: 0; white-space: pre-wrap; font-family: var(--f-mono); font-size: .78rem; line-height: 1.6; color: var(--ink-soft); background: none; border-left: 1px solid var(--hairline-firm); border-radius: 0; padding: 4px 0 4px 20px; }
+.dk-card--shape .shape { margin-bottom: .8rem; }
+
+/* ---------- The bar, one layer (TJ, 12 Oct 2026) ----------
+   TJ: the fee, Back and Next and the progress line all in one layer at the
+   foot; no step numbers. Claude: desktop one row (the fee, Back, the line,
+   Next), the columns fixed so the line never changes length between pages;
+   phones two rows (the fee with Back and Next, then the line full width).
+   The glass recipe is the bar's own, unchanged. */
+.dk-bar {
+  position: relative; z-index: 3; background: rgba(243, 239, 236, .62);
+  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  border-top: 1px solid var(--hairline);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.dk-bar__in {
+  display: grid; grid-template-columns: 13rem 4rem minmax(0, 1fr) 11.5rem;
+  grid-template-areas: "fee back line next";
+  align-items: center; gap: 0 clamp(16px, 2.4vw, 32px);
+  max-width: 1080px; margin-inline: auto; padding: 8px var(--gutter, 24px) 8px;
+}
+/* Placed with .dk-bar in front: the link's all: unset would otherwise
+   reset the grid area. */
+.dk-bar .dk-fee { grid-area: fee; }
+.dk-bar .dk-back { grid-area: back; justify-self: start; }
+.dk-bar .dk-line { grid-area: line; }
+.dk-bar .dk-next { grid-area: next; justify-self: end; }
+
+/* Device E: What We Do's Read more link (.ty .tl-readmore__toggle). */
+.dk-link {
+  all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; min-height: 44px;
+  font-family: var(--f-body); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px;
+  -webkit-tap-highlight-color: transparent;
+}
+.dk-link:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+.dk-link.is-hidden { visibility: hidden; }
+/* Chat 8: the link's words are 39 to 41px wide; the target is not. */
+.dk-link { min-width: 44px; }
+.dk-next.dk-link { justify-content: flex-end; }
+.dk-next.btn { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap; }
+
+/* The sliding line (TJ, 12 Oct 2026): only the previous, current and next
+   stops in view; the line slides past a fixed current point as in A Day With
+   Us; a definite beginning and a definite end. Claude's execution: a clipped
+   window (.dk-line__win) onto a long track, the stops at an even pitch of 34
+   percent of the window, so the previous and next sit 16 percent in from the
+   edges and the stops beyond fall outside; the window's edges fade (12 percent
+   each side) so the line seems to go on. The current stop is held at the
+   centre under the --ttip circle, with the step name above it. The track and
+   the fill move together on --tease over 650ms, so the fill's end never leaves
+   the centre; a jump of several steps is one movement. */
+.dk-line { position: relative; min-width: 0; display: grid; justify-items: center; gap: 2px; --i: 0; --last: 8; --pos: 0; }
+/* The step name: Tailored's DAYS (.ty__unit), over the current stop. */
+.dk-bar__name {
+  margin: 0; white-space: nowrap; line-height: 1.2;
+  font-family: var(--f-body); font-size: .66rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--ink); opacity: .7;
+}
+.dk-line__win {
+  --dk-pitch: 34cqw; --dk-fadew: 12;
+  position: relative; width: 100%; height: 44px; overflow: hidden; container-type: inline-size;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+/* The track starts at the first stop and ends at the last: nothing beyond. */
+.dk-line__track {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: calc(var(--last) * var(--dk-pitch));
+  transform: translateX(calc(var(--i) * var(--dk-pitch) * -1)); transition: transform 650ms var(--tease);
+}
+.dk-line__rail, .dk-line__fill { position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); margin-top: calc(var(--tline) / -2); }
+.dk-line__rail { background: var(--tline-track); }
+.dk-line__fill { background: var(--tline-ink); transform-origin: 0 50%; transform: scaleX(calc(var(--i) / var(--last))); transition: transform 650ms var(--tease); }
+.dk-line__tip { position: absolute; left: 50%; top: 50%; width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) 0 0 calc(var(--ttip) / -2); border-radius: 50%; background: var(--tline-ink); pointer-events: none; z-index: 2; }
+/* Each stop is a 44px button; only the previous and next are live. Stops
+   beyond them fade out and leave the page (visibility) once out of view. */
+.dk-line__stop {
+  all: unset; box-sizing: border-box; position: absolute; top: 0; bottom: 0; left: calc(var(--k) * var(--dk-pitch));
+  width: 44px; margin-left: -22px; z-index: 1; pointer-events: none; -webkit-tap-highlight-color: transparent;
+  opacity: 0; visibility: hidden; transition: opacity 260ms var(--ease-out), visibility 0s linear 260ms;
+}
+.dk-line__stop.is-near { opacity: 1; visibility: visible; transition: opacity 320ms var(--ease-out) 180ms, visibility 0s; }
+.dk-line__stop.is-open { pointer-events: auto; cursor: pointer; }
+/* The dot: the previous solid on the ember fill (--tdot); the next smaller and
+   faint on the grey track (7px, .45); the arriving stop fills as it lands. */
+.dk-line__dot {
+  position: absolute; left: 50%; top: 50%; width: var(--tdot); height: var(--tdot);
+  margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%;
+  background: var(--tline-ink); opacity: .45; transform: scale(calc(7 / 11));
+  transition: transform 650ms var(--tease), opacity 650ms var(--tease);
+}
+.dk-line__stop.is-past .dk-line__dot, .dk-line__stop.is-on .dk-line__dot { opacity: 1; transform: none; }
+.dk-line__stop.is-next:hover .dk-line__dot { opacity: .78; }
+.dk-line__stop:focus-visible { outline: 2px solid var(--ember); outline-offset: -2px; border-radius: 8px; }
+
+/* ---------- Phones ---------- */
+@media (max-width: 860px) {
+  /* Phones: the photograph above, the card merged upward into its foot
+     (A Day With Us' .vt__card::before, sized for 390). */
+  .dk-start { --st-up: 110px; --st-fade: 120px; grid-template-columns: minmax(0, 1fr); }
+  .dk-start__frame { grid-column: 1; grid-row: 1; aspect-ratio: 4 / 3; border-radius: var(--r-card) var(--r-card) 0 0; }
+  .dk-start__copy { grid-column: 1; grid-row: 2; margin-top: calc(var(--st-up) * -1); padding: calc(clamp(22px, 5vw, 30px) + var(--st-fade) * .62) clamp(22px, 5vw, 30px) clamp(22px, 5vw, 30px); }
+  .dk-start__copy::before {
+    border-top: 0; border-radius: 0 0 var(--r-card) var(--r-card);
+    -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--st-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--st-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--st-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--st-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--st-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--st-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--st-fade) * 0.875), rgba(0,0,0,1.000) var(--st-fade));
+    mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--st-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--st-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--st-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--st-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--st-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--st-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--st-fade) * 0.875), rgba(0,0,0,1.000) var(--st-fade));
+  }
+  .dk-kicker { font-size: clamp(1.8rem, 8vw, 3.4rem); }
+  .dk-h1 { font-size: clamp(2.2rem, 10.5vw, 3.2rem); }
+  /* Phones (TJ, 12 Oct 2026; layout Claude's): two rows, the fee on the left
+     with Back and Next on the right, then the line across the full width. */
+  .dk-bar__in {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-areas: "fee back next" "line line line";
+    gap: 4px 16px; padding: 10px max(var(--gutter, 24px), 24px) 4px;
+  }
+  .dk-bar__name { font-size: .75rem; }
+  /* Claude: beside the figure the change chip ran into Back on the longest
+     row (See my programme); on phones it shows under the figure, at the left
+     of the line's row, level with the step name. */
+  .dk-fee { position: relative; }
+  .dk-fee__chip { position: absolute; left: 0; top: calc(100% + 6px); line-height: 1.2; }
+  .dk-next.btn { padding: 12px 16px; }
+  .dk-link { font-size: .8125rem; min-height: 44px; }
+  .dk-sum .area { grid-template-columns: minmax(0, 1fr) auto; }
+  .dk-sum .area__label { grid-column: 1 / -1; }
+  .dk-sumhero .dk-start__frame { grid-column: 1; aspect-ratio: 4 / 3; }
+  .dk-sumhero .dk-start__copy { grid-column: 1; padding: calc(clamp(22px, 5vw, 30px) + var(--st-fade) * .62) clamp(22px, 5vw, 30px) clamp(22px, 5vw, 30px); }
+  .dk-actions { gap: 0 28px; }
+}
+/* Claude: at 360 wide the fee touched Back on the See my programme page;
+   tighter gaps and tracking on the smallest phones only. */
+@media (max-width: 380px) {
+  .dk-bar__in { column-gap: 10px; }
+  .dk-bar .dk-link { letter-spacing: .12em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dk-line__track, .dk-line__fill, .dk-line__dot, .dk-line__stop, .dk-line__stop.is-near { transition: none; }
+}
+
+/* Fixes (10 Oct 2026): the summary column never grows past the page; the
+   included rows read as on, whatever the unticked rule says. */
+.dk-sum { grid-template-columns: minmax(0, 1fr); }
+.dk-card { min-width: 0; }
+.dk-sum .brief__text { max-width: 100%; overflow-x: auto; }
+@media (max-width: 860px) { .dk-fee__label { font-size: .75rem; letter-spacing: .1em; } }
+
+/* ---------- Two way steps: 01, 03, 04 (restyle chat 3, 12 Oct 2026) ----------
+   What We Do's two stop line (.dnl, what-we-do-day-night.css) over the two real
+   radios, which stay in the DOM (.sr-only) and stay the source of truth. Pure
+   CSS: the line reads the checked radio through :has(), so the engine's own
+   changes (night forced back to day, Restore, the budget's Apply) move the
+   circle too. Tapping an end label or either half of the line is a native
+   <label> click on that radio, so the engine gets its usual change event;
+   arrow keys on the focused radio move the choice and the circle follows. */
+.dkl { --t: 0; position: relative; max-width: 640px; margin-top: clamp(4px, 1.2vh, 14px); }
+.dkl:has(.dkl__end--b input:checked) { --t: 1; }
+.dkl__ends { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+.dkl__end {
+  position: relative; display: flex; align-items: flex-end; box-sizing: border-box; min-height: 44px; padding: 12px 0 10px;
+  flex: 0 1 auto; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  font-family: var(--f-body); font-size: .8125rem; font-weight: 500; line-height: 1.35; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink); opacity: .5; transition: opacity 280ms var(--ease-out);
+}
+.dkl__end--b { text-align: right; justify-content: flex-end; }
+.dkl__end:hover { opacity: .78; }
+.dkl__end:has(input:checked) { opacity: 1; }
+.dkl__end:has(input:focus-visible) { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 2px; }
+/* Night care with daytime in-home care: the end is there but cannot be had. */
+.dkl__end:has(input:disabled) { opacity: .3; cursor: default; pointer-events: none; }
+.dkl__rail { position: relative; height: 26px; margin-inline: calc(var(--ttip) / 2); }
+.dkl__rail::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: var(--tline-track); }
+.dkl__fill { position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: var(--tline-ink); transform-origin: 0 50%; transform: scaleX(var(--t)); transition: transform 650ms var(--tease); }
+.dkl__stop, .dkl__tip { position: absolute; top: 50%; border-radius: 50%; background: var(--tline-ink); pointer-events: none; }
+.dkl__stop { width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); }
+.dkl__stop--a { left: 0; }
+.dkl__stop--b { left: 100%; opacity: .45; transition: opacity 300ms var(--ease-out); }
+.dkl:has(.dkl__end--b input:checked) .dkl__stop--b { opacity: 1; }
+.dkl:has(.dkl__end--b input:disabled) .dkl__stop--b { opacity: .3; }
+.dkl__tip { z-index: 2; left: calc(var(--t) * 100%); width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) 0 0 calc(var(--ttip) / -2); transition: left 650ms var(--tease); }
+/* Each half of the line is a 44px tall target for its own end. */
+.dkl__half { position: absolute; top: 50%; height: 44px; margin-top: -22px; width: 50%; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.dkl__half--a { left: calc(var(--ttip) / -2); }
+.dkl__half--b { right: calc(var(--ttip) / -2); }
+.dkl:has(.dkl__end--b input:disabled) .dkl__half--b { pointer-events: none; cursor: default; }
+/* The chosen option's second line, under the line, in its own end's corner. */
+.dkl__metas { display: grid; margin-top: 12px; }
+.dkl__meta {
+  grid-area: 1 / 1; margin: 0; max-width: 46ch;
+  font-family: var(--f-read); font-size: clamp(.92rem, .9rem + .12vw, 1rem); line-height: 1.55; color: var(--ink-soft);
+  opacity: 0; visibility: hidden; transition: opacity 300ms var(--ease-out), visibility 0s linear 300ms;
+}
+.dkl__meta--b { justify-self: end; text-align: right; }
+.dkl:not(:has(.dkl__end--b input:checked)) .dkl__meta--a,
+.dkl:has(.dkl__end--b input:checked) .dkl__meta--b { opacity: 1; visibility: visible; transition: opacity 300ms var(--ease-out), visibility 0s; }
+/* The night note: plain text on the ground, as the start page's note (chat 2). */
+#step-03 [data-night-band] { background: none; padding: 0; margin-top: 1.4rem; max-width: 60ch; font-family: var(--f-read); font-size: clamp(.92rem, .9rem + .12vw, 1rem); color: var(--ink-soft); }
+@media (max-width: 860px) {
+  .dkl { max-width: none; }
+  .dkl__ends { gap: 16px; }
+  .dkl__end { letter-spacing: .14em; }
+  .dkl__meta { max-width: 34ch; }
+}
+/* Chat 8: at 360 wide both end labels share one line (tracking first, type stays). */
+@media (max-width: 380px) {
+  .dkl__ends { gap: 10px; }
+  .dkl__end { letter-spacing: .09em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dkl__fill, .dkl__tip, .dkl__meta, .dkl__end, .dkl__stop--b { transition: none; }
+}
+
+/* ---------- 02: How long, Tailored's day line (restyle chat 4, 12 Oct 2026) ----------
+   What We Do's .ty__days over the four real radios, which stay in the DOM
+   (.sr-only) and stay the source of truth. Pure CSS: --i is read off the
+   checked radio through :has(), so the engine's own changes (Restore, the
+   budget's Apply) move the circle too. The four stops are spaced evenly
+   (TJ's rule about the 14 at the middle is Tailored's, not this page's):
+   stop n sits at .16 + n * .28 of the line, the last at the end. Tapping a
+   numeral or a quarter of the line is a native <label> click on that radio. */
+.dkd { --i: 0; --a: .16; --st: .28; max-width: 640px; margin-top: clamp(4px, 1.2vh, 14px); }
+.dkd:has(input[value="7"]:checked) { --i: 1; }
+.dkd:has(input[value="14"]:checked) { --i: 2; }
+.dkd:has(input[value="30"]:checked) { --i: 3; }
+.dkd__day, .dkd__stop, .dkd__zone { --p: calc(var(--a) + var(--at) * var(--st)); }
+.dkd__fill, .dkd__tip { --p: calc(var(--a) + var(--i) * var(--st)); }
+.dkd__days { position: relative; height: clamp(76px, 10.5vh, 108px); margin-right: 26px; }
+.dkd__unit { position: absolute; left: 0; bottom: 30px; font-family: var(--f-body); font-size: .66rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--ink); opacity: .7; }
+.dkd__day {
+  position: absolute; top: 0; left: calc(var(--p) * 100%); transform: translateX(-50%);
+  box-sizing: border-box; min-width: 44px; min-height: 44px; padding: 2px 6px; text-align: center; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--f-display); font-size: clamp(1.8rem, min(3.4vw, 5vh), 3.1rem); line-height: 1;
+  color: var(--ink); opacity: .38; transition: opacity 280ms var(--ease-out);
+}
+.dkd__day:hover { opacity: .78; }
+.dkd__day:has(input:checked) { opacity: 1; }
+.dkd__day:has(input:focus-visible) { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 2px; }
+.dkd__rail { position: absolute; left: 0; right: 0; bottom: 0; height: 26px; }
+.dkd__rail::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: var(--tline-track); }
+.dkd__fill { position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: var(--tline-ink); transform-origin: 0 50%; transform: scaleX(var(--p)); transition: transform 650ms var(--tease); }
+.dkd__stop, .dkd__tip { position: absolute; top: 50%; border-radius: 50%; background: var(--tline-ink); pointer-events: none; }
+.dkd__stop {
+  left: calc(var(--p) * 100%); width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2);
+  opacity: clamp(.45, calc((var(--i) - var(--at)) * 3 + 1), 1); transition: opacity 300ms var(--ease-out);
+}
+.dkd__tip { z-index: 2; left: calc(var(--p) * 100%); width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) 0 0 calc(var(--ttip) / -2); transition: left 650ms var(--tease); }
+/* A quarter of the line each, 44px tall, centred on the line. */
+.dkd__zone { position: absolute; top: 50%; height: 44px; margin-top: -22px; left: calc(var(--p) * 100% - var(--st) * 50%); width: calc(var(--st) * 100%); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.dkd__zone:first-of-type { left: 0; width: calc((var(--a) + var(--st) / 2) * 100%); }
+.dkd__zone:last-of-type { left: calc((1 - var(--st) / 2) * 100%); width: auto; right: calc(var(--ttip) / -2); }
+/* The chosen stay, one row under the line; the others sit behind it, hidden. */
+.dkd__infos { display: grid; margin-top: 12px; }
+.dkd__info {
+  grid-area: 1 / 1; margin: 0; font-family: var(--f-read); font-size: clamp(.92rem, .9rem + .12vw, 1rem); line-height: 1.55; color: var(--ink-soft);
+  opacity: 0; visibility: hidden; transition: opacity 300ms var(--ease-out), visibility 0s linear 300ms;
+}
+.dkd__info .length__sub::after { content: " \00b7  "; white-space: pre; }
+.dkd:has(input[value="5"]:checked) .dkd__info[data-for="5"],
+.dkd:has(input[value="7"]:checked) .dkd__info[data-for="7"],
+.dkd:has(input[value="14"]:checked) .dkd__info[data-for="14"],
+.dkd:has(input[value="30"]:checked) .dkd__info[data-for="30"] { opacity: 1; visibility: visible; transition: opacity 300ms var(--ease-out), visibility 0s; }
+@media (max-width: 860px) {
+  .dkd { max-width: none; }
+  .dkd__days { height: 108px; margin-top: 8px; margin-right: 22px; }
+  .dkd__rail { height: 44px; }
+  .dkd__day { font-size: clamp(1.9rem, 8.2vw, 2.6rem); padding: 10px 3px; }
+  .dkd__unit { font-size: .8125rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dkd__fill, .dkd__tip, .dkd__stop, .dkd__day, .dkd__info { transition: none; }
+}
+
+/* ---------- The dot control (restyle chat 4; used by chats 5 and 6) ----------
+   An 11px circle (--tdot) with a 1px ring in --tline-track at rest; selected, it
+   fills ember and the ring goes, over 200ms. 44px tap target around it. It marks
+   the start of a Device D row, in place of the row's hairline. Use it in either
+   of two ways: wrap the visually hidden input (<span class="dk-dot"><input
+   class="sr-only" ...></span>), or put it straight after the input
+   (<input class="sr-only" ...><span class="dk-dot"></span>). */
+.dk-dot { position: relative; display: inline-grid; flex: none; place-items: center; width: 44px; height: 44px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.dk-dot::before {
+  content: ""; box-sizing: border-box; width: var(--tdot); height: var(--tdot); border-radius: 50%;
+  border: 1px solid var(--tline-track); background: transparent;
+  transition: background-color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+}
+.dk-dot:has(input:checked)::before, input:checked + .dk-dot::before, .dk-dot[aria-checked="true"]::before { background: var(--ember); border-color: transparent; }
+.dk-dot:has(input:focus-visible)::before, input:focus-visible + .dk-dot::before { outline: 2px solid var(--ember); outline-offset: 3px; }
+.dk-dot:has(input:disabled), input:disabled + .dk-dot { opacity: .3; cursor: default; }
+@media (prefers-reduced-motion: reduce) { .dk-dot::before { transition: none; } }
+
+/* ---------- Steps 05 and 06: Device D rows with the dot (restyle chat 5, 12 Oct 2026) ----------
+   The list device from Your Postpartum Specialist: no thumbnail, no card, a hairline
+   between rows (none above the first), the .dk-dot as the row's mark. The real
+   checkboxes and radios stay in the DOM (.sr-only) and stay the source of truth. */
+.treats, .rhythms { display: block; margin: 0; padding: 0; list-style: none; }
+.treats--included { margin: 0; }
+.treat, .rhythm {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: start; column-gap: 6px;
+  min-height: 44px; padding: 4px 0 8px; margin: 0;
+  background: none; border: 0; border-top: 1px solid var(--hairline); border-radius: 0;
+  transition: none; opacity: 1;
+}
+.treats--included .treat:first-child, .rhythms .rhythm:first-child { border-top: 0; }
+.treat:active, .rhythm:active { transform: none; }
+.treat:focus-within, .rhythm:focus-within { outline: 0; }
+.treat .dk-dot, .rhythm .dk-dot { grid-column: 1; align-self: start; }
+.treat__body, .rhythm__body { grid-column: 2; display: block; min-width: 0; padding-top: 11px; }
+.treat--included { padding-left: 50px; cursor: default; }
+.treat--included .treat__body { grid-column: 1 / -1; padding-top: 11px; }
+.treat__head, .rhythm__head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.treat__title, .rhythm__title {
+  font-family: var(--f-body); font-size: .8125rem; font-weight: 500; line-height: 1.4;
+  letter-spacing: 0; text-transform: none; color: var(--ink);
+}
+.treat__count, .rhythm__std, .treat__tag {
+  flex: none; font-family: var(--f-mono); font-size: .8125rem; line-height: 1.4; background: none; padding: 0; border-radius: 0;
+}
+.treat:has(input:checked) .treat__count { color: var(--ember-deep); }
+.treat:not(:has(input:checked)) .treat__count { color: var(--ink-mute); }
+.rhythm__std, .treat__tag { text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); }
+.treat__what, .rhythm__sub {
+  display: block; margin-top: 2px; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--ink-soft);
+}
+/* The whole step already dims to .4 (.step.is-off); dimming the rows again made .16. */
+.treat:has(input:disabled), .rhythm:has(input:disabled) { background: none; opacity: 1; cursor: default; }
+.rhythm .dk-dot:has(input:disabled), .rhythm input:disabled + .dk-dot { opacity: 1; }
+@media (max-width: 620px) {
+  .treat__head, .rhythm__head { gap: 10px; }
+  .treat__title, .rhythm__title { font-size: .875rem; }
+}
+
+/* ============================================================
+   EVERY SCREEN FITS (TJ, 12 Oct 2026)
+   TJ: no internal scrolling and no continuous scroll; every step fits one
+   screen with economic spacing, the bar at the foot; steps need not be
+   numbered; the title can be resized, reshaped and repositioned; break
+   things into more steps where a screen will not fit. The values below are
+   Claude's. The held frame is the default; .is-tight (a page whose content
+   overflows) and .dk.is-free (the release, the flowing page's rules) are set
+   by the fit check in build-your-programme.js.
+   ============================================================ */
+
+/* A page never scrolls on its own. */
+.dk-page { overflow: hidden; display: flex; flex-direction: column; overscroll-behavior: auto; }
+.dk-in { flex: none; width: 100%; padding: clamp(16px, 3.4vh, 44px) var(--gutter, 24px) clamp(14px, 2.6vh, 32px); }
+
+/* Step titles sized for the space. */
+.dk-step { margin: 0 0 clamp(.45rem, 1.3vh, .9rem); }
+.dk-step__t { font-size: clamp(1.6rem, min(3.2vw, 5.2vh), 2.8rem); }
+.dk-page .step__note--lead { margin: 0 0 clamp(.7rem, 2.2vh, 1.6rem); }
+
+/* ---------- The start screen ----------
+   The three 01 to 03 rows are gone; the Quentin line, the capitals and the
+   paragraph take their size from the window's height as well as its width
+   (Tailored's card); the photograph is as tall as the deck allows. */
+.dk-page--start > .dk-start {
+  flex: 1 1 auto; min-height: 0; grid-template-rows: minmax(0, 1fr);
+  padding-block: clamp(14px, 3vh, 44px) clamp(14px, 3vh, 40px);
+}
+.dk-page--start .dk-start__frame { align-self: center; justify-self: stretch; max-height: 100%; }
+.dk-page--start .dk-start__copy { align-self: center; padding: clamp(18px, min(3vw, 4.4vh), 44px); padding-right: calc(var(--st-fade) * .55 + clamp(18px, min(3vw, 4.4vh), 44px)); }
+.dk-kicker { font-size: clamp(1.8rem, min(3.3vw, 6vh), 2.85rem); }
+.dk-h1 { margin: clamp(.2rem, .7vh, .6rem) 0 clamp(.6rem, 1.8vh, 1.2rem); font-size: clamp(2rem, min(4.2vw, 7.4vh), 4rem); }
+.dk-lede { margin: 0 0 clamp(.6rem, 1.6vh, 1.2rem); font-size: clamp(.9rem, min(.98rem + .25vw, 2.2vh), 1.18rem); }
+.dk-start .dk-note { font-size: clamp(.85rem, 1.9vh, .95rem); }
+
+/* ---------- The summary, seven pages (four screens from 1024px wide) ---------- */
+.dk-page--summary > .dk-sum { max-width: 1080px; align-content: start; }
+/* The first block on a screen carries no hairline above it. */
+.dk-sum > .dk-card:first-child { padding-top: 0; }
+.dk-sum > .dk-card:first-child::before { display: none; }
+/* The brief is what Copy my programme summary copies; it stays in the page
+   for the script, not on the screen (Claude: it repeated the areas). */
+.dk-sum .brief__text { display: none; }
+
+/* Your programme: the fee, glass merged into the photograph. Desktop keeps the
+   sideways merge, the photograph as tall as the deck allows. */
+.dk-sum--fee { flex: 1 1 auto; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+.dk-sum--fee > .dk-sumhero { min-height: 0; grid-template-rows: minmax(0, 1fr); align-self: stretch; }
+.dk-sum--fee .dk-start__frame { align-self: center; justify-self: stretch; max-height: 100%; aspect-ratio: 4 / 5; grid-column: 7 / 13; }
+.dk-sum--fee .dk-start__copy { align-self: center; grid-column: 1 / 9; }
+.dk-sum--fee .dk-sumfee { font-size: clamp(2.8rem, min(5.4vw, 10vh), 5rem); }
+.dk-sum--fee .dk-card--fee .dk-note { font-size: clamp(.85rem, 1.9vh, .95rem); max-width: 44ch; }
+
+/* What you have built: the rows a little closer. */
+.dk-sum--built .dk-h2 { margin-bottom: clamp(.5rem, 1.6vh, 1rem); }
+.dk-sum--built .areas { gap: clamp(0rem, .5vh, .35rem); }
+.dk-sum--built .area { padding-block: clamp(.2rem, .7vh, .55rem); }
+.dk-sum--built .area:first-child { padding-top: clamp(.2rem, .7vh, .55rem); }
+
+/* The second Recovery treatments screen starts without a rule above its first row. */
+.treats--more .treat:first-child { border-top: 0; }
+/* The priorities, a single column in each half of their step. */
+.dk-page .priorities { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
+.dk-page .priorities .prio:nth-child(2) { border-top: 1px solid var(--hairline); }
+.dk-sum--book .dk-actions { margin-bottom: .6rem; }
+
+/* ---------- Joined screens (Claude, 12 Oct 2026) ----------
+   From 1024px wide, a page marked data-join shares the screen of the page
+   before it: two halves side by side, each half its own .dk-in, the pair
+   centred on the usual 1080px measure. Only in the held frame. A half with no
+   title of its own (data-join="align") hides its repeated title and starts its
+   rows level with the first row beside it (--join-top, set by the script). */
+@media (min-width: 1024px) {
+  .dk:not(.is-free) .dk-page:has(+ .dk-page[data-join]), .dk:not(.is-free) .dk-page[data-join] { flex: 0 0 50%; }
+  .dk:not(.is-free) .dk-page[data-join] { scroll-snap-align: none; }
+  .dk:not(.is-free) .dk-page:has(+ .dk-page[data-join]) > .dk-in { max-width: 560px; margin-right: 0; padding-right: clamp(20px, 2.6vw, 40px); }
+  .dk:not(.is-free) .dk-page[data-join] > .dk-in { max-width: 560px; margin-left: 0; padding-left: clamp(20px, 2.6vw, 40px); }
+  .dk:not(.is-free) .dk-page[data-join="align"] .dk-step { display: none; }
+  .dk:not(.is-free) .dk-page[data-join="align"] > .dk-in { padding-top: var(--join-top, clamp(16px, 3.4vh, 44px)); }
+  /* What you have built, in a half: the label over the words, Change beside them. */
+  .dk:not(.is-free) .dk-sum--built .area { grid-template-columns: minmax(0, 1fr) auto; gap: 2px 16px; }
+  .dk:not(.is-free) .dk-sum--built .area__label { grid-column: 1; }
+  .dk:not(.is-free) .dk-sum--built .area__body { grid-column: 1; }
+  .dk:not(.is-free) .dk-sum--built .area__change { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+}
+.dk-sum .included__list li { padding-block: clamp(.15rem, .5vh, .3rem); }
+.dk-sum .dk-h2 { font-size: clamp(1.4rem, min(2.4vw, 4.2vh), 1.9rem); }
+
+/* ---------- Phones ---------- */
+@media (max-width: 860px) {
+  .dk-step__t { font-size: clamp(1.5rem, 7vw, 2.1rem); }
+  .dk-in { padding: clamp(12px, 2.4vh, 28px) var(--gutter, 24px) clamp(12px, 2vh, 24px); }
+  /* The start screen and the fee: the photograph above takes what the copy
+     leaves (its height from the window, not a fixed 4:3), the card merged
+     upward into its foot. */
+  .dk-page--start > .dk-start, .dk-sum--fee > .dk-sumhero {
+    display: flex; flex-direction: column; justify-content: center;
+    --st-up: clamp(36px, 8vh, 110px); --st-fade: clamp(44px, 10vh, 120px);
+  }
+  .dk-page--start > .dk-start { padding-block: clamp(8px, 1.6vh, 20px) clamp(8px, 1.6vh, 16px); }
+  .dk-sum--fee { display: flex; flex-direction: column; }
+  .dk-sum--fee > .dk-sumhero { flex: 1 1 auto; }
+  .dk-page--start .dk-start__frame, .dk-sum--fee .dk-start__frame { order: -1; flex: 1 1 0; min-height: 56px; max-height: 75vw; aspect-ratio: auto; width: 100%; }
+  .dk-page--start .dk-start__copy, .dk-sum--fee .dk-start__copy {
+    flex: none; align-self: stretch; margin-top: calc(var(--st-up) * -1);
+    padding: calc(clamp(16px, 4.4vw, 26px) + var(--st-fade) * .62) clamp(16px, 4.4vw, 26px) clamp(12px, 2vh, 24px);
+  }
+  .dk-kicker { font-size: clamp(1.7rem, min(8vw, 5vh), 3.4rem); }
+  .dk-h1 { font-size: clamp(1.8rem, min(10.5vw, 5.6vh), 3.2rem); }
+  .dk-lede { font-size: clamp(.8125rem, 2.3vh, 1.02rem); line-height: 1.5; }
+  .dk-start .dk-note { font-size: clamp(.8125rem, 2.1vh, .95rem); line-height: 1.5; }
+  .dk-sum--fee .dk-sumfee { font-size: clamp(2.6rem, min(13vw, 7vh), 3.6rem); }
+  .dk-sum .area__body { font-size: clamp(.8125rem, 2vh, .95rem); line-height: 1.45; }
+  .dk-sum .area { padding-left: 16px; gap: 0 12px; }
+  .dk-sum .area__change { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .dk-sum .area__label { grid-column: 1; }
+  .dk-sum .area__body { grid-column: 1; }
+}
+
+/* ---------- .is-tight: a page whose content would not fit ----------
+   Closer spacing and smaller type, within limits: body text never under 13px. */
+.dk-page.is-tight .dk-in { padding-top: clamp(8px, 1.6vh, 24px); padding-bottom: clamp(8px, 1.4vh, 16px); }
+.dk-page.is-tight .dk-step { margin-bottom: .25rem; }
+.dk-page.is-tight .dk-step__t { font-size: clamp(1.4rem, min(2.8vw, 4.4vh), 2.4rem); }
+.dk-page.is-tight .step__note--lead { margin-bottom: .6rem; font-size: .8125rem; line-height: 1.5; }
+.dk-page.is-tight .treat, .dk-page.is-tight .rhythm, .dk-page.is-tight .prio { padding-top: 0; padding-bottom: 4px; }
+.dk-page.is-tight .treat__body, .dk-page.is-tight .rhythm__body, .dk-page.is-tight .prio__body { padding-top: 12px; }
+.dk-page.is-tight .treat__what, .dk-page.is-tight .rhythm__sub, .dk-page.is-tight .prio__what { margin-top: 0; line-height: 1.4; }
+.dk-page.is-tight .dkd__days { height: clamp(68px, 9vh, 96px); }
+.dk-page.is-tight .dkl__metas, .dk-page.is-tight .dkd__infos { margin-top: 6px; }
+.dk-page.is-tight .dk-kicker { font-size: clamp(1.5rem, min(3vw, 5vh), 2.6rem); }
+.dk-page.is-tight .dk-h1 { font-size: clamp(1.7rem, min(3.8vw, 6.4vh), 3.6rem); margin: .15rem 0 .5rem; }
+.dk-page.is-tight .dk-lede { font-size: .8125rem; line-height: 1.45; margin-bottom: .5rem; }
+.dk-page.is-tight .dk-start .dk-note, .dk-page.is-tight .dk-card--fee .dk-note { font-size: .8125rem; line-height: 1.45; }
+.dk-page.is-tight .dk-sum { gap: 12px; }
+.dk-page.is-tight .dk-sum > .dk-card:not(:first-child) { padding-top: 12px; }
+.dk-page.is-tight .dk-sum .dk-h2 { font-size: clamp(1.2rem, min(2vw, 3.6vh), 1.6rem); margin-bottom: .4rem; }
+.dk-page.is-tight .dk-sum .area { padding-block: .1rem; }
+.dk-page.is-tight .dk-sum .area__body, .dk-page.is-tight .dk-sum .included__list li, .dk-page.is-tight .dk-p,
+.dk-page.is-tight .budget__help, .dk-page.is-tight .budget__answer, .dk-page.is-tight .fit__body, .dk-page.is-tight .fit__head { font-size: .8125rem; line-height: 1.45; }
+.dk-page.is-tight .dk-sum .included__list li { padding-block: .1rem; }
+.dk-page.is-tight .dk-card__small { margin-bottom: .4rem; }
+.dk-page.is-tight .shape__key { margin-top: .4rem; gap: .2rem 1rem; }
+.dk-page.is-tight .dk-card--shape .shape { margin-bottom: .4rem; }
+.dk-page.is-tight .dk-card__small:last-child { margin-bottom: 0; }
+/* The day strip on a phone, tight: the same marks, shorter (Claude). */
+.dk-page.is-tight .shape__grid[data-scale="week"] { --mark-h: 5px; --mark-h-massage: 9px; --mark-h-night: 3px; --mark-gap: 2px; }
+.dk-page.is-tight .shape__grid[data-scale="week"] .day { min-height: 0; padding-bottom: .15rem; }
+.dk-page.is-tight .shape__grid[data-scale="week"] .day__n { margin-top: .15rem; }
+.dk-page.is-tight .dk-card__small { font-size: .8125rem; line-height: 1.45; }
+.dk-page.is-tight .fit__apply, .dk-page.is-tight .dk-actions .dk-link { letter-spacing: .1em; }
+.dk-page.is-tight .budget__help { margin-bottom: .4rem; }
+.dk-page.is-tight .budget__answer { margin-top: .5rem; }
+.dk-page.is-tight .dk-actions { margin-bottom: .4rem; }
+.dk-page.is-tight .dk-sum .budget__label { margin-bottom: .4rem; }
+.dk-page.is-tight .dk-sum .fit { margin-top: .5rem; padding-left: 14px; }
+.dk-page.is-tight .dk-sum .fit__apply { margin-top: .1rem; }
+.dk-page.is-tight .dk-sum .fit__alt { margin-top: .3rem; }
+
+/* ---------- .is-free: the release (the flowing page, lab/flow-attempt) ----------
+   Only when a page still overflows or the window is under 500px tall: the
+   window scrolls, the steps are sections down the page, the bar is fixed at
+   the foot and follows the section being read; Back, Next and Change glide
+   the page to a section. Never a scrollbar inside the page. */
+.dk.is-free { height: auto; min-height: 0; display: block; overflow: visible; padding-bottom: clamp(40px, 6vh, 72px); }
+.page--deck.dk-is-free { padding-bottom: var(--dk-bar-h, 96px) !important; }
+.dk.is-free .dk-deck { display: block; overflow: visible; scroll-snap-type: none; overscroll-behavior: auto; }
+.dk.is-free .dk-page {
+  display: block; height: auto; min-height: 0; overflow: visible; scroll-snap-align: none; scroll-snap-stop: normal;
+  scroll-margin-top: var(--dk-top, var(--nav-h));
+}
+.dk.is-free .dk-page + .dk-page .dk-in { padding-top: clamp(40px, 7vh, 80px); }
+.dk.is-free .dk-bar { position: fixed; left: 0; right: 0; bottom: 0; }
+.dk.is-free .dk-page:not(:first-child) > .dk-aurora { display: none; }
+.dk.is-free .dk-page:first-child > .dk-aurora { position: fixed; inset: 0; }
+/* Released, the photographs take their own shape again. */
+.dk.is-free .dk-page--start .dk-start__frame, .dk.is-free .dk-sum--fee .dk-start__frame { max-height: none; }
+@media (max-width: 860px) {
+  .dk.is-free .dk-page--start .dk-start__frame, .dk.is-free .dk-sum--fee .dk-start__frame { flex: none; aspect-ratio: 4 / 3; height: auto; }
 }

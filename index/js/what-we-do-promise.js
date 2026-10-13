@@ -11,13 +11,19 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 // The sunset (TJ, 9 Oct 2026): the descent is longer (was 1.92) and the beat
 // held on full night after it shorter (was 1.3), the total unchanged, because
 // night now falls during the descent rather than after it.
-const PEAK_PIN_VH = 2.4;
+// Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 5): the same beats in the same order,
+// over about 3 screens instead of 5.5. The descent 2.4 to 1.5, the beat on full
+// night .82 to .35, the glass 1.3 to .8, the hold 1.0 to .45. Desktop unchanged.
+// Shorter again (TJ, 12 Oct 2026): swiping a long scrub is hard work on a phone,
+// so the whole hold is about 1.8 screens instead of 3.1, the sunset itself 0.9.
+const DN_PHONE = window.matchMedia('(max-width: 860px)').matches;
+const PEAK_PIN_VH = DN_PHONE ? 0.9 : 2.4;
 // Day and Night Care (TJ, 8 Oct 2026): after the two options land, a glass
 // phase (DN_GLASS_VH) frosts and splits the frame and opens both columns, then
 // the hold lets them be read. The hold was .6 before the merge.
-const DN_BEAT_VH = 0.82;
-const DN_GLASS_VH = 1.3;
-const PEAK_HOLD_VH = 1.0;
+const DN_BEAT_VH = DN_PHONE ? 0.2 : 0.82;
+const DN_GLASS_VH = DN_PHONE ? 0.5 : 1.3;
+const PEAK_HOLD_VH = DN_PHONE ? 0.2 : 1.0;
 // The sun is the clock (TJ, 9 Oct 2026). Night, and the one change from dark to
 // cream for everything on the frame and the header's menu, are worked out from
 // where the sun is, not from scroll, so the three can never drift apart: night
@@ -42,6 +48,27 @@ function actPeak() {
   const answer = act.querySelector('[data-peak-answer]');
   const wrap = act.closest('.dn-wrap');
   const bodies = [...act.querySelectorAll('[data-dn-body]')];
+
+  /* Phones: Day to Night on one line (TJ, 12 Oct 2026). The sun and the four
+     times of day give way to the site's progression line: Day at the left,
+     Night at the right, the circle travelling between them as the scrub runs,
+     reaching Night as night has fully fallen. The sunset sits on the line's
+     middle (TJ, 12 Oct 2026): a sun that arrives with the line, sets into it on
+     the way to Night and rises again on the way back to Day. A tap on either end scrolls the
+     page there slowly, so scroll stays the one thing driving the light and the
+     change reads as a fade, not a switch; a swipe takes over at any moment. */
+  let dnl = null, dnlEnds = [], dnlRail = null, dnlSun = null, dnTitle = null, dnlSkyH = 0;
+  if (DN_PHONE && clock) {
+    dnl = document.createElement('div');
+    dnl.className = 'dnl';
+    dnl.innerHTML = '<div class="dnl__ends"><button type="button" class="dnl__end" data-dnl="0">Day</button><button type="button" class="dnl__end" data-dnl="1">Night</button></div>' +
+      '<div class="dnl__rail" aria-hidden="true"><span class="dnl__sky"><span class="dnl__sun"></span></span><span class="dnl__fill"></span><span class="dnl__stop dnl__stop--a"></span><span class="dnl__stop dnl__stop--b"></span><span class="dnl__tip"></span></div>';
+    clock.appendChild(dnl);
+    dnlEnds = [...dnl.querySelectorAll('.dnl__end')];
+    dnlRail = dnl.querySelector('.dnl__rail');
+    dnlSun = dnl.querySelector('.dnl__sun');
+    dnTitle = act.querySelector('.dn-title--ink');
+  }
 
   /* The glass, 0 to 1: frosting and split over the frame, the intro gives
      way, both bodies open to the same closed height, and the day column's
@@ -165,7 +192,10 @@ function actPeak() {
       // mid screen. This frame is the height of the screen and has to come to
       // rest filling it, so the wipe finishes at the moment its top reaches
       // the top of the viewport, which is also where the pin takes over.
-      end: 'top top',
+      // Phones (MOBILE-PLAN item 6): the wipe finishes with the frame's top at 40
+      // percent of the screen, so the grey ground after Tailored's last stop is a
+      // short beat, not a screen.
+      end: DN_PHONE ? 'top 40%' : 'top top',
       scrub: 0.5,
       // As above: measured after Tailored For You's pins (-10).
       refreshPriority: -11,
@@ -233,7 +263,7 @@ function actPeak() {
   // The pin. Its tween carries nothing of its own: night, like everything else
   // on the frame, is set from the sun in onUpdate below, so it all runs on one
   // clock (TJ, 9 Oct 2026).
-  gsap.to({ v: 0 }, {
+  const pinTween = gsap.to({ v: 0 }, {
     v: 1,
     scrollTrigger: {
       trigger: frame,
@@ -265,8 +295,10 @@ function actPeak() {
         // at its finished state rather than continuing to move.
         const m = Math.min(1, self.progress / MOTION_FRAC);
 
-        // The clock arrives, holds, and clears before the answer.
-        clock.style.opacity = m < GONE
+        // The clock arrives, holds, and clears before the answer. On phones the
+        // line stays through the note, so Day is still a tap away at night, and
+        // goes as the glass builds (set below, once the glass is known).
+        if (!dnl) clock.style.opacity = m < GONE
           ? between(m, 0, CLOCK_IN) * (1 - between(m, CLOCK_OUT, GONE))
           : 0;
 
@@ -278,7 +310,9 @@ function actPeak() {
         const travel = between(m, CLOCK_IN, CLOCK_OUT);
         sun.style.transform = `translateY(${travel * sky}px)`;
         // Where the sun's lower edge touches the line, as a share of its travel.
-        const touch = sky > 0 ? Math.max(0.3, (sky - sun.offsetHeight) / sky) : 0.6;
+        // Phones have no sun: night is complete at the end of the travel, as the
+        // circle reaches Night.
+        const touch = dnl ? 1 : sky > 0 ? Math.max(0.3, (sky - sun.offsetHeight) / sky) : 0.6;
         const N = ndSmooth(travel / touch);
         const C = ndSmooth((travel - 0.5 * touch) / (0.4 * touch));
         night.style.opacity = N.toFixed(3);
@@ -313,6 +347,22 @@ function actPeak() {
           h.style.setProperty('--dn-ha', ha.toFixed(3));
         });
         setGlass(g);
+        if (dnl) {
+          // The sun starts half way between the title and the line (TJ, 12 Oct
+          // 2026), so its sky reaches from the line up to that point plus half
+          // the sun; measured live (the two sit in the same pinned frame).
+          const tb = dnTitle ? dnTitle.getBoundingClientRect().bottom : 0;
+          const rr = dnlRail.getBoundingClientRect(), lineY = rr.top + rr.height / 2;
+          const sunH = dnlSun.offsetHeight || 35;
+          const skyH = Math.max(sunH + 8, Math.round((lineY - tb) / 2 + sunH / 2));
+          if (skyH !== dnlSkyH) { dnl.style.setProperty('--dnl-sky', skyH + 'px'); dnlSkyH = skyH; }
+          const co = between(m, 0, CLOCK_IN) * (1 - between(g, 0, 0.45));
+          clock.style.opacity = co.toFixed(3);
+          dnl.style.setProperty('--dnl-t', travel.toFixed(4));
+          dnl.classList.toggle('is-live', co > 0.15);
+          dnlEnds[0].style.opacity = (1 - 0.5 * travel).toFixed(3);
+          dnlEnds[1].style.opacity = (0.5 + 0.5 * travel).toFixed(3);
+        }
 
         // The small title and the paragraph (TJ, 8 Oct 2026). They lift in (a
         // short rise and fade) once the photograph is in position, dark over the
@@ -340,6 +390,37 @@ function actPeak() {
         // touches it again.
       }
     }
+  });
+  // Day rests just after the line arrives, Night where the night has fully fallen.
+  if (dnl) dnLineTaps(pinTween.scrollTrigger, [CLOCK_IN * MOTION_FRAC + 0.004, CLOCK_OUT * MOTION_FRAC]);
+}
+
+/* Phones: a tap on Day or Night scrolls the page, over about two and a half
+   seconds, to the point in the pin where the circle rests at that end. Any touch,
+   wheel or key by the reader cancels it and hands back to the swipe. */
+function dnLineTaps(st, at) {
+  const dnl = document.querySelector('.act--peak .dnl');
+  if (!dnl || !st) return;
+  let raf = 0;
+  const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
+  ['touchstart', 'wheel', 'keydown'].forEach(ev => window.addEventListener(ev, stop, { passive: true }));
+  const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  dnl.querySelectorAll('[data-dnl]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      stop();
+      const y0 = window.scrollY, y1 = st.start + at[+btn.dataset.dnl] * (st.end - st.start);
+      if (Math.abs(y1 - y0) < 2) return;
+      if (REDUCED) { window.scrollTo(0, y1); return; }
+      const t0 = performance.now(), dur = 2500;
+      const step = now => {
+        const k = Math.min(1, (now - t0) / dur);
+        // instant: the page's own smooth scrolling would restart every frame and stall
+        window.scrollTo({ top: y0 + (y1 - y0) * ease(k), behavior: 'instant' });
+        raf = k < 1 ? requestAnimationFrame(step) : 0;
+      };
+      // The click came from a touch, whose touchstart already fired; start next frame.
+      raf = requestAnimationFrame(step);
+    });
   });
 }
 

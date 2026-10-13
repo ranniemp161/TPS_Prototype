@@ -71,10 +71,35 @@ html.js .spec__checks.is-in li::before {
 }
 
 @media (max-width: 860px) {
-  .spec__checks { grid-template-columns: minmax(0, 1fr); }
+  /* Two columns at 13px (MOBILE-PLAN item 2): one column at 11px took 300px. */
+  .spec__checks { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+  .spec__checks li { font-size: .8125rem; letter-spacing: .08em; padding: 9px 0 9px 14px; }
+}
+
+/* Phones (TJ, 11 Oct 2026): the title above the portrait (moved there by
+   what-we-do-specialist.js), its lines sliding in from the left one after
+   another; the portrait centred on the page, opening from the centre out. */
+/* Stacked and centred (TJ, 11 Oct 2026): one word a line (min-content, so the
+   line splitter in what-we-do.js finds three rows), each rising 12px and
+   fading in, one after another, as the answer under "Who is it for?" does.
+   The lead and paragraphs under the portrait centred; the checks as they were. */
+@keyframes specRise { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (max-width: 860px) {
+  /* Bigger (halfway between the first size and 14vw, TJ), and an even 32px above it and between it and the portrait (TJ, 11 Oct 2026). */
+  /* One line again, wider than the portrait (TJ, 12 Oct 2026): sized to run to 16px
+     from the screen edge, centred, the portrait's 24px margin passed on each side. */
+  .spec .wh2 { width: max-content; white-space: nowrap; justify-self: center; text-align: center; font-size: min(calc((100vw - 32px) / 12.39), 3.06rem); }
+  .spec { padding-top: 33.6px; }
+  .spec__grid { row-gap: 33.6px; }
+  .spec__grid > .wh2 .kin-line { overflow: visible; }
+  .spec .is-split .kin-line > span { transform: translateY(12px); opacity: 0; }
+  .spec .is-split.is-in .kin-line > span { animation: specRise .8s var(--ease-out) both; animation-delay: calc(var(--i, 0) * .17s); }
+  .spec__frame { justify-self: center; width: 100%; margin-inline: auto; }
+  .spec__copy > .wlead, .spec__copy > .wp { text-align: center; margin-inline: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .spec .is-split .kin-line > span, .spec .is-split.is-in .kin-line > span { transform: none; opacity: 1; animation: none; }
   html.js .spec__frame.is-armed { clip-path: none; }
   html.js .spec__frame.is-armed .spec__zoom { transform: none; }
   html.js .spec__checks li { opacity: 1; transform: none; }

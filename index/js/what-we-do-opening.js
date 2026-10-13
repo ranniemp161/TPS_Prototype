@@ -23,8 +23,9 @@
      3.15 to 3.95  the answer unfolds beneath the question, block by block
                    (TJ, 8 Oct 2026); then a short hold
    The pin is 4.8 windows.
-   Phones: the stage pins for 1.8 windows and plays only the first half; the
-   introduction follows in normal flow.
+   Phones (MOBILE-PLAN item 3): the stage pins for 1.9 windows; the photograph grows,
+   the statement fades, the question lands and its answer follows on the
+   photograph, block by block (TJ, 11 Oct 2026).
 
    Everything is computed from the window, and the build runs once fonts are
    in and again when the width changes (or the height by 160px or more), so
@@ -87,6 +88,26 @@
 
   var img = frame.querySelector('img');
 
+  /* Phones: "Who is it for?" on the photograph (MOBILE-PLAN item 3). A copy of the
+     introduction's heading, hidden from screen readers; the real heading stays in
+     the page for them. Hidden on desktop by what-we-do-opening.css. */
+  var ask = document.createElement('p');
+  ask.className = 'op__ask';
+  ask.setAttribute('aria-hidden', 'true');
+  ask.textContent = leads[0].textContent;
+  /* Phones: the answer on the photograph too (TJ, 11 Oct 2026). A cream copy of
+     the five blocks under the question, so the question and its answer are one
+     held screen. Hidden from screen readers; the real introduction stays in the
+     page for them. Hidden on desktop. */
+  var on = document.createElement('div');
+  on.className = 'op__on';
+  on.setAttribute('aria-hidden', 'true');
+  on.appendChild(ask);
+  var onBlocks = blocks[0].map(function (el) {
+    var p = document.createElement('p'); p.className = 'op__on-p'; p.textContent = el.textContent; on.appendChild(p); return p;
+  });
+  stage.appendChild(on);
+
   /* The zoom (TJ, 8 Oct 2026). Small, the frame shows the whole wide
      photograph: the room, the mother, the baby in the Moses basket. Full
      screen, the photograph zooms into the moment itself: the hands tucking
@@ -95,7 +116,7 @@
      or its height); the zoom is the scale that makes it fill the window, about
      a transform origin chosen so it lands in the centre. */
   var IW = +img.getAttribute('width'), IHt = +img.getAttribute('height');
-  var FOCUS = { desktop: { cx: 800, cy: 380, w: 840 }, phone: { cx: 760, cy: 450, h: 760 } };
+  var FOCUS = { desktop: { cx: 1376, cy: 768, w: 2752 }, phone: { cx: 1278, cy: 786, h: 1536 } };   // hands only, 2752 by 1536, shown whole: no zoom in, phones centred on the hands (TJ, 9 Oct 2026)
   function zoomFor(f, w, h) {
     var a = w / h, rw = f.w || f.h * a, rh = f.h || f.w / a;
     var c = Math.max(w / IW, h / IHt);                 // object-fit cover at scale 1
@@ -259,39 +280,67 @@
       });
     });
 
-    /* ---------- Phones and small tablets ---------- */
+    /* ---------- Phones and small tablets (TJ, 9 Oct 2026, MOBILE-PLAN item 3) ----------
+       The statement sits centred at the top. The photograph takes the rest of the
+       first screen: from 22px under the text to 16px above the foot, the full width
+       less the gutters, cropped around the hands (FOCUS.phone). If that would leave
+       under 160px, the text steps down a size (.op--tight) and is measured again.
+       One scrubbed movement, pinned for 1.2 screens: the photograph grows to the
+       full screen, the statement fades up and away, the darkening rises and
+       "Who is it for?" arrives alone on the photograph. The introduction's own
+       heading is kept for screen readers only (.op--phone), so the question is
+       seen once; its paragraphs follow in the page. */
     mm.add('(max-width: 860px)', function () {
+      op.classList.add('op--phone');
+      op.classList.remove('op--tight');
       copy.style.transform = 'none'; light.style.transform = 'none';
       gsap.set(both, { top: TOP() + 10, yPercent: 0, y: 0, scale: 1, opacity: 1 });
-      /* The photograph sits below the text. On a short phone, if it would
-         not fit, it shrinks (still whole) rather than climbing over the words. */
-      var bottom = copy.getBoundingClientRect().bottom - stage.getBoundingClientRect().top;
-      var top = bottom + 22;
-      var w = W() - 32, h = w / RATIO;
-      var room = H() - top - 16;
-      if (h > room) { h = Math.max(120, room); w = h * RATIO; }
-      var left = (W() - w) / 2;
-      gsap.set(frame, { left: left, top: top, width: w, height: h, right: 'auto', bottom: 'auto', borderRadius: 12, autoAlpha: 1 });
+      var st = stage.getBoundingClientRect();
+      var measure = function () { return copy.getBoundingClientRect().bottom - st.top + 22; };
+      var top = measure();
+      if (H() - top - 16 < 160) { op.classList.add('op--tight'); top = measure(); }
+      /* Full bleed from the start (TJ, 11 Oct 2026): no gutters, no radius; the wide
+         photograph keeps its height and runs off both edges, the hands centred. */
+      var h = Math.max(160, H() - top - 16), w = W();
+      var centre = function (fw, fh) {
+        var c = Math.max(fw / IW, fh / IHt), ex = IW * c - fw, ey = IHt * c - fh;
+        var px = ex > 0 ? Math.min(100, Math.max(0, (FOCUS.phone.cx * c - fw / 2) / ex * 100)) : 50;
+        var py = ey > 0 ? Math.min(100, Math.max(0, (FOCUS.phone.cy * c - fh / 2) / ey * 100)) : 50;
+        return px.toFixed(1) + '% ' + py.toFixed(1) + '%';
+      };
+      gsap.set(frame, { left: 0, top: top, width: w, height: h, right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
+      gsap.set(img, { objectPosition: centre(w, h), scale: 1 });
       gsap.set(scrim, { opacity: 0 });
+      gsap.set(dim, { opacity: 0 });
+      gsap.set(ask, { opacity: 0, y: 18 });
+      gsap.set(onBlocks, { opacity: 0, y: 12 });
       arrive();
 
+      /* The answer follows the question onto the photograph with the desktop's
+         block by block entrance (each .32, .17 apart, rising 12px), close on the
+         question's heels, while an even dimming deepens so the cream reads on
+         the pale linen; then a short hold, and the next section follows. */
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
-      var zp = zoomFor(FOCUS.phone, W(), H());
-      gsap.set(img, { scale: 1, transformOrigin: zp.origin });
-      tl.fromTo(img, { scale: 1 }, { scale: zp.scale, duration: 1.2, ease: 'power2.inOut', immediateRender: false }, 0);
-      tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1.2, ease: 'power2.inOut' }, 0)
-        .to(scrim, { opacity: 1, duration: .6, ease: 'power1.inOut' }, .1)
-        .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .2, ease: 'power1.inOut', immediateRender: false }, .05)
-        .to(dim, { opacity: 0, duration: .35, ease: 'power1.inOut' }, .95)
-        .to(both, { top: '100%', yPercent: -100, y: -18, scale: .94, duration: .85, ease: 'power2.inOut' }, .25)
-        .to({}, { duration: .5 }, 1.2);
+      tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1, ease: 'power2.inOut' }, 0)
+        .to(img, { objectPosition: centre(W(), H()), duration: 1, ease: 'power2.inOut' }, 0)
+        .to(copy, { opacity: 0, y: -30, duration: .28, ease: 'power1.in' }, 0)
+        .to(scrim, { opacity: 1, duration: .6, ease: 'power1.inOut' }, .3)
+        .to(dim, { opacity: 1, duration: .5, ease: 'power1.inOut' }, .6)
+        .to(ask, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .7);
+      onBlocks.forEach(function (el, i) {
+        tl.to(el, { opacity: 1, y: 0, duration: .32, ease: 'power2.out' }, .85 + i * .17);
+      });
+      tl.to({}, { duration: .3 }, .85 + onBlocks.length * .17 + .32);
 
       ScrollTrigger.create({
-        trigger: stage, start: 'top top', end: '+=' + Math.round(H() * 1.8),
-        pin: stage, scrub: .7, animation: tl
+        trigger: stage, start: 'top top', end: '+=' + Math.round(H() * 1.9),
+        pin: stage, scrub: .6, animation: tl
       });
-      gsap.fromTo(introIn, { opacity: 0, y: 24 }, { opacity: 1, y: 0, ease: 'power2.out', scrollTrigger: { trigger: intro, start: 'top 85%', end: 'top 50%', scrub: .6 } });
-      gsap.fromTo(blocks[0], { opacity: 0, y: 12 }, { opacity: 1, y: 0, ease: 'power2.out', stagger: .12, scrollTrigger: { trigger: introIn.querySelector('.op__more'), start: 'top 88%', end: 'top 55%', scrub: .6 } });
+      return function () {
+        op.classList.remove('op--phone', 'op--tight');
+        gsap.set(copy, { clearProps: 'opacity,transform' });
+        gsap.set(img, { clearProps: 'objectPosition' });
+      };
     });
   }
 

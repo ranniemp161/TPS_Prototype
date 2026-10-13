@@ -36,7 +36,7 @@
      Scrubbing a video by scroll is rough on touch screens (seeking lags,
      flicks skip beats, the browser bars resize the screen), so there it is
      not used. The house plays its arrival once as it comes into view and
-     stops on the first lit room; the rooms are tabs, and a tap swaps the
+     stops dimmed, before any room lights (TJ, 11 Oct 2026); the rooms are tabs, and a tap swaps the
      words and fades in that room's lit still (cut from the same film, so
      the pictures match). Desktop below is unchanged. (TJ, 5 Oct 2026) */
   function initTap() {
@@ -75,6 +75,12 @@
       tablist.appendChild(tab); panels.appendChild(panel);
       tabs.push(tab); panelEls.push(panel);
     });
+    // The start of the line (TJ, 11 Oct 2026): a small circle where the line rests,
+    // smaller than the moving one; a tap on it returns to the whole house, no room lit.
+    var home = document.createElement('button');
+    home.type = 'button'; home.className = 'zones__home';
+    home.setAttribute('aria-label', 'The whole house');
+    tablist.appendChild(home);
     rooms.parentNode.replaceChild(tablist, rooms);
     var srList = line.querySelector('.sr-only');
     if (srList) srList.parentNode.removeChild(srList);
@@ -84,7 +90,11 @@
 
     function placeMarker() {
       var t = tabs.filter(function (b) { return b.dataset.key === active; })[0];
-      if (!t) return;
+      var rest = tabs.length ? Math.round(tabs[0].offsetLeft / 2) : 0;
+      tablist.style.setProperty('--mr', rest + 'px');
+      // No room chosen yet (TJ, 11 Oct 2026): the line rests in the start before the
+      // rooms, half way to the first, a little already drawn; no room reached.
+      if (!t) { tablist.style.setProperty('--mc', rest + 'px'); tabs.forEach(function (b) { b.classList.remove('is-past'); }); return; }
       // The line fills to the chosen room's centre, where the circle sits.
       tablist.style.setProperty('--mc', (t.offsetLeft + t.offsetWidth / 2) + 'px');
       var reached = true;
@@ -92,7 +102,7 @@
     }
     function sizePanels() {
       var pn = panelEls.filter(function (e) { return e.dataset.key === active; })[0];
-      if (pn) panels.style.height = pn.offsetHeight + 'px';
+      panels.style.height = (pn ? pn.offsetHeight : 0) + 'px';
     }
     function showStill(key) {
       Object.keys(stills).forEach(function (k) {
@@ -109,11 +119,14 @@
       tabs.forEach(function (b) {
         var on = b.dataset.key === key;
         b.setAttribute('aria-selected', String(on));
-        b.tabIndex = on ? 0 : -1;
+        b.tabIndex = on || (!key && b === tabs[0]) ? 0 : -1;
       });
       panelEls.forEach(function (e) { e.classList.toggle('is-active', e.dataset.key === key); });
+      home.classList.toggle('is-home', !key);
       placeMarker(); sizePanels();
-      if (introDone) showStill(key);
+      // Back to nothing: the room's still fades and the film's unlit frame shows
+      // again (or the first still, if the film never played).
+      if (introDone) showStill(key || (stage.classList.contains('has-clip') ? null : 'intro'));
     }
     function finishIntro() {
       if (introDone) return;
@@ -121,10 +134,12 @@
       if (video && !video.paused) video.pause();
       if (title) title.classList.add('is-in');
       line.classList.add('is-in');
-      showStill(active);
+      if (active) showStill(active);
     }
 
-    var STOP = 4.5;   // film seconds: the living room lit
+    // Film seconds: the house dimmed, no room lit yet (TJ, 11 Oct 2026; the
+    // living room starts to glow at about 3.7). Was 4.5, the living room lit.
+    var STOP = 3.55;
     function loadVideo() {
       if (loaded || reduced || !video) return;
       loaded = true;
@@ -132,9 +147,19 @@
       video.src = video.dataset.srcMobile;
       video.load();
     }
+    // The words never wait for the film (TJ, 9 Oct 2026, MOBILE-PLAN item 1): with
+    // autoplay blocked (Low Power Mode, data saver) or a slow connection the film may
+    // never pass one second, and the title and rooms stayed hidden. They now rise in
+    // as the section arrives; the film plays behind them when it can.
+    function showWords() {
+      if (title) title.classList.add('is-in');
+      line.classList.add('is-in');
+      sizePanels();
+    }
     function startIntro() {
       if (started) return;
       started = true;
+      setTimeout(showWords, 350);
       if (reduced || !video) { finishIntro(); return; }
       loadVideo();
       var shown = false;
@@ -148,10 +173,11 @@
       var pr = video.play();
       if (pr && pr.then) pr.then(function () { requestAnimationFrame(watch); }, finishIntro);
       else requestAnimationFrame(watch);
-      // If the film cannot play or stalls, never leave the words hidden.
-      setTimeout(function () { if (!introDone && video.currentTime < 0.2) finishIntro(); }, 6000);
+      // If the film cannot play, or starts and then stalls, settle on the lit room.
+      setTimeout(function () { if (!introDone) finishIntro(); }, 8000);
     }
 
+    home.addEventListener('click', function () { select(null); finishIntro(); });
     tablist.addEventListener('click', function (e) {
       var b = e.target.closest ? e.target.closest('.zones__tab') : null;
       if (!b) return;
@@ -160,12 +186,13 @@
     });
     tablist.addEventListener('keydown', function (e) {
       var i = tabs.map(function (b) { return b.dataset.key; }).indexOf(active), n = tabs.length, to = -1;
-      if (e.key === 'ArrowRight') to = (i + 1) % n; else if (e.key === 'ArrowLeft') to = (i + n - 1) % n;
+      if (e.key === 'ArrowRight') to = (i + 1) % n; else if (e.key === 'ArrowLeft') to = i < 0 ? n - 1 : (i + n - 1) % n;
       if (to < 0) return;
       e.preventDefault(); select(tabs[to].dataset.key); tabs[to].focus(); finishIntro();
     });
 
-    select(tabs.length ? tabs[0].dataset.key : null);
+    // Nothing chosen until the reader taps a room (TJ, 11 Oct 2026).
+    select(null);
     var relayout = function () { placeMarker(); sizePanels(); };
     addEventListener('resize', relayout);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
