@@ -205,7 +205,7 @@
     }
 
     function priorities() {
-      return [].slice.call(form.querySelectorAll('.prio input:checked'))
+      return [].slice.call(form.querySelectorAll('input[name^="p-"]:checked'))
         .map(function (i) { return i.value; });
     }
 
@@ -218,17 +218,17 @@
       P.RHYTHMS[days].forEach(function (r) {
         var n = P.massageSessions(r, days);
         var lab = document.createElement('label');
-        lab.className = 'rhythm' + (r === std ? ' is-standard' : '');
+        lab.className = 'tg' + (r === std ? ' is-standard' : '');
         lab.innerHTML =
           '<input class="sr-only" type="radio" name="rhythm" value="' + r + '"' + (r === want ? ' checked' : '') + ' />' +
-          '<span class="dk-dot" aria-hidden="true"></span>' +
-          '<span class="rhythm__body">' +
-            '<span class="rhythm__head"><span class="rhythm__title">' + P.rhythmTitle(r) + '</span>' +
-            (r === std ? '<span class="rhythm__std">Standard</span>' : '') + '</span>' +
-            '<span class="rhythm__sub">' + (days <= 7
+          '<span class="tg__body">' +
+            '<span class="tg__t">' + P.rhythmTitle(r) + '</span>' +
+            '<span class="tg__s">' + (days <= 7
               ? 'Across your ' + days + ' days'
               : n + ' sessions across ' + days + ' days') + '</span>' +
-          '</span>';
+          '</span>' +
+          (r === std ? '<span class="tg__aside">Standard</span>' : '') +
+          '<span class="tg__sw" aria-hidden="true"></span>';
         frag.appendChild(lab);
       });
       el.rhythms.textContent = '';
@@ -493,6 +493,8 @@
       function block(head, body) { lines.push(head); lines.push('  ' + body); }
       lines.push('THE POSTPARTUM SUITE, PROGRAMME ENQUIRY');
       lines.push('');
+      var due = dueDate();
+      if (due) { lines.push('DUE DATE  ' + dueLabel(due)); lines.push(''); }
       block('LENGTH AND FORMAT', sel.days + ' days · ' + formatLine(sel) +
         (sel.format === 'out' ? ' · includes £30 a day for travel and accommodation' : ''));
       block('YOUR SPECIALIST', 'One postpartum specialist, reserved for your family for the full ' + sel.days + ' days');
@@ -504,7 +506,7 @@
       if (budget) block('CARE BUDGET', P.money(budget));
       lines.push('');
       lines.push('Indicative fee  ' + P.money(result.fee) +
-        (P.CONFIG.introPricing ? '  (introductory pricing, held for ' + P.CONFIG.introHeldFor + ')' : ''));
+        (P.CONFIG.introPricing ? '  (indicative, held for three months)' : ''));
       if (result.floored) lines.push('                at the minimum fee for this length');
       lines.push('');
       lines.push('Final programme, availability and fee are confirmed after consultation.');
@@ -646,7 +648,7 @@
       form.querySelector('input[name="days"][value="' + days + '"]').checked = true;
       if (btn.getAttribute('data-complete') === 'true') { lastDays = days; applyComplete(days); }
       update('days');
-      deck.go(2);
+      deck.go(3);
     });
 
     /* ---------- The update ---------- */
@@ -661,7 +663,35 @@
       paintPriorities();
       paintBudget(result, sel);
       el.briefText.textContent = briefFor(sel, result);
+      fillCapture(sel, result);
       return forced;
+    }
+
+    // The close's form (FUNNEL-PLAN.md chat 5): the hidden fields carry the programme for TJ's
+    // colleague to send on; the close's version and its first sentence follow the due date.
+    function fillCapture(sel, result) {
+      var d = dueDate(), kind = closeKind(d);
+      var app = document.querySelector('.dk');
+      if (app) app.setAttribute('data-close', kind);
+      [].slice.call(document.querySelectorAll('[data-due-phrase]')).forEach(function (n) { n.textContent = duePhrase(d); });
+      var f = document.querySelector('[data-capture]');
+      if (!f) return;
+      var v = {
+        due: d ? dueIso(d) : '',
+        fee: String(Math.round(result.fee)),
+        days: String(sel.days),
+        format: sel.format === 'in' ? 'live-in' : 'daytime',
+        shift: sel.shift,
+        meals: mealsLine(sel),
+        treatments: treatmentsLine(sel),
+        rhythm: sel.massage ? sel.rhythm : '',
+        priorities: priorities().join(' · '),
+        budget: el.budget.value || '',
+        summary: el.briefText.textContent,
+        close: kind,
+        generated: new Date().toISOString()
+      };
+      Object.keys(v).forEach(function (k) { if (f.elements[k]) f.elements[k].value = v[k]; });
     }
 
     /* ---------- The panel's two views ---------- */
@@ -733,9 +763,87 @@
       if (e.animationName === 'target') e.target.classList.remove('is-targeted');
     });
 
+    var dueEl = document.getElementById('due');
+    if (dueEl) dueEl.addEventListener('input', function () { update('due'); deck.dueChanged(); });
+
+    // The due date calendar (TJ, 13 Oct 2026). Looks like the single treatments booking
+    // calendar (booking.js renderCalendar) with no limits: both arrows always live, every
+    // day selectable, no time step. The hidden #due stays the single source of truth.
+    (function () {
+      var root = document.querySelector('[data-due-cal]');
+      if (!root || !dueEl) return;
+      var grid = root.querySelector('[data-due-grid]');
+      var monthEl = root.querySelector('[data-due-month]');
+      var chosenEl = document.querySelector('[data-due-chosen]');
+      var WD = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+      var pad = function (n, w) { var s = String(n); while (s.length < w) s = '0' + s; return s; };
+      var iso = function (y, m, d) { return pad(y, 4) + '-' + pad(m, 2) + '-' + pad(d, 2); };
+      var now = new Date();
+      var todayIso = iso(now.getFullYear(), now.getMonth() + 1, now.getDate());
+      var cur = { year: now.getFullYear(), month: now.getMonth() + 1 };
+      var selected = '';
+      function readValue() {
+        var m = /^(\d{4,6})-(\d{2})-(\d{2})$/.exec(dueEl.value || '');
+        return m ? { year: +m[1], month: +m[2], day: +m[3] } : null;
+      }
+      function addMonths(c, delta) {
+        var s = new Date(Date.UTC(c.year, c.month - 1 + delta, 1));
+        return { year: s.getUTCFullYear(), month: s.getUTCMonth() + 1 };
+      }
+      function daysIn(c) { return new Date(Date.UTC(c.year, c.month, 0)).getUTCDate(); }
+      function fmtMonth(c) {
+        return new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(c.year, c.month - 1, 1)));
+      }
+      function fmtLong(v) {
+        // en-GB puts a comma after the weekday; the line reads 'Saturday 15 May 2027'.
+        return new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(v.year, v.month - 1, v.day))).replace(',', '');
+      }
+      function paintSelection() {
+        [].slice.call(grid.querySelectorAll('.due-day')).forEach(function (b) {
+          b.setAttribute('aria-pressed', String(b.getAttribute('data-date') === selected));
+        });
+        var v = readValue();
+        chosenEl.textContent = v ? fmtLong(v) : '';
+      }
+      function render() {
+        monthEl.textContent = fmtMonth(cur);
+        grid.setAttribute('aria-label', 'Choose a date in ' + fmtMonth(cur));
+        var html = WD.map(function (l) { return '<div class="due-cal__wd" aria-hidden="true">' + l + '</div>'; }).join('');
+        var blanks = (new Date(Date.UTC(cur.year, cur.month - 1, 1)).getUTCDay() + 6) % 7;
+        for (var i = 0; i < blanks; i++) html += '<div></div>';
+        for (var d = 1, n = daysIn(cur); d <= n; d++) {
+          var di = iso(cur.year, cur.month, d);
+          html += '<button type="button" class="due-day" data-date="' + di + '"' + (di === todayIso ? ' aria-current="date"' : '') + ' aria-pressed="' + (di === selected) + '">' + d + '</button>';
+        }
+        grid.setAttribute('data-rows', String(Math.ceil((blanks + daysIn(cur)) / 7)));
+        grid.innerHTML = html;
+      }
+      root.addEventListener('click', function (e) {
+        var step = e.target.closest && e.target.closest('[data-due-step]');
+        if (step && root.contains(step)) { cur = addMonths(cur, +step.getAttribute('data-due-step')); render(); return; }
+        var day = e.target.closest && e.target.closest('.due-day');
+        if (day && grid.contains(day)) {
+          dueEl.value = day.getAttribute('data-date');
+          dueEl.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      });
+      // Anything that sets #due (a tap, a script) lands here: mirror it in the grid.
+      dueEl.addEventListener('input', function () {
+        var v = readValue();
+        selected = v ? iso(v.year, v.month, v.day) : '';
+        if (v && (v.year !== cur.year || v.month !== cur.month)) { cur = { year: v.year, month: v.month }; render(); }
+        paintSelection();
+      });
+      var v0 = readValue();
+      if (v0) { selected = iso(v0.year, v0.month, v0.day); cur = { year: v0.year, month: v0.month }; }
+      render(); paintSelection();
+    })();
     form.addEventListener('change', function (e) {
       var name = e.target && e.target.name;
       if (!name || name === 'budget') return;
+      if (e.target.closest && e.target.closest('[data-capture]')) return;
+      // Book a call now? (FUNNEL-PLAN.md chat 4): not a pricing input; only Next needs to know.
+      if (name === 'call') { deck.dueChanged(); return; }
       var forced = update(name);
       flag(name, forced);
     });
@@ -813,7 +921,60 @@
      ------------------------------------------------------------ */
   // deck.go takes a PAGE index (the Change links' data-goto, the budget's
   // Apply); the deck turns it into the screen that page is on.
-  var deck = { go: function () {} };
+  var deck = { go: function () {}, dueChanged: function () {} };
+
+  // The due date (FUNNEL-PLAN.md chat 2). Not a pricing input. Returns a Date at
+  // local midnight, or null while the field is empty or not a real date. Past
+  // dates are valid (she has already given birth), and there is no year cap (TJ, 13 Oct 2026).
+  function dueDate() {
+    var f = document.getElementById('due');
+    var m = f && /^(\d{4,6})-(\d{2})-(\d{2})$/.exec(f.value);
+    if (!m) return null;
+    var y = +m[1], mo = +m[2] - 1, d = +m[3];
+    var dt = new Date(y, mo, d);
+    return dt.getMonth() === mo && dt.getDate() === d ? dt : null;
+  }
+  // The due date as YYYY-MM-DD for Calendly's second answer (FUNNEL-PLAN.md chat 4).
+  function dueIso(dt) {
+    function z(n) { return (n < 10 ? '0' : '') + n; }
+    return dt.getFullYear() + '-' + z(dt.getMonth() + 1) + '-' + z(dt.getDate());
+  }
+  function callChoice() {
+    var r = document.querySelector('input[name="call"]:checked');
+    return r ? r.value : '';
+  }
+  // Calendly: the booking link with the programme text (a1) and the due date (a2) passed through.
+  function calendlyUrl() {
+    var u = P.CONFIG.consultationUrl, d = dueDate();
+    var t = document.querySelector('[data-brief-text]');
+    var q = 'a1=' + encodeURIComponent(t ? t.textContent : '') + '&a2=' + encodeURIComponent(d ? dueIso(d) : '');
+    return u + (u.indexOf('?') < 0 ? '?' : '&') + q;
+  }
+  // The close (FUNNEL-PLAN.md chat 5). 'hold' when the due date is more than three calendar
+  // months from today, else 'dates' (nearer, or already born). No date yet reads as 'hold'.
+  function today0() { var t = new Date(); return new Date(t.getFullYear(), t.getMonth(), t.getDate()); }
+  function closeKind(d) {
+    if (!d) return 'hold';
+    var t = today0(), edge = new Date(t.getFullYear(), t.getMonth() + 3, t.getDate());
+    return d > edge ? 'hold' : 'dates';
+  }
+  function plural(n, one) { return n + ' ' + one + (n === 1 ? '' : 's'); }
+  // The first sentence of the close: how far away the baby is, in months when far, weeks when near.
+  function duePhrase(d) {
+    if (!d) return '';
+    var t = today0(), days = Math.round((d - t) / 864e5);
+    if (closeKind(d) === 'hold') {
+      var m = (d.getFullYear() - t.getFullYear()) * 12 + d.getMonth() - t.getMonth() - (d.getDate() < t.getDate() ? 1 : 0);
+      return 'Your baby is due in ' + plural(m, 'month') + '.';
+    }
+    if (days < 0) { var a = Math.floor(-days / 7); return a ? 'Your baby arrived ' + plural(a, 'week') + ' ago.' : 'Your baby arrived this week.'; }
+    var w = Math.round(days / 7);
+    return w ? 'Your baby is due in ' + plural(w, 'week') + '.' : 'Your baby is due this week.';
+  }
+
+  function dueLabel(dt) {
+    return dt.getDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][dt.getMonth()] + ' ' + dt.getFullYear();
+  }
 
   function deckController() {
     var root = document.querySelector('[data-deck]');
@@ -840,6 +1001,16 @@
     // header is at this width (the three line wordmark makes it taller). The
     // bar's height is kept on the root for the released page (.is-free).
     var app = document.querySelector('.dk'), hdr = document.querySelector('[data-nav]'), bar = document.querySelector('.dk-bar');
+    // Return to the site (top left, where the corner mark sits; TJ, 13 Oct 2026): added here, not in partials/header.html, so the shared header stays
+    // identical on every page (FUNNEL-PLAN.md chat 1).
+    if (app && app.hasAttribute('data-funnel') && hdr && !hdr.querySelector('.nav__return')) {
+      var side = hdr.querySelector('.nav__side--l');
+      if (side) {
+        var ret = document.createElement('a');
+        ret.className = 'nav__return'; ret.href = 'index.html'; ret.textContent = 'Return to the site';
+        side.insertBefore(ret, side.firstChild);
+      }
+    }
     function fitTop() {
       if (app && hdr) app.style.setProperty('--dk-top', Math.round(hdr.getBoundingClientRect().height) + 'px');
       if (bar) document.documentElement.style.setProperty('--dk-bar-h', Math.round(bar.getBoundingClientRect().height) + 'px');
@@ -903,13 +1074,17 @@
 
     function label(i) {
       if (i === 0) return 'Begin';
-      if (i === last) return 'Book a call';
+      if (i === callScreen()) return 'Continue';
       if (firstSumPage > 0 && i === screenOf[firstSumPage] - 1) return 'See my programme';
       return 'Next';
     }
 
     function paint(i) {
       cur = i;
+      app.classList.toggle('is-start', i === 0);
+      // The quiet funnel (TJ, 13 Oct 2026): past the start, the header keeps only the logo
+      // and Return to the site (FUNNEL-PLAN.md chat 1).
+      if (app.hasAttribute('data-funnel')) document.body.classList.toggle('is-funnelled', i > 0);
       line.style.setProperty('--pos', String(last ? i / last : 0));
       line.style.setProperty('--i', String(i));
       stops.forEach(function (s, k) {
@@ -925,20 +1100,58 @@
         s.setAttribute('aria-current', k === i ? 'step' : 'false');
       });
       nameEl.textContent = title(i);
+      paintNext();
       back.disabled = i === 0;
       back.classList.toggle('is-hidden', i === 0);
       // The ember button only as Begin and Book a call; otherwise the link.
-      var primary = i === 0 || i === last;
+      var primary = i === 0;
       next.classList.toggle('btn', primary);
       next.classList.toggle('btn--primary', primary);
       next.classList.toggle('dk-link', !primary);
       next.textContent = label(i);
+      // The last screen is the close; it has no Next (FUNNEL-PLAN.md chat 5 builds it).
+      next.classList.toggle('is-hidden', (i === last && last > 0) || (i === closeScreen() && closeScreen() > 0) || (i === decideScreen() && decideScreen() > 0));
       // Held, only the screen in view is live; released, every section is on the page.
       pages.forEach(function (p, k) { var off = !free && screenOf[k] !== i; p.setAttribute('aria-hidden', String(off)); p.inert = off; });
     }
 
+    // The due date screen blocks Next until a valid date is in (FUNNEL-PLAN.md chat 2).
+    // The screen is found from the page flagged data-block="due".
+    var duePage = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'due'; });
+    function blocked() { return duePage >= 0 && !dueDate(); }
+    function dueScreen() { return screenOf[duePage]; }
+    // Book a call now? blocks Next until Yes or Not yet is on (chat 4). Only Not yet may pass
+    // to the screen after it; Yes goes to Calendly instead.
+    var callPage = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'call'; });
+    function callScreen() { return callPage >= 0 ? screenOf[callPage] : -1; }
+    function callBlocked() { return callPage >= 0 && callChoice() !== 'no'; }
+    // The close and Done (FUNNEL-PLAN.md chat 5): Done is reached only by sending the form, and
+    // the close carries its own button, so Next is hidden on both.
+    var closePage = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'close'; });
+    var donePage = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'done'; });
+    var sent = false;
+    function closeScreen() { return closePage >= 0 ? screenOf[closePage] : -1; }
+    // The conclusive screen (TJ, 13 Oct 2026): Book a call or Not yet are its only ways on. Next is
+    // hidden there, and the close is reached only through Not yet.
+    var decidePage = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'decide'; });
+    var notYet = false;
+    function decideScreen() { return decidePage >= 0 ? screenOf[decidePage] : -1; }
+    function decideBlocked() { return decidePage >= 0 && !notYet; }
+    function closeBlocked() { return donePage >= 0 && !sent; }
+    function paintNext() {
+      var b = (blocked() && cur === dueScreen()) || (cur === callScreen() && !callChoice());
+      if (b) next.setAttribute('aria-disabled', 'true'); else next.removeAttribute('aria-disabled');
+    }
+    deck.dueChanged = paintNext;
+
     function go(i, instant) {
       i = Math.max(0, Math.min(last, i));
+      // No way forward past the due date screen without a date: Next, the arrow keys,
+      // the stops, a Change link and a swipe all land here.
+      if (blocked() && i > dueScreen()) i = dueScreen();
+      if (callBlocked() && i > callScreen() && cur <= callScreen()) i = callScreen();
+      if (decideBlocked() && i > decideScreen()) i = decideScreen();
+      if (closeBlocked() && i > closeScreen()) i = closeScreen();
       // A move we started: ignore the deck's (or, released, the window's)
       // scroll until it lands, so the line never steps back on the way.
       target = i;
@@ -948,11 +1161,36 @@
       else root.scrollTo({ left: i * root.clientWidth, behavior: instant || REDUCED ? 'auto' : 'smooth' });
       paint(i);
     }
+    // Sending the form. UI only: TJ's colleague replaces action="#" or adds the request here, then
+    // calls deck.done() on success (FUNNEL-PLAN.md section 9).
+    var capture = document.querySelector('[data-capture]');
+    deck.done = function () { sent = true; go(screenOf[donePage]); };
+    if (capture && donePage >= 0) capture.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!capture.checkValidity()) { capture.reportValidity(); return; }
+      deck.done();
+    });
+    var notYetBtn = document.querySelector('[data-not-yet]');
+    if (notYetBtn) notYetBtn.addEventListener('click', function () { notYet = true; go(decideScreen() + 1); });
+    // The days and Always included: open on desktop; behind an expand on phones, so the call to
+    // action shows before any scroll (TJ, 13 Oct 2026).
+    var more = document.querySelector('[data-decide-more]');
+    if (more && window.matchMedia) {
+      var WIDE = window.matchMedia('(min-width: 861px)');
+      var syncMore = function () { more.open = WIDE.matches; };
+      syncMore();
+      if (WIDE.addEventListener) WIDE.addEventListener('change', syncMore); else if (WIDE.addListener) WIDE.addListener(syncMore);
+    }
+    [].slice.call(document.querySelectorAll('[data-calendly]')).forEach(function (a) {
+      a.addEventListener('click', function () { a.href = calendlyUrl(); });
+    });
     deck.go = function (page, instant) { go(screenOf[Math.max(0, Math.min(pages.length - 1, page))], instant); };
 
     back.addEventListener('click', function () { go(cur - 1); });
     next.addEventListener('click', function () {
-      if (cur === last) { window.location.href = P.CONFIG.consultationUrl; return; }
+      if (next.getAttribute('aria-disabled') === 'true') return;
+      if (cur === last) return;
+      if (cur === callScreen() && callChoice() === 'yes') { window.location.href = calendlyUrl(); return; }
       go(cur + 1);
     });
 
@@ -964,6 +1202,10 @@
       settleT = setTimeout(function () {
         var i = Math.max(0, Math.min(last, Math.round(root.scrollLeft / root.clientWidth)));
         if (target !== null) { if (i === target) { target = null; clearTimeout(lockT); } return; }
+        if (blocked() && i > dueScreen()) { go(dueScreen()); return; }
+        if (callBlocked() && i > callScreen() && cur <= callScreen()) { go(callScreen()); return; }
+        if (decideBlocked() && i > decideScreen()) { go(decideScreen()); return; }
+        if (closeBlocked() && i > closeScreen()) { go(closeScreen()); return; }
         if (i !== cur) paint(i);
       }, 80);
     }, { passive: true });
@@ -1002,13 +1244,28 @@
         var inner = p.querySelector('.dk-in');
         inner.style.removeProperty('--join-top');
         if (free || k === 0 || screenOf[k] !== screenOf[k - 1]) return;
-        var a = pages[k - 1], sel = '.prio, .area';
+        var a = pages[k - 1], sel = '.tg, .area';
         var ar = a.querySelector(sel), br = p.querySelector(sel);
         if (!ar || !br) return;
         var aOff = ar.getBoundingClientRect().top - a.querySelector('.dk-in').getBoundingClientRect().top;
         var bOff = br.getBoundingClientRect().top - inner.getBoundingClientRect().top;
         var pad = parseFloat(getComputedStyle(inner).paddingTop) || 0;
         inner.style.setProperty('--join-top', Math.max(0, Math.round(pad + aOff - bOff)) + 'px');
+      });
+    }
+
+    // Centring on desktop (TJ, 13 Oct 2026): a single page centres itself in CSS (margin-block auto
+    // on .dk-in). The halves of a joined screen cannot centre apart, or they would part company, so
+    // the pair shares one offset, half the room left over by the taller half (CSS reads --join-shift).
+    function centre() {
+      pages.forEach(function (p) { var i = p.querySelector('.dk-in'); if (i) i.style.removeProperty('--join-shift'); });
+      if (free || window.innerWidth < 1024) return;
+      screens.forEach(function (g) {
+        if (g.length < 2) return;
+        var room = Infinity, most = 0;
+        g.forEach(function (k) { room = Math.min(room, pages[k].clientHeight); most = Math.max(most, need(pages[k])); });
+        var shift = Math.max(0, Math.floor((room - most) / 2));
+        g.forEach(function (k) { var i = pages[k].querySelector('.dk-in'); if (i) i.style.setProperty('--join-shift', shift + 'px'); });
       });
     }
 
@@ -1025,14 +1282,14 @@
       pages.forEach(function (p) { p.classList.remove('is-tight'); });
       group(); align();
       pages.forEach(function (p) { if (overflows(p)) p.classList.add('is-tight'); });
-      align();
+      align(); centre();
       var over = pages.filter(overflows);
       free = over.length > 0 || window.innerHeight < 500;
       app.classList.toggle('is-free', free);
       document.body.classList.toggle('dk-is-free', free);
       app.setAttribute('data-over', over.map(function (p) { return pages.indexOf(p); }).join(' '));
       app.setAttribute('data-fit', free ? 'free' : pages.some(function (p) { return p.classList.contains('is-tight'); }) ? 'tight' : 'fits');
-      if (free) { group(); align(); }
+      if (free) { group(); align(); centre(); }
       fitTop();
       var to = screenOf[curPage] || 0;
       paint(to);
@@ -1086,6 +1343,10 @@
         if (!free) return;
         var i = reading();
         if (target !== null) { if (i === target) { target = null; clearTimeout(lockT); } return; }
+        if (blocked() && i > dueScreen()) { go(dueScreen()); return; }
+        if (callBlocked() && i > callScreen() && cur <= callScreen()) { go(callScreen()); return; }
+        if (decideBlocked() && i > decideScreen()) { go(decideScreen()); return; }
+        if (closeBlocked() && i > closeScreen()) { go(closeScreen()); return; }
         if (i !== cur) paint(i);
       });
     }, { passive: true });

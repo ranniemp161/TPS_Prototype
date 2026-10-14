@@ -2036,6 +2036,21 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 .dk-page.is-tight .shape__grid[data-scale="week"] .day { min-height: 0; padding-bottom: .15rem; }
 .dk-page.is-tight .shape__grid[data-scale="week"] .day__n { margin-top: .15rem; }
 .dk-page.is-tight .dk-card__small { font-size: .8125rem; line-height: 1.45; }
+/* The calendar is taller than the old field: on a page that would not fit, the head, the
+   weekday row and the note close up and the grid narrows a little. Day buttons stay 40px or
+   more (TJ, 13 Oct 2026). */
+.dk-page.is-tight .due { max-width: 20rem; }
+.dk-page.is-tight .due__note--top { margin-bottom: .3rem; font-size: .85rem; line-height: 1.25; }
+.dk-page.is-tight #step-due .step__note--lead { margin-bottom: .35rem; }
+.dk-page.is-tight .due-cal__head { margin-bottom: .2rem; }
+.dk-page.is-tight .due-cal__wd { padding-bottom: .1rem; line-height: 1.1; }
+.dk-page.is-tight .due-day { aspect-ratio: auto; height: 40px; }
+/* A six row month (for example May 2027) is the tallest the calendar gets; on the shortest
+   screens its day buttons give up a few pixels so the frame still holds (Claude, 13 Oct 2026). */
+.dk-page.is-tight .due-cal__grid[data-rows="6"] { gap: 1px; }
+.dk-page.is-tight .due-cal__grid[data-rows="6"] .due-day { height: 36px; }
+.dk-page.is-tight[data-block="due"] .dk-in { padding-top: 8px; padding-bottom: 6px; }
+.dk-page.is-tight .due__chosen { margin-top: .2rem; font-size: .85rem; min-height: 1.25em; line-height: 1.25; }
 .dk-page.is-tight .fit__apply, .dk-page.is-tight .dk-actions .dk-link { letter-spacing: .1em; }
 .dk-page.is-tight .budget__help { margin-bottom: .4rem; }
 .dk-page.is-tight .budget__answer { margin-top: .5rem; }
@@ -2066,3 +2081,456 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 @media (max-width: 860px) {
   .dk.is-free .dk-page--start .dk-start__frame, .dk.is-free .dk-sum--fee .dk-start__frame { flex: none; aspect-ratio: 4 / 3; height: auto; }
 }
+
+/* Header at the top (TJ, 13 Oct 2026): same as What We Do. No glass strip until the page
+   scrolls and the header folds (.is-scrolled, set by nav-fold.js), so header and page are
+   one surface. The held frame does not scroll, so the strip only appears on short windows
+   that release into a scrolling page. An open menu keeps the strip. */
+.page--builder .nav--glass::before { opacity: 0; transition: opacity 320ms var(--ease-out); }
+.page--builder .nav--glass.is-scrolled::before,
+.page--builder .nav--glass.is-open::before { opacity: 1; }
+
+/* The start screen's aurora runs up behind the header (TJ, 13 Oct 2026), as What We Do's does, so
+   the top of the page has no band where the aurora begins under the header. Held, it is one
+   window wide layer, fixed, above the bar and under the screens; it shows on the start screen
+   only (.is-start is set by the deck) and fades out as the deck moves on. Released, the rule
+   above already makes it fixed and full height. */
+.dk:not(.is-free) .dk-page--start > .dk-aurora {
+  position: fixed; top: 0; left: 0; right: 0; bottom: var(--dk-bar-h, 0px);
+  opacity: 0; transition: opacity 320ms var(--ease-out);
+}
+.dk:not(.is-free).is-start .dk-page--start > .dk-aurora { opacity: 1; }
+
+/* The start title (TJ, 13 Oct 2026): the capitals name the page, the Quentin line under them
+   carries the feeling, as the rest of the site does. The capitals end on the line, the script
+   sits close beneath, then the lede. */
+.dk-h1--start { margin-bottom: 0 !important; }
+.dk-kicker--under { margin: clamp(.1rem, .6vh, .4rem) 0 clamp(.7rem, 2vh, 1.4rem); }
+
+/* The start screen, laid out simply (TJ, 13 Oct 2026): the words on the left, straight on the
+   aurora with no glass card; the photograph on the right, exactly as tall as the words (its top
+   level with the title, its foot level with the note), so the words never run below it. The
+   photograph's column is narrower so the words have room; it is cropped to fit, not stretched.
+   The title stays on one line: its size follows the column's width (the line is about 13.9em
+   wide). Phones keep their own layout. */
+@media (min-width: 861px) {
+  .dk-page--start > .dk-start {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 34%); grid-template-rows: auto;
+    column-gap: clamp(36px, 4.4vw, 72px); align-content: center; align-items: stretch;
+  }
+  .dk-page--start .dk-start__copy { grid-column: 1; grid-row: 1; align-self: start; padding: 0; container-type: inline-size; }
+  .dk-page--start .dk-start__copy::before { display: none; }
+  .dk-page--start .dk-start__frame { grid-column: 2; grid-row: 1; align-self: stretch; aspect-ratio: auto; height: auto; max-height: none; min-height: 0; }
+  .dk-page--start .dk-start__frame img { position: absolute; inset: 0; }
+  .dk-page--start .dk-h1--start { white-space: nowrap; margin-top: 0 !important; font-size: min(3rem, 7cqi, 7.4vh) !important; }
+  /* Tailored to you is 60 percent of the title's length (TJ, 13 Oct 2026): the line is about 6.54em
+     wide against the title's 13.9em, so its size is 1.274 times the title's. */
+  .dk-page--start .dk-kicker--under { font-size: min(3.82rem, 8.92cqi, 9.43vh) !important; }
+  .dk-page--start .dk-note { margin-bottom: 0; }
+}
+
+/* ============================================================
+   ONE WAY TO CHOOSE (TJ, 13 Oct 2026)
+   Every choice on every step is the same row: the option's name and its line on the
+   left, a note on the right where there is one, and a toggle at the end. No cards,
+   no borders round the row, only the hairline between rows. Off: the words in
+   ink-mute and a grey outlined toggle. On: the name in ember, the line in ink-soft,
+   the toggle filled ember with its knob slid across. Ember, not the paler corals,
+   because only ember reads at this size on the canvas (4.9 to 1; coral-deep 3.9).
+   Pick one steps are radios under the toggle, so turning one on turns the rest
+   off and the one that is on cannot be turned off; pick any steps are checkboxes.
+   The line under each step's title says which: Choose one, Choose any. The real
+   inputs stay in the DOM (.sr-only) with their names and values, so the pricing
+   is untouched. The progress line lives only in the bar at the foot.
+   ============================================================ */
+.tgl { --tg-off: #8F8480; display: block; max-width: 640px; margin: clamp(2px, .8vh, 10px) 0 0; padding: 0; list-style: none; }
+.tgl--included { margin: 0; }
+.tgl__hint { margin: 0 0 4px; font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); }
+.tgl__rows { display: block; }
+.tg {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto 44px; align-items: center; column-gap: 14px;
+  min-height: 52px; margin: 0; padding: 8px 0; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  background: none; border: 0; border-top: 1px solid var(--hairline); border-radius: 0; transform: none; opacity: 1;
+}
+.tgl__hint + .tg, .tgl__rows > .tg:first-child, .tgl--included > .tg:first-child { border-top: 0; }
+.tgl--included + .tgl .tgl__hint + .tg { border-top: 1px solid var(--hairline); }
+.tg:focus-within { outline: 0; }
+.tg__body { grid-column: 1; display: block; min-width: 0; }
+.tg__t {
+  display: block; font-family: var(--f-body); font-size: .875rem; font-weight: 500; line-height: 1.35; letter-spacing: 0; text-transform: none;
+  color: var(--ink-mute); transition: color 240ms var(--ease-out);
+}
+.tg__s {
+  display: block; margin-top: 2px; font-family: var(--f-read); font-size: .8125rem; line-height: 1.45;
+  color: var(--ink-mute); transition: color 240ms var(--ease-out);
+}
+.tg__aside {
+  grid-column: 2; font-family: var(--f-body); font-size: .75rem; font-weight: 500; letter-spacing: .04em; white-space: nowrap;
+  color: var(--ink-mute); transition: color 240ms var(--ease-out);
+}
+.tg__sw {
+  grid-column: 3; justify-self: end; position: relative; width: 40px; height: 22px; border-radius: 11px; box-sizing: border-box;
+  border: 1.5px solid var(--tg-off); background: transparent;
+  transition: background-color 240ms var(--ease-out), border-color 240ms var(--ease-out);
+}
+.tg__sw::after {
+  content: ""; position: absolute; top: 2.5px; left: 3px; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--tg-off); transition: transform 240ms var(--ease-out), background-color 240ms var(--ease-out);
+}
+.tg:hover:not(:has(input:disabled)) .tg__t { color: var(--ink-soft); }
+.tg:has(input:checked) .tg__t, .tg:has(input:checked):hover .tg__t { color: var(--ember); }
+.tg:has(input:checked) .tg__s { color: var(--ink-soft); }
+.tg:has(input:checked) .tg__aside { color: var(--ember); }
+.tg:has(input:checked) .tg__sw { background: var(--ember); border-color: var(--ember); }
+.tg:has(input:checked) .tg__sw::after { transform: translateX(17px); background: var(--canvas); }
+.tg:has(input:focus-visible) .tg__sw { outline: 2px solid var(--ember); outline-offset: 3px; }
+.tg:has(input:disabled) { cursor: not-allowed; opacity: .4; }
+.step.is-off .tg:has(input:disabled) { opacity: 1; }
+/* Always included: lit, with Included where the toggle would be. */
+.tg--included { cursor: default; grid-template-columns: minmax(0, 1fr) auto; }
+.tg--included .tg__t, .tg--included .tg__aside { color: var(--ember); }
+.tg--included .tg__s { color: var(--ink-soft); }
+.tg--included .tg__aside { grid-column: 2; text-transform: uppercase; letter-spacing: .1em; font-size: .6875rem; }
+.dk-page.is-tight .tg { min-height: 44px; padding: 4px 0; }
+.dk-page.is-tight .tg__s { margin-top: 0; line-height: 1.35; }
+@media (max-width: 860px) { .tgl { max-width: none; } }
+@media (prefers-reduced-motion: reduce) { .tg__t, .tg__s, .tg__aside, .tg__sw, .tg__sw::after { transition: none; } }
+
+.tg__s .length__sub::after { content: " \00b7  "; white-space: pre; }
+.dk-page.is-tight .tgl { margin-top: 0; }
+.dk-page.is-tight .tgl__hint { margin-bottom: 0; }
+.dk-page.is-tight .tg { padding: 2px 0; }
+
+/* ============================================================
+   THE QUIET FUNNEL (TJ, 13 Oct 2026; FUNNEL-PLAN.md chat 1)
+   Past the start screen the header keeps only the logo and one link back to the
+   site: the five tabs, Menu and Enquire fade out, Return to the site fades in.
+   Forward or exit, nothing else. The shared header partial is not edited; the link
+   is added by this page's script. The footer is not shown on this page.
+   ============================================================ */
+.nav__return { display: none; }
+.page--builder .nav__return {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 2px;
+  font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-mute); text-decoration: none; text-underline-offset: 4px; white-space: nowrap;
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 240ms var(--ease-out), visibility 0s linear 240ms, color 240ms var(--ease-out);
+}
+.page--builder .nav__return:hover { color: var(--ink); text-decoration: underline; }
+.page--builder .nav__return:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 2px; }
+.page--builder .nav__tabs, .page--builder .tab--cta, .page--builder .tab--menu {
+  transition: opacity 240ms var(--ease-out), visibility 0s linear 0s;
+}
+.page--builder.is-funnelled .nav__tabs,
+.page--builder.is-funnelled .tab--cta,
+.page--builder.is-funnelled .tab--menu {
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 240ms var(--ease-out), visibility 0s linear 240ms;
+}
+.page--builder.is-funnelled .nav__return {
+  opacity: 1; visibility: visible; pointer-events: auto;
+  transition: opacity 240ms var(--ease-out) 120ms, visibility 0s linear 0s, color 240ms var(--ease-out);
+}
+/* The link sits where Enquire was; Enquire keeps its place in the row while hidden, so take it out. */
+.page--builder .nav__side--r { position: relative; }
+.page--builder.is-funnelled .tab--cta { position: absolute; right: 0; }
+.page--builder .sf { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .page--builder .nav__return, .page--builder .nav__tabs, .page--builder .tab--cta, .page--builder .tab--menu { transition: none; }
+}
+/* Phones: the link wraps to two lines in the slot Enquire had, clear of the wordmark. */
+@media (max-width: 860px) {
+  .page--builder .nav__return { max-width: 92px; white-space: normal; text-align: right; line-height: 1.5; font-size: .625rem; letter-spacing: .12em; justify-content: flex-end; }
+}
+
+/* ==========================================================================
+   THE DUE DATE SCREEN (FUNNEL-PLAN.md chat 2, TJ, 13 Oct 2026)
+   One field in the budget field's clothes: a hairline underline, a mono
+   figure. Next is blocked on this screen until a date is entered.
+   ========================================================================== */
+.due { max-width: 22rem; }
+.due .due__note--top { margin: 0 0 1rem; }
+.due .due__chosen { min-height: 1.5em; }
+.due__note { margin: .8rem 0 0; font-family: var(--f-read); font-size: .9rem; line-height: 1.5; color: var(--ink-mute); }
+/* The due date calendar. These rules mirror booking.css's .bk-cal and .bk-day (the single
+   treatments booking calendar): same sizes, borders, radius and colour tokens, under page
+   specific names because booking.css is not loaded on this page (TJ, 13 Oct 2026). Unlike
+   booking there is no disabled state: no limits either way, every day selectable. */
+.due-cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.due-cal__month { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: .875rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.due-cal__step {
+  display: flex; height: 44px; width: 44px; align-items: center; justify-content: center;
+  border-radius: var(--r-button); border: 1px solid var(--hairline); background: var(--paper);
+  color: var(--ink); cursor: pointer;
+  transition: border-color 140ms var(--ease-out);
+}
+.due-cal__step:hover { border-color: var(--sand); }
+.due-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+@media (min-width: 640px) { .due-cal__grid { gap: 4px; } }
+.due-cal__wd { padding-bottom: .5rem; text-align: center; font-family: var(--f-body); font-weight: 500; font-size: .625rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute); }
+.due-day {
+  display: flex; aspect-ratio: 1; align-items: center; justify-content: center;
+  border-radius: var(--r-button); border: 1px solid var(--hairline); background: var(--paper);
+  font-family: var(--f-read); font-size: .875rem; color: var(--ink); cursor: pointer;
+  transition: border-color 140ms var(--ease-out), background-color 140ms var(--ease-out);
+}
+.due-day:hover { border-color: var(--action); }
+.due-day[aria-pressed="true"] { border-color: var(--action); background: var(--action); color: var(--paper); }
+.due-day[aria-current="date"]:not([aria-pressed="true"]) { font-weight: 700; text-decoration: underline; }
+/* Next, blocked: muted, not clickable, until the date is valid. */
+.dk-next[aria-disabled="true"] { color: var(--ink-mute); opacity: .55; cursor: default; }
+.dk-next.btn[aria-disabled="true"] { background: transparent; color: var(--ink-mute); }
+
+/* The fee screen, relaid like the start screen (TJ, 13 Oct 2026, FUNNEL-PLAN chat 3): the words on the
+   left straight on the aurora with no glass panel and no fade; the photograph on the right, 34% wide,
+   stretched to the words so its top is level with the INDICATIVE FEE label and its foot with the last
+   paragraph. Scoped to the fee screen, so the start screen is untouched. Phones keep their own layout. */
+@media (min-width: 861px) {
+  .dk-sum--fee > .dk-sumhero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 34%); grid-template-rows: auto;
+    column-gap: clamp(36px, 4.4vw, 72px); align-content: center; align-items: stretch;
+  }
+  .dk-sum--fee .dk-sumhero .dk-start__copy { grid-column: 1; grid-row: 1; align-self: start; padding: 0; }
+  .dk-sum--fee .dk-sumhero .dk-start__copy::before { display: none; }
+  .dk-sum--fee .dk-sumhero .dk-start__frame { grid-column: 2; grid-row: 1; align-self: stretch; justify-self: stretch; aspect-ratio: auto; height: auto; max-height: none; min-height: 0; }
+  .dk-sum--fee .dk-sumhero .dk-start__frame img { position: absolute; inset: 0; }
+  .dk-sum--fee .dk-sumhero .dk-note:last-child { margin-bottom: 0; }
+}
+
+/* ---------- BOOK A CALL NOW? (TJ, 13 Oct 2026, FUNNEL-PLAN chat 4) ----------
+   The toggle row as every other step, Next blocked until one is on. Copy my programme summary is a quiet
+   link under the toggles; the legal line sits small at the foot until the close (chat 5) takes it. */
+.dk-page--summary > .dk-sum--call, .dk-page--summary > .dk-sum--close { max-width: 760px; }
+.dk-sum--call .callcopy { margin: clamp(.6rem, 1.8vh, 1.1rem) 0 0; }
+.dk-sum--call .dk-legal { margin-top: clamp(.8rem, 2.4vh, 1.6rem); max-width: 56ch; }
+.dk-page.is-tight .dk-sum--call { gap: 0; }
+.dk-page.is-tight .dk-sum--call .callcopy { margin: .2rem 0 0; }
+.dk-page.is-tight .dk-sum--call .callcopy .dk-link { min-height: 36px; }
+.dk-page.is-tight .dk-sum--call .dk-legal { margin-top: .3rem; font-size: .75rem; line-height: 1.4; }
+
+/* ============================================================
+   THE CLOSE AND DONE (TJ, 13 Oct 2026; FUNNEL-PLAN.md chat 5)
+   Two versions of the close in one screen, shown by .dk[data-close]: hold (due more
+   than three months away) and dates (nearer, or born). The email field is the due
+   date field's line: a hairline underline, ember when focused. One ember button.
+   ============================================================ */
+.dk-page--summary > .dk-sum--done { max-width: 760px; }
+.close__v { display: none; }
+.dk[data-close="hold"] .close__v--hold, .dk[data-close="dates"] .close__v--dates { display: block; }
+.capture__btn .close__v { display: none; }
+.dk[data-close="hold"] .capture__btn .close__v--hold, .dk[data-close="dates"] .capture__btn .close__v--dates,
+.dk[data-close="hold"] .dk-sum--done .close__v--hold, .dk[data-close="dates"] .dk-sum--done .close__v--dates { display: inline; }
+.capture { margin: clamp(.8rem, 2.4vh, 1.6rem) 0 0; max-width: 560px; }
+.capture__label { display: block; margin: 0 0 2px; }
+.capture__row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 14px 20px; }
+.capture__email {
+  flex: 1 1 260px; min-width: 0; min-height: 44px; box-sizing: border-box;
+  border: 0; border-bottom: 1px solid var(--hairline-firm); border-radius: 0;
+  background: transparent; padding: .7rem .3rem; margin: 0;
+  font-family: var(--f-body); font-size: 1rem; color: var(--ink);
+  appearance: none; -webkit-appearance: none;
+}
+.capture__email:focus { outline: none; border-bottom: 2px solid var(--ember); margin-bottom: -1px; }
+.capture__btn { flex: none; min-height: 44px; }
+.capture__note { margin: .8rem 0 0; font-family: var(--f-read); font-size: .875rem; line-height: 1.5; color: var(--ink-mute); }
+.dk-sum--close .dk-legal { margin-top: clamp(.8rem, 2.4vh, 1.6rem); max-width: 56ch; }
+.dk-sum--done .dk-actions { margin-top: clamp(.8rem, 2.4vh, 1.4rem); display: flex; flex-wrap: wrap; gap: 8px 28px; }
+.dk-page.is-tight .capture { margin-top: .5rem; }
+.dk-page.is-tight .capture__note { margin-top: .4rem; font-size: .8125rem; }
+.dk-page.is-tight .dk-sum--close .dk-legal { margin-top: .4rem; font-size: .75rem; line-height: 1.4; }
+@media (max-width: 620px) {
+  .capture__btn { flex: 1 1 100%; }
+}
+/* The summary grid's row gap doubled the margins above; these two screens space by margin alone. */
+.dk-sum--close, .dk-sum--done { gap: 0; row-gap: 0; }
+.dk-sum--close .step__note--lead, .dk-sum--done .step__note--lead { margin-bottom: 0; }
+
+/* ============================================================
+   THE HEADER IN THE FUNNEL, AND EVERY SCREEN CENTRED (TJ, 13 Oct 2026)
+   Past the start screen the header shows the circular logo alone in the centre (the folded
+   state the header takes on scroll, shown by .is-funnelled instead) and Return to the site at
+   the top left, where the corner mark sits, with a small backwards chevron. Nothing at the
+   right. The link is added by the script into .nav__side--l; partials/header.html is untouched.
+   ============================================================ */
+.page--builder .nav__side--l { position: relative; }
+.page--builder .nav__return {
+  position: absolute; left: 0; top: 50%; transform: translateY(-50%); gap: .6em; justify-content: flex-start;
+}
+.page--builder .nav__return::before {
+  content: ""; flex: none; box-sizing: border-box; width: .55em; height: .55em; margin-left: .2em;
+  border-left: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg);
+}
+.page--builder.is-funnelled .nav--glass .nav__inner { height: var(--nav-h); transition: height 240ms var(--ease-out); }
+/* The corner mark steps aside for the link. */
+.page--builder.is-funnelled .nav--glass .nav__corner {
+  opacity: 0; visibility: hidden; transform: translateY(-50%) scale(.55); transition-delay: 0ms;
+  transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out), visibility 0s linear 240ms;
+}
+/* The wordmark folds into the circle, as on scroll. */
+.page--builder.is-funnelled .nav--glass .wm-line { opacity: 0; transform: translateY(-10px); }
+.page--builder.is-funnelled .nav--glass .wm-line--1 { transform: translateY(calc(var(--lockup-h) * 0.115)); transition-delay: 110ms; }
+.page--builder.is-funnelled .nav--glass .wm-line--2 { transform: scaleY(.4); transition-delay: 55ms; }
+.page--builder.is-funnelled .nav--glass .wm-line--3 { transform: translateY(calc(var(--lockup-h) * -0.115)); transition-delay: 0ms; }
+.page--builder.is-funnelled .nav--glass .nav__mark { transform: translate(-50%, -50%) scale(1); opacity: 1; transition-delay: 240ms; }
+@media (prefers-reduced-motion: reduce) {
+  .page--builder.is-funnelled .nav--glass .nav__inner, .page--builder.is-funnelled .nav--glass .nav__corner { transition: none; }
+}
+@media (max-width: 860px) {
+  .page--builder .nav__return { max-width: 92px; text-align: left; justify-content: flex-start; }
+}
+
+/* Every screen centred in the deck on desktop: the content sits midway between the header and the
+   bar. Not on the start screen or the fee screen (both centre themselves), not on tight pages (no
+   room to spare), not when the deck is released into a scrolling page. The top padding matches the
+   bottom so the air above and below is equal. A joined pair (from 1024px) shares one offset, set
+   by the script (--join-shift), so the two halves stay level with each other. */
+@media (min-width: 861px) {
+  .dk:not(.is-free) .dk-page:not(.dk-page--start) > .dk-in:not(.dk-sum--fee) { margin-block: auto; }
+  .dk:not(.is-free) .dk-page:not(.dk-page--start):not(.is-tight):not([data-join]) > .dk-in:not(.dk-sum--fee) { padding-top: clamp(14px, 2.6vh, 32px); }
+}
+@media (min-width: 1024px) {
+  .dk:not(.is-free) .dk-page:has(+ .dk-page[data-join]) > .dk-in,
+  .dk:not(.is-free) .dk-page[data-join] > .dk-in { margin-block: var(--join-shift, 0px) 0; }
+  .dk:not(.is-free) .dk-page:not(.dk-page--start):not(.is-tight):has(+ .dk-page[data-join]) > .dk-in { padding-top: clamp(16px, 3.4vh, 44px); }
+}
+
+/* ============================================================
+   YOUR PROGRAMME, THE CONCLUSIVE SCREEN (TJ, 13 Oct 2026)
+   The fee, what she built and her days on the left; the one question on the right:
+   Ready to talk it through? with Book a call (ember) and Not yet (quiet). Desktop shows
+   it all on one screen; phones keep the fee, the line and the question in view and put
+   the days and Always included behind an expand.
+   ============================================================ */
+.dk-retired { display: none !important; }
+.dk-page--summary > .dk-decide { max-width: 1080px; }
+.dk-decide { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); row-gap: 0; column-gap: clamp(40px, 5vw, 88px); align-items: center; }
+.dk-decide__prog, .dk-decide__ask { min-width: 0; }
+.dk-decide .dk-sumfee { font-size: clamp(2.8rem, min(5vw, 8.4vh), 4.4rem); margin: .2rem 0 .3rem; }
+.dk-decide .dk-card__small { margin: 0 0 .9rem; }
+.dk-decide__line { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 16px; }
+.dk-decide__built { margin: 0; font-family: var(--f-display); font-size: clamp(1.25rem, min(1.8vw, 3.2vh), 1.6rem); line-height: 1.2; text-transform: uppercase; color: var(--ink); }
+.dk-decide__change { min-height: 44px; }
+.dk-decide__more { margin-top: clamp(.6rem, 1.8vh, 1.2rem); }
+.dk-decide__toggle { display: none; }
+.dk-decide__toggle::-webkit-details-marker { display: none; }
+.dk-decide__shape-t { margin: 0 0 .5rem; font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); }
+.dk-decide__incl { margin: .8rem 0 0; max-width: 60ch; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--ink-mute); }
+.dk-decide__ask .step__note--lead { margin: 0; }
+.dk-decide__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin: clamp(1rem, 2.6vh, 1.6rem) 0 0; }
+.dk-decide__book { min-height: 48px; padding-inline: 28px; }
+.dk-decide__no { min-height: 44px; }
+.dk-decide__ask [data-brief-copy] { margin-top: clamp(.6rem, 1.8vh, 1.2rem); min-height: 36px; font-size: .625rem; color: var(--ink-mute); }
+.dk-decide .brief__text { display: none; }
+@media (max-width: 860px) {
+  .dk-decide { grid-template-columns: minmax(0, 1fr); row-gap: clamp(.8rem, 2.2vh, 1.4rem); align-content: center; }
+  .dk-decide .dk-sumfee { font-size: clamp(2.4rem, min(12vw, 7vh), 3.2rem); }
+  .dk-decide .dk-card__small { margin-bottom: .5rem; }
+  .dk-decide__built { font-size: 1.15rem; }
+  .dk-decide__more { margin-top: .2rem; }
+  .dk-decide__toggle {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 44px; cursor: pointer; list-style: none;
+    font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft);
+  }
+  .dk-decide__toggle::after { content: ""; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); transition: transform 240ms var(--ease-out); }
+  .dk-decide__more[open] > .dk-decide__toggle::after { transform: translateY(1px) rotate(-135deg); }
+  .dk-decide__actions { gap: 10px 20px; }
+  .dk-decide__book { flex: 1 1 100%; }
+}
+.dk-page.is-tight .dk-decide .dk-card__small { display: none; }
+.dk-page.is-tight .dk-decide__actions { margin-top: .6rem; }
+.dk-page.is-tight .dk-decide__ask [data-brief-copy] { margin-top: .2rem; }
+@media (prefers-reduced-motion: reduce) { .dk-decide__toggle::after { transition: none; } }
+
+/* Tight windows: the call to action stays in view without a scroll (TJ, 13 Oct 2026). Short desktops
+   drop the chart key and the Always included line; small phones drop the copy link and close up. */
+.dk-page.is-tight .dk-decide__incl, .dk-page.is-tight .dk-decide .shape__key { display: none; }
+.dk-page.is-tight .dk-decide__more { margin-top: .3rem; }
+.dk-page.is-tight .dk-decide__line { gap: 0 12px; }
+@media (max-width: 860px) {
+  .dk-page.is-tight .dk-decide { row-gap: .4rem; }
+  .dk-page.is-tight .dk-decide__ask [data-brief-copy] { display: none; }
+  .dk-page.is-tight .dk-decide .dk-sumfee { font-size: 2.2rem; margin: 0; }
+  .dk-page.is-tight .dk-decide__change, .dk-page.is-tight .dk-decide__toggle { min-height: 36px; }
+  .dk-page.is-tight .dk-decide__ask .step__note--lead { font-size: .875rem; line-height: 1.45; }
+  .dk-page.is-tight .dk-decide__actions { gap: 4px 20px; margin-top: .5rem; }
+  .dk-page.is-tight .dk-decide__book { min-height: 44px; }
+}
+
+/* ==========================================================================
+   EVERY STEP CENTRED ACROSS THE PAGE (TJ, 13 Oct 2026)
+   Desktop only. The step column was centred but its contents hugged the left, so the title,
+   lead and calendar sat left of the window's centre line. Titles, leads, hints, lists, the
+   calendar, the form and the links now share the page's centre line. Inside each .tg row
+   the layout is unchanged. Start and Your programme are left as they were; What matters
+   most is already a symmetric pair from 1024px. Phones (860px and under) and the released
+   state (.dk.is-free) are untouched.
+   ========================================================================== */
+@media (min-width: 861px) {
+  .dk:not(.is-free) .dk-page[data-section="builder-due"] .dk-step,
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-0"]:not([data-section^="builder-step-07"]) .dk-step,
+  .dk:not(.is-free) .dk-page[data-block="close"] .dk-step,
+  .dk:not(.is-free) .dk-page[data-block="done"] .dk-step { justify-content: center; text-align: center; }
+  .dk:not(.is-free) .dk-page[data-section="builder-due"] .step__note--lead,
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-0"]:not([data-section^="builder-step-07"]) .step__note--lead,
+  .dk:not(.is-free) .dk-page[data-block="close"] .step__note--lead,
+  .dk:not(.is-free) .dk-page[data-block="done"] .step__note--lead { margin-inline: auto; text-align: center; }
+
+  /* Due date */
+  .dk:not(.is-free) .dk-page[data-section="builder-due"] .due { margin-inline: auto; }
+  .dk:not(.is-free) .dk-page[data-section="builder-due"] .due__note { text-align: center; }
+  .dk:not(.is-free) .dk-page[data-section="builder-due"] .due-cal { margin-inline: auto; }
+
+  /* Choice steps: one centre line for title, lead, hint and list; rows keep their layout. */
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-0"]:not([data-section^="builder-step-07"]) .tgl { margin-inline: auto; }
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-0"]:not([data-section^="builder-step-07"]) .tgl__hint { text-align: center; }
+
+  /* The close and Done */
+  .dk:not(.is-free) .dk-sum--close, .dk:not(.is-free) .dk-sum--done { justify-items: center; text-align: center; }
+  .dk:not(.is-free) .dk-sum--close .close__v--hold, .dk:not(.is-free) .dk-sum--close .close__v--dates { width: 100%; }
+  .dk:not(.is-free) .dk-sum--close .capture { width: 100%; margin-inline: auto; }
+  .dk:not(.is-free) .dk-sum--close .capture__label { text-align: center; }
+  .dk:not(.is-free) .dk-sum--close .capture__row { justify-content: center; }
+  .dk:not(.is-free) .dk-sum--close .capture__email { text-align: left; }
+  .dk:not(.is-free) .dk-sum--close .capture__note,
+  .dk:not(.is-free) .dk-sum--close .dk-legal { margin-inline: auto; text-align: center; }
+  .dk:not(.is-free) .dk-sum--done .dk-actions { justify-content: center; }
+}
+/* What matters most as two separate screens (861px to 1023px), before the pair joins. */
+@media (min-width: 861px) and (max-width: 1023px) {
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-07"] .dk-step { justify-content: center; text-align: center; }
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-07"] .step__note--lead { margin-inline: auto; text-align: center; }
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-07"] .tgl { margin-inline: auto; }
+  .dk:not(.is-free) .dk-page[data-section^="builder-step-07"] .tgl__hint { text-align: center; }
+}
+
+/* Ready to talk it through? (TJ, 13 Oct 2026): two clear options, side by side, the same size and
+   shape. Book a call is the ember button; Not yet is its quiet twin, no fill, a grey border and grey
+   words, ink on hover. Change and Copy my programme summary are gone from this screen (Back does
+   Change's job; copying undercut the email). */
+.dk-decide__actions { flex-wrap: nowrap; gap: 12px; }
+.dk-decide__book, .dk-decide__no { display: inline-flex; align-items: center; box-sizing: border-box; flex: 0 0 auto; min-width: 10.5rem; min-height: 48px; padding-inline: 28px; justify-content: center; text-align: center; }
+.dk-decide__no {
+  background: transparent; color: var(--ink-mute); border: 1px solid #8F8480;
+  transition: border-color 140ms var(--ease-out), color 140ms var(--ease-out), transform 120ms var(--ease-out);
+}
+.dk-decide__no:hover { color: var(--ink); border-color: var(--ink); }
+.dk-decide__no:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+@media (max-width: 860px) {
+  .dk-decide__actions { gap: 10px; }
+  .dk-decide__book, .dk-decide__no { flex: 1 1 0; min-width: 0; padding-inline: 12px; }
+}
+
+/* The email field as the booking form draws it (TJ, 13 Oct 2026): a white box, hairline border,
+   the button radius, 44px, ember border on focus. Mirrors booking.css .bk-input. The label keeps
+   the booking form's small capitals. Replaces the underline field. */
+.capture__email {
+  min-height: 44px; width: 100%; box-sizing: border-box;
+  border-radius: var(--r-button); border: 1px solid var(--hairline);
+  background: var(--paper); padding: .5rem .75rem; margin: 0;
+  font-family: var(--f-body); font-size: .9375rem; color: var(--ink); outline: none;
+}
+.capture__email:focus, .capture__email:focus-visible { border: 1px solid var(--action); border-bottom-width: 1px; margin-bottom: 0; outline: none; }
+.capture__email::placeholder { color: var(--ink-mute); opacity: 1; }
+.capture__label { margin-bottom: .5rem; }
+.capture__row { align-items: stretch; }
+.capture__btn { min-height: 44px; }
