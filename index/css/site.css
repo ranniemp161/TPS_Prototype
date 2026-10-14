@@ -1111,7 +1111,15 @@ main:focus { outline: none; }
 /* Scoped to the hero rather than changing the shared .script size, because
    this line has to clear one line in the copy column and the others do not.
    At the shared 2.9rem cap it needed 761px in 724 and orphaned "too." */
-.act--hero .script { font-size: clamp(1.5rem, 2.6vw, 2.5rem); }
+.act--hero .script { font-size: calc(1.1 * clamp(2.4rem, 6.2vw, 4rem)); }
+/* The script is 10 percent larger than the headline at every size, so the
+   two media queries that shrink the headline shrink this with it. */
+@media (max-height: 780px) {
+  .act--hero .script { font-size: calc(1.1 * clamp(2rem, 4.4vh, 3.2rem)); }
+}
+@media (max-width: 700px) {
+  .act--hero .script { font-size: calc(1.1 * clamp(1.8rem, 7.8vw, 3rem)); }
+}
 .act--hero .btn--primary { margin-top: 1.8rem; }
 /* The header band (TJ, 5 Oct 2026). At the top of the page the tall header
    sits on the page colour, not on the photograph, and the photograph begins
@@ -1123,15 +1131,8 @@ main:focus { outline: none; }
    gives way. */
 .act--hero .stage { background: var(--canvas); }
 .act--hero .stage__media { inset: var(--hero-top) 0 0 0; overflow: hidden; }
-.act--hero .stage__media img { object-position: 62% 68%; }
-.act--hero .stage__media::after {
-  content: "";
-  position: absolute; left: 0; right: 0; top: 0;
-  height: clamp(96px, 15svh, 160px);
-  pointer-events: none; z-index: 1;
-  background: linear-gradient(to bottom,
-    var(--canvas) 0%, rgba(243, 239, 236, .78) 38%, rgba(243, 239, 236, 0) 100%);
-}
+.act--hero .stage__media img { object-position: 62% 50%; }
+/* No fade (TJ, 14 Oct 2026): the header ends on a clean edge and the photograph starts crisp. */
 
 /* Kinetic lines: each line rises from behind a mask.
    Masks reserve descender room so g, y, p and j keep their tails. */
@@ -1145,16 +1146,18 @@ main:focus { outline: none; }
   to   { transform: translateY(0);    opacity: 1; }
 }
 @keyframes softRise {
-  from { transform: translateY(14px); opacity: 0; }
+  from { transform: translateY(26px); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
+/* The same entrance as the opening header on What We Do: a 1s power3.out
+   rise, one part after another at .16s, starting .2s in (TJ, 14 Oct 2026). */
 .act--hero.is-ready .kin-line > span {
   animation: kinRise 1s var(--ease-out) both;
-  animation-delay: calc(var(--i, 0) * .09s + .15s);
+  animation-delay: calc(var(--i, 0) * .16s + .2s);
 }
 .act--hero.is-ready [data-fade] {
-  animation: softRise .8s var(--ease-out) both;
-  animation-delay: calc(var(--i, 0) * .12s + .62s);
+  animation: softRise 1s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * .16s + .2s);
 }
 @media (prefers-reduced-motion: reduce) {
   .act--hero.is-ready .kin-line > span,
@@ -2282,6 +2285,11 @@ main:focus { outline: none; }
      finished frame and then moves on. It has to stay above the 196svh margin
      or the sections after it get dragged up over it. */
   height: 230vh;
+  /* 335vh since the door handoff (TJ, 14 Oct 2026): the extra 105vh is a
+     longer hold on the finished frame so the figures can be read, then the
+     smoke rising slowly over the still held bath, before the scene lets go
+     at 2.85 viewport heights instead of 1.8. */
+  height: 335vh;
   /* Pulled far enough up that the scene is stuck flush at the top of the
      viewport long before it starts climbing, while the hero is still
      pinned and motionless. It shows nothing until then because the image
@@ -2382,11 +2390,84 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
    shrinks it with the window. */
 .bath__copy { display: flex; justify-content: flex-end; }
 .bath__lines { max-width: none; }
-.bath__lines .say,
 .bath__lines .script { max-width: none; white-space: nowrap; }
-/* Tighter than the hero's gap. Two short lines this close in size need to
-   read as one thought rather than as a heading and a caption. */
-.bath__lines .script { margin-top: 1rem; }
+/* The single line the lower half now carries (TJ, 14 Oct 2026). It is the
+   old handwriting line, enlarged, and it keeps the script colour. */
+.bath__lines .script {
+  margin: 0;
+  font-size: clamp(2.86rem, 5.5vw, 5.06rem);
+}
+/* The label above the script line (TJ, 14 Oct 2026): the same caps style as
+   the figures' labels, so "Your recovery:" reads as the fourth entry in the
+   list above it, with "Well deserved" set under it in Quentin. */
+.bath__lines { position: relative; }
+/* 30 percent larger than the stat labels (TJ, 14 Oct 2026). */
+.bath__lines .bath__kicker { font-size: 1.04rem; }
+.bath__lines .bath__kicker {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  width: max-content;
+  margin: 0 0 .4rem;
+  text-align: left;
+  /* Its midpoint, not its left edge, sits on the script's left edge, so the
+     Quentin line starts halfway along the label (TJ, 14 Oct 2026). */
+  transform: translateX(-50%);
+}
+
+/* The figures (TJ, 14 Oct 2026). They live in the empty steam above her
+   head, not in the lower half. They sit as a direct child of the sticky
+   bath so they are placed against the window, not against the copy.
+   Three equal columns, spanning most of the content width, with the lead
+   line aligned to the first column. Nothing here has a border, panel or
+   shadow. */
+.bath__figures {
+  position: absolute;
+  top: 15svh;
+  left: 0;
+  right: 0;
+  width: min(1200px, calc(100% - 2 * var(--gutter)));
+  margin-inline: auto;
+  z-index: 3;
+  /* Centred, at half the first size (TJ, 14 Oct 2026). */
+  text-align: center;
+}
+.bath__lead,
+.bath__label {
+  font-family: var(--f-body);
+  font-size: .8rem;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+}
+.bath__lead { margin-bottom: 1rem; }
+.bath__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+.bath__stat { margin: 0; min-width: 0; }
+.bath__num {
+  display: block;
+  font-family: var(--f-display);
+  font-size: clamp(2.25rem, 5vw, 4.75rem);
+  line-height: .95;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: .4rem;
+}
+/* The finished figures for the screen reader, once, out of sight. */
+.bath__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
 
 @media (max-width: 700px) {
   /* Same arithmetic as the desktop rule. At 200vh the scene came unstuck at
@@ -2400,15 +2481,40 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
      unstick at 1.40 while the climb runs to 1.455, so the section let go of
      the screen before the bath had finished arriving and the frame slid
      away mid move. 260vh puts it at 1.79 and gives the finished frame the
-     same beat the desktop gets. */
-  .act--bath { height: 260vh; }
+     same beat the desktop gets.
+
+     365vh since 14 Oct 2026, for the same reason as the desktop rule. */
+  .act--bath { height: 365vh; }
   /* On a phone the column is the whole screen, so there is no right hand
      side to move to and no room to hold a line. It goes back to the left,
      it wraps, and it stays down where the frame is empty. */
-  .bath__copy { padding-bottom: clamp(44px, 9vh, 80px); justify-content: flex-start; }
-  .bath__lines { max-width: 20ch; }
-  .bath__lines .say,
-  .bath__lines .script { white-space: normal; }
+  /* The one line sits lower right, over the bath, where the frame is empty. */
+  .bath__copy { padding-bottom: clamp(44px, 9vh, 80px); justify-content: flex-end; }
+  .bath__lines { max-width: none; }
+  .bath__lines .script { white-space: normal; font-size: clamp(2.64rem, 12.1vw, 3.52rem); }
+  /* On a phone the figures sit in the steam band above her head, stacked as
+     three rows: number on the left, its label on the right, with the lead
+     line above. */
+  .bath__figures {
+    text-align: left;
+    /* Clears the fixed header bar, which is about 80px tall on a phone. */
+    top: 6.5rem;
+    left: var(--gutter);
+    right: var(--gutter);
+    width: auto;
+    margin-inline: 0;
+  }
+  .bath__stats { display: grid; grid-template-columns: 1fr; row-gap: .7rem; }
+  .bath__stat {
+    display: grid;
+    grid-template-columns: 5.6rem minmax(0, 1fr);
+    align-items: center;
+    column-gap: .9rem;
+  }
+  .bath__num { font-size: clamp(2.6rem, 12vw, 3.2rem); line-height: 1; margin-bottom: 0; }
+  .bath__lead { font-size: .7rem; margin-bottom: .7rem; }
+  .bath__lines .bath__kicker { font-size: .91rem; }
+  .bath__label { font-size: .7rem; letter-spacing: .08em; line-height: 1.4; }
 
   /* Window width is the right rule on a landscape screen and the wrong one
      on a portrait phone. At 390 wide the image comes out 367 tall in an 844
@@ -2428,9 +2534,113 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   }
 }
 
+/* The door handoff (TJ, 14 Oct 2026). Fixed over every section but the
+   header. The bank is a band of smoke, the fog plate with the same plate
+   flipped under it, so it is densest in the middle (about 72 percent) and
+   thins to nothing at both ends. home.js keeps that middle on the bath's
+   bottom edge. Each plate is 60 percent of the window tall whatever the
+   width, so the band is the same depth on a phone and on a desktop. */
+.arrive {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  overflow: hidden;
+}
+.arrive__bank {
+  position: absolute;
+  top: 0;
+  left: -15vw;
+  width: 130vw;
+  transform: translateY(200vh);
+  will-change: transform;
+}
+.arrive__bank img { display: block; width: 100%; height: 60svh; }
+.arrive__flip { transform: scaleY(-1); }
+.arrive__out { position: absolute; inset: 0; will-change: transform, opacity; }
+.arrive__out--line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--gutter);
+}
+/* Once the veil has gone the line sits on the door, which is busy brick,
+   oak and a plant. A soft wash of the page's light behind it, a radial
+   with no edge, keeps it readable; it lives in the line's own wrapper, so
+   it arrives and leaves with the line (TJ, 14 Oct 2026). */
+.arrive__out--line::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(1100px, 110vw);
+  height: min(520px, 60vh);
+  transform: translate(-50%, -50%);
+  background: radial-gradient(closest-side,
+    rgba(243, 239, 236, .82) 0%,
+    rgba(243, 239, 236, .62) 45%,
+    rgba(243, 239, 236, 0) 100%);
+}
+.arrive__line {
+  position: relative;
+  margin: 0;
+  color: var(--ink);
+  text-align: center;
+  opacity: 0;
+}
+/* On a phone the house film's caption card rests at the middle of the
+   screen, so the line sits higher, in the band between the door photograph
+   and the card. */
+@media (max-width: 767px) {
+  .arrive__out--line { align-items: flex-start; padding-top: 30svh; }
+  .arrive__out--line::before { top: calc(30svh + 2.2rem); height: 34svh; }
+}
+/* The house film sits under the bath (TJ, 14 Oct 2026): pulled up by the
+   bath frame's own height, so its stage is held on the top of the window
+   from the moment the bath lets go, and the bath, layered above it, lifts
+   off it. */
+.act--bath { z-index: 2; }
+/* The bath's own bottom edge is a straight line, and over the door it read
+   as a panel sliding away even under the smoke. As it lets go, its bottom
+   fades out over --bath-feather (home.js grows it from 0 to 35 percent of
+   the window), so it dissolves off the door rather than uncovering it. 0
+   while the bath is held, so nothing shows through early. */
+.bath {
+  --bath-feather: 0px;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--bath-feather)), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - var(--bath-feather)), transparent 100%);
+}
+.flight--home {
+  z-index: 1;
+  margin-top: calc(-1 * max(100svh, 540px));
+}
+html:not(.js) .flight--home { margin-top: 0; }
+
+/* "Your recovery: Well deserved" over the smoke (TJ, 14 Oct 2026). The
+   bath is sticky, and a sticky element is its own stacking layer, so
+   nothing inside it can sit above the fixed smoke. home.js moves the copy
+   into this layer instead, the same box as .bath, above the smoke and
+   under the header, and moves the layer with the bath every frame. */
+.bath__float {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100svh;
+  min-height: 540px;
+  display: flex;
+  align-items: flex-end;
+  z-index: 41;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+html:not(.js) .arrive { display: none; }
+
 /* No fog, so nothing needs hiding, so nothing overlaps: the two scenes go
    back to being two plain stacked sections. */
 @media (prefers-reduced-motion: reduce) {
+  .arrive { display: none; }
+  .flight--home { margin-top: 0; }
   .fog { display: none; }
   .act--bath { height: auto; margin-top: 0; background: var(--canvas); }
   .bath { position: relative; }

@@ -2534,3 +2534,31 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 .capture__label { margin-bottom: .5rem; }
 .capture__row { align-items: stretch; }
 .capture__btn { min-height: 44px; }
+
+/* The calendar stays still (TJ, 14 Oct 2026): six rows always, the blank cells hold their place,
+   and the chosen date line keeps its height before a date is chosen. */
+.due-day--pad { visibility: hidden; pointer-events: none; }
+.due .due__chosen { min-height: 1.5em; }
+/* The name field (TJ, 14 Oct 2026), the same booking style field as the email, above it. */
+.capture__name { display: block; }
+.capture__label--email { margin-top: .9rem; }
+.dk-page.is-tight .capture__label--email { margin-top: .5rem; }
+
+/* Two fields, stacked, the same width; the button under them (TJ, 14 Oct 2026). */
+.dk-sum--close .capture__row { display: block; }
+.dk-sum--close .capture__email { width: 100%; }
+.dk-sum--close .capture__btn { display: block; margin: .9rem auto 0; min-width: 12rem; }
+.dk-page.is-tight .dk-sum--close .capture__btn { margin-top: .5rem; }
+@media (max-width: 860px) { .dk-sum--close .capture__btn { width: 100%; } }
+
+/* The close with two fields on small phones (TJ, 14 Oct 2026): when tight, close up so it stays one
+   screen and the frame stays held. The summary note drops; the legal line stays, smaller. */
+@media (max-width: 860px) {
+  .dk-page.is-tight .dk-sum--close .step__note--lead { font-size: .875rem; line-height: 1.45; }
+  .dk-page.is-tight .dk-sum--close .capture { margin-top: .4rem; }
+  .dk-page.is-tight .dk-sum--close .capture__label { margin-bottom: .25rem; }
+  .dk-page.is-tight .dk-sum--close .capture__label--email { margin-top: .4rem; }
+  .dk-page.is-tight .dk-sum--close .capture__btn { margin-top: .5rem; }
+  .dk-page.is-tight .dk-sum--close .capture__note { display: none; }
+  .dk-page.is-tight .dk-sum--close .dk-legal { margin-top: .5rem; font-size: .6875rem; line-height: 1.4; }
+}

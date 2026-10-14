@@ -127,6 +127,6 @@ List every new visible line from chats 2, 4 and 5 in one message for TJ to send.
 
 ## 9. For TJ's colleague (the email)
 
-- The form is `form[data-capture]` on the close screen. Fields are named above. `summary` is the same text as Copy my programme summary.
+- The form is `form[data-capture]` on the close screen. Visible fields: `name` (required, added by TJ 14 Oct 2026) and `email` (required). Hidden fields are named above. `summary` is the same text as Copy my programme summary.
 - `close` tells you which email to send: `hold` (twelve month price hold) or `dates` (availability check, follow up within one working day).
 - Replace `action="#"` or attach a submit handler; on success show the Done screen by calling `deck.go(<index of Done>)`, which the page exposes.

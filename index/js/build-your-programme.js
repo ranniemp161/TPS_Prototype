@@ -815,7 +815,10 @@
           var di = iso(cur.year, cur.month, d);
           html += '<button type="button" class="due-day" data-date="' + di + '"' + (di === todayIso ? ' aria-current="date"' : '') + ' aria-pressed="' + (di === selected) + '">' + d + '</button>';
         }
-        grid.setAttribute('data-rows', String(Math.ceil((blanks + daysIn(cur)) / 7)));
+        // Always six rows (TJ, 14 Oct 2026): the arrows and the days never move between months, so
+        // she can click through months without the buttons shifting. Trailing cells are blank.
+        for (var k = blanks + daysIn(cur); k < 42; k++) html += '<span class="due-day due-day--pad" aria-hidden="true"></span>';
+        grid.setAttribute('data-rows', '6');
         grid.innerHTML = html;
       }
       root.addEventListener('click', function (e) {
@@ -1075,7 +1078,7 @@
     function label(i) {
       if (i === 0) return 'Begin';
       if (i === callScreen()) return 'Continue';
-      if (firstSumPage > 0 && i === screenOf[firstSumPage] - 1) return 'See my programme';
+      // No 'See my programme' (TJ, 14 Oct 2026): the programme is a surprise; Next reads Next.
       return 'Next';
     }
 
@@ -1156,7 +1159,7 @@
       // scroll until it lands, so the line never steps back on the way.
       target = i;
       clearTimeout(lockT);
-      lockT = setTimeout(function () { target = null; }, free ? 1600 : 1400);
+      lockT = setTimeout(function () { target = null; realign(); }, free ? 1600 : 1400);
       if (free) glide(i, instant || REDUCED);
       else root.scrollTo({ left: i * root.clientWidth, behavior: instant || REDUCED ? 'auto' : 'smooth' });
       paint(i);
@@ -1194,6 +1197,20 @@
       go(cur + 1);
     });
 
+    // The deck always rests exactly on a screen (TJ, 14 Oct 2026: the due date screen showed
+    // about 180px left of centre in his Chrome). If a slide is interrupted part way, or the
+    // window or a side panel changes size, or the tab returns, snap to the current screen.
+    function realign() {
+      if (free || fitting || target !== null) return;
+      var w = root.clientWidth, x = cur * w;
+      if (w && Math.abs(root.scrollLeft - x) > 1) root.scrollTo({ left: x, behavior: 'auto' });
+    }
+    var realignT = 0;
+    function realignSoon() { clearTimeout(realignT); realignT = setTimeout(realign, 120); }
+    window.addEventListener('resize', realignSoon, { passive: true });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) realignSoon(); });
+    if (window.ResizeObserver) new ResizeObserver(realignSoon).observe(root);
+
     // Swiping: read the screen once scrolling settles, so the line and the
     // buttons follow a swipe exactly as they follow a tap.
     root.addEventListener('scroll', function () {
@@ -1207,6 +1224,7 @@
         if (decideBlocked() && i > decideScreen()) { go(decideScreen()); return; }
         if (closeBlocked() && i > closeScreen()) { go(closeScreen()); return; }
         if (i !== cur) paint(i);
+        realignSoon();
       }, 80);
     }, { passive: true });
 

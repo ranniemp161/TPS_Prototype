@@ -180,21 +180,8 @@
       </div>
     </section>
 
-    <!-- 1. Live-in or daytime -->
-    <section class="dk-page" data-title="Live-in or daytime" aria-label="Step 01" data-section="builder-step-01" data-section-name="Step 01 Live-in or Daytime">
-      <div class="dk-in">
-        <fieldset class="step" id="step-01">
-          <legend class="dk-step"><span class="dk-step__t">Live-in, or daytime?</span></legend>
-          <p class="step__note step__note--lead">The care is the same either way. The difference is whether your specialist is in your home overnight.</p>
-          <div class="tgl" role="radiogroup" aria-label="Live-in, or daytime">
-            <p class="tgl__hint" aria-hidden="true">Choose one</p>
-            <label class="tg"><input class="sr-only" type="radio" name="format" value="in" id="dkl-format-in" aria-describedby="dkl-format-in-m" checked /><span class="tg__body"><span class="tg__t">Live-in care</span><span class="tg__s" id="dkl-format-in-m">She stays in your home for the whole programme.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input class="sr-only" type="radio" name="format" value="out" id="dkl-format-out" aria-describedby="dkl-format-out-m" /><span class="tg__body"><span class="tg__t">Daytime in-home care</span><span class="tg__s" id="dkl-format-out-m">She arrives each morning and leaves in the evening. Adds £30 a day towards her travel and accommodation.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-          </div>
-        </fieldset>
-      </div>
-    </section>
-
+    <!-- Step order (TJ, 14 Oct 2026): due date, how long, what matters most (free, sets up the
+         choices that cost), then live-in or daytime, day or night, meals, treatments, massage rhythm. -->
     <!-- 2. How long -->
     <section class="dk-page" data-title="How long" aria-label="Step 02" data-section="builder-step-02" data-section-name="Step 02 How Long">
       <div class="dk-in">
@@ -207,6 +194,55 @@
             <label class="tg"><input class="sr-only" type="radio" name="days" value="7" id="dkd-days-7" aria-describedby="dkd-days-7-m" /><span class="tg__body"><span class="tg__t">7 days</span><span class="tg__s" id="dkd-days-7-m"><span class="length__sub">A full week</span><span class="length__price">Complete programme £2,495</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg"><input class="sr-only" type="radio" name="days" value="14" id="dkd-days-14" aria-describedby="dkd-days-14-m" /><span class="tg__body"><span class="tg__t">14 days</span><span class="tg__s" id="dkd-days-14-m"><span class="length__sub">Two weeks</span><span class="length__price">Complete programme £4,495</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg"><input class="sr-only" type="radio" name="days" value="30" id="dkd-days-30" aria-describedby="dkd-days-30-m" /><span class="tg__body"><span class="tg__t">30 days</span><span class="tg__s" id="dkd-days-30-m"><span class="length__sub">Full confinement</span><span class="length__price">Complete programme £6,399</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 8. What matters most, one of two. On a phone each half is a screen; from
+         1024px wide the two halves share one screen (data-join, Claude's call: TJ,
+         12 Oct 2026, break a step into more screens where it will not fit). -->
+    <section class="dk-page" data-title="What matters most" aria-label="Step 07" data-section="builder-step-07" data-section-name="Step 07 What Matters Most">
+      <div class="dk-in">
+        <fieldset class="step" id="step-07">
+          <legend class="dk-step"><span class="dk-step__t">What matters most to you?</span></legend>
+          <p class="step__note step__note--lead">Choose as many as you like. These don’t change the fee. They’re the first thing we read before your call.</p>
+          <div class="tgl" role="group" aria-label="What matters most to you">
+            <p class="tgl__hint" aria-hidden="true">Choose any</p>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-sleep" value="Sleep and rest" /><span class="tg__body"><span class="tg__t">Sleep and rest</span><span class="tg__s">A full night, and time to nap in the day</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-recovery" value="My own recovery" /><span class="tg__body"><span class="tg__t">My own recovery</span><span class="tg__s">Treatments, binding, and healing well</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-baby" value="Confidence with my baby" /><span class="tg__body"><span class="tg__t">Confidence with my baby</span><span class="tg__s">Feeding and settling, alongside someone experienced</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+          </div>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 9. What matters most, two of two -->
+    <section class="dk-page" data-title="What matters most" data-join="align" aria-label="Step 07, part 2" data-section="builder-step-07b" data-section-name="Step 07 What Matters Most, part 2">
+      <div class="dk-in">
+        <fieldset class="step" id="step-07b">
+          <legend class="dk-step"><span class="dk-step__t">What matters most to you?</span></legend>
+          <div class="tgl" role="group" aria-label="What matters most to you">
+            <p class="tgl__hint" aria-hidden="true">Choose any</p>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-food" value="Warm, nourishing food" /><span class="tg__body"><span class="tg__t">Warm, nourishing food</span><span class="tg__s">Confinement meals, cooked for you daily</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-house" value="Help with the house" /><span class="tg__body"><span class="tg__t">Help with the house</span><span class="tg__s">The washing, the kitchen and the shopping, handled</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-family" value="Support for the whole family" /><span class="tg__body"><span class="tg__t">Support for the whole family</span><span class="tg__s">Meals and calm for partners and older children too</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+          </div>
+          <p class="prio__count" data-prio-count hidden></p>
+        </fieldset>
+      </div>
+    </section>
+
+    <!-- 1. Live-in or daytime -->
+    <section class="dk-page" data-title="Live-in or daytime" aria-label="Step 01" data-section="builder-step-01" data-section-name="Step 01 Live-in or Daytime">
+      <div class="dk-in">
+        <fieldset class="step" id="step-01">
+          <legend class="dk-step"><span class="dk-step__t">Live-in, or daytime?</span></legend>
+          <p class="step__note step__note--lead">The care is the same either way. The difference is whether your specialist is in your home overnight.</p>
+          <div class="tgl" role="radiogroup" aria-label="Live-in, or daytime">
+            <p class="tgl__hint" aria-hidden="true">Choose one</p>
+            <label class="tg"><input class="sr-only" type="radio" name="format" value="in" id="dkl-format-in" aria-describedby="dkl-format-in-m" checked /><span class="tg__body"><span class="tg__t">Live-in care</span><span class="tg__s" id="dkl-format-in-m">She stays in your home for the whole programme.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="format" value="out" id="dkl-format-out" aria-describedby="dkl-format-out-m" /><span class="tg__body"><span class="tg__t">Daytime in-home care</span><span class="tg__s" id="dkl-format-out-m">She arrives each morning and leaves in the evening. Adds £30 a day towards her travel and accommodation.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
         </fieldset>
       </div>
@@ -297,40 +333,6 @@
       </div>
     </section>
 
-    <!-- 8. What matters most, one of two. On a phone each half is a screen; from
-         1024px wide the two halves share one screen (data-join, Claude's call: TJ,
-         12 Oct 2026, break a step into more screens where it will not fit). -->
-    <section class="dk-page" data-title="What matters most" aria-label="Step 07" data-section="builder-step-07" data-section-name="Step 07 What Matters Most">
-      <div class="dk-in">
-        <fieldset class="step" id="step-07">
-          <legend class="dk-step"><span class="dk-step__t">What matters most to you?</span></legend>
-          <p class="step__note step__note--lead">Choose as many as you like. These don’t change the fee. They’re the first thing we read before your call.</p>
-          <div class="tgl" role="group" aria-label="What matters most to you">
-            <p class="tgl__hint" aria-hidden="true">Choose any</p>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-sleep" value="Sleep and rest" /><span class="tg__body"><span class="tg__t">Sleep and rest</span><span class="tg__s">A full night, and time to nap in the day</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-recovery" value="My own recovery" /><span class="tg__body"><span class="tg__t">My own recovery</span><span class="tg__s">Treatments, binding, and healing well</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-baby" value="Confidence with my baby" /><span class="tg__body"><span class="tg__t">Confidence with my baby</span><span class="tg__s">Feeding and settling, alongside someone experienced</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-          </div>
-        </fieldset>
-      </div>
-    </section>
-
-    <!-- 9. What matters most, two of two -->
-    <section class="dk-page" data-title="What matters most" data-join="align" aria-label="Step 07, part 2" data-section="builder-step-07b" data-section-name="Step 07 What Matters Most, part 2">
-      <div class="dk-in">
-        <fieldset class="step" id="step-07b">
-          <legend class="dk-step"><span class="dk-step__t">What matters most to you?</span></legend>
-          <div class="tgl" role="group" aria-label="What matters most to you">
-            <p class="tgl__hint" aria-hidden="true">Choose any</p>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-food" value="Warm, nourishing food" /><span class="tg__body"><span class="tg__t">Warm, nourishing food</span><span class="tg__s">Confinement meals, cooked for you daily</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-house" value="Help with the house" /><span class="tg__body"><span class="tg__t">Help with the house</span><span class="tg__s">The washing, the kitchen and the shopping, handled</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-family" value="Support for the whole family" /><span class="tg__body"><span class="tg__t">Support for the whole family</span><span class="tg__s">Meals and calm for partners and older children too</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-          </div>
-          <p class="prio__count" data-prio-count hidden></p>
-        </fieldset>
-      </div>
-    </section>
-
     <!-- 10. Your programme, the conclusive screen (TJ, 13 Oct 2026). The fee, what she built and
          her days, with the one question beside it: Book a call (Calendly) or Not yet (the close).
          Replaces the fee screen, the two built halves, Your days, Always included, Care budget and
@@ -385,7 +387,9 @@
           <p class="step__note step__note--lead"><span data-due-phrase></span> Send your programme to your email and we’ll check availability for your dates and come back to you within one working day.</p>
         </div>
         <form class="capture" data-capture method="post" action="#">
-          <label class="tgl__hint capture__label" for="capture-email">Your email</label>
+          <label class="tgl__hint capture__label" for="capture-name">Your name</label>
+          <input class="capture__email capture__name" id="capture-name" name="name" type="text" required autocomplete="name" />
+          <label class="tgl__hint capture__label capture__label--email" for="capture-email">Your email</label>
           <div class="capture__row">
             <input class="capture__email" id="capture-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" />
             <button class="btn btn--primary capture__btn" type="submit"><span class="close__v close__v--hold">Hold my price</span><span class="close__v close__v--dates">Check my dates</span></button>
