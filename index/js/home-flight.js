@@ -9,22 +9,48 @@
   var posters = [].slice.call(section.querySelectorAll('[data-poster]'));
   var beats = [].slice.call(section.querySelectorAll('[data-beat]'));
   var ghost = section.querySelector('[data-ghost]');
-  var deskcard = section.querySelector('[data-deskcard]');
-  var deskcardName = section.querySelector('[data-deskcard-name]');
-  var deskcardDesc = section.querySelector('[data-deskcard-desc]');
-  var cards = section.querySelector('[data-cards]');
-  var cardEls = [].slice.call(section.querySelectorAll('[data-card]'));
+  var route = section.querySelector('[data-route]');
+  var routeList = section.querySelector('[data-route-stops]');
+  var routeWash = section.querySelector('[data-route-wash]');
+  var routeTip = section.querySelector('.route__tip');
+  var routeFill = section.querySelector('.route__fill');
+  var stopEls = [].slice.call(section.querySelectorAll('[data-stop]'));
+  var stopBtns = stopEls.map(function (li) { return li.querySelector('.route__name'); });
   var flightEnquire = section.querySelector('[data-flight-enquire]');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var phoneQuery = matchMedia('(max-width: 767px)');
   var phone = phoneQuery.matches;
   var finePointer = matchMedia('(pointer: fine)').matches;
 
-  var DURATION = 26.98;
-  var TRACK_VH = 15.6;
+  // The film now starts just before the front door (TJ, 14 Oct 2026). The
+  // bedroom handover and the flight round the outside of the house are cut
+  // from the files themselves (the uncut originals are
+  // home-flight.with-handover.mp4 and home-flight-m.with-handover.mp4), so
+  // CUT is how far into the old timeline the new first frame sat. Every
+  // time below is still written in the old timeline's numbers, the ones the
+  // footage notes use, and tc() shifts them.
+  //
+  // The files open 1.0 s before the closed door (frame 69 of the old cut,
+  // just after its cut from the flight round the house, where the camera
+  // holds on the front of the house and pushes in; the door is frame 99).
+  // That glide plays while the bath lifts off the stage (the lead, below),
+  // so the film is already moving as the smoke clears and lands on the
+  // closed door exactly where it used to hold. From the door on, a vh of
+  // scroll moves the film exactly as far as before, so every point after it
+  // is where it was.
+  var CUT = 69 / 30;
+  var DOOR = 99 / 30 - CUT;
+  var DURATION = 26.98 - CUT;
+  var TRACK_VH = 15.6 * (DURATION - DOOR) / 26.98;
+  // The section sits underneath the bath (site.css, .flight--home), so its
+  // stage is held on the top of the window from the moment the bath lets
+  // go. Over this first stretch, while the bath rises off it (home.js,
+  // doorHandoff), the film plays the glide up to the door, easing in from
+  // still and arriving at the normal speed as the last of the bath leaves.
+  var LEAD_VH = 1;
   var DEAD_BAND = phone || !finePointer ? 0.025 : 0.01;
 
-  function tc(seconds, frames) { return seconds + frames / 30; }
+  function tc(seconds, frames) { return seconds + frames / 30 - CUT; }
   function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
   function mix(a, b, amount) { return a + (b - a) * amount; }
   function smooth(value) { value = clamp(value, 0, 1); return value * value * (3 - 2 * value); }
@@ -46,25 +72,24 @@
   var PHONE_ZONE = { top: '62%', left: '50%' };
   var TREATMENT_FADE_AT = tc(23, 15); // ~23.5s, tune against the footage
   var SCENES = [
-    { name: 'handover', beat: 'handover', time: 0, rest: 0, fx: 50,
-      desc: 'A warm hand-off, in the first minutes home.',
-      zone: { top: '72%', left: '73%' } },
-    { name: 'exterior', beat: 'exterior', time: tc(2, 11.5), rest: tc(2, 9), fx: 50,
+    { name: 'exterior', beat: 'exterior', time: DOOR, rest: DOOR, fx: 50,
       desc: 'Scroll and come in.',
       zone: { top: '86%', left: '14%' } },
     { name: 'kitchen', beat: 'kitchen', time: (tc(6, 28) + tc(7, 25)) / 2, rest: tc(6, 28), fx: 66, room: 'kitchen',
-      desc: 'Warm, nourishing meals made in your own kitchen, so you eat well without lifting a thing.',
+      desc: 'Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery.',
       zone: { top: '78%', left: '20%' } },
     { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 78, room: 'living',
-      desc: 'Laundry, ironing and the small daily jobs. The house keeps running while you rest.',
+      desc: 'The living room is where your days with your baby unfold, so we keep it feeling restful and composed.',
       zone: { top: '24%', left: '28%' } },
     { name: 'nursery', beat: 'nursery', time: (tc(16, 8) + tc(17, 10)) / 2, rest: tc(16, 8), fx: 18, room: 'nursery',
-      desc: 'Feeds, settling and the long nights, so you can finally sleep.',
-      zone: { top: '52%', left: '77%' }, panelAt: 14 },
+      desc: 'Whether it is a 3am feed or an afternoon change, you step into a room that is peaceful, considered and already prepared, with nothing to search for.',
+      zone: { top: '52%', left: '77%' }, panelAt: 14 - CUT },
     { name: 'treatment', beat: 'bedroom', time: (tc(21, 19) + tc(22, 12)) / 2, rest: tc(21, 19), fx: 52, room: 'bedroom',
       desc: 'Postpartum treatments at home, to help your body recover.',
-      zone: { top: '20%', left: '20%' }, panelAt: 19 },
-    { name: 'exit', beat: 'sky', time: DURATION, rest: DURATION, fx: 50,
+      zone: { top: '20%', left: '20%' }, panelAt: 19 - CUT },
+    // rest is where a phone settles: on The Window with its words up, not on
+    // the last frame, where the route has already faded.
+    { name: 'exit', beat: 'sky', time: DURATION, rest: 26.1 - CUT - 0.8, fx: 50,
       desc: 'All of it, in one pair of hands.',
       zone: { top: '20%', left: '20%' } }
   ];
@@ -108,8 +133,22 @@
     gctx.drawImage(src, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
   }
 
-  function trackForTime(time) { return time / DURATION * TRACK_VH; }
-  function timeForTrack(track) { return clamp(track / TRACK_VH, 0, 1) * DURATION; }
+  // Track 0 is the closed door; the track runs from there to the end.
+  function trackForTime(time) { return (time - DOOR) / (DURATION - DOOR) * TRACK_VH; }
+  function timeForTrack(track) { return DOOR + clamp(track / TRACK_VH, 0, 1) * (DURATION - DOOR); }
+
+  // The glide before the door, over the lead. Half of it runs at a steady
+  // pace and half eases in (time = DOOR * (A x + (1 - A) x^n)), so it is
+  // visibly moving from the first scroll (TJ: an ease from still left it
+  // looking frozen for half the lift) and n is chosen so it reaches the
+  // door at the same speed the track runs at, with no jolt where they meet.
+  var SPEED = (DURATION - DOOR) / TRACK_VH;   // film seconds per vh
+  var PRE_A = 0.5;
+  var PRE_N = Math.max(1, (SPEED * LEAD_VH / DOOR - PRE_A) / (1 - PRE_A));
+  function timeForLead(raw) {
+    var x = clamp(1 + raw / LEAD_VH, 0, 1);
+    return DOOR * (PRE_A * x + (1 - PRE_A) * Math.pow(x, PRE_N));
+  }
 
   function sceneAt(time) {
     var index = 0;
@@ -122,9 +161,10 @@
   // The desktop panel's own switch points: SCENES[i].panelAt when given,
   // else the same midpoint sceneAt uses. Capped at treatment (index 5),
   // since the panel has no zone of its own past that point.
+  var TREATMENT_INDEX = SCENES.findIndex(function (scene) { return scene.name === 'treatment'; });
   function panelIndexAt(time) {
     var index = 0;
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= TREATMENT_INDEX; i++) {
       var switchAt = SCENES[i].panelAt !== undefined ? SCENES[i].panelAt : (SCENES[i - 1].time + SCENES[i].time) / 2;
       if (time >= switchAt) index = i;
     }
@@ -172,11 +212,10 @@
     var pair = scenePair(time);
     var a = SCENES[pair.left], b = SCENES[pair.right];
 
-    stage.style.setProperty('--blend', smooth((time - 26.1) / 0.88).toFixed(3));
+    stage.style.setProperty('--blend', smooth((time - (26.1 - CUT)) / 0.88).toFixed(3));
     stage.style.setProperty('--fx', phone ? mix(a.fx, b.fx, pair.amount).toFixed(1) + '%' : '50%');
 
-    if (phone) paintPhoneCards(current);
-    else paintDeskCard(time);
+    paintRoute(time);
   }
 
   // Up for the whole video, first frame to last, no fade of its own: a
@@ -193,132 +232,136 @@
     if (flightEnquire) flightEnquire.classList.toggle('is-live', !pastFlight);
   }
 
-  // Desktop: one panel, gliding. It is live from the first frame and
-  // fades out approaching TREATMENT_FADE_AT, before the practitioner's
-  // face would cross under it on the way to the window scene; it never
-  // reappears after that, so exit has no panel of its own. Its own
-  // switch points (panelIndexAt) run ahead of the video's scene changes
-  // by design; it does not take current from sceneAt.
+  // The route (TJ, 14 Oct 2026): one fixed centred line, driven by film
+  // time. "Now" runs along it piecewise linearly: from the left end at
+  // ROUTE_IN to the first stop at its birth, stop to stop at each birth, and
+  // from the last stop to the right end at DURATION, so the solid fill and
+  // its circle are exactly at a stop's dot when that stop is born. A dot
+  // grows when its stop is born and stays. The stop whose WINDOWS entry
+  // holds the film time is current: its stem, wash and masked name and words
+  // rise and fall with the film (see paintRoute, which writes --p, --pw and
+  // --d on each stop; the CSS draws everything from those, no transitions).
+  // Measurements are cached in layoutRoute(); paintRoute runs on every paint.
   //
-  // Shape: the panel pinches down to PANEL_H_MIN for most of the glide,
-  // then opens back out to full height in the final PANEL_OPEN_SPAN of
-  // it, eased rather than linear, so it reads as an arrival rather than
-  // a size change. Driven every frame on the same 900ms clock as the
-  // CSS top/left transition (GLIDE_MS below, kept equal to the CSS
-  // value by hand since a JS clock can't read a CSS transition-duration
-  // back out), not a separate wall-clock timer, so it can never drift
-  // out of sync with the move itself.
-  var GLIDE_MS = 900;
-  var PANEL_H_MIN = 0.3;
-  var PANEL_OPEN_SPAN = 0.15; // the last 15% of the glide
-  function panelShapeAt(p) {
-    var openStart = 1 - PANEL_OPEN_SPAN;
-    if (p < openStart) return PANEL_H_MIN;
-    var t = smooth((p - openStart) / PANEL_OPEN_SPAN);
-    return PANEL_H_MIN + (1 - PANEL_H_MIN) * t;
-  }
-
-  var deskLiveIndex = -1;
-  var deskGlideStart = 0;
-  var deskGlideRunning = false;
-  function runDeskGlide() {
-    var p = clamp((performance.now() - deskGlideStart) / GLIDE_MS, 0, 1);
-    deskcard.style.setProperty('--panel-h', panelShapeAt(p).toFixed(3));
-    if (p >= 1) { deskGlideRunning = false; return; }
-    requestAnimationFrame(runDeskGlide);
-  }
-
-  function paintDeskCard(time) {
-    if (!deskcard) return;
-    var visible = time < TREATMENT_FADE_AT;
-    var fadeOut = clamp(1 - (time - (TREATMENT_FADE_AT - 0.6)) / 0.6, 0, 1);
-    var opacity = visible ? fadeOut : 0;
-    stage.style.setProperty('--cards-o', opacity.toFixed(3));
-    stage.style.setProperty('--cards-v', opacity > 0.01 ? 'visible' : 'hidden');
-    deskcard.classList.toggle('is-live', opacity > 0.5);
-
-    var clamped = panelIndexAt(time);
-    if (clamped === deskLiveIndex) return;
-    deskLiveIndex = clamped;
-    var scene = SCENES[clamped];
-    deskcard.style.top = scene.zone.top;
-    deskcard.style.left = scene.zone.left;
-    if (scene.room) deskcard.setAttribute('data-room', scene.room); else deskcard.removeAttribute('data-room');
-
-    // The words fade out immediately, then back in once the shape curve
-    // has finished opening, so they never appear on a still-thin bar or
-    // read as sliding with the panel; only the panel itself moves.
-    deskcard.style.setProperty('--deskcard-text-o', 0);
-    deskcard.style.setProperty('--deskcard-text-delay', '0ms');
-    // Names live once, in the phone cards' own markup; read from there
-    // rather than duplicating a name map that could drift out of sync.
-    var sourceCard = cardEls.filter(function (c) { return c.dataset.card === scene.name; })[0];
-    var displayName = sourceCard ? sourceCard.querySelector('.cards__name').textContent : scene.name;
-
-    deskGlideStart = performance.now();
-    if (!deskGlideRunning) { deskGlideRunning = true; requestAnimationFrame(runDeskGlide); }
-
-    setTimeout(function () {
-      if (deskLiveIndex !== clamped) return; // a later scene has already taken over
-      deskcardName.textContent = displayName;
-      deskcardDesc.textContent = scene.desc;
-      deskcard.style.setProperty('--deskcard-text-o', 1);
-    }, GLIDE_MS);
-  }
-
-  // Phone: one fixed spot (PHONE_ZONE). A scene change slides the old
-  // card out toward the side the swipe came from and the new one in from
-  // the other; the position itself never changes, only which card sits
-  // there and which side it arrived from.
-  var OFFSTAGE = { left: '-140%', right: '140%' };
-  function placePhoneCard(card, dir) {
-    card.style.top = PHONE_ZONE.top;
-    card.style.left = PHONE_ZONE.left;
-    card.style.setProperty('--card-x', dir === 'left' ? OFFSTAGE.left : dir === 'right' ? OFFSTAGE.right : '0%');
-    card.style.setProperty('--card-y', '0%');
-  }
-
-  var phoneLiveIndex = -1;
-  function paintPhoneCards(current) {
-    if (!cards || !cardEls.length) return;
-    var cardsOpacity = 1 - smooth((SCENES[current].time - 24.8) / 0.8);
-    stage.style.setProperty('--cards-o', cardsOpacity.toFixed(3));
-    stage.style.setProperty('--cards-v', cardsOpacity > 0.01 ? 'visible' : 'hidden');
-    if (cards) cards.classList.toggle('is-live', cardsOpacity > 0.5);
-
-    if (current === phoneLiveIndex) return;
-    var forward = phoneLiveIndex >= 0 && current > phoneLiveIndex;
-    var backward = phoneLiveIndex >= 0 && current < phoneLiveIndex;
-    var scene = SCENES[current];
-    var card = cardEls.filter(function (c) { return c.dataset.card === scene.name; })[0];
-    var outgoing = phoneLiveIndex >= 0
-      ? cardEls.filter(function (c) { return c.dataset.card === SCENES[phoneLiveIndex].name; })[0]
-      : null;
-    phoneLiveIndex = current;
-    if (!card) return;
-
-    cardEls.forEach(function (c) { if (c !== card) c.classList.remove('is-live'); });
-
-    if (outgoing && outgoing !== card) {
-      // Leaves toward the side the swipe is heading, i.e. the opposite
-      // side the new card is arriving from.
-      placePhoneCard(outgoing, forward ? 'left' : backward ? 'right' : null);
-      outgoing.style.setProperty('--card-o', 0);
+  // Where each stop sits (x is a fraction of the line) and which side of its
+  // stem the words take, chosen by looking at each room's settled frame so
+  // the words land on the quietest part of the picture, clear of faces. The
+  // lower band of the frame, where the words sit, per room:
+  //   Arrival   .08 right: plain brick wall left of the door; short words.
+  //   Kitchen   .24 right: the plain marble front of the island, with the
+  //             cook up and to the right of it.
+  //   Living    .42 right: the table legs and rug between the sofa and the
+  //             moses basket; both women's faces are well above.
+  //   Nursery   .52 left: the chair base and floor left of the crib, clear
+  //             of the carer's face and the crib's busy rails.
+  //   Treatment .72 left: the plain pink blanket over the bed, below both
+  //             faces and left of the feet.
+  //   Window    .88 left: the hedge below the house; the words are short.
+  // On a phone the same x are used and the side is automatic (left half
+  // reads to the right, right half to the left) so the words fit.
+  var ROUTE_IN = DOOR - 0.5;
+  // Out just before the window shot blends to sky (26.1 in the old
+  // timeline), so The Window's words have time to be read (was 24.8, which
+  // faded it out almost as soon as it was born).
+  var ROUTE_OUT = 26.1 - CUT - 0.4;
+  var ROUTE_STOPS = [
+    { x: 0.08, side: 'right' },
+    { x: 0.24, side: 'right' },
+    { x: 0.42, side: 'right' },
+    { x: 0.52, side: 'left' },
+    { x: 0.72, side: 'left' },
+    { x: 0.88, side: 'left' }
+  ];
+  // Each stop's [in, out] window in film seconds, read from the footage (TJ, 14 Oct 2026), in
+  // SCENES order. A stop is current only inside its window. Between windows (the hallway, 1.9 to
+  // 2.9, and the stretch after the treatment room) no stop is current. The exit window runs to
+  // just past ROUTE_OUT, where the route's own fade takes over.
+  var WINDOWS = [
+    [DOOR, 1.9],
+    [2.9, 6.1],
+    [6.6, 11.3],
+    [11.9, 15.7],
+    [17.3, 21.2],
+    [21.6, ROUTE_OUT + 1]
+  ];
+  // A stop is born (its dot shown, the fill reaches it) at the start of its window.
+  var births = WINDOWS.map(function (w) { return w[0]; });
+  var knotT = [ROUTE_IN].concat(births, [DURATION]);
+  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [1]);
+  var lineW = 1;
+  var bornNow = [];
+  var currentNow = [];
+  // Last values written to each stop's --p, --pw and --d custom properties.
+  var lastP = [];
+  var lastPw = [];
+  var lastD = [];
+  function nowFraction(time) {
+    if (time <= knotT[0]) return 0;
+    for (var k = 1; k < knotT.length; k++) {
+      if (time <= knotT[k]) return knotX[k - 1] + (knotX[k] - knotX[k - 1]) * (time - knotT[k - 1]) / (knotT[k] - knotT[k - 1]);
     }
-
-    if (forward || backward) {
-      card.style.transition = 'none';
-      placePhoneCard(card, forward ? 'right' : 'left');
-      card.style.setProperty('--card-o', 1);
-      requestAnimationFrame(function () {
-        card.style.transition = '';
-        card.style.setProperty('--card-x', '0%');
-      });
-    } else {
-      placePhoneCard(card, null);
-      card.style.setProperty('--card-o', 1);
+    return 1;
+  }
+  function layoutRoute() {
+    if (!route || !stopEls.length) return;
+    lineW = route.clientWidth || innerWidth;
+    var isPhone = innerWidth < 768;
+    stopEls.forEach(function (li, i) {
+      var x = ROUTE_STOPS[i].x;
+      var side = isPhone ? (x < 0.5 ? 'right' : 'left') : ROUTE_STOPS[i].side;
+      li.style.left = (x * lineW).toFixed(1) + 'px';
+      li.classList.toggle('is-right', side === 'right');
+      li.classList.toggle('is-left', side === 'left');
+      // the words never run past the line's end or into its fading edge
+      var room = (side === 'right' ? lineW * (1 - x) : lineW * x) - 16 - lineW * 0.04;
+      li.style.setProperty('--room', Math.max(150, room).toFixed(0) + 'px');
+    });
+    bornNow = [];
+    currentNow = [];
+  }
+  // Writes a stop's ramp variable only when it has moved by more than 0.001, so a
+  // paint that changes nothing for this stop costs no style write.
+  function writeRamp(cache, i, name, value) {
+    if (cache[i] !== undefined && Math.abs(cache[i] - value) <= 0.001) return;
+    cache[i] = value;
+    stopEls[i].style.setProperty(name, value.toFixed(3));
+  }
+  // Runs on every paint: the ramps follow film time exactly, so scrolling stops them
+  // and scrolling back runs them back.
+  function paintRoute(time) {
+    if (!route || !stopBtns.length) return;
+    var o = smooth((time - ROUTE_IN) / 0.5) * (1 - smooth((time - ROUTE_OUT) / 0.8));
+    route.style.opacity = o.toFixed(3);
+    if (routeWash) routeWash.style.opacity = o.toFixed(3);
+    route.style.visibility = o > 0.01 ? 'visible' : 'hidden';
+    route.classList.toggle('is-live', o > 0.5);
+    var f = nowFraction(time);
+    routeFill.style.transform = 'scaleX(' + f.toFixed(4) + ')';
+    routeTip.style.transform = 'translate3d(' + (f * lineW).toFixed(1) + 'px,0,0)';
+    var cur = -1;
+    for (var i = 0; i < stopEls.length; i++) {
+      if (time >= WINDOWS[i][0] && time < WINDOWS[i][1]) cur = i;
     }
-    card.classList.add('is-live');
+    for (var j = 0; j < stopEls.length; j++) {
+      var win = WINDOWS[j];
+      var born = time >= births[j];
+      var isCur = j === cur;
+      if (born !== bornNow[j]) { bornNow[j] = born; stopEls[j].classList.toggle('is-born', born); }
+      if (isCur !== currentNow[j]) {
+        currentNow[j] = isCur;
+        stopEls[j].classList.toggle('is-current', isCur);
+        stopBtns[j].tabIndex = isCur ? 0 : -1;
+        stopBtns[j].setAttribute('aria-expanded', String(isCur));
+        if (isCur) stopBtns[j].setAttribute('aria-current', 'step'); else stopBtns[j].removeAttribute('aria-current');
+      }
+      var fall = smooth((win[1] - time) / 0.3);
+      var p = smooth((time - win[0]) / 0.3) * fall;
+      var pw = smooth((time - win[0] - 0.08) / 0.3) * fall;
+      var d = smooth((time - births[j]) / 0.15);
+      writeRamp(lastP, j, '--p', p);
+      writeRamp(lastPw, j, '--pw', pw);
+      writeRamp(lastD, j, '--d', d);
+    }
   }
 
   function attachClip(source) {
@@ -351,9 +394,13 @@
 
   function layout() {
     vh = stage.offsetHeight || innerHeight;
-    section.style.height = Math.round((TRACK_VH + 1) * vh) + 'px';
-    trackTop = section.getBoundingClientRect().top + scrollY;
+    section.style.height = Math.round((LEAD_VH + TRACK_VH + 1) * vh) + 'px';
+    // trackTop is where scrubbing starts, after the lead, so every
+    // scrollTo below that adds a track position to it stays correct.
+    trackTop = section.getBoundingClientRect().top + scrollY + LEAD_VH * vh;
     sizeGhost();
+    layoutRoute();
+    lastPaint = -1;
   }
 
   // True once scroll has carried the page past the flight's own sticky
@@ -362,14 +409,15 @@
   // themselves stay pinned at their max and cannot tell the two apart.
   var pastFlight = false;
   function updateFromScroll() {
-    var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
+    var raw = (scrollY - trackTop) / vh;
+    var track = clamp(raw, 0, TRACK_VH);
     // The section carries an extra +1vh of height past TRACK_VH on
     // purpose (see layout()), runway after the scrubbing itself maxes
     // out and before the next section visually arrives. The button
     // should stay up for all of that too, not drop the instant the
     // video's own scrub distance is exhausted.
     pastFlight = scrollY - trackTop >= (TRACK_VH + 1) * vh;
-    var nextDesired = timeForTrack(track);
+    var nextDesired = raw < 0 ? timeForLead(raw) : timeForTrack(track);
     var direct = performance.now() < wheelUntil || performance.now() < keyUntil || touchActive;
     desired = nextDesired;
     clearTimeout(settleTimer);
@@ -405,21 +453,14 @@
     requestAnimationFrame(frame);
   }
 
-  cardEls.filter(function (card) { return card.dataset.room; }).forEach(function (card) {
-    card.addEventListener('click', function () {
-      var scene = SCENES.find(function (item) { return item.room === card.dataset.room; });
+  stopBtns.forEach(function (btn, i) {
+    var go = function () {
+      var scene = SCENES[i];
       if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
-    });
+    };
+    btn.addEventListener('click', go);
+    stopEls[i].querySelector('.route__dot').addEventListener('click', go);
   });
-
-  if (deskcard) {
-    deskcard.addEventListener('click', function () {
-      var room = deskcard.dataset.room;
-      if (!room) return;
-      var scene = SCENES.find(function (item) { return item.room === room; });
-      if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
-    });
-  }
 
   if (finePointer && !reduced) {
     addEventListener('pointermove', function (event) {
@@ -462,18 +503,11 @@
 
   // phone is read once above for things that cannot change mid-session
   // without breaking playback (which video file loaded) or degrading
-  // gently on their own (the ghost canvas). But which caption system is
-  // live, .deskcard or .cards__card, has to track the real breakpoint:
-  // testing by resizing a desktop Chrome window down to phone width
-  // switches the CSS instantly but previously left the JS still running
-  // desktop logic, so .deskcard sat there fully opaque and just hidden
-  // by @media, and no phone card was ever marked live. A change listener
-  // on the same query CSS uses, not a debounced resize, catches every
-  // way the breakpoint gets crossed.
+  // gently on their own (the ghost canvas). The route's spacing changes
+  // with the breakpoint, so crossing it re-measures the track.
   phoneQuery.addEventListener('change', function (event) {
     phone = event.matches;
-    deskLiveIndex = -1;
-    phoneLiveIndex = -1;
+    layoutRoute();
     lastPaint = -1;
   });
 

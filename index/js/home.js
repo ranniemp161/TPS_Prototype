@@ -138,7 +138,10 @@ function actHero() {
   // entirely the copy is simply there. JS only measures the line boxes.
   const lines = heading ? splitLines(heading) : [];
   lines.forEach((line, i) => line.style.setProperty('--i', i));
-  fades.forEach((el, i) => el.style.setProperty('--i', i));
+  // The copy enters in one order: the two headline lines, then the script,
+  // then the lede. The fades carry on from the lines' indexes so nothing
+  // enters on top of another (TJ, 14 Oct 2026).
+  fades.forEach((el, i) => el.style.setProperty('--i', i + lines.length));
   act.classList.add('is-ready');
 }
 
@@ -860,6 +863,14 @@ function mistHandoff() {
   gsap.set(bathImg, { y: riseBy });
   gsap.set(line, { opacity: 0, y: 18 });
 
+  // The three figures start from zero and count up after the lines land.
+  // The HTML carries the real totals, so this only runs when they are about
+  // to be shown.
+  const figBlock = bath.querySelector('[data-bath-figures]');
+  const counts = figBlock ? [...figBlock.querySelectorAll('[data-bath-count]')] : [];
+  if (figBlock) gsap.set(figBlock, { opacity: 0, y: 14 });
+  counts.forEach((el) => { el.textContent = '0'; });
+
   const vh = () => window.innerHeight;
 
   // The hero holds still for the whole of the covering, so it has no moving
@@ -906,6 +917,183 @@ function mistHandoff() {
     .to(ground, { opacity: 1, duration: 0.13, ease: 'none' }, 0.83)
     .to(scrim, { opacity: 1, duration: 0.13, ease: 'none' }, 0.83)
     .to(line, { opacity: 1, y: 0, duration: 0.10, ease: EASE }, 0.88);
+
+  // The figures (TJ, 14 Oct 2026). They ride the same pinned timeline as the
+  // steam, added as tweens inside its 0 to 0.98 span, so they reverse with
+  // the scroll and finish while the bath still fills the screen. The block
+  // rises in as the steam thins, then each count runs as an integer tween
+  // that rounds during the count and writes the exact total on completion.
+  if (figBlock) {
+    tl.fromTo(figBlock,
+      { opacity: 0, y: 14 },
+      { opacity: 1, y: 0, duration: 0.12, ease: EASE }, 0.50);
+    counts.forEach((el) => {
+      const target = Number(el.dataset.bathCount);
+      const count = { v: 0 };
+      tl.fromTo(count,
+        { v: 0 },
+        {
+          v: target,
+          duration: 0.37,
+          ease: 'none',
+          onUpdate: () => { el.textContent = String(Math.round(count.v)); },
+          onComplete: () => { el.textContent = String(target); },
+          onReverseComplete: () => { el.textContent = '0'; }
+        }, 0.55);
+    });
+  }
+}
+
+/* ------------------------------------------------------------
+   DOOR HANDOFF (TJ, 14 Oct 2026)
+   The house film is pulled up underneath the bath (site.css, .flight--home)
+   so its stage is already held on the top of the window, on the closed
+   front door, by the time the bath lets go. The bath is layered above it
+   and simply rises out under the header, lifting off the door like a
+   curtain. A band of smoke trails the bath's bottom edge, so the door
+   dissolves in through it. There is no white screen: what is behind the
+   smoke is the door, which is meant to be seen. home-flight.js holds the
+   door closed until the bath has gone (LEAD_VH), then scrolling opens it.
+
+   The order of things, keyed to the bath's bottom edge (in windows from
+   the top): a pause on the finished frame with the figures; from 1.8 the
+   smoke rises from below over the still held bath; at 1.0 the bath lets go
+   and the smoke rides its edge; "From the moment we arrive" dissolves in
+   from 0.7 while "Your recovery: Well deserved", which stays above the
+   smoke throughout, dissolves as her head leaves the top (0.45 to 0.3).
+   ------------------------------------------------------------ */
+const DOOR_LEAD_VH = 1;     // the same as LEAD_VH in home-flight.js
+
+function doorHandoff() {
+  const arrive = document.querySelector('[data-arrive]');
+  const bank = arrive && arrive.querySelector('[data-arrive-bank]');
+  const line = arrive && arrive.querySelector('[data-arrive-line]');
+  const lineOut = arrive && arrive.querySelector('[data-arrive-line-out]');
+  const bathAct = document.querySelector('.act--bath');
+  const bathEl = document.querySelector('[data-bath]');
+  const flight = document.querySelector('[data-flight]');
+  if (!arrive || !bank || !line || !lineOut || !bathAct || !bathEl || !flight || REDUCED) return;
+
+  const vh = () => window.innerHeight;
+
+  // "Your recovery: Well deserved" never goes under the smoke (TJ). The
+  // bath is sticky, so it is its own stacking layer and nothing in it can
+  // sit above the fixed smoke. The copy is moved into a fixed layer above
+  // the smoke instead, shifted by the bath's own offset every frame.
+  const copy = bathEl.querySelector('.bath__copy');
+  let float = null;
+  if (copy) {
+    float = document.createElement('div');
+    float.className = 'bath__float';
+    document.body.appendChild(float);
+    float.appendChild(copy);
+  }
+
+  // Where the band's dense middle sits, as windows below the bath's bottom
+  // edge. It starts well below (out of sight while the bath is held), rises
+  // to just above the edge by the time the bath lets go, and then rides it.
+  const lift = { off: 0.7, away: 0 };
+  gsap.fromTo(lift, { off: 0.7 }, {
+    off: -0.06,
+    ease: 'none',
+    immediateRender: false,
+    scrollTrigger: {
+      trigger: bathAct,
+      start: 'bottom 180%',
+      end: 'bottom 100%',
+      scrub: 0.7,
+      invalidateOnRefresh: true
+    }
+  });
+
+  // Over the last stretch, as the bath's edge goes from 0.4 of a window
+  // to the top, the smoke pulls ahead of it and away, so by the time the
+  // bath has gone the band is clear of the door. A phone settles on the
+  // door at exactly that point, so nothing may be left lying over it. A
+  // second property, so the two tweens never share one.
+  gsap.fromTo(lift, { away: 0 }, {
+    away: -0.7,
+    ease: 'none',
+    immediateRender: false,
+    scrollTrigger: {
+      trigger: bathAct,
+      start: 'bottom 40%',
+      end: 'bottom 0%',
+      scrub: 0.7,
+      invalidateOnRefresh: true
+    }
+  });
+
+  // The bath's bottom edge feathers out as it lets go (site.css), so it
+  // dissolves off the door instead of showing a hard line across it.
+  gsap.fromTo(bathEl, { '--bath-feather': '0px' }, {
+    '--bath-feather': () => Math.round(vh() * 0.35) + 'px',
+    ease: 'none',
+    immediateRender: false,
+    scrollTrigger: {
+      trigger: bathAct,
+      start: 'bottom 102%',
+      end: 'bottom 80%',
+      scrub: 0.7,
+      invalidateOnRefresh: true
+    }
+  });
+
+  // One frame loop places both the copy and the smoke from the bath's
+  // measured position, so neither can drift from the photograph.
+  let lastTop = null, lastY = null;
+  gsap.ticker.add(() => {
+    const r = bathEl.getBoundingClientRect();
+    const top = Math.round(r.top);
+    if (float && top !== lastTop) {
+      lastTop = top;
+      float.style.transform = 'translate3d(0,' + top + 'px,0)';
+    }
+    const y = Math.round(r.bottom + (lift.off + lift.away) * vh() - bank.offsetHeight / 2);
+    if (y !== lastY) {
+      lastY = y;
+      bank.style.transform = 'translate3d(0,' + y + 'px,0)';
+    }
+  });
+
+  // "From the moment we arrive" dissolves in slowly, starting while "Well
+  // deserved" is still on screen (TJ). On a phone the copy rises through
+  // the line's own spot, so it starts a little later there.
+  const phoneQ = window.matchMedia('(max-width: 767px)');
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: bathAct,
+      start: () => phoneQ.matches ? 'bottom 50%' : 'bottom 70%',
+      end: () => phoneQ.matches ? 'bottom 20%' : 'bottom 30%',
+      scrub: 0.7,
+      invalidateOnRefresh: true
+    }
+  }).fromTo(line, { opacity: 0, y: 14 }, { opacity: 1, y: 0, ease: 'none', duration: 1, immediateRender: false }, 0);
+
+  // "Well deserved" dissolves as her head leaves the top of the window.
+  if (float) {
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: bathAct,
+        start: 'bottom 45%',
+        end: 'bottom 30%',
+        scrub: 0.7,
+        invalidateOnRefresh: true
+      }
+    }).fromTo(float, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 1, immediateRender: false }, 0);
+  }
+
+  // The line stays while the door opens (TJ) and dissolves as the camera
+  // carries on into the hallway: 0.35 to 1.0 of a window after the lead.
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: flight,
+      start: () => 'top+=' + vh() * (DOOR_LEAD_VH + 0.35) + ' top',
+      end: () => '+=' + vh() * 0.65,
+      scrub: 0.7,
+      invalidateOnRefresh: true
+    }
+  }).fromTo(lineOut, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 1, immediateRender: false }, 0);
 }
 
 /* ------------------------------------------------------------
@@ -1364,6 +1552,7 @@ function boot() {
   actFlow();
   gallery();
   mistHandoff();
+  doorHandoff();
   navTheme();
   // Last. It registers no ScrollTrigger and never transforms its own
   // section, so it stays out of the measurement the hero pin depends on.

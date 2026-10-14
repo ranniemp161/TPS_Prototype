@@ -869,3 +869,178 @@
 @media (prefers-reduced-motion: reduce) {
   .zones__poster { transition: opacity 700ms linear; }
 }
+
+
+/* ---------- the route (TJ, 14 Oct 2026) ----------
+   One fixed, centred line across the foot of the film (the What We Do
+   timeline's language, laid on its side): a hairline for the whole way,
+   a solid Ink fill from the left end to "now" with the circle at its tip,
+   both ends dissolving in a mask. Film time moves "now" along the line
+   (home-flight.js, piecewise between hand placed stops). A stop's dot grows
+   on the line when the fill reaches it and stays. While a stop is the
+   current one a 1px stem grows up from its dot and its name and words rise
+   out of masks beside the stem, on the side the picture is quietest (the
+   room's side is set in the JS table). When the camera moves on, the text
+   masks back down and the stem retracts. A long linear foot fade (.route__wash)
+   sits behind the line and the words. Tokens as the
+   timeline: --tline, --tline-track, --tline-ink, --tdot, --ttip, --tease. */
+.route {
+  --above: 214px;
+  --below: 110px;
+  --stem: 76px;
+  --fade: 8%;
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  width: min(1120px, calc(100% - 2 * var(--gutter)));
+  height: calc(var(--above) + var(--below));
+  /* the line sits 14svh up from the bottom of the frame (desktop; TJ, 14 Oct 2026),
+     a touch higher so the room's words fit under it */
+  bottom: calc(14svh - var(--below));
+  transform: translateX(-50%);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  /* Amidat's copy (TJ, 14 Oct 2026): the words below the line need more width than the line's soft ends allow, so a second mask layer, no-clip, keeps everything from 20px under the line down fully visible, past the route's own box. The line, dots and stems keep the soft ends. */
+  -webkit-mask-image: linear-gradient(#000, #000), linear-gradient(to right, transparent 0, #000 var(--fade), #000 calc(100% - var(--fade)), transparent 100%);
+  mask-image: linear-gradient(#000, #000), linear-gradient(to right, transparent 0, #000 var(--fade), #000 calc(100% - var(--fade)), transparent 100%);
+  -webkit-mask-size: 4000px 400px, 100% 100%;
+  mask-size: 4000px 400px, 100% 100%;
+  -webkit-mask-position: center calc(var(--above) + 20px), 0 0;
+  mask-position: center calc(var(--above) + 20px), 0 0;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-clip: no-clip;
+  mask-clip: no-clip;
+  -webkit-mask-composite: source-over;
+  mask-composite: add;
+}
+.route__wash {
+  /* the foot fade (TJ, 14 Oct 2026): canvas colour rising from the bottom of the
+     film, full width so it has no side edge, gone by 45% of the height. Behind
+     the route (z 3) and the header; never reaches the faces mid frame. */
+  position: absolute; z-index: 2;
+  left: 0; right: 0; bottom: 0; height: 42%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to top,
+    rgba(243, 239, 236, .9) 0%,
+    rgba(243, 239, 236, .82) 20%,
+    rgba(243, 239, 236, .4) 42%,
+    rgba(243, 239, 236, .12) 70%,
+    rgba(243, 239, 236, 0) 100%);
+}
+.route__line, .route__fill {
+  position: absolute; left: 0; width: 100%; top: var(--above); height: var(--tline); pointer-events: none;
+}
+.route__line { background: var(--tline-track); }
+.route__fill { background: var(--tline-ink); transform-origin: 0 50%; transform: scaleX(0); will-change: transform; }
+.route__tip {
+  position: absolute; left: 0; top: var(--above); z-index: 3; pointer-events: none;
+  width: var(--ttip); height: var(--ttip); border-radius: 50%; background: var(--tline-ink);
+  margin: calc(var(--ttip) / -2 + var(--tline) / 2) 0 0 calc(var(--ttip) / -2);
+  will-change: transform;
+}
+.route__stops { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; pointer-events: none; }
+.route__stop { position: absolute; top: 0; left: 0; height: 100%; width: 0; }
+.route__dot {
+  position: absolute; left: 0; top: var(--above); z-index: 2; padding: 0; border: 0; cursor: pointer;
+  width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2 + var(--tline) / 2) 0 0 calc(var(--tdot) / -2);
+  border-radius: 50%; background: var(--tline-ink);
+  transform: scale(var(--d, 0));
+  pointer-events: none;
+}
+.route__dot::after { content: ""; position: absolute; inset: -10px; }
+.route.is-live .route__stop.is-born .route__dot { pointer-events: auto; }
+.route__stem {
+  position: absolute; left: 0; bottom: var(--below); width: var(--tline); height: var(--stem);
+  background: var(--tline-ink); transform: scaleY(var(--p, 0)); transform-origin: 50% 100%;
+  pointer-events: none;
+}
+.route__text {
+  position: absolute;
+  bottom: calc(var(--below) + 14px);
+  width: min(40ch, var(--room, 40ch));
+  isolation: isolate;
+}
+.route__stop.is-right .route__text { left: 16px; }
+.route__stop.is-left .route__text { right: 16px; text-align: right; }
+.route__mask { display: block; overflow: hidden; }
+.route__in {
+  display: block;
+  transform: translate3d(0, calc((1 - var(--p, 0)) * 105%), 0);
+}
+.route__more .route__in { transform: translate3d(0, calc((1 - var(--pw, 0)) * 105%), 0); }
+.route__stops button.route__name {
+  display: block;
+  white-space: nowrap;
+  font-family: var(--f-body);
+  font-size: .8rem;
+  font-weight: 500;
+  letter-spacing: .16em;
+  line-height: 1.7;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  margin: 0 0 6px;
+  cursor: pointer;
+  pointer-events: none;
+}
+.route__stop.is-right button.route__name { text-align: left; }
+.route__stop.is-left button.route__name { text-align: right; margin-left: auto; }
+.route.is-live .route__stop.is-current button.route__name { pointer-events: auto; }
+.route__stops button:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+.route__more {
+  /* the room's words sit below the line (TJ, 14 Oct 2026): under the stem, left aligned
+     for right side stops, right aligned for left side stops */
+  position: absolute; top: 100%; margin-top: 32px; left: 0;
+  width: max-content; max-width: min(44ch, 56vw);
+  pointer-events: none;
+}
+.route__stop.is-left .route__more { left: auto; right: 0; }
+.route__head {
+  /* Amidat's heading (TJ, 14 Oct 2026): above the line, directly under the small room name */
+  margin: 0 0 4px;
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 1.7vw, 1.9rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.route__stop[data-stop="nursery"] .route__more { max-width: min(40rem, 60vw); }
+.route__more p {
+  margin: 0;
+  font-family: var(--f-body);
+  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+/* Phone: the same line, in the lower blurred area of the screen, the stems
+   shorter and the words narrower. */
+@media (max-width: 767px) {
+  .route {
+    --above: 220px;
+    --below: 70px;
+    --stem: 76px;
+    --fade: 6%;
+    bottom: auto;
+    top: calc(60svh - var(--above));
+  }
+  .route__text { width: min(40ch, 60vw, var(--room, 60vw)); }
+  /* phones keep the words above the line, inside the text block */
+  .route__more { position: static; width: auto; max-width: none; margin-top: 0; }
+  .route__stops button.route__name { font-size: .74rem; }
+  .route__more p { font-size: 1rem; }
+  .route__head { font-size: 1.15rem; }
+  .route__stop[data-stop="nursery"] .route__more { max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route__dot, .route__stem, .route__in { transition: none; }
+}
+

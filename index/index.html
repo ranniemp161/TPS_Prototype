@@ -156,14 +156,13 @@
   <section class="act act--hero" id="day" data-act data-section="hero" data-section-name="Hero">
     <div class="stage" data-stage>
       <div class="stage__media">
-        <img data-focus src="../assets/img/s2-handoff.webp" alt="A specialist passing the swaddled baby to the mother resting in bed" width="2000" height="1116" />
+        <img data-focus src="../assets/img/care.webp" alt="A mother resting on the sofa in the afternoon while her specialist holds the baby beside her" width="1920" height="1072" />
       </div>
       <div class="scrim scrim--lead"></div>
       <div class="stage__copy">
-        <h1 class="display display--xl" data-kinetic>Live-in postpartum care,<br />for you and your baby</h1>
-        <p class="script" data-fade="0.2">Because mum needs looking after too.</p>
+        <h1 class="display display--xl" data-kinetic>Live-in postpartum care<br />for you and your baby</h1>
+        <p class="script" data-fade="0.2">Because mum needs looking after too</p>
         <p class="lede" data-fade="0.35">Rooted in Malaysian confinement traditions, our certified specialists provide dedicated in-home care for mother and baby for 5 to 30 days.</p>
-        <a class="btn btn--primary" href="#programmes" data-fade="0.5">Book a consultation</a>
       </div>
     </div>
   </section>
@@ -207,6 +206,23 @@
   <div class="fog" data-fog aria-hidden="true">
     <div class="fog__veil" data-fog-veil></div>
   </div>
+  <!-- The door handoff (TJ, 14 Oct 2026). The house film sits underneath
+       the bath, already held on the closed front door, and the bath lifts
+       off it like a curtain as it rises out under the header. A band of
+       smoke trails the bath's bottom edge: the fog plate, then the same
+       plate flipped below it, densest at the edge and thinning both ways,
+       so the door dissolves in through it. No white screen: the only thing
+       behind the smoke is the door, which may be seen. home.js
+       doorHandoff() drives it. -->
+  <div class="arrive" data-arrive aria-hidden="true">
+    <div class="arrive__bank" data-arrive-bank>
+      <img src="../assets/img/fog.webp" alt="" width="1920" height="1080" decoding="async" />
+      <img class="arrive__flip" src="../assets/img/fog.webp" alt="" width="1920" height="1080" decoding="async" />
+    </div>
+    <div class="arrive__out arrive__out--line" data-arrive-line-out>
+      <p class="arrive__line display display--lg" data-arrive-line>From the moment we arrive</p>
+    </div>
+  </div>
 
   <!-- ============ SECTION: bath ============
        Pulled up over the hero's pin spacer in CSS so the scene is already
@@ -229,13 +245,37 @@
       <img class="bath__img" data-bath-img src="../assets/img/bath-steam.webp" alt="A mother resting in a warm herbal bath, steam rising around her" width="2400" height="2260" />
       <div class="scrim scrim--bath" data-bath-scrim></div>
       <div class="bath__copy">
-        <!-- data-bath-line moved onto the wrapper so both lines rise and fade
-             as one. mistHandoff() takes a single element, and splitting the
-             copy in two without this would have animated the display line and
-             left the handwriting behind. -->
+        <!-- data-bath-line sits on the wrapper so mistHandoff() can rise and
+             fade the line as one element. The line is the only copy left in
+             the lower half. -->
         <div class="bath__lines" data-bath-line>
-          <p class="say">They say rest and recover.</p>
-          <p class="script">We make it possible.</p>
+          <p class="bath__label bath__kicker">Your recovery:</p>
+          <p class="script">Well deserved</p>
+        </div>
+      </div>
+      <!-- Three figures that count up inside the pinned handoff (TJ, 14 Oct
+           2026). They sit in the steam above her head. The real totals are in
+           the markup so no-JS and reduced motion show them as they are. The
+           visible numbers are aria-hidden, and the screen reader copy carries
+           the finished figures once. -->
+      <div class="bath__figures" data-bath-figures>
+        <p class="bath__lead">In thirty days</p>
+        <div class="bath__stats">
+          <p class="bath__stat">
+            <span class="bath__num" data-bath-count="360" aria-hidden="true">360</span>
+            <span class="bath__label" aria-hidden="true">hours of care</span>
+            <span class="bath__sr">360 hours of care</span>
+          </p>
+          <p class="bath__stat">
+            <span class="bath__num" data-bath-count="90" aria-hidden="true">90</span>
+            <span class="bath__label" aria-hidden="true">family meals cooked</span>
+            <span class="bath__sr">90 family meals cooked</span>
+          </p>
+          <p class="bath__stat">
+            <span class="bath__num" data-bath-count="30" aria-hidden="true">30</span>
+            <span class="bath__label" aria-hidden="true">restorative treatments</span>
+            <span class="bath__sr">30 restorative treatments</span>
+          </p>
         </div>
       </div>
     </div>
@@ -243,19 +283,19 @@
 
 
 <!-- ============ HOMEPAGE HOUSE FLIGHT ============
-     Seven scroll beats. Baby handover is intentionally copy-free for now;
-     the six established Care beats retain their approved copy. -->
-<section class="flight flight--home" data-flight aria-label="From baby handover through the home">
+     Six scroll beats, starting at the front door (TJ, 14 Oct 2026): the
+     bedroom handover and the flight round the outside are cut from the
+     film, and the steam from the bath clears onto the closed door. -->
+<section class="flight flight--home" data-flight aria-label="From the moment we arrive, through the home">
   <div class="flight__stage" data-stage>
     <div class="flight__film" data-film>
       <div class="flight__tilt" data-tilt>
-        <img class="flight__poster is-on" data-poster="0" src="../assets/img/home-handover.webp" alt="" width="1920" height="1080" />
-        <img class="flight__poster" data-poster="1" src="../assets/img/home-exterior.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="2" src="../assets/img/home-kitchen.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="3" src="../assets/img/home-living.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="4" src="../assets/img/home-nursery.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="5" src="../assets/img/home-treatment.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="6" src="../assets/img/home-window-exit.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster is-on" data-poster="0" src="../assets/img/home-door.webp" alt="" width="1920" height="1080" />
+        <img class="flight__poster" data-poster="1" src="../assets/img/home-kitchen.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="2" src="../assets/img/home-living.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="3" src="../assets/img/home-nursery.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="4" src="../assets/img/home-treatment.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="5" src="../assets/img/home-window-exit.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
         <video class="flight__video" data-video
                data-src="../assets/video/home-flight.mp4"
                data-src-mobile="../assets/video/home-flight-m.mp4"
@@ -276,74 +316,81 @@
          button that used to live here is gone too: the flight-enquire
          button below now covers the whole video, this scene included. -->
     <div class="flight__copy">
-      <div class="beat beat--handover" data-beat="handover" data-section="baby-handover" data-section-name="Baby Handover" data-dev-scroll-t="0" aria-label="Baby Handover"></div>
-      <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Exterior" data-dev-scroll-t="1.06"></div>
-      <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="3.28"></div>
-      <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="5.28"></div>
-      <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="7.47"></div>
-      <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="9.79"></div>
-      <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="12"></div>
+      <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Arrival" data-dev-scroll-t="0"></div>
+      <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="1.37"></div>
+      <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="3.37"></div>
+      <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="5.56"></div>
+      <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="7.88"></div>
+      <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="10.09"></div>
     </div>
 
-    <!-- One Enquire button for the whole video, first frame to last: desktop
-         centred on screen, phone fixed at the bottom. It does not move
-         once shown. The nav's own Enquire in the top right is never
-         hidden, so during the video both are on screen. -->
-    <a class="flight-enquire" data-flight-enquire href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
 
-    <!-- Desktop: one panel that glides from its old zone straight to its
-         new one on every scene change (see SCENES[i].zone in
-         home-flight.js), text fading in once it has arrived. It has no
-         fixed content of its own; home-flight.js writes the current
-         scene's name and description into it. Hidden on phone. -->
-    <div class="deskcard" data-deskcard aria-hidden="true">
-      <p class="cards__name" data-deskcard-name></p>
-      <span class="cards__line"></span>
-      <p class="cards__desc" data-deskcard-desc></p>
-    </div>
-
-    <!-- Phone: one card per scene, always resting in the same fixed spot
-         (house-flight.css), swept out to one side and the next swept in from the
-         other on a swipe, direction matching which way you swiped. Hidden
-         on desktop. home-flight.js drives which one is live. -->
-    <nav class="cards" data-cards aria-label="Rooms in the house">
-      <div class="cards__track" data-cards-track>
-        <div class="cards__card" data-card="handover">
-          <p class="cards__name">Handover</p>
-          <span class="cards__line"></span>
-          <p class="cards__desc">A warm hand-off, in the first minutes home.</p>
-        </div>
-        <div class="cards__card" data-card="exterior">
-          <p class="cards__name">Arrival</p>
-          <span class="cards__line"></span>
-          <p class="cards__desc">Scroll and come in.</p>
-        </div>
-        <div class="cards__card" data-card="kitchen" data-room="kitchen">
-          <p class="cards__name">Kitchen</p>
-          <span class="cards__line"></span>
-          <p class="cards__desc">Warm, nourishing meals made in your own kitchen, so you eat well without lifting a thing.</p>
-        </div>
-        <div class="cards__card" data-card="living" data-room="living">
-          <p class="cards__name">Living Room</p>
-          <span class="cards__line"></span>
-          <p class="cards__desc">Laundry, ironing and the small daily jobs. The house keeps running while you rest.</p>
-        </div>
-        <div class="cards__card" data-card="nursery" data-room="nursery">
-          <p class="cards__name">Nursery</p>
-          <span class="cards__line"></span>
-          <p class="cards__desc">Feeds, settling and the long nights, so you can finally sleep.</p>
-        </div>
-        <div class="cards__card" data-card="treatment" data-room="bedroom">
-          <p class="cards__name">Treatment Room</p>
-          <span class="cards__line"></span>
-          <p class="cards__desc">Postpartum treatments at home, to help your body recover.</p>
-        </div>
-        <div class="cards__card" data-card="exit">
-          <p class="cards__name">The Window</p>
-          <span class="cards__line"></span>
-          <p class="cards__desc">All of it, in one pair of hands.</p>
-        </div>
-      </div>
+    <!-- The route (TJ, 14 Oct 2026): one fixed, centred line across the foot
+         of the film. A hairline for the whole way, a solid fill to "now"
+         with the circle at its tip, moved by the film's time. Each room has
+         a dot that grows when the fill reaches it and stays; while it is the
+         current room a stem rises from its dot and its name and words rise
+         out of masks beside the stem. home-flight.js places and drives it;
+         a tap on a name or a dot scrolls the film to that room. -->
+    <!-- The route's soft foot fade: full width, no edge, behind the route (driven with its opacity by home-flight.js). -->
+    <div class="route__wash" data-route-wash aria-hidden="true"></div>
+    <nav class="route" data-route aria-label="Rooms in the house">
+      <div class="route__line" aria-hidden="true"></div>
+      <div class="route__fill" aria-hidden="true"></div>
+      <span class="route__tip" aria-hidden="true"></span>
+      <ol class="route__stops" data-route-stops>
+        <li class="route__stop" data-stop="exterior">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Arrival</span></span></button>
+            <div class="route__more"><div class="route__mask"><p class="route__in">Scroll and come in.</p></div></div>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="kitchen">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Kitchen</span></span></button>
+            <div class="route__head"><span class="route__mask"><span class="route__in">A kitchen that nourishes you</span></span></div>
+            <div class="route__more"><div class="route__mask"><p class="route__in">Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery.</p></div></div>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="living">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Living Room</span></span></button>
+            <div class="route__head"><span class="route__mask"><span class="route__in">A living room that stays calm</span></span></div>
+            <div class="route__more"><div class="route__mask"><p class="route__in">The living room is where your days with your baby unfold, so we keep it feeling restful and composed.</p></div></div>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="nursery">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Nursery</span></span></button>
+            <div class="route__head"><span class="route__mask"><span class="route__in">A nursery prepared with care</span></span></div>
+            <div class="route__more"><div class="route__mask"><p class="route__in">Whether it is a 3am feed or an afternoon change, you step into a room that is peaceful, considered and already prepared, with nothing to search for.</p></div></div>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="treatment">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Treatment Room</span></span></button>
+            <div class="route__more"><div class="route__mask"><p class="route__in">Postpartum treatments at home, to help your body recover.</p></div></div>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="exit">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">The Window</span></span></button>
+            <div class="route__more"><div class="route__mask"><p class="route__in">All of it, in one pair of hands.</p></div></div>
+          </div>
+        </li>
+      </ol>
     </nav>
   </div>
 </section>
