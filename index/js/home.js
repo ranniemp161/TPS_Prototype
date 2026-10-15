@@ -187,7 +187,60 @@ function actPan() {
     // driven by it, not by scroll position.
     const railTween = gsap.to(rail, { x: () => -measure(), ease: 'none' });
 
-    ScrollTrigger.create({
+    // The line (TJ, 15 Oct 2026): the site's progression line across the
+    // whole width under the rail, in the house film's manner. The circle
+    // holds the centre of the screen and the fill runs from the left edge
+    // to it; a dot sits under each card and travels with the rail, so each
+    // card's dot passes the circle as the card reaches the centre, and the
+    // card's title rides beneath its dot. Dots behind the circle are cards
+    // passed. A tap on a name carries the page to that card. Built here so
+    // it exists only where the rail is pinned; the stacked phone rail has
+    // no travel to show.
+    const cards = gsap.utils.toArray('.rail__item.card', rail);
+    const line = document.createElement('nav');
+    line.className = 'care-line';
+    line.setAttribute('aria-label', 'Four kinds of care');
+    line.innerHTML = '<span class="care-line__track" aria-hidden="true"></span>'
+      + '<span class="care-line__fill" aria-hidden="true"></span>'
+      + '<ol class="care-line__stops"></ol>'
+      + '<span class="care-line__tip" aria-hidden="true"></span>';
+    const lineList = line.querySelector('.care-line__stops');
+    const stops = cards.map(card => {
+      const li = document.createElement('li');
+      li.className = 'care-line__stop';
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = card.querySelector('.card__title').textContent;
+      li.appendChild(btn);
+      lineList.appendChild(li);
+      return { li, btn, card };
+    });
+    stage.appendChild(line);
+
+    // Each card's centre in the rail's own coordinates; the rail sits at the
+    // stage's left edge, so on screen it is that plus the rail's x.
+    let centres = [];
+    const layoutLine = () => {
+      centres = cards.map(c => c.offsetLeft + c.offsetWidth / 2);
+      stops.forEach((s, i) => { s.li.style.left = centres[i].toFixed(1) + 'px'; });
+    };
+    let lastX = null;
+    const paintLine = () => {
+      const x = gsap.getProperty(rail, 'x');
+      if (lastX !== null && Math.abs(x - lastX) < 0.25) return;
+      lastX = x;
+      lineList.style.transform = 'translate3d(' + x.toFixed(1) + 'px,0,0)';
+      const mid = stage.clientWidth / 2;
+      let cur = -1;
+      centres.forEach((c, i) => { if (c + x <= mid + 1) cur = i; });
+      stops.forEach((s, i) => {
+        s.li.classList.toggle('is-past', i <= cur);
+        s.li.classList.toggle('is-current', i === cur);
+        if (i === cur) s.btn.setAttribute('aria-current', 'step'); else s.btn.removeAttribute('aria-current');
+      });
+    };
+
+    const st = ScrollTrigger.create({
       trigger: act,
       start: 'top top',
       // Only a short beat past the end of the travel, enough to read the
@@ -198,7 +251,22 @@ function actPan() {
       scrub: 0.8,
       refreshPriority: 2,
       invalidateOnRefresh: true,
-      animation: railTween
+      animation: railTween,
+      onRefresh: () => { layoutLine(); lastX = null; }
+    });
+    layoutLine();
+    gsap.ticker.add(paintLine);
+
+    // A tap on a name carries the page to where that card's centre has just
+    // passed the circle. The rail tween spans the whole trigger, so the
+    // rail's position maps straight onto the trigger's scroll range.
+    stops.forEach((s, i) => {
+      s.btn.addEventListener('click', () => {
+        const travel = measure();
+        const want = Math.min(travel, Math.max(0, centres[i] - stage.clientWidth / 2 + 4));
+        const p = travel ? want / travel : 0;
+        window.scrollTo({ top: st.start + p * (st.end - st.start), behavior: 'smooth' });
+      });
     });
 
     // Each item settles as it crosses in from the right edge.
@@ -262,6 +330,8 @@ function actPan() {
         }
       );
     });
+
+    return () => { gsap.ticker.remove(paintLine); line.remove(); };
   });
 
   mm.add('(max-width: 700px)', () => {
@@ -638,20 +708,112 @@ function actTurn() {
   const copy = act.querySelectorAll('.stage__side .turn__standfirst, .stage__side .body');
   const img = act.querySelector('.stage__frame img');
 
+  // The hand over from the house film (TJ, 14 Oct 2026). home-flight.js lays
+  // the act over the film from the moment the house and trees have left the
+  // frame (.is-handover); here it is pinned to the window from there for two
+  // beats, each its own stretch of scroll: the emerge, a steady linear
+  // opacity 0 to 1 over BEAT_EMERGE windows (the film's last stretch still
+  // plays and dissolves to white underneath its start), then a hold, fully
+  // in, before the pin lets go. The fade is a scrubbed timeline on the pin
+  // itself (scrub 0.7, the page's standard), so it always catches up with
+  // the scroll, and nothing below the act can come up while it is pinned. If
+  // a very fast scroll carries past the end before the scrub has caught up,
+  // the pin's onLeave finishes it, so the act is always fully in when the
+  // page moves on. The heading's assembly and the copy's entrance start
+  // almost at once (about 0.05 opacity) and run long, so they rise with the
+  // fade rather than switching on part way through it.
+  // Decided here, not read from a class, because home-flight.js (which also
+  // marks the act) loads after this file and boot() runs on fonts.ready,
+  // which can resolve before it has run when the fonts are cached: the pin
+  // was then never created and the act scrolled up at full opacity (TJ's
+  // screenshots, 14 and 15 Oct 2026). Both scripts now decide from the same
+  // facts, in either order.
+  const held = !REDUCED && !!document.querySelector('[data-flight]');
+  if (held) act.classList.add('is-handover');
+  const BEAT_EMERGE = 1.0, BEAT_HOLD = 1.2;
+  const BEATS = BEAT_EMERGE + BEAT_HOLD;
+  const entrances = [];
+  let entered = false;
+  const enter = () => { if (entered) return; entered = true; entrances.forEach(t => t.play()); };
+
+  if (held) {
+    // The route runs on to this question (TJ, 15 Oct 2026): across the emerge
+    // the pin's scrubbed timeline carries its fill to the last stop (e, to
+    // home-flight.js), and once the pin lets go a second scrub dissolves the
+    // whole route travels off with the act (below), it no longer fades.
+    const routeEmerge = { e: 0 };
+    const flight = () => window.__flight;
+    const pinTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: act,
+        start: 'top top',
+        end: () => '+=' + window.innerHeight * BEATS,
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.7,
+        // Refreshed before the care rail's pin (priority 2, below this on
+        // the page): triggers are measured in priority order, and this pin's
+        // spacer moves everything after it. Measured after the rail, the
+        // rail's start was 2.2 windows stale and the two pins overlapped by
+        // about 500px, so the rail was already panning while the
+        // testimonials were still on screen (TJ's screenshot, 15 Oct 2026).
+        refreshPriority: 2,
+        invalidateOnRefresh: true,
+        onUpdate: self => {
+          // about 0.05 opacity on the linear emerge
+          if (self.progress > (BEAT_EMERGE * 0.05) / BEATS) enter();
+        },
+        onLeave: self => { const t = self.getTween(); if (t) t.progress(1); enter(); },
+        onLeaveBack: self => { const t = self.getTween(); if (t) t.progress(1); }
+      }
+    })
+      .fromTo(act, { autoAlpha: 0 }, { autoAlpha: 1, ease: 'none', duration: BEAT_EMERGE, immediateRender: true }, 0)
+      .fromTo(routeEmerge, { e: 0 }, {
+        e: 1, ease: 'none', duration: BEAT_EMERGE, immediateRender: true,
+        onUpdate: () => { const f = flight(); if (f && f.setHandover) f.setHandover(routeEmerge.e); }
+      }, 0)
+      .to({}, { duration: BEAT_HOLD });
+
+    // The line belongs to the act once it is complete (TJ, 15 Oct 2026): it
+    // does not fade over the testimonials, it leaves with the act. The route
+    // lives in a fixed layer (home-flight.js), so after the pin lets go the
+    // layer is shifted by exactly the act's own offset each frame: 0 while
+    // the act is below or pinned, then the act's negative top as it scrolls
+    // up, so the line travels off the top with the text and the photograph.
+    // Looked up each frame, not once: home-flight.js creates the layer and
+    // can run after this (the fonts.ready race, see DESIGN.md 15 Oct).
+    {
+      let layer = null, lastY = null;
+      gsap.ticker.add(() => {
+        if (!layer) { layer = document.querySelector('[data-route-layer]'); if (!layer) return; }
+        const y = Math.min(0, Math.round(act.getBoundingClientRect().top));
+        if (y === lastY) return;
+        lastY = y;
+        layer.style.transform = y ? 'translate3d(0,' + y + 'px,0)' : '';
+      });
+    }
+  }
+
   if (heading) {
     const source = heading.textContent;
+    let headTween = null;
     const build = () => {
       heading.textContent = source;
       const lines = splitLines(heading);
       if (REDUCED) { gsap.set(lines, { yPercent: 0, opacity: 1 }); return; }
       gsap.set(lines, { yPercent: 108, opacity: 0 });
-      gsap.to(lines, {
-        yPercent: 0, opacity: 1,
-        duration: 0.9,
-        stagger: 0.08,
-        ease: EASE,
-        scrollTrigger: { trigger: heading, start: 'top 86%', once: true }
-      });
+      // run long when it rides the hand over's fade, so it rises with it
+      const vars = { yPercent: 0, opacity: 1, duration: held ? 1.2 : 0.9, stagger: 0.08, ease: EASE };
+      if (held) {
+        headTween = gsap.to(lines, { ...vars, paused: true });
+        const i = entrances.indexOf(build.last);
+        if (i >= 0) entrances.splice(i, 1);
+        entrances.push(headTween);
+        build.last = headTween;
+        if (entered) headTween.play();
+      } else {
+        headTween = gsap.to(lines, { ...vars, scrollTrigger: { trigger: heading, start: 'top 86%', once: true } });
+      }
     };
     build();
 
@@ -662,20 +824,21 @@ function actTurn() {
       if (window.innerWidth === w) return;
       w = window.innerWidth;
       ScrollTrigger.getAll().forEach(t => { if (t.trigger === heading) t.kill(); });
+      if (headTween) headTween.kill();
       build();
     });
   }
 
   gsap.set(copy, { opacity: 0, y: REDUCED ? 0 : 16 });
-  gsap.to(copy, {
-    opacity: 1, y: 0, duration: 0.75, stagger: 0.12, ease: EASE,
-    scrollTrigger: { trigger: act, start: 'top 70%', once: true }
-  });
+  const copyVars = { opacity: 1, y: 0, duration: held ? 1.2 : 0.75, stagger: 0.12, ease: EASE };
+  if (held) entrances.push(gsap.to(copy, { ...copyVars, paused: true }));
+  else gsap.to(copy, { ...copyVars, scrollTrigger: { trigger: act, start: 'top 70%', once: true } });
 
   if (REDUCED || !img) return;
 
   // Subtle differential parallax & settling scale adhering to scroll-craft and taste-skill:
   // The image drifts smoothly inside its masked frame while settling from 1.06 to 1.0.
+  // Created after the pin, so it measures with the pin's spacing in place.
   gsap.fromTo(img,
     { scale: 1.06, yPercent: -4 },
     {
@@ -1348,42 +1511,38 @@ function gallery() {
                      easing cubic-bezier(.22, 1, .36, 1).
      the author      Fades in from x -10 while a one pixel rule draws
                      itself downward from the top, 400ms after 100ms.
-     the index       The active number swaps with a 10px rise.
-     the pips        Three 24px faces, the active one in colour and
-                     ringed, the rest grey at half opacity.
-     the bar         Fills to (index + 1) / total over 500ms.
+     the line        A fixed circle at the centre of an endless hairline.
+                     The stops slide under it, one per testimonial, and
+                     the current name sits at the centre. Each name is a
+                     button.
 
    Added because the source is a demo page rather than a section in a
    document: the block answers the keyboard as well as the pointer,
    its entrance runs off an IntersectionObserver rather than on mount,
    and the custom cursor is not built where there is no fine pointer.
 
-   PLACEHOLDER CONTENT. None of these quotes, names or faces belongs to
-   a real client. The avatars are the stock images the source component
-   shipped with, still served from its own CDN. Replace all of it with
-   cleared testimonials before this is shown publicly.
+   PLACEHOLDER CONTENT. None of these quotes, names or programmes belongs
+   to a real client. Replace all of it with cleared testimonials before
+   this is shown publicly.
    ------------------------------------------------------------ */
 const TV2 = [
   {
     quote: "I came home expecting to cope. Instead someone cooked, held the baby, and told me to go back to bed.",
     author: "Amara O.",
     role: "14 day programme",
-    place: "Hackney",
-    avatar: "https://cdn.21st.dev/assets/mirror/da/da434276d51c85ff15ac27eabca303c18b8044390be5aad668d18d5fb43cc373.png"
+    place: "Hackney"
   },
   {
     quote: "The bath was drawn every evening without me asking once. By the second week I had stopped bracing for the day ahead.",
     author: "Priya N.",
     role: "30 day programme",
-    place: "Ealing",
-    avatar: "https://cdn.21st.dev/assets/mirror/93/93c76c47af7fc3821e1f5d22b087263d5db480b664f5b24a27cbf6ddc0c2c11d.jpg"
+    place: "Ealing"
   },
   {
     quote: "It is not babysitting. She was there for me, and the baby was part of that. The distinction is the whole service.",
     author: "Yewande M.",
     role: "21 day programme",
-    place: "Lewisham",
-    avatar: "https://cdn.21st.dev/assets/mirror/db/dbe8ba771425288545e355ee4da179d1c7564860aa6f61e02c3c617695487c11.png"
+    place: "Lewisham"
   }
 ];
 
@@ -1392,41 +1551,63 @@ function actVoices() {
   if (!root) return;
 
   const q     = root.querySelector('[data-tv2-quote]');
-  const now   = root.querySelector('[data-tv2-now]');
-  const total = root.querySelector('[data-tv2-total]');
-  const pips  = root.querySelector('[data-tv2-pips]');
-  const faces = root.querySelector('[data-tv2-faces]');
-  const meta  = root.querySelector('[data-tv2-meta]');
   const name  = root.querySelector('[data-tv2-name]');
   const role  = root.querySelector('[data-tv2-role]');
-  const fill  = root.querySelector('[data-tv2-fill]');
+  const meta  = root.querySelector('[data-tv2-meta]');
+  const track = root.querySelector('[data-tv2-track]');
+  const live  = root.querySelector('[data-tv2-live]');
   const prev  = root.querySelector('[data-tv2-prev]');
   const nxt   = root.querySelector('[data-tv2-next]');
+  if (!q || !name || !role || !meta || !track) return;
 
   const esc = s => String(s).replace(/[&<>"]/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-  const pad = n => String(n).padStart(2, '0');
 
-  total.textContent = pad(TV2.length);
+  const n = TV2.length;
+  const mod = k => ((k % n) + n) % n;
 
-  // The source preloads every avatar on mount, because the swap is a
-  // cross fade between images that are already stacked, and a face that
-  // decodes on click arrives after the fade it was meant to be part of.
-  TV2.forEach(t => { const i = new window.Image(); i.src = t.avatar; });
-
-  pips.innerHTML = TV2.map((t, i) =>
-    `<span class="tv2__pip${i === 0 ? ' is-on' : ''}"><img src="${esc(t.avatar)}" alt="" /></span>`).join('');
-  faces.insertAdjacentHTML('beforeend', TV2.map((t, i) =>
-    `<img src="${esc(t.avatar)}" alt="" class="${i === 0 ? 'is-on' : ''}" />`).join(''));
-
-  const pipEls  = [...pips.children];
-  const faceEls = [...faces.querySelectorAll('img')];
-
-  let index = 0;
+  // p is the virtual position: the stop under the centre circle. It goes up
+  // or down one step at a time and is never wrapped, so the track can run on
+  // past the last testimonial and the first comes in from the right with no
+  // jump. Stop k is laid out k spacings along the track, and the track moves
+  // to -p spacings. Stop k always shows testimonial mod(k), so a stop keeps
+  // its name for its whole life.
+  let p = 0;
   let wordTimers = [];
+  const WINDOW = 3;            // stops kept either side of the centre
+  const items = new Map();     // virtual stop -> element
 
-  const paint = (first) => {
-    const t = TV2[index];
+  const makeItem = k => {
+    const t = TV2[mod(k)];
+    const el = document.createElement('div');
+    el.className = 'tv2__item';
+    el.style.setProperty('--q', k);
+    el.innerHTML =
+      `<span class="tv2__dot" aria-hidden="true"></span>` +
+      `<button class="tv2__stop" type="button" aria-label="Show testimonial from ${esc(t.author)}">${esc(t.author)}</button>`;
+    el.querySelector('button').addEventListener('click', () => {
+      if (k !== p) move(k - p);
+    });
+    return el;
+  };
+
+  // Keep the stops either side of the centre, and drop the ones well past
+  // the mask, which are already off the line.
+  const sync = () => {
+    for (let k = p - WINDOW; k <= p + WINDOW; k++) {
+      if (!items.has(k)) {
+        const el = makeItem(k);
+        items.set(k, el);
+        track.appendChild(el);
+      }
+    }
+    items.forEach((el, k) => {
+      if (Math.abs(k - p) > WINDOW) { el.remove(); items.delete(k); }
+    });
+  };
+
+  const paint = () => {
+    const t = TV2[mod(p)];
 
     // The quote is rebuilt word by word. Timers are cleared first, or a
     // fast click leaves the previous set still staggering in behind the
@@ -1445,34 +1626,32 @@ function actVoices() {
     }
 
     name.textContent = t.author;
-    role.textContent = t.role + ' — ' + t.place;
+    role.textContent = t.role + ' · ' + t.place;
     meta.classList.remove('is-in');
     // Two frames, not one: the class has to be off for a painted frame
     // before it goes back on, or the browser coalesces both into no
     // change at all and the rule never draws.
     requestAnimationFrame(() => requestAnimationFrame(() => meta.classList.add('is-in')));
 
-    faceEls.forEach((el, i) => el.classList.toggle('is-on', i === index));
-    pipEls.forEach((el, i) => el.classList.toggle('is-on', i === index));
+    track.style.transform = `translateX(calc(${-p} * var(--tv-s)))`;
+    items.forEach((el, k) => {
+      const btn = el.querySelector('button');
+      if (k === p) btn.setAttribute('aria-current', 'true');
+      else btn.removeAttribute('aria-current');
+    });
 
-    if (first) {
-      now.textContent = pad(index + 1);
-    } else {
-      now.classList.add('is-turning');
-      setTimeout(() => { now.textContent = pad(index + 1); now.classList.remove('is-turning'); }, 150);
-    }
-
-    fill.style.width = ((index + 1) / TV2.length) * 100 + '%';
+    if (live) live.textContent = `Testimonial ${mod(p) + 1} of ${n}, ${t.author}: ${t.quote}`;
   };
 
-  // Two buttons rather than the whole block. They are real <button>
-  // elements, so focus, Enter and Space are the browser's job rather than
-  // a keydown handler of ours, and a screen reader is told what they do.
-  const go = step => { index = (index + step + TV2.length) % TV2.length; paint(false); };
-  if (nxt)  nxt.addEventListener('click', () => go(1));
-  if (prev) prev.addEventListener('click', () => go(-1));
+  // The chevrons and the names are real <button> elements, so focus, Enter
+  // and Space are the browser's job. Nothing here runs on a timer: the
+  // quote only moves when the reader asks for it.
+  const move = step => { p += step; sync(); paint(); };
+  if (nxt)  nxt.addEventListener('click', () => move(1));
+  if (prev) prev.addEventListener('click', () => move(-1));
 
-  paint(true);
+  sync();
+  paint();
 
   // The entrance. An observer, not a ScrollTrigger, on purpose: this
   // block must not exist as far as the document measurement that the
