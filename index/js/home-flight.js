@@ -14,8 +14,10 @@
   var routeWash = section.querySelector('[data-route-wash]');
   var routeTip = section.querySelector('.route__tip');
   var routeFill = section.querySelector('.route__fill');
+  var routeEnd = section.querySelector('[data-route-end]');
   var stopEls = [].slice.call(section.querySelectorAll('[data-stop]'));
-  var stopBtns = stopEls.map(function (li) { return li.querySelector('.route__name'); });
+  // Each stop's button: the small name for Arrival, the large title for the rooms after it (TJ, 15 Oct 2026).
+  var stopBtns = stopEls.map(function (li) { return li.querySelector('.route__name, .route__head'); });
   var flightEnquire = section.querySelector('[data-flight-enquire]');
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var phoneQuery = matchMedia('(max-width: 767px)');
@@ -48,6 +50,35 @@
   // doorHandoff), the film plays the glide up to the door, easing in from
   // still and arriving at the normal speed as the last of the bath leaves.
   var LEAD_VH = 1;
+  // The hand over to What Is Confinement (TJ, 14 Oct 2026). The confinement
+  // act's pin starts at PIN_T, once the house and trees have left the frame
+  // (gone by 23.9 at 1440 x 900 and 390 x 844) but before the white: the
+  // film's last stretch, PIN_T to its end, still plays on scroll under the
+  // start of the emerge, its own dissolve to the canvas (--blend) turning the
+  // sky white as the act appears. The flight section gives back that stretch
+  // plus its stage's own window (a negative bottom margin), so the act's top
+  // reaches the window's top exactly at PIN_T while the film's stage stays
+  // held to the end of the track, white by then. home.js (actTurn) pins the
+  // act there and scrubs its opacity. The route fades out by the last frame
+  // with the roof in it (ROUTE_OUT, below). None of it with reduced motion:
+  // the film runs to its end and the sections stack as before.
+  var turnAct = document.querySelector('.act--turn');
+  var HELD = !!turnAct && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var PIN_T = 24.0;
+  var PIN_VH = (PIN_T - DOOR) / (DURATION - DOOR) * TRACK_VH;
+  if (HELD) turnAct.classList.add('is-handover');
+  // The route runs on to the confinement question (TJ, 15 Oct 2026), across
+  // the act's pin, after the film's stage has stopped being held, so it is
+  // lifted out of the stage into a fixed layer of the same size, above the
+  // film and the pinned act and below the header (house-flight.css,
+  // .route-layer). Every reference to its parts is already taken above.
+  if (HELD && route) {
+    var routeLayer = document.createElement('div');
+    routeLayer.className = 'route-layer';
+    routeLayer.setAttribute('data-route-layer', '');
+    document.body.appendChild(routeLayer);
+    routeLayer.appendChild(route);
+  }
   var DEAD_BAND = phone || !finePointer ? 0.025 : 0.01;
 
   function tc(seconds, frames) { return seconds + frames / 30 - CUT; }
@@ -85,11 +116,11 @@
       desc: 'Whether it is a 3am feed or an afternoon change, you step into a room that is peaceful, considered and already prepared, with nothing to search for.',
       zone: { top: '52%', left: '77%' }, panelAt: 14 - CUT },
     { name: 'treatment', beat: 'bedroom', time: (tc(21, 19) + tc(22, 12)) / 2, rest: tc(21, 19), fx: 52, room: 'bedroom',
-      desc: 'Postpartum treatments at home, to help your body recover.',
+      desc: 'Your treatments are woven into your stay, so warmth, support and restoration build gently day after day, in the comfort of your home.',
       zone: { top: '20%', left: '20%' }, panelAt: 19 - CUT },
     // rest is where a phone settles: on The Window with its words up, not on
     // the last frame, where the route has already faded.
-    { name: 'exit', beat: 'sky', time: DURATION, rest: 26.1 - CUT - 0.8, fx: 50,
+    { name: 'exit', beat: 'sky', time: DURATION, rest: HELD ? PIN_T : 26.1 - CUT - 0.8, fx: 50,
       desc: 'All of it, in one pair of hands.',
       zone: { top: '20%', left: '20%' } }
   ];
@@ -212,6 +243,8 @@
     var pair = scenePair(time);
     var a = SCENES[pair.left], b = SCENES[pair.right];
 
+    // the dissolve to canvas belongs to the film's own end, which the hand
+    // over never reaches
     stage.style.setProperty('--blend', smooth((time - (26.1 - CUT)) / 0.88).toFixed(3));
     stage.style.setProperty('--fx', phone ? mix(a.fx, b.fx, pair.amount).toFixed(1) + '%' : '50%');
 
@@ -256,38 +289,53 @@
   //             of the carer's face and the crib's busy rails.
   //   Treatment .72 left: the plain pink blanket over the bed, below both
   //             faces and left of the feet.
-  //   Window    .88 left: the hedge below the house; the words are short.
   // On a phone the same x are used and the side is automatic (left half
   // reads to the right, right half to the left) so the words fit.
   var ROUTE_IN = DOOR - 0.5;
   // Out just before the window shot blends to sky (26.1 in the old
-  // timeline), so The Window's words have time to be read (was 24.8, which
-  // faded it out almost as soon as it was born).
+  // timeline), so the line leaves with the film's last frames (was 24.8).
+  // With the hand over the route no longer fades with the film: it runs on to
+  // the confinement question and dissolves after the act's pin (routeOut,
+  // driven from home.js). ROUTE_OUT is only used without the hand over.
   var ROUTE_OUT = 26.1 - CUT - 0.4;
   var ROUTE_STOPS = [
     { x: 0.08, side: 'right' },
     { x: 0.24, side: 'right' },
     { x: 0.42, side: 'right' },
     { x: 0.52, side: 'left' },
-    { x: 0.72, side: 'left' },
-    { x: 0.88, side: 'left' }
+    { x: 0.72, side: 'left' }
   ];
   // Each stop's [in, out] window in film seconds, read from the footage (TJ, 14 Oct 2026), in
-  // SCENES order. A stop is current only inside its window. Between windows (the hallway, 1.9 to
-  // 2.9, and the stretch after the treatment room) no stop is current. The exit window runs to
-  // just past ROUTE_OUT, where the route's own fade takes over.
+  // SCENES order, for the route's stops only: the route ends at the treatment room (The Window
+  // is a film beat with no stop, TJ, 15 Oct 2026). A stop is current only inside its window.
+  // Between windows (the hallway, 1.9 to 2.9, and the stretch after the treatment room, from 21.2)
+  // no stop is current, and the route's own fade takes over at ROUTE_OUT.
   var WINDOWS = [
     [DOOR, 1.9],
     [2.9, 6.1],
     [6.6, 11.3],
     [11.9, 15.7],
-    [17.3, 21.2],
-    [21.6, ROUTE_OUT + 1]
+    [17.3, 21.2]
   ];
   // A stop is born (its dot shown, the fill reaches it) at the start of its window.
   var births = WINDOWS.map(function (w) { return w[0]; });
-  var knotT = [ROUTE_IN].concat(births, [DURATION]);
-  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [1]);
+  // The last stop, What Is Confinement? (TJ, 15 Oct 2026): a dot only, at
+  // END_X, born as the act starts to emerge (PIN_T); the fill reaches it as
+  // the emerge ends. Up to PIN_T the fill runs on film time from the
+  // treatment room to X_PIN, then on the pin's scrubbed emerge (handE, from
+  // home.js) from X_PIN to END_X, at about the same pace: X_PIN splits the
+  // distance in the ratio of the film left (treatment's birth to PIN_T) to
+  // the emerge's window of scroll in film seconds.
+  var END_X = 0.9;
+  var EMERGE_FILM_S = 1.0 * (DURATION - DOOR) / TRACK_VH;
+  var lastX = ROUTE_STOPS[ROUTE_STOPS.length - 1].x;
+  var lastBirth = WINDOWS[WINDOWS.length - 1][0];
+  var X_PIN = lastX + (END_X - lastX) * (PIN_T - lastBirth) / (PIN_T - lastBirth + EMERGE_FILM_S);
+  var handE = 0;      // the pin's emerge, 0 to 1, scrubbed (home.js)
+  var routeOut = 1;   // the route's dissolve after the pin, 1 to 0, scrubbed (home.js)
+  var lastEndD = -1;
+  var knotT = [ROUTE_IN].concat(births, [HELD ? PIN_T : DURATION]);
+  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [HELD ? X_PIN : 1]);
   var lineW = 1;
   var bornNow = [];
   var currentNow = [];
@@ -300,11 +348,12 @@
     for (var k = 1; k < knotT.length; k++) {
       if (time <= knotT[k]) return knotX[k - 1] + (knotX[k] - knotX[k - 1]) * (time - knotT[k - 1]) / (knotT[k] - knotT[k - 1]);
     }
-    return 1;
+    return knotX[knotX.length - 1];
   }
   function layoutRoute() {
     if (!route || !stopEls.length) return;
     lineW = route.clientWidth || innerWidth;
+    if (routeEnd) routeEnd.style.left = (END_X * lineW).toFixed(1) + 'px';
     var isPhone = innerWidth < 768;
     stopEls.forEach(function (li, i) {
       var x = ROUTE_STOPS[i].x;
@@ -315,6 +364,26 @@
       // the words never run past the line's end or into its fading edge
       var room = (side === 'right' ? lineW * (1 - x) : lineW * x) - 16 - lineW * 0.04;
       li.style.setProperty('--room', Math.max(150, room).toFixed(0) + 'px');
+      // Titles sit on one line (TJ, 15 Oct 2026). Where a title is wider than
+      // the room beside its stem (phones), it is nudged along the line just
+      // enough to stay inside the line's width, never clipped or wrapped.
+      // Measured, not predicted: an overflowing block cannot right align
+      // itself, so the title's real position is read and corrected.
+      var mask = li.querySelector('.route__head .route__mask, .route__name .route__mask');
+      li.style.setProperty('--tshift', '0px');
+      if (mask) {
+        var rr = route.getBoundingClientRect();
+        var mr = mask.getBoundingClientRect();
+        var tw = mr.width;
+        var dotX = x * lineW;
+        var want = side === 'right' ? dotX + 16 : dotX - 16 - tw;
+        // clear of the line's soft ends (--fade, 8 percent, 6 on phones);
+        // a title too long for the space between them is centred
+        var fadeVal = getComputedStyle(route).getPropertyValue('--fade').trim();
+        var m = fadeVal.slice(-1) === '%' ? lineW * parseFloat(fadeVal) / 100 : (parseFloat(fadeVal) || 0);
+        want = tw > lineW - 2 * m ? (lineW - tw) / 2 : Math.max(m, Math.min(lineW - m - tw, want));
+        li.style.setProperty('--tshift', (want - (mr.left - rr.left)).toFixed(0) + 'px');
+      }
     });
     bornNow = [];
     currentNow = [];
@@ -330,12 +399,17 @@
   // and scrolling back runs them back.
   function paintRoute(time) {
     if (!route || !stopBtns.length) return;
-    var o = smooth((time - ROUTE_IN) / 0.5) * (1 - smooth((time - ROUTE_OUT) / 0.8));
+    var o = smooth((time - ROUTE_IN) / 0.5) * (HELD ? routeOut : 1 - smooth((time - ROUTE_OUT) / 0.8));
     route.style.opacity = o.toFixed(3);
     if (routeWash) routeWash.style.opacity = o.toFixed(3);
     route.style.visibility = o > 0.01 ? 'visible' : 'hidden';
     route.classList.toggle('is-live', o > 0.5);
     var f = nowFraction(time);
+    if (HELD && handE > 0) f = X_PIN + (END_X - X_PIN) * handE;
+    if (routeEnd) {
+      var endD = HELD ? smooth(handE / 0.08) : 0;
+      if (Math.abs(endD - lastEndD) > 0.001) { lastEndD = endD; routeEnd.style.setProperty('--d', endD.toFixed(3)); }
+    }
     routeFill.style.transform = 'scaleX(' + f.toFixed(4) + ')';
     routeTip.style.transform = 'translate3d(' + (f * lineW).toFixed(1) + 'px,0,0)';
     var cur = -1;
@@ -395,6 +469,9 @@
   function layout() {
     vh = stage.offsetHeight || innerHeight;
     section.style.height = Math.round((LEAD_VH + TRACK_VH + 1) * vh) + 'px';
+    // the hand over: give back the stage's own window and the track past
+    // PIN_T, so the confinement act starts at PIN_T over the held film
+    section.style.marginBottom = HELD ? -Math.round((1 + TRACK_VH - PIN_VH) * vh) + 'px' : '';
     // trackTop is where scrubbing starts, after the lead, so every
     // scrollTo below that adds a track position to it stays correct.
     trackTop = section.getBoundingClientRect().top + scrollY + LEAD_VH * vh;
@@ -416,7 +493,8 @@
     // out and before the next section visually arrives. The button
     // should stay up for all of that too, not drop the instant the
     // video's own scrub distance is exhausted.
-    pastFlight = scrollY - trackTop >= (TRACK_VH + 1) * vh;
+    // With the hand over, the act takes the window where the track ends.
+    pastFlight = scrollY - trackTop >= (HELD ? TRACK_VH : TRACK_VH + 1) * vh;
     var nextDesired = raw < 0 ? timeForLead(raw) : timeForTrack(track);
     var direct = performance.now() < wheelUntil || performance.now() < keyUntil || touchActive;
     desired = nextDesired;
@@ -485,7 +563,8 @@
     clearTimeout(restSettleTimer);
     restSettleTimer = setTimeout(function () {
       var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
-      if (track <= 0 || track >= TRACK_VH) return;
+      // never past the pin's start: from there the act's pin owns the scroll
+      if (track <= 0 || track >= (HELD ? PIN_VH : TRACK_VH)) return;
       var restTime = nearestRestTime(timeForTrack(track));
       restSettling = true;
       window.scrollTo({ top: trackTop + trackForTime(restTime) * vh, behavior: reduced ? 'auto' : 'smooth' });
@@ -517,7 +596,14 @@
   // The hero and bath now sit above the flight, and their pin spacers are
   // added or resized whenever ScrollTrigger refreshes. Re-measure the
   // flight's start then too, or trackTop is left pointing at the old origin.
-  if (window.ScrollTrigger) ScrollTrigger.addEventListener('refresh', layout);
+  // refreshInit runs before ScrollTrigger measures, so every pin below the
+  // film (the confinement act's) is measured against the current heights
+  // and margin; refresh runs after, for trackTop, which depends on the pin
+  // spacers ScrollTrigger has just placed above the film.
+  if (window.ScrollTrigger) {
+    ScrollTrigger.addEventListener('refreshInit', layout);
+    ScrollTrigger.addEventListener('refresh', layout);
+  }
 
   layout();
   updateFromScroll();
@@ -532,9 +618,13 @@
       var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
       return { t: track, progress: track / TRACK_VH, target: target, desired: desired, inputMode: inputMode,
         current: video.currentTime || 0, ready: reduced || ready, vh: vh, top: trackTop,
-        duration: DURATION, trackVh: TRACK_VH };
+        duration: DURATION, trackVh: TRACK_VH, endVh: TRACK_VH, pinVh: HELD ? PIN_VH : TRACK_VH, pinT: PIN_T, held: HELD };
     },
     scrollToT: function (track) { window.scrollTo({ top: trackTop + clamp(track, 0, TRACK_VH) * vh, behavior: 'instant' }); },
+    // the hand over's route, from the confinement pin (home.js)
+    setHandover: function (e) { if (Math.abs(e - handE) < 0.0005) return; handE = e; lastPaint = -1; },
+    setRouteOut: function (r) { if (Math.abs(r - routeOut) < 0.0005) return; routeOut = r; lastPaint = -1; },
+    route: function () { return { fill: nowFraction(target), handE: handE, routeOut: routeOut, xPin: X_PIN, endX: END_X }; },
     scrollToTime: function (time) { window.scrollTo({ top: trackTop + trackForTime(time) * vh, behavior: 'instant' }); }
   };
 })();

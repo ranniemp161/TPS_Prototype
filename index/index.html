@@ -338,6 +338,10 @@
       <div class="route__line" aria-hidden="true"></div>
       <div class="route__fill" aria-hidden="true"></div>
       <span class="route__tip" aria-hidden="true"></span>
+      <!-- The last stop, What Is Confinement? (TJ, 15 Oct 2026): a dot only.
+           The confinement section's own heading is its text. Born as the
+           section starts to emerge; the fill reaches it as the emerge ends. -->
+      <span class="route__end" data-route-end aria-hidden="true"></span>
       <ol class="route__stops" data-route-stops>
         <li class="route__stop" data-stop="exterior">
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
@@ -351,8 +355,7 @@
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Kitchen</span></span></button>
-            <div class="route__head"><span class="route__mask"><span class="route__in">A kitchen that nourishes you</span></span></div>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A kitchen that nourishes you</span></span></button>
             <div class="route__more"><div class="route__mask"><p class="route__in">Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery.</p></div></div>
           </div>
         </li>
@@ -360,8 +363,7 @@
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Living Room</span></span></button>
-            <div class="route__head"><span class="route__mask"><span class="route__in">A living room that stays calm</span></span></div>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A living room that stays calm</span></span></button>
             <div class="route__more"><div class="route__mask"><p class="route__in">The living room is where your days with your baby unfold, so we keep it feeling restful and composed.</p></div></div>
           </div>
         </li>
@@ -369,8 +371,7 @@
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Nursery</span></span></button>
-            <div class="route__head"><span class="route__mask"><span class="route__in">A nursery prepared with care</span></span></div>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A nursery prepared with care</span></span></button>
             <div class="route__more"><div class="route__mask"><p class="route__in">Whether it is a 3am feed or an afternoon change, you step into a room that is peaceful, considered and already prepared, with nothing to search for.</p></div></div>
           </div>
         </li>
@@ -378,16 +379,8 @@
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">Treatment Room</span></span></button>
-            <div class="route__more"><div class="route__mask"><p class="route__in">Postpartum treatments at home, to help your body recover.</p></div></div>
-          </div>
-        </li>
-        <li class="route__stop" data-stop="exit">
-          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
-          <span class="route__stem" aria-hidden="true"></span>
-          <div class="route__text">
-            <button type="button" class="route__name" aria-expanded="false"><span class="route__mask"><span class="route__in">The Window</span></span></button>
-            <div class="route__more"><div class="route__mask"><p class="route__in">All of it, in one pair of hands.</p></div></div>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Daily treatments to restore you</span></span></button>
+            <div class="route__more"><div class="route__mask"><p class="route__in">Your treatments are woven into your stay, so warmth, support and restoration build gently day after day, in the comfort of your home.</p></div></div>
           </div>
         </li>
       </ol>
@@ -469,28 +462,17 @@
          2. The click target also answers the keyboard and hides its custom
             cursor on touch, where "cursor: none" would strand the visitor.
 
-       NOTE: quotes, names and faces are PLACEHOLDER. The avatars are the
-       stock images the source component shipped with. Replace with cleared
-       client testimonials before this is shown publicly. -->
-  <hr class="seam" aria-hidden="true" />
+       NOTE: quotes, names and programmes are PLACEHOLDER. Replace with
+       cleared client testimonials before this is shown publicly. -->
 
   <div class="voices" aria-labelledby="voices-heading">
+  <div class="aurora aurora--voices" aria-hidden="true"><span class="aurora__field"></span></div>
   <div class="tv2" data-tv2>
 
     <header class="tv2__head">
       <h2 class="tv2__title" id="voices-heading">Testimonials</h2>
       <p class="tv2__script">What our clients say about us.</p>
     </header>
-
-    <!-- The faces and the counter used to be pinned into the top corners,
-         above everything. They are a row in the normal flow now, sitting
-         under the title, faces left and counter right. -->
-    <div class="tv2__row">
-      <div class="tv2__pips" data-tv2-pips aria-hidden="true"></div>
-      <p class="tv2__index" aria-hidden="true">
-        <span class="tv2__now" data-tv2-now>01</span><span class="tv2__sep">/</span><span class="tv2__total" data-tv2-total>03</span>
-      </p>
-    </div>
 
     <!-- Two real buttons, so the keyboard and screen readers get this for
          free. They sit outside the text column on a wide window and tuck
@@ -506,7 +488,6 @@
       <blockquote class="tv2__quote" data-tv2-quote></blockquote>
 
       <div class="tv2__by">
-        <div class="tv2__face" data-tv2-faces><span class="tv2__ring" aria-hidden="true"></span></div>
         <div class="tv2__meta" data-tv2-meta>
           <span class="tv2__rule" aria-hidden="true"></span>
           <span class="tv2__name" data-tv2-name></span>
@@ -514,7 +495,16 @@
         </div>
       </div>
 
-      <div class="tv2__bar" aria-hidden="true"><span class="tv2__fill" data-tv2-fill></span></div>
+      <!-- A fixed circle at the centre of the line. actVoices places one stop
+           per testimonial on the track that slides under it, and the names
+           under the stops are the buttons that change the quote. -->
+      <div class="tv2__car" data-tv2-car>
+        <span class="tv2__track-line" aria-hidden="true"></span>
+        <span class="tv2__fill" aria-hidden="true"></span>
+        <div class="tv2__track" data-tv2-track></div>
+        <span class="tv2__tip" aria-hidden="true"></span>
+      </div>
+      <p class="tv2__sr" aria-live="polite" data-tv2-live></p>
     </div>
   </div>
   </div>
@@ -522,7 +512,8 @@
 
 <!-- ============ SECTION: care · four kinds of care ============
      pan. Lateral travel reads as breadth. -->
-<section class="act act--pan band" id="care" data-act data-section="care" data-section-name="Four Kinds of Care">
+<section class="act act--pan act--silk" id="care" data-act data-section="care" data-section-name="Four Kinds of Care">
+  <div class="aurora aurora--silk" aria-hidden="true"><span class="aurora__field"></span></div>
   <div class="stage" data-stage>
     <div class="rail" data-rail>
 

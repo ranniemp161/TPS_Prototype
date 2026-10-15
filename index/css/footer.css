@@ -66,8 +66,8 @@
 /* The tagline: Quentin, white, the full width of the footer, centred above the closing line. */
 .sf__tagline { position: relative; z-index: 1; white-space: nowrap; max-width: 1080px; margin: 0 auto; padding: clamp(20px, 3.4vh, 36px) 0 clamp(20px, 3vh, 32px); text-align: center; font-family: var(--f-script, "Quentin", cursive); font-weight: 400; font-size: clamp(2.2rem, 4vw, 3.6rem); line-height: 1.05; color: var(--sf-text); }
 .sf__head {
-  margin: 0 0 1.1rem; font: 600 .92rem/1 var(--f-ui, "Montserrat", system-ui, sans-serif);
-  letter-spacing: .16em; text-transform: uppercase; color: var(--sf-text);
+  margin: 0 0 1.1rem; font: 400 1.35rem/1 var(--f-display);
+  letter-spacing: .02em; text-transform: uppercase; color: var(--sf-text);
 }
 .sf__col li + li { margin-top: .55rem; }
 .sf__col a { font-size: .84rem; font-weight: 400; line-height: 1.4; }

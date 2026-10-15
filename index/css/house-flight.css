@@ -966,18 +966,29 @@
 .route__stop.is-right .route__text { left: 16px; }
 .route__stop.is-left .route__text { right: 16px; text-align: right; }
 .route__mask { display: block; overflow: hidden; }
+/* A title's mask is as wide as the title, so a title wider than its block is
+   never clipped; home-flight.js nudges it (--tshift) to stay within the line
+   (TJ, 15 Oct 2026). */
+.route__head .route__mask,
+.route__name .route__mask { width: max-content; transform: translateX(var(--tshift, 0px)); }
+.route__stop.is-left .route__head .route__mask,
+.route__stop.is-left .route__name .route__mask { margin-left: auto; }
 .route__in {
   display: block;
   transform: translate3d(0, calc((1 - var(--p, 0)) * 105%), 0);
 }
 .route__more .route__in { transform: translate3d(0, calc((1 - var(--pw, 0)) * 105%), 0); }
+/* One title style along the line (TJ, 15 Oct 2026): Arrival's face (Montserrat
+   500, spaced capitals) for every stop's title, at Arrival's own size, .8rem
+   (.74rem on phones), each on one line (TJ, 15 Oct 2026). */
+.route { --route-title: .8rem; }
 .route__stops button.route__name {
   display: block;
   white-space: nowrap;
   font-family: var(--f-body);
-  font-size: .8rem;
-  font-weight: 500;
-  letter-spacing: .16em;
+  font-size: var(--route-title);
+  font-weight: 400;
+  letter-spacing: normal;
   line-height: 1.7;
   text-transform: uppercase;
   color: var(--ink);
@@ -1002,21 +1013,38 @@
 }
 .route__stop.is-left .route__more { left: auto; right: 0; }
 .route__head {
-  /* Amidat's heading (TJ, 14 Oct 2026): above the line, directly under the small room name */
+  /* Amidat's heading (TJ, 14 Oct 2026): above the line, beside the stem. The room's
+     large title is itself the stop's button (TJ, 15 Oct 2026), so it is reset here
+     to read exactly as the plain heading did. */
   margin: 0 0 4px;
-  font-family: var(--f-display);
+  font-family: var(--f-body);
   font-weight: 400;
-  font-size: clamp(1.35rem, 1.7vw, 1.9rem);
-  line-height: 1.05;
-  letter-spacing: 0;
+  font-size: var(--route-title);
+  line-height: 1.4;
+  letter-spacing: normal;
   text-transform: uppercase;
+  /* every title on one line (TJ, 15 Oct 2026) */
+  white-space: nowrap;
   color: var(--ink);
 }
+.route__stops button.route__head {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: inherit;
+  cursor: pointer;
+  pointer-events: none;
+}
+.route.is-live .route__stop.is-current button.route__head { pointer-events: auto; }
 .route__stop[data-stop="nursery"] .route__more { max-width: min(40rem, 60vw); }
 .route__more p {
   margin: 0;
-  font-family: var(--f-body);
-  font-size: clamp(1.05rem, 1.25vw, 1.3rem);
+  font-family: var(--f-read);
+  font-weight: 400;
+  font-size: var(--route-title);
   line-height: 1.5;
   color: var(--ink);
 }
@@ -1035,12 +1063,38 @@
   .route__text { width: min(40ch, 60vw, var(--room, 60vw)); }
   /* phones keep the words above the line, inside the text block */
   .route__more { position: static; width: auto; max-width: none; margin-top: 0; }
-  .route__stops button.route__name { font-size: .74rem; }
-  .route__more p { font-size: 1rem; }
-  .route__head { font-size: 1.15rem; }
+  .route { --route-title: .74rem; }
   .route__stop[data-stop="nursery"] .route__more { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .route__dot, .route__stem, .route__in { transition: none; }
 }
 
+
+/* The route's last stop and its layer (TJ, 15 Oct 2026). The end dot is the
+   What Is Confinement? stop: a dot only, placed by home-flight.js, grown with
+   its own --d. With the hand over, home-flight.js lifts the route out of the
+   film's sticky stage into .route-layer, a fixed layer of the same size, so
+   it stays on screen across the confinement pin: above the film and the
+   pinned act (z 2), below the header. */
+.route__end {
+  position: absolute; left: 0; top: var(--above); z-index: 2; pointer-events: none;
+  width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2 + var(--tline) / 2) 0 0 calc(var(--tdot) / -2);
+  border-radius: 50%; background: var(--tline-ink);
+  transform: scale(var(--d, 0));
+}
+.route-layer {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 100svh;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ---------- the hand over: What Is Confinement over the film's white end (TJ, 14 Oct 2026)
+   home-flight.js adds .is-handover (JS and motion only) and overlaps the act
+   onto the film's held white frame; home.js pins it with ScrollTrigger for
+   its still, emerge and hold. Above the film, and its stage at least a
+   window tall (less the act's top padding), so the testimonials below never
+   show while it is pinned. */
+.act--turn.is-handover { z-index: 2; }
+.act--turn.is-handover > .stage { min-height: calc(100svh - clamp(84px, 13vh, 160px)); }
