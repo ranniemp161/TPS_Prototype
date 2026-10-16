@@ -109,7 +109,7 @@
     { name: 'kitchen', beat: 'kitchen', time: (tc(6, 28) + tc(7, 25)) / 2, rest: tc(6, 28), fx: 66, room: 'kitchen',
       desc: 'Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery.',
       zone: { top: '78%', left: '20%' } },
-    { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 78, room: 'living',
+    { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 31, room: 'living',
       desc: 'The living room is where your days with your baby unfold, so we keep it feeling restful and composed.',
       zone: { top: '24%', left: '28%' } },
     { name: 'nursery', beat: 'nursery', time: (tc(16, 8) + tc(17, 10)) / 2, rest: tc(16, 8), fx: 18, room: 'nursery',
@@ -364,10 +364,15 @@
     lineW = route.clientWidth || innerWidth;
     if (routeEnd) routeEnd.style.left = (END_X * lineW).toFixed(1) + 'px';
     var isPhone = innerWidth < 768;
+    // Phones (TJ, 16 Oct 2026): the words leave the dots and sit as one
+    // block under the line, so the CSS needs each stop's offset (--x) and
+    // the line's width (--lw) to pull them back to the line's left edge.
+    route.style.setProperty('--lw', lineW.toFixed(1) + 'px');
     stopEls.forEach(function (li, i) {
       var x = ROUTE_STOPS[i].x;
       var side = isPhone ? (x < 0.5 ? 'right' : 'left') : ROUTE_STOPS[i].side;
       li.style.left = (x * lineW).toFixed(1) + 'px';
+      li.style.setProperty('--x', (x * lineW).toFixed(1) + 'px');
       li.classList.toggle('is-right', side === 'right');
       li.classList.toggle('is-left', side === 'left');
       // the words never run past the line's end or into its fading edge
@@ -380,7 +385,7 @@
       // itself, so the title's real position is read and corrected.
       var mask = li.querySelector('.route__head .route__mask, .route__name .route__mask');
       li.style.setProperty('--tshift', '0px');
-      if (mask) {
+      if (mask && !isPhone) {
         var rr = route.getBoundingClientRect();
         var mr = mask.getBoundingClientRect();
         var tw = mr.width;

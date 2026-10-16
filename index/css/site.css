@@ -1296,6 +1296,13 @@ main:focus { outline: none; }
    fold on desktop with card two showing at the edge, which is the whole
    affordance: you can see there is more to the right. */
 .rail__item { flex: 0 0 auto; width: clamp(300px, 50vw, 780px); }
+/* The closing note at the end of the rail came out (TJ, 16 Oct 2026). Its
+   travel stays: the rail ends with room for the last card to reach the
+   middle of the screen, so the line's last dot (Home) is still reached.
+   Desktop only; the phone stack does not travel. */
+@media (min-width: 701px) {
+  .act--pan .rail::after { content: ""; flex: 0 0 auto; width: calc(50vw - clamp(150px, 25vw, 390px) - var(--gutter)); }
+}
 
 .rail__intro {
   width: clamp(300px, 34vw, 460px);
@@ -1670,6 +1677,33 @@ main:focus { outline: none; }
 .stage__frame.stage__frame--turn {
   aspect-ratio: 4 / 5;
   box-shadow: inset 0 0 0 1px var(--hairline);
+}
+/* Phones (TJ, 16 Oct 2026): the heading, the copy and a smaller, centred
+   photograph all fit in one screen. The text is set a touch tighter and
+   the photograph takes what is left. It opens from a narrow slot as the
+   act arrives (home.js, actTurn). */
+@media (max-width: 767px) {
+  .act--turn .stage--split { gap: 16px; }
+  .act--turn .stage__side .display { margin-bottom: .5rem; }
+  .act--turn .turn__standfirst { font-size: .98rem; line-height: 1.4; margin-bottom: .5rem; }
+  .act--turn .stage__side .body { margin-bottom: 0; font-size: .92rem; line-height: 1.45; }
+  .act--turn .turn__trail { padding-top: .6rem; margin-top: .6rem; }
+  /* Option 1 (TJ, 16 Oct 2026): the photograph runs the full text width,
+     the same width as the specialist portrait on What We Do, cropped square
+     instead of tall so the whole section fits one screen. */
+  /* The photograph keeps the full text width and takes the height that is
+     left above a bottom margin the same as the side gutter (24px), so the
+     crop follows the screen rather than a fixed square (TJ, 16 Oct 2026). */
+  /* The pinned stage is one screen tall on a phone, less the top padding
+     and a bottom margin the width of the side gutter, so the photograph's
+     bottom edge sits that same distance above the screen's edge (TJ, 16 Oct
+     2026). The section itself is not sized: the testimonials follow it. */
+  .act.act--turn.is-handover > .stage--split,
+  .act.act--turn > .stage--split { height: calc(100svh - clamp(84px, 13vh, 160px) - var(--gutter)); min-height: 0; grid-template-rows: auto minmax(240px, 1fr); margin-bottom: var(--gutter); }
+  /* The same gutter again under the stage, so the testimonials band starts a
+     clear 24px below the photograph instead of touching it (TJ, 16 Oct 2026). */
+  .act--turn .stage__frame.stage__frame--turn { width: 100%; aspect-ratio: auto; height: 100%; align-self: stretch; justify-self: stretch; }
+  .act--turn .stage__frame.stage__frame--turn img { object-position: 50% 30%; height: 118%; top: -9%; }
 }
 .stage__frame.stage__frame--turn img {
   object-position: center center;
@@ -2530,14 +2564,26 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
      side to move to and no room to hold a line. It goes back to the left,
      it wraps, and it stays down where the frame is empty. */
   /* The one line sits lower right, over the bath, where the frame is empty. */
-  .bath__copy { padding-bottom: clamp(44px, 9vh, 80px); justify-content: flex-end; }
-  .bath__lines { max-width: none; }
+  /* Phone (TJ, 16 Oct 2026): "Your recovery" and "Well deserved" are one
+     block, and the block itself is centred, so its full width sits in the
+     middle of the screen rather than each line being centred separately. */
+  .bath__copy { padding-bottom: clamp(44px, 9vh, 80px); justify-content: center; }
+  .bath__lines {
+    max-width: none;
+    width: max-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bath__lines .bath__kicker { position: static; transform: none; margin: 0 0 .4rem; }
   .bath__lines .script { white-space: normal; font-size: clamp(2.64rem, 12.1vw, 3.52rem); }
   /* On a phone the figures sit in the steam band above her head, stacked as
      three rows: number on the left, its label on the right, with the lead
      line above. */
+  /* Phone (TJ, 16 Oct 2026): the three figures run across one row above her
+     head, each number over its label, the row centred on the screen. */
   .bath__figures {
-    text-align: left;
+    text-align: center;
     /* Clears the fixed header bar, which is about 80px tall on a phone. */
     top: 6.5rem;
     left: var(--gutter);
@@ -2545,17 +2591,12 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
     width: auto;
     margin-inline: 0;
   }
-  .bath__stats { display: grid; grid-template-columns: 1fr; row-gap: .7rem; }
-  .bath__stat {
-    display: grid;
-    grid-template-columns: 5.6rem minmax(0, 1fr);
-    align-items: center;
-    column-gap: .9rem;
-  }
-  .bath__num { font-size: clamp(2.6rem, 12vw, 3.2rem); line-height: 1; margin-bottom: 0; }
+  .bath__stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: .6rem; }
+  .bath__stat { display: block; text-align: center; }
+  .bath__num { font-size: clamp(2.2rem, 10.5vw, 2.8rem); line-height: 1; margin-bottom: .35rem; }
   .bath__lead { font-size: .7rem; margin-bottom: .7rem; }
   .bath__lines .bath__kicker { font-size: .91rem; }
-  .bath__label { font-size: .7rem; letter-spacing: .08em; line-height: 1.4; }
+  .bath__label { font-size: .64rem; letter-spacing: .07em; line-height: 1.35; }
 
   /* Window width is the right rule on a landscape screen and the wrong one
      on a portrait phone. At 390 wide the image comes out 367 tall in an 844
@@ -2796,6 +2837,28 @@ html:not(.js) .arrive { display: none; }
   .gal__thumb.is-active:hover { opacity: 1; }
 }
 
+/* Phones (TJ, 16 Oct 2026): the whole programmes section, heading to large
+   photograph, fits one screen and uses the full width. The four thumbnails
+   are equal squares across the width, the length's description runs the
+   full width, the gaps are tighter, the heading holds one line, and the
+   large photograph keeps the full width and is cropped to the height left
+   above a bottom margin the width of the gutter. */
+@media (max-width: 767px) {
+  .act--programmes .sec-head { margin-bottom: 20px; }
+  .act--programmes .sec-head .display { white-space: nowrap; font-size: min(2rem, calc((100vw - 2 * var(--gutter)) / 10.6)); }
+  .act--programmes .sec-head .script { margin-bottom: .9rem; }
+  .gal { gap: 16px; }
+  .gal__list { gap: 10px; overflow: visible; }
+  .gal__row { flex: 1 1 0; min-width: 0; }
+  .gal__thumb { width: 100%; aspect-ratio: 1 / 1; }
+  .gal__heading { margin-bottom: .5rem; }
+  .gal__body { max-width: none; }
+  /* Height = the screen less the section above it less the 24px margin.
+     The section above grows as the width shrinks (more lines), hence the vw
+     term; measured at 390 x 844 and 360 x 780. */
+  .act--programmes .gal .gal__media { width: 100%; aspect-ratio: auto; height: clamp(130px, calc(100svh - 830px + 53.3vw), 320px); }
+}
+
 /* ---- Copy ---- */
 
 .gal__heading { margin-bottom: .8rem; }
@@ -2817,7 +2880,40 @@ html:not(.js) .arrive { display: none; }
    below it. .gal__name went with that move. */
 .gal__body { max-width: 38ch; margin-bottom: 0; }
 
-/* The link to all programmes (TJ, 16 Oct 2026): the site's underlined
+/* Links inside body copy (TJ, 16 Oct 2026), one rule for the whole home
+   page: no underline, no colour of their own. The linked words are a
+   little darker than the sentence they sit in (the inherited colour mixed
+   toward black), and turn coral on hover. */
+.text-link {
+  color: color-mix(in srgb, currentColor 65%, #000);
+  text-decoration: none;
+  transition: color .2s ease;
+}
+.text-link:hover,
+.text-link:focus-visible { color: var(--coral-deep); }
+/* On the grey silk the copy is white, so darker would read as dimmer. The
+   link keeps the white and still turns coral on hover. */
+.act--silk .text-link { color: inherit; }
+.act--silk .text-link:hover,
+.act--silk .text-link:focus-visible { color: var(--coral-mid); }
+/* Links that are the point of their sentence (TJ, 16 Oct 2026): the "Learn
+   more" under the treatments and the bespoke programmes door in the main
+   call to action. They keep the accent so they read as an invitation; links
+   inside ordinary body copy stay .text-link, quiet and only a little darker. */
+.cta-link {
+  color: var(--ember);
+  font-family: var(--f-body);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  transition: color .2s ease;
+}
+.cta-link:hover,
+.cta-link:focus-visible { color: var(--ember-deep); }
+
+/* .gal__all is unused since 16 Oct 2026; the link moved into the heading
+   copy as a .text-link. The link to all programmes: the site's underlined
    spaced capitals link, the same whichever length is showing. */
 .gal__all {
   display: inline-flex;
@@ -3109,6 +3205,50 @@ html:not(.js) .arrive { display: none; }
 .care-line__stop button:hover { color: #FFFFFF; }
 .care-line__stop button:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }
 @media (max-width: 700px) { .care-line { display: none; } }
+
+/* The line on phones (TJ, 16 Oct 2026): the desktop line turned upright, in
+   a lane down the right of the stacked cards, which are narrowed to make
+   room. White on the grey silk, as the desktop line. home.js (actPan) sets
+   the line's top and height, each dot's top and --at, the fill's length. */
+.care-vline { display: none; }
+@media (max-width: 700px) {
+  .act--pan .rail__item.card { width: calc(100% - 44px); }
+  /* The card's title, hidden on desktop where it rides on the line, shows
+     again on phones, between the photograph and its paragraph (TJ, 16 Oct
+     2026). */
+  .act--pan .card .card__media { order: -1; }
+  .act--silk .card__title {
+    position: static; width: auto; height: auto; overflow: visible; clip: auto;
+    white-space: normal; margin: 0 0 .5rem; padding: 0; border: 0;
+  }
+  .care-vline {
+    display: block;
+    position: absolute;
+    right: calc(var(--gutter) + 22px);
+    width: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .care-vline__track,
+  .care-vline__fill { position: absolute; left: 0; top: 0; width: var(--tline); }
+  .care-vline__track { bottom: 0; background: rgba(255, 255, 255, .32); }
+  .care-vline__fill { height: var(--at, 0px); background: #FFFFFF; }
+  .care-vline__dot,
+  .care-vline__tip { position: absolute; left: calc(var(--tline) / 2); border-radius: 50%; }
+  .care-vline__dot {
+    width: var(--tdot); height: var(--tdot);
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, .55);
+    transition: background-color 240ms var(--ease-out);
+  }
+  .care-vline__dot.is-past { background: #FFFFFF; }
+  .care-vline__tip {
+    top: var(--at, 0px);
+    width: var(--ttip); height: var(--ttip);
+    transform: translate(-50%, -50%);
+    background: #FFFFFF;
+  }
+}
 
 /* The seam. A short rule, not a full width edge: the two halves are one
    section on one ground now, and a line running the whole way across would

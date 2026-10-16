@@ -428,10 +428,14 @@
      so the visible slice is the middle 1536 of it, aspect ratio 1536:1080.
      flight__tilt carries the pointer-drift transform on desktop, so the
      crop frame goes on flight__film instead, one level up. */
+  /* Phones (TJ, 16 Oct 2026): the film starts under the header, so none of
+     its top is hidden, and is square rather than a wide strip, so it uses
+     the portrait screen's height. Each room keeps its subject through
+     --fx. Was top 0 and 1536 / 1080. */
   .flight__film {
-    top: 0;
+    top: var(--nav-h);
     bottom: auto;
-    aspect-ratio: 1536 / 1080;
+    aspect-ratio: 1 / 1;
     overflow: hidden;
   }
   .flight__poster,
@@ -476,7 +480,7 @@
     position: absolute;
     left: 0;
     right: 0;
-    top: calc(100vw / (1536 / 1080) * 1.35);
+    top: calc(var(--nav-h) + 100vw * 1.35);
     bottom: 0;
     z-index: -2;
     -webkit-mask-image: linear-gradient(to bottom,
@@ -494,9 +498,9 @@
     display: block;
     position: absolute;
     left: 0;
-    top: calc(100vw / (1536 / 1080) * 0.58);
+    top: calc(var(--nav-h) + 100vw * 0.58);
     width: 100%;
-    height: calc(100svh - 100vw / (1536 / 1080) * 0.58);
+    height: calc(100svh - var(--nav-h) - 100vw * 0.58);
     z-index: -1;
     filter: blur(14px);
     pointer-events: none;
@@ -1058,8 +1062,35 @@
     --stem: 76px;
     --fade: 6%;
     bottom: auto;
-    top: calc(60svh - var(--above));
+    /* The line sits just under the square film (TJ, 16 Oct 2026). */
+    top: calc(var(--nav-h) + 100vw + 14px - var(--above));
   }
+  /* Phones (TJ, 16 Oct 2026): the room's words leave the dots and sit as one
+     block under the line, the line's full width, left aligned and larger,
+     so they fill the lower half of the screen. Only the current room's
+     words show, as before. --x (the stop's offset) and --lw (the line's
+     width) come from home-flight.js. */
+  .route__stem { display: none; }
+  .route__stop .route__text,
+  .route__stop.is-left .route__text,
+  .route__stop.is-right .route__text {
+    top: calc(var(--above) + 30px);
+    bottom: auto;
+    left: calc(-1 * var(--x, 0px));
+    right: auto;
+    width: var(--lw, 90vw);
+    text-align: left;
+  }
+  .route__head .route__mask,
+  .route__name .route__mask,
+  .route__stop.is-left .route__head .route__mask,
+  .route__stop.is-left .route__name .route__mask { width: auto; margin-left: 0; transform: none; }
+  .route__stops button.route__name,
+  .route__stop.is-left button.route__name,
+  .route__head { white-space: normal; text-align: left; margin-left: 0; }
+  .route__stops button.route__name,
+  .route__stops button.route__head { font-size: 1.1rem; line-height: 1.35; letter-spacing: .02em; margin-bottom: 10px; }
+  .route__more p { font-size: 1rem; line-height: 1.6; }
   /* While the confinement act holds, the line at 60svh runs through its last
      paragraph on a phone. During the hand over the layer moves the line down
      into the gap between that paragraph and the photograph (home.js sets

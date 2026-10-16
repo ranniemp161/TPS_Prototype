@@ -354,6 +354,66 @@ function actPan() {
         }
       );
     });
+
+    // The line on phones (TJ, 16 Oct 2026): the desktop progression line
+    // turned upright, in a lane down the right of the narrowed cards. A dot
+    // sits level with each card's photograph; the fill and the circle run to
+    // the middle of the screen, so a card's dot fills as its photograph
+    // reaches the middle, as the desktop dots do sideways. No names: each
+    // card's own title sits beside its dot.
+    const vline = document.createElement('div');
+    vline.className = 'care-vline';
+    vline.setAttribute('aria-hidden', 'true');
+    vline.innerHTML = '<span class="care-vline__track"></span><span class="care-vline__fill"></span>';
+    const cards = gsap.utils.toArray('.rail__item.card', rail);
+    const vdots = cards.map(() => {
+      const d = document.createElement('span');
+      d.className = 'care-vline__dot';
+      vline.appendChild(d);
+      return d;
+    });
+    const vtip = document.createElement('span');
+    vtip.className = 'care-vline__tip';
+    vline.appendChild(vtip);
+    stage.appendChild(vline);
+
+    // Equal tails above the first dot and below the last, as on the house route.
+    const TAIL = 40;
+    let vTop = 0, vLen = 0, ys = [];
+    const measureV = () => {
+      // Layout positions, not screen boxes: the cards rise 18px as they
+      // enter, and a box read mid rise would put the dot off its photograph.
+      const within = el => { let y = 0; for (let n = el; n && n !== stage; n = n.offsetParent) y += n.offsetTop; return y; };
+      ys = cards.map(c => {
+        const m = c.querySelector('.card__media') || c;
+        return within(m) + m.offsetHeight / 2;
+      });
+      vTop = ys[0] - TAIL;
+      vLen = ys[ys.length - 1] + TAIL - vTop;
+      vline.style.top = vTop.toFixed(1) + 'px';
+      vline.style.height = vLen.toFixed(1) + 'px';
+      vdots.forEach((d, i) => { d.style.top = (ys[i] - vTop).toFixed(1) + 'px'; });
+    };
+    const paintV = () => {
+      const sr = stage.getBoundingClientRect();
+      const at = Math.max(0, Math.min(vLen, window.innerHeight / 2 - sr.top - vTop));
+      vline.style.setProperty('--at', at.toFixed(1) + 'px');
+      vdots.forEach((d, i) => d.classList.toggle('is-past', ys[i] - vTop <= at + 2));
+    };
+    const remeasureV = () => { measureV(); paintV(); };
+    remeasureV();
+    window.addEventListener('scroll', paintV, { passive: true });
+    window.addEventListener('resize', remeasureV);
+    window.addEventListener('load', remeasureV);
+    ScrollTrigger.addEventListener('refresh', remeasureV);
+
+    return () => {
+      window.removeEventListener('scroll', paintV);
+      window.removeEventListener('resize', remeasureV);
+      window.removeEventListener('load', remeasureV);
+      ScrollTrigger.removeEventListener('refresh', remeasureV);
+      vline.remove();
+    };
   });
 
 
@@ -767,6 +827,18 @@ function actTurn() {
     })
       .fromTo(act, { autoAlpha: 0 }, { autoAlpha: 1, ease: 'none', duration: BEAT_EMERGE, immediateRender: true }, 0)
       .to({}, { duration: BEAT_HOLD });
+
+    // Phones (TJ, 16 Oct 2026): the photograph opens like the specialist's
+    // portrait on What We Do, from a narrow slot to the full frame. Here it
+    // rides the pin's own emerge, so it opens as the act arrives, whatever
+    // the scroll speed, and is fully open early in the hold.
+    const turnFrame = act.querySelector('.stage__frame--turn');
+    if (turnFrame && window.matchMedia('(max-width: 767px)').matches) {
+      pinTl.fromTo(turnFrame,
+        { clipPath: 'inset(0% 36% 0% 36% round 16px)' },
+        { clipPath: 'inset(0% 0% 0% 0% round 16px)', ease: 'power2.inOut', duration: BEAT_EMERGE * 0.9, immediateRender: true },
+        BEAT_EMERGE * 0.35);
+    }
 
     // The line belongs to the act once it is complete (TJ, 15 Oct 2026): it
     // does not fade over the testimonials, it leaves with the act. The route
@@ -1403,6 +1475,22 @@ function gallery() {
     pre.decoding = 'async';
     pre.src = btn.dataset.img;
   });
+
+  // The description box keeps the height of the longest of the four
+  // (TJ, 16 Oct 2026), so choosing a length never moves the photograph
+  // below it; on a phone the whole section is sized to fit one screen.
+  const reserveBody = () => {
+    const now = bodyEl.textContent;
+    bodyEl.style.minHeight = '';
+    let tallest = 0;
+    items.forEach(b => { bodyEl.textContent = b.dataset.body; tallest = Math.max(tallest, bodyEl.offsetHeight); });
+    bodyEl.textContent = now;
+    bodyEl.style.minHeight = tallest + 'px';
+  };
+  reserveBody();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserveBody);
+  let reserveW = window.innerWidth;
+  window.addEventListener('resize', () => { if (window.innerWidth === reserveW) return; reserveW = window.innerWidth; reserveBody(); });
 
   // idxEl is optional as of 2026-09-07: the 01 / 06 counter came off when
   // this became the programme picker, and a section counter is a hard rule

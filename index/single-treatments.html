@@ -143,24 +143,12 @@
        it shows are the same number, so a shorter strip on the original file
        would have left fingertips in a slot. A replacement photograph must be
        similarly wide or the ratios in booking.css will not hold. -->
-  <header class="bk-hero" data-section="booking-hero" data-section-name="Booking Hero">
+  <header class="bk-hero bk-hero--plain" data-section="booking-hero" data-section-name="Booking Hero">
     <div class="bk-hero__strip">
       <img src="../assets/img/booking-header-wide.webp" alt="" aria-hidden="true"
            width="4000" height="1758" fetchpriority="high" />
     </div>
 
-    <div class="bk-hero__lockup">
-      <!-- The logo goes on whole, mark and wordmark, and sits straight on the
-           page. The pull that drops it onto the photograph's edge is 45.8% of
-           its own width, which is where the ring's centre is in the file
-           (394x480, ring centred at 49% across and 37.6% down), so the
-           photograph's edge runs exactly through the middle of the circle at
-           any size. Nothing here is tuned by eye. -->
-      <a href="index.html" aria-label="The Postpartum Suite, home">
-        <img src="../assets/img/tps-logo-480.webp" alt="The Postpartum Suite"
-             width="394" height="480" />
-      </a>
-    </div>
   </header>
 
   <!-- This is a booking page. The flow is the content, so the copy above it
@@ -201,11 +189,6 @@
        prototype reproduces the booking app's flow, not its booking: no
        appointment is written and no card is taken, because SimplyBook is the
        third party that will own both. -->
-  <p class="bk-proto" data-section="prototype-notice" data-section-name="Prototype Notice">
-    Prototype of the booking flow. It goes as far as the confirmation and no
-    further &mdash; no appointment is made and no payment is taken. Postcodes
-    are checked for real against postcodes.io.
-  </p>
 
 </main>
 
