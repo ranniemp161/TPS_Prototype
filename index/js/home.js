@@ -1410,6 +1410,62 @@ function gallery() {
     pre.src = btn.dataset.img;
   });
 
+  // The site's progression line (TJ, 16 Oct 2026), set on the outer side of
+  // the thumbnails: down their left edge on desktop, above the row on a
+  // phone. It sits there, not between the thumbnails and the copy, because
+  // the flying frame crosses that gap. A dot per length, the fill and the
+  // circle run to the chosen one. The line draws in when the picker first
+  // comes into view.
+  const picker = root.querySelector('.gal__picker');
+  const line = document.createElement('div');
+  line.className = 'gal-line';
+  line.setAttribute('aria-hidden', 'true');
+  line.innerHTML = '<span class="gal-line__track"></span><span class="gal-line__fill"></span>' +
+    items.map(() => '<span class="gal-line__dot"></span>').join('') +
+    '<span class="gal-line__tip"></span>';
+  picker.appendChild(line);
+  const dots = [...line.querySelectorAll('.gal-line__dot')];
+  const wide = matchMedia('(min-width: 1000px)');
+  let stops = [];
+  let lineStart = 0;
+  let drawn = REDUCED;
+
+  const measureLine = () => {
+    const p = picker.getBoundingClientRect();
+    const v = wide.matches;
+    const rects = items.map(b => b.getBoundingClientRect());
+    const first = rects[0], last = rects[rects.length - 1];
+    lineStart = v ? first.top - p.top : first.left - p.left;
+    stops = rects.map(r => v ? r.top + r.height / 2 - p.top : r.left + r.width / 2 - p.left);
+    line.style.setProperty('--start', lineStart + 'px');
+    line.style.setProperty('--end', (v ? last.bottom - p.top : last.right - p.left) + 'px');
+    dots.forEach((d, k) => d.style.setProperty('--p', stops[k] + 'px'));
+  };
+  const paintLine = () => {
+    const i = items.indexOf(current);
+    line.style.setProperty('--at', (drawn ? stops[i] : lineStart) + 'px');
+    dots.forEach((d, k) => d.classList.toggle('is-reached', drawn && k <= i));
+  };
+  // No transition while measuring, so a resize does not replay the draw.
+  const remeasure = () => {
+    line.classList.add('is-still');
+    measureLine(); paintLine();
+    line.getBoundingClientRect();
+    line.classList.remove('is-still');
+  };
+  remeasure();
+  new ResizeObserver(remeasure).observe(picker);
+  dots.forEach((d, k) => d.addEventListener('click', () => show(items[k])));
+  if (!drawn) {
+    const io = new IntersectionObserver(entries => {
+      if (!entries.some(e => e.isIntersecting)) return;
+      io.disconnect();
+      drawn = true;
+      paintLine();
+    }, { threshold: 0.5 });
+    io.observe(picker);
+  }
+
   // idxEl is optional as of 2026-09-07: the 01 / 06 counter came off when
   // this became the programme picker, and a section counter is a hard rule
   // ban. data-index is still on the buttons because the rest of the
@@ -1443,6 +1499,7 @@ function gallery() {
       b.setAttribute('aria-pressed', String(on));
     });
     current = btn;
+    paintLine();
     swapCopy(btn);
 
     const back = imgs[1 - front];

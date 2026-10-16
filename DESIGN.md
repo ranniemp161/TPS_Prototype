@@ -1162,3 +1162,48 @@ TJ chose to go back to the fixed line with stems, then: "the space is too high" 
 - **Care names once, above the line (TJ, 15 Oct 2026):** the title above each photograph is visually hidden (kept for screen readers and for home.js, which reads the names from it), and each card's name now rides above the line with its dot instead of below it, so the name is said once as the line progresses. Checked at 1680 (fonts cached) and 1440: dots still within 1px of their cards, tap works, no errors. Backup lab/site.before-care-names-above.css.bak.
 - **The transitions, three faults found and fixed (Claude, 16 Oct 2026):** TJ reported the fly-through line overlaying where it should not and transitions moving where they should not. Measured through the whole sequence at 1680x980 and 390x844 with cached fonts and real wheel and touch input. (1) Stacking: when the route was lifted into a fixed layer it went to z 3, above the bath (z 2) and the smoke, so the line and words drew over the bath photograph while it lifted off the door. The layer is now z 2 and the bath z 3; verified the element under the line at every stage (bath, then film, then confinement). (2) The phone film could not be scrolled at all: the rest settle fired 120ms after any scroll event and snapped to the nearest rest, and one swipe is less than half the gap between rests, so every swipe went straight back to the door. The settle now only arms on touch, waits 420ms of true idle, and only settles when within 0.9s of a rest; wheel input never settles. Touch now runs the film 1.0 to 11.9s over 14 swipes, wheel 1.5 to 8.5s. (3) While the confinement act holds, the line's fixed height crossed its last paragraph on phones and the photograph on a short desktop window (1280x720). home.js now measures the act and, once it is at the top, shifts the line into the clear band under the content (phones: the gap between the last paragraph and the photograph; desktop: below the lower of the two), reading the natural line height once per layout so the maths never feeds on its output; the line then leaves with the act as before. Hold sweep at 1280, 1440, 1680, 1920 and 390: the line crosses neither text nor photograph at any width. No errors anywhere. Backups lab/*.before-route-stack.css.bak, lab/home-flight.before-settle-fix.js.bak, lab/home.before-phone-line-shift.js.bak.
 - **Late image loads broke the pins on TJ's machine (Claude, 16 Oct 2026):** TJ, desktop, after a hard reload: scrolling past What Is Confinement skipped the testimonials straight to the grey section, and the line jumped, until he scrolled back and forth. Cause: the site loads from Google Drive, so the window load event (every image in) fires seconds after scrolling has started; boot()'s goToAnchor then scrolled to 0 and refreshed, which in a slowed reproduction threw the page to the top mid scroll and re-measured the pins under the reader. Headless loads images instantly, so every earlier check missed it. Fix in home.js: once the reader has moved (wheel, touch, key or pointer), the load routine only refreshes in place (ScrollTrigger keeps the scroll position); and a ResizeObserver on the body plus a listener on every unfinished image triggers one debounced in place refresh whenever the document height changes. Reproduced with images delayed 6 and 12 seconds at 1680x980: before, the testimonials never showed and the page jumped to 0; after, the testimonials show and the care rail starts only at its section's top, the same as with instant loading. Earlier checks rerun clean. Backup lab/home.before-late-load.js.bak. Test rule: slow images (page.route delay) belong in every scroll check on this site, with cached fonts and a real wheel.
+
+## Home programmes title: However long you stay, the same care (TJ, 16 Oct 2026)
+
+- Serif capitals heading "However long you stay", with the Quentin line "The same care" directly under it. The two read as one sentence. (TJ)
+- The "Programmes" eyebrow is removed. (TJ)
+- Body is Ami's FAQ wording: "Every programme includes the same standard of care. The difference is how long your support is in place. Stay with us for 5, 7, 14 or 30 days." The old line about longer stays repeating treatments more often came out because it worked against "the same". (Claude's proposal, implemented with TJ's go)
+- The coral ring around the picker photograph is removed. The photo keeps its own rounded corners. (TJ)
+- Backups: lab/index.before-same-care-title.html.bak, lab/site.before-same-care-title.css.bak. Screenshots: node lab/programmes-shots.mjs <outdir>.
+
+## Home programmes picker: the progression line (TJ, 16 Oct 2026)
+
+- The site's progression line now runs beside the four length thumbnails: hairline track, Ember Deep fill, a dot per length (faint until reached), the larger circle at the chosen length, 650ms on --tease. (TJ)
+- It sits on the outer side of the thumbnails, never between them and the copy, because the chosen frame flies across that gap. Desktop: down the left edge, clamp(22px, 2.2vw, 34px) outside the thumbnails. Phone: above the row. (TJ)
+- It draws from the start to the first length when the picker is half in view. Clicking a thumbnail or a dot moves it. (Claude's details)
+- Built by gallery() in home.js (.gal-line), styles under "The progression line" in the gallery block of site.css. Measured with lab/programme-line-check.mjs at 1440x900 and 390x844: the circle lands exactly on the chosen thumbnail's centre (0.00px) at rest, at 30 days and after a dot click to 7 days; no overflow, no errors. Backups: lab/*.before-programme-line.*.bak.
+
+## Home programmes: chart archived, two links (TJ, 16 Oct 2026)
+
+- The Duration, drawn chart (5, 7, 14, 30 day bars) and its "Build your programme" exit are removed from the home page and archived in archive/home-duration-drawn/ (markup, CSS, JS, README with restore steps). Its CSS and durations() JS stay in site.css and home.js, unused and harmless. (TJ)
+- One fixed link under the picker copy, the same whichever length is showing, to programmes.html: "View all programmes", in the underlined spaced capitals link style (.gal__all). The wording is Claude's choice, open for TJ. (TJ, wording Claude)
+- Below the picker, the act ends with "Want something more bespoke? Build your own programme here", the link to build-your-programme.html, set like the treatments section's "Want more?" line (.programmes-bespoke). (TJ)
+- Checked at 1440x900 and 390x844 with lab/programme-line-check.mjs: picker line still lands at 0.00px, no overflow, no errors. Backups: lab/*.before-programmes-links.*.bak.
+
+## Bespoke line wording (TJ, 16 Oct 2026)
+
+- Now reads "Want something more bespoke? Visit the bespoke programmes page." Only "bespoke programmes" is the link, to build-your-programme.html. (TJ)
+- Link style: Ember, Montserrat 500, 1px underline at 5px, no bold, hover Ember Deep. The lead-in stays in the body voice. Backups: lab/*.before-bespoke-link-wording.*.bak.
+
+## Single treatments: prices off the cards, new title (TJ, 16 Oct 2026)
+
+- Prices are removed from the four treatment cards. Each card shows its length only. Pricing is found on the booking page. (TJ)
+- Heading now reads "Try a signature treatment", with Quentin "Luxury for one afternoon" set straight under it. The menu term is "signature treatments" (TJ, from Ami). The Quentin wording is TJ's choice. (TJ)
+- Backups: lab/index.before-treatments-prices.html.bak, lab/index.before-treatments-title.html.bak, lab/site.before-treatments-title.css.bak. Check: lab/treatments-price-check.mjs.
+
+## Home programmes heading: "However long you need" (TJ, 16 Oct 2026)
+
+- Heading changed from "However long you stay" to "However long you need". The family stays with the team, not the reverse. (TJ)
+- Quentin line "The same care" is 20 percent larger on desktop (1000px and up): 55.68px at 1440, up from 46.4px. Phones unchanged at 28.8px. (TJ)
+- The line under it, "Stay with us for 5, 7, 14 or 30 days", is Ami's FAQ wording and is kept. (Claude's note)
+- Backups: lab/index.before-however-need.html.bak, lab/site.before-however-need.css.bak. Check: lab/programmes-head-check.mjs.
+
+## Single treatments heading sizes (TJ, 16 Oct 2026)
+
+- "Try a signature treatment" and its Quentin line "Luxury for one afternoon" are both 20 percent larger on desktop (1000px and up). Phones keep the defaults. (TJ)
+- Backups: lab/site.before-treatments-size.css.bak. Check: lab/treatments-head-size-check.mjs.
