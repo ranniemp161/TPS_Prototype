@@ -1060,6 +1060,11 @@
     bottom: auto;
     top: calc(60svh - var(--above));
   }
+  /* While the confinement act holds, the line at 60svh runs through its last
+     paragraph on a phone. During the hand over the layer moves the line down
+     into the gap between that paragraph and the photograph (home.js sets
+     --route-phone-shift from the measured gap), and it travels up with the
+     act from there (TJ, 16 Oct 2026). */
   .route__text { width: min(40ch, 60vw, var(--room, 60vw)); }
   /* phones keep the words above the line, inside the text block */
   .route__more { position: static; width: auto; max-width: none; margin-top: 0; }
@@ -1075,8 +1080,10 @@
    What Is Confinement? stop: a dot only, placed by home-flight.js, grown with
    its own --d. With the hand over, home-flight.js lifts the route out of the
    film's sticky stage into .route-layer, a fixed layer of the same size, so
-   it stays on screen across the confinement pin: above the film and the
-   pinned act (z 2), below the header. */
+   it stays on screen across the confinement pin: above the film (z 1) and
+   the pinned act (z 2, the layer is later in the DOM so it wins the tie),
+   and BELOW the bath (z 3) and the smoke, so the line never draws over the
+   bath photograph while it lifts off the door (TJ, 16 Oct 2026). */
 .route__end {
   position: absolute; left: 0; top: var(--above); z-index: 2; pointer-events: none;
   width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2 + var(--tline) / 2) 0 0 calc(var(--tdot) / -2);
@@ -1086,9 +1093,13 @@
 .route-layer {
   position: fixed; top: 0; left: 0; right: 0;
   height: 100svh;
-  z-index: 3;
+  z-index: 2;
   pointer-events: none;
 }
+/* While the confinement act holds, home.js shifts the line into the clear
+   band under the act's content (--route-phone-shift, any width), so it never
+   crosses the paragraph or the photograph (16 Oct 2026). */
+.route-layer .route { transform: translate(-50%, var(--route-phone-shift, 0px)); }
 
 /* ---------- the hand over: What Is Confinement over the film's white end (TJ, 14 Oct 2026)
    home-flight.js adds .is-handover (JS and motion only) and overlaps the act
