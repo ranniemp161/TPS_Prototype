@@ -556,25 +556,39 @@
     return best.rest;
   }
 
+  // The phone settle (fixed 16 Oct 2026). It used to fire 120ms after ANY
+  // scroll event and snap to the nearest rest, and one swipe (about a
+  // second of film) is less than half the gap between rests, so every
+  // swipe was pulled straight back to the door: the film could not be
+  // scrolled on a phone at all. Now it waits for the scroll to have truly
+  // stopped (no scroll events for SETTLE_IDLE ms, and no touch or wheel
+  // live), and only settles when the film is already within SETTLE_REACH
+  // seconds of a rest, so a reader who has moved on is never dragged back.
+  var SETTLE_IDLE = 420;
+  var SETTLE_REACH = 0.9;
   var restSettleTimer = 0;
   var restSettling = false;
+  var settleArmed = false;   // only a touch arms the settle; a wheel never does
   function scheduleRestSettle() {
-    if (!phone || restSettling) return;
+    if (!phone || restSettling || !settleArmed) return;
     clearTimeout(restSettleTimer);
     restSettleTimer = setTimeout(function () {
+      if (touchActive) { scheduleRestSettle(); return; }
       var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
       // never past the pin's start: from there the act's pin owns the scroll
       if (track <= 0 || track >= (HELD ? PIN_VH : TRACK_VH)) return;
-      var restTime = nearestRestTime(timeForTrack(track));
+      var now = timeForTrack(track);
+      var restTime = nearestRestTime(now);
+      if (Math.abs(restTime - now) > SETTLE_REACH || Math.abs(restTime - now) < 0.03) return;
       restSettling = true;
       window.scrollTo({ top: trackTop + trackForTime(restTime) * vh, behavior: reduced ? 'auto' : 'smooth' });
-      setTimeout(function () { restSettling = false; }, 500);
-    }, 120);
+      setTimeout(function () { restSettling = false; }, 600);
+    }, SETTLE_IDLE);
   }
 
-  addEventListener('wheel', function () { wheelUntil = performance.now() + 350; }, { passive: true, capture: true });
-  addEventListener('touchstart', function () { touchActive = true; clearTimeout(restSettleTimer); }, { passive: true, capture: true });
-  addEventListener('touchend', function () { touchActive = false; }, { passive: true, capture: true });
+  addEventListener('wheel', function () { wheelUntil = performance.now() + 350; settleArmed = false; clearTimeout(restSettleTimer); }, { passive: true, capture: true });
+  addEventListener('touchstart', function () { touchActive = true; settleArmed = true; clearTimeout(restSettleTimer); }, { passive: true, capture: true });
+  addEventListener('touchend', function () { touchActive = false; scheduleRestSettle(); }, { passive: true, capture: true });
   addEventListener('touchcancel', function () { touchActive = false; }, { passive: true, capture: true });
   addEventListener('keydown', function () { keyUntil = performance.now() + 350; }, { capture: true });
   addEventListener('scroll', updateFromScroll, { passive: true });

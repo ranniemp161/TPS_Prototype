@@ -2599,7 +2599,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
    bath frame's own height, so its stage is held on the top of the window
    from the moment the bath lets go, and the bath, layered above it, lifts
    off it. */
-.act--bath { z-index: 2; }
+.act--bath { z-index: 3; } /* above the fixed route layer (z 2), 16 Oct 2026 */
 /* The bath's own bottom edge is a straight line, and over the door it read
    as a panel sliding away even under the smoke. As it lets go, its bottom
    fades out over --bath-feather (home.js grows it from 0 to 35 percent of

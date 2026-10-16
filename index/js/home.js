@@ -783,13 +783,53 @@ function actTurn() {
     // Looked up each frame, not once: home-flight.js creates the layer and
     // can run after this (the fonts.ready race, see DESIGN.md 15 Oct).
     {
-      let layer = null, lastY = null;
+      let layer = null, lastY = null, lastShift = null, naturalLineY = null, layoutW = 0, layoutH = 0;
+      const phoneQ = window.matchMedia('(max-width: 767px)');
+      const lastPara = act.querySelector('.stage__side .body:last-of-type, .stage__side p:last-of-type');
+      const frame = act.querySelector('.stage__frame');
       gsap.ticker.add(() => {
         if (!layer) { layer = document.querySelector('[data-route-layer]'); if (!layer) return; }
-        const y = Math.min(0, Math.round(act.getBoundingClientRect().top));
-        if (y === lastY) return;
-        lastY = y;
-        layer.style.transform = y ? 'translate3d(0,' + y + 'px,0)' : '';
+        const r = act.getBoundingClientRect();
+        const y = Math.min(0, Math.round(r.top));
+        if (y !== lastY) {
+          lastY = y;
+          layer.style.transform = y ? 'translate3d(0,' + y + 'px,0)' : '';
+        }
+        // While the act holds (16 Oct 2026), the line's fixed height can run
+        // through the act's content: on a phone through its last paragraph,
+        // on a short desktop window through the photograph. So once the act
+        // is at the top, the line is shifted into the clear band beneath the
+        // content: on phones the gap between the last paragraph and the
+        // photograph, on desktop below the lower of the two. The natural
+        // (unshifted) line height is read once per layout, so the maths never
+        // feeds on its own output.
+        let shift = 0;
+        if (lastPara && frame && r.top <= 1) {
+          const line = layer.querySelector('.route__line') || layer.querySelector('[data-route]');
+          if (naturalLineY === null || layoutW !== innerWidth || layoutH !== innerHeight) {
+            const prev = layer.style.getPropertyValue('--route-phone-shift');
+            layer.style.setProperty('--route-phone-shift', '0px');
+            const lr0 = line.getBoundingClientRect();
+            naturalLineY = lr0.top + lr0.height / 2 - (lastY || 0);
+            layoutW = innerWidth; layoutH = innerHeight;
+            layer.style.setProperty('--route-phone-shift', prev || '0px');
+          }
+          const lineY = naturalLineY + (lastY || 0);
+          const pr = lastPara.getBoundingClientRect(), fr = frame.getBoundingClientRect();
+          let target;
+          if (phoneQ.matches) {
+            if (fr.top - pr.bottom > 24) target = (pr.bottom + fr.top) / 2;
+          } else {
+            const contentBottom = Math.max(pr.bottom, fr.bottom);
+            const room = innerHeight - contentBottom;
+            if (room > 40) target = contentBottom + Math.min(room / 2, 60);
+          }
+          if (target !== undefined && lineY < Math.max(pr.bottom, phoneQ.matches ? pr.bottom : fr.bottom) + 8) shift = Math.round(target - lineY);
+        }
+        if (shift !== lastShift) {
+          lastShift = shift;
+          layer.style.setProperty('--route-phone-shift', shift + 'px');
+        }
       });
     }
   }
@@ -1764,7 +1804,38 @@ function boot() {
   // the first time. Copied in now, unchanged from v1-ruined.js: zero the
   // scroll, refresh from there so every pin measures from the true origin,
   // then jump to the anchor.
+  // Late loads (16 Oct 2026). On TJ's machine the site loads from Google
+  // Drive, so 'load' (every image in) can fire seconds after the reader has
+  // started scrolling. This routine used to scroll to 0 and re-measure at
+  // that point, throwing the page to the top or re-measuring the pins under
+  // the reader mid scroll, which skipped the testimonials straight to the
+  // grey section until a few scrolls back and forth re-measured it. Now, if
+  // the reader has already scrolled, it only refreshes in place
+  // (ScrollTrigger keeps the scroll position), and any later change in the
+  // document's height (an image arriving late) triggers one debounced
+  // in place refresh, so the pins are never measured against a stale page.
+  let readerMoved = false;
+  const moved = () => { readerMoved = true; };
+  ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(ev => window.addEventListener(ev, moved, { passive: true, capture: true, once: true }));
+  let lastH = document.documentElement.scrollHeight, heightTimer = 0, touching = false;
+  window.addEventListener('touchstart', () => { touching = true; }, { passive: true });
+  window.addEventListener('touchend', () => { touching = false; }, { passive: true });
+  const watchHeight = () => {
+    clearTimeout(heightTimer);
+    heightTimer = setTimeout(() => {
+      const h = document.documentElement.scrollHeight;
+      if (Math.abs(h - lastH) < 2) return;
+      if (touching) { watchHeight(); return; }
+      lastH = h;
+      ScrollTrigger.refresh();
+      lastH = document.documentElement.scrollHeight;
+    }, 250);
+  };
+  if (window.ResizeObserver) new ResizeObserver(watchHeight).observe(document.body);
+  document.querySelectorAll('img').forEach(img => { if (!img.complete) img.addEventListener('load', watchHeight, { once: true }); });
+
   const goToAnchor = () => {
+    if (readerMoved) { ScrollTrigger.refresh(); lastH = document.documentElement.scrollHeight; return; }
     const target = location.hash.length > 1 && document.querySelector(location.hash);
     const root = document.documentElement;
     const behaviour = root.style.scrollBehavior;
@@ -1778,6 +1849,7 @@ function boot() {
       ScrollTrigger.update();
     }
     root.style.scrollBehavior = behaviour;
+    lastH = document.documentElement.scrollHeight;
   };
 
   if (document.readyState === 'complete') requestAnimationFrame(goToAnchor);
