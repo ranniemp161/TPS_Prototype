@@ -1207,3 +1207,41 @@ TJ chose to go back to the fixed line with stems, then: "the space is too high" 
 
 - "Try a signature treatment" and its Quentin line "Luxury for one afternoon" are both 20 percent larger on desktop (1000px and up). Phones keep the defaults. (TJ)
 - Backups: lab/site.before-treatments-size.css.bak. Check: lab/treatments-head-size-check.mjs.
+
+## Progression lines trimmed (TJ, 16 Oct 2026)
+
+- The line beside the length photos in the however long you need section is removed entirely (JS and CSS). The section is back to thumbnails and copy. (TJ)
+- The house route ends at the daily treatments, which is now the final stop. The confinement dot (END_X 0.9) and its handover are removed, so the line no longer runs on into What Is Confinement. (TJ)
+- The line fades out from film time 21.2, the end of the treatment room, over 0.8 film seconds, so it is gone as the view flies out of the window. Before this it faded at about 23.4. (TJ, timing Claude's read of the code)
+- Checked: lab/route-end-check.mjs at 1440x900 and 390x844. Fill stops at 0.72 (the treatment room), the end dot is gone, the route opacity reaches 0 by film 21 to 22 and stays at 0, no page errors.
+- Backups: lab/*.before-route-end-treatments.*.bak and lab/site.before-route-end-treatments.css.bak, lab/index.before-route-end-treatments.html.bak.
+
+## House route: equal tails (TJ, 16 Oct 2026)
+
+- The line now has the same tail at both ends: 0.08 of its width before Arrival and 0.08 past Daily treatments, which is the last stop. Stops moved to 0.08, 0.29, 0.526, 0.658 and 0.92, keeping the spacing between them in proportion. (TJ asked for equal tails; Claude's numbers)
+- Measured at rest: 90px at each end at 1440, 27px at each end at 390. Checked with lab/route-tails-check.mjs, no errors.
+- Backups: lab/home-flight.before-route-tails.js.bak. Earlier route stop values were 0.08, 0.24, 0.42, 0.52, 0.72.
+
+## House route: five evenly spaced stops (TJ, 16 Oct 2026)
+
+- The five stops sit at 8, 29, 50, 71 and 92 percent of the line's width: the two ends, the centre, and one midway between each end and the centre. Gaps are equal. (TJ)
+- Measured at rest: gaps of 235px at 1440 and 72px at 390, all four equal. Tails stay at 90px and 27px. Check: lab/route-spacing-check.mjs.
+- Backup of the previous spacing is in lab/home-flight.before-route-tails.js.bak.
+
+## Home programmes Quentin line: "We're here for you" (TJ, 16 Oct 2026)
+
+- Heading stays "However long you need". The Quentin line changes from "The same care" to "We're here for you". (TJ)
+- Backup: lab/index.before-were-here.html.bak.
+
+## Single treatments add on line (TJ, 16 Oct 2026)
+
+- The line under the four treatment cards now reads "Want the full details? Learn more." The Learn more link goes to single-treatments.html, the Standalone Signature Treatments page. It replaces the body scrub upsell and its Calendly link. (TJ)
+- Wording chosen from Claude's ten options. The text size is unchanged and still to be decided. (TJ asked for smaller)
+- Backup: lab/index.before-addon-details.html.bak.
+
+## Main call to action moves into the programmes act (TJ, 16 Oct 2026)
+
+- The boxed close ("Ready to talk it through?") is removed. The page's main call to action now ends the programmes act, centred on its ground with no box: "Tell us about your due date" (serif capitals), Quentin "We'll take it from there" (20 percent larger on desktop, matching the act's heading pair), Ami's booking sentence from the FAQ, the ember Book a consultation button (Calendly), "Thirty minutes, by phone or video. Nothing is booked on the call.", then the bespoke line as the quiet second door. (TJ chose Claude's option 2)
+- Page order now ends: Programmes, the call to action, Single treatments, Footer. The dev panel lists the call to action as "Book a Consultation".
+- The old .close CSS stays in site.css, unused. Checked with lab/cta-check.mjs at 1440x900 and 390x844: no .act--close, no overflow, no errors.
+- Backups: lab/index.before-due-date-cta.html.bak, lab/site.before-due-date-cta.css.bak.

@@ -297,13 +297,21 @@
   // With the hand over the route no longer fades with the film: it runs on to
   // the confinement question and dissolves after the act's pin (routeOut,
   // driven from home.js). ROUTE_OUT is only used without the hand over.
-  var ROUTE_OUT = 26.1 - CUT - 0.4;
+  // Changed (TJ, 16 Oct 2026): the line ends at the daily treatments and is
+  // gone as the view flies out of the window, so it fades from the end of the
+  // treatment room's window (21.2, see WINDOWS) and not at the roof shot.
+  var ROUTE_OUT = 21.2;
+  // The line has an equal tail at each end (TJ, 16 Oct 2026): it starts 0.08
+  // of its width before Arrival and runs 0.08 past Daily treatments, which
+  // is the last stop. The five stops are evenly spaced between those ends,
+  // 0.21 apart: the two ends, the centre, and one midway between each end
+  // and the centre (TJ, 16 Oct 2026).
   var ROUTE_STOPS = [
     { x: 0.08, side: 'right' },
-    { x: 0.24, side: 'right' },
-    { x: 0.42, side: 'right' },
-    { x: 0.52, side: 'left' },
-    { x: 0.72, side: 'left' }
+    { x: 0.29, side: 'right' },
+    { x: 0.50, side: 'right' },
+    { x: 0.71, side: 'left' },
+    { x: 0.92, side: 'left' }
   ];
   // Each stop's [in, out] window in film seconds, read from the footage (TJ, 14 Oct 2026), in
   // SCENES order, for the route's stops only: the route ends at the treatment room (The Window
@@ -334,8 +342,9 @@
   var handE = 0;      // the pin's emerge, 0 to 1, scrubbed (home.js)
   var routeOut = 1;   // the route's dissolve after the pin, 1 to 0, scrubbed (home.js)
   var lastEndD = -1;
-  var knotT = [ROUTE_IN].concat(births, [HELD ? PIN_T : DURATION]);
-  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [HELD ? X_PIN : 1]);
+  // The fill stops at the last stop (the daily treatments, TJ 16 Oct 2026).
+  var knotT = [ROUTE_IN].concat(births, [DURATION]);
+  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [lastX]);
   var lineW = 1;
   var bornNow = [];
   var currentNow = [];
@@ -399,7 +408,7 @@
   // and scrolling back runs them back.
   function paintRoute(time) {
     if (!route || !stopBtns.length) return;
-    var o = smooth((time - ROUTE_IN) / 0.5) * (HELD ? routeOut : 1 - smooth((time - ROUTE_OUT) / 0.8));
+    var o = smooth((time - ROUTE_IN) / 0.5) * (1 - smooth((time - ROUTE_OUT) / 0.8));
     route.style.opacity = o.toFixed(3);
     if (routeWash) routeWash.style.opacity = o.toFixed(3);
     route.style.visibility = o > 0.01 ? 'visible' : 'hidden';

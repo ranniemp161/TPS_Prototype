@@ -341,7 +341,6 @@
       <!-- The last stop, What Is Confinement? (TJ, 15 Oct 2026): a dot only.
            The confinement section's own heading is its text. Born as the
            section starts to emerge; the fill reaches it as the emerge ends. -->
-      <span class="route__end" data-route-end aria-hidden="true"></span>
       <ol class="route__stops" data-route-stops>
         <li class="route__stop" data-stop="exterior">
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
@@ -574,7 +573,7 @@
 
     <header class="sec-head" data-in>
       <h2 class="display display--lg">However long you need</h2>
-      <p class="script">The same care</p>
+      <p class="script">We're here for you</p>
       <p class="body body--wide">Every programme includes the same standard of care. The difference is how long your support is in place. Stay with us for 5, 7, 14 or 30 days.</p>
     </header>
 
@@ -670,10 +669,21 @@
 
     </div>
 
-    <!-- The way out of this act (TJ, 16 Oct 2026). The duration chart that
-         sat here is archived in archive/home-duration-drawn/. Set like the
-         treatments section's "Want more?" line. -->
-    <p class="programmes-bespoke" data-in>Want something more bespoke? Visit the <a class="programmes-bespoke__link" href="build-your-programme.html">bespoke programmes</a> page.</p>
+    <!-- The page's main call to action (TJ, 16 Oct 2026). It ends the
+         programmes act, where the reader has just chosen a length, and
+         replaces the boxed close that used to sit at the foot of the page.
+         Words on the ground, no box. The booking sentence and the facts
+         under the button are Ami's own wording. The bespoke line is the
+         second door, below the main one. The duration chart that sat
+         above it is archived in archive/home-duration-drawn/. -->
+    <div class="cta" data-in data-section="book-consultation" data-section-name="Book a Consultation">
+      <h2 class="display display--lg">Tell us about your due date</h2>
+      <p class="script">We'll take it from there</p>
+      <p class="body cta__lead">We recommend booking as early as possible, ideally in your second trimester. If your baby has already arrived, please get in touch and we will do our very best to help.</p>
+      <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
+      <p class="cta__meta">Thirty minutes, by phone or video. Nothing is booked on the call.</p>
+      <p class="programmes-bespoke cta__alt">Want something more bespoke? Visit the <a class="programmes-bespoke__link" href="build-your-programme.html">bespoke programmes</a> page.</p>
+    </div>
 
   </div>
 </section>
@@ -770,34 +780,14 @@
 
     </div>
 
-    <p class="treatments-addon">Want more? Add a body scrub to any session. <a class="treatments-addon__link" href="https://calendly.com/thepostpartumsuite/30min">Learn more.</a></p>
+    <p class="treatments-addon">Want the full details? <a class="treatments-addon__link" href="single-treatments.html">Learn more.</a></p>
 
   </div>
 </section>
 
-<!-- ============ THE CLOSE ============
-     Lifted out of the programmes act on 2026-09-06 so the two can be
-     placed independently. The markup inside it is untouched; it only has
-     a section and a wrap of its own now, and the ground and vertical
-     padding the programmes act used to give it. -->
-<section class="act act--close" data-act data-section="close" data-section-name="Book a Consultation">
-  <div class="wrap">
-    <!-- The decision. A statement and an action as two objects rather
-         than three lines stacked in a column, on paper inside a hairline
-         so the page ends on something with an edge instead of fading out
-         into the same ground it has been on since the turn. -->
-    <div class="close" data-in>
-      <div class="close__say">
-        <h2 class="display display--md">Ready to talk it through?</h2>
-        <p class="script script--sm">Start with a conversation.</p>
-      </div>
-      <div class="close__act">
-        <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
-        <p class="close__meta">Thirty minutes, by phone or video.<br />Nothing is booked on the call.</p>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- The boxed close that sat here was removed (TJ, 16 Oct 2026); the
+     main call to action now ends the programmes act. Backup:
+     lab/index.before-due-date-cta.html.bak. -->
 
 
 </main>
