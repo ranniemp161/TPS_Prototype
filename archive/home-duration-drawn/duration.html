@@ -1,0 +1,63 @@
+    <!-- ============================================================
+         DURATION, DRAWN
+         The one thing this page claims no competitor does is make the
+         length of live-in care legible. Four equal columns said the
+         opposite of that: they gave thirty days exactly as much room on
+         the page as five, so the layout argued against its own sentence.
+
+         The programmes are measured against one shared thirty-day scale
+         now. The week rules run through every track at the same pitch,
+         seven days wide, so "two weeks" is a place on the page rather
+         than a number to convert. Thirty carries the accent because it
+         is the traditional confinement period, not because it is the one
+         being sold hardest.
+
+         The bars are a drawing of the numbers beside them, which is why
+         they are aria-hidden: the figure and the unit already carry the
+         whole fact for anyone not looking at it.
+         ============================================================ -->
+    <div class="dur" data-in>
+
+      <div class="dur__scale" aria-hidden="true">
+        <span class="dur__pad"></span>
+        <span class="dur__ruler">
+          <span class="dur__mark" style="--at: 7">1 week</span>
+          <span class="dur__mark" style="--at: 14">2 weeks</span>
+          <span class="dur__mark" style="--at: 21">3 weeks</span>
+          <span class="dur__mark" style="--at: 28">4 weeks</span>
+        </span>
+        <span class="dur__pad"></span>
+      </div>
+
+      <ol class="dur__list">
+        <li class="dur__row" style="--days: 5">
+          <p class="dur__head"><span class="dur__n">5</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">The first week home, covered.</p>
+        </li>
+        <li class="dur__row" style="--days: 7">
+          <p class="dur__head"><span class="dur__n">7</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">A full week, with treatments through it.</p>
+        </li>
+        <li class="dur__row" style="--days: 14">
+          <p class="dur__head"><span class="dur__n">14</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">Treatments move to a weekly rhythm.</p>
+        </li>
+        <li class="dur__row dur__row--full" style="--days: 30">
+          <p class="dur__head"><span class="dur__n">30</span><span class="dur__unit">days of care</span></p>
+          <span class="dur__track" aria-hidden="true"><span class="dur__bar"></span></span>
+          <p class="dur__note">The full confinement period, as it is traditionally kept.</p>
+        </li>
+      </ol>
+
+    </div>
+
+    <!-- The way out of this act. It used to be a note saying pricing lived
+         on a page that did not exist yet; build-your-programme.html is that page, so
+         the line is a door now rather than an apology. -->
+    <div class="dur__out" data-in>
+      <p class="body">Every length above is a published programme. If the shape you want sits between them, build it and see an indicative fee as you go.</p>
+      <a class="btn btn--primary" href="build-your-programme.html">Build your programme</a>
+    </div>

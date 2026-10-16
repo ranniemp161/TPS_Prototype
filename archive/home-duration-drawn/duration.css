@@ -1,0 +1,149 @@
+/* ---------- Duration, drawn ----------
+
+   One scale, thirty days wide, shared by the ruler and by every track
+   under it. Both are laid on the same three-column grid, so a mark and a
+   bar at the same percentage land on the same pixel without either of
+   them knowing the other exists.
+
+   The week rules are a repeating gradient rather than four positioned
+   elements. 700% / 30 is seven days of the scale, so the rules fall on 7,
+   14, 21 and 28 in every row, at every width, and nothing has to be
+   placed by hand. Depth stays hairlines and edges: no shadow anywhere. */
+
+.dur {
+  --dur-max:  30;                                   /* the scale, in days */
+  --dur-cols: clamp(102px, 13vw, 146px) minmax(0, 1fr) minmax(0, 26ch);
+  --dur-gap:  clamp(16px, 2.6vw, 40px);
+  border-top: 1px solid var(--hairline-firm);
+}
+
+.dur__scale,
+.dur__row {
+  display: grid;
+  grid-template-columns: var(--dur-cols);
+  gap: var(--dur-gap);
+  align-items: center;
+}
+
+.dur__scale { padding-block: 12px 16px; }
+.dur__ruler { position: relative; display: block; height: 1.5rem; }
+.dur__mark {
+  position: absolute;
+  top: 0;
+  left: calc(var(--at) / var(--dur-max) * 100%);
+  transform: translateX(-50%);
+  font-family: var(--f-body);
+  font-size: .66rem;
+  letter-spacing: .07em;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+/* The tick, not the label, is the true position: the label is centred on
+   it and may sit a pixel either side of where the type happens to land. */
+.dur__mark::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 1px;
+  height: 6px;
+  background: var(--hairline-firm);
+}
+
+.dur__list { list-style: none; margin: 0; padding: 0; }
+
+.dur__row {
+  padding-block: clamp(18px, 2.4vh, 26px);
+  border-bottom: 1px solid var(--hairline);
+}
+.dur__row:last-child { border-bottom: none; }
+
+.dur__head {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+.dur__n {
+  font-family: var(--f-display);
+  font-size: clamp(2.1rem, 3.4vw, 3rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+.dur__unit {
+  font-family: var(--f-body);
+  font-size: .66rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* 3px, not the 6px badge radius. At fourteen pixels tall a six-pixel
+   corner turns the five-day bar into a lozenge, and the brand's line on
+   buttons is that they are soft rectangles and never pills. A measured
+   length should read as a length. */
+.dur__track {
+  position: relative;
+  display: block;
+  height: 14px;
+  border-radius: 3px;
+  background:
+    repeating-linear-gradient(to right,
+      var(--hairline-firm) 0 1px,
+      transparent 1px calc(700% / 30));
+}
+.dur__bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: calc(var(--days) / var(--dur-max) * 100%);
+  border-radius: 3px;
+  background: var(--sand);
+  transform-origin: left center;
+}
+
+/* Thirty takes the accent because it is the length the tradition is
+   actually kept at, which is a fact about the programme rather than a
+   recommendation about the sale. */
+.dur__row--full .dur__bar { background: var(--ember); }
+.dur__row--full .dur__n   { color: var(--ember); }
+
+.dur__note {
+  font-family: var(--f-read);
+  font-size: .95rem;
+  line-height: 1.55;
+  color: var(--ink-mute);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* Stacked. The ruler keeps its two outer marks only: four labels inside a
+   phone's measure collide, and two weeks and four weeks are enough to
+   read the scale by. */
+@media (max-width: 760px) {
+  .dur__scale,
+  .dur__row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dur__pad { display: none; }
+  .dur__row { padding-block: 22px; }
+  .dur__mark:nth-child(odd) { display: none; }
+}
+
+
+/* The way out of the programmes act, added 2026-09-19 with the builder
+   page. A line and one control, sharing the act's left lead rather than
+   centring under a centred gallery, and separated from the duration
+   drawing above it by the same hairline every other group here uses. */
+.dur__out {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 3rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--hairline);
+}
+.dur__out .body { flex: 1 1 32ch; margin: 0; }
+.dur__out .btn { flex: none; }
+@media (max-width: 700px) { .dur__out { gap: 1rem; } }

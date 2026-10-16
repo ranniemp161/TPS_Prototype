@@ -1162,3 +1162,216 @@ TJ chose to go back to the fixed line with stems, then: "the space is too high" 
 - **Care names once, above the line (TJ, 15 Oct 2026):** the title above each photograph is visually hidden (kept for screen readers and for home.js, which reads the names from it), and each card's name now rides above the line with its dot instead of below it, so the name is said once as the line progresses. Checked at 1680 (fonts cached) and 1440: dots still within 1px of their cards, tap works, no errors. Backup lab/site.before-care-names-above.css.bak.
 - **The transitions, three faults found and fixed (Claude, 16 Oct 2026):** TJ reported the fly-through line overlaying where it should not and transitions moving where they should not. Measured through the whole sequence at 1680x980 and 390x844 with cached fonts and real wheel and touch input. (1) Stacking: when the route was lifted into a fixed layer it went to z 3, above the bath (z 2) and the smoke, so the line and words drew over the bath photograph while it lifted off the door. The layer is now z 2 and the bath z 3; verified the element under the line at every stage (bath, then film, then confinement). (2) The phone film could not be scrolled at all: the rest settle fired 120ms after any scroll event and snapped to the nearest rest, and one swipe is less than half the gap between rests, so every swipe went straight back to the door. The settle now only arms on touch, waits 420ms of true idle, and only settles when within 0.9s of a rest; wheel input never settles. Touch now runs the film 1.0 to 11.9s over 14 swipes, wheel 1.5 to 8.5s. (3) While the confinement act holds, the line's fixed height crossed its last paragraph on phones and the photograph on a short desktop window (1280x720). home.js now measures the act and, once it is at the top, shifts the line into the clear band under the content (phones: the gap between the last paragraph and the photograph; desktop: below the lower of the two), reading the natural line height once per layout so the maths never feeds on its output; the line then leaves with the act as before. Hold sweep at 1280, 1440, 1680, 1920 and 390: the line crosses neither text nor photograph at any width. No errors anywhere. Backups lab/*.before-route-stack.css.bak, lab/home-flight.before-settle-fix.js.bak, lab/home.before-phone-line-shift.js.bak.
 - **Late image loads broke the pins on TJ's machine (Claude, 16 Oct 2026):** TJ, desktop, after a hard reload: scrolling past What Is Confinement skipped the testimonials straight to the grey section, and the line jumped, until he scrolled back and forth. Cause: the site loads from Google Drive, so the window load event (every image in) fires seconds after scrolling has started; boot()'s goToAnchor then scrolled to 0 and refreshed, which in a slowed reproduction threw the page to the top mid scroll and re-measured the pins under the reader. Headless loads images instantly, so every earlier check missed it. Fix in home.js: once the reader has moved (wheel, touch, key or pointer), the load routine only refreshes in place (ScrollTrigger keeps the scroll position); and a ResizeObserver on the body plus a listener on every unfinished image triggers one debounced in place refresh whenever the document height changes. Reproduced with images delayed 6 and 12 seconds at 1680x980: before, the testimonials never showed and the page jumped to 0; after, the testimonials show and the care rail starts only at its section's top, the same as with instant loading. Earlier checks rerun clean. Backup lab/home.before-late-load.js.bak. Test rule: slow images (page.route delay) belong in every scroll check on this site, with cached fonts and a real wheel.
+
+## Home programmes title: However long you stay, the same care (TJ, 16 Oct 2026)
+
+- Serif capitals heading "However long you stay", with the Quentin line "The same care" directly under it. The two read as one sentence. (TJ)
+- The "Programmes" eyebrow is removed. (TJ)
+- Body is Ami's FAQ wording: "Every programme includes the same standard of care. The difference is how long your support is in place. Stay with us for 5, 7, 14 or 30 days." The old line about longer stays repeating treatments more often came out because it worked against "the same". (Claude's proposal, implemented with TJ's go)
+- The coral ring around the picker photograph is removed. The photo keeps its own rounded corners. (TJ)
+- Backups: lab/index.before-same-care-title.html.bak, lab/site.before-same-care-title.css.bak. Screenshots: node lab/programmes-shots.mjs <outdir>.
+
+## Home programmes picker: the progression line (TJ, 16 Oct 2026)
+
+- The site's progression line now runs beside the four length thumbnails: hairline track, Ember Deep fill, a dot per length (faint until reached), the larger circle at the chosen length, 650ms on --tease. (TJ)
+- It sits on the outer side of the thumbnails, never between them and the copy, because the chosen frame flies across that gap. Desktop: down the left edge, clamp(22px, 2.2vw, 34px) outside the thumbnails. Phone: above the row. (TJ)
+- It draws from the start to the first length when the picker is half in view. Clicking a thumbnail or a dot moves it. (Claude's details)
+- Built by gallery() in home.js (.gal-line), styles under "The progression line" in the gallery block of site.css. Measured with lab/programme-line-check.mjs at 1440x900 and 390x844: the circle lands exactly on the chosen thumbnail's centre (0.00px) at rest, at 30 days and after a dot click to 7 days; no overflow, no errors. Backups: lab/*.before-programme-line.*.bak.
+
+## Home programmes: chart archived, two links (TJ, 16 Oct 2026)
+
+- The Duration, drawn chart (5, 7, 14, 30 day bars) and its "Build your programme" exit are removed from the home page and archived in archive/home-duration-drawn/ (markup, CSS, JS, README with restore steps). Its CSS and durations() JS stay in site.css and home.js, unused and harmless. (TJ)
+- One fixed link under the picker copy, the same whichever length is showing, to programmes.html: "View all programmes", in the underlined spaced capitals link style (.gal__all). The wording is Claude's choice, open for TJ. (TJ, wording Claude)
+- Below the picker, the act ends with "Want something more bespoke? Build your own programme here", the link to build-your-programme.html, set like the treatments section's "Want more?" line (.programmes-bespoke). (TJ)
+- Checked at 1440x900 and 390x844 with lab/programme-line-check.mjs: picker line still lands at 0.00px, no overflow, no errors. Backups: lab/*.before-programmes-links.*.bak.
+
+## Bespoke line wording (TJ, 16 Oct 2026)
+
+- Now reads "Want something more bespoke? Visit the bespoke programmes page." Only "bespoke programmes" is the link, to build-your-programme.html. (TJ)
+- Link style: Ember, Montserrat 500, 1px underline at 5px, no bold, hover Ember Deep. The lead-in stays in the body voice. Backups: lab/*.before-bespoke-link-wording.*.bak.
+
+## Single treatments: prices off the cards, new title (TJ, 16 Oct 2026)
+
+- Prices are removed from the four treatment cards. Each card shows its length only. Pricing is found on the booking page. (TJ)
+- Heading now reads "Try a signature treatment", with Quentin "Luxury for one afternoon" set straight under it. The menu term is "signature treatments" (TJ, from Ami). The Quentin wording is TJ's choice. (TJ)
+- Backups: lab/index.before-treatments-prices.html.bak, lab/index.before-treatments-title.html.bak, lab/site.before-treatments-title.css.bak. Check: lab/treatments-price-check.mjs.
+
+## Home programmes heading: "However long you need" (TJ, 16 Oct 2026)
+
+- Heading changed from "However long you stay" to "However long you need". The family stays with the team, not the reverse. (TJ)
+- Quentin line "The same care" is 20 percent larger on desktop (1000px and up): 55.68px at 1440, up from 46.4px. Phones unchanged at 28.8px. (TJ)
+- The line under it, "Stay with us for 5, 7, 14 or 30 days", is Ami's FAQ wording and is kept. (Claude's note)
+- Backups: lab/index.before-however-need.html.bak, lab/site.before-however-need.css.bak. Check: lab/programmes-head-check.mjs.
+
+## Single treatments heading sizes (TJ, 16 Oct 2026)
+
+- "Try a signature treatment" and its Quentin line "Luxury for one afternoon" are both 20 percent larger on desktop (1000px and up). Phones keep the defaults. (TJ)
+- Backups: lab/site.before-treatments-size.css.bak. Check: lab/treatments-head-size-check.mjs.
+
+## Progression lines trimmed (TJ, 16 Oct 2026)
+
+- The line beside the length photos in the however long you need section is removed entirely (JS and CSS). The section is back to thumbnails and copy. (TJ)
+- The house route ends at the daily treatments, which is now the final stop. The confinement dot (END_X 0.9) and its handover are removed, so the line no longer runs on into What Is Confinement. (TJ)
+- The line fades out from film time 21.2, the end of the treatment room, over 0.8 film seconds, so it is gone as the view flies out of the window. Before this it faded at about 23.4. (TJ, timing Claude's read of the code)
+- Checked: lab/route-end-check.mjs at 1440x900 and 390x844. Fill stops at 0.72 (the treatment room), the end dot is gone, the route opacity reaches 0 by film 21 to 22 and stays at 0, no page errors.
+- Backups: lab/*.before-route-end-treatments.*.bak and lab/site.before-route-end-treatments.css.bak, lab/index.before-route-end-treatments.html.bak.
+
+## House route: equal tails (TJ, 16 Oct 2026)
+
+- The line now has the same tail at both ends: 0.08 of its width before Arrival and 0.08 past Daily treatments, which is the last stop. Stops moved to 0.08, 0.29, 0.526, 0.658 and 0.92, keeping the spacing between them in proportion. (TJ asked for equal tails; Claude's numbers)
+- Measured at rest: 90px at each end at 1440, 27px at each end at 390. Checked with lab/route-tails-check.mjs, no errors.
+- Backups: lab/home-flight.before-route-tails.js.bak. Earlier route stop values were 0.08, 0.24, 0.42, 0.52, 0.72.
+
+## House route: five evenly spaced stops (TJ, 16 Oct 2026)
+
+- The five stops sit at 8, 29, 50, 71 and 92 percent of the line's width: the two ends, the centre, and one midway between each end and the centre. Gaps are equal. (TJ)
+- Measured at rest: gaps of 235px at 1440 and 72px at 390, all four equal. Tails stay at 90px and 27px. Check: lab/route-spacing-check.mjs.
+- Backup of the previous spacing is in lab/home-flight.before-route-tails.js.bak.
+
+## Home programmes Quentin line: "We're here for you" (TJ, 16 Oct 2026)
+
+- Heading stays "However long you need". The Quentin line changes from "The same care" to "We're here for you". (TJ)
+- Backup: lab/index.before-were-here.html.bak.
+
+## Single treatments add on line (TJ, 16 Oct 2026)
+
+- The line under the four treatment cards now reads "Want the full details? Learn more." The Learn more link goes to single-treatments.html, the Standalone Signature Treatments page. It replaces the body scrub upsell and its Calendly link. (TJ)
+- Wording chosen from Claude's ten options. The text size is unchanged and still to be decided. (TJ asked for smaller)
+- Backup: lab/index.before-addon-details.html.bak.
+
+## Main call to action moves into the programmes act (TJ, 16 Oct 2026)
+
+- The boxed close ("Ready to talk it through?") is removed. The page's main call to action now ends the programmes act, centred on its ground with no box: "Tell us about your due date" (serif capitals), Quentin "We'll take it from there" (20 percent larger on desktop, matching the act's heading pair), Ami's booking sentence from the FAQ, the ember Book a consultation button (Calendly), "Thirty minutes, by phone or video. Nothing is booked on the call.", then the bespoke line as the quiet second door. (TJ chose Claude's option 2)
+- Page order now ends: Programmes, the call to action, Single treatments, Footer. The dev panel lists the call to action as "Book a Consultation".
+- The old .close CSS stays in site.css, unused. Checked with lab/cta-check.mjs at 1440x900 and 390x844: no .act--close, no overflow, no errors.
+- Backups: lab/index.before-due-date-cta.html.bak, lab/site.before-due-date-cta.css.bak.
+
+## Programmes link moves into the copy (TJ, 16 Oct 2026)
+
+- The standalone "View all programmes" link under the picker is removed. The section's body line now ends "...Stay with us for 5, 7, 14 or 30 days, and see what each programme includes.", with "what each programme includes" linking to programmes.html. (TJ chose Claude's option 1)
+- Why: the old link sat just above the main call to action as a competing exit. A descriptive link inside the copy carries the same internal link for SEO.
+- New .text-link style for links inside running copy: Ember, the copy's own face and size, 1px underline at 4px, hover Ember Deep. Use it for future body links to inner pages. .gal__all CSS is unused.
+- Open (Claude's suggestion, not built): add body links from the home page to What We Do, About, Who Comes Into Your Home and FAQs in the sections that already talk about them.
+- Backups: lab/index.before-programmes-inline-link.html.bak, lab/site.before-programmes-inline-link.css.bak.
+
+## Home body links to inner pages, SEO pass (TJ, 16 Oct 2026)
+
+- Links set on existing words, no new copy (.text-link):
+  - What Is Confinement, last line: "The Postpartum Suite" to about.html, "dedicated live-in care" to what-we-do.html.
+  - Four Kinds of Care, mother and baby card: "Your dedicated specialist" to who-comes-into-your-home.html. On the grey silk the link keeps the white copy colour and shows by its underline.
+  - Already in place: "what each programme includes" to programmes.html, "bespoke programmes" to build-your-programme.html, "Learn more" to single-treatments.html.
+- FAQs has no body link yet: no existing home sentence fits without new copy. Awaiting TJ.
+- Checked with lab/seo-links-check.mjs at 1440: every target file exists, no errors, screenshots of both new spots.
+- Backups: lab/index.before-seo-body-links.html.bak, lab/site.before-seo-body-links.css.bak.
+
+## Confinement links made quieter (TJ, 16 Oct 2026)
+
+- In What Is Confinement only, the two links have no underline and no ember. They are Ink Soft (#2C2C2C), a little darker than the muted line around them, and go to full Ink on hover. (TJ)
+- Other .text-link uses are unchanged. Backup: lab/site.before-confinement-quiet-links.css.bak.
+
+## One rule for links in body copy (TJ, 16 Oct 2026)
+
+- Every link inside body copy on the home page uses .text-link: no underline, no colour of its own, a little darker than its sentence (the inherited colour mixed 65 percent with black), Coral Deep (#B95A4B) on hover and keyboard focus. (TJ)
+- On the grey silk the link stays white (darker would read dimmer) and turns Coral Mid on hover. (Claude's call)
+- The bespoke programmes link and the Learn more link were switched to .text-link, so all six home body links share the rule. Replaces the earlier ember underline and the confinement only override.
+- Checked with lab/body-link-rule-check.mjs: all six links darker than their sentence, no underline, coral on focus, no errors.
+- Backups: lab/site.before-body-link-rule.css.bak, lab/index.before-body-link-rule.html.bak.
+
+## Bath scene on phones: figures in a row, copy block centred (TJ, 16 Oct 2026)
+
+- Phone (390 wide): the three figures (360 hours of care, 90 family meals cooked, 30 restorative treatments) run across one row above her head, each number over its label, centred. The row is three equal columns of 108px. (TJ)
+- Phone: "Your recovery:" and "Well deserved" are one block, centred as a whole. The label sits flush with the script's left edge on phones, instead of the desktop's half-way offset, so the block's full width is what gets centred. Measured block centre 195 against screen centre 195 at 390. (TJ asked for the centring; the flush label is Claude's call)
+- Desktop is unchanged. Check: lab/bath-mobile-shot.mjs. Backup: lab/site.before-bath-mobile.css.bak.
+
+## House film on phones: square film, words fill the lower half (TJ, 16 Oct 2026)
+
+- Phones only (767px and under); desktop untouched. (TJ)
+- The film starts under the header (top var(--nav-h), was 0, so its top was hidden) and is square (was 1536 / 1080). Each room keeps its subject through --fx. At 390 the film runs 80 to 470, at 360 80 to 440.
+- The line sits 14px under the film. Stems are hidden. The current room's words leave the dots and sit as one block under the line, the line's full width, left aligned: titles 1.1rem (was .74rem), descriptions 1rem (was .74rem), titles may wrap. home-flight.js now sets --x per stop and --lw on the route so the CSS can pull the words to the line's left edge, and skips the title nudge (--tshift) on phones.
+- The blurred ghost and the aurora under the film were re-keyed to the new film height.
+- Checked with lab/phone-flight-check.mjs at 390x844 and 360x780 (all five rooms: words 24 to 366 at 390, nothing past the screen, no errors) and lab/phone-flight-ends.mjs (smoke clearing, window exit, confinement: no collisions).
+- Backups: lab/house-flight.before-phone-flight-space.css.bak, lab/home-flight.before-phone-flight-space.js.bak.
+
+## Living room framing on phones (TJ, 16 Oct 2026)
+
+- On phones the living room was framed on the carer (fx 78), so the square crop showed only the mother's legs. Now fx 6, framed on the mother on the sofa. (TJ asked for more of the mother; value Claude's, checked by screenshot)
+- fx only applies on phones; desktop is fixed at 50 percent and unchanged. Checked with lab/phone-flight-ends.mjs at 390x844: mid living room shows the mother in full; the carer and the Moses basket are toward the right edge as the camera moves. No errors.
+- Backup: lab/home-flight.before-living-frame.js.bak.
+- Revised (TJ, 16 Oct 2026): fx 6 went too far. Now fx 31, so mid living room shows the mother's face (a little of her head cut at the left), the carer's face and shoulder at the right, and the baby in the basket at the bottom right. Checked by screenshot at 390x844.
+
+## What Is Confinement on phones: one screen, photo opens (TJ, 16 Oct 2026)
+
+- Phones only (767px and under); desktop unchanged. (TJ)
+- The heading, the copy and the photograph fit in one screen. Text set a touch tighter (standfirst 1.04rem, smaller gaps). The photograph is smaller and centred: width min(58vw, 240px, (100svh - 580px) x .8), still 4 / 5. Measured: 390x844 heading 126, photo 565 to 829, 211 wide, centred at 195; 360x780 heading 106, photo 575 to 775, 160 wide, centred at 180.
+- The photograph opens like the specialist's portrait on What We Do: clip from inset 36 percent each side to the full frame. Here it rides the pin's emerge (home.js actTurn, from 0.35 to about 1.25 of BEAT_EMERGE), so it opens as the act arrives at any scroll speed and is fully open early in the hold.
+- Checks: lab/confinement-phone-check.mjs (fit, both sizes), lab/confinement-open-check.mjs (the clip through the emerge), no errors.
+- Backups: lab/site.before-confinement-phone.css.bak, lab/home.before-confinement-phone.js.bak.
+- Revised (TJ, 16 Oct 2026, option 1): the photograph runs the full text width, 342px at 390 (the same width as the specialist portrait on What We Do), cropped square. Phone text tightened (standfirst .98rem, body .92rem, smaller gaps) so the whole section fits. Measured: 390x844 heading 122, photo 490 to 832 (12px to spare); 360x780 photo 468 to 780 at 312px, touching the bottom edge. Backup: lab/site.before-confinement-square.css.bak.
+- Revised again (TJ, 16 Oct 2026): the photograph keeps the full text width and takes the height left in the pinned stage, so its bottom edge sits 24px above the screen edge, the same as its 24px side gaps. Cropped to fit (no longer square): 342 x 367 at 390x844, 312 x 290 at 360x780. The stage height is set from the screen: 100svh less the section's top padding and the gutter. Note: house-flight.css sets a min-height on the hand-over stage that had been holding it at one screen less the header; overridden on phones with .act.act--turn.is-handover > .stage--split. The section itself is not sized, because the testimonials follow it. Checked: lab/confinement-gap-check.mjs (24 / 24 / 24 at both sizes).
+- Revised (TJ, 16 Oct 2026): the testimonials band touched the photograph's bottom edge once the pin let go. The phone stage now has a bottom margin of the gutter (24px), so there is a clear 24px between the photograph and the band. During the hold the photo sits 24px above the screen edge and the band starts just off screen. Measured at 390 and 360: 24px gap in the hold and after. Check: lab/confinement-voices-gap.mjs. Backup: lab/site.before-confinement-voices-gap.css.bak.
+
+## Four Kinds of Care on phones: the line turns upright (TJ, 16 Oct 2026)
+
+- Phones (700px and under, where the rail stacks). Desktop unchanged. (TJ)
+- The desktop progression line becomes a vertical line in a lane on the right: cards narrowed by 44px (298 wide at 390, 268 at 360), the line 22px right of the cards. Track, fill, a dot level with each card's photograph, the circle at the fill's end. White on the grey silk, as on desktop. The circle holds the middle of the screen, so each dot fills as its card's photo reaches the middle. Tails of 40px above the first dot and below the last. (TJ; details Claude's)
+- No names on the line. Instead each card's title, hidden on desktop where it rides on the line, shows on phones between the photograph and its paragraph: photo, title, paragraph. (TJ)
+- Built in home.js actPan, phone branch (.care-vline). The dots are placed from layout positions, not screen boxes, so the cards' 18px entrance rise does not move them. Checked with lab/care-vline-check.mjs at 390x844 and 360x780: dots fill 1000, 1100, 1110, 1111 as each card reaches the middle, circle on the middle, no overflow, no errors.
+- Backups: lab/home.before-care-vline.js.bak, lab/site.before-care-vline.css.bak.
+
+## However long you need on phones: full width, one screen (TJ, 16 Oct 2026)
+
+- Phones (767px and under). The whole section, heading to large photograph, fits one screen and uses the full width. (TJ)
+- The four thumbnails are equal squares across the full width with equal margins (78px at 390, 70px at 360, 10px gaps). The length's description runs the full width. Gaps tightened. The heading holds one line (sized to the width). (TJ asked; details Claude's)
+- The description box keeps the height of the longest of the four descriptions (home.js gallery, reserveBody), so choosing a length never moves the photograph. This also applies on desktop, where it only steadies the middle column.
+- The large photograph keeps the full width and is cropped to the height left above a 24px bottom margin: clamp(130px, 100svh - 830px + 53.3vw, 320px). Measured: 390x844 photo 598 to 820 (222 tall), 360x780 photo 614 to 756 (142 tall), 24px gap for all four lengths at both sizes, no overflow, no errors. Check: lab/prog-phone-measure.mjs.
+- Backups: lab/site.before-gal-phone.css.bak, lab/home.before-gal-reserve.js.bak.
+
+## The 30 days photograph: the correct hot stone (TJ, 16 Oct 2026)
+
+- The length picker's 30 days image showed a row of spa hot stones, which is not the treatment. TPS uses the Malaysian hot stone: a stone wrapped in cloth with leaves (tungku). (TJ)
+- Replaced with hero-images/traditional-malay-hot-compress-tungku-stones.jpg (the stone in batik cloth with leaves on a towel at the end of the bed), converted to assets/img/tungku-stones.webp at 1920 x 1072. Focal point 46% 62%. Alt text rewritten. Checked at 1440 and 390, both thumbnail and large frame, no errors (lab/tungku-check.mjs).
+- The Four Kinds of Care Treatments card also showed stones.webp. Replaced (TJ said switch it; the image was Claude's pick, landscape to suit the 16:9 card) with hero-images/traditional-malay-hot-compress-tungku-treatment.jpg, the specialist pressing the wrapped stone onto the mother's abdomen, as assets/img/tungku-treatment.webp, 1920 x 1072. Checked at 1440 (rail) and 390 (stacked), no errors (lab/tungku-card-check.mjs). Backup: lab/index.before-tungku-card.html.bak. stones.webp is no longer used on the home page.
+- Backup: lab/index.before-tungku-swap.html.bak. stones.webp is kept, unused by the picker.
+- Revised (TJ, 16 Oct 2026): the first replacement showed the stone used the wrong way. The card now uses treatment-images/TPS hot stones 01.png, the tungku in red batik held by its knotted top and pressed onto the mother's abdomen, the same grip as the What We Do Treatments segment. Saved as assets/img/tungku-held.webp (900 x 900, the only size available), cropped in the 16:9 card with object-position 50% 72% so the stone, hands and abdomen are in frame; the carer's face falls above the crop. Checked at 1440 and 390, no errors. tungku-treatment.webp is no longer used. Backup: lab/index.before-tungku-held.html.bak.
+
+## Four Kinds of Care: closing note removed (TJ, 16 Oct 2026)
+
+- "The same four, whichever programme you choose. What changes is how long they last." is removed, desktop and mobile. It repeated the next section, which says the same in Ami's words ("Every programme includes the same standard of care..."). The section now ends on the Home card. (TJ, on Claude's recommendation)
+- Desktop: the note had given the rail its last stretch of travel, so without it the line stopped at Meals. The rail now ends with a spacer (.act--pan .rail::after, desktop only) so Home reaches the middle and its dot fills. Checked with lab/care-end-check.mjs at 1440: dots fill 1000, 1100, 1110, 1111, no errors.
+- Phone: the vertical line still fills all four (lab/care-vline-check.mjs), no errors. The .rail__close CSS stays, unused.
+- Backups: lab/index.before-remove-rail-close.html.bak, lab/site.before-rail-end-space.css.bak.
+
+## Two kinds of link: call to action and body copy (TJ, 16 Oct 2026)
+
+- Links that are the point of their sentence keep the accent: .cta-link, Ember, Montserrat 500, 1px underline at 5px, Ember Deep on hover. On the home page: "Learn more." under the treatments, and "bespoke programmes" in the main call to action. (TJ)
+- Links inside ordinary body copy stay .text-link (no underline, a little darker than the sentence, coral on hover): The Postpartum Suite, dedicated live-in care, Your dedicated specialist, what each programme includes. (TJ)
+- Rule of thumb for new links: if the sentence exists to send the reader somewhere, .cta-link; if the link is a word in a sentence that is about something else, .text-link.
+- Checked with lab/body-link-rule-check.mjs at 1440, no errors. Backups: lab/index.before-cta-links.html.bak, lab/site.before-cta-links.css.bak.
+
+## About: split hero with the founder illustration (TJ, 16 Oct 2026)
+
+- The About hero is now split: a picture of Ami with her newborn and her eldest on the left, the question "Who is caring for the mother?" and its lede on the right, left aligned. Stacks on 860px and under, picture first, title at full width. (TJ)
+- The picture is a placeholder illustration, generated once with Nano Banana 2 (TJ approved the single paid generation): TPS images/tailored/about-hero-founder-illustration.jpg, cropped for the page to assets/img/about-founder-illustration.webp (1600 x 1470, the empty paper above the family removed). Replace with a real photograph of Ami and her children when there is one. Ami's appearance in the drawing is assumed, not taken from a photo.
+- Spacing: the page's main already clears the header and holds the side margins, so the split hero adds only clamp(8px, 2vh, 24px) on top and no side padding on phones (the original hero's padding doubled them).
+- Measured: 1440 picture 128 to 684 wide, 164 to 675 tall, title at 756; 390 picture 24 to 366, title two lines. No hero overflow, no errors (lab/about-hero-check.mjs).
+- Found, not touched: on a 360 phone the About page scrolls sideways by about 23px, from a DD element further down the page and the footer's field (lab/overflow-find.mjs). It is not from the hero.
+- Backups: lab/about.before-split-hero.html.bak, lab/about.before-split-hero.css.bak.
+
+## About: story flipped, original bath photograph (TJ, 16 Oct 2026)
+
+- The story section is flipped on desktop: words left, photograph right, so it no longer repeats the split hero's picture left, words right. Phones unchanged (picture first). The story photograph swap (option 2) is still open: Claude suggested kc-meals (specialist carrying a tray of soup through the living room); awaiting TJ. (TJ chose option 2)
+- The traditions band used bath-steam.webp, the tall plate made for the home page's bath scroll. It now uses the original, TPS images/hero_bath-steam_v1.jpg, as assets/img/bath-steam-original.webp (2400 x 1340), framed at 34% 60% on the mother. On desktop the glass card moves to the right, over the steam, so she is clear. (TJ asked for the original; the card move is Claude's)
+- Checked at 1440 and 390, no errors (lab/about-trad-check.mjs). Backups: lab/about.before-story-flip.css.bak, lab/about.before-bath-original.html.bak, lab/about.before-bath-original.css.bak.
+
+## Who Comes Into Your Home: specialist portrait (TJ, 16 Oct 2026)
+
+- The first image (Meet Your Specialist) was specialist-meet.webp, a low resolution cutout of a woman holding a baby. Now the specialist portrait from What We Do, assets/img/specialist-portrait.webp (1200 x 1490). It keeps the block's frame (16:10, 4:3 on phones) with height: auto inline, because the image's own height attribute was overriding the frame; cropped at 50% 55% so her face and uniform are in view on both. Checked at 1440 and 390, no errors (lab/who-image-check.mjs). Backup: lab/who.before-specialist-image.html.bak.
+- Removed (TJ, 16 Oct 2026): at the foot of the page, the "Note for Amidat" under If It Is Not the Right Match and the "See the care she provides" button, with no replacement. The page now ends on that section's sentence. Two other "Note for Amidat" boxes remain (Meet Your Specialist, and the checks section), awaiting TJ. Backup: lab/who.before-remove-last-note.html.bak.
+
+## Single treatments hero: the strip only, clean edges (TJ, 16 Oct 2026)
+
+- Desktop and mobile. The circular TPS logo and wordmark that sat in a notch on the strip's bottom edge are removed, with the notch. The fade at the strip's top is removed, so the photograph meets the header on a clean line. The page goes from the strip straight to "Book a treatment". (TJ)
+- Scoped with .bk-hero--plain in booking.css, so the shared booking styles are unchanged for any other page that uses them. Measured: strip 101 to 307 at 1440, 101 to 186 at 390; title 32px and 24px below it. No errors, no overflow (lab/single-hero-check.mjs).
+- Backups: lab/single.before-hero-clean.html.bak, lab/booking.before-hero-clean.css.bak.
+- Removed (TJ, 16 Oct 2026): the "Prototype of the booking flow..." notice at the foot of the single treatments page (.bk-proto). A second prototype line remains on the booking confirmation screen, written by js/booking.js; awaiting TJ. Backup: lab/single.before-remove-proto-note.html.bak.
+- Added (TJ, 16 Oct 2026): space between "Already booked with us? Manage your booking..." and the footer on the single treatments page: .bk-foot-link bottom margin clamp(64px, 10vh, 120px). Measured gap 90px at 1440x900, 84px at 390x844, no errors (lab/single-foot-check.mjs). Backup: lab/booking.before-foot-gap.css.bak.

@@ -109,7 +109,7 @@
     { name: 'kitchen', beat: 'kitchen', time: (tc(6, 28) + tc(7, 25)) / 2, rest: tc(6, 28), fx: 66, room: 'kitchen',
       desc: 'Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery.',
       zone: { top: '78%', left: '20%' } },
-    { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 78, room: 'living',
+    { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 31, room: 'living',
       desc: 'The living room is where your days with your baby unfold, so we keep it feeling restful and composed.',
       zone: { top: '24%', left: '28%' } },
     { name: 'nursery', beat: 'nursery', time: (tc(16, 8) + tc(17, 10)) / 2, rest: tc(16, 8), fx: 18, room: 'nursery',
@@ -297,13 +297,21 @@
   // With the hand over the route no longer fades with the film: it runs on to
   // the confinement question and dissolves after the act's pin (routeOut,
   // driven from home.js). ROUTE_OUT is only used without the hand over.
-  var ROUTE_OUT = 26.1 - CUT - 0.4;
+  // Changed (TJ, 16 Oct 2026): the line ends at the daily treatments and is
+  // gone as the view flies out of the window, so it fades from the end of the
+  // treatment room's window (21.2, see WINDOWS) and not at the roof shot.
+  var ROUTE_OUT = 21.2;
+  // The line has an equal tail at each end (TJ, 16 Oct 2026): it starts 0.08
+  // of its width before Arrival and runs 0.08 past Daily treatments, which
+  // is the last stop. The five stops are evenly spaced between those ends,
+  // 0.21 apart: the two ends, the centre, and one midway between each end
+  // and the centre (TJ, 16 Oct 2026).
   var ROUTE_STOPS = [
     { x: 0.08, side: 'right' },
-    { x: 0.24, side: 'right' },
-    { x: 0.42, side: 'right' },
-    { x: 0.52, side: 'left' },
-    { x: 0.72, side: 'left' }
+    { x: 0.29, side: 'right' },
+    { x: 0.50, side: 'right' },
+    { x: 0.71, side: 'left' },
+    { x: 0.92, side: 'left' }
   ];
   // Each stop's [in, out] window in film seconds, read from the footage (TJ, 14 Oct 2026), in
   // SCENES order, for the route's stops only: the route ends at the treatment room (The Window
@@ -334,8 +342,9 @@
   var handE = 0;      // the pin's emerge, 0 to 1, scrubbed (home.js)
   var routeOut = 1;   // the route's dissolve after the pin, 1 to 0, scrubbed (home.js)
   var lastEndD = -1;
-  var knotT = [ROUTE_IN].concat(births, [HELD ? PIN_T : DURATION]);
-  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [HELD ? X_PIN : 1]);
+  // The fill stops at the last stop (the daily treatments, TJ 16 Oct 2026).
+  var knotT = [ROUTE_IN].concat(births, [DURATION]);
+  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [lastX]);
   var lineW = 1;
   var bornNow = [];
   var currentNow = [];
@@ -355,10 +364,15 @@
     lineW = route.clientWidth || innerWidth;
     if (routeEnd) routeEnd.style.left = (END_X * lineW).toFixed(1) + 'px';
     var isPhone = innerWidth < 768;
+    // Phones (TJ, 16 Oct 2026): the words leave the dots and sit as one
+    // block under the line, so the CSS needs each stop's offset (--x) and
+    // the line's width (--lw) to pull them back to the line's left edge.
+    route.style.setProperty('--lw', lineW.toFixed(1) + 'px');
     stopEls.forEach(function (li, i) {
       var x = ROUTE_STOPS[i].x;
       var side = isPhone ? (x < 0.5 ? 'right' : 'left') : ROUTE_STOPS[i].side;
       li.style.left = (x * lineW).toFixed(1) + 'px';
+      li.style.setProperty('--x', (x * lineW).toFixed(1) + 'px');
       li.classList.toggle('is-right', side === 'right');
       li.classList.toggle('is-left', side === 'left');
       // the words never run past the line's end or into its fading edge
@@ -371,7 +385,7 @@
       // itself, so the title's real position is read and corrected.
       var mask = li.querySelector('.route__head .route__mask, .route__name .route__mask');
       li.style.setProperty('--tshift', '0px');
-      if (mask) {
+      if (mask && !isPhone) {
         var rr = route.getBoundingClientRect();
         var mr = mask.getBoundingClientRect();
         var tw = mr.width;
@@ -399,7 +413,7 @@
   // and scrolling back runs them back.
   function paintRoute(time) {
     if (!route || !stopBtns.length) return;
-    var o = smooth((time - ROUTE_IN) / 0.5) * (HELD ? routeOut : 1 - smooth((time - ROUTE_OUT) / 0.8));
+    var o = smooth((time - ROUTE_IN) / 0.5) * (1 - smooth((time - ROUTE_OUT) / 0.8));
     route.style.opacity = o.toFixed(3);
     if (routeWash) routeWash.style.opacity = o.toFixed(3);
     route.style.visibility = o > 0.01 ? 'visible' : 'hidden';
