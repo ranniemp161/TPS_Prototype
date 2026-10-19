@@ -195,7 +195,10 @@
       var fullRight = Math.max(rightOf(hl[0]), restRight);
       var bw = Math.min(W() - margin - (fullRight + 60), (H() - TOP()) * .8 * RATIO), bh = bw / RATIO;
       if (bw > sw) small = { left: W() - margin - bw, top: mid - bh / 2, width: bw, height: bh };
-      gsap.set(frame, { left: small.left, top: small.top, width: small.width, height: small.height, right: 'auto', bottom: 'auto', borderRadius: 16, autoAlpha: 1 });
+      /* Opens at full screen (TJ for Ami, 19 Oct 2026): the photograph already
+         fills the window and the statement sits on it, cream, at the lower
+         left. The grow from the side by side frame is gone; small is unused. */
+      gsap.set(frame, { left: 0, top: 0, width: W(), height: H(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
       /* Where the photograph comes back to, placed as in the first hero (TJ,
          8 Oct 2026): the question is the long line, so the photograph tucks in
          under it, 60px right of the answer blocks, its foot level with the
@@ -221,7 +224,9 @@
       var end = { left: el0, top: textBottom - eh, width: ew, height: eh };
       var wideW = Math.min(W() - margin - (Math.max(whoRight, blocksRight) + 60), (H() - TOP()) * .8 * RATIO), wideH = wideW / RATIO;
       if (wideW > ew) end = { left: W() - margin - wideW, top: TOP() + (H() - TOP()) / 2 - wideH / 2, width: wideW, height: wideH };
-      gsap.set(scrim, { opacity: 0 });
+      gsap.set(scrim, { opacity: 1 });
+      gsap.set(dim, { opacity: 0 });
+      gsap.set(both, { top: H(), yPercent: -100, y: -Math.round(H() * .07), scale: .72 });
       /* The introduction waits at the statement's full screen position, the
          lower left, showing only its first sentence once it arrives. */
       /* At full screen it shares the picture with the statement (TJ, 7 Oct
@@ -241,41 +246,31 @@
       arrive();
 
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
-      // half 1: the room opens
       var zd = zoomFor(FOCUS.desktop, W(), H());
-      gsap.set(img, { scale: 1, transformOrigin: zd.origin });
-      tl.fromTo(img, { scale: 1 }, { scale: zd.scale, duration: 1.4, ease: 'power2.inOut', immediateRender: false }, 0);
-      tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1.4, ease: 'power2.inOut' }, 0)
-        .to(scrim, { opacity: 1, duration: .7, ease: 'power1.inOut' }, .15)
-        .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .25, ease: 'power1.inOut', immediateRender: false }, .05)
-        .to(dim, { opacity: 0, duration: .4, ease: 'power1.inOut' }, 1.05)
-        .to(both, { top: '100%', yPercent: -100, y: -Math.round(H() * .07), scale: .72, duration: .9, ease: 'power2.inOut' }, .3)
-        // the first sentence arrives as the photograph reaches full screen
-        .to(leads, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, 1.1)
+      gsap.set(img, { scale: zd.scale, transformOrigin: zd.origin });
+      // "Who is it for?" rises into its place at the lower right
+      tl.to(leads, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .1)
         // the hinge: both on the picture together
-        .to({}, { duration: .55 }, 1.45)
+        .to({}, { duration: .55 }, .45)
         // the statement leaves and the sentence is left on its own
-        .to(both, { opacity: 0, y: '-=30', duration: .4, ease: 'power2.in' }, 2.0)
-        // half 2, the mirror of half 1: the photograph pulls back to its frame
-        // while the introduction travels to its place on the left, turning ink
-        // along the photograph's edge, and the rest of the paragraph unfolds
-        .to(frame, { left: end.left, top: end.top, width: end.width, height: end.height, borderRadius: 16, duration: .9, ease: 'power2.inOut' }, 2.6)
-        .to(img, { scale: 1, duration: .9, ease: 'power2.inOut' }, 2.6)
-        .to(scrim, { opacity: 0, duration: .6 }, 2.6)
-        .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .2, ease: 'power1.inOut', immediateRender: false }, 2.55)
-        .to(dim, { opacity: 0, duration: .35, ease: 'power1.inOut' }, 3.2)
-        .to(introBoth, { top: TOP() + (H() - TOP()) / 2, yPercent: -50, y: 0, x: 0, duration: .9, ease: 'power2.inOut' }, 2.6)
-        .to(mores, { height: 'auto', duration: .65, ease: 'power1.inOut' }, 2.85)
-        // the answer unfolds beneath the question, one block after another,
-        // each block arriving together with its cream twin
-        ;
+        .to(both, { opacity: 0, y: '-=30', duration: .4, ease: 'power2.in' }, 1.0)
+        // the photograph pulls back to its frame while the introduction travels
+        // to its place on the left, turning ink along the photograph's edge,
+        // and the rest of the paragraph unfolds
+        .to(frame, { left: end.left, top: end.top, width: end.width, height: end.height, borderRadius: 16, duration: .9, ease: 'power2.inOut' }, 1.6)
+        .to(img, { scale: 1, duration: .9, ease: 'power2.inOut' }, 1.6)
+        .to(scrim, { opacity: 0, duration: .6 }, 1.6)
+        .fromTo(dim, { opacity: 0 }, { opacity: 1, duration: .2, ease: 'power1.inOut', immediateRender: false }, 1.55)
+        .to(dim, { opacity: 0, duration: .35, ease: 'power1.inOut' }, 2.2)
+        .to(introBoth, { top: TOP() + (H() - TOP()) / 2, yPercent: -50, y: 0, x: 0, duration: .9, ease: 'power2.inOut' }, 1.6)
+        .to(mores, { height: 'auto', duration: .65, ease: 'power1.inOut' }, 1.85);
       blocks[0].forEach(function (el, i) {
-        tl.to([el, blocks[1][i]], { opacity: 1, y: 0, duration: .32, ease: 'power2.out' }, 3.15 + i * .17);
+        tl.to([el, blocks[1][i]], { opacity: 1, y: 0, duration: .32, ease: 'power2.out' }, 2.15 + i * .17);
       });
-      tl.to({}, { duration: .5 }, 3.15 + blocks[0].length * .17 + .32);
+      tl.to({}, { duration: .5 }, 2.15 + blocks[0].length * .17 + .32);
 
       ScrollTrigger.create({
-        trigger: op, start: 'top top', end: '+=' + Math.round(H() * 4.8),
+        trigger: op, start: 'top top', end: '+=' + Math.round(H() * 3.6),
         pin: op, scrub: .9, animation: tl, refreshPriority: 10
       });
     });
@@ -308,10 +303,13 @@
         var py = ey > 0 ? Math.min(100, Math.max(0, (FOCUS.phone.cy * c - fh / 2) / ey * 100)) : 50;
         return px.toFixed(1) + '% ' + py.toFixed(1) + '%';
       };
-      gsap.set(frame, { left: 0, top: top, width: w, height: h, right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
-      gsap.set(img, { objectPosition: centre(w, h), scale: 1 });
-      gsap.set(scrim, { opacity: 0 });
-      gsap.set(dim, { opacity: 0 });
+      /* Opens at full screen (TJ for Ami, 19 Oct 2026): the photograph fills the
+         screen from the start with the statement on it in cream. */
+      gsap.set(frame, { left: 0, top: 0, width: W(), height: H(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
+      gsap.set(img, { objectPosition: centre(W(), H()), scale: 1 });
+      gsap.set(scrim, { opacity: 1 });
+      // some dimming from the start, so the cream statement reads on the linen
+      gsap.set(dim, { opacity: .55 });
       gsap.set(ask, { opacity: 0, y: 18 });
       gsap.set(onBlocks, { opacity: 0, y: 12 });
       arrive();
@@ -321,24 +319,21 @@
          question's heels, while an even dimming deepens so the cream reads on
          the pale linen; then a short hold, and the next section follows. */
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
-      tl.to(frame, { left: 0, top: 0, width: W(), height: H(), borderRadius: 0, duration: 1, ease: 'power2.inOut' }, 0)
-        .to(img, { objectPosition: centre(W(), H()), duration: 1, ease: 'power2.inOut' }, 0)
-        .to(copy, { opacity: 0, y: -30, duration: .28, ease: 'power1.in' }, 0)
-        .to(scrim, { opacity: 1, duration: .6, ease: 'power1.inOut' }, .3)
-        .to(dim, { opacity: 1, duration: .5, ease: 'power1.inOut' }, .6)
-        .to(ask, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .7);
+      tl.to(both, { opacity: 0, y: -30, duration: .28, ease: 'power1.in' }, .1)
+        .to(dim, { opacity: 1, duration: .5, ease: 'power1.inOut' }, .3)
+        .to(ask, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .4);
       onBlocks.forEach(function (el, i) {
-        tl.to(el, { opacity: 1, y: 0, duration: .32, ease: 'power2.out' }, .85 + i * .17);
+        tl.to(el, { opacity: 1, y: 0, duration: .32, ease: 'power2.out' }, .55 + i * .17);
       });
-      tl.to({}, { duration: .3 }, .85 + onBlocks.length * .17 + .32);
+      tl.to({}, { duration: .3 }, .55 + onBlocks.length * .17 + .32);
 
       ScrollTrigger.create({
-        trigger: stage, start: 'top top', end: '+=' + Math.round(H() * 1.9),
+        trigger: stage, start: 'top top', end: '+=' + Math.round(H() * 1.6),
         pin: stage, scrub: .6, animation: tl
       });
       return function () {
         op.classList.remove('op--phone', 'op--tight');
-        gsap.set(copy, { clearProps: 'opacity,transform' });
+        gsap.set(both, { clearProps: 'opacity,transform' });
         gsap.set(img, { clearProps: 'objectPosition' });
       };
     });
