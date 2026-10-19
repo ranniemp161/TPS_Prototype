@@ -1375,3 +1375,22 @@ TJ chose to go back to the fixed line with stems, then: "the space is too high" 
 - Backups: lab/single.before-hero-clean.html.bak, lab/booking.before-hero-clean.css.bak.
 - Removed (TJ, 16 Oct 2026): the "Prototype of the booking flow..." notice at the foot of the single treatments page (.bk-proto). A second prototype line remains on the booking confirmation screen, written by js/booking.js; awaiting TJ. Backup: lab/single.before-remove-proto-note.html.bak.
 - Added (TJ, 16 Oct 2026): space between "Already booked with us? Manage your booking..." and the footer on the single treatments page: .bk-foot-link bottom margin clamp(64px, 10vh, 120px). Measured gap 90px at 1440x900, 84px at 390x844, no errors (lab/single-foot-check.mjs). Backup: lab/booking.before-foot-gap.css.bak.
+
+## What We Do hero opens at full screen (Ami via TJ, 19 Oct 2026)
+
+- Desktop and phone. The page opens on the full screen photograph with the statement in cream. The side by side opening and the grow to full screen are removed. (Ami via TJ)
+- Desktop, on scroll: "Who is it for?" rises into its place at the lower right; the statement leaves; then, as before, the question slides across to the left as the photograph pulls back to its frame and the answer unfolds block by block. The pin is 3.6 windows (was 4.8). (TJ)
+- Phone, on scroll: the statement fades, then the question and its five lines come in on the photograph, as before. The pin is 1.6 windows (was 1.9). The phone statement is now cream (the cream copy is desktop only), with the photograph dimmed to .55 from the start so it reads on the linen. (TJ; the dimming is Claude's)
+- what-we-do-opening.js: half 1 of the desktop timeline removed and the rest shifted 1.1 earlier; both builds start with frame full screen and scrim on. Checked with lab/wwd-open-check.mjs at 1440x900 and 390x844 from scroll zero with a real wheel, no errors.
+- Backups: lab/what-we-do-opening.before-fullscreen-start.js.bak, lab/what-we-do-opening.before-fullscreen-start.css.bak.
+
+## What We Do, Four Kinds of Care: massage still test (TJ, 19 Oct 2026)
+
+- Treatments now shows the massage still (TPS images/kinds-of-care/hands-crops/practitioner-back-massage-v1.png, as assets/img/hands-plate-massage.webp, 1536 x 1024) in place of the tungku pair. It is one flat image, so it takes the room's drift and zoom (desktop: 1.08 to 1.1, right to left; phone: zoom to 1.2), but not the separate hand slide the other three have. The cut layer points at hands-cut-empty.webp, a transparent placeholder. A test for TJ to compare. (TJ)
+- To restore the tungku, put hands-plate-treatments.webp and hands-cut-treatments.webp back (backup: lab/what-we-do.before-massage-still.html.bak).
+- Checked with lab/hands-massage-check.mjs (1440x900) and lab/hands-massage-phone.mjs (390x844), no errors.
+- A 4 second 480p video of the stroke was also made (practitioner-back-massage-v1-480p.mp4, Seedance 1.5 Pro, $0.05); TJ said its movement does not match the others, so it is not used.
+
+## What We Do, Tailored For You: new bedroom photograph (TJ, 19 Oct 2026)
+
+- Replaced tailored-bedroom.webp with TPS images/tailored/bedroom-care-real-model-identity-v1.png, as assets/img/tailored-bedroom-v2.webp (1678 x 937, the source size). Alt text updated. Checked at 1440 and 390, no errors (lab/tailored-image-check.mjs). The old file stays in assets/img. Backup: lab/what-we-do.before-tailored-bedroom-v2.html.bak.
