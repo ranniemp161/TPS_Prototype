@@ -1,20 +1,50 @@
 /* ============================================================
-   WHAT WE DO, Your Postpartum Specialist (TJ, 9 Oct 2026)
-
-   The one place on the page where you meet her: the Four Kinds of Care that
-   follows only ever shows her hands. Quiet on purpose.
+   YOUR POSTPARTUM SPECIALIST, the hero of Who Comes Into Your Home
+   (TJ, 19 Oct 2026: moved here whole from What We Do, where it was built
+   on 9 Oct 2026. Placed as is; TJ will arrange the page around it.)
 
    The portrait opens from a narrow slot to the full frame as the section
    scrolls in, and settles from a slight zoom while it does (scrubbed on
-   desktop, a single soft opening on phones; what-we-do-specialist.js).
+   desktop, a single soft opening on phones; specialist.js).
    Once it has settled, the checks from her copy draw in on the site's fine
    line language: small spaced capitals beside a hairline that draws in
    Ember and cools to the hairline colour. No cards, no chips, no buttons.
 
-   Loads after what-we-do.css, which still holds .spec, .spec__grid and the
-   frame's size and radius. Without script, or with reduced motion, the
-   frame is simply open and the checks are simply there.
+   Self contained: the section's base layout and the What We Do type it uses
+   (.wh2, .wlead, .wp, .wide, the kinetic heading, the reveal) came with it
+   from what-we-do.css, scoped to .spec so nothing else on the page moves.
+   Without script, or with reduced motion, the frame is simply open and the
+   checks are simply there.
    ============================================================ */
+
+/* ---- Base, from what-we-do.css ---- */
+.spec { padding-block: clamp(64px, 11vh, 120px); background: var(--canvas); }
+.spec__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
+.spec__frame { aspect-ratio: 4 / 5; border-radius: var(--r-media); overflow: hidden; position: relative; max-width: 460px; background: var(--haze); }
+.spec__frame img { position: absolute; left: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; object-position: 50% 30%; will-change: transform; }
+.spec__copy { display: grid; gap: 1.2rem; }
+@media (max-width: 860px) { .spec__grid { grid-template-columns: minmax(0, 1fr); } .spec__frame { max-width: 360px; } }
+@media (max-width: 860px) { .spec { padding-bottom: 54px; } }
+
+.spec .wh2 {
+  margin: 0; font-family: var(--f-display); font-weight: 400;
+  font-size: clamp(2.4rem, 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
+  text-transform: uppercase; text-wrap: balance;
+}
+.spec .wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(.98rem, .9rem + .3vw, 1.12rem); line-height: 1.5; color: var(--ink); max-width: 44ch; }
+.spec .wp { margin: 0; color: var(--ink-soft); max-width: 60ch; line-height: 1.65; }
+.spec .wp + .wp { margin-top: 1em; }
+.spec .wide { max-width: 1280px; margin-inline: auto; padding-inline: var(--gutter); }
+.spec .kin-line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
+.spec .kin-line > span { display: block; will-change: transform, opacity; }
+.spec .is-split .kin-line > span { transform: translateY(108%); opacity: 0; }
+.spec .is-split.is-in .kin-line > span { animation: kinRise 1s var(--ease-out) both; animation-delay: calc(var(--i, 0) * .09s); }
+html.js .spec [data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity .8s var(--ease-out), transform .8s var(--ease-out); transition-delay: calc(var(--i, 0) * 80ms); }
+html.js .spec [data-reveal].is-in { opacity: 1; transform: none; }
+
+/* ---- On this page: first in main, so main already clears the header.
+   main has no side padding here (who-comes.css); .wide brings its own. ---- */
+.page--who .spec { padding-top: 0; }
 
 .spec__frame { background: var(--canvas); }
 .spec__zoom { position: absolute; inset: 0; overflow: hidden; transform-origin: 50% 40%; }
@@ -77,10 +107,10 @@ html.js .spec__checks.is-in li::before {
 }
 
 /* Phones (TJ, 11 Oct 2026): the title above the portrait (moved there by
-   what-we-do-specialist.js), its lines sliding in from the left one after
+   specialist.js), its lines sliding in from the left one after
    another; the portrait centred on the page, opening from the centre out. */
 /* Stacked and centred (TJ, 11 Oct 2026): one word a line (min-content, so the
-   line splitter in what-we-do.js finds three rows), each rising 12px and
+   line splitter in specialist.js finds three rows), each rising 12px and
    fading in, one after another, as the answer under "Who is it for?" does.
    The lead and paragraphs under the portrait centred; the checks as they were. */
 @keyframes specRise { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -99,6 +129,7 @@ html.js .spec__checks.is-in li::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html.js .spec [data-reveal] { transition: none; opacity: 1; transform: none; }
   .spec .is-split .kin-line > span, .spec .is-split.is-in .kin-line > span { transform: none; opacity: 1; animation: none; }
   html.js .spec__frame.is-armed { clip-path: none; }
   html.js .spec__frame.is-armed .spec__zoom { transform: none; }

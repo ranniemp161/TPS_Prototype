@@ -1394,3 +1394,98 @@ TJ chose to go back to the fixed line with stems, then: "the space is too high" 
 ## What We Do, Tailored For You: new bedroom photograph (TJ, 19 Oct 2026)
 
 - Replaced tailored-bedroom.webp with TPS images/tailored/bedroom-care-real-model-identity-v1.png, as assets/img/tailored-bedroom-v2.webp (1678 x 937, the source size). Alt text updated. Checked at 1440 and 390, no errors (lab/tailored-image-check.mjs). The old file stays in assets/img. Backup: lab/what-we-do.before-tailored-bedroom-v2.html.bak.
+
+## Your Postpartum Specialist moves to Who Comes Into Your Home (TJ, 19 Oct 2026)
+
+- The whole section (portrait, heading, lead, both paragraphs, the six checks, its opening and line animations) is now the hero of who-comes-into-your-home.html, first inside main. Everything that was on that page sits below it unchanged, for TJ to arrange later. (TJ)
+- What We Do now runs from the opening straight into Four Kinds of Care. (TJ)
+- what-we-do-specialist.css and .js became css/specialist.css and js/specialist.js, self contained: the .spec base rules left what-we-do.css, and the type, kinetic heading, reveal and parallax it borrowed from what-we-do.css and what-we-do.js came with it, scoped to .spec. The page now loads ScrollTrigger and sets html.js. The portrait loads eagerly with high priority as the hero image. (Claude)
+- Known for later: the old "Meet Your Specialist" block below uses the same portrait, and the page's old title and lede now sit under the hero.
+- Checked with lab/specialist-move-check.mjs and lab/specialist-move-join.mjs at 1440x900 and 390x844 from scroll zero, no errors, no sideways overflow. Backups: lab/*.before-specialist-move.*.bak.
+
+## Who Comes Into Your Home: the hero carries the page title (TJ, 19 Oct 2026)
+
+- The hero heading now reads "Who Comes Into Your Home" and is the page's h1. (TJ)
+- The two titles swapped places: "Your Postpartum Specialist" now sits where the old title was, above the lede, as an h2, so the page keeps a single h1. (Claude; TJ will arrange the lower page later)
+- Checked at 1440x900 and 390x844 (lab/specialist-move-check.mjs), no errors. Backup: lab/who-comes-into-your-home.before-title-swap.html.bak.
+
+## Who Comes Into Your Home: duplicate portrait removed (TJ, 19 Oct 2026)
+
+- The specialist portrait in the Meet Your Specialist block is removed; the hero keeps the only copy. Backup: lab/who-comes-into-your-home.before-remove-duplicate-photo.html.bak. (TJ)
+
+## Who Comes Into Your Home redesigned (TJ, 19 Oct 2026)
+
+TJ: the page was flat, placeholder like and incoherent, with too much text in the hero; make it feel like What We Do without copying it, smaller and simple to read. TJ approved Claude's plan and said build it whole, best assumptions, placeholders where needed.
+
+- Five beats, every word the client's (copy.json "specialist" and the FAQ's Our Specialists group). (plan Claude's, approved by TJ)
+  1. Hero: portrait with its opening, the title, "One dedicated person in your home, chosen with care." and one sentence, "The person who looks after you is the heart of your stay." The second paragraph and the checks list left the hero.
+  2. Statement: "You will have the same specialist throughout, so the care feels personal from the first day to the last." Instrument Serif, sentence case, alone on the aurora, words rising one after another.
+  3. Trained in our approach to recovery: her sentence held on the left; the photo stack on the right (hands-mother-baby, hands-treatments, hands-meals), each sliding up over the last as the one beneath settles back (scale .92, fade). First use of the photo stack from section 9. Glass captions use her own phrases: Mothers and newborns, Treatments and binding, Postpartum meals.
+  4. Before anyone joins us (this page's own moment): her sentence on the left; the six checks in large capitals on the right on one fine line that draws down with the scroll, each check lighting Ember as the line reaches it, then cooling to ink.
+  5. Before she arrives: s2-handoff wide with her sentence on frosted glass (glass sits below the photograph on phones), then three Our Specialists questions in the site's question rows, and a Frequently Asked Questions link to faqs.html#faq-specialists.
+- Removed: the September article (old title and lede, Meet Your Specialist, You Meet Her First, Vetting and Safety, If It Is Not the Right Match, both Notes for Amidat, the massage photograph). That copy was not the client's, and Vetting and Safety contradicted her verified words.
+- Placeholder: a comment in the markup marks where the specialist's name, background and years of experience go once Amidat answers SITE-PLAN questions 11 to 13. Nothing is shown until then.
+- Files: css/who-comes.css and js/who-comes.js (new); specialist.css now pads the hero for .page--who; the body carries page--who. No other page touched.
+- Checked with lab/who-redesign-check.mjs at 1440x900 and 390x844 from scroll zero with a real wheel: no errors, no sideways overflow, all six checks lit. Backups: lab/*.before-redesign.*.bak.
+
+## Who Comes Into Your Home: hands only, the script line, no dash labels (TJ, 19 Oct 2026)
+
+- Trained In Our Approach To Recovery: the three full figure photographs are now the hands crops from What We Do (hands-crop-mother-baby, hands-crop-treatments, hands-crop-meals). TJ: the full figure repeated three times looked unnatural; the hands only crops read far better.
+- The page's one Quentin line is her promise, "One dedicated person in your home, chosen with care.", in Ember under the hero title, in place of the Montserrat lead. (TJ asked for the script; the placement is Claude's)
+- The small dash labels (Trained in our approach to recovery, Before anyone joins us, Our Specialists) are gone. TJ: they read as AI. They are now capitals in Instrument Serif, one size below the hero, each line rising in as the hero's does (who-comes.js). The MaisonFav dash label from section 9 should not be used again on this site.
+- Checked with lab/who-redesign-check.mjs at 1440x900 and 390x844, no errors. Backups: lab/*.before-hands-script.*.bak.
+
+## Who Comes Into Your Home hero: title, subheader, script, three points (TJ, 20 Oct 2026)
+
+- Order (TJ): the title "Who Comes Into Your Home" as it was; a subheader in Montserrat that answers it, "One dedicated person in your home"; "Chosen with care" under it in Quentin, Ember; then three key points.
+- The three points are placeholders ("Placeholder one, two, three") in the hero's existing check style (small spaced capitals on a hairline that draws in Ember), three across on desktop, stacked and centred on phones. TJ will settle the wording; his examples were a background check and postpartum trained.
+- Removed by the new structure: "The person who looks after you is the heart of your stay."
+- Checked at 1440x900 and 390x844 (lab/specialist-move-check.mjs), no errors. Backups: lab/*.before-hero-structure.*.bak.
+
+## Who Comes Into Your Home hero: the three points (TJ, 20 Oct 2026)
+
+- Enhanced DBS checked; Trained in postpartum recovery; Infant first aid trained. (TJ) DBS and infant first aid are Ami's own claims (copy.json, the specialist paragraph and the checks FAQ). "Trained in postpartum recovery" is TJ's wording; her nearest phrases are "trained in our approach to recovery" and "experienced in postpartum care".
+- One point a line on desktop as on phones; three across wrapped them onto two or three lines. (Claude)
+- Backup: lab/who-comes-into-your-home.before-hero-points.html.bak.
+
+## Who Comes Into Your Home hero: subheader reworded (TJ, 20 Oct 2026)
+
+- "One dedicated person in your home" is now "A dedicated postpartum specialist". (TJ) Backup: lab/who-comes-into-your-home.before-subheader.html.bak.
+
+## Who Comes Into Your Home hero: subheader in capitals, Quentin larger (TJ, 20 Oct 2026)
+
+- "A dedicated postpartum specialist" (.wc-sub) is set in capitals, .06em tracking. "Chosen with care" (.wc-script) is 20 percent larger at every width: clamp(2.28rem, 3.84vw, 3.36rem), was clamp(1.9rem, 3.2vw, 2.8rem); 53.76px at 1440, 36.48px at 390. Checked with lab/who-hero-check.mjs, no errors. Backup: lab/who-comes.before-sub-script.css.bak.
+- The three points (.wc-points) are 15 percent larger on this page only (TJ, 20 Oct 2026): 12.88px at 1440 (was 11.2px), 14.94px at 390 (was 13px). The shared .spec__checks on What We Do is unchanged. Backup: lab/who-comes.before-points-size.css.bak.
+- Third point now reads "Infant first aid qualified" (was "trained", to avoid repeating point two) (TJ, 20 Oct 2026). Backup: lab/who.before-first-aid-qualified.html.bak.
+- Phones: the hero fits one screen at scroll zero on any phone (TJ, 20 Oct 2026). who-comes.js measures how far the last point runs past the screen (keeping 16px clear) and takes it off the portrait's height; the portrait keeps its natural 4:5 height when everything already fits. Re-fitted on a width change or a height change of 100px or more. Floor 60px. Measured (lab/who-fold-check.mjs): last point ends 15 to 16px above the foot at 390x844, 375x667, 360x780 and 430x932; portrait about 309px tall at 390x844, about 140px at 375x667. Desktop unaffected. Backup: lab/who-comes.before-fold-fit.js.bak.
+
+## Who Comes Into Your Home: header clear at the top (TJ, 20 Oct 2026)
+
+- The header's glass strip is hidden at scroll zero so the header sits on the hero's aurora as one surface; it fades in when the header folds, as on What We Do and the FAQ page (who-comes.css, .page--who .nav--glass). The aurora behind hero and statement (.wc-top) was added in a parallel session the same day.
+
+## Who Comes Into Your Home: What It Is Like To Have Her In Your Home (TJ, 20 Oct 2026)
+
+- TJ: "You will have the same specialist throughout, so the care feels personal from the first day to the last" did not sound genuine; the section should help a mother decide whether the service is right for her. The statement and the Trained In Our Approach photo stack are replaced by one section. (TJ)
+- Left, held: the heading "What It Is Like To Have Her In Your Home" and her trained paragraph. Right: four facts between hairlines, each rising in: Her hours; Where she stays; You meet her first; If anything changes. The four short headings and the section heading are Claude's and need Ami's sign off; every line under them is hers verbatim from the FAQ's Our Specialists answers. "We always aim to keep the same specialist with you" is her own sentence, from the extend your programme answer; it is the honest form of the line TJ dropped. (plan Claude's, approved by TJ)
+- The handoff photograph with its glass sentence moved up to close this section. The three hands photographs are gone from this page, so it no longer repeats What We Do.
+- The question rows: the three old questions are now answered above, so they became Who are your specialists?, How does 24 hour care work? and Can I extend my programme after it has started? (all FAQ page copy). (Claude)
+- The aurora (.wc-top) now covers the hero only.
+- Backups: lab/*.before-life-section.*.bak.
+
+## Who Comes Into Your Home: One specialist, yours alone (TJ, 20 Oct 2026)
+
+- A fifth fact, first in the list: "One specialist, yours alone". "On live in programmes, your specialist is reserved for your family alone for the whole stay. You will know who is arriving before your stay begins, and you will have the same specialist throughout." (TJ)
+- Sources: the first sentence is from the Build 10 spec (new md for build your own.md, the live in reserve note), not Ami's verified copy, so it needs her sign off with the headings. The second is Ami's specialist paragraph without its ending ("so the care feels personal from the first day to the last"), which TJ dropped as not genuine.
+- If anything changes no longer opens with "We always aim to keep the same specialist with you", so the promise is not said twice.
+- Backup: lab/who-comes-into-your-home.before-one-specialist.html.bak.
+
+## What It Is Like section: faint photograph behind it (TJ, 20 Oct 2026)
+
+- New image: TPS images/tailored/living-room-blonde-mother-specialist_from-IMG_9551_v1.png (Nano Banana Pro edit on WaveSpeed, $0.13, TJ's go): IMG_9551's living room, the mother recast as an average blonde new mother, the carer replaced by the site's specialist (bareheaded, pink uniform), 16:9. Site copy: assets/img/living-room-specialist-mother.webp (2400 x 1340).
+- It sits behind the whole What It Is Like section, full width (TJ): held on screen while the facts scroll (sticky, one window tall), opacity .16 (.14 on phones), a 1.5px blur, dissolved into the canvas over the top 220px and foot 260px. Text unchanged, in ink. (values Claude's)
+- Backups: lab/*.before-life-bg.*.bak.
+
+## What It Is Like: the handoff sentence under the photograph (TJ, 20 Oct 2026)
+
+- "Your specialist takes time to understand your home..." is no longer on frosted glass over the handoff photograph. It sits below it as plain text and rises in (28px) as it arrives. (TJ) Backup: lab/who-comes.before-handoff-caption.css.bak.
+- Then (TJ, 20 Oct 2026): the sentence is centred, 86 percent of the photograph's width (92 on phones), and 15 percent larger: clamp(1.2075rem, 1.15rem + .345vw, 1.38rem). Backup: lab/who-comes.before-handoff-centre.css.bak.

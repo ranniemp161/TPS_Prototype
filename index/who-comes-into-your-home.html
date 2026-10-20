@@ -21,9 +21,12 @@
      inner-pages.css adds only what an empty page needs and overrides nothing. -->
 <link rel="stylesheet" href="css/site.css" />
 <link rel="stylesheet" href="css/inner-pages.css" />
+<link rel="stylesheet" href="css/specialist.css" />
+<link rel="stylesheet" href="css/who-comes.css" />
 <link rel="stylesheet" href="css/footer.css" />
+<script>document.documentElement.classList.add('js');</script>
 </head>
-<body class="page--article">
+<body class="page--article page--who">
 
 <a class="skip" href="#content">Skip to content</a>
 
@@ -116,71 +119,139 @@
 <div class="veil" data-veil hidden></div>
 
 <main id="content" tabindex="-1">
-  <article class="article">
-    <h1 class="article__title" data-section="specialist-introduction" data-section-name="Specialist Introduction">Who Comes Into Your Home</h1>
-    <p class="article__lede">
-      You are trusting someone to live in your home during one of the
-      most vulnerable periods of your life. This page sets out who
-      that person is, and the standard she is held to.
-    </p>
+  <!-- ============ Who Comes Into Your Home, redesigned (TJ, 19 Oct 2026) ============
+       Five beats, every word the client's (copy.json "specialist" and the FAQ's
+       Our Specialists group): the hero, one statement, what she is trained in
+       (the photo stack), the checks on one drawn line (this page's own moment),
+       and before she arrives with three questions. who-comes.css / who-comes.js. -->
 
-    <section class="block" data-section="meet-specialist" data-section-name="Meet Your Specialist">
-      <img class="block__image" src="../assets/img/specialist-portrait.webp" alt="A postpartum specialist in her pink uniform, smiling, standing in a sunlit living room" width="1200" height="1490" loading="lazy" style="height: auto; object-position: 50% 55%" />
-      <h2 class="block__heading">Meet Your Specialist</h2>
-      <p class="block__text">
-        Your specialist is trained in both postpartum care and beauty
-        therapy, so one person provides the care a maternity nurse and
-        a separate therapist would otherwise divide between them.
-      </p>
-      <div class="block__note">
-        <p class="block__note-label">Note for Amidat</p>
-        <p class="block__note-text">
-          A real name, background, photograph and years of experience
-          are needed for this section before it can go live. Whether
-          you are currently the sole specialist, or whether there is a
-          wider team, should also be confirmed, since it changes how
-          this page is written.
-        </p>
+  <!-- ============ SECTION: hero ============
+       The portrait opens from a narrow slot to the full frame (specialist.js).
+       Lighter than before: the title, her promise and one sentence. -->
+  <!-- One aurora behind the hero and the statement (TJ, 20 Oct 2026), reaching up
+       under the header, so the top of the page is one blended ground with no line
+       between the hero and the statement. -->
+  <div class="wc-top">
+  <div class="aurora wc-top__aurora" aria-hidden="true"><span class="aurora__field"></span></div>
+  <section class="spec" id="specialist" data-section="hero" data-section-name="Hero">
+    <div class="wide spec__grid">
+      <div class="spec__frame" data-spec-frame>
+        <div class="spec__zoom" data-spec-zoom>
+          <img src="../assets/img/specialist-portrait.webp" alt="A postpartum specialist in her pink uniform, smiling, standing in a sunlit living room" width="1200" height="1490" fetchpriority="high" decoding="async" data-par="4" />
+        </div>
       </div>
-    </section>
-
-    <section class="block" data-section="meet-first" data-section-name="You Meet Her First">
-      <img class="block__image" src="../assets/img/s2-handoff.webp" alt="A specialist passing the swaddled baby to the mother resting in bed" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">You Meet Her First</h2>
-      <p class="block__text">
-        You are introduced to your specialist on your consultation
-        call, before you commit to a booking. Nothing about who comes
-        into your home is left until the day she arrives.
-      </p>
-    </section>
-
-    <section class="block" data-section="vetting-safety" data-section-name="Vetting and Safety">
-      <img class="block__image" src="../assets/img/specialist-standards.webp" alt="A specialist's hands performing a postpartum massage" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">Vetting and Safety</h2>
-      <p class="block__text">
-        Every specialist holds an enhanced DBS check, is trained in
-        paediatric first aid, and has references that are checked
-        before she joins the team. The Postpartum Suite carries full
-        public liability and professional indemnity insurance.
-      </p>
-      <div class="block__note">
-        <p class="block__note-label">Note for Amidat</p>
-        <p class="block__note-text">
-          Each of these must be confirmed as currently true before
-          this page is published. Any line that does not apply should
-          be removed rather than left as written.
-        </p>
+      <div class="spec__copy" data-reveal>
+        <h1 class="wh2" data-kin>Who Comes Into Your Home</h1>
+        <!-- Hero structure (TJ, 20 Oct 2026): the title, a subheader that answers
+             it, her "chosen with care" in Quentin, then three key points.
+             The three points chosen by TJ, 20 Oct 2026. -->
+        <p class="wc-sub">A dedicated postpartum specialist</p>
+        <p class="wc-script">Chosen with care</p>
+        <ul class="spec__checks wc-points" data-spec-checks>
+          <li>Enhanced DBS checked</li>
+          <li>Trained in postpartum recovery</li>
+          <li>Infant first aid qualified</li>
+        </ul>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="block" data-section="changing-specialist" data-section-name="If It Is Not the Right Match">
-      <h2 class="block__heading">If It Is Not the Right Match</h2>
-      <p class="block__text">
-        If your specialist is not the right fit for your household,
-        this can be discussed and addressed with us directly.
-      </p>
-    </section>
-  </article>
+  </div>
+
+  <!-- ============ SECTION: what it is like to have her in your home (TJ, 20 Oct 2026) ============
+       Replaces the statement ("You will have the same specialist throughout",
+       TJ: it did not sound genuine) and the trained in our approach photo stack.
+       Her paragraph and the heading hold on the left; four facts on the right,
+       each rising in as it arrives. The four short headings are Claude's, for
+       Ami to sign off; every line under them is hers (copy.json and the FAQ's
+       Our Specialists group). Then the handoff photograph with her sentence. -->
+  <section class="wc-tr wc-life" data-section="life" data-section-name="What It Is Like To Have Her In Your Home">
+    <!-- Faint background (TJ, 20 Oct 2026): the living room photograph from
+         IMG_9551 (the site's specialist with a new mother), full width behind
+         the whole section, held on screen while the facts scroll over it and
+         dissolved into the canvas at the top and foot. -->
+    <div class="wc-life__bg" aria-hidden="true">
+      <div class="wc-life__bg-hold"><img src="../assets/img/living-room-specialist-mother.webp" alt="" width="2400" height="1340" loading="lazy" decoding="async" /></div>
+    </div>
+    <div class="wide wc-tr__grid">
+      <div class="wc-tr__copy" data-reveal>
+        <h2 class="wh2 wc-h2" data-kin>What It Is Like To Have Her In Your Home</h2>
+        <p class="wp">Every specialist at The Postpartum Suite has extensive experience in caring for mothers and newborns and is trained in our approach to recovery, from treatments and binding to the preparation of postpartum meals.</p>
+      </div>
+      <ol class="wc-facts">
+        <li data-reveal>
+          <h3 class="wc-facts__head">One specialist, yours alone</h3>
+          <p class="wp">On live in programmes, your specialist is reserved for your family alone for the whole stay. You will know who is arriving before your stay begins, and you will have the same specialist throughout.</p>
+        </li>
+        <li data-reveal>
+          <h3 class="wc-facts__head">Her hours</h3>
+          <p class="wp">Your specialist cares for you and your baby from 7am to 7pm, including a break during the day that is timed around you and your baby. Care continues at weekends according to your agreed schedule.</p>
+        </li>
+        <li data-reveal>
+          <h3 class="wc-facts__head">Where she stays</h3>
+          <p class="wp">With live in care, your specialist stays in your home for the length of your programme. A private room should be available for her. With live out care, she stays nearby and arrives each morning at 7am. We recommend live in care, as your specialist becomes a natural part of your household and its rhythm.</p>
+        </li>
+        <li data-reveal>
+          <h3 class="wc-facts__head">You meet her first</h3>
+          <p class="wp">You are welcome to share any preferences during your consultation. Where possible, we can also arrange an introductory call before your care begins.</p>
+        </li>
+        <li data-reveal>
+          <h3 class="wc-facts__head">If anything changes</h3>
+          <p class="wp">If your specialist becomes unwell, we arrange another fully trained specialist to continue your care, and we contact you promptly to confirm the arrangements.</p>
+        </li>
+      </ol>
+    </div>
+    <div class="wide">
+      <div class="wc-bf__media wc-life__media">
+        <div class="wc-bf__frame"><img src="../assets/img/s2-handoff.webp" alt="A specialist passing the swaddled baby to the mother resting in bed" width="2000" height="1116" loading="lazy" decoding="async" data-wc-par /></div>
+        <div class="wc-bf__glass" data-reveal>
+          <p>Your specialist takes time to understand your home, your routine and the kind of support you want. You will know who is arriving before your stay begins.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: the checks, this page's own moment ============
+       One fine line draws down as you scroll. Each check lights in Ember as the
+       line reaches it, then cools to ink. -->
+  <section class="wc-ck" data-section="checks" data-section-name="Before Anyone Joins Us">
+    <div class="wide wc-ck__grid">
+      <div class="wc-ck__head" data-reveal>
+        <h2 class="wh2 wc-h2" data-kin>Before Anyone Joins Us</h2>
+        <p class="wp">Before anyone joins us, they go through an enhanced DBS check, reference checks and an interview process. All of our specialists are fully insured and hold infant first aid and safeguarding training.</p>
+      </div>
+      <div class="wc-ck__wrap" data-wc-checks>
+        <span class="wc-ck__line" aria-hidden="true"><span data-wc-line></span></span>
+        <ul class="wc-ck__list">
+          <li data-wc-check>Enhanced DBS check</li>
+          <li data-wc-check>Reference checks</li>
+          <li data-wc-check>Interview process</li>
+          <li data-wc-check>Fully insured</li>
+          <li data-wc-check>Infant first aid</li>
+          <li data-wc-check>Safeguarding training</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SECTION: questions ============
+       Three from the FAQ page that this page does not
+       already answer (TJ, 20 Oct 2026: the photograph moved up). -->
+  <section class="wc-bf" data-section="questions" data-section-name="Our Specialists">
+    <div class="wide">
+      <div class="wc-qs" data-reveal>
+        <h2 class="wh2 wc-h2" data-kin>Our Specialists</h2>
+        <details class="q"><summary>Who are your specialists?</summary><div><p>Our specialists are experienced in postpartum care, postpartum treatments, traditional confinement care, feeding support and newborn care. Each has extensive experience and takes great pride in her work. Every specialist is carefully selected for her experience, qualifications and suitability, and all work to the standards of care and service set by The Postpartum Suite.</p></div></details>
+        <details class="q"><summary>How does 24 hour care work?</summary><div><p>Where 24 hour care has been arranged, support follows an agreed rota that gives your specialist appropriate rest while making sure care is available throughout. We agree the arrangement with you before your programme begins.</p></div></details>
+        <details class="q"><summary>Can I extend my programme after it has started?</summary><div><p>Yes, subject to availability. This includes moving from a 14 day programme to 30 days or longer. We recommend letting us know as early as possible. We always aim to keep the same specialist with you, but we cannot guarantee her availability for an extended period.</p></div></details>
+        <p class="wc-qs__more"><a class="cta-link" href="faqs.html#faq-specialists">Frequently Asked Questions</a></p>
+      </div>
+      <!-- Placeholder (Claude, 19 Oct 2026): the specialist's name, background
+           and years of experience belong here once Amidat confirms them
+           (SITE-PLAN questions 11 to 13). Nothing is shown until then. -->
+    </div>
+  </section>
+
 </main>
 
 <footer class="sf" data-section="site-footer" data-section-name="Footer">
@@ -230,7 +301,10 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="js/inner-nav.js"></script>
+<script src="js/specialist.js"></script>
+<script src="js/who-comes.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
 </body>

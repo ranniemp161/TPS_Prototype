@@ -153,12 +153,7 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 }
 
 /* ---------- 6. Specialist ---------- */
-.spec { padding-block: clamp(64px, 11vh, 120px); background: var(--canvas); }
-.spec__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
-.spec__frame { aspect-ratio: 4 / 5; border-radius: var(--r-media); overflow: hidden; position: relative; max-width: 460px; background: var(--haze); }
-.spec__frame img { position: absolute; left: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; object-position: 50% 30%; will-change: transform; }
-.spec__copy { display: grid; gap: 1.2rem; }
-@media (max-width: 860px) { .spec__grid { grid-template-columns: minmax(0, 1fr); } .spec__frame { max-width: 360px; } }
+/* .spec moved with the section to specialist.css (TJ, 19 Oct 2026). */
 
 /* ---------- 9. Tailored to you: rebuilt 9 Oct 2026 (TJ) in what-we-do-tailored.css ---------- */
 
@@ -363,8 +358,3 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
   .page--faqs .faq__weather-field::after { animation: none; }
 }
 
-/* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 7): the specialist section ended in about
-   90px of empty canvas before the Four Kinds' first picture. */
-@media (max-width: 860px) {
-  .spec { padding-bottom: 54px; }
-}
