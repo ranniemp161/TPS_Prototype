@@ -528,7 +528,7 @@
       return { full: P.calculate(full).fee, floor: P.calculate(bare).fee };
     }
 
-    var WORDS = { 5: 'five', 7: 'seven', 14: 'fourteen', 30: 'thirty' };
+    var WORDS = { 7: 'seven', 14: 'fourteen', 30: 'thirty' };
     function word(d) { return WORDS[d] || String(d); }
     var COUNTS = ['none', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
 
@@ -568,7 +568,7 @@
     }
 
     function recommend(v, sel) {
-      var lengths = [30, 14, 7, 5];
+      var lengths = [30, 14, 7];
       var format = sel.format;
       var completeFit = null, shapedFit = null;
       for (var i = 0; i < lengths.length; i++) {
@@ -591,9 +591,9 @@
         body = 'It starts at ' + P.money(shapedFit.fee) + ' indicative for the period, and we build up from there with you.';
         action = { days: shapedFit.days, complete: false, label: 'Start from ' + word(shapedFit.days) + ' days' };
       } else {
-        var five = bracket(5, format);
+        var seven = bracket(7, format);
         head = 'That sits below where our shortest programme starts.';
-        body = 'Five days begins at ' + P.money(five.floor) + ' indicative, because your specialist is reserved for your family for the whole of it. Bring the figure to your call and we will talk through what is possible.';
+        body = 'Seven days begins at ' + P.money(seven.floor) + ' indicative, because your specialist is reserved for your family for the whole of it. Bring the figure to your call and we will talk through what is possible.';
       }
       if (completeFit && shapedFit && shapedFit.days > completeFit.days) {
         alt = 'Or ' + word(shapedFit.days) + ' days, shaped to fit. It starts at ' + P.money(shapedFit.fee) + ' indicative and we build up from there with you.';

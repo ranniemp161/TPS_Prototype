@@ -22,7 +22,7 @@ const require = createRequire(import.meta.url);
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const P = require(path.join(root, 'index', 'js', 'build-your-programme-pricing.js'));
 
-const LENGTHS = [5, 7, 14, 30];
+const LENGTHS = [7, 14, 30];
 const EXTRAS = P.COUNTED;
 let failures = 0;
 function check(name, got, want) {
@@ -42,7 +42,6 @@ for (const d of LENGTHS) {
 
 console.log('\nSpec section 5, one change from complete');
 const T = {
-  5:  { night: 2016, out: 2145, nomeals: 1811, nomassage: 1802, noextras: 1868 },
   7:  { night: 2528, out: 2705, nomeals: 2245, nomassage: 2245, noextras: 2369 },
   14: { night: 4579, out: 4915, nomeals: 4045, nomassage: 4045, noextras: 4247 },
   30: { night: 6596, out: 7299, nomeals: 5750, nomassage: 5750, noextras: 5980 }
@@ -56,12 +55,12 @@ for (const d of LENGTHS) {
 }
 
 console.log('\nSpec section 5, fewer massages');
-[[5, 's2', 1931], [7, 's3', 2431], [7, 's2', 2367], [14, 'w3', 4369], [14, 'w2', 4243], [30, 'w3', 6095], [30, 'w2', 5851]]
+[[7, 's3', 2431], [7, 's2', 2367], [14, 'w3', 4369], [14, 'w2', 4243], [30, 'w3', 6095], [30, 'w2', 5851]]
   .forEach(([d, r, want]) => check(`${d} days ${P.rhythmTitle(r)}`, fee({ ...complete(d), rhythm: r }), want));
 
 console.log('\nSpec section 5, everything stripped out');
 const stripped = d => noExtras({ ...complete(d), meals: false, massage: false });
-const S = { 5: [1795, 1945], 7: [2245, 2455], 14: [4045, 4465], 30: [5750, 6650] };
+const S = { 7: [2245, 2455], 14: [4045, 4465], 30: [5750, 6650] };
 for (const d of LENGTHS) {
   check(`${d} stripped, live-in`, fee(stripped(d)), S[d][0]);
   check(`${d} stripped, daytime in-home`, fee({ ...stripped(d), format: 'out' }), S[d][1]);
@@ -105,7 +104,7 @@ for (const sel of every()) {
   // daytime in-home never cheaper than live-in
   if (sel.format === 'out' && P.calculate({ ...sel, format: 'in' }).fee > r + 0.5) bad.outCheaper++;
 }
-check('combinations swept (the spec tested 2,880)', seen, 2880);
+check('combinations swept (the spec tested 2,304 once five days was withdrawn)', seen, 2304);
 check('no fee is zero, negative or NaN', bad.finite, 0);
 check('no fee below the floor plus supplement', bad.floor, 0);
 check('removing anything never raises the fee', bad.removal, 0);

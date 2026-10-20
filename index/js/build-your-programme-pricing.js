@@ -27,19 +27,19 @@ var TPS_PRICING = (function () {
     introHeldFor: '2026',
     consultationUrl: 'https://calendly.com/thepostpartumsuite/30min',
 
-    fullPrice:  { 5: 2495, 7: 2995, 14: 4995, 30: 6995 },
-    introPrice: { 5: 1995, 7: 2495, 14: 4495, 30: 6399 },
+    fullPrice:  { 7: 2995, 14: 4995, 30: 6995 },
+    introPrice: { 7: 2495, 14: 4495, 30: 6399 },
 
     // Floor a built programme cannot go below, on the introductory basis.
-    minimumFee: { 5: 1795, 7: 2245, 14: 4045, 30: 5750 },
+    minimumFee: { 7: 2245, 14: 4045, 30: 5750 },
 
     nightCareFor30: 500,        // across 30 nights, scaled by length
     liveOutDailySupplement: 30  // travel and accommodation, per day
   };
 
   // Solved so that each complete programme equals its published price.
-  var RESERVATION  = { 5: 1680.80, 7: 1980.80, 14: 3151.00, 30: 3288.10 };
-  var DURATION_ADJ = { 5: 1.15, 7: 1.10, 14: 1.00, 30: 0.95 };
+  var RESERVATION  = { 7: 1980.80, 14: 3151.00, 30: 3288.10 };
+  var DURATION_ADJ = { 7: 1.10, 14: 1.00, 30: 0.95 };
 
   var RATE = {
     breakfast: 10, lunch: 14, dinner: 16, bath: 14, grocery: 8,
@@ -50,7 +50,6 @@ var TPS_PRICING = (function () {
   // The treatments the client can tick off, with their fixed counts per length.
   var COUNTED = ['scrub', 'reflex', 'facial', 'herbfoot', 'thermal'];
   var STD = {
-    5:  { scrub: 1, reflex: 1, facial: 1, herbfoot: 1, thermal: 1 },
     7:  { scrub: 1, reflex: 1, facial: 1, herbfoot: 1, thermal: 1 },
     14: { scrub: 2, reflex: 2, facial: 2, herbfoot: 2, thermal: 2 },
     30: { scrub: 2, reflex: 4, facial: 4, herbfoot: 4, thermal: 4 }
@@ -59,7 +58,6 @@ var TPS_PRICING = (function () {
   // Massage options per length. sN is N sessions in total; wN is N a week,
   // rounded up across the length. The first option is the standard.
   var RHYTHMS = {
-    5:  ['s3', 's2'],
     7:  ['s4', 's3', 's2'],
     14: ['w4', 'w3', 'w2'],
     30: ['w4', 'w3', 'w2']

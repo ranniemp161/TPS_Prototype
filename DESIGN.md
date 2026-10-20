@@ -1489,3 +1489,15 @@ TJ: the page was flat, placeholder like and incoherent, with too much text in th
 
 - "Your specialist takes time to understand your home..." is no longer on frosted glass over the handoff photograph. It sits below it as plain text and rises in (28px) as it arrives. (TJ) Backup: lab/who-comes.before-handoff-caption.css.bak.
 - Then (TJ, 20 Oct 2026): the sentence is centred, 86 percent of the photograph's width (92 on phones), and 15 percent larger: clamp(1.2075rem, 1.15rem + .345vw, 1.38rem). Backup: lab/who-comes.before-handoff-centre.css.bak.
+
+## Five day programme withdrawn (Ami via TJ, 20 Oct 2026)
+
+Ami no longer offers five days. Seven days is the shortest programme; 7, 14 and 30 keep their prices, counts and behaviour unchanged. Every trace of five days is removed, not greyed out. Fable 5.1 planned and verified; Sonnet did the edits in three parallel builds; Haiku ran the inventory.
+
+- Bespoke Programmes: key 5 removed from every engine table (build-your-programme-pricing.js); the 5 days radio removed and 7 days is the default and first paint (£2,495, "Your 7-day programme includes 4 massages", "7 days, laid out", "This is our complete 7-day programme"); the budget recommender searches 30, 14, 7 and its below the floor message now reads "Seven days begins at ..."; meta "from 7 to 30 days". The spec (new md for build your own.md) loses its five day rows and gets a withdrawal line under 4.1. lab/programme-check.mjs and lab/bespoke-check.mjs rewritten for three lengths; both pass (2304 combinations, was 2880).
+- What We Do, Tailored For You: three stops. 7 at the start of the line, 14 at the exact centre (keeping the rule that the circle drops down the page's centre), 30 at the end: --pos: calc(0.071429 * clamp(0, var(--d) - 7, 7) + 0.03125 * max(0, var(--d) - 14)), inverse in what-we-do-tailored.js. STOPS [7, 14, 30], MILESTONES [0, 1/2, 1], the circle rests on 7 below a quarter, 14 to three quarters, then 30. The ledger opens on 7 days, 21 meals, 7 baths, 7 binds. The 7 label is left aligned at the start as the 30 is right aligned at the end. The opening's list reads "7, 14 or 30 day programmes" and the read more "7, 14 or 30 days".
+- Home: meta and og "from seven days to thirty", lede "for 7 to 30 days", "Stay with us for 7, 14 or 30 days"; the programmes gallery has three items (01 to 03) and opens on 7 days of care with bind.webp.
+- Programmes page: "three programme lengths, from seven to thirty days", "Three Lengths of Care", the 5 days price line removed, "On the seven and fourteen day programmes ... included four times across seven days", meta "The three lengths".
+- FAQ: "We offer 7, 14 and 30 day programmes."
+- Not changed: SITE-PLAN.md's pricing arguments still cite five days (planning notes, not the site); old dated DESIGN.md sections above keep their five day history.
+- Checked by screenshot at 1440x900 and 390x844 on all four pages, no errors (lab/nofive-shots.mjs, lab/nofive-home-shots.mjs, lab/length-shot-nofive.mjs). Backups: lab/*.before-no-five.*.bak.
