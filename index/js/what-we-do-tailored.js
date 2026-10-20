@@ -3,22 +3,22 @@
    Desktop: one scrubbed progress over a held (sticky) stage, as A Day With Us.
      0.00 to 0.20  the photograph closes from the full screen onto the slot,
                    the title over it gives way, the glass card lifts in
-     0.24 to 0.34  the line draws from nothing to 5 days, led by the circle
-     0.34 to 0.90  5, 7, 14, 30: the circle travels and rests at each stop
+     0.24 to 0.34  the line draws from nothing to 7 days, led by the circle
+     0.34 to 0.90  7, 14, 30: the circle travels and rests at each stop
                    while the figures count (the ledger in what-we-do.js)
    Phones: the photograph closes onto its frame as it scrolls in, the glass
    card joined to its foot (Read more lifts the glass up into it); the line
    runs across, as on desktop, and is tapped, not scrolled (TJ, 12 Oct 2026,
-   swiping does not work well on a phone): a tap on 5, 7, 14 or 30, or on the
+   swiping does not work well on a phone): a tap on 7, 14 or 30, or on the
    line, slides the circle there on the housekeeping rooms' easing, and the
-   ledger in what-we-do.js counts the figures. It rests on the 5 day stay.
+   ledger in what-we-do.js counts the figures. It rests on the 7 day stay.
 
    Then the sun, desktop only (TJ, 12 Oct 2026: removed on phones): once the
    line is complete and the section is leaving, the 14 day circle lifts off
    the line, which has it at the page's centre, and drifts straight down into
    Day and Night, growing as it goes, and lands on the sun at the moment the
    clock begins, where the sun takes over.
-   Reduced motion: the line complete at five days, no flight. */
+   Reduced motion: the line complete at seven days, no flight. */
 (function () {
   'use strict';
   var sec = document.querySelector('[data-ty]');
@@ -37,7 +37,7 @@
   var days = sec.querySelector('.ty__days');
   var tip = sec.querySelector('[data-ty-tip]');
   var stop14 = sec.querySelector('.ty__stop[style*="--at: 14"]');
-  var STOPS = [5, 7, 14, 30], MILESTONES = [0, 1 / 3, 2 / 3, 1];
+  var STOPS = [7, 14, 30], MILESTONES = [0, 1 / 2, 1];
   var PH = 0.2, L0 = 0.24, L1 = 0.34, L2 = 0.9;
   var lastW = 0, lastH = 0, phone = false;
   // One driver per mode, run every frame. Positions are read live from the
@@ -53,14 +53,14 @@
   // Desktop: the circle rests at each stop, easing between them.
   function dayAt(q) {
     if (q >= 1) return 30;
-    var seg = Math.min(2, Math.floor(q * 3)), local = q * 3 - seg;
+    var seg = Math.min(1, Math.floor(q * 2)), local = q * 2 - seg;
     return STOPS[seg] + (STOPS[seg + 1] - STOPS[seg]) * smooth(local);
   }
-  function activeAt(q) { return q < 1 / 6 ? 5 : q < 1 / 2 ? 7 : q < 5 / 6 ? 14 : 30; }
+  function activeAt(q) { return q < 1 / 4 ? 7 : q < 3 / 4 ? 14 : 30; }
 
   function setDays(d, active) {
     var L = ledger(); if (!L) return;
-    if (d < 5) L.arrive(d); else L.scrub(d, active);
+    if (d < 7) L.arrive(d); else L.scrub(d, active);
   }
 
   function teardown() {
@@ -167,17 +167,17 @@
       sec.style.setProperty('--ty-ci', smooth((p - PH * 0.5) / (PH * 0.45)).toFixed(3));
       sec.style.setProperty('--ty-di', smooth((p - PH * 0.8) / (PH * 0.4)).toFixed(3));
       if (keepDays) return;
-      if (p < L0) setDays(0, 5);
-      else if (p < L1) setDays(5 * (p - L0) / (L1 - L0), 5);
+      if (p < L0) setDays(0, 7);
+      else if (p < L1) setDays(7 * (p - L0) / (L1 - L0), 7);
       else { var q = clamp((p - L1) / (L2 - L1), 0, 1); setDays(dayAt(q), activeAt(q)); }
     }
 
     if (calm) {
       // Finished from the start: the photograph in its slot, the title on its line,
-      // the card and the line in place, resting on 5 days; a tap on a day, on the
+      // the card and the line in place, resting on 7 days; a tap on a day, on the
       // line or a drag of the circle moves it (the ledger in what-we-do.js).
       render(1, true);
-      var L = ledger(); if (L) L.arrive(5);
+      var L = ledger(); if (L) L.arrive(7);
       var head = sec.querySelector('.ty__head'), hH = head.offsetHeight;
       var ro = new ResizeObserver(function () {
         if (Math.abs(head.offsetHeight - hH) < 1) return;
@@ -211,7 +211,7 @@
   /* Phones: the photograph closes as it scrolls in; the line is the ledger's own,
      driven by taps (what-we-do.js: a tap on a day, a tap on the line or a drag of
      the circle slides it there over 650ms on --tease and counts the figures). It
-     rests on the 5 day stay, so the figures never read zero (MOBILE-PLAN item 6).
+     rests on the 7 day stay, so the figures never read zero (MOBILE-PLAN item 6).
      Nothing drops from it into Day and Night on phones (TJ, 12 Oct 2026). */
   function flow() {
     sec.classList.add('is-flow');
@@ -220,7 +220,7 @@
     // the screen and at 12 percent.
     var livePh = function () { var vh = window.innerHeight; return clamp((0.85 * vh - photo.getBoundingClientRect().top) / (0.73 * vh), 0, 1); };
     var a = livePh(), shownA = -1;
-    var L0 = ledger(); if (L0) L0.arrive(5);
+    var L0 = ledger(); if (L0) L0.arrive(7);
     var paint = function () {
       if (a !== shownA) {
         var e = smooth(a);
@@ -310,7 +310,7 @@
     teardown();
     lastW = window.innerWidth; lastH = window.innerHeight;
     phone = window.innerWidth <= 860;
-    if (reduced) { var L = ledger(); if (L) L.arrive(5); return; }
+    if (reduced) { var L = ledger(); if (L) L.arrive(7); return; }
     if (phone) flow(); else desktop();
   }
 

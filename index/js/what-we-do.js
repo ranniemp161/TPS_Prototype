@@ -168,11 +168,11 @@
     var roots = [].slice.call(document.querySelectorAll('[data-ledger]'));
     roots.forEach(function (root) {
     var buttons = [].slice.call(root.querySelectorAll('[data-days]'));
-    var STOPS = [5, 7, 14, 30];
+    var STOPS = [7, 14, 30];
     var out = {};
     [].slice.call(root.querySelectorAll('[data-out]')).forEach(function (el) { out[el.getAttribute('data-out')] = el; });
-    var shown = { days: 5, meals: 15, baths: 5, binds: 5 };
-    var raf = 0, started = false, currentDay = 5, countTarget = 5;
+    var shown = { days: 7, meals: 21, baths: 7, binds: 7 };
+    var raf = 0, started = false, currentDay = 7, countTarget = 7;
     function set(k, v) { out[k].textContent = String(Math.round(v)); }
     function paint() { Object.keys(shown).forEach(function (k) { set(k, shown[k]); }); }
     function setMarker(days, dur) {
@@ -254,7 +254,7 @@
       // place on the line is turned back into days piece by piece, and returned
       // as days over 30, which is what the callers expect.
       if (r.height <= r.width && rail.closest('.ty')) {
-        var d = f <= 7 / 30 ? f / 0.033333 : f <= 0.5 ? 7 + (f - 7 / 30) / 0.038095 : 14 + (f - 0.5) / 0.03125;
+        var d = f <= 0.5 ? 7 + f / 0.071429 : 14 + (f - 0.5) / 0.03125;
         return d / 30;
       }
       return f;

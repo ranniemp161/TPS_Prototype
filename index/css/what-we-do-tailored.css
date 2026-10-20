@@ -119,9 +119,9 @@
    Where a day sits along the line is not strictly by count: the 14 is placed at
    exactly the middle (TJ, 9 Oct 2026), so the circle that drops to become the sun
    falls straight down the page's centre. --pos is that position as 0 to 1:
-   5 days at 1/6, 7 at 7/30 (as by count), 14 at 1/2, 30 at the end. */
+   7 days at the start, 14 at 1/2, 30 at the end. */
 .ty__day, .ty__stop, .ty__tip, .ty__fill {
-  --pos: calc(0.033333 * min(var(--d), 7) + 0.038095 * clamp(0, var(--d) - 7, 7) + 0.03125 * max(0, var(--d) - 14));
+  --pos: calc(0.071429 * clamp(0, var(--d) - 7, 7) + 0.03125 * max(0, var(--d) - 14));
 }
 .ty__day, .ty__stop { --d: var(--at); }
 .ty__tip, .ty__fill { --d: var(--sel); }
@@ -133,6 +133,7 @@
   font-family: var(--f-display); font-size: clamp(1.8rem, min(3.4vw, 5vh), 3.1rem); line-height: 1;
   color: var(--ty-ink); opacity: .38; transition: opacity 280ms var(--ease-out);
 }
+.ty__day[data-days="7"] { transform: none; padding-left: 0; text-align: left; }
 .ty__day[data-days="30"] { transform: translateX(-100%); padding-right: 0; }
 .ty__day:hover { opacity: .78; }
 .ty__day[aria-checked="true"] { opacity: 1; }
@@ -246,15 +247,16 @@
   .ty__br { display: inline; }
 
   /* The line, across (TJ, 12 Oct 2026): the vertical one did not work. The same
-     line as desktop, the full width of the card, 5, 7, 14 and 30 above it, the 14
+     line as desktop, the full width of the card, 7, 14 and 30 above it, the 14
      at the exact middle so the circle that drops to become the sun falls straight
      down the page's centre. The figures sit above it; tapped, not scrolled
      (what-we-do.js ledger). 44px tall to touch, drag or tap. */
   .ty__days { order: 3; height: 108px; margin-top: 8px; }
   .ty__rail { height: 44px; }
   .ty__day { font-size: clamp(1.9rem, 8.2vw, 2.6rem); padding: 10px 3px; min-width: 22px; text-align: center; }
+  .ty__day[data-days="7"] { padding-left: 0; text-align: left; }
   .ty__day[data-days="30"] { padding-right: 0; }
-  /* All four stops stay on the line, reached ones solid, the rest faint, so the
+  /* All three stops stay on the line, reached ones solid, the rest faint, so the
      14 is always there to drop into the sun, whatever stay is chosen. */
   .ty.is-flow .ty__stop { transform: none; opacity: clamp(.45, calc((var(--sel) - var(--at)) * 3 + .45), 1); transition: opacity 300ms var(--ease-out); }
   /* Phone text floor 13px and a 44px tap target (MOBILE-PLAN item 2). */
@@ -320,7 +322,7 @@
   .ty.is-live.is-calm .ty__stage { position: relative; top: auto; height: auto; }
   .ty.is-live.is-calm .ty__track { height: auto; max-width: min(1160px, 100%); padding-bottom: clamp(48px, 9vh, 96px); }
   .ty.is-calm .ty__head > .ty__card { height: auto; min-height: 100%; }
-  /* All four stops stay on the line, reached ones solid, the rest faint (as on
+  /* All three stops stay on the line, reached ones solid, the rest faint (as on
      phones), so the 14 is there to drop into the sun whatever stay is chosen. */
   .ty.is-calm .ty__stop { transform: none; opacity: clamp(.45, calc((var(--sel) - var(--at)) * 3 + .45), 1); transition: opacity 300ms var(--ease-out); }
 }
