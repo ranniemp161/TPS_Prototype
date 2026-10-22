@@ -24,10 +24,29 @@
 <link rel="stylesheet" href="css/footer.css" />
 <style>
   /* Holding page (TJ, 22 Oct 2026): a title on coral, saying coming soon. */
-  .gifts-soon { min-height: 100svh; display: grid; place-content: center; gap: 1rem; text-align: center;
-    padding: calc(var(--nav-h, 80px) + 40px) var(--gutter, 24px) 80px; background: var(--coral-deep); color: #fff; }
-  .gifts-soon h1 { margin: 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(4rem, 12vw, 10rem); line-height: 1; }
-  .gifts-soon p { margin: 0; font-family: var(--f-display); text-transform: uppercase; letter-spacing: .08em; font-size: clamp(1.1rem, 2vw, 1.6rem); }
+  .gifts-soon { position: relative; overflow: hidden; isolation: isolate; min-height: 100svh; display: grid; place-content: center; gap: 1rem; text-align: center;
+    padding: calc(var(--nav-h, 80px) + 40px) var(--gutter, 24px) 80px; background: #8C362F; color: #fff; }
+  .gifts-soon h1 { position: relative; z-index: 1; margin: 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(4rem, 12vw, 10rem); line-height: 1; }
+  .gifts-soon p { position: relative; z-index: 1; margin: 0; font-family: var(--f-display); text-transform: uppercase; letter-spacing: .08em; font-size: clamp(1.1rem, 2vw, 1.6rem); }
+  /* The note under Coming soon (TJ, 22 Oct 2026): body type, two short paragraphs. */
+  .gifts-soon__note { position: relative; z-index: 1; max-width: 46ch; margin: 1.6rem auto 0; display: grid; gap: .9rem; }
+  .gifts-soon__note p { font-family: var(--f-body); text-transform: none; letter-spacing: 0; font-size: clamp(.95rem, 1.1vw, 1.05rem); line-height: 1.6; }
+  .gifts-soon__note a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+  /* Ember night (option 1 of Fuchsia-variants.html): the deep red ground with
+     blush and canvas light drifting over it. Text sits above it (TJ, 22 Oct 2026). */
+  .gifts-aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+  .gifts-aurora__field { position: absolute; inset: -40px; display: block;
+    background-image: repeating-linear-gradient(100deg, var(--a)); background-size: 300%; background-position: 50% 50%;
+    filter: blur(44px); opacity: .8; will-change: transform;
+    --a: transparent 0%, #E2CAC6 7%, #FFFFFF 12%, transparent 22%, #D7C2C9 30%, transparent 40%;
+    -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+    mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%); }
+  .gifts-aurora__field::after { content: ""; position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(123deg, var(--b)); background-size: 235%;
+    --b: transparent 0%, #FFFFFF 6%, #E2CAC6 12%, transparent 24%, #E3D7D3 33%, transparent 46%;
+    animation: gifts-aurora 62s linear infinite; }
+  @keyframes gifts-aurora { from { background-position: 50% 50%; } to { background-position: 350% 50%; } }
+  @media (prefers-reduced-motion: reduce) { .gifts-aurora__field::after { animation: none; } }
 </style>
 </head>
 <body>
@@ -131,8 +150,13 @@
 
 <main id="content" tabindex="-1">
   <section class="gifts-soon" data-section="gifts-coming-soon" data-section-name="Gifts Coming Soon">
+    <div class="gifts-aurora" aria-hidden="true"><span class="gifts-aurora__field"></span></div>
     <h1>Gifts</h1>
     <p>Coming soon</p>
+    <div class="gifts-soon__note">
+      <p>Gifting is on its way. We are building a simple way for you to give The Postpartum Suite to someone you love.</p>
+      <p>Until then, email us at <a href="mailto:info@thepostpartumsuite.com">info@thepostpartumsuite.com</a> with your enquiry and we will be in touch to arrange it with you personally.</p>
+    </div>
   </section>
 </main>
 
