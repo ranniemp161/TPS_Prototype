@@ -22,8 +22,9 @@
 <link rel="stylesheet" href="css/site.css" />
 <link rel="stylesheet" href="css/inner-pages.css" />
 <link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/programmes.css" />
 </head>
-<body class="page--article">
+<body class="page--programmes">
 
 <a class="skip" href="#content">Skip to content</a>
 
@@ -126,115 +127,105 @@
 <div class="veil" data-veil hidden></div>
 
 <main id="content" tabindex="-1">
-  <article class="article">
-    <h1 class="article__title" data-section="programmes-introduction" data-section-name="Programmes Introduction">Programmes</h1>
-    <p class="article__lede">
-      The Postpartum Suite offers three programme lengths, from seven to
-      thirty days. Every programme includes the same four areas of
-      care described on The Care page. Longer programmes extend that
-      support and repeat treatments more often as your recovery
-      progresses.
-    </p>
 
-    <section class="block" data-section="programme-lengths" data-section-name="Three Lengths of Care">
-      <img class="block__image" src="../assets/img/programmes-overview.webp" alt="In-home postpartum care for a new mother, her specialist beside her" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">Three Lengths of Care</h2>
-      <ul class="block__list">
-        <li>7 days, introductory price £2,495. Programme price £2,995.</li>
-        <li>14 days, introductory price £4,495. Programme price £4,995.</li>
-        <li>30 days, introductory price £6,399. Programme price £6,995, the full confinement period as it is traditionally kept.</li>
-      </ul>
-      <p class="block__text">
-        Introductory pricing is held for bookings taken in 2026. All
-        prices are indicative until confirmed at your consultation.
-      </p>
-    </section>
 
-    <section class="block" data-section="included-care" data-section-name="What Is Included">
-      <img class="block__image" src="../assets/img/programmes-included.webp" alt="A trained postpartum specialist with a newborn" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">What Is Included</h2>
-      <p class="block__text">
-        Every programme includes hands on care for your baby, recovery
-        treatments, three meals cooked daily in your kitchen, and
-        household support, exactly as described on The Care page.
-        Nothing is added or removed by length. What changes is how
-        many times treatments repeat, and how much of your recovery
-        the programme spans.
-      </p>
-    </section>
+  <!-- ============ THE THREE LENGTHS, on the testimonials' line ============
+       Prices are the pricing engine's complete programme (live in, daytime,
+       everything included). Placeholders until Ami confirms. -->
+  <section class="pg-lengths" data-pg data-section="programme-lengths" data-section-name="Programmes Hero and Pricing">
+    <div class="aurora aurora--voices" aria-hidden="true"><span class="aurora__field"></span></div>
+    <div class="pg-wrap">
+      <!-- The hero and the pricing are one section (TJ, 22 Oct 2026): the
+           title, one Quentin line and one sentence, then the line and the card. -->
+      <header class="pg-lengths__head">
+        <h1 class="pg-lengths__title">Our Postpartum Programmes</h1>
+        <p class="pg-lengths__script">For as long as you need us.</p>
+        <p class="pg-lengths__lede">Every programme brings the same four areas of care into your home each day. What changes is how long your specialist is with you.</p>
+      </header>
 
-    <section class="block" data-section="treatment-scaling" data-section-name="How Treatments Scale">
-      <img class="block__image" src="../assets/img/stones.webp" alt="Hot stones laid out ready for a postpartum massage" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">How Treatments Scale With Length</h2>
-      <p class="block__text">
-        On the seven and fourteen day programmes, treatment
-        counts are totals for the whole stay. On the thirty day
-        programme, several treatments repeat weekly instead. Postpartum
-        massage with hot stone therapy, for example, is included four
-        times across seven days and increases with the length of your
-        programme. Herbal baths and belly binding are included daily
-        on every programme.
-      </p>
-      <div class="block__note">
-        <p class="block__note-label">Note for Amidat</p>
-        <p class="block__note-text">
-          Two documents already in the project file, the Programmes
-          PDF and the Care Packages PDF, show slightly different
-          treatment counts for some lengths. These need to be
-          reconciled to one confirmed table before this section is
-          finished.
-        </p>
+      <div class="pg-line">
+        <div class="pg-car tv2__car" data-pg-car>
+          <span class="tv2__track-line" aria-hidden="true"></span>
+          <span class="tv2__fill" aria-hidden="true"></span>
+          <div class="tv2__track" data-pg-track></div>
+          <span class="tv2__tip" aria-hidden="true"></span>
+        </div>
+        <p class="tv2__sr" aria-live="polite" data-pg-live></p>
       </div>
-    </section>
 
-    <section class="block" data-section="care-format" data-section-name="Live In or Daytime Care">
-      <img class="block__image" src="../assets/img/night.webp" alt="The sofa in the evening, the mother resting, the specialist holding the baby beside her" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">Live In or Daytime Care</h2>
-      <p class="block__text">
-        Live in care means your specialist stays in your home for the
-        full length of the programme. Daytime in home care means your
-        specialist arrives each morning and leaves in the evening, and
-        carries a supplement of £30 a day toward her accommodation and
-        travel. Both formats include the same care. The difference is
-        whether your specialist is present overnight.
-      </p>
-      <p class="block__text">
-        Daytime care runs from 7am to 7pm. Day and night care is also
-        available on live in programmes. Your specialist begins at
-        1pm, settles for the evening at 7pm, and takes your baby from
-        11.30pm until 6am, so you can sleep through the night.
-        Breakfast is not included when night care is selected, since
-        the day begins at 1pm.
-      </p>
-    </section>
-
-    <section class="block" data-section="custom-programme" data-section-name="Build Your Own Programme">
-      <img class="block__image" src="../assets/img/s3-rest.webp" alt="A mother resting back against the pillows while her specialist settles the baby" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">Build Your Own Programme</h2>
-      <p class="block__text">
-        If the shape of care you are looking for sits outside the four
-        published programmes, you can build an indicative programme
-        and see a fee update as you go. This is not a quote or a
-        booking. Your final programme and fee are confirmed after a
-        consultation.
-      </p>
-      <div class="article__actions">
-        <a class="btn btn--primary" href="build-your-programme.html">Build your programme</a>
+      <!-- The arrows sit either side of the card (TJ, 22 Oct 2026). -->
+      <div class="pg-stage">
+        <button class="pg-nav pg-nav--prev" type="button" data-pg-prev aria-label="Shorter programme">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
+        </button>
+        <button class="pg-nav pg-nav--next" type="button" data-pg-next aria-label="Longer programme">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
+        </button>
+      <div class="pg-card" data-pg-card>
+        <div class="pg-price pg-swap">
+          <h3 class="pg-price__days" data-pg-days>Seven days</h3>
+          <p class="pg-price__held" data-pg-sub>A full week</p>
+          <p class="pg-price__from">Introductory price, from</p>
+          <p class="pg-price__fee" data-pg-fee>£2,495</p>
+          <p class="pg-price__full" data-pg-full>Programme price £2,995 after 2026</p>
+          <p class="pg-price__held">Live in care, 7am to 7pm, with everything included. Daytime care and day and night care are available, and the fee is confirmed at your consultation.</p>
+          <div class="pg-price__cta"><a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a free consultation</a></div>
+        </div>
+        <div class="pg-swap pg-treat" data-pg-treat>
+          <p class="pg-counts__h">Your treatments across the stay</p>
+          <!-- Phones only: the rows fold away behind this so the card fits the
+               first screen (TJ, 22 Oct 2026). -->
+          <button class="pg-treat__toggle" type="button" data-pg-treat-toggle aria-expanded="false" aria-controls="pg-counts">
+            <span>Your treatments across the stay</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9.5 12 15.5 18 9.5" /></svg>
+          </button>
+          <ul class="pg-counts" id="pg-counts" data-pg-counts></ul>
+        </div>
       </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <section class="block" data-section="single-treatments" data-section-name="Single Treatments">
-      <img class="block__image" src="../assets/img/tb-hotstone.webp" alt="A specialist applying a heated herbal compress during a postpartum treatment" width="1200" height="750" loading="lazy" />
-      <h2 class="block__heading">Single Treatments</h2>
-      <p class="block__text">
-        If you are not ready for a full programme, single treatment
-        sessions are also available, booked directly.
-      </p>
-      <div class="article__actions">
+  <!-- ============ THE SAME, WHATEVER THE LENGTH ============ -->
+  <section class="pg-same" data-section="what-is-included" data-section-name="What Is Included">
+    <div class="pg-wrap pg-same__grid">
+      <div>
+        <h2 class="pg-h2">Included in every programme</h2>
+        <p class="pg-same__script">Every day, however long you stay.</p>
+        <p class="pg-same__p">Nothing is added or removed by length. What changes is how many times your treatments repeat, and how much of your recovery the programme spans.</p>
+      </div>
+      <div>
+        <ul class="pg-same__list">
+          <li><b>One specialist, yours alone</b>Reserved for your family for the whole stay, so you have the same person throughout.</li>
+          <li><b>Mother and baby care</b>Hands on care for your baby through the day, and someone with you while you rest.</li>
+          <li><b>Meals</b>Breakfast, lunch and dinner cooked fresh in your kitchen, with herbal teas and lactation drinks.</li>
+          <li><b>Daily treatments</b>A herbal bath and belly binding every day, with your massage and treatments on the rhythm of your programme.</li>
+          <li><b>Home support</b>Light housekeeping, laundry and ironing, and grocery collection.</li>
+          <li><b>Live in or daytime</b>Live in care is recommended. Daytime care, 7am to 7pm, adds £30 a day towards travel and accommodation.</li>
+        </ul>
+        <p class="pg-same__note">Day and night care is available on live in programmes, so your specialist takes your baby through the night. Introductory pricing is held for bookings taken in 2026. All prices are indicative until confirmed at your consultation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CALL TO ACTION ============ -->
+  <section class="pg-cta" data-section="programmes-cta" data-section-name="Book a Consultation">
+    <div class="aurora aurora--voices" aria-hidden="true"><span class="aurora__field"></span></div>
+    <div class="pg-wrap">
+      <h2 class="pg-h2">Ready to talk it through?</h2>
+      <p class="pg-cta__p">Thirty minutes by phone or video. We look at your dates and what you need, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call.</p>
+      <div class="pg-cta__actions">
+        <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a free consultation</a>
         <a class="btn btn--outline" href="single-treatments.html">Single treatments</a>
       </div>
-    </section>
-  </article>
+      <div class="pg-cta__bespoke">
+        <h3>Need a different shape?</h3>
+        <p>If the care you have in mind sits outside these three programmes, build your own and see an indicative fee as you go.</p>
+        <a class="btn btn--outline" href="build-your-programme.html">Build your programme</a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="sf" data-section="site-footer" data-section-name="Footer">
@@ -284,7 +275,9 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/build-your-programme-pricing.js"></script>
 <script src="js/inner-nav.js"></script>
+<script src="js/programmes.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
 </body>
