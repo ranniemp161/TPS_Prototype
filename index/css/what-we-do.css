@@ -336,6 +336,12 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 .page--faqs .q summary::after,
 .page--faqs .q p { color: var(--faq-text); }
 .page--faqs .faq__nav a { font-weight: 400; transition: padding-left 260ms var(--ease-out); }
+/* The group headings take the selector's font, at their own size (TJ, 22 Oct 2026). */
+.page--faqs .faq__group > .wwd-h3 { font-family: var(--f-body); font-weight: 500; font-size: clamp(1.08rem, 1.3vw, 1.2rem); }
+/* The questions too (TJ, 22 Oct 2026). The right side sits one step above the
+   selector (.9rem): headings 1.2rem, questions 1.05rem, answers .95rem. */
+.page--faqs .q summary { font-family: var(--f-body); font-size: clamp(1rem, 1.1vw, 1.05rem); padding: 16px 0; }
+.page--faqs .q p { font-size: .95rem; }
 .page--faqs .faq__nav a.is-active { color: var(--faq-text); font-weight: 700; }
 .page--faqs .faq__nav a span { font-weight: 400; }
 

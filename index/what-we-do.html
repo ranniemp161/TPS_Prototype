@@ -41,18 +41,19 @@
            screens only. -->
       <img class="nav__corner" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
       <!-- The five main menu items share one row, with the Menu chip taking
-           their place below 1100px. Our Offering and About Us open panels;
-           Home, What We Do and Faqs are page links. -->
+           their place below 1100px. What We Do, Our Offering and About Us open
+           panels; Home and Gifts are page links (TJ, 22 Oct 2026: FAQs moved
+           into the What We Do panel, Gifts took its place in the bar). -->
       <div class="nav__tabs" data-tabs>
         <a class="tab" href="index.html">Home</a>
-        <a class="tab" href="what-we-do.html">What We Do</a>
+        <button class="tab" type="button" data-tab="what-we-do" aria-expanded="false" aria-controls="panel-what-we-do">What We Do</button>
         <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
         <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
-        <a class="tab" href="faqs.html">Faqs</a>
+        <a class="tab" href="gifts.html">Gifts</a>
       </div>
       <!-- Takes the place of the five above it below 1100px. A word, not a
            glyph, in the same chip as everything else. -->
-      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-offerings">Menu</button>
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-what-we-do">Menu</button>
     </div>
 
     <!-- #content, not #top. There has never been an element with id
@@ -86,6 +87,16 @@
          eventually mirror stay exactly where they are. A section on the
          homepage and a page of its own are two different things, and
          whether the former ever links to the latter is a later call. -->
+    <section class="menu__panel" id="panel-what-we-do" data-panel="what-we-do" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">What We Do</h2>
+        <ul class="menu__list">
+          <li><a href="what-we-do.html">What We Do</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+        </ul>
+      </div>
+    </section>
+
     <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
       <div class="menu__group">
         <h2 class="menu__head">Our Offerings</h2>
@@ -93,8 +104,7 @@
           <li><a href="programmes.html">Programmes</a></li>
           <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
           <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
-          <!-- No Gifts page exists yet, so it is a label, not a link. -->
-          <li><span class="menu__pending">Gifts</span></li>
+          <li><a href="gifts.html">Gifts</a></li>
         </ul>
       </div>
     </section>
@@ -167,6 +177,112 @@
     </div>
   </section>
 
+<!-- ============ SECTION: the house flight (moved from Home, TJ, 21 Oct 2026) ============
+     Six scroll beats, starting at the front door. A plain entry for now: it
+     scrolls straight in after Who is it for, and dissolves to the canvas at
+     its end. Motion: home-flight.js. Styles: house-flight.css. -->
+<section class="flight" data-flight data-reveal-vh="1" aria-label="From the moment we arrive, through the home">
+  <div class="flight__stage" data-stage>
+    <div class="flight__film" data-film>
+      <div class="flight__tilt" data-tilt>
+        <img class="flight__poster is-on" data-poster="0" src="../assets/img/home-door.webp" alt="" width="1920" height="1080" />
+        <img class="flight__poster" data-poster="1" src="../assets/img/home-kitchen.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="2" src="../assets/img/home-living.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="3" src="../assets/img/home-nursery.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="4" src="../assets/img/home-treatment.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <img class="flight__poster" data-poster="5" src="../assets/img/home-window-exit.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
+        <video class="flight__video" data-video
+               data-src="../assets/video/home-flight.mp4"
+               data-src-mobile="../assets/video/home-flight-m.mp4"
+               muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+      </div>
+    </div>
+
+    <div class="aurora flight__aurora" aria-hidden="true"><span class="aurora__field"></span></div>
+    <canvas class="flight__ghost" data-ghost aria-hidden="true"></canvas>
+
+    <div class="flight__blend" data-blend aria-hidden="true"></div>
+    <!-- The opening veil (TJ, 21 Oct 2026): white over the whole film while
+         "Fly through the service" is up, dissolving with it. -->
+    <div class="flight__veil" data-flight-veil aria-hidden="true"></div>
+
+    <!-- The old per-scene titles are gone: the route bar (desktop) and the
+         card sweep (phone) now carry that copy, in the section 12 language.
+         These markers stay only for data-section/data-section-name, which
+         the dev panel and lab/state.mjs read for section tracking; none
+         carry visible text of their own. The window-exit beat's Enquire
+         button that used to live here is gone too: the flight-enquire
+         button below now covers the whole video, this scene included. -->
+    <div class="flight__copy">
+      <!-- The opening line (TJ, 21 Oct 2026): Quentin, centred over the
+           film as it arrives, gone as the door comes up (home-flight.js). -->
+      <p class="flight__intro" data-flight-intro>Fly through the service</p>
+      <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Arrival" data-dev-scroll-t="0"></div>
+      <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="1.37"></div>
+      <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="3.37"></div>
+      <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="5.56"></div>
+      <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="7.88"></div>
+      <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="10.09"></div>
+    </div>
+
+
+    <!-- The route (TJ, 14 Oct 2026): one fixed, centred line across the foot
+         of the film. A hairline for the whole way, a solid fill to "now"
+         with the circle at its tip, moved by the film's time. Each room has
+         a dot that grows when the fill reaches it and stays; while it is the
+         current room a stem rises from its dot and its name and words rise
+         out of masks beside the stem. home-flight.js places and drives it;
+         a tap on a name or a dot scrolls the film to that room. -->
+    <!-- The route's soft foot fade: full width, no edge, behind the route (driven with its opacity by home-flight.js). -->
+    <div class="route__wash" data-route-wash aria-hidden="true"></div>
+    <nav class="route" data-route aria-label="Rooms in the house">
+      <div class="route__line" aria-hidden="true"></div>
+      <div class="route__fill" aria-hidden="true"></div>
+      <span class="route__tip" aria-hidden="true"></span>
+      <!-- The last stop, What Is Confinement? (TJ, 15 Oct 2026): a dot only.
+           The confinement section's own heading is its text. Born as the
+           section starts to emerge; the fill reaches it as the emerge ends. -->
+      <ol class="route__stops" data-route-stops>
+        <li class="route__stop" data-stop="exterior">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">In Home Postpartum Care</span></span></button>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="kitchen">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Meals</span></span></button>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="living">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Home Support</span></span></button>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="nursery">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Mother and Baby Care</span></span></button>
+          </div>
+        </li>
+        <li class="route__stop" data-stop="treatment">
+          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
+          <span class="route__stem" aria-hidden="true"></span>
+          <div class="route__text">
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Treatments</span></span></button>
+          </div>
+        </li>
+      </ol>
+    </nav>
+  </div>
+</section>
+
   <!-- ============ SECTION: the four kinds of care ============
        MaisonFav's stacked cards (geometry measured, code ours). Each card
        carries its chapter name on the strip that stays visible once the next
@@ -218,86 +334,105 @@
       <div class="hd__copy">
         <article class="hd__kind" data-hd-kind aria-labelledby="hd-h0">
           <h2 class="hd__name" id="hd-h0" data-hd-split>Mother and Baby Care</h2>
-          <p class="hd__promise" data-hd-split>Hands on support with your baby, and thoughtful care for you, every day.</p>
-          <p class="hd__para" data-hd-split>The weeks after birth are not meant to be managed alone. Your dedicated postpartum specialist stays with you, taking time to learn the routine of your home, your baby's cues and the way you like things done. Her care is there in the quiet early hours as much as in the busy ones, and it is guided by two priorities: your baby's comfort and your rest.</p>
-          <ul class="hd__items" data-hd-fade>
+          <div class="hd__text" data-hd-fade>
+            <p class="hd__promise">Hands on support with your baby, and thoughtful care for you, every day.</p>
+            <div class="hd__para"><p>The weeks after birth are not meant to be managed alone. Your dedicated postpartum specialist stays with you, taking time to learn the routine of your home, your baby's cues and the way you like things done.</p><p>Her care is there in the quiet early hours as much as in the busy ones, and it is guided by two priorities: your baby's comfort and your rest.</p></div>
+            <button class="hd__read" type="button" aria-expanded="false" data-hd-read>Read more</button>
+            <div class="hd__full">
+          <ul class="hd__items">
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-0-0">Care for your baby while you rest</button>
-              <div class="hd__more" id="hd-0-0"><p>Whether you need an uninterrupted sleep after a long night or a moment to bathe in peace, your baby is in attentive, experienced hands. Your specialist takes care of changing, winding, settling, bathing support, and feeding with expressed or formula milk. If you are breastfeeding, she brings your baby to you for each feed and settles them again afterwards, so your energy is kept for the moments that matter most. On selected programmes this care continues through the night. Along the way she gently shares what she observes, from feeding cues to sleep patterns, so your confidence grows with each day.</p></div>
+              <h3 class="hd__sub">Care for your baby while you rest</h3>
+              <div class="hd__more" id="hd-0-0"><p>Whether you need an uninterrupted sleep after a long night or a moment to bathe in peace, your baby is in attentive, experienced hands.</p><p>Your specialist takes care of changing, winding, settling, bathing support, and feeding with expressed or formula milk.</p><p>If you are breastfeeding, she brings your baby to you for each feed and settles them again afterwards, so your energy is kept for the moments that matter most. On selected programmes this care continues through the night.</p><p>Along the way she gently shares what she observes, from feeding cues to sleep patterns, so your confidence grows with each day.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-0-1">Accompanying you and baby on outings</button>
-              <div class="hd__more" id="hd-0-1"><p>Those first trips out of the house should feel effortless. Your specialist can accompany you to GP appointments, baby clinic weigh ins or a gentle stroll in the park. She prepares the changing bag, manages the car seat and pram, and holds your baby while you are seen, so you step out feeling composed and cared for.</p></div>
+              <h3 class="hd__sub">Accompanying you and baby on outings</h3>
+              <div class="hd__more" id="hd-0-1"><p>Those first trips out of the house should feel effortless. Your specialist can accompany you to GP appointments, baby clinic weigh ins or a gentle stroll in the park.</p><p>She prepares the changing bag, manages the car seat and pram, and holds your baby while you are seen, so you step out feeling composed and cared for.</p></div>
             </li>
           </ul>
+          </div>
+          </div>
         </article>
         <article class="hd__kind" data-hd-kind aria-labelledby="hd-h1">
           <h2 class="hd__name" id="hd-h1" data-hd-split>Treatments</h2>
-          <p class="hd__promise" data-hd-split>Hands on care that repeats through your stay, not offered once as a treat.</p>
-          <p class="hd__para" data-hd-split>Elsewhere, postpartum treatments are often booked as a single indulgence. Inspired by Malaysian confinement traditions, ours are woven into your stay, so warmth, support and restoration build gently day after day. Every treatment takes place in the comfort of your home, at a time that suits you and your baby.</p>
-          <ul class="hd__items" data-hd-fade>
+          <div class="hd__text" data-hd-fade>
+            <p class="hd__promise">Hands on care that repeats through your stay, not offered once as a treat.</p>
+            <div class="hd__para"><p>Elsewhere, postpartum treatments are often booked as a single indulgence. Inspired by Malaysian confinement traditions, ours are woven into your stay, so warmth, support and restoration build gently day after day.</p><p>Every treatment takes place in the comfort of your home, at a time that suits you and your baby.</p></div>
+            <button class="hd__read" type="button" aria-expanded="false" data-hd-read>Read more</button>
+            <div class="hd__full">
+          <ul class="hd__items">
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-0">Postpartum massage and hot stone therapy, several times a week</button>
-              <div class="hd__more" id="hd-1-0"><p>At the heart of your recovery is postpartum massage, carried out several times each week. Slow, warming strokes ease the tension of pregnancy, birth and early feeding, while heated stones bring a deep, soothing warmth to the body. Each session is tailored to how you are feeling, leaving you relaxed, restored and wonderfully cared for.</p></div>
+              <h3 class="hd__sub">Postpartum massage and hot stone therapy, several times a week</h3>
+              <div class="hd__more" id="hd-1-0"><p>At the heart of your recovery is postpartum massage, carried out several times each week. Slow, warming strokes ease the tension of pregnancy, birth and early feeding, while heated stones bring a deep, soothing warmth to the body.</p><p>Each session is tailored to how you are feeling, leaving you relaxed, restored and wonderfully cared for.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-1">Belly binding, daily</button>
-              <div class="hd__more" id="hd-1-1"><p>Your tummy wrap is applied once your massage or hot stone therapy is complete, while your body is warm and relaxed, so it supports and holds the benefits of your treatment. This gives your core and lower back a reassuring, held feeling as your body recovers, and extra support as you lift, carry and feed your baby. Each wrap is adjusted to your comfort. After a caesarean birth, we follow the guidance of your midwife or doctor on when to begin.</p></div>
+              <h3 class="hd__sub">Belly binding, daily</h3>
+              <div class="hd__more" id="hd-1-1"><p>Your tummy wrap is applied once your massage or hot stone therapy is complete, while your body is warm and relaxed, so it supports and holds the benefits of your treatment.</p><p>This gives your core and lower back a reassuring, held feeling as your body recovers, and extra support as you lift, carry and feed your baby. Each wrap is adjusted to your comfort.</p><p>After a caesarean birth, we follow the guidance of your midwife or doctor on when to begin.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-2">Herbal baths for you, daily</button>
-              <div class="hd__more" id="hd-1-2"><p>Each day your specialist prepares a warm bath infused with fresh herbs and leaves, such as lemongrass and pandan. It is a calming feeling that soothes tired muscles, refreshes the skin and offers a quiet moment that is entirely yours.</p></div>
+              <h3 class="hd__sub">Herbal baths for you, daily</h3>
+              <div class="hd__more" id="hd-1-2"><p>Each day your specialist prepares a warm bath infused with fresh herbs and leaves, such as lemongrass and pandan.</p><p>It is a calming feeling that soothes tired muscles, refreshes the skin and offers a quiet moment that is entirely yours.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-3">Thermal blanket treatment</button>
+              <h3 class="hd__sub">Thermal blanket treatment</h3>
               <div class="hd__more" id="hd-1-3"><p>You rest comfortably wrapped in a heated blanket as a deep, steady warmth builds, leaving you free to simply relax. Each session is tailored to how you are feeling that day.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-1-4">Foot massage, reflexology and full body scrub</button>
+              <h3 class="hd__sub">Foot massage, reflexology and full body scrub</h3>
               <div class="hd__more" id="hd-1-4"><p>On the days between your massages, your care continues with a soothing foot massage and reflexology or a gentle full body scrub, so there is always something restorative in your day.</p></div>
             </li>
           </ul>
+          </div>
+          </div>
         </article>
         <article class="hd__kind" data-hd-kind aria-labelledby="hd-h2">
           <h2 class="hd__name" id="hd-h2" data-hd-split>Meals</h2>
-          <p class="hd__promise" data-hd-split>Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
-          <p class="hd__para" data-hd-split>In postpartum care, also known as confinement, food is an essential part of healing. Rather than meals arriving in delivery boxes, your specialist shops and cooks in your kitchen each day, so every dish is served hot, fresh and suited to that stage of your recovery. The menu is guided by Malaysian confinement principles, using warming ingredients such as ginger, turmeric and black pepper, slow simmered broths, and gentle dishes that are easy to digest. Cold and raw foods are avoided in the early weeks. Your family dines from the same table, and dietary requirements, allergies and preferences are discussed with you before we arrive.</p>
-          <ul class="hd__items" data-hd-fade>
+          <div class="hd__text" data-hd-fade>
+            <p class="hd__promise">Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
+            <div class="hd__para"><p>In postpartum care, also known as confinement, food is an essential part of healing.</p><p>Rather than meals arriving in delivery boxes, your specialist shops and cooks in your kitchen each day, so every dish is served hot, fresh and suited to that stage of your recovery.</p><p>The menu is guided by Malaysian confinement principles, using warming ingredients such as ginger, turmeric and black pepper, slow simmered broths, and gentle dishes that are easy to digest.</p><p>Cold and raw foods are avoided in the early weeks. Your family dines from the same table, and dietary requirements, allergies and preferences are discussed with you before we arrive.</p></div>
+            <button class="hd__read" type="button" aria-expanded="false" data-hd-read>Read more</button>
+            <div class="hd__full">
+          <ul class="hd__items">
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-2-0">Fresh postpartum meals, 3 a day</button>
-              <div class="hd__more" id="hd-2-0"><p>Breakfast, lunch and dinner are prepared from scratch each day. Dishes might include ginger fish soup, chicken braised in ginger and herbs, comforting rice porridge, slow cooked broths and greens stir fried with garlic. The menu evolves throughout your stay as your body recovers.</p></div>
+              <h3 class="hd__sub">Fresh postpartum meals, 3 a day</h3>
+              <div class="hd__more" id="hd-2-0"><p>Breakfast, lunch and dinner are prepared from scratch each day. Dishes might include ginger fish soup, chicken braised in ginger and herbs, comforting rice porridge, slow cooked broths and greens stir fried with garlic.</p><p>The menu evolves throughout your stay as your body recovers.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-2-1">Herbal teas</button>
+              <h3 class="hd__sub">Herbal teas</h3>
               <div class="hd__more" id="hd-2-1"><p>Your specialist brews tea fresh throughout the day as required. Warm drinks are favoured over cold, so there is always something warm within reach.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-2-2">Lactation support drinks</button>
+              <h3 class="hd__sub">Lactation support drinks</h3>
               <div class="hd__more" id="hd-2-2"><p>Warm drinks made with ingredients traditionally given to nursing mothers, such as oats, dates and fenugreek, are prepared fresh each day. If you are not breastfeeding, we prepare other nourishing warm drinks in their place.</p></div>
             </li>
           </ul>
+          </div>
+          </div>
         </article>
         <article class="hd__kind" data-hd-kind aria-labelledby="hd-h3">
           <h2 class="hd__name" id="hd-h3" data-hd-split>Home Support</h2>
-          <p class="hd__promise" data-hd-split>Everyday life, taken care of from the moment we arrive.</p>
-          <p class="hd__para" data-hd-split>A new baby brings more laundry, more dishes and more errands almost overnight. Your specialist attends to these quietly and discreetly, so your home remains calm and ordered and your only focus is rest. This is not a visiting service that comes and goes. It is care woven into the whole day.</p>
-          <ul class="hd__items" data-hd-fade>
+          <div class="hd__text" data-hd-fade>
+            <p class="hd__promise">Everyday life, taken care of from the moment we arrive.</p>
+            <div class="hd__para"><p>A new baby brings more laundry, more dishes and more errands almost overnight. Your specialist attends to these quietly and discreetly, so your home remains calm and ordered and your only focus is rest.</p><p>This is not a visiting service that comes and goes. It is care woven into the whole day.</p></div>
+            <button class="hd__read" type="button" aria-expanded="false" data-hd-read>Read more</button>
+            <div class="hd__full">
+          <ul class="hd__items">
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-3-0">Laundry and ironing</button>
+              <h3 class="hd__sub">Laundry and ironing</h3>
               <div class="hd__more" id="hd-3-0"><p>Your laundry is taken care of throughout your stay. Your clothes and your baby's are washed, beautifully pressed and put away, and your bed is made fresh each day so it is always inviting when you return to rest.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-3-1">Light house cleaning, organising baby wardrobe</button>
-              <div class="hd__more" id="hd-3-1"><p>The kitchen is left spotless after every meal, and the areas of your home you use most are hoovered and mopped, so everything stays fresh and orderly. Your baby's wardrobe is kept neatly organised, so every outfit, muslin and essential is exactly where you need it.</p></div>
+              <h3 class="hd__sub">Light house cleaning, organising baby wardrobe</h3>
+              <div class="hd__more" id="hd-3-1"><p>The kitchen is left spotless after every meal, and the areas of your home you use most are hoovered and mopped, so everything stays fresh and orderly.</p><p>Your baby's wardrobe is kept neatly organised, so every outfit, muslin and essential is exactly where you need it.</p></div>
             </li>
             <li class="hd__item">
-              <button class="hd__toggle" type="button" aria-expanded="false" aria-controls="hd-3-2">Grocery collection</button>
+              <h3 class="hd__sub">Grocery collection</h3>
               <div class="hd__more" id="hd-3-2"><p>Your specialist collects your groceries along with the fresh produce and specialist ingredients for your meals, so the kitchen is always well stocked and nobody needs to make a last minute trip to the shops.</p></div>
             </li>
           </ul>
+          </div>
+          </div>
         </article>
       </div>
-      <div class="hd__rail" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
     </div>
   </section>
 
@@ -952,6 +1087,7 @@
 <script src="js/what-we-do-hands.js"></script>
 <script src="js/what-we-do-tailored.js"></script>
 <script src="js/what-we-do-dn-title.js"></script>
+<script src="js/home-flight.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
 </body>

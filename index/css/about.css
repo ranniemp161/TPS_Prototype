@@ -99,8 +99,10 @@ html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--hai
    desktop the card moves to the right, over the steam, and leaves her clear
    (TJ, 16 Oct 2026). Phones keep the card across the band. */
 @media (min-width: 861px) {
-  .os-trad__band { justify-content: flex-end; }
-  .os-trad__card { margin-left: var(--gutter, 24px); margin-right: max(var(--gutter, 24px), calc((100vw - 1080px) / 2)); }
+  /* Pinned to the photograph's right edge and centred top to bottom, narrower,
+     so her face stays clear (TJ, 22 Oct 2026). */
+  .os-trad__band { justify-content: flex-end; align-items: center; padding-block: clamp(40px, 7vh, 72px); }
+  .os-trad__card { margin: 0 clamp(32px, 4vw, 64px) 0 auto; max-width: 560px; }
 }
 /* The page's one Quentin line. */
 .os-script { margin: clamp(48px, 8vh, 88px) auto; max-width: 24ch; text-align: center; font-family: var(--f-script); font-weight: 400; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.15; color: var(--ember); }
@@ -166,3 +168,10 @@ html.js [data-os-rise].is-in { opacity: 1; transform: none; }
   .os-line__tip { display: none; }
   .os-trad__img { transform: none !important; }
 }
+
+/* Three heading sizes, top to bottom (TJ, 22 Oct 2026, Ami's row 20): the hero
+   about 44px, every section heading 32px, the small tier 22px, on a laptop;
+   about 34, 26 and 19 on a phone. Overrides the sizes set above. */
+.os-open__h, .os-open--split .os-open__h { font-size: clamp(2.52rem, 3.72vw, 3.3rem); max-width: none; } /* 20 percent up, on two lines (TJ) */
+.os-h2, .os-trad__card .os-h2, .os-final { font-size: clamp(1.625rem, 2.25vw, 2rem); }
+.os-h3, .os-founder__name, .os-pull { font-size: clamp(1.19rem, 1.55vw, 1.375rem); }

@@ -311,14 +311,16 @@
         refreshPriority: -13
       }
     });
-    // First the photograph (0 to PH of the scroll): full screen under the
-    // title, it closes down into its slot as the glass card lifts in beside it
-    // and the card's lines rise. Then the line, over the rest.
-    var PH = 0.17, at = function (s) { return PH + s * (1 - PH); };
-    tl.to(ph, { a: 1, duration: PH, onUpdate: applyPhoto }, 0);
-    tl.to(sec, { '--vt-ci': 1, duration: PH * 0.4 }, PH * 0.55);
-    tl.to(cardLines, { yPercent: 0, duration: PH * 0.35, stagger: PH * 0.04, ease: 'power2.out' }, PH * 0.62);
-    tl.to(st, { p: 1, duration: 1 - PH, onUpdate: apply }, PH);
+    // No opening (TJ, 21 Oct 2026, from Ami, as Tailored For You): the
+    // photograph is in its slot, "A Day With Us" in the card and the card's
+    // lines in place from the start; the line runs over the whole scroll. The
+    // section lost the opening's 17 percent (780vh to 664vh), so the hours
+    // arrive over exactly the same scroll as before.
+    var PH = 0, at = function (s) { return s; };
+    ph.a = 1; applyPhoto();
+    gsap.set(sec, { '--vt-ci': 1 });
+    gsap.set(cardLines, { yPercent: 0 });
+    tl.to(st, { p: 1, duration: 1, onUpdate: apply }, 0);
 
     items.forEach(function (it, i) {
       // Each hour starts as the tip of the line reaches its dot.
@@ -336,7 +338,6 @@
       cs.duration(0.08 * (1 - PH));
       tl.add(cs, at(0.91));
     }
-    applyPhoto();
     apply();
   }
 

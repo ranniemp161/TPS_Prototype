@@ -105,3 +105,143 @@
 @media (max-width: 860px) {
   .hd:not(.is-live) .hd__scene { aspect-ratio: 16 / 10; }
 }
+
+/* ============================================================
+   READ MORE, THE STACK (TJ, 21 Oct 2026, from Ami: too big, too busy,
+   uniform text; she loves the imagery). Two sizes only: the name, and one
+   body size for everything under it (the promise, the paragraphs and the
+   item names, the names set apart by weight alone).
+   Closed: the name at the left; under it the promise and the opening
+   paragraph run on as one teaser, cut after a few lines with an ellipsis
+   and Read more straight after the dots.
+   Open (desktop): the photograph washes out, the name glides to the top
+   centre, and the full text fills the centre of the page as one stack, all
+   one width, the width set per kind by what-we-do-hands.js so the stack
+   ends above the foot of the window. Read more never moves (one top per
+   kind in both states), it only becomes Read less. The progress rail is
+   gone.
+   Phones: Read more takes over the screen as before.
+   ============================================================ */
+.hd__text { display: block; }
+.hd__promise { margin: 0; font-family: var(--f-read); font-weight: 400; font-size: 1em; line-height: 1.6; letter-spacing: 0; color: var(--ink-soft); text-wrap: pretty; }
+.hd__para { margin: 0; font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--ink-soft); }
+.hd__para > p { margin: 0; }
+/* --hd-gap: 1 normally; what-we-do-hands.js tightens it, for all four kinds
+   together, only on a window too short for the stack at the 13px floor. */
+.hd__para > p + p, .hd__more > p + p { margin-top: calc(.8em * var(--hd-gap, 1)); }
+.hd__read {
+  all: unset; box-sizing: border-box; cursor: pointer;
+  font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--ink);
+  text-decoration: underline; text-underline-offset: .18em; text-decoration-color: rgba(10, 10, 10, .4);
+}
+.hd__read:hover { color: var(--ember-deep); }
+.hd__read:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+.hd__full { display: none; }
+.hd__items { list-style: none; margin: 0; padding: 0; border: 0; }
+.hd__item { border: 0; }
+.hd__sub { margin: calc(1.1em * var(--hd-gap, 1)) 0 .25em; font-family: var(--f-body); font-size: 1em; font-weight: 600; line-height: 1.6; color: var(--ink); }
+.hd__more { display: block; }
+.hd__more > p { margin: 0; padding: 0; font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--ink-soft); }
+
+/* ---- Desktop ---- */
+.hd.is-live .hd__name { font-size: clamp(1.56rem, 3vw, 3.36rem); }
+.hd.is-tight .hd__name { font-size: clamp(1.56rem, 3vw, 3.36rem); }
+.hd.is-live .hd__kind { display: block; font-size: var(--hd-fs, .92rem); }
+.hd.is-live .hd__name { margin-bottom: .9em; }
+/* the teaser: what-we-do-hands.js fills .hd__tease with the promise and the
+   opening paragraph trimmed to the lines there is room for, so the dots and
+   Read more end its last line; the promise and paragraph themselves are
+   hidden until Read more */
+/* Read more on its own line, at the start (TJ, 21 Oct 2026): the teaser
+   ends with its dots, the button sits under it at the left, so when the
+   kind opens and the button stays put it is in the margin beside the
+   stack, never in a line of text. */
+.hd__tease { display: block; }
+.hd.is-live .hd__kind:not(.is-reading):not(.is-measure) .hd__promise,
+.hd.is-live .hd__kind:not(.is-reading):not(.is-measure) .hd__para { display: none; }
+.hd.is-live .hd__kind:not(.is-reading):not(.is-measure) .hd__teaser { display: block; }
+.hd.is-live .hd__kind:not(.is-reading):not(.is-measure) .hd__read { display: block; width: fit-content; margin-top: .55em; }
+.hd.is-live .hd__kind.is-reading .hd__teaser,
+.hd.is-live .hd__kind.is-measure .hd__teaser { display: contents; }
+.hd.is-live .hd__kind.is-reading .hd__tease,
+.hd.is-live .hd__kind.is-measure .hd__tease { display: none; }
+/* the wash: the whole photograph */
+.hd.is-live .hd__veil::after {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(243, 239, 236, .86);
+  /* slower (TJ, 21 Oct 2026): the white emerges over 1.4s, no light switch */
+  opacity: 0; transition: opacity 1400ms cubic-bezier(.45, 0, .25, 1);
+}
+.hd.is-live.is-reading .hd__veil::after { opacity: 1; }
+/* open: the stack, one width, centred on the page; the name glides to the
+   top centre (its line masks are moved by the script) */
+.hd.is-live .hd__kind.is-reading .hd__text,
+.hd.is-live .hd__kind.is-measure .hd__text {
+  display: block; width: var(--hd-w, 60ch);
+  margin-left: calc((var(--stage-w, 100vw) - var(--hd-w, 60ch)) / 2 - var(--gutter, 24px));
+}
+.hd.is-live .hd__kind.is-reading .hd__full,
+.hd.is-live .hd__kind.is-measure .hd__full { display: block; }
+.hd.is-live .hd__kind.is-reading .hd__promise,
+.hd.is-live .hd__kind.is-measure .hd__promise { margin-bottom: calc(.8em * var(--hd-gap, 1)); }
+.hd.is-live .hd__kind.is-reading .hd__read,
+.hd.is-live .hd__kind.is-measure .hd__read { position: absolute; }
+.hd.is-live .hd__name .hd-line { width: fit-content; transition: transform 650ms var(--ease-out); }
+/* The flight (TJ, 21 Oct 2026): a copy of the teaser (.hd__fly, made by the
+   script) glides from its closed spot to the top of the stack and widens
+   into it; the real text is hidden while it flies and fades in as it lands.
+   Read more is never hidden. */
+/* only the items fade; the opening text is swapped for its flown copy at
+   once, so it settles with no dissolve (TJ) */
+.hd.is-live .hd__full { transition: opacity 700ms var(--ease-out); }
+/* hidden at once while the copy flies (no fade from visible, which showed
+   the stack faintly behind the copy); on Read less the items fade away
+   under the returning copy */
+.hd.is-live .hd__kind.is-switching .hd__tease,
+.hd.is-live .hd__kind.is-switching .hd__promise,
+.hd.is-live .hd__kind.is-switching .hd__para,
+.hd.is-live .hd__kind.is-switching .hd__full { opacity: 0; transition: none; }
+.hd.is-live .hd__kind.is-switching.is-closing .hd__full { transition: opacity 700ms var(--ease-out); }
+.hd__fly {
+  position: fixed; z-index: 60; pointer-events: none; margin: 0; overflow: hidden;
+  font-family: var(--f-read); line-height: 1.6; color: var(--ink-soft);
+  transition: left 1000ms cubic-bezier(.45, 0, .25, 1), top 1000ms cubic-bezier(.45, 0, .25, 1), width 1000ms cubic-bezier(.45, 0, .25, 1), height 1000ms cubic-bezier(.45, 0, .25, 1);
+}
+.hd__fly .hd__promise { display: block; margin: 0 0 calc(.8em * var(--hd-gap, 1)); }
+.hd__fly .hd__para, .hd__fly .hd__para > p { display: block; }
+
+/* ---- Phones ---- */
+.hd:not(.is-live) .hd__kind { font-size: .92rem; }
+.hd:not(.is-live) .hd__read { display: block; width: fit-content; margin-top: .55em; }
+.hd:not(.is-live) .hd__promise { margin: 0 0 .5em; }
+.hd:not(.is-live) .hd__kind:not(.is-reading) .hd__promise,
+.hd:not(.is-live) .hd__kind:not(.is-reading) .hd__para { display: none; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__teaser { display: contents; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__tease { display: none; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__text { display: flex; flex-direction: column; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__promise { margin: 0 0 calc(.5em * var(--fit)); }
+.hd.is-reading-phone { isolation: auto; }
+.hd:not(.is-live) .hd__kind.is-reading {
+  --fit: 1;
+  position: fixed; inset: 0; z-index: 1000; max-width: none; margin: 0;
+  display: flex; flex-direction: column; justify-content: center; gap: calc(7px * var(--fit));
+  padding: calc(20px * var(--fit)) var(--gutter, 24px); overflow-y: auto; overscroll-behavior: contain;
+  font-size: calc(.92rem * var(--fit));
+  background:
+    linear-gradient(rgba(243, 239, 236, .9), rgba(243, 239, 236, .9)),
+    var(--hd-bg, none) center / cover no-repeat,
+    var(--canvas);
+}
+.hd:not(.is-live) .hd__kind.is-reading .hd__full { display: block; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__name { font-size: calc(2rem * var(--fit)); }
+.hd:not(.is-live) .hd__kind.is-reading .hd__promise,
+.hd:not(.is-live) .hd__kind.is-reading .hd__para,
+.hd:not(.is-live) .hd__kind.is-reading .hd__more > p,
+.hd:not(.is-live) .hd__kind.is-reading .hd__sub { line-height: 1.5; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__para > p + p,
+.hd:not(.is-live) .hd__kind.is-reading .hd__more > p + p { margin-top: calc(.4em * var(--fit)); }
+.hd:not(.is-live) .hd__kind.is-reading .hd__sub { margin: calc(.75em * var(--fit)) 0 .25em; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__read { display: block; order: 10; align-self: flex-start; margin-top: calc(6px * var(--fit)); }
+
+/* the notch: a float at the pinned button's spot (what-we-do-hands.js) */
+.hd__notch { float: left; display: block; pointer-events: none; }

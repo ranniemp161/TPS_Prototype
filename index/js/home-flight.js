@@ -19,6 +19,17 @@
   // Each stop's button: the small name for Arrival, the large title for the rooms after it (TJ, 15 Oct 2026).
   var stopBtns = stopEls.map(function (li) { return li.querySelector('.route__name, .route__head'); });
   var flightEnquire = section.querySelector('[data-flight-enquire]');
+  var intro = section.querySelector('[data-flight-intro]');
+  var introVeil = section.querySelector('[data-flight-veil]');
+  // The reveal (TJ, 21 Oct 2026, What We Do): the Four Kinds of Care's held
+  // stage is tucked under the end of the film, already in place, and the
+  // film dissolves away over its last REVEAL_VH windows to show it, rather
+  // than fading to the canvas and the section rising in. Only while that
+  // section is live (desktop, what-we-do-hands.js); otherwise the old end.
+  var REVEAL_VH = parseFloat(section.dataset.revealVh) || 0;
+  var revealNext = section.nextElementSibling;
+  var revealing = false;
+  var VEIL = 0.62;
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var phoneQuery = matchMedia('(max-width: 767px)');
   var phone = phoneQuery.matches;
@@ -240,12 +251,34 @@
       beat.style.transform = 'none';
     });
 
+    // The opening line (TJ, 21 Oct 2026): up as the film arrives and through
+    // the glide, gone as the door comes up, before the first stop's title.
+    if (intro) {
+      var io = 1 - smooth((time - (DOOR - 0.4)) / 0.5);
+      intro.style.opacity = io.toFixed(3);
+      intro.style.visibility = io > 0.001 ? 'visible' : 'hidden';
+    }
+    if (introVeil) introVeil.style.opacity = (VEIL * (1 - smooth((time - (DOOR - 0.4)) / 0.5))).toFixed(3);
+
     var pair = scenePair(time);
     var a = SCENES[pair.left], b = SCENES[pair.right];
 
     // the dissolve to canvas belongs to the film's own end, which the hand
     // over never reaches
-    stage.style.setProperty('--blend', smooth((time - (26.1 - CUT)) / 0.88).toFixed(3));
+    var endBlend = smooth((time - (26.1 - CUT)) / 0.88);
+    if (revealing) {
+      // Matched to the old hand over onto What Is Confinement on Home (TJ,
+      // 21 Oct 2026): a steady linear fade over one full window of scroll,
+      // the last REVEAL_VH of the track, the film still playing under it.
+      var fade = clamp((trackForTime(time) - (TRACK_VH - REVEAL_VH)) / REVEAL_VH, 0, 1);
+      stage.style.setProperty('--blend', '0');
+      stage.style.opacity = (1 - fade).toFixed(3);
+      stage.style.pointerEvents = fade > 0.95 ? 'none' : '';
+    } else {
+      stage.style.setProperty('--blend', endBlend.toFixed(3));
+      stage.style.opacity = '';
+      stage.style.pointerEvents = '';
+    }
     stage.style.setProperty('--fx', phone ? mix(a.fx, b.fx, pair.amount).toFixed(1) + '%' : '50%');
 
     paintRoute(time);
@@ -486,6 +519,11 @@
     // the hand over: give back the stage's own window and the track past
     // PIN_T, so the confinement act starts at PIN_T over the held film
     section.style.marginBottom = HELD ? -Math.round((1 + TRACK_VH - PIN_VH) * vh) + 'px' : '';
+    // the reveal: give back the stage's own window plus REVEAL_VH, so the
+    // next section's top meets the window's top REVEAL_VH before the film ends
+    revealing = !HELD && !reduced && REVEAL_VH > 0 && !!revealNext && revealNext.classList.contains('is-live');
+    section.classList.toggle('is-reveal', revealing);
+    if (revealing) section.style.marginBottom = -Math.round((1 + REVEAL_VH) * vh) + 'px';
     // trackTop is where scrubbing starts, after the lead, so every
     // scrollTo below that adds a track position to it stays correct.
     trackTop = section.getBoundingClientRect().top + scrollY + LEAD_VH * vh;
