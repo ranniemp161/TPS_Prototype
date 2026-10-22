@@ -188,7 +188,7 @@
 .ty__tslot { display: none; }
 
 /* ---- Desktop, live: the held stage ---- */
-.ty.is-live { height: 420vh; }
+.ty.is-live { height: 343vh; }   /* 420vh less the opening's stretch (TJ, 21 Oct 2026) */
 .ty.is-live .ty__stage { position: sticky; top: 0; height: 100vh; height: 100svh; }
 .ty.is-live .ty__track { height: 100%; align-content: center; box-sizing: border-box; }
 .ty.is-live .ty__card { opacity: var(--ty-ci, 0); transform: translateY(calc((1 - var(--ty-ci, 0)) * 18px)); }

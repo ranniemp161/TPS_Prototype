@@ -1215,7 +1215,7 @@ function mistHandoff() {
 
 /* ------------------------------------------------------------
    DOOR HANDOFF (TJ, 14 Oct 2026)
-   The house film is pulled up underneath the bath (site.css, .flight--home)
+   The house film is pulled up underneath the bath (site.css, .flight--home; since 21 Oct 2026 the home film, .film)
    so its stage is already held on the top of the window, on the closed
    front door, by the time the bath lets go. The bath is layered above it
    and simply rises out under the header, lifting off the door like a
@@ -1234,14 +1234,15 @@ function mistHandoff() {
 const DOOR_LEAD_VH = 1;     // the same as LEAD_VH in home-flight.js
 
 function doorHandoff() {
+  // Since 21 Oct 2026 (TJ) the bath lifts off the home film, not the house
+  // flight's door (the flight moved to What We Do), and "From the moment we
+  // arrive" is gone. The smoke, the feather and the floating copy are as
+  // they were.
   const arrive = document.querySelector('[data-arrive]');
   const bank = arrive && arrive.querySelector('[data-arrive-bank]');
-  const line = arrive && arrive.querySelector('[data-arrive-line]');
-  const lineOut = arrive && arrive.querySelector('[data-arrive-line-out]');
   const bathAct = document.querySelector('.act--bath');
   const bathEl = document.querySelector('[data-bath]');
-  const flight = document.querySelector('[data-flight]');
-  if (!arrive || !bank || !line || !lineOut || !bathAct || !bathEl || !flight || REDUCED) return;
+  if (!arrive || !bank || !bathAct || !bathEl || REDUCED) return;
 
   const vh = () => window.innerHeight;
 
@@ -1325,20 +1326,6 @@ function doorHandoff() {
     }
   });
 
-  // "From the moment we arrive" dissolves in slowly, starting while "Well
-  // deserved" is still on screen (TJ). On a phone the copy rises through
-  // the line's own spot, so it starts a little later there.
-  const phoneQ = window.matchMedia('(max-width: 767px)');
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: bathAct,
-      start: () => phoneQ.matches ? 'bottom 50%' : 'bottom 70%',
-      end: () => phoneQ.matches ? 'bottom 20%' : 'bottom 30%',
-      scrub: 0.7,
-      invalidateOnRefresh: true
-    }
-  }).fromTo(line, { opacity: 0, y: 14 }, { opacity: 1, y: 0, ease: 'none', duration: 1, immediateRender: false }, 0);
-
   // "Well deserved" dissolves as her head leaves the top of the window.
   if (float) {
     gsap.timeline({
@@ -1351,18 +1338,172 @@ function doorHandoff() {
       }
     }).fromTo(float, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 1, immediateRender: false }, 0);
   }
+}
 
-  // The line stays while the door opens (TJ) and dissolves as the camera
-  // carries on into the hallway: 0.35 to 1.0 of a window after the lead.
-  gsap.timeline({
+/* ------------------------------------------------------------
+   THE HOME FILM (TJ, 21 Oct 2026)
+   Sits under the bath where the house flight used to (site.css, .film), so
+   the bath lifts off it through the smoke exactly as it lifted off the door.
+   Held for one window after the bath has gone, then it scrolls up and What
+   Is Confinement follows in plain flow; its bottom edge feathers out as it
+   leaves, so no straight line crosses the page.
+
+   It plays silent and loops while it is on screen, and pauses off screen.
+   Watch With Sound plays it from the top with sound; on a phone, where it
+   rests as a landscape picture across the width, it also goes full screen.
+   When it ends, or when the reader scrolls it away or leaves full screen,
+   it goes back to the silent loop and the prompt returns.
+   ------------------------------------------------------------ */
+function homeFilm() {
+  const section = document.querySelector('[data-film-section]');
+  if (!section) return;
+  const stage = section.querySelector('[data-film-stage]');
+  const video = section.querySelector('[data-film-video]');
+  const sound = section.querySelector('[data-film-sound]');
+  if (!stage || !video) return;
+
+  const phoneQ = window.matchMedia('(max-width: 767px)');
+  const fine = window.matchMedia('(pointer: fine)').matches;
+  video.src = (phoneQ.matches || !fine) ? video.dataset.srcMobile : video.dataset.src;
+  video.preload = 'auto';
+
+  let inView = false;
+  let withSound = false;
+
+  const playSilent = () => {
+    if (!inView || REDUCED) return;
+    const p = video.play();
+    if (p && p.catch) p.catch(() => {});
+  };
+
+  const fsElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const exitFull = () => {
+    if (fsElement()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    else if (video.webkitDisplayingFullscreen && video.webkitExitFullscreen) video.webkitExitFullscreen();
+  };
+
+  // The timeline (TJ, 21 Oct 2026): shown only while the film plays with
+  // sound. The fill follows the film every frame; tapping or dragging the
+  // line moves the film there, arrows step five seconds.
+  const bar = section.querySelector('[data-film-bar]');
+  const pauseBtn = section.querySelector('[data-film-pause]');
+  const track = section.querySelector('[data-film-track]');
+  let lastP = -1;
+  const paintBar = () => {
+    if (!bar) return;
+    const p = video.duration ? Math.min(1, video.currentTime / video.duration) : 0;
+    if (Math.abs(p - lastP) > 0.0005) {
+      lastP = p;
+      bar.style.setProperty('--film-p', p.toFixed(4));
+      if (track) track.setAttribute('aria-valuenow', String(Math.round(p * 100)));
+    }
+  };
+  const barLoop = () => { if (!withSound) return; paintBar(); requestAnimationFrame(barLoop); };
+  const setPaused = (paused) => {
+    section.classList.toggle('is-paused', paused);
+    if (pauseBtn) pauseBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
+  };
+
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', () => {
+      if (video.paused) { const p = video.play(); if (p && p.catch) p.catch(() => {}); setPaused(false); }
+      else { video.pause(); setPaused(true); }
+    });
+  }
+
+  if (track) {
+    let dragging = false;
+    const seekTo = (clientX) => {
+      const r = track.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+      if (video.duration) video.currentTime = x * video.duration;
+      paintBar();
+    };
+    track.addEventListener('pointerdown', (e) => {
+      dragging = true;
+      track.setPointerCapture(e.pointerId);
+      seekTo(e.clientX);
+    });
+    track.addEventListener('pointermove', (e) => { if (dragging) seekTo(e.clientX); });
+    track.addEventListener('pointerup', () => { dragging = false; });
+    track.addEventListener('pointercancel', () => { dragging = false; });
+    track.addEventListener('keydown', (e) => {
+      const step = e.key === 'ArrowRight' ? 5 : e.key === 'ArrowLeft' ? -5 : 0;
+      if (!step || !video.duration) return;
+      e.preventDefault();
+      video.currentTime = Math.max(0, Math.min(video.duration - 0.1, video.currentTime + step));
+      paintBar();
+    });
+  }
+
+  const backToLoop = () => {
+    if (!withSound) return;
+    withSound = false;
+    video.muted = true;
+    video.loop = true;
+    section.classList.remove('is-sound');
+    setPaused(false);
+    exitFull();
+    if (inView) playSilent(); else video.pause();
+  };
+
+  if (sound) {
+    sound.addEventListener('click', () => {
+      withSound = true;
+      video.loop = false;
+      video.muted = false;
+      video.currentTime = 0;
+      section.classList.add('is-sound');
+      setPaused(false);
+      lastP = -1;
+      requestAnimationFrame(barLoop);
+      const p = video.play();
+      if (p && p.catch) p.catch(() => {});
+      // A phone goes full screen. The stage itself where the browser allows
+      // it, so the timeline comes too; an iPhone only lets the video go full
+      // screen, with its own controls.
+      if (phoneQ.matches) {
+        if (stage.requestFullscreen) stage.requestFullscreen().catch(() => {});
+        else if (stage.webkitRequestFullscreen) stage.webkitRequestFullscreen();
+        else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+      }
+    });
+  }
+
+  video.addEventListener('ended', backToLoop);
+  video.addEventListener('webkitendfullscreen', backToLoop);
+  document.addEventListener('fullscreenchange', () => { if (!fsElement()) backToLoop(); });
+  document.addEventListener('webkitfullscreenchange', () => { if (!fsElement()) backToLoop(); });
+
+  new IntersectionObserver(entries => {
+    inView = entries[0].isIntersecting;
+    if (inView) playSilent();
+    else if (withSound && !fsElement()) backToLoop();
+    else if (!withSound) video.pause();
+  }, { threshold: 0.15 }).observe(stage);
+
+  if (REDUCED) return;
+
+  // The film is held for LEAD (the bath lifting off it) plus HOLD windows,
+  // then scrolls away with its own window: the section is that tall.
+  const LEAD = DOOR_LEAD_VH, HOLD = 1;
+  const size = () => { section.style.height = Math.round((LEAD + HOLD + 1) * Math.max(window.innerHeight, 540)) + 'px'; };
+  size();
+  ScrollTrigger.addEventListener('refreshInit', size);
+
+  // The bottom edge feathers out as the film scrolls away (site.css).
+  gsap.fromTo(stage, { '--film-feather': '0px' }, {
+    '--film-feather': () => Math.round(window.innerHeight * 0.35) + 'px',
+    ease: 'none',
+    immediateRender: false,
     scrollTrigger: {
-      trigger: flight,
-      start: () => 'top+=' + vh() * (DOOR_LEAD_VH + 0.35) + ' top',
-      end: () => '+=' + vh() * 0.65,
+      trigger: section,
+      start: 'bottom 100%',
+      end: 'bottom 70%',
       scrub: 0.7,
       invalidateOnRefresh: true
     }
-  }).fromTo(lineOut, { opacity: 1 }, { opacity: 0, ease: 'none', duration: 1, immediateRender: false }, 0);
+  });
 }
 
 /* ------------------------------------------------------------
@@ -1567,7 +1708,9 @@ function gallery() {
     ghost.style.objectPosition = posOf(btn);
     gsap.set(ghost, {
       left: from.left, top: from.top, width: from.width, height: from.height,
-      borderRadius: 6, opacity: 1
+      // the thumbnail's own corners (square on desktop but for the outer
+      // ones, TJ 21 Oct 2026), so the copy lifts off exactly as it sits
+      borderRadius: getComputedStyle(btn).borderRadius || '6px', opacity: 1
     });
     document.body.appendChild(ghost);
 
@@ -1587,7 +1730,7 @@ function gallery() {
       .to(ghost, { scale: 1.06, duration: 0.18, ease: 'power2.out' })
       .to(ghost, {
         left: to.left, top: to.top, width: to.width, height: to.height,
-        borderRadius: parseFloat(getComputedStyle(media).borderTopLeftRadius) || 22,
+        borderRadius: getComputedStyle(media).borderRadius || '22px',
         scale: 1,
         duration: 0.62, ease: 'power3.inOut'
       });
@@ -1854,6 +1997,7 @@ function boot() {
   gallery();
   mistHandoff();
   doorHandoff();
+  homeFilm();
   navTheme();
   // Last. It registers no ScrollTrigger and never transforms its own
   // section, so it stays out of the measurement the hero pin depends on.

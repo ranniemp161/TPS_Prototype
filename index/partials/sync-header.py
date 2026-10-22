@@ -27,6 +27,7 @@ PAGES = {
     "who-comes-into-your-home.html":      dict(brand="index.html",  enquire=CAL,           compact=False),
     "build-your-programme.html":       dict(brand="index.html",  enquire=CAL,           compact=False),
     "faqs.html":           dict(brand="index.html",  enquire=CAL,           compact=False),
+    "gifts.html":          dict(brand="index.html",  enquire=CAL,           compact=False),
 }
 
 raw = (HERE / "site-header.html").read_text(encoding="utf-8")

@@ -33,18 +33,19 @@
            screens only. -->
       <img class="nav__corner" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
       <!-- The five main menu items share one row, with the Menu chip taking
-           their place below 1100px. Our Offering and About Us open panels;
-           Home, What We Do and Faqs are page links. -->
+           their place below 1100px. What We Do, Our Offering and About Us open
+           panels; Home and Gifts are page links (TJ, 22 Oct 2026: FAQs moved
+           into the What We Do panel, Gifts took its place in the bar). -->
       <div class="nav__tabs" data-tabs>
         <a class="tab" href="index.html">Home</a>
-        <a class="tab" href="what-we-do.html">What We Do</a>
+        <button class="tab" type="button" data-tab="what-we-do" aria-expanded="false" aria-controls="panel-what-we-do">What We Do</button>
         <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
         <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
-        <a class="tab" href="faqs.html">Faqs</a>
+        <a class="tab" href="gifts.html">Gifts</a>
       </div>
       <!-- Takes the place of the five above it below 1100px. A word, not a
            glyph, in the same chip as everything else. -->
-      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-offerings">Menu</button>
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-what-we-do">Menu</button>
     </div>
 
     <!-- #content, not #top. There has never been an element with id
@@ -78,6 +79,16 @@
          eventually mirror stay exactly where they are. A section on the
          homepage and a page of its own are two different things, and
          whether the former ever links to the latter is a later call. -->
+    <section class="menu__panel" id="panel-what-we-do" data-panel="what-we-do" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">What We Do</h2>
+        <ul class="menu__list">
+          <li><a href="what-we-do.html">What We Do</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+        </ul>
+      </div>
+    </section>
+
     <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
       <div class="menu__group">
         <h2 class="menu__head">Our Offerings</h2>
@@ -85,8 +96,7 @@
           <li><a href="programmes.html">Programmes</a></li>
           <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
           <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
-          <!-- No Gifts page exists yet, so it is a label, not a link. -->
-          <li><span class="menu__pending">Gifts</span></li>
+          <li><a href="gifts.html">Gifts</a></li>
         </ul>
       </div>
     </section>

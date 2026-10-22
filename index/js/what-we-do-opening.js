@@ -198,7 +198,9 @@
       /* Opens at full screen (TJ for Ami, 19 Oct 2026): the photograph already
          fills the window and the statement sits on it, cream, at the lower
          left. The grow from the side by side frame is gone; small is unused. */
-      gsap.set(frame, { left: 0, top: 0, width: W(), height: H(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
+      // Under the header, not behind it (TJ, 21 Oct 2026, Ami's notes): the
+      // photograph starts at the header band's foot, as on the home page.
+      gsap.set(frame, { left: 0, top: TOP(), width: W(), height: H() - TOP(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
       /* Where the photograph comes back to, placed as in the first hero (TJ,
          8 Oct 2026): the question is the long line, so the photograph tucks in
          under it, 60px right of the answer blocks, its foot level with the
@@ -246,7 +248,7 @@
       arrive();
 
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
-      var zd = zoomFor(FOCUS.desktop, W(), H());
+      var zd = zoomFor(FOCUS.desktop, W(), H() - TOP());
       gsap.set(img, { scale: zd.scale, transformOrigin: zd.origin });
       // "Who is it for?" rises into its place at the lower right
       tl.to(leads, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .1)
@@ -305,8 +307,10 @@
       };
       /* Opens at full screen (TJ for Ami, 19 Oct 2026): the photograph fills the
          screen from the start with the statement on it in cream. */
-      gsap.set(frame, { left: 0, top: 0, width: W(), height: H(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
-      gsap.set(img, { objectPosition: centre(W(), H()), scale: 1 });
+      // Under the header, not behind it (TJ, 21 Oct 2026, Ami's notes): the
+      // photograph starts at the header band's foot, as on the home page.
+      gsap.set(frame, { left: 0, top: TOP(), width: W(), height: H() - TOP(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
+      gsap.set(img, { objectPosition: centre(W(), H() - TOP()), scale: 1 });
       gsap.set(scrim, { opacity: 1 });
       // some dimming from the start, so the cream statement reads on the linen
       gsap.set(dim, { opacity: .55 });

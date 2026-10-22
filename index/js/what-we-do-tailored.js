@@ -38,7 +38,11 @@
   var tip = sec.querySelector('[data-ty-tip]');
   var stop14 = sec.querySelector('.ty__stop[style*="--at: 14"]');
   var STOPS = [7, 14, 30], MILESTONES = [0, 1 / 2, 1];
-  var PH = 0.2, L0 = 0.24, L1 = 0.34, L2 = 0.9;
+  // No opening (TJ, 21 Oct 2026, from Ami): the section arrives in its split,
+  // photograph in its slot, title on its line, card and figures in place. The
+  // 0.24 of the old 420vh the opening used is gone (the section is 343vh), so
+  // the line draws and travels over exactly the same scroll as before.
+  var L0 = 0, L1 = 0.132, L2 = 0.868;
   var lastW = 0, lastH = 0, phone = false;
   // One driver per mode, run every frame. Positions are read live from the
   // page rather than measured once, because the sections above change height
@@ -154,7 +158,7 @@
     geom();
 
     function render(p, keepDays) {
-      var a = clamp(p / PH, 0, 1), e = a < .5 ? 2 * a * a : 1 - Math.pow(-2 * a + 2, 2) / 2;
+      var e = 1;   // the split from the start (no opening)
       sec.style.setProperty('--ph-t', (e * sl.t).toFixed(1) + 'px');
       sec.style.setProperty('--ph-r', (e * sl.r).toFixed(1) + 'px');
       sec.style.setProperty('--ph-b', (e * sl.b).toFixed(1) + 'px');
@@ -164,8 +168,8 @@
       img.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + (w / BASE).toFixed(4) + ')';
       var tf = 'translate(' + (tX * e).toFixed(1) + 'px,' + (tY * e).toFixed(1) + 'px) scale(' + (1 + (tS - 1) * e).toFixed(4) + ')';
       titles.forEach(function (t) { t.style.transform = tf; });
-      sec.style.setProperty('--ty-ci', smooth((p - PH * 0.5) / (PH * 0.45)).toFixed(3));
-      sec.style.setProperty('--ty-di', smooth((p - PH * 0.8) / (PH * 0.4)).toFixed(3));
+      sec.style.setProperty('--ty-ci', '1');
+      sec.style.setProperty('--ty-di', '1');
       if (keepDays) return;
       if (p < L0) setDays(0, 7);
       else if (p < L1) setDays(7 * (p - L0) / (L1 - L0), 7);

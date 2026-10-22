@@ -45,18 +45,19 @@
            screens only. -->
       <img class="nav__corner" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
       <!-- The five main menu items share one row, with the Menu chip taking
-           their place below 1100px. Our Offering and About Us open panels;
-           Home, What We Do and Faqs are page links. -->
+           their place below 1100px. What We Do, Our Offering and About Us open
+           panels; Home and Gifts are page links (TJ, 22 Oct 2026: FAQs moved
+           into the What We Do panel, Gifts took its place in the bar). -->
       <div class="nav__tabs" data-tabs>
         <a class="tab" href="index.html">Home</a>
-        <a class="tab" href="what-we-do.html">What We Do</a>
+        <button class="tab" type="button" data-tab="what-we-do" aria-expanded="false" aria-controls="panel-what-we-do">What We Do</button>
         <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
         <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
-        <a class="tab" href="faqs.html">Faqs</a>
+        <a class="tab" href="gifts.html">Gifts</a>
       </div>
       <!-- Takes the place of the five above it below 1100px. A word, not a
            glyph, in the same chip as everything else. -->
-      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-offerings">Menu</button>
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-what-we-do">Menu</button>
     </div>
 
     <!-- #content, not #top. There has never been an element with id
@@ -90,6 +91,16 @@
          eventually mirror stay exactly where they are. A section on the
          homepage and a page of its own are two different things, and
          whether the former ever links to the latter is a later call. -->
+    <section class="menu__panel" id="panel-what-we-do" data-panel="what-we-do" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">What We Do</h2>
+        <ul class="menu__list">
+          <li><a href="what-we-do.html">What We Do</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+        </ul>
+      </div>
+    </section>
+
     <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
       <div class="menu__group">
         <h2 class="menu__head">Our Offerings</h2>
@@ -97,8 +108,7 @@
           <li><a href="programmes.html">Programmes</a></li>
           <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
           <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
-          <!-- No Gifts page exists yet, so it is a label, not a link. -->
-          <li><span class="menu__pending">Gifts</span></li>
+          <li><a href="gifts.html">Gifts</a></li>
         </ul>
       </div>
     </section>
@@ -137,7 +147,7 @@
         <img src="../assets/img/about-founder-illustration.webp" alt="Illustration of a mother on the sofa cradling her newborn while her young daughter leans in beside her" width="1600" height="1470" fetchpriority="high" decoding="async" />
       </figure>
       <div class="os-open__words">
-        <h1 class="os-open__h" data-os-lines>Who is caring for the mother?</h1>
+        <h1 class="os-open__h">Who is caring<br /> for the mother?</h1>
         <p class="os-open__lede" data-os-rise>The Postpartum Suite began with a simple question: <strong>who is caring for the mother?</strong></p>
       </div>
     </div>
@@ -166,7 +176,7 @@
   <!-- 3. The care we felt was missing -->
   <section class="os-missing" data-section="the-care-missing" data-section-name="The Care We Felt Was Missing">
     <div class="os-wrap os-measure">
-      <h2 class="os-h2" data-os-rise>The care we felt was missing</h2>
+      <h2 class="os-h2">The care we felt was missing</h2>
       <p class="os-p" data-os-rise>We didn't want to create a service that put another pair of hands in the home. We wanted to create something more considered: care built around what a woman may genuinely need after birth.</p>
       <p class="os-p" data-os-rise>That might mean time to recover, nourishing food prepared for her, postpartum treatments that give attention to her body and wellbeing, someone she trusts with her baby, and a home that continues to function without depending entirely on her.</p>
       <ul class="os-needs" data-os-needs aria-hidden="true">
@@ -186,8 +196,8 @@
   <section class="os-founders" data-section="our-founders" data-section-name="Our Founders">
     <div class="os-wrap">
       <header class="os-founders__head os-measure">
-        <h2 class="os-h2" data-os-rise>Our founders</h2>
-        <p class="os-h3" data-os-rise>Two sisters. Two perspectives. One shared standard.</p>
+        <h2 class="os-h2">Our founders</h2>
+        <p class="os-h3">Two sisters. Two perspectives. One shared standard.</p>
         <p class="os-p" data-os-rise>Our different backgrounds and the perspectives each of us brings have shaped The Postpartum Suite.</p>
       </header>
       <div class="os-founders__grid">
@@ -219,7 +229,7 @@
   <section class="os-trad" data-section="traditions" data-section-name="Inspired by Traditions">
     <div class="os-trad__band">
       <img class="os-trad__img" src="../assets/img/bath-steam-original.webp" alt="A mother resting in a steaming herbal bath, her hair wrapped in a towel, a candle burning beside the tub" width="2400" height="1340" loading="lazy" decoding="async" data-os-par />
-      <div class="os-trad__card glass" data-os-rise>
+      <div class="os-trad__card glass">
         <h2 class="os-h2">Inspired by traditions that have long centred the mother</h2>
         <p class="os-p">The idea of protecting a woman’s recovery after birth is not new.</p>
         <p class="os-p">Across cultures and generations, the postpartum period has long been recognised as a distinct time of recovery, a time when mothers are nourished, rest is protected, the body is cared for, and practical responsibilities are shared.</p>
@@ -238,7 +248,7 @@
   <!-- 6. Care should be felt in the details: a line that draws as you read -->
   <section class="os-details" data-section="the-details" data-section-name="Care Should Be Felt in the Details">
     <div class="os-wrap">
-      <h2 class="os-h2 os-details__h" data-os-rise>Care should be felt in the details</h2>
+      <h2 class="os-h2 os-details__h">Care should be felt in the details</h2>
       <ol class="os-line" data-os-line>
         <li class="os-line__axis" aria-hidden="true"><span class="os-line__fill"></span><span class="os-line__tip"></span></li>
         <li class="os-act"><span class="os-act__dot" aria-hidden="true"></span><p>Sometimes that means preparing nourishing postpartum meals. Sometimes it means caring for the baby while mum sleeps.</p></li>
@@ -260,7 +270,7 @@
   <section class="os-close" data-section="the-same-intention" data-section-name="The Same Intention, in Every Home">
     <div class="aurora os-close__aurora" aria-hidden="true"><span class="aurora__field"></span></div>
     <div class="os-wrap os-measure os-close__in">
-      <h2 class="os-h2" data-os-rise>The same intention, in every home</h2>
+      <h2 class="os-h2">The same intention, in every home</h2>
       <p class="os-p" data-os-rise>The Postpartum Suite began because one sister wanted another to feel cared for after birth.</p>
       <p class="os-p" data-os-rise>That intention has never changed.</p>
       <p class="os-p" data-os-rise>Today, it informs every part of TPS, from the programmes we design and the practitioners we train to the meals prepared, treatments delivered and hours of rest we help protect.</p>

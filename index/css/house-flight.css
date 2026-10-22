@@ -25,6 +25,10 @@
   background: var(--canvas);
 }
 
+/* Above the Four Kinds of Care while it dissolves to show it (home-flight.js). */
+.flight.is-reveal { z-index: 2; background: transparent; pointer-events: none; }
+.flight.is-reveal .flight__stage { pointer-events: auto; }
+
 .flight__stage {
   position: sticky;
   top: 0;
@@ -85,6 +89,21 @@
   pointer-events: none;
 }
 
+/* The opening veil (TJ, 21 Oct 2026): white over the whole film while the
+   opening line is up, so the line stands out; the house still shows through.
+   home-flight.js dissolves it with the line as the door comes up. It sits
+   under the copy (z 2) and under the route and its foot fade (z 2 and 3),
+   so the progression line is never beneath it. No blur (TJ). */
+.flight__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--paper);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
 /* The mobile aurora: hidden on desktop, where the photo still fills the
    whole stage. On phones it fills everything below the contained image
    and holds the caption copy still to come. Its own top edge fades in
@@ -97,8 +116,33 @@
 .flight__copy {
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
   transform: translate3d(calc(var(--mx) * -14px), calc(var(--my) * -10px), 0);
+}
+
+/* The opening line (TJ, 21 Oct 2026), after the old "From the moment we
+   arrive", now in Quentin: large, centred on the film, on a soft wash of
+   the canvas with no edge so it reads on the brick and oak. home-flight.js
+   fades it out as the door comes up. */
+.flight__intro {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  margin: 0;
+  padding: .2em .6em;
+  transform: translate(-50%, -50%);
+  font-family: var(--f-script);
+  font-size: clamp(2.6rem, 6vw, 6rem);
+  line-height: 1.1;
+  color: var(--ember-deep);
+  text-align: center;
+  white-space: nowrap;
+  will-change: opacity;
+}
+@media (max-width: 767px) {
+  .flight__intro { font-size: min(8.6vw, 3rem); }
 }
 
 .beat {
@@ -1023,7 +1067,9 @@
   margin: 0 0 4px;
   font-family: var(--f-body);
   font-weight: 400;
-  font-size: var(--route-title);
+  /* doubled, then 25 percent back (TJ, 21 Oct 2026): the rooms are titles
+     only now. Phones set their own size below. */
+  font-size: calc(1.5 * var(--route-title));
   line-height: 1.4;
   letter-spacing: normal;
   text-transform: uppercase;

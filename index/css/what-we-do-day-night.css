@@ -181,9 +181,10 @@
    with them, so the title and paragraph sit low, under the clock, until then. */
 .dnf__heads { display: grid; gap: 10px; overflow: hidden; height: calc(var(--dn-hh, 0) * 1px); opacity: var(--dn-ha, 0); }
 .dn-wrap { --dnt-c: 10, 10, 10; }
+/* Same font, size and spacing as the title above (TJ, 22 Oct 2026, Ami's font test). */
 .dnf__name {
-  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(1.7rem, 3vw, 2.8rem); line-height: 1; letter-spacing: .02em; color: inherit;
+  margin: 0; font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(1.12rem, 1.02rem + .42vw, 1.4rem); line-height: 1.25; letter-spacing: .08em; color: inherit;
 }
 .dnf__hours { margin: 0; font-family: var(--f-mono); font-size: clamp(.82rem, .95vw, 1rem); letter-spacing: .02em; opacity: .86; }
 
@@ -229,7 +230,7 @@
   /* Small enough that "Care arranged around the hours" holds one line. */
   .dnf__lede { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
   .dnf__opt--day { padding-top: calc(var(--nav-h) + 12px); }
-  .dnf__name { font-size: clamp(1.5rem, 7vw, 2rem); }
+  .dnf__name { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
   .dn-wrap { --dn-lines: 4; }
   .dnf__intro { font-size: .85rem; line-height: 1.5; }
   .dnf__opt.is-open .dnf__body { max-height: calc(50svh - 150px) !important; }

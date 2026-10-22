@@ -19,7 +19,7 @@
   position: relative; isolation: isolate; background: var(--canvas); color: var(--ink);
 }
 .vt__stage { position: relative; overflow: hidden; }
-.vt.is-live { height: 780vh; }
+.vt.is-live { height: 664vh; }   /* 780vh less the opening's 17 percent of the scroll (TJ, 21 Oct 2026) */
 .vt.is-live .vt__stage { position: sticky; top: 0; height: 100vh; height: 100svh; }
 
 /* ---- Aurora: the footer's construction, light palette ---- */
@@ -47,11 +47,17 @@
 /* ---- The track ---- */
 .vt__track { position: relative; z-index: 1; padding: calc(var(--nav-h) + clamp(28px, 6vh, 64px)) var(--gutter, 24px) clamp(80px, 14vh, 160px); will-change: transform; }
 .vt__card { padding: clamp(26px, 3vw, 42px); display: grid; gap: .9rem; align-content: center; }
-.vt__card .wh2 { margin: 0; }
+/* A quiet eyebrow over the script line (TJ, 22 Oct 2026, Ami's header rework): the
+   heading keeps its serif, as large as the card allows on one line (TJ). The line
+   measures 13.31em, so 7.3cqi fills the card's width with a little to spare. */
+.vt__card { container-type: inline-size; }
+.vt__card .wh2 {
+  margin: 0; font-size: 7.3cqi; line-height: 1.1; white-space: nowrap;
+}
 /* The settled title's place (TJ, 9 Oct 2026): "A Day With Us" in Quentin where it sat in
    Instrument Serif. Transparent, so it holds its room and stays in the page for
    screen readers; the two travelling copies (.vt__photo-title) are what show. */
-.vt__sub { margin: 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(2rem, 2.9vw, 2.9rem); line-height: 1.02; color: transparent; }
+.vt__sub { margin: -.35rem 0 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(2.6rem, 3.8vw, 4rem); line-height: 1.02; color: transparent; }
 
 /* The head row (TJ, 8 Oct 2026): the arrival photograph's slot and the glass
    card side by side, the seam between them on the axis, so the line grows out
@@ -82,7 +88,7 @@
 /* Without the held stage (reduced motion, or before the script): no travelling title; the line in the card is simply shown, in coral. */
 .vt:not(.is-live) .vt__photo-title { display: none; }
 .vt:not(.is-live) .vt__sub { color: var(--coral-deep); }
-.vt__card .wlead { margin: 0; }
+.vt__card .wlead { margin: 0; font-size: clamp(.88rem, .82rem + .22vw, 1rem); }
 /* The card's entrance (TJ, 8 Oct 2026): as the photograph closes down into
    its slot, the glass lifts in beside it and its lines rise out of masks.
    Driven by what-we-do-timeline.js. */
@@ -136,7 +142,8 @@
   .vt__slot { aspect-ratio: 16 / 11; }
   .vt__photo img { object-position: 64% 50%; }
   .vt__photo-title { font-size: clamp(2.8rem, 14vw, 4.4rem); bottom: clamp(36px, 7vh, 64px); }
-  .vt__sub { font-size: clamp(2rem, 9vw, 2.6rem); }
+  .vt__sub { font-size: clamp(2.4rem, 11vw, 3.2rem); }
+  .vt__card .wlead { font-size: .85rem; }   /* phone text floor (MOBILE-PLAN item 2) */
   .vt__body time { font-size: .85rem; }   /* phone text floor (MOBILE-PLAN item 2) */
 }
 
