@@ -143,6 +143,7 @@
   var lastDesired = 0;
   var wheelUntil = 0;
   var keyUntil = 0;
+  var tapUntil = 0;   // a tapped step is moving the page (phones)
   var touchActive = false;
   var settleTimer = 0;
   var inputMode = 'native';
@@ -253,8 +254,9 @@
 
     // The opening line (TJ, 21 Oct 2026): up as the film arrives and through
     // the glide, gone as the door comes up, before the first stop's title.
+    // Phones keep it up for the whole flight, above the film (TJ, 23 Oct 2026).
     if (intro) {
-      var io = 1 - smooth((time - (DOOR - 0.4)) / 0.5);
+      var io = phone ? 1 : 1 - smooth((time - (DOOR - 0.4)) / 0.5);
       intro.style.opacity = io.toFixed(3);
       intro.style.visibility = io > 0.001 ? 'visible' : 'hidden';
     }
@@ -339,11 +341,12 @@
   // is the last stop. The five stops are evenly spaced between those ends,
   // 0.21 apart: the two ends, the centre, and one midway between each end
   // and the centre (TJ, 16 Oct 2026).
+  // The arrival stop is gone and the line starts at the kitchen (TJ, 23 Oct
+  // 2026): four stops, evenly spaced between the same two ends, 0.28 apart.
   var ROUTE_STOPS = [
     { x: 0.08, side: 'right' },
-    { x: 0.29, side: 'right' },
-    { x: 0.50, side: 'right' },
-    { x: 0.71, side: 'left' },
+    { x: 0.36, side: 'right' },
+    { x: 0.64, side: 'left' },
     { x: 0.92, side: 'left' }
   ];
   // Each stop's [in, out] window in film seconds, read from the footage (TJ, 14 Oct 2026), in
@@ -352,7 +355,6 @@
   // Between windows (the hallway, 1.9 to 2.9, and the stretch after the treatment room, from 21.2)
   // no stop is current, and the route's own fade takes over at ROUTE_OUT.
   var WINDOWS = [
-    [DOOR, 1.9],
     [2.9, 6.1],
     [6.6, 11.3],
     [11.9, 15.7],
@@ -386,11 +388,15 @@
   var lastPw = [];
   var lastD = [];
   function nowFraction(time) {
-    if (time <= knotT[0]) return 0;
-    for (var k = 1; k < knotT.length; k++) {
-      if (time <= knotT[k]) return knotX[k - 1] + (knotX[k] - knotX[k - 1]) * (time - knotT[k - 1]) / (knotT[k] - knotT[k - 1]);
+    // Phones, tapped: the fill reaches each dot at that room's resting
+    // frame, so a tap always leaves the tip on a dot (TJ, 23 Oct 2026).
+    var kt = tapFlow() ? [DOOR].concat(STATIONS.slice(1), [DURATION]) : knotT;
+    var kx = knotX;
+    if (time <= kt[0]) return 0;
+    for (var k = 1; k < kt.length; k++) {
+      if (time <= kt[k]) return kx[k - 1] + (kx[k] - kx[k - 1]) * (time - kt[k - 1]) / (kt[k] - kt[k - 1]);
     }
-    return knotX[knotX.length - 1];
+    return kx[kx.length - 1];
   }
   function layoutRoute() {
     if (!route || !stopEls.length) return;
@@ -465,7 +471,8 @@
     }
     for (var j = 0; j < stopEls.length; j++) {
       var win = WINDOWS[j];
-      var born = time >= births[j];
+      var bj = tapFlow() ? STATIONS[j + 1] - 0.05 : births[j];   // phones: red as the tip arrives
+      var born = time >= bj;
       var isCur = j === cur;
       if (born !== bornNow[j]) { bornNow[j] = born; stopEls[j].classList.toggle('is-born', born); }
       if (isCur !== currentNow[j]) {
@@ -478,7 +485,7 @@
       var fall = smooth((win[1] - time) / 0.3);
       var p = smooth((time - win[0]) / 0.3) * fall;
       var pw = smooth((time - win[0] - 0.08) / 0.3) * fall;
-      var d = smooth((time - births[j]) / 0.15);
+      var d = smooth((time - bj) / 0.15);
       writeRamp(lastP, j, '--p', p);
       writeRamp(lastPw, j, '--pw', pw);
       writeRamp(lastD, j, '--d', d);
@@ -548,7 +555,7 @@
     // With the hand over, the act takes the window where the track ends.
     pastFlight = scrollY - trackTop >= (HELD ? TRACK_VH : TRACK_VH + 1) * vh;
     var nextDesired = raw < 0 ? timeForLead(raw) : timeForTrack(track);
-    var direct = performance.now() < wheelUntil || performance.now() < keyUntil || touchActive;
+    var direct = performance.now() < wheelUntil || performance.now() < keyUntil || performance.now() < tapUntil || touchActive;
     desired = nextDesired;
     clearTimeout(settleTimer);
     if (direct) {
@@ -571,6 +578,7 @@
       lastPaint = target;
     }
     paintFlightEnquire();
+    paintStep();
     if (ready && !video.seeking && Math.abs(video.currentTime - target) > DEAD_BAND) video.currentTime = target;
     drawGhost();
 
@@ -585,7 +593,7 @@
 
   stopBtns.forEach(function (btn, i) {
     var go = function () {
-      var scene = SCENES[i];
+      var scene = SCENES.filter(function (s) { return s.name === stopEls[i].dataset.stop; })[0];
       if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
     };
     btn.addEventListener('click', go);
@@ -622,7 +630,7 @@
   var restSettling = false;
   var settleArmed = false;   // only a touch arms the settle; a wheel never does
   function scheduleRestSettle() {
-    if (!phone || restSettling || !settleArmed) return;
+    if (!phone || restSettling || !settleArmed || tapFlow()) return;
     clearTimeout(restSettleTimer);
     restSettleTimer = setTimeout(function () {
       if (touchActive) { scheduleRestSettle(); return; }
@@ -637,6 +645,131 @@
       setTimeout(function () { restSettling = false; }, 600);
     }, SETTLE_IDLE);
   }
+
+  // ---- Phones: a tapped flight (TJ, 23 Oct 2026) ----
+  // Once the reader reaches the film it holds: a drag no longer scrubs it.
+  // Back and next under the saying play it one room at a time (the door,
+  // then the four rooms). A clear swipe leaves the film the way it points,
+  // and next on the last room plays the film out and carries on down the
+  // page. The page is still moved by scrolling under the hood, so the film,
+  // the line and everything after them work exactly as before.
+  var stepBox = section.querySelector('[data-route-step]');
+  var stepBack = stepBox ? stepBox.querySelector('[data-step="-1"]') : null;
+  var stepNext = stepBox ? stepBox.querySelector('[data-step="1"]') : null;
+  var STATIONS = [DOOR].concat(['kitchen', 'living', 'nursery', 'treatment'].map(function (n) {
+    return SCENES.filter(function (s) { return s.name === n; })[0].rest;
+  }));
+  var locked = false, tweening = false, tweenRaf = 0, snapTimer = 0;
+  var swipeY = null, swipeLocked = false;
+  function tapFlow() { return phone && !reduced && !!stepBox; }
+  function yForTime(time) { return trackTop + trackForTime(time) * vh; }
+  // Where next on the last room comes to rest: the next section, just
+  // under the header.
+  function landingY() {
+    var next = section.nextElementSibling;
+    while (next && (next.hidden || next.offsetHeight === 0)) next = next.nextElementSibling;
+    var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 0;
+    return next ? next.getBoundingClientRect().top + scrollY - navH : trackTop + TRACK_VH * vh + 2;
+  }
+  function lastY() { return yForTime(STATIONS[STATIONS.length - 1]); }
+  // The hold runs from the door to just above the landing, so the film's
+  // tail after the last room is part of it: coming back up from Mother and
+  // Baby Care, one swipe is caught and carried back to the last room
+  // (TJ, 23 Oct 2026).
+  function inHold(y) {
+    return y >= yForTime(STATIONS[0]) - 0.25 * vh && y < landingY() - 4;
+  }
+  var tailPending = false;
+  function catchTail() {
+    tailPending = false;
+    if (tweening || !inHold(scrollY) || scrollY <= lastY() + 0.25 * vh) return false;
+    goStation(STATIONS.length - 1);
+    return true;
+  }
+  function stationNow() {
+    var best = 0, d = Infinity;
+    for (var i = 0; i < STATIONS.length; i++) {
+      var di = Math.abs(STATIONS[i] - target);
+      if (di < d) { d = di; best = i; }
+    }
+    return best;
+  }
+  function tweenTo(y, ms, done) {
+    cancelAnimationFrame(tweenRaf);
+    tweening = true;
+    var from = scrollY, t0 = performance.now();
+    tapUntil = t0 + ms + 250;
+    (function step(now) {
+      var k = clamp((now - t0) / ms, 0, 1);
+      var e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
+      window.scrollTo({ top: from + (y - from) * e, behavior: 'instant' });
+      if (k < 1) tweenRaf = requestAnimationFrame(step);
+      else { tweening = false; if (done) done(); }
+    })(t0);
+  }
+  // film seconds to milliseconds: a room to the next takes about two seconds
+  function msFor(fromTime, toTime) { return clamp(Math.abs(toTime - fromTime) * 420, 600, 2600); }
+  function goStation(i) {
+    i = clamp(i, 0, STATIONS.length - 1);
+    locked = true;
+    tweenTo(yForTime(STATIONS[i]), msFor(target, STATIONS[i]));
+  }
+  // After the last room the film plays out and the page comes to rest at
+  // the start of the next section, Mother and Baby Care (TJ, 23 Oct 2026).
+  function leaveDown() {
+    locked = false;
+    tweenTo(landingY(), msFor(target, DURATION) + 700);
+  }
+  function leaveUp() {
+    locked = false;
+    tweenTo(Math.max(0, trackTop - (LEAD_VH + 0.6) * vh), 900);
+  }
+  function step(dir) {
+    if (!tapFlow()) return;
+    var i = stationNow() + dir;
+    if (i < 0) return;
+    if (i >= STATIONS.length) leaveDown(); else goStation(i);
+  }
+  function paintStep() {
+    if (!tapFlow() || !stepBack) return;
+    var i = stationNow();
+    stepBack.disabled = i === 0;
+  }
+  if (stepBack) stepBack.addEventListener('click', function () { step(-1); });
+  if (stepNext) stepNext.addEventListener('click', function () { step(1); });
+  // Arriving by scroll: once the page comes to rest inside the film, it
+  // settles on the nearest room and holds.
+  addEventListener('scroll', function () {
+    if (!tapFlow() || tweening) return;
+    if (!inHold(scrollY)) { locked = false; clearTimeout(snapTimer); return; }
+    // in the tail: straight back to the last room, once the finger is off
+    if (!locked && scrollY > lastY() + 0.25 * vh) {
+      locked = true;
+      if (touchActive) tailPending = true; else catchTail();
+      return;
+    }
+    locked = true;
+    clearTimeout(snapTimer);
+    snapTimer = setTimeout(function () {
+      if (touchActive || tweening || !inHold(scrollY)) return;
+      var i = stationNow();
+      if (Math.abs(scrollY - yForTime(STATIONS[i])) > 2) goStation(i);
+    }, 180);
+  }, { passive: true });
+  addEventListener('touchstart', function (e) {
+    swipeLocked = tapFlow() && locked && !tweening;
+    swipeY = e.touches[0].clientY;
+  }, { passive: true });
+  addEventListener('touchmove', function (e) {
+    if (swipeLocked && e.cancelable) e.preventDefault();
+  }, { passive: false });
+  addEventListener('touchend', function (e) {
+    if (tailPending) { swipeY = null; if (catchTail()) return; }
+    if (!swipeLocked || swipeY === null) return;
+    var dy = e.changedTouches[0].clientY - swipeY;
+    swipeY = null;
+    if (dy < -70) leaveDown(); else if (dy > 70) leaveUp();
+  }, { passive: true });
 
   addEventListener('wheel', function () { wheelUntil = performance.now() + 350; settleArmed = false; clearTimeout(restSettleTimer); }, { passive: true, capture: true });
   addEventListener('touchstart', function () { touchActive = true; settleArmed = true; clearTimeout(restSettleTimer); }, { passive: true, capture: true });

@@ -53,6 +53,8 @@ html.js .op__frame { opacity: 0; }
    statement, so the cream letters read on the bright window; gone once the
    photograph fills the screen and the foot darkening takes over. */
 .op__dim { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: rgba(10, 10, 10, .26); }
+/* Phones: the ember deep wash the swipe builds, at most 65 percent (TJ, 23 Oct 2026; 80 was tried). */
+.op__tint { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: color-mix(in srgb, var(--ember-deep) 65%, transparent); }
 .op__scrim { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: linear-gradient(to top, rgba(10, 10, 10, .62) 0%, rgba(10, 10, 10, .32) 38%, rgba(10, 10, 10, 0) 72%); }
 
 /* ---- The statement ---- big, on the left, no panel. */
@@ -172,7 +174,7 @@ html:not(.js) .op__intro-in, .op--static .op__intro-in { position: static; trans
   .op__copy { text-align: center; justify-items: center; transform-origin: center bottom; grid-template-columns: minmax(0, 1fr); }
   .op__copy--light { display: none; }
   .op__h { justify-items: center; }
-  .op__kicker { font-size: clamp(2.8rem, min(15vw, 7vh), 4rem); }
+  .op__kicker { font-size: clamp(3.22rem, min(17.25vw, 8.05vh), 4.6rem); }   /* 15 percent larger (TJ, 23 Oct 2026) */
   .op__rows { justify-items: center; text-align: center; max-width: none; width: 100%; font-size: min(1.125rem, 4.6vw); gap: 10px; }
   /* "Baby Care" and "Restorative Treatments" need about 22 times the type size in width, so
      the kinds take 4.1vw (16px at 390 wide, 18px from 440) and each pair holds one line. */
@@ -183,7 +185,7 @@ html:not(.js) .op__intro-in, .op--static .op__intro-in { position: static; trans
   .op__kinds span::before, .op__kinds span + span:nth-child(odd)::before { content: none; }
   .op__kinds span + span:nth-child(2n)::before { content: ""; display: inline-block; width: 12px; height: 1px; background: var(--coral-deep); vertical-align: middle; margin: 0 .55em; }
   /* A short phone: the text steps down a size so the photograph keeps 160px. */
-  .op--tight .op__kicker { font-size: clamp(2.4rem, min(12.5vw, 5.8vh), 3.4rem); }
+  .op--tight .op__kicker { font-size: clamp(2.76rem, min(14.375vw, 6.67vh), 3.91rem); }
   .op--tight .op__head { font-size: clamp(1.5rem, min(7.6vw, 3.6vh), 2.2rem); }
   .op--tight .op__rows { font-size: min(1rem, 4.2vw); gap: 6px; }
   .op--tight .op__kinds { font-size: min(1rem, 3.9vw); }

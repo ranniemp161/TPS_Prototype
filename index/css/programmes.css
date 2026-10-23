@@ -66,8 +66,23 @@
    gets a fine edge and a soft shadow so the glass holds on the cream. The
    call to action keeps the testimonials' calm band. */
 .pg-lengths { background: var(--canvas); }
-.pg-lengths .aurora--voices .aurora__field { opacity: .5; filter: blur(56px); }
-.pg-lengths .aurora--voices .aurora__field::after { animation-duration: 90s; }
+/* The top and the call to action share one ground: canvas with the band 8
+   ribbons at the same strength (TJ, 23 Oct 2026: the two pinks must match). */
+.pg-lengths .aurora--voices .aurora__field,
+.pg-cta .aurora--voices .aurora__field { opacity: .5; filter: blur(56px); }
+.pg-lengths .aurora--voices .aurora__field::after,
+.pg-cta .aurora--voices .aurora__field::after { animation-duration: 90s; }
+/* The ribbons reach past the section's foot into Included in Every
+   Programme and dissolve there, so the cream is only the middle of that
+   section (TJ, 23 Oct 2026). The section clips sideways only, so the field
+   can hang below it; .pg-same sits above it so its words stay clean. */
+.pg-lengths { overflow: visible; overflow-x: clip; }
+.pg-lengths .aurora {
+  bottom: calc(-1 * var(--pg-reach));
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - var(--pg-reach) * 2.2), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - var(--pg-reach) * 2.2), transparent 100%);
+}
+.page--programmes { --pg-reach: 200px; }
 .pg-lengths .pg-card { border-color: rgba(166, 76, 69, .18); box-shadow: 0 18px 50px -24px rgba(140, 54, 47, .28); }
 .pg-wrap { max-width: 1120px; margin: 0 auto; }
 
@@ -124,14 +139,28 @@
   margin: 0; font-family: var(--f-display); text-transform: uppercase; font-weight: 400;
   font-size: clamp(1.5rem, 2.6vw, 2.2rem); line-height: 1; letter-spacing: .02em; color: var(--ink);
 }
-.pg-price__from { margin: 1.2rem 0 0; font-family: var(--f-body); text-transform: uppercase; letter-spacing: .16em; font-size: .68rem; color: var(--ink-mute); }
+/* One price: the figure first on the left, then "Starting from" stacked over
+   "per day" beside it, the pair sitting on the figure's foot (TJ, 23 Oct 2026).
+   A grid, so the words still read in order: Starting from £X per day. */
 .pg-price__fee {
-  margin: .2rem 0 0; font-family: var(--f-display); font-weight: 400;
+  margin: 1.1rem 0 .4rem; display: grid; grid-template-columns: auto auto; grid-template-rows: 1fr auto auto;
+  justify-content: start; column-gap: .7rem; row-gap: .35rem;
+  font-family: var(--f-display); font-weight: 400;
   font-size: clamp(2.8rem, 5.2vw, 4.4rem); line-height: 1; color: var(--ember);
 }
-.pg-price__full { margin: .6rem 0 0; font-family: var(--f-mono); font-size: .8rem; letter-spacing: .02em; color: var(--ink-mute); }
+.pg-price__num { grid-column: 1; grid-row: 1 / span 3; }
+.pg-price__from { grid-column: 2; grid-row: 2; }
+.pg-price__per { grid-column: 2; grid-row: 3; padding-bottom: .55em; }
+.pg-price__from, .pg-price__per { font-family: var(--f-body); text-transform: uppercase; letter-spacing: .16em; font-size: .68rem; line-height: 1.2; color: var(--ink-mute); }
 .pg-price__held { margin: .35rem 0 0; font-family: var(--f-read); font-size: .88rem; line-height: 1.5; color: var(--ink-soft); }
 .pg-price__cta { margin-top: 1.5rem; }
+/* Desktop: the card's sentence matches the treatment rows beside it
+   (TJ, 23 Oct 2026). Phones keep .88rem. */
+@media (min-width: 861px) {
+  .pg-price__held { font-size: clamp(.9rem, 1.05vw, 1rem); line-height: 1.55; }
+  /* A larger length name on desktop (TJ, 23 Oct 2026), was up to 2.2rem. */
+  .pg-price__days { font-size: clamp(2.2rem, 2.9vw, 2.6rem); }
+}
 
 /* What changes with the length: the treatment counts */
 .pg-counts__h {
@@ -147,18 +176,20 @@
 .pg-counts b { font-family: var(--f-mono); font-weight: 500; font-size: .85rem; letter-spacing: .02em; color: var(--ember-deep); white-space: nowrap; }
 .pg-counts .pg-counts__always { font-family: var(--f-body); font-weight: 500; font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-mute); }
 
-/* The swap: the card's words fade and rise in when the length changes. */
+/* The swap: the card's words fade out sideways the way the line moves, and
+   the new ones fade in from the other side (TJ, 23 Oct 2026). --pg-dir is 1
+   for a longer programme (the track moves left), -1 for a shorter one. */
 .pg-swap { transition: opacity 320ms var(--tease), transform 320ms var(--tease); }
-.pg-card.is-swapping .pg-swap { opacity: 0; transform: translateY(8px); }
+.pg-card.is-swapping .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * -28px)); }
+.pg-card.is-entering .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * 28px)); transition: none; }
 
 /* ---- the same, whatever the length ---- */
-.pg-same { padding: clamp(56px, 8vh, 96px) var(--gutter); }
+.pg-same { position: relative; z-index: 1; padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(40px, 6vh, 72px); }
 .pg-same__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(24px, 5vw, 72px); align-items: start; }
 .pg-h2 {
   margin: 0; font-family: var(--f-display); text-transform: uppercase; font-weight: 400;
   font-size: clamp(1.7rem, 2.8vw, 2.4rem); line-height: 1.05; letter-spacing: .02em; color: var(--ink); text-wrap: balance;
 }
-.pg-same__script { margin: .6rem 0 0; font-family: var(--f-script); font-size: clamp(1.5rem, 2.3vw, 2rem); line-height: 1.15; color: var(--ember-deep); }
 .pg-same__p { margin: 1rem 0 0; max-width: 40ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--ink-soft); }
 .pg-same__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 clamp(20px, 3vw, 40px); }
 .pg-same__list li {
@@ -169,14 +200,24 @@
 .pg-same__note { margin: 1.4rem 0 0; font-family: var(--f-read); font-size: .9rem; line-height: 1.6; color: var(--ink-mute); max-width: 60ch; }
 
 /* ---- call to action ---- */
-.pg-cta { position: relative; isolation: isolate; overflow: hidden; background: var(--rose-mist); padding: clamp(56px, 9vh, 104px) var(--gutter); text-align: center; }
+/* The same ground as the top (TJ, 23 Oct 2026). Its ribbons start
+   --pg-reach above the section, inside Included in Every Programme, and
+   fade in from nothing, so there is no line. Clipped sideways only. */
+.pg-cta {
+  position: relative; isolation: isolate; overflow: visible; overflow-x: clip;
+  background: var(--canvas);
+  padding: clamp(32px, 5vh, 64px) var(--gutter) clamp(56px, 9vh, 104px); text-align: center;
+}
+.pg-cta .aurora {
+  top: calc(-1 * var(--pg-reach));
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--pg-reach) * 1.8));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--pg-reach) * 1.8));
+}
 .pg-cta > .pg-wrap { position: relative; z-index: 1; max-width: 640px; }
-.pg-cta__p { margin: 1rem auto 0; max-width: 46ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--ink-soft); }
+/* Quentin heading (TJ, 23 Oct 2026). */
+.pg-cta__script { margin: 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(2.2rem, 3.6vw, 3rem); line-height: 1.15; color: var(--ember-deep); }
+.pg-cta__p { margin: 1rem auto 0; max-width: 52ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--ink-soft); }
 .pg-cta__actions { margin-top: 1.8rem; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-.pg-cta__bespoke { margin: 2.6rem auto 0; padding-top: 1.8rem; border-top: 1px solid rgba(10, 10, 10, .14); max-width: 46ch; }
-.pg-cta__bespoke h3 { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.2rem, 1.8vw, 1.5rem); letter-spacing: .02em; color: var(--ink); }
-.pg-cta__bespoke p { margin: .6rem 0 0; font-family: var(--f-read); font-size: .95rem; line-height: 1.6; color: var(--ink-soft); }
-.pg-cta__bespoke .btn { margin-top: 1rem; }
 
 @media (prefers-reduced-motion: reduce) {
   .pg-swap, .pg-car .tv2__track, .pg-car .tv2__stop { transition: none; }
@@ -191,11 +232,12 @@
   .pg-car { height: 52px; }
   .pg-stage { margin-top: 14px; }
   .pg-card { padding-top: 22px; }
-  .pg-price__from { margin-top: .7rem; }
+  .pg-price__fee { margin-top: .7rem; }
 }
 
 /* The fold toggle exists only on phones; on desktop the rows always show. */
 .pg-treat__toggle { display: none; }
+.pg-price__cta--foot { display: none; }
 
 @media (max-width: 860px) {
   .pg-lengths { --tv-s: 42%; }
@@ -208,23 +250,54 @@
     font-family: var(--f-read); font-size: .95rem; color: var(--ink); text-align: left;
   }
   .pg-treat__toggle svg { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--ember-deep); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform 260ms var(--tease); }
-  .pg-treat__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+  /* A plus that becomes a minus when open (TJ, 23 Oct 2026). */
+  .pg-treat__v { transition: opacity 200ms var(--tease); }
+  .pg-treat__toggle[aria-expanded="true"] .pg-treat__v { opacity: 0; }
+  .pg-price > .pg-price__cta { display: none; }
+  .pg-price__cta--foot { display: block; margin-top: 0; }
   .pg-treat__toggle:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
   .pg-treat .pg-counts { display: none; margin-top: 6px; }
   .pg-treat.is-open .pg-counts { display: block; }
+  /* Open, the rows are tighter so the line and the whole card fit one
+     phone screen (TJ, 23 Oct 2026). */
+  .pg-treat .pg-counts li { padding: 7px 0; font-size: .9rem; line-height: 1.35; }
   /* Tighter rhythm on phones so price, note and button fit with the line. */
-  .pg-lengths { padding-top: 22px; }
   .pg-lengths__head { margin-bottom: 10px; }
   .pg-car { height: 50px; }
   .pg-stage { margin-top: 6px; }
   .pg-card { gap: 16px; padding: 22px 22px 18px; }
-  .pg-price__from { margin-top: .7rem; }
-  .pg-price__fee { font-size: 2.6rem; }
-  .pg-price__full { margin-top: .4rem; }
+  .pg-price__days { font-size: 2.1rem; }   /* larger on phones (TJ, 23 Oct 2026) */
+  .pg-price__fee { margin-top: .8rem; font-size: 2.6rem; }
   .pg-price__cta { margin-top: 1rem; }
   .pg-card { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .pg-same__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  /* Phones: a much smaller gap into the call to action (TJ, 23 Oct 2026). */
+  .pg-same { padding-bottom: 20px; padding-top: 24px; }
+  /* Phones (TJ, 23 Oct 2026): a larger title, "Our Postpartum" filling the
+     width, and the Quentin line larger but a little narrower than it. */
+  .pg-lengths__title { font-size: min(calc((100vw - 2 * var(--gutter)) / 12.7), 3.4rem); white-space: nowrap; }
+  .pg-lengths__script { font-size: min(6.8vw, 2.35rem); }
+  /* Phones (TJ, 23 Oct 2026): more room under the header, a much smaller gap
+     between the card and Included in Every Programme. */
+  .pg-lengths { padding-top: 38px; padding-bottom: 28px; }
+  .pg-cta { padding-top: 16px; }
+  .page--programmes { --pg-reach: 160px; }
   .pg-same__list { grid-template-columns: 1fr; }
-  .pg-nav { display: none; }
-  .pg-stage { max-width: none; }   /* no arrows on phones: the line's labels move it */
+  .pg-stage { max-width: none; }
+  /* Phones: both arrows sit side by side in the card's top right corner,
+     level with the length's name (card padding 22px, name 2.1rem tall), in
+     the space beside the name and price (TJ, 23 Oct 2026). The line keeps
+     its own fade. */
+  .pg-nav { top: calc(22px + 1.05rem); right: auto; left: auto; }
+  /* The swapping words stay inside the card (TJ, 23 Oct 2026). */
+  .pg-card { overflow: hidden; }
+  .pg-nav--prev { right: 54px; }
+  .pg-nav--next { right: 10px; }
+}
+
+/* The card's length name and Included in Every Programme are both 40px on
+   desktop (TJ, 23 Oct 2026). Phones keep their sizes: at 40px the name runs
+   into the card's arrows. */
+@media (min-width: 861px) {
+  .pg-price__days, .pg-same .pg-h2 { font-size: 40px; }
 }

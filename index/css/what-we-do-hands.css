@@ -245,3 +245,10 @@
 
 /* the notch: a float at the pinned button's spot (what-we-do-hands.js) */
 .hd__notch { float: left; display: block; pointer-events: none; }
+
+/* The four kinds' titles 30 percent smaller, every width (TJ, 23 Oct 2026).
+   Desktop was clamp(1.56rem, 3vw, 3.36rem), phones 2.6rem, the phone's
+   Read more view 2rem. */
+.hd.is-live .hd__name, .hd.is-tight .hd__name { font-size: clamp(1.092rem, 2.1vw, 2.352rem); }
+.hd:not(.is-live) .hd__name { font-size: 1.82rem; }
+.hd:not(.is-live) .hd__kind.is-reading .hd__name { font-size: calc(1.4rem * var(--fit)); }

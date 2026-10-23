@@ -291,7 +291,8 @@
       op.classList.add('op--phone');
       op.classList.remove('op--tight');
       copy.style.transform = 'none'; light.style.transform = 'none';
-      gsap.set(both, { top: TOP() + 10, yPercent: 0, y: 0, scale: 1, opacity: 1 });
+      // 38px under the header, as on Programmes (TJ, 23 Oct 2026; was 10px).
+      gsap.set(both, { top: TOP() + 38, yPercent: 0, y: 0, scale: 1, opacity: 1 });
       var st = stage.getBoundingClientRect();
       var measure = function () { return copy.getBoundingClientRect().bottom - st.top + 22; };
       var top = measure();
@@ -309,9 +310,19 @@
          screen from the start with the statement on it in cream. */
       // Under the header, not behind it (TJ, 21 Oct 2026, Ami's notes): the
       // photograph starts at the header band's foot, as on the home page.
-      gsap.set(frame, { left: 0, top: TOP(), width: W(), height: H() - TOP(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
-      gsap.set(img, { objectPosition: centre(W(), H() - TOP()), scale: 1 });
+      // The photograph starts at the folded header's foot (--nav-h) from the
+      // first frame, so when the header shortens on the swipe it lands on
+      // the photograph with no gap (TJ, 23 Oct 2026). The tall header's foot
+      // sits over its top edge until then.
+      var NAV = function () { return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 80; };
+      gsap.set(frame, { left: 0, top: NAV(), width: W(), height: H() - NAV(), right: 'auto', bottom: 'auto', borderRadius: 0, autoAlpha: 1 });
+      gsap.set(img, { objectPosition: centre(W(), H() - NAV()), scale: 1 });
       gsap.set(scrim, { opacity: 1 });
+      // The Gifts page's ember deep washes over the photograph as the swipe
+      // goes on, to 65 percent (TJ, 23 Oct 2026), and takes over from the grey.
+      var tint = frame.querySelector('.op__tint');
+      if (!tint) { tint = document.createElement('span'); tint.className = 'op__tint'; tint.setAttribute('aria-hidden', 'true'); frame.appendChild(tint); }
+      gsap.set(tint, { opacity: 0 });
       // some dimming from the start, so the cream statement reads on the linen
       gsap.set(dim, { opacity: .55 });
       gsap.set(ask, { opacity: 0, y: 18 });
@@ -324,7 +335,8 @@
          the pale linen; then a short hold, and the next section follows. */
       var tl = gsap.timeline({ defaults: { ease: 'none' } });
       tl.to(both, { opacity: 0, y: -30, duration: .28, ease: 'power1.in' }, .1)
-        .to(dim, { opacity: 1, duration: .5, ease: 'power1.inOut' }, .3)
+        .to(tint, { opacity: 1, duration: .75, ease: 'power1.inOut' }, .05)
+        .to(dim, { opacity: 0, duration: .5, ease: 'power1.inOut' }, .1)
         .to(ask, { opacity: 1, y: 0, duration: .35, ease: 'power2.out' }, .4);
       onBlocks.forEach(function (el, i) {
         tl.to(el, { opacity: 1, y: 0, duration: .32, ease: 'power2.out' }, .55 + i * .17);
@@ -339,6 +351,7 @@
         op.classList.remove('op--phone', 'op--tight');
         gsap.set(both, { clearProps: 'opacity,transform' });
         gsap.set(img, { clearProps: 'objectPosition' });
+        if (tint) tint.remove();
       };
     });
   }
