@@ -18,7 +18,7 @@
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var LENGTHS = [7, 14, 30];
   var WORDS = { 7: 'Seven days', 14: 'Fourteen days', 30: 'Thirty days' };
-  var SUB = { 7: 'A full week', 14: 'Two weeks', 30: 'Full confinement' };
+  var START = 1;            // the page opens on 14 days (TJ, 23 Oct 2026)
 
   var track = root.querySelector('[data-pg-track]');
   var card  = root.querySelector('[data-pg-card]');
@@ -27,9 +27,7 @@
   var live  = root.querySelector('[data-pg-live]');
   var out = {
     days:  root.querySelector('[data-pg-days]'),
-    sub:   root.querySelector('[data-pg-sub]'),
     fee:   root.querySelector('[data-pg-fee]'),
-    full:  root.querySelector('[data-pg-full]'),
     counts: root.querySelector('[data-pg-counts]')
   };
 
@@ -41,7 +39,7 @@
   var mod = function (k) { return ((k % n) + n) % n; };
   var WINDOW = 3;           // stops kept either side of the centre
   var items = {};           // virtual stop -> element
-  var p = 0;
+  var p = START;
   var timer = null;
 
   function times(n) { return n === 1 ? 'Once' : n + ' times'; }
@@ -58,7 +56,9 @@
       ['Herbal foot treatment', times(P.STD[d].herbfoot)],
       ['Thermal blanket treatment', times(P.STD[d].thermal)]
     ];
-    return { fee: fee, full: P.CONFIG.fullPrice[d], rows: rows };
+    // Only the per day price shows (TJ, 23 Oct 2026, Ami's directive),
+    // rounded down so "Starting from" stays true.
+    return { perDay: Math.floor(fee / d), rows: rows };
   }
 
   function makeItem(k) {
@@ -87,14 +87,12 @@
   function fill() {
     var d = LENGTHS[mod(p)], f = figures(d);
     out.days.textContent = WORDS[d];
-    out.sub.textContent = SUB[d];
-    out.fee.textContent = P.money(f.fee);
-    out.full.textContent = 'Programme price ' + P.money(f.full) + ' after ' + P.CONFIG.introHeldFor;
+    out.fee.textContent = P.money(f.perDay);
     out.counts.innerHTML = f.rows.map(function (r) {
       return '<li><span>' + r[0] + '</span><b>' + r[1] + '</b></li>';
     }).join('') +
       '<li><span>Herbal bath and belly binding</span><b>Every day</b></li>';
-    if (live) live.textContent = WORDS[d] + ', from ' + P.money(f.fee);
+    if (live) live.textContent = WORDS[d] + ', starting from ' + P.money(f.perDay) + ' per day';
   }
 
   function paint() {
@@ -111,9 +109,19 @@
     sync();
     paint();
     if (REDUCED) { fill(); return; }
+    // The card's words leave the way the track moves and the new ones come
+    // in from the other side (TJ, 23 Oct 2026). Next moves the track left.
     clearTimeout(timer);
+    card.style.setProperty('--pg-dir', step > 0 ? 1 : -1);
+    card.classList.remove('is-entering');
     card.classList.add('is-swapping');
-    timer = setTimeout(function () { fill(); card.classList.remove('is-swapping'); }, 330);
+    timer = setTimeout(function () {
+      fill();
+      card.classList.add('is-entering');
+      card.classList.remove('is-swapping');
+      void card.offsetWidth;
+      card.classList.remove('is-entering');
+    }, 330);
   }
 
   // Phones: the treatment rows fold behind a toggle (CSS hides it on desktop).
@@ -124,6 +132,20 @@
       var open = treatBtn.getAttribute('aria-expanded') !== 'true';
       treatBtn.setAttribute('aria-expanded', String(open));
       treat.classList.toggle('is-open', open);
+      // Opening brings the line and the whole open card, button included,
+      // into one screen: the line settles just under the header
+      // (TJ, 23 Oct 2026). Closing leaves the page where it is.
+      // The header folds to --nav-h once the page scrolls, so that is the
+      // height to clear. On a screen too short for both, the card's foot
+      // wins, so the button is always in view.
+      if (open) {
+        var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 0;
+        var lineTop = root.querySelector('.pg-line').getBoundingClientRect().top + window.scrollY;
+        var cardBottom = card.getBoundingClientRect().bottom + window.scrollY;
+        var top = lineTop - navH - 6;
+        if (cardBottom - top > window.innerHeight) top = cardBottom - window.innerHeight + 8;
+        window.scrollTo({ top: Math.max(0, top), behavior: REDUCED ? 'auto' : 'smooth' });
+      }
     });
   }
 
@@ -132,4 +154,14 @@
   paint();
   if (prev) prev.addEventListener('click', function () { move(-1); });
   if (next) next.addEventListener('click', function () { move(1); });
+
+  // Phones: a sideways swipe on the card moves one length (TJ, 23 Oct 2026).
+  var sx = 0, sy = 0;
+  card.addEventListener('touchstart', function (e) {
+    sx = e.touches[0].clientX; sy = e.touches[0].clientY;
+  }, { passive: true });
+  card.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx < 0 ? 1 : -1);
+  }, { passive: true });
 })();

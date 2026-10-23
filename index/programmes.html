@@ -139,7 +139,7 @@
            title, one Quentin line and one sentence, then the line and the card. -->
       <header class="pg-lengths__head">
         <h1 class="pg-lengths__title">Our Postpartum Programmes</h1>
-        <p class="pg-lengths__script">For as long as you need us.</p>
+        <p class="pg-lengths__script">For as long as you need us</p>
         <p class="pg-lengths__lede">Every programme brings the same four areas of care into your home each day. What changes is how long your specialist is with you.</p>
       </header>
 
@@ -163,11 +163,9 @@
         </button>
       <div class="pg-card" data-pg-card>
         <div class="pg-price pg-swap">
-          <h3 class="pg-price__days" data-pg-days>Seven days</h3>
-          <p class="pg-price__held" data-pg-sub>A full week</p>
-          <p class="pg-price__from">Introductory price, from</p>
-          <p class="pg-price__fee" data-pg-fee>£2,495</p>
-          <p class="pg-price__full" data-pg-full>Programme price £2,995 after 2026</p>
+          <h3 class="pg-price__days" data-pg-days>Fourteen days</h3>
+          <!-- One price, per day, on one line (TJ, 23 Oct 2026, Ami's directive). -->
+          <p class="pg-price__fee"><span class="pg-price__from">Starting from</span> <span class="pg-price__num" data-pg-fee>£321</span> <span class="pg-price__per">per day</span></p>
           <p class="pg-price__held">Live in care, 7am to 7pm, with everything included. Daytime care and day and night care are available, and the fee is confirmed at your consultation.</p>
           <div class="pg-price__cta"><a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a free consultation</a></div>
         </div>
@@ -177,10 +175,13 @@
                first screen (TJ, 22 Oct 2026). -->
           <button class="pg-treat__toggle" type="button" data-pg-treat-toggle aria-expanded="false" aria-controls="pg-counts">
             <span>Your treatments across the stay</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9.5 12 15.5 18 9.5" /></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12" /><path class="pg-treat__v" d="M12 6v12" /></svg>
           </button>
           <ul class="pg-counts" id="pg-counts" data-pg-counts></ul>
         </div>
+        <!-- Phones: the button sits under the treatments fold, last on the card
+             (TJ, 23 Oct 2026). The one in the price block is hidden there. -->
+        <div class="pg-price__cta pg-price__cta--foot pg-swap"><a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a free consultation</a></div>
       </div>
       </div>
     </div>
@@ -191,7 +192,6 @@
     <div class="pg-wrap pg-same__grid">
       <div>
         <h2 class="pg-h2">Included in every programme</h2>
-        <p class="pg-same__script">Every day, however long you stay.</p>
         <p class="pg-same__p">Nothing is added or removed by length. What changes is how many times your treatments repeat, and how much of your recovery the programme spans.</p>
       </div>
       <div>
@@ -212,16 +212,12 @@
   <section class="pg-cta" data-section="programmes-cta" data-section-name="Book a Consultation">
     <div class="aurora aurora--voices" aria-hidden="true"><span class="aurora__field"></span></div>
     <div class="pg-wrap">
-      <h2 class="pg-h2">Ready to talk it through?</h2>
-      <p class="pg-cta__p">Thirty minutes by phone or video. We look at your dates and what you need, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call.</p>
+      <!-- One block, one button (TJ, 23 Oct 2026): the bespoke builder and
+           single treatments are links inside the sentence, not buttons. -->
+      <h2 class="pg-cta__script">Ready to talk it through?</h2>
+      <p class="pg-cta__p">Thirty minutes by phone or video. We look at your dates and what you need, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call. If the care you have in mind sits outside these three programmes, <a class="text-link" href="build-your-programme.html">build your own programme</a> and see an indicative fee as you go, or book <a class="text-link" href="single-treatments.html">single treatments</a> on their own.</p>
       <div class="pg-cta__actions">
         <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a free consultation</a>
-        <a class="btn btn--outline" href="single-treatments.html">Single treatments</a>
-      </div>
-      <div class="pg-cta__bespoke">
-        <h3>Need a different shape?</h3>
-        <p>If the care you have in mind sits outside these three programmes, build your own and see an indicative fee as you go.</p>
-        <a class="btn btn--outline" href="build-your-programme.html">Build your programme</a>
       </div>
     </div>
   </section>

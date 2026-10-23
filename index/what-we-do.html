@@ -242,43 +242,49 @@
       <!-- The last stop, What Is Confinement? (TJ, 15 Oct 2026): a dot only.
            The confinement section's own heading is its text. Born as the
            section starts to emerge; the fill reaches it as the emerge ends. -->
+      <!-- Ami's sayings for the rooms, from her zones copy (7 Oct 2026), and
+           "Treatments that restore" (TJ, 23 Oct 2026). The line starts at the
+           kitchen: the arrival stop is gone, every width (TJ, 23 Oct 2026). -->
       <ol class="route__stops" data-route-stops>
-        <li class="route__stop" data-stop="exterior">
-          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
-          <span class="route__stem" aria-hidden="true"></span>
-          <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">In Home Postpartum Care</span></span></button>
-          </div>
-        </li>
         <li class="route__stop" data-stop="kitchen">
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Meals</span></span></button>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A kitchen that nourishes you</span></span></button>
           </div>
         </li>
         <li class="route__stop" data-stop="living">
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Home Support</span></span></button>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A living room that stays calm</span></span></button>
           </div>
         </li>
         <li class="route__stop" data-stop="nursery">
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Mother and Baby Care</span></span></button>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A nursery prepared with care</span></span></button>
           </div>
         </li>
         <li class="route__stop" data-stop="treatment">
           <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
           <span class="route__stem" aria-hidden="true"></span>
           <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Treatments</span></span></button>
+            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Treatments that restore</span></span></button>
           </div>
         </li>
       </ol>
+      <!-- Phones (TJ, 23 Oct 2026): the flight is tapped, not scrolled.
+           Back and next move the film one room; home-flight.js drives them. -->
+      <div class="route__step" data-route-step>
+        <button type="button" class="route__arrow" data-step="-1" aria-label="Previous room">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
+        </button>
+        <button type="button" class="route__arrow" data-step="1" aria-label="Next room">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
+        </button>
+      </div>
     </nav>
   </div>
 </section>

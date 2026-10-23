@@ -288,6 +288,8 @@ doing specific maths out loud. It does not belong on a public page.
 
 ### The rule that replaces it
 
+**Overruled in part (Ami, 23 Oct 2026):** the Programmes page now shows a per day price only, "Starting from £X per day". See DESIGN.md, the section of that date. Hourly prices are still out.
+
 **Express the value gradient in what she receives, never in what it costs per
 unit.**
 

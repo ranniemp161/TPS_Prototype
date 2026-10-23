@@ -48,7 +48,7 @@ imagery, not in UI tokens.
 | Display, headlines | Instrument Serif | Capitals on the homepage |
 | Labels, interface | Montserrat 300 to 600 | |
 | Anything read | Karla | Body, paragraphs, quotes |
-| One accent line | Quentin | One per page, large |
+| One accent line | Quentin | Usually one per page, large. Guidance, not a rule: TJ can ask for more (23 Oct 2026) |
 | Badges, section numbers | IBM Plex Mono | Never prices or dates |
 
 Never a numeral in a title ("Week One"). All caps headings sit at one cap
@@ -134,7 +134,7 @@ Never changed by work on another page or section:
 - No em dashes or hyphens in any copy, titles or metadata.
 - Questions are not build orders. Production files change only on "build".
 - Never commit or push without asking.
-- Never publish an hourly or unit price. Express value as what is delivered.
+- Never publish an hourly price. (The ban on a unit price was overruled by Ami, 23 Oct 2026: the Programmes page shows a per day price only. See the section at the end.)
 
 ## 8. Site header [TJ, 5 Oct 2026: every page has the same header]
 
@@ -1604,3 +1604,63 @@ Replaces the three column Read more from earlier the same day.
 ## The Postpartum Suite Experience: arrives with both cards in place (TJ, 21 Oct 2026, Ami's notes)
 
 - Desktop, as Tailored For You: the opening is gone (the arrival photograph opening full screen under "A Day With Us" and closing into its slot while the glass card lifts in). The photograph sits in its slot, the card is in place with "A Day With Us" settled under the heading, from the moment the section arrives. The day's timeline is unchanged: the opening's 17 percent of the scroll is removed (the section 780vh to 664vh, PH 0) so the hours draw down over exactly the same scroll as before. Text not reworked (TJ). Phones unchanged (already settled from the start). Checked with lab/vt-split-shots.mjs at 1440x900, 1280x720 and 390x844, no errors. Backups: lab/what-we-do-timeline.before-no-opening.*.bak.
+
+## Programmes: per day price only, opens on fourteen days, arrows on phones (TJ, 23 Oct 2026, Ami's directive on price)
+
+- Price: the card shows one price, per day, under "Starting from". The figure is the introductory programme fee divided by the days, rounded down (£356, £321, £213 at today's placeholders). The total fee, the "Introductory price, from" label and the "Programme price ... after 2026" line are gone, on every width. The client does the maths for the length. This overrules the old rule against a unit price (SITE-PLAN.md section 5), on Ami's directive.
+- The small line under the length ("A full week", "Two weeks", "Full confinement") is removed as clutter (TJ).
+- The page opens on fourteen days on every width (TJ).
+- Price layout, every width (TJ): the figure first on the left, with "Starting from" stacked over "per day" in small capitals beside it, both sitting at the figure's foot. Built as a grid so the words still read in order for screen readers. An earlier version with "Starting from" on its own line above the figure was replaced. Card text stays left aligned.
+- Phones (TJ): the length's name ("Fourteen days") is larger, 2.1rem against 1.5rem. Desktop size unchanged.
+- Phones (TJ): both arrows sit side by side in the card's top right corner, level with the length's name. Two earlier tries were rejected: centring the card with arrows either side of the name, and arrows at either end of the line. The line keeps its original fade. A sideways swipe on the card also moves one length. Desktop arrows unchanged.
+- The card's swap, every width (TJ): the words fade out sideways the way the line moves and the new ones fade in from the other side (28px, same 320ms fade), replacing the old fade down. A longer programme moves left, a shorter one moves right. Checked with lab/programmes-swap-check.mjs. On phones the card clips the moving words at its edge so they never pass outside it (TJ); desktop left as is.
+- Checked with lab/programmes-perday-shots.mjs at 1440x900, 1280x720 and 390x844: opens on fourteen days, arrows and swipe move it, no overflow, no errors. Backups: lab/programmes.before-per-day.*.bak.
+
+## Programmes: one call to action, Quentin heading, seamless grounds (TJ, 23 Oct 2026)
+
+- Ready to Talk It Through is one block: the heading in Quentin (ember deep), one paragraph, one button (Book a free consultation). The hairline, the "Need a different shape?" heading and the Single Treatments and Build Your Programme outline buttons are gone, every width. The bespoke builder and single treatments are now text links inside the paragraph ("build your own programme", "single treatments"), in the site's .text-link style. The paragraph is the old two blocks' sentences joined.
+- "Every day, however long you stay." removed from Included in Every Programme (TJ).
+- Script lines per page (TJ): the "one Quentin line per page" guidance is not a rule when TJ asks for more. This page now has two: the hero line and the call to action heading.
+- Grounds (TJ): no hard lines between sections. The top and the call to action share one ground, canvas with the band 8 ribbons at the same strength (.5, blur 56px), so the two pinks match. Both fields reach into Included in Every Programme (--pg-reach, 200px desktop, 160px phones) and dissolve there, so only the middle of that section is plain cream; the sections clip sideways only, and .pg-same sits above the fields so its words stay clean. The gap from the day and night care note to the call to action is smaller (desktop) and much smaller (phones). The edge between the call to action and the footer is unchanged (not asked).
+- Checked with lab/programmes-full-shots.mjs at 1440 and 390: no overflow, no errors. Backups: lab/programmes.before-cta-merge.*.bak.
+
+- Desktop only (TJ, 23 Oct 2026): the card's sentence ("Live in care, 7am to 7pm...") is the same size as the treatment rows beside it (clamp .9rem, 1.05vw, 1rem). Phones unchanged.
+- Desktop only (TJ, 23 Oct 2026): the length name on the card is larger, clamp(2.2rem, 2.9vw, 2.6rem), 42px at 1440 (was 35px; 48px was tried and was too big). The rest of the card moves down into the space below the button. Phones unchanged (2.1rem).
+- Desktop (TJ, 23 Oct 2026): the card's length name and the Included in Every Programme heading are both 40px. This replaces the clamp above. Phones unchanged (33.6px and 27.2px): at 40px the length name runs into the card's arrows. Awaiting TJ on phones.
+- Phones (TJ, 23 Oct 2026, from his screenshot): 38px between the header and the page title (was 22px), and 52px from the foot of the price card to the Included in Every Programme heading (was about 150px).
+- Phones (TJ, 23 Oct 2026): the page title sits on one line at the largest size that fits, (100vw minus both gutters) / 12.7, capped at 3.4rem (27px at 390, 24.5px at 360). A two line version at 48px was tried and was too big. The Quentin line is larger, min(6.8vw, 2.35rem), a little narrower than the title (317px against 334px at 390; was 25.6px). "For as long as you need us" has no full stop.
+- Phones (TJ, 23 Oct 2026): the treatments fold opens with a plus that becomes a minus (was a chevron). Book a Free Consultation is the last thing on the card, under the fold and under the list when it is open (a second copy of the button after .pg-treat, shown on phones only; the one in the price block shows on desktop only). Desktop unchanged.
+- Phones (TJ, 23 Oct 2026): opening the treatments fold scrolls the page smoothly so the line sits just under the folded header and the line, the whole open card and the button share one screen. Rows are tighter when open (7px, .9rem). Fits at 390x844 and 430x932. On shorter screens (360x740, 375x667) the card and button fit but the line goes under the header: the card's foot wins. Closing does not scroll. Checked with lab/programmes-fold-scroll.mjs.
+
+## What We Do opening, phones: larger "What we do", lower start (TJ, 23 Oct 2026)
+
+- Phones only: the Quentin "What we do" is 15 percent larger (67px at 390 wide, was 58.5px; the short phone size scaled the same). The statement starts 38px under the header (was 10px), matching the gap on Programmes. Desktop untouched. Checked at 390x844, 360x740, 375x667 and 510x1000: no errors. Backups: lab/what-we-do-opening.before-kicker-up.*.bak.
+- Phones (TJ, 23 Oct 2026): the photograph starts at the folded header's foot (--nav-h, 80px) from the first frame, so the header shortens onto it with no gap; the tall header's foot overlaps its top edge until then. As the swipe goes on, an ember deep wash (the Gifts page colour, #8C362F, at 65 percent; 80 was tried first) builds over the photograph and takes over from the grey dimming, fully on by about 0.6 of a screen, under "Who is it for?". Checked with lab/wwd-phone-tint-shots.mjs at 390x844 and 375x667: no gap at any point, no errors. Backups: lab/what-we-do-opening.before-tint.*.bak.
+
+## What We Do fly through, phones: the title stays up, above the film (TJ, 23 Oct 2026)
+
+- Phones only (under 768px): "Fly through the service" sits in its own band under the header (--fh, 66px, set on .page--wwd so the route layer gets it too), in ember deep on the plain ground, and stays up for the whole flight (home-flight.js keeps its opacity at 1 on phones). The film, the blurred ghost, the aurora beneath and the route line all move down by the band. The white opening veil is off on phones, since nothing sits on the film. Desktop unchanged. Checked with lab/wwd-flight-phone-shots.mjs at 390x844 and 375x667, no errors. Backups: lab/house-flight.before-phone-title.css.bak, lab/home-flight.before-phone-title.js.bak.
+- Phones (TJ, 23 Oct 2026, follow up): the film's top edge now blends in from the ground over its first 15 percent, as its foot does. The band under the header is 100px (was 66px) with the line held 33px under the header, so the film sits lower with more room under the line. On a 375x667 phone the room name still settles on screen (about 600 to 625px). Backup: lab/house-flight.before-top-blend.css.bak.
+
+## What We Do fly through: Ami's sayings on the route, no arrival stop (TJ, 23 Oct 2026)
+
+- Every width: the route's first stop, "In Home Postpartum Care" (exterior), is gone; the line starts at the kitchen. Four stops, evenly spaced 0.08, 0.36, 0.64, 0.92 (first two right, last two left on desktop), with the arrival window dropped from WINDOWS. A tap on a stop now finds its scene by data-stop, not by position.
+- The short names are gone. Each stop shows a saying: "A kitchen that nourishes you", "A living room that stays calm", "A nursery prepared with care" (Ami's zones copy, 7 Oct 2026, research/what-we-do/copy-zones-and-day-night.md) and "Treatments that restore" (TJ). On phones the saying sits under the line in the lower space, as the names did.
+- Checked with lab/wwd-sayings-shots.mjs at 1440x900 and 390x844: four stops, each saying current in its room, no overflow, no errors. Backups: lab/what-we-do.before-sayings.html.bak, lab/home-flight.before-sayings.js.bak.
+
+## What We Do fly through, phones: tapped, not scrolled (TJ, 23 Oct 2026)
+
+- Phones only (under 768px, not with reduced motion). Once the page comes to rest inside the film it settles on the nearest station and holds: a drag no longer scrubs it. Stations: the door, then the four rooms. Back and next arrows sit under the saying at either end of the line (back is dimmed at the door); each tap plays the film to the next station over about two seconds (the page is still moved by scroll under the hood, so the film, line and what follows behave as before). Next on Treatments That Restore plays the film out and carries on down the page. A clear swipe (70px) leaves the film the way it points, at any station (Claude's suggestion, TJ agreed).
+- Every dot shows from the start: rooms still to come are smaller (60 percent) and grey; rooms reached grow to full size in ember deep.
+- Checked with lab/wwd-tap-flow-check.mjs at 390x844 with touch: arrives on the door, four nexts reach kitchen, living, nursery, treatment, back returns, a small drag moves nothing, a swipe up leaves past the track; no errors. Headless touch only: needs a check on a real phone. Backups: lab/*.before-tap-flow.*.bak.
+- Phones (TJ, 23 Oct 2026, follow up): the saying is centred between the back and next arrows, on their level, in a fixed two line band (64px) so the arrows stay level whether it takes one line or two. Backup: lab/house-flight.before-centred-saying.css.bak.
+- Phones (TJ, 23 Oct 2026, follow up): on the tapped flight the line's fill reaches each dot at that room's resting frame (knots at the stations, not the windows' starts), so a tap always leaves the tip on a dot, and each dot turns ember deep as the tip arrives. Next on the last room (and a swipe down) plays the film out and comes to rest with the next section, Mother and Baby Care, just under the header; "Fly through the service" has left by then. Checked with lab/wwd-tap-flow-check.mjs: tip on each dot (51, 147, 243, 339 at 390 wide), next section top at 80px, no errors.
+- Phones (TJ, 23 Oct 2026, follow up): the hold now runs from the door to just above the landing on Mother and Baby Care, so the film's tail after the last room is part of it. Coming back up from Mother and Baby Care, the first swipe into the tail is caught (once the finger lifts) and carried straight back to Treatments That Restore. Checked with lab/wwd-tap-return-check.mjs: a 120px and a 400px swipe both land on the treatment room; the tap flow check still passes. Backup: lab/home-flight.before-wide-catch.js.bak.
+
+## About: Ami's portrait (TJ, 23 Oct 2026)
+
+- Ami Olowu's approved portrait (project root "Amidat Olowu.jpg.jpeg", 1024x1536) is in her founder card on About, every width, as assets/img/founder-ami-olowu.webp, cropped into the 4:5 frame with the face kept in view (object-position 50% 22%). Aminat's card keeps its placeholder. Backups: lab/about.before-ami-photo.*.bak.
+
+## What We Do: the four kinds' titles 30 percent smaller (TJ, 23 Oct 2026)
+
+- Mother and Baby Care, Treatments, Meals and Home Support titles, every width: desktop clamp(1.092rem, 2.1vw, 2.352rem) (30px at 1440, was 43px), phones 1.82rem (29px, was 41.6px), the phone Read more view 1.4rem x fit (was 2rem). Backup: lab/what-we-do-hands.before-titles-30.css.bak.
