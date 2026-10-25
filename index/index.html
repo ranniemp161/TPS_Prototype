@@ -106,7 +106,7 @@
     </a>
 
     <div class="nav__side nav__side--r">
-      <a class="tab tab--cta" href="#programmes">Enquire</a>
+      <a class="tab tab--cta" href="request-a-place.html">Check your dates</a>
     </div>
 
   </div>
@@ -289,13 +289,65 @@
   </section>
 
 
-<!-- ============ HOMEPAGE FILM (TJ, 21 Oct 2026) ============
-     The steam from the bath clears onto a film that plays on its own, silent
-     and looping, held for a window, then scrolled away. Watch With Sound
-     plays it from the top with sound (full screen on a phone) and it goes
-     back to the silent loop when it ends. The house flight moved to What We
-     Do. Placeholder footage. Motion: home.js, filmHandoff() and homeFilm(). -->
+
+<!-- ============ THE TURN ============
+     The seam between the story and the answer.
+
+     Redesigned 2026-09-07 onto the split-stage device the treatment act
+     used to own: text and photograph in one row, not a text block with a
+     photograph waiting below it. The old stacked layout put a scroll gap
+     between the definition and the frame that answers it; this removes
+     the gap by putting both on screen together. The treatment act itself
+     is retired (see below), so this is the split-stage's only home on the
+     page now, not a repeated device. -->
+<section class="act act--turn" data-act data-section="confinement" data-section-name="What Is Postpartum Care" aria-labelledby="confinement-heading">
+
+  <!-- Same aurora as the programmes act, tuned for this one. It replaced
+       the WebGL mesh field here on 2026-09-07. -->
+  <div class="aurora aurora--turn" aria-hidden="true"><span class="aurora__field"></span></div>
+
+  <div class="stage stage--split" data-stage>
+    <div class="stage__side">
+      <!-- The heading now carries the kinetic assembly, matching what the
+           treatment act did. The standfirst held that job before; moving
+           it here means the heading and the photograph's own drift read as
+           one arrival instead of two unrelated devices (a mask reveal on
+           the copy, a clip-path wipe on the frame) doing the same job
+           differently. -->
+      <h2 class="display display--lg" id="confinement-heading" data-kinetic>What is Postpartum Care?</h2>
+      <p class="turn__standfirst">Our postpartum care comes from the Malaysian and Southeast Asian tradition of confinement, where the first month after birth is a sacred window dedicated entirely to maternal rest, healing, and bonding.</p>
+      <p class="body">Rather than expecting a mother to navigate the postpartum transition alone, this care surrounds her with skilled daily support, nourishing food, and restorative bodywork.</p>
+      <!-- The turn from what the tradition is to what you do with it. No
+           hairline since 21 Oct 2026 (TJ): the same size and colour as the
+           line above, set apart by spacing only. -->
+      <p class="body turn__trail">At <a class="text-link" href="about.html">The Postpartum Suite</a>, we bring this time-honoured practice into your home through <a class="text-link" href="what-we-do.html">dedicated live-in care</a> from morning to evening.</p>
+      <!-- Request a place under the definition (Ami, 24 Oct 2026). -->
+      <p class="turn__cta"><a class="btn btn--primary" href="request-a-place.html">Check your dates</a></p>
+    </div>
+
+    <!-- The one photograph the act already had, not the treatment act's
+         three treatment stills: those show specific services and belong
+         to programmes, not to the act that defines the tradition. The
+         source frame is wide (a room, a doorway, the mother visible
+         through it) so the box is wider than the treatment act's portrait
+         4/3 stills, to keep both the specialist and the doorway in frame
+         rather than cropping down to a tight portrait. -->
+    <div class="stage__frame stage__frame--turn">
+        <img class="xfade__img" src="../assets/img/s8-confinement-arrival.webp" alt="A postpartum specialist in soft rose uniform arriving at the home, greeted warmly by the mother holding her newborn" width="1228" height="1536" loading="lazy" />
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ HOMEPAGE FILM ============
+     After What is Postpartum Care (Ami, 24 Oct 2026: hero, bath, What is
+     Postpartum Care, film). No longer under the bath and no longer full
+     screen (TJ, 25 Oct 2026): the film sits in a rounded frame on the
+     section's aurora, plays silent and looping while in view, and Play runs
+     it from the top with sound (full screen on a phone). Placeholder
+     footage. Motion: home.js homeFilm(). -->
 <section class="film" data-film-section data-section="film" data-section-name="Film" aria-label="Film">
+  <div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div>
   <div class="film__stage" data-film-stage>
     <video class="film__video" data-film-video
            data-src="../assets/video/home-film.mp4"
@@ -303,7 +355,7 @@
            poster="../assets/img/home-film-poster.webp"
            muted loop playsinline preload="none" aria-label="The Postpartum Suite film"></video>
     <button type="button" class="film__sound" data-film-sound>
-      <span>Watch With Sound</span>
+      <span>Play</span>
       <svg viewBox="0 0 10 12" aria-hidden="true" focusable="false"><path d="M0 0 L10 6 L0 12 Z" /></svg>
     </button>
     <!-- The film's timeline, only while it plays with sound (TJ, 21 Oct 2026):
@@ -322,51 +374,170 @@
   </div>
 </section>
 
-<!-- ============ THE TURN ============
-     The seam between the story and the answer.
-
-     Redesigned 2026-09-07 onto the split-stage device the treatment act
-     used to own: text and photograph in one row, not a text block with a
-     photograph waiting below it. The old stacked layout put a scroll gap
-     between the definition and the frame that answers it; this removes
-     the gap by putting both on screen together. The treatment act itself
-     is retired (see below), so this is the split-stage's only home on the
-     page now, not a repeated device. -->
-<section class="act act--turn" data-act data-section="confinement" data-section-name="What Is Confinement" aria-labelledby="confinement-heading">
-
-  <!-- Same aurora as the programmes act, tuned for this one. It replaced
-       the WebGL mesh field here on 2026-09-07. -->
-  <div class="aurora aurora--turn" aria-hidden="true"><span class="aurora__field"></span></div>
-
-  <div class="stage stage--split" data-stage>
-    <div class="stage__side">
-      <!-- The heading now carries the kinetic assembly, matching what the
-           treatment act did. The standfirst held that job before; moving
-           it here means the heading and the photograph's own drift read as
-           one arrival instead of two unrelated devices (a mask reveal on
-           the copy, a clip-path wipe on the frame) doing the same job
-           differently. -->
-      <h2 class="display display--lg" id="confinement-heading" data-kinetic>What is Confinement?</h2>
-      <p class="turn__standfirst">In Malaysian and Southeast Asian traditions, the first month after birth, known as the confinement period, is a sacred window dedicated entirely to maternal rest, healing, and bonding.</p>
-      <p class="body">Rather than expecting a mother to navigate the postpartum transition alone, confinement surrounds her with skilled daily support, nourishing food, and restorative bodywork.</p>
-      <!-- The turn from what the tradition is to what you do with it. No
-           hairline since 21 Oct 2026 (TJ): the same size and colour as the
-           line above, set apart by spacing only. -->
-      <p class="body turn__trail">At <a class="text-link" href="about.html">The Postpartum Suite</a>, we bring this time-honoured practice into your home through <a class="text-link" href="what-we-do.html">dedicated live-in care</a> from morning to evening.</p>
+<!-- ============ SECTION: care · four kinds of care ============
+     A carousel on the line (Ami, 24 Oct 2026: sideways scrolling was
+     unintuitive). The page scrolls normally past it; the arrows, a tap on a
+     name, the keyboard or a swipe move one kind of care at a time. The line
+     is the testimonials' and the Programmes page's device (tv2__car), in
+     white on the silk. home.js actCare(). The sideways rail, actPan(), is
+     retired. -->
+<section class="act act--care act--silk" id="care" data-act data-section="care" data-section-name="Four Kinds of Care">
+  <div class="aurora aurora--silk" aria-hidden="true"><span class="aurora__field"></span></div>
+  <div class="wrap care">
+    <header class="sec-head care__head">
+      <h2 class="display display--lg">Four kinds of care</h2>
+      <p class="script">Every single day</p>
+    </header>
+    <div class="care__line">
+      <div class="tv2__car care__car">
+        <span class="tv2__track-line" aria-hidden="true"></span>
+        <span class="tv2__fill" aria-hidden="true"></span>
+        <div class="tv2__track" data-care-track></div>
+        <span class="tv2__tip" aria-hidden="true"></span>
+      </div>
+      <p class="tv2__sr" aria-live="polite" data-care-live></p>
     </div>
+    <div class="care__stage">
+      <button class="care__nav care__nav--prev" type="button" data-care-prev aria-label="Previous kind of care"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg></button>
+      <button class="care__nav care__nav--next" type="button" data-care-next aria-label="Next kind of care"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg></button>
+      <div class="care__cards" data-care-cards>
 
-    <!-- The one photograph the act already had, not the treatment act's
-         three treatment stills: those show specific services and belong
-         to programmes, not to the act that defines the tradition. The
-         source frame is wide (a room, a doorway, the mother visible
-         through it) so the box is wider than the treatment act's portrait
-         4/3 stills, to keep both the specialist and the doorway in frame
-         rather than cropping down to a tight portrait. -->
-    <div class="stage__frame stage__frame--turn">
-        <img class="xfade__img" src="../assets/img/s8-confinement-arrival.webp" alt="A postpartum specialist in soft rose uniform arriving at the home, greeted warmly by the mother holding her newborn" width="1228" height="1536" loading="lazy" />
+      <article class="card care__card" data-care-card>
+        <h3 class="card__title">Mother and baby</h3>
+        <figure class="card__media"><img src="../assets/img/hero_night-shift_v1.webp" alt="A specialist settling the baby into the cot at night while the mother sleeps in the room next door" width="1920" height="1072" /></figure>
+        <p class="body">Hands-on support for your baby throughout the day so you can rest completely. <a class="text-link" href="who-comes-into-your-home.html">Your dedicated specialist</a> takes care of your newborn while you nap, recover, and bond, and is on hand to accompany you and your baby on outings.</p>
+      </article>
+
+      <article class="card care__card" data-care-card>
+        <h3 class="card__title">Treatments</h3>
+        <figure class="card__media"><img src="../assets/img/tungku-held.webp" alt="A specialist holding a warm Malaysian hot stone by the knot of its red batik cloth and pressing it onto a resting mother's abdomen" width="900" height="900" style="object-position: 50% 72%" /></figure>
+        <p class="body">Hands-on therapeutic care integrated directly into your stay, not offered as a one-off treat. Every programme includes daily traditional belly binding, daily herbal baths, thermal blanket treatments, and scheduled postpartum massages with hot stone therapy, foot reflexology, and herbal foot spas.</p>
+      </article>
+
+      <article class="card care__card" data-care-card>
+        <h3 class="card__title">Meals</h3>
+        <figure class="card__media"><img src="../assets/img/meal.webp" alt="A warm postpartum recovery meal of salmon and vegetables" width="1920" height="1072" /></figure>
+        <p class="body">Three fresh, tailored postpartum meals cooked daily in your own kitchen for you and your family. Your nutrition is supported throughout the day with traditional herbal teas and lactation drinks designed to restore your energy and assist feeding.</p>
+      </article>
+
+      <article class="card care__card" data-care-card>
+        <h3 class="card__title">Home</h3>
+        <figure class="card__media"><img src="../assets/img/hero_household-wide_v2_ironing.webp" alt="A specialist ironing and folding laundry in the living room while the mother rests on the sofa and the baby sleeps in a moses basket" width="1920" height="1072" /></figure>
+        <p class="body">Day-to-day household demands handled from the moment we arrive. Your specialist takes care of light housekeeping, organizing the baby&rsquo;s wardrobe, grocery collection, and daily laundry and ironing.</p>
+      </article>
+
+      </div>
     </div>
   </div>
+</section>
 
+<!-- ============ SECTION: programmes ============
+     flow + in. The story is over. This answers the question it raised. -->
+<section class="act act--programmes" id="programmes" data-act data-section="programmes" data-section-name="Programmes">
+
+  <!-- The aurora, this section only. Ported from the component TJ supplied
+       in Faurora-background.txt. Two layers rather than one: the field is
+       held still and its ::after travels across it, and the two sliding
+       against each other is what stops the repeat reading as stripes. See
+       the note in site.css for what was changed from the source and why. -->
+  <div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div>
+
+  <div class="wrap">
+
+    <header class="sec-head" data-in>
+      <h2 class="display display--lg">However long you need with us</h2>
+      <p class="script">We're here for you</p>
+      <p class="body body--wide">Every programme includes the same standard of care. The difference is how long your support is in place. Stay with us for 7, 14 or 30 days, and see <a class="text-link" href="programmes.html">what each programme includes</a>.</p>
+    </header>
+
+    <!-- The programme picker, rebuilt 2026-09-07. It was a six item
+         treatments gallery; it carries the four programme lengths now, so
+         the section picks a length rather than listing treatments that are
+         already listed in the care rail above.
+
+         Three columns: the lengths run down the left, the copy sits in the
+         middle, and the chosen frame plays on the right inside a ring.
+         Clicking a length flies its frame in from slightly deeper in the
+         page rather than crossfading it flat.
+
+         The 01 / 06 counter came off with the rebuild. Four items the
+         reader can see all of do not need counting, and a section counter
+         is a hard rule ban in scroll-craft. The breadcrumb line under the
+         heading came off with it: it read "Treatments", which is no longer
+         what this is, and it was the one line in the act that the aurora
+         cost contrast on.
+
+         Each length carries its own focal point in data-pos. The frames
+         crop to 4:5 here and 4:3 on a phone.
+
+         NOTE: the four photographs are placeholders. No image in the set
+         shows a length of stay, because a photograph cannot; these are
+         chosen to read as recovery progressing. They want naming properly,
+         the way the care rail images were. -->
+    <div class="gal" data-gallery>
+
+    <div class="gal__picker">
+      <ul class="gal__list">
+        <li class="gal__row">
+          <button class="gal__thumb is-active" type="button" data-gal-item
+            data-index="01" data-title="7 days of care"
+            data-body="A full week, with treatments running through it. Long enough for a rhythm to start, and for the difference to be something you feel rather than something you are told."
+            data-img="../assets/img/bind.webp" data-pos="50% 50%"
+            data-alt="A binding cloth rolled and folded on the bed beside a bowl of warm oil"
+            aria-pressed="true" aria-label="7 days of care">
+            <img src="../assets/img/bind.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="02" data-title="14 days of care"
+            data-body="Two weeks, and the treatments move to a weekly rhythm. This is where recovery stops being something you are waiting on and starts being something already underway."
+            data-img="../assets/img/massage.webp" data-pos="50% 45%"
+            data-alt="A specialist working along a mother's back and shoulders with warm oil"
+            aria-pressed="false" aria-label="14 days of care">
+            <img src="../assets/img/massage.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+        <li class="gal__row">
+          <button class="gal__thumb" type="button" data-gal-item
+            data-index="03" data-title="30 days of care"
+            data-body="The full postpartum month, kept the way tradition intends. Thirty days of daily support, all four areas of care, with the treatments repeating throughout."
+            data-img="../assets/img/tungku-stones.webp" data-pos="46% 62%"
+            data-alt="A traditional Malay hot stone wrapped in batik cloth with leaves, warming on a towel at the end of the bed"
+            aria-pressed="false" aria-label="30 days of care">
+            <img src="../assets/img/tungku-stones.webp" alt="" loading="lazy" />
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- The heading is the changing element as of 2026-09-07. It carried a
+         static "Choose a length." with the chosen length repeated as a small
+         line under the description; the length is the heading itself now and
+         the description sits under it, so the reader is told what they are
+         looking at before they read about it rather than after. -->
+    <div class="gal__copy">
+      <h2 class="display display--lg gal__heading" data-gal-title>7 days of care</h2>
+      <p class="body gal__body" data-gal-body>A full week, with treatments running through it. Long enough for a rhythm to start, and for the difference to be something you feel rather than something you are told.</p>
+    </div>
+
+    <div class="gal__frame">
+      <div class="gal__media">
+        <img class="gal__img" data-gal-img src="../assets/img/bind.webp" alt="A binding cloth rolled and folded on the bed beside a bowl of warm oil" style="object-position:50% 50%" />
+        <img class="gal__img" data-gal-img alt="" aria-hidden="true" />
+      </div>
+    </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ SECTION: testimonials ============
+     Their own section after However long you need with us (Ami, 24 Oct
+     2026). They were merged into the confinement act on 2026-09-07; the
+     notes below are from then. actVoices() finds them by [data-tv2]. -->
+<section class="act act--voices" data-act data-section="voices" data-section-name="Testimonials" aria-labelledby="voices-heading">
   <!-- ============ VOICES ============
        Merged into the confinement act on 2026-09-07. Both were white once
        the testimonials came off canvas, so the join between them had
@@ -443,167 +614,21 @@
   </div>
 </section>
 
-<!-- ============ SECTION: care · four kinds of care ============
-     pan. Lateral travel reads as breadth. -->
-<section class="act act--pan act--silk" id="care" data-act data-section="care" data-section-name="Four Kinds of Care">
-  <div class="aurora aurora--silk" aria-hidden="true"><span class="aurora__field"></span></div>
-  <div class="stage" data-stage>
-    <div class="rail" data-rail>
-
-      <div class="rail__intro rail__item">
-        <h2 class="display display--lg">Four kinds of care,<br />every single day</h2>
-      </div>
-
-      <!-- Title, then photograph, then description. The counters came off
-           on 2026-09-07: four cards in a rail the reader can see the whole
-           of do not need to be numbered, and the hard rules ban a section
-           counter anyway. The hairline the number carried moved onto the
-           title, so each card still opens on an edge rather than floating
-           on the band. -->
-      <article class="rail__item card">
-        <h3 class="card__title">Mother and baby</h3>
-        <figure class="card__media"><img src="../assets/img/hero_night-shift_v1.webp" alt="A specialist settling the baby into the cot at night while the mother sleeps in the room next door" width="1920" height="1072" /></figure>
-        <p class="body">Hands-on support for your baby throughout the day so you can rest completely. <a class="text-link" href="who-comes-into-your-home.html">Your dedicated specialist</a> takes care of your newborn while you nap, recover, and bond, and is on hand to accompany you and your baby on outings.</p>
-      </article>
-
-      <article class="rail__item card">
-        <h3 class="card__title">Treatments</h3>
-        <figure class="card__media"><img src="../assets/img/tungku-held.webp" alt="A specialist holding a warm Malaysian hot stone by the knot of its red batik cloth and pressing it onto a resting mother's abdomen" width="900" height="900" style="object-position: 50% 72%" /></figure>
-        <p class="body">Hands-on therapeutic care integrated directly into your stay, not offered as a one-off treat. Every programme includes daily traditional belly binding, daily herbal baths, thermal blanket treatments, and scheduled postpartum massages with hot stone therapy, foot reflexology, and herbal foot spas.</p>
-      </article>
-
-      <article class="rail__item card">
-        <h3 class="card__title">Meals</h3>
-        <figure class="card__media"><img src="../assets/img/meal.webp" alt="A warm postpartum recovery meal of salmon and vegetables" width="1920" height="1072" /></figure>
-        <p class="body">Three fresh, tailored postpartum meals cooked daily in your own kitchen for you and your family. Your nutrition is supported throughout the day with traditional herbal teas and lactation drinks designed to restore your energy and assist feeding.</p>
-      </article>
-
-      <article class="rail__item card">
-        <h3 class="card__title">Home</h3>
-        <figure class="card__media"><img src="../assets/img/hero_household-wide_v2_ironing.webp" alt="A specialist ironing and folding laundry in the living room while the mother rests on the sofa and the baby sleeps in a moses basket" width="1920" height="1072" /></figure>
-        <p class="body">Day-to-day household demands handled from the moment we arrive. Your specialist takes care of light housekeeping, organizing the baby&rsquo;s wardrobe, grocery collection, and daily laundry and ironing.</p>
-      </article>
-
-
-    </div>
-  </div>
-</section>
-
-<!-- ============ SECTION: programmes ============
-     flow + in. The story is over. This answers the question it raised. -->
-<section class="act act--programmes" id="programmes" data-act data-section="programmes" data-section-name="Programmes">
-
-  <!-- The aurora, this section only. Ported from the component TJ supplied
-       in Faurora-background.txt. Two layers rather than one: the field is
-       held still and its ::after travels across it, and the two sliding
-       against each other is what stops the repeat reading as stripes. See
-       the note in site.css for what was changed from the source and why. -->
+<!-- ============ SECTION: call to action ============
+     Its own section after the testimonials, in one card with the
+     Programmes page card's design (Ami, 24 Oct 2026). Ami's words
+     unchanged; the button changes with Request a place (batch 6). -->
+<section class="act act--cta" data-act data-section="book-consultation" data-section-name="Book a Consultation">
   <div class="aurora" aria-hidden="true"><span class="aurora__field"></span></div>
-
   <div class="wrap">
-
-    <header class="sec-head" data-in>
-      <h2 class="display display--lg">However long you need</h2>
-      <p class="script">We're here for you</p>
-      <p class="body body--wide">Every programme includes the same standard of care. The difference is how long your support is in place. Stay with us for 7, 14 or 30 days, and see <a class="text-link" href="programmes.html">what each programme includes</a>.</p>
-    </header>
-
-    <!-- The programme picker, rebuilt 2026-09-07. It was a six item
-         treatments gallery; it carries the four programme lengths now, so
-         the section picks a length rather than listing treatments that are
-         already listed in the care rail above.
-
-         Three columns: the lengths run down the left, the copy sits in the
-         middle, and the chosen frame plays on the right inside a ring.
-         Clicking a length flies its frame in from slightly deeper in the
-         page rather than crossfading it flat.
-
-         The 01 / 06 counter came off with the rebuild. Four items the
-         reader can see all of do not need counting, and a section counter
-         is a hard rule ban in scroll-craft. The breadcrumb line under the
-         heading came off with it: it read "Treatments", which is no longer
-         what this is, and it was the one line in the act that the aurora
-         cost contrast on.
-
-         Each length carries its own focal point in data-pos. The frames
-         crop to 4:5 here and 4:3 on a phone.
-
-         NOTE: the four photographs are placeholders. No image in the set
-         shows a length of stay, because a photograph cannot; these are
-         chosen to read as recovery progressing. They want naming properly,
-         the way the care rail images were. -->
-    <div class="gal" data-gallery>
-
-    <div class="gal__picker">
-      <ul class="gal__list">
-        <li class="gal__row">
-          <button class="gal__thumb is-active" type="button" data-gal-item
-            data-index="01" data-title="7 days of care"
-            data-body="A full week, with treatments running through it. Long enough for a rhythm to start, and for the difference to be something you feel rather than something you are told."
-            data-img="../assets/img/bind.webp" data-pos="50% 50%"
-            data-alt="A binding cloth rolled and folded on the bed beside a bowl of warm oil"
-            aria-pressed="true" aria-label="7 days of care">
-            <img src="../assets/img/bind.webp" alt="" loading="lazy" />
-          </button>
-        </li>
-        <li class="gal__row">
-          <button class="gal__thumb" type="button" data-gal-item
-            data-index="02" data-title="14 days of care"
-            data-body="Two weeks, and the treatments move to a weekly rhythm. This is where recovery stops being something you are waiting on and starts being something already underway."
-            data-img="../assets/img/massage.webp" data-pos="50% 45%"
-            data-alt="A specialist working along a mother's back and shoulders with warm oil"
-            aria-pressed="false" aria-label="14 days of care">
-            <img src="../assets/img/massage.webp" alt="" loading="lazy" />
-          </button>
-        </li>
-        <li class="gal__row">
-          <button class="gal__thumb" type="button" data-gal-item
-            data-index="03" data-title="30 days of care"
-            data-body="The full confinement period, kept the way tradition intends. Thirty days of daily support, all four areas of care, with the treatments repeating throughout."
-            data-img="../assets/img/tungku-stones.webp" data-pos="46% 62%"
-            data-alt="A traditional Malay hot stone wrapped in batik cloth with leaves, warming on a towel at the end of the bed"
-            aria-pressed="false" aria-label="30 days of care">
-            <img src="../assets/img/tungku-stones.webp" alt="" loading="lazy" />
-          </button>
-        </li>
-      </ul>
-    </div>
-
-    <!-- The heading is the changing element as of 2026-09-07. It carried a
-         static "Choose a length." with the chosen length repeated as a small
-         line under the description; the length is the heading itself now and
-         the description sits under it, so the reader is told what they are
-         looking at before they read about it rather than after. -->
-    <div class="gal__copy">
-      <h2 class="display display--lg gal__heading" data-gal-title>7 days of care</h2>
-      <p class="body gal__body" data-gal-body>A full week, with treatments running through it. Long enough for a rhythm to start, and for the difference to be something you feel rather than something you are told.</p>
-    </div>
-
-    <div class="gal__frame">
-      <div class="gal__media">
-        <img class="gal__img" data-gal-img src="../assets/img/bind.webp" alt="A binding cloth rolled and folded on the bed beside a bowl of warm oil" style="object-position:50% 50%" />
-        <img class="gal__img" data-gal-img alt="" aria-hidden="true" />
-      </div>
-    </div>
-
-    </div>
-
-    <!-- The page's main call to action (TJ, 16 Oct 2026). It ends the
-         programmes act, where the reader has just chosen a length, and
-         replaces the boxed close that used to sit at the foot of the page.
-         Words on the ground, no box. The booking sentence and the facts
-         under the button are Ami's own wording. The bespoke line is the
-         second door, below the main one. The duration chart that sat
-         above it is archived in archive/home-duration-drawn/. -->
-    <div class="cta" data-in data-section="book-consultation" data-section-name="Book a Consultation">
-      <h2 class="display display--lg">Tell us about your due date</h2>
-      <p class="script">We'll take it from there</p>
-      <p class="body cta__lead">We recommend booking as early as possible, ideally in your second trimester. If your baby has already arrived, please get in touch and we will do our very best to help.</p>
-      <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Book a consultation</a>
-      <p class="cta__meta">Thirty minutes, by phone or video. Nothing is booked on the call.</p>
-      <p class="programmes-bespoke cta__alt">Want something more bespoke? Visit the <a class="cta-link" href="build-your-programme.html">bespoke programmes</a> page.</p>
-    </div>
-
+    <div class="cta cta--card" data-in>
+          <h2 class="display display--lg">We care for a few mothers each month</h2>
+          <p class="script">You could be one of them</p>
+          <p class="body cta__lead">Tell us your due date and we’ll check whether your dates are still open. If they are, we hold them for seven days while you decide. If you’re not ready yet, we keep you close, with a short guide to your first weeks at home and first word when a place opens.</p>
+          <a class="btn btn--primary" href="request-a-place.html">Check your dates</a>
+          <p class="cta__meta">Nothing is booked and nothing is paid. We confirm everything together on a call.</p>
+              <p class="programmes-bespoke cta__alt">Want something more bespoke? Visit the <a class="cta-link" href="build-your-programme.html">bespoke programmes</a> page.</p>
+        </div>
   </div>
 </section>
 
@@ -699,7 +724,7 @@
 
     </div>
 
-    <p class="treatments-addon">Want the full details? <a class="cta-link" href="single-treatments.html">Learn more.</a></p>
+    <p class="treatments-addon treatments-addon--sm"><a class="cta-link" href="single-treatments.html">Explore the full details</a></p>
 
   </div>
 </section>

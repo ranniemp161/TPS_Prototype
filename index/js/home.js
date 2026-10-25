@@ -152,6 +152,99 @@ function actHero() {
    ACT 4 · 13:00 · Four kinds of care
    pan. Vertical scroll, lateral travel.
    ------------------------------------------------------------ */
+/* ------------------------------------------------------------
+   FOUR KINDS OF CARE, a carousel on the line (Ami, 24 Oct 2026)
+   Replaces actPan(), the sideways rail pinned to the scroll, which Ami found
+   unintuitive. The page scrolls past it normally. One card shows at a time;
+   the arrows, a tap on a name on the line, the arrow keys or a sideways
+   swipe move one kind of care. The line is the Programmes page's
+   (programmes.js): stops at a fixed spacing on a track that slides under the
+   centre circle, looping without a jump. The card leaves the way the track
+   moves and the next comes in from the other side.
+   ------------------------------------------------------------ */
+function actCare() {
+  const act = document.querySelector('.act--care');
+  if (!act) return;
+  const cards = [...act.querySelectorAll('[data-care-card]')];
+  const track = act.querySelector('[data-care-track]');
+  const live = act.querySelector('[data-care-live]');
+  const prev = act.querySelector('[data-care-prev]');
+  const next = act.querySelector('[data-care-next]');
+  if (!cards.length || !track) return;
+
+  const names = cards.map(c => c.querySelector('.card__title').textContent.trim());
+  const n = cards.length;
+  const mod = k => ((k % n) + n) % n;
+  const WINDOW = 3;
+  const items = {};
+  let p = 0;
+
+  const makeItem = k => {
+    const el = document.createElement('div');
+    el.className = 'tv2__item';
+    el.style.setProperty('--q', k);
+    el.innerHTML = '<span class="tv2__dot" aria-hidden="true"></span>'
+      + '<button class="tv2__stop" type="button">' + names[mod(k)] + '</button>';
+    el.querySelector('button').addEventListener('click', () => { if (k !== p) move(k - p); });
+    return el;
+  };
+  const sync = () => {
+    for (let k = p - WINDOW; k <= p + WINDOW; k++) {
+      if (!items[k]) { items[k] = makeItem(k); track.appendChild(items[k]); }
+    }
+    Object.keys(items).forEach(key => {
+      if (Math.abs(+key - p) > WINDOW) { items[key].remove(); delete items[key]; }
+    });
+  };
+  const paint = () => {
+    track.style.transform = 'translateX(calc(' + (-p) + ' * var(--tv-s)))';
+    Object.keys(items).forEach(key => {
+      const b = items[key].querySelector('button');
+      if (+key === p) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+  };
+  const show = (dir) => {
+    const now = mod(p);
+    cards.forEach((c, i) => {
+      const on = i === now;
+      if (on && dir && !REDUCED) {
+        // Start the arriving card on the side it comes in from.
+        c.style.transition = 'none';
+        c.style.transform = 'translateX(' + (dir * 40) + 'px)';
+        void c.offsetWidth;
+        c.style.removeProperty('transition');
+        c.style.removeProperty('transform');
+      }
+      c.classList.toggle('is-current', on);
+      c.setAttribute('aria-hidden', String(!on));
+      c.inert = !on;
+    });
+    if (live) live.textContent = names[now];
+  };
+  const move = step => {
+    p += step;
+    act.style.setProperty('--care-dir', step > 0 ? 1 : -1);
+    sync(); paint(); show(step > 0 ? 1 : -1);
+  };
+
+  sync(); paint(); show(0);
+  if (prev) prev.addEventListener('click', () => move(-1));
+  if (next) next.addEventListener('click', () => move(1));
+  act.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); move(1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); move(-1); }
+  });
+  const box = act.querySelector('[data-care-cards]');
+  let sx = 0, sy = 0;
+  box.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  box.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) move(dx < 0 ? 1 : -1);
+  }, { passive: true });
+}
+
+/* Retired (Ami, 24 Oct 2026): the sideways rail. Nothing calls it; kept for
+   reference until TJ approves the carousel. */
 function actPan() {
   const act = document.querySelector('.act--pan');
   if (!act) return;
@@ -1341,16 +1434,15 @@ function doorHandoff() {
 }
 
 /* ------------------------------------------------------------
-   THE HOME FILM (TJ, 21 Oct 2026)
-   Sits under the bath where the house flight used to (site.css, .film), so
-   the bath lifts off it through the smoke exactly as it lifted off the door.
-   Held for one window after the bath has gone, then it scrolls up and What
-   Is Confinement follows in plain flow; its bottom edge feathers out as it
-   leaves, so no straight line crosses the page.
+   THE HOME FILM (TJ, 21 Oct 2026; moved 25 Oct 2026)
+   After What is Postpartum Care, in a rounded frame on its section's
+   aurora (TJ, 25 Oct 2026: not full screen). Until then it sat under the
+   bath, which lifted off it through the smoke; now the bath lifts away and
+   What is Postpartum Care follows in plain flow.
 
    It plays silent and loops while it is on screen, and pauses off screen.
-   Watch With Sound plays it from the top with sound; on a phone, where it
-   rests as a landscape picture across the width, it also goes full screen.
+   Play runs it from the top with sound; on a phone it also goes full
+   screen.
    When it ends, or when the reader scrolls it away or leaves full screen,
    it goes back to the silent loop and the prompt returns.
    ------------------------------------------------------------ */
@@ -1482,28 +1574,8 @@ function homeFilm() {
     else if (!withSound) video.pause();
   }, { threshold: 0.15 }).observe(stage);
 
-  if (REDUCED) return;
-
-  // The film is held for LEAD (the bath lifting off it) plus HOLD windows,
-  // then scrolls away with its own window: the section is that tall.
-  const LEAD = DOOR_LEAD_VH, HOLD = 1;
-  const size = () => { section.style.height = Math.round((LEAD + HOLD + 1) * Math.max(window.innerHeight, 540)) + 'px'; };
-  size();
-  ScrollTrigger.addEventListener('refreshInit', size);
-
-  // The bottom edge feathers out as the film scrolls away (site.css).
-  gsap.fromTo(stage, { '--film-feather': '0px' }, {
-    '--film-feather': () => Math.round(window.innerHeight * 0.35) + 'px',
-    ease: 'none',
-    immediateRender: false,
-    scrollTrigger: {
-      trigger: section,
-      start: 'bottom 100%',
-      end: 'bottom 70%',
-      scrub: 0.7,
-      invalidateOnRefresh: true
-    }
-  });
+  // No hold and no feather since 25 Oct 2026 (TJ): the film is an ordinary
+  // section in a rounded frame, after What is Postpartum Care.
 }
 
 /* ------------------------------------------------------------
@@ -1985,11 +2057,35 @@ function actTreatmentsB() {
   });
 }
 
+/* ------------------------------------------------------------
+   THE GAP ABOVE THE FILM (TJ, 25 Oct 2026: close it by half)
+   What is Postpartum Care fills the window with its content centred, so
+   the space between its last line or photograph and the film frame
+   depends on the window. Measured with no pull, then the film section is
+   pulled up by half of it. Runs at boot, before any ScrollTrigger measures
+   the page, and again at the start of every refresh (a resize).
+   ------------------------------------------------------------ */
+function filmGap() {
+  const turn = document.querySelector('.act--turn');
+  const film = document.querySelector('.film');
+  const frame = film && film.querySelector('.film__stage');
+  if (!turn || !film || !frame) return;
+  const set = () => {
+    film.style.marginTop = '0px';
+    const low = Math.max(...[...turn.querySelectorAll('.stage__side > *, .stage__frame')].map(e => e.getBoundingClientRect().bottom));
+    const gap = frame.getBoundingClientRect().top - low;
+    film.style.marginTop = gap > 0 ? (-Math.round(gap / 2)) + 'px' : '0px';
+  };
+  set();
+  ScrollTrigger.addEventListener('refreshInit', set);
+}
+
 function boot() {
+  filmGap();
   actTreatmentsB();
   nav();
   actHero();
-  actPan();
+  actCare();
   actPeak();
   actTurn();
   durations();

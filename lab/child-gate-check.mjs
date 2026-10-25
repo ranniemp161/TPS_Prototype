@@ -1,0 +1,35 @@
+/* The due screen gate: date and child number both required. node lab/child-gate-check.mjs [width] [height] */
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+import { passPostcode } from './pc-pass.mjs';
+const [w = '1440', h = '900'] = process.argv.slice(2);
+const b = await chromium.launch({ channel: 'chrome' });
+const p = await b.newPage({ viewport: { width: +w, height: +h } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1500);
+await passPostcode(p);
+await p.click('.dk-next'); await p.waitForTimeout(1000);
+const state = async label => {
+  const r = await p.evaluate(() => ({ step: document.querySelector('[data-step-name]').textContent.trim(), next: document.querySelector('.dk-next').getAttribute('aria-disabled') === 'true' ? 'locked' : 'open' }));
+  console.log(label.padEnd(34), r.step.padEnd(12), 'Next', r.next);
+};
+const tryNext = async () => { await p.click('.dk-next', { force: true }); await p.waitForTimeout(1000); };
+await state('nothing chosen');
+await tryNext(); await state('  after pressing Next');
+await p.mouse.wheel(0, 1500); await p.waitForTimeout(1200); await state('  after scrolling down');
+await p.click('[data-due-grid] button:not([disabled])'); await p.waitForTimeout(500);
+await state('date only');
+await tryNext(); await state('  after pressing Next');
+await p.click('label:has(#dkd-child-3)'); await p.waitForTimeout(500);
+await state('date and child');
+await tryNext(); await state('  after pressing Next');
+const b2 = await (await b.newContext({ viewport: { width: +w, height: +h } })).newPage();
+await b2.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+await b2.evaluate(() => document.fonts.ready); await b2.waitForTimeout(1500);
+await passPostcode(b2); await b2.click('.dk-next', { force: true }); await b2.waitForTimeout(1000);
+await b2.click('label:has(#dkd-child-1)'); await b2.waitForTimeout(500);
+await passPostcode(b2); await b2.click('.dk-next', { force: true }); await b2.waitForTimeout(1000);
+console.log('child only, after Next'.padEnd(34), (await b2.evaluate(() => document.querySelector('[data-step-name]').textContent.trim())).padEnd(12), 'Next', await b2.evaluate(() => document.querySelector('.dk-next').getAttribute('aria-disabled') === 'true' ? 'locked' : 'open'));
+console.log('errors', JSON.stringify(errs));
+await b.close();

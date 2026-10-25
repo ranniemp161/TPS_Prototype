@@ -12,7 +12,7 @@ import re, sys, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
 SITE = HERE.parent  # the pages sit one folder up, in index/
 PAGES = ["index.html", "what-we-do.html", "programmes.html", "single-treatments.html",
-         "about.html", "who-comes-into-your-home.html", "build-your-programme.html", "faqs.html", "gifts.html"]
+         "about.html", "who-comes-into-your-home.html", "build-your-programme.html", "faqs.html", "gifts.html", "request-a-place.html"]
 LINK = '<link rel="stylesheet" href="css/footer.css" />'
 
 raw = (HERE / "site-footer.html").read_text(encoding="utf-8")

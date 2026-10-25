@@ -1,0 +1,27 @@
+/* Request a place (TJ and Ami, 24 Oct 2026). The Programmes page's hero and
+   glass card (programmes.css) holding one narrow form in the builder's type:
+   Montserrat capitals for labels, Karla for anything read, Ember for actions. */
+.rq-card { display: block; max-width: 560px; }
+.rq-form { display: grid; gap: .45rem; }
+.rq-form[hidden], .rq-done[hidden] { display: none; }
+.rq-label { margin: .7rem 0 0; font-family: var(--f-body); font-size: .68rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-mute); }
+.rq-label:first-child { margin-top: 0; }
+.rq-gets { list-style: none; margin: .2rem 0 .6rem; padding: 0; }
+.rq-gets li { position: relative; padding: .2rem 0 .2rem 1.1rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: var(--ink-soft); }
+.rq-gets li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em); width: 8px; height: 1px; background: var(--ink-mute); }
+.rq-input {
+  width: 100%; min-height: 46px; padding: 10px 14px; border-radius: var(--r-badge, 8px);
+  border: 1px solid rgba(10, 10, 10, .14); background: rgba(255, 255, 255, .85);
+  font-family: var(--f-read); font-size: 1rem; color: var(--ink);
+}
+.rq-input:focus-visible { outline: 2px solid var(--ember); outline-offset: 1px; }
+.rq-input--pc { text-transform: uppercase; }
+.rq-msg { margin: .4rem 0 0; min-height: 1.4em; font-family: var(--f-read); font-size: .875rem; line-height: 1.45; color: var(--ink-mute); }
+.rq-msg.is-error, .rq-msg.is-out { color: var(--ember-deep); }
+.rq-btn { justify-self: start; margin-top: .3rem; }
+.rq-legal { margin: .8rem 0 0; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--ink-mute); }
+.rq-done__h { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.05; color: var(--ink); }
+.rq-done__h:focus { outline: none; }
+.rq-done__p { margin: .8rem 0 1.4rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.55; color: var(--ink-soft); }
+.rq-done__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
+@media (max-width: 860px) { .rq-btn { justify-self: stretch; } }

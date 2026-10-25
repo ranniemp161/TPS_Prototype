@@ -1664,3 +1664,33 @@ Replaces the three column Read more from earlier the same day.
 ## What We Do: the four kinds' titles 30 percent smaller (TJ, 23 Oct 2026)
 
 - Mother and Baby Care, Treatments, Meals and Home Support titles, every width: desktop clamp(1.092rem, 2.1vw, 2.352rem) (30px at 1440, was 43px), phones 1.82rem (29px, was 41.6px), the phone Read more view 1.4rem x fit (was 2rem). Backup: lab/what-we-do-hands.before-titles-30.css.bak.
+
+## Bespoke builder after Ami's 24 Oct notes (TJ, 25 Oct 2026)
+
+Seven steps: due date and child number (both required), programme length, what matters most (one screen on every device), live-in or live-out, daytime or day and night care, recovery treatments (one screen), your programme. The Meals and Massage rhythm steps are gone (Ami): meals are always in the fee and every length runs its standard massage rhythm, so the published prices are unchanged. Maths to be revisited later (TJ).
+
+Every price shown is per day (Ami): 7 days £356, 14 days £321, 30 days £213 for the complete programme, the same as the Programmes page. The form still carries the total for Ami, with fee_per_day beside it. No clock times, no £30 figure and no session counts anywhere in the builder or its summary (Ami).
+
+Recommended (TJ): a small ember note beside a choice's name, driven by What matters most. Sleep and rest recommends Day and night care; My own recovery recommends the massage. A note only; nothing is chosen for her.
+
+The step bar keeps the original sliding line (TJ rejected numbered circles); above it the step reads "2 of 7 · How long", counting from the due date to Your programme, where the line ends. Back and Next are buttons (Ami). Body text is one size through the builder, the size of "The fee is a guide" (TJ). Nothing on a screen moves when a toggle or date is tapped (TJ); on the released long page (short phones) the tapped item is held in place when other sections change size.
+
+Your programme lists what she chose (Meals, Treatments, What matters most) in place of the day chart (Ami). Checks: lab/bespoke-perday-check.mjs, lab/bespoke-shift-check.mjs, lab/bespoke-free-shift.mjs, lab/child-gate-check.mjs, lab/bespoke-walk.mjs.
+
+
+## Request a place, the one front door (TJ and Ami, 24 and 25 Oct 2026)
+
+Every call to action on the site says Request a place and leads to one form: the header button on every page (index/partials/site-header.html, synced), the home page's call to action and a new button under What is Postpartum Care, the About page, and all three Programmes page buttons. The standalone page is index/request-a-place.html (name, email, due or birth date, postcode). The bespoke builder has the same form at its end, carrying her programme. A call is offered only after the request is sent: the confirmation, "You're on our list", has Choose a time to talk (Calendly). Ami can still review requests; the call link is simply offered at once (TJ: the option to book a call comes once they have enquired).
+
+With the request (TJ): her full programme summary, her indicative price held for 7 days, and a free postpartum guide. The 7 day hold replaces the three and twelve month wording and the due date split. The guide does not exist yet; the line is holding copy until it does.
+
+Postcode (Ami): the bespoke builder asks for it on its opening screen and does not open without a postcode inside the M25; Request a place checks it before sending. Both use js/postcode-check.js, the single treatments check lifted unchanged (postcodes.io, ray cast against booking-m25.js), with the client's own Service Area Notice for postcodes outside.
+
+The header button sizes to its words and, on phones up to 520px wide, stacks them in two lines so it stays clear of the centred wordmark. The Programmes cards link down to Included in every programme (See the full breakdown). Open: the numbers for the cards' summary of treatments and the four kinds of care (Ami to supply); the forms are UI only until TJ's colleague wires them to the CRM and Resend.
+
+
+## Check your dates, the universal call to action (TJ and Ami, 25 Oct 2026)
+
+Replaces Request a place (same day). The button everywhere is Check your dates: the ready mother reads it as "can I have mine", the unsure one as harmless, and it names the real scarce thing, dates. The sales psychology (TJ): real scarcity ("We care for a few mothers each month", never a number, and mothers, not families, as Ami's focus is the mother), the due date as the natural deadline and asked for first, gifts before the ask (whether her dates are open, the price held for seven days, a short guide), and no risk ("Nothing is booked and nothing is paid. We confirm everything together on a call."). After the form: "Your dates are in view", then Choose a time to talk for the ready buyer; the unsure one has joined the list without feeling she joined a list.
+
+Home page card: We care for a few mothers each month / You could be one of them / the body about checking her dates, the seven day hold, and keeping her close / Check your dates / the no risk line. The same words head request-a-place.html (due date first on its form). The builder's final screens carry the same copy. Copy is Claude's, approved by TJ; Ami to see it.

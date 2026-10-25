@@ -3030,12 +3030,13 @@ html:not(.js) .arrive { display: none; }
 /* Phones (TJ, 16 Oct 2026): the whole programmes section, heading to large
    photograph, fits one screen and uses the full width. The four thumbnails
    are equal squares across the width, the length's description runs the
-   full width, the gaps are tighter, the heading holds one line, and the
+   full width, the gaps are tighter, the heading holds one line (size
+   refitted for "with us", Ami, 24 Oct 2026), and the
    large photograph keeps the full width and is cropped to the height left
    above a bottom margin the width of the gutter. */
 @media (max-width: 767px) {
   .act--programmes .sec-head { margin-bottom: 20px; }
-  .act--programmes .sec-head .display { white-space: nowrap; font-size: min(2rem, calc((100vw - 2 * var(--gutter)) / 10.6)); }
+  .act--programmes .sec-head .display { white-space: nowrap; font-size: min(2rem, calc((100vw - 2 * var(--gutter)) / 14.6)); }
   .act--programmes .sec-head .script { margin-bottom: .9rem; }
   .gal { gap: 16px; }
   .gal__list { gap: 10px; overflow: visible; }
@@ -3796,6 +3797,8 @@ html:not(.js) .arrive { display: none; }
   font-size: clamp(1.05rem, 1.3vw, 1.25rem);
   color: var(--ink-mute);
 }
+/* Explore full details, smaller (Ami, 24 Oct 2026). */
+.act--treatments-b .treatments-addon--sm { font-size: .85em; }
 .act--treatments-b .treatments-addon__link {
   color: var(--ember);
   font-weight: 600;
@@ -4054,3 +4057,174 @@ html:not(.js) .arrive { display: none; }
 .dur__out .body { flex: 1 1 32ch; margin: 0; }
 .dur__out .btn { flex: none; }
 @media (max-width: 700px) { .dur__out { gap: 1rem; } }
+
+
+/* ============================================================
+   Ami's 24 Oct 2026 home page notes
+   ============================================================ */
+
+/* Four kinds of care as a carousel on the line. The silk band, its aurora
+   and the white type are the section's own (.act--silk). One card shows at
+   a time, the others stacked under it, hidden. */
+.act--care { padding-block: var(--section); }
+.care__head { text-align: center; margin-bottom: 0; }
+.care__line { max-width: min(860px, 100%); margin: clamp(18px, 3vh, 32px) auto 0; }
+.care__car { margin-top: 0; }
+.act--care .tv2__track-line { background: rgba(255, 255, 255, .32); }
+.act--care .tv2__fill, .act--care .tv2__tip, .act--care .tv2__dot { background: #FFFFFF; }
+.act--care .tv2__stop { color: rgba(255, 255, 255, .62); }
+.act--care .tv2__stop[aria-current="true"], .act--care .tv2__stop:hover { color: #FFFFFF; }
+.act--care .tv2__stop:focus-visible { outline-color: #FFFFFF; }
+.care__stage { position: relative; max-width: min(760px, calc(100% - 136px)); margin: clamp(8px, 1.6vh, 18px) auto 0; }
+.care__cards { display: grid; }
+.care__card {
+  grid-area: 1 / 1;
+  opacity: 0; visibility: hidden;
+  transform: translateX(calc(var(--care-dir, 1) * -40px));
+  transition: opacity 420ms var(--tease), transform 420ms var(--tease), visibility 0s linear 420ms;
+}
+.care__card.is-current {
+  opacity: 1; visibility: visible; transform: none;
+  transition: opacity 420ms var(--tease), transform 420ms var(--tease), visibility 0s;
+}
+.act--care .js .card__media img, .act--care .card__media img { width: 100%; margin-left: 0; will-change: auto; }
+.act--care .card__media { margin-bottom: 1.2rem; }
+/* The name is said once, on the line, on every width. */
+.act--care .card__title {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; margin: 0; padding: 0; border: 0;
+}
+.care__nav {
+  position: absolute; top: calc((min(760px, 100vw - 136px)) * 9 / 32); transform: translateY(-50%);
+  width: 44px; height: 44px; margin: 0; padding: 0; border: 0; background: none;
+  color: rgba(255, 255, 255, .72); cursor: pointer; z-index: 2; transition: color 180ms var(--tease);
+}
+.care__nav:hover { color: #FFFFFF; }
+.care__nav:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+.care__nav svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.care__nav--prev { left: -64px; }
+.care__nav--next { right: -64px; }
+@media (max-width: 700px) {
+  .care__stage { max-width: none; }
+  .act--care .tv2__car { --tv-s: 48%; }
+  /* On phones the arrows sit over the photograph's edges, on a soft disc. */
+  .care__nav { top: calc((100vw - 2 * var(--gutter)) * 9 / 32); width: 40px; height: 40px; border-radius: 50%; background: rgba(10, 10, 10, .32); color: #FFFFFF; }
+  .care__nav svg { width: 22px; height: 22px; }
+  .care__nav--prev { left: 8px; }
+  .care__nav--next { right: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .care__card, .care__card.is-current { transition: none; transform: none; }
+}
+
+/* The testimonials as their own section. The voices block brings its own
+   aurora and padding. */
+.act--voices { position: relative; }
+
+/* The call to action, its own section, in one card in the Programmes page
+   card's design (glass, the card radius, the hairline white border; no
+   shadow, per the brand). */
+.act--cta { position: relative; padding-block: var(--section); }
+.cta.cta--card {
+  margin: 0 auto; max-width: 46rem;
+  padding: clamp(32px, 4.4vw, 56px) clamp(24px, 4vw, 56px);
+  border-radius: var(--r-card);
+  background: rgba(255, 255, 255, .62); border: 1px solid rgba(255, 255, 255, .7);
+  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+.cta--card .programmes-bespoke.cta__alt { margin-top: clamp(24px, 4vh, 36px); }
+
+/* "Every single day" in Quentin under the heading (TJ, 25 Oct 2026), white on the silk. */
+.act--care .script { color: #FFFFFF; margin: .2rem 0 0; }
+@media (min-width: 1000px) { .act--care .script { font-size: calc(1.2 * clamp(1.8rem, 3.4vw, 2.9rem)); } }
+
+
+/* ============================================================
+   HOME PAGE TITLES = THE HERO TITLE (TJ, 25 Oct 2026)
+   Every title on the home page is the size of the hero title, and nothing
+   below the hero is larger. --hero-title repeats the hero's own sizing rules
+   (.display--xl and .act--hero .stage__copy .display--xl above), in the same
+   order, so it moves with the hero at every window width and height. The
+   hero itself is untouched. Quentin lines and card or panel titles are not
+   included. Home page only; other pages follow once TJ has approved this.
+   ============================================================ */
+:root { --hero-title: clamp(2.4rem, 6.2vw, 4rem); }
+@media (max-height: 780px) { :root { --hero-title: clamp(2rem, 4.4vh, 3.2rem); } }
+@media (max-width: 700px) { :root { --hero-title: clamp(1.8rem, 7.8vw, 3rem); } }
+@media (min-width: 1100px) { :root { --hero-title: 2.406vw; } }
+
+.act--turn #confinement-heading,
+.act--care .care__head .display,
+.act--programmes .sec-head .display,
+.act--programmes .gal__heading,
+.voices .tv2__title,
+.act--cta .cta .display,
+.act--treatments-b .sec-head .display { font-size: var(--hero-title); }
+/* The programmes heading was held to one line on phones at a smaller size. At
+   the hero's size it wraps instead. */
+@media (max-width: 767px) { .act--programmes .sec-head .display { white-space: normal; } }
+
+/* "What is Postpartum Care?" on one line (TJ, 25 Oct 2026): it was held to a
+   20ch column, which broke it in two. */
+.act--turn #confinement-heading { max-width: none; white-space: nowrap; }
+
+
+/* ============================================================
+   THE HOME FILM, MOVED AND FRAMED (TJ, 25 Oct 2026)
+   After What is Postpartum Care (Ami's order), as an ordinary section: no
+   longer pulled up under the bath, no longer held, no longer full screen.
+   The video sits in a rounded 16:9 frame on the section's aurora. Play (was
+   Watch With Sound) sits inside the frame. These rules come last and
+   replace the pulled up, full window ones above.
+   ============================================================ */
+.film {
+  height: auto; margin-top: 0;
+  padding-block: var(--section);
+  isolation: isolate; overflow: hidden;
+}
+.film__stage {
+  position: relative; top: auto;
+  width: min(1120px, calc(100% - 2 * var(--gutter)));
+  height: auto; min-height: 0; aspect-ratio: 16 / 9;
+  margin-inline: auto;
+  border-radius: var(--r-media);
+  background: var(--ink-mute);
+  -webkit-mask-image: none; mask-image: none;
+}
+.film__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: none; -webkit-mask-image: none; mask-image: none; aspect-ratio: auto; }
+.film__sound { width: auto; gap: 16px; padding: 13px 18px; }
+.film__bar { width: calc(100% - 2 * clamp(16px, 2.4vw, 32px)); bottom: clamp(12px, 2.6vw, 28px); }
+@media (max-width: 767px) {
+  .film__video { inset: 0; height: 100%; transform: none; -webkit-mask-image: none; mask-image: none; }
+  .film__sound { top: auto; bottom: 12px; right: 12px; width: auto; padding: 10px 14px; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .film { height: auto; margin-top: 0; }
+  .film__stage { position: relative; }
+}
+
+/* What is Postpartum Care now sits between the bath and the film, both on
+   the canvas (TJ, 25 Oct 2026). Its white ground fades in from the canvas
+   at the top and back out at the foot, so no straight line crosses the page
+   at either join. */
+.act.act--turn { background: linear-gradient(to bottom, var(--canvas) 0, #FFFFFF 24%, #FFFFFF 76%, var(--canvas) 100%); }
+/* The film section's aurora fades out at its top and foot, so its edge never
+   draws a line across the page (TJ, 25 Oct 2026). */
+.film > .aurora {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 28%, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 28%, #000 72%, transparent 100%);
+}
+/* The gap above the testimonials equals the gap below them (TJ, 25 Oct
+   2026): the picker's bottom margin spaced it from the call to action, which
+   has since moved out of this section, so only the section padding remains. */
+.act--programmes .gal { margin-bottom: 0; }
+/* Request a place under What is Postpartum Care (Ami, 24 Oct 2026). */
+.act--turn .turn__cta { margin: clamp(20px, 3vh, 32px) 0 0; }
+/* The header button sizes to "Request a place" (TJ and Ami, 24 Oct 2026); it was
+   a fixed width that suited "Enquire". Never narrower than before. */
+.tab.tab--cta { width: auto; min-width: var(--tab-w); padding: 0 clamp(14px, 1.2vw, 20px); white-space: nowrap; }
+/* Phones: the longer words stack in two lines so the button keeps clear of the
+   centred wordmark (TJ and Ami, 24 Oct 2026). */
+@media (max-width: 520px) {
+  .tab.tab--cta { width: 86px; min-width: 0; height: auto; min-height: var(--tab-h); padding: 5px 8px; white-space: normal; text-align: center; font-size: .72rem; line-height: 1.12; }
+}
