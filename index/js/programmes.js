@@ -17,7 +17,8 @@
   var P = TPS_PRICING;
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var LENGTHS = [7, 14, 30];
-  var WORDS = { 7: 'Seven days', 14: 'Fourteen days', 30: 'Thirty days' };
+  // Numerals on the cards (Ami, 24 Oct 2026), over the no numerals in titles rule.
+  var WORDS = { 7: '7 Days', 14: '14 Days', 30: '30 Days' };
   var START = 1;            // the page opens on 14 days (TJ, 23 Oct 2026)
 
   var track = root.querySelector('[data-pg-track]');
@@ -87,7 +88,9 @@
   function fill() {
     var d = LENGTHS[mod(p)], f = figures(d);
     out.days.textContent = WORDS[d];
-    out.fee.textContent = P.money(f.perDay);
+    // The digits sit closer together, the £ as it was (TJ, 25 Oct 2026).
+    var money = P.money(f.perDay);
+    out.fee.innerHTML = money.charAt(0) + '<span class="pg-price__digits">' + money.slice(1) + '</span>';
     out.counts.innerHTML = f.rows.map(function (r) {
       return '<li><span>' + r[0] + '</span><b>' + r[1] + '</b></li>';
     }).join('') +

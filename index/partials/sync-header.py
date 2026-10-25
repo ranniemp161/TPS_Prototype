@@ -14,20 +14,22 @@ import re, sys, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
 SITE = HERE.parent  # the pages sit one folder up, in index/
 CAL = "https://calendly.com/thepostpartumsuite/30min"
+# Every page's header button is Request a place, to the one form (TJ and Ami, 24 Oct 2026).
 VEIL = '<div class="veil" data-veil hidden></div>'
 
 # compact: not used any more. Every page opens with the tall header and folds on scroll
 # (TJ, 5 Oct 2026: the tall to short change is universal).
 PAGES = {
-    "index.html":              dict(brand="#content", enquire="#programmes", compact=False),
-    "what-we-do.html":            dict(brand="index.html",  enquire=CAL,           compact=False),
-    "programmes.html":      dict(brand="index.html",  enquire=CAL,           compact=False),
-    "single-treatments.html": dict(brand="index.html", enquire=CAL,          compact=False),
-    "about.html":           dict(brand="index.html",  enquire=CAL,           compact=False),
-    "who-comes-into-your-home.html":      dict(brand="index.html",  enquire=CAL,           compact=False),
-    "build-your-programme.html":       dict(brand="index.html",  enquire=CAL,           compact=False),
-    "faqs.html":           dict(brand="index.html",  enquire=CAL,           compact=False),
-    "gifts.html":          dict(brand="index.html",  enquire=CAL,           compact=False),
+    "index.html":              dict(brand="#content", enquire="request-a-place.html", compact=False),
+    "what-we-do.html":            dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
+    "programmes.html":      dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
+    "single-treatments.html": dict(brand="index.html", enquire="request-a-place.html",          compact=False),
+    "about.html":           dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
+    "who-comes-into-your-home.html":      dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
+    "build-your-programme.html":       dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
+    "faqs.html":           dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
+    "gifts.html":          dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
+    "request-a-place.html": dict(brand="index.html",  enquire="request-a-place.html",           compact=False),
 }
 
 raw = (HERE / "site-header.html").read_text(encoding="utf-8")

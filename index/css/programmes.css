@@ -137,7 +137,7 @@
 }
 .pg-price__days {
   margin: 0; font-family: var(--f-display); text-transform: uppercase; font-weight: 400;
-  font-size: clamp(1.5rem, 2.6vw, 2.2rem); line-height: 1; letter-spacing: .02em; color: var(--ink);
+  font-size: clamp(1.725rem, 2.99vw, 2.53rem); line-height: 1; letter-spacing: .02em; color: var(--ink);
 }
 /* One price: the figure first on the left, then "Starting from" stacked over
    "per day" beside it, the pair sitting on the figure's foot (TJ, 23 Oct 2026).
@@ -145,8 +145,8 @@
 .pg-price__fee {
   margin: 1.1rem 0 .4rem; display: grid; grid-template-columns: auto auto; grid-template-rows: 1fr auto auto;
   justify-content: start; column-gap: .7rem; row-gap: .35rem;
-  font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(2.8rem, 5.2vw, 4.4rem); line-height: 1; color: var(--ember);
+  font-family: var(--f-read); font-weight: 400;
+  font-size: clamp(1.792rem, 3.328vw, 2.816rem); line-height: 1; color: var(--ember);
 }
 .pg-price__num { grid-column: 1; grid-row: 1 / span 3; }
 .pg-price__from { grid-column: 2; grid-row: 2; }
@@ -159,7 +159,7 @@
 @media (min-width: 861px) {
   .pg-price__held { font-size: clamp(.9rem, 1.05vw, 1rem); line-height: 1.55; }
   /* A larger length name on desktop (TJ, 23 Oct 2026), was up to 2.2rem. */
-  .pg-price__days { font-size: clamp(2.2rem, 2.9vw, 2.6rem); }
+  .pg-price__days { font-size: clamp(2.53rem, 3.335vw, 2.99rem); }
 }
 
 /* What changes with the length: the treatment counts */
@@ -266,8 +266,8 @@
   .pg-car { height: 50px; }
   .pg-stage { margin-top: 6px; }
   .pg-card { gap: 16px; padding: 22px 22px 18px; }
-  .pg-price__days { font-size: 2.1rem; }   /* larger on phones (TJ, 23 Oct 2026) */
-  .pg-price__fee { margin-top: .8rem; font-size: 2.6rem; }
+  .pg-price__days { font-size: 2.415rem; }   /* larger on phones (TJ, 23 Oct 2026); 15 percent up (TJ, 25 Oct 2026) */
+  .pg-price__fee { margin-top: .8rem; font-size: 1.664rem; }   /* 20 percent down, twice (TJ, 25 Oct 2026) */
   .pg-price__cta { margin-top: 1rem; }
   .pg-card { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .pg-same__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
@@ -299,5 +299,17 @@
    desktop (TJ, 23 Oct 2026). Phones keep their sizes: at 40px the name runs
    into the card's arrows. */
 @media (min-width: 861px) {
-  .pg-price__days, .pg-same .pg-h2 { font-size: 40px; }
+  .pg-same .pg-h2 { font-size: 40px; }
+  /* The length name 15 percent up, the price 20 percent down (TJ, 25 Oct 2026). */
+  .pg-price__days { font-size: 46px; }
 }
+
+/* The price's digits: half the space between them (TJ, 25 Oct 2026). Karla's
+   digits have about 0.088em of air between their ink; this takes 0.044em
+   off each, and gives it back after the last digit so the words beside the
+   figure keep their place. The £ keeps its own spacing. */
+.pg-price__digits { letter-spacing: -0.044em; margin-right: 0.044em; }
+
+/* The card's link down to Included in every programme (Ami, 24 Oct 2026). */
+.pg-price__more { margin: .9rem 0 0; font-family: var(--f-read); font-size: .9rem; }
+#what-is-included { scroll-margin-top: calc(var(--nav-h, 72px) + 16px); }

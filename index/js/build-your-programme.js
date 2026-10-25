@@ -118,10 +118,10 @@
      ------------------------------------------------------------ */
 
   var TREAT_LABEL = {
-    scrub: 'body scrub',
+    scrub: 'full body scrub',
     reflex: 'foot reflexology',
     facial: 'facial massage',
-    herbfoot: 'herbal foot treatment',
+    herbfoot: 'herbal foot spa',
     thermal: 'thermal blanket treatment'
   };
 
@@ -171,7 +171,9 @@
       restore:    document.querySelector('[data-restore]'),
       nightInput: form.querySelector('input[name="shift"][value="night"]'),
       massage:    form.querySelector('input[name="massage"]'),
-      tickerChip: document.querySelector('[data-fee-chip]')
+      decideList: document.querySelector('[data-decide-list]'),
+      recNight:   document.querySelector('[data-rec="night"]'),
+      recMassage: document.querySelector('[data-rec="massage"]')
     };
 
     // Two counting figures, one value: the bar's fee and the summary.
@@ -196,9 +198,11 @@
         days: days,
         format: radio('format'),
         shift: radio('shift'),
-        meals: radio('meals') === 'yes',
+        // Meals are always in (Ami, 24 Oct 2026) and the massage runs at the
+        // length's standard rhythm: the Meals and Massage rhythm steps came off.
+        meals: true,
         massage: checked('massage'),
-        rhythm: radio('rhythm') || P.standardRhythm(days)
+        rhythm: P.standardRhythm(days)
       };
       P.COUNTED.forEach(function (k) { sel[k] = checked(k); });
       return sel;
@@ -251,21 +255,7 @@
         forced.push('baby', 'meals');
       }
 
-      // Changing the length resets the rhythm to that length's standard.
-      var days = parseInt(radio('days'), 10);
-      if (lastDays === null || days !== lastDays) {
-        var had = radio('rhythm');
-        drawRhythms(days, null);
-        if (lastDays !== null && had !== P.standardRhythm(days)) forced.push('treatments');
-      }
-      lastDays = days;
-
-      // No rhythm to set without massage.
-      var off = !el.massage.checked;
-      el.rhythmStep.classList.toggle('is-off', off);
-      [].slice.call(form.querySelectorAll('input[name="rhythm"]'))
-        .forEach(function (i) { i.disabled = off; });
-
+      lastDays = parseInt(radio('days'), 10);
       return forced;
     }
 
@@ -274,12 +264,11 @@
     function times(n) { return n + (n === 1 ? ' time' : ' times'); }
 
     function paintSteps(sel) {
-      var night = sel.shift === 'night' && sel.format === 'in';
-
-      el.mealsNote.textContent = night
-        ? 'Cooked fresh in your kitchen for you and your family. With night care your specialist’s day begins at 1pm, so breakfast sits outside it. Herbal teas and lactation drinks are in every programme.'
-        : 'Cooked fresh in your kitchen for you and your family, guided by confinement principles. Herbal teas and lactation drinks are in every programme.';
-      el.mealsSub.textContent = night ? 'Lunch and dinner, every day' : 'Breakfast, lunch and dinner, every day';
+      // Recommended (TJ, 24 Oct 2026): from What matters most. Sleep and rest
+      // recommends day and night care; My own recovery recommends the massage.
+      // A note only, nothing is chosen for her.
+      if (el.recNight) el.recNight.hidden = !checked('p-sleep');
+      if (el.recMassage) el.recMassage.hidden = !checked('p-recovery');
 
       P.COUNTED.forEach(function (k) {
         var out = document.querySelector('[data-count="' + k + '"]');
@@ -291,12 +280,6 @@
         mOut.textContent = sel.massage ? mc + (mc === 1 ? ' session' : ' sessions') : 'Not selected';
       }
 
-      var stdN = P.massageSessions(P.standardRhythm(sel.days), sel.days);
-      el.rhythmNote.textContent = !sel.massage
-        ? 'Postpartum massage isn’t selected, so there’s no rhythm to set. Go back one step to add it.'
-        : sel.days <= 7
-          ? 'Your ' + sel.days + '-day programme includes ' + stdN + ' massages. Choose fewer and the fee comes down with it. Massage is never on back-to-back days, so your body has a day to rest between.'
-          : 'Your ' + sel.days + '-day programme is built around massage four times a week. Choose fewer and the fee comes down with it. Massage is never on back-to-back days, so your body has a day to rest between.';
     }
 
     /* ---------- The summary (spec page 8, card 2) ---------- */
@@ -317,18 +300,15 @@
     function formatLine(sel) {
       var night = sel.shift === 'night' && sel.format === 'in';
       return (sel.format === 'in' ? 'Live-in care' : 'Daytime in-home care') + ', ' +
-        (night ? 'day and night' : '7am to 7pm');
+        (night ? 'day and night' : '12 hours of care');
     }
 
     function treatmentsLine(sel) {
-      var bits = ['Herbal baths and belly binding daily'];
-      if (sel.massage) {
-        var mc = P.massageSessions(sel.rhythm, sel.days);
-        bits.push('postpartum massage with hot stone therapy ' +
-          (sel.days <= 7 ? '(' + mc + ' sessions)' : P.rhythmTitle(sel.rhythm).toLowerCase() + ' (' + mc + ' sessions)'));
-      }
+      // No session counts (Ami, 24 Oct 2026).
+      var bits = ['Herbal rinse and belly binding daily'];
+      if (sel.massage) bits.push('postpartum massage with hot stone therapy');
       var extras = P.COUNTED.filter(function (k) { return sel[k]; })
-        .map(function (k) { return TREAT_LABEL[k] + ' (' + P.STD[sel.days][k] + ')'; });
+        .map(function (k) { return TREAT_LABEL[k]; });
       if (extras.length) bits.push(extras.join(', '));
       return bits.join(' · ');
     }
@@ -342,34 +322,35 @@
 
     function paintSummary(sel, result) {
       var night = sel.shift === 'night' && sel.format === 'in';
-      var title = sel.days + ' days · ' + formatLine(sel).charAt(0).toLowerCase() + formatLine(sel).slice(1);
+      var title = sel.days + ' day bespoke programme';   // the name only (TJ, 25 Oct 2026)
       if (el.builtTitle) el.builtTitle.textContent = title;
 
       setArea('duration', sel.days + ' days · ' + formatLine(sel) +
-        (sel.format === 'out' ? ' · includes £30 a day for travel and accommodation' : ''));
+        (sel.format === 'out' ? ' · includes a daily supplement for travel and accommodation' : ''));
       setArea('reservation', 'One postpartum specialist, reserved for your family for the full ' + sel.days + ' days');
-      setArea('baby', 'Hands-on baby care through the day' + (night ? ', and overnight from 11.30pm to 6am' : ''));
+      setArea('baby', 'Hands-on baby care through the day' + (night ? ', and through the night' : ''));
       setArea('meals', mealsLine(sel), !sel.meals);
       setArea('treatments', treatmentsLine(sel));
       setArea('household', 'Light housekeeping · laundry and ironing · grocery collection');
       var pri = priorities();
       setArea('priorities', pri.length ? pri.join(' · ') : 'Not chosen yet', !pri.length);
 
-      // The fee: counted, not swapped.
-      var text = P.money(result.fee);
-      var value = Math.round(result.fee);
+      paintDecideList(sel);
+
+      // The fee, per day (Ami, 24 Oct 2026: never a programme total): counted, not swapped.
+      var value = Math.round(result.fee / sel.days);
+      var text = P.money(value) + ' per day';
       el.feeOuts.forEach(function (out) { out.textContent = text; });
       var prev = null;
       if (rollers.length) prev = rollers[0].value();
       rollers.forEach(function (r) { r.set(value, lastFee !== null); });
       if (prev !== null) prev = Math.round(prev);
-      if (prev !== null && prev !== value) chip(value - prev);
       lastFee = text;
 
       el.floorNote.hidden = !result.floored;
       if (result.floored) {
         el.floorNote.textContent = 'Because your specialist is reserved for your family alone, a ' + sel.days +
-          '-day programme has a minimum fee of ' + P.money(result.floor) + '.';
+          '-day programme has a minimum fee of ' + P.money(result.floor / sel.days) + ' per day.';
       }
 
       var done = P.isComplete(sel);
@@ -382,22 +363,34 @@
       }
 
       el.reserveNote.textContent = sel.format === 'in'
-        ? 'On live-in programmes, your specialist is reserved for your family alone for the whole stay. Taking out meals or treatments changes what she does each day, but the reservation is what most of the fee pays for.'
-        : 'Your specialist is held for your family for each day of the programme. Daytime in-home care adds £30 a day towards her travel and accommodation.';
+        ? 'On live-in programmes, your specialist is reserved for your family alone for the whole stay. Taking out treatments changes what she does each day, but the reservation is what most of the fee pays for.'
+        : 'Your specialist is held for your family for each day of the programme. A daily supplement applies towards her travel and accommodation.';
     }
 
-    // The change, said in the band as the figure rolls.
-    function chip(delta) {
-      if (!el.tickerChip || !delta) return;
-      var up = delta > 0;
-      el.tickerChip.textContent = (up ? '+ ' : '− ') + P.money(Math.abs(delta));
-      el.tickerChip.classList.toggle('is-down', !up);
-      el.tickerChip.classList.remove('is-on');
-      void el.tickerChip.offsetWidth;
-      el.tickerChip.classList.add('is-on');
-      clearTimeout(el.tickerChip._t);
-      el.tickerChip._t = setTimeout(function () { el.tickerChip.classList.remove('is-on'); }, 1500);
+    // Your programme (TJ, 25 Oct 2026): everything she receives, chosen or included, as one
+    // plain list in one size. The person first, then how she is with you, then each day.
+    // No counts, times or prices; the full breakdown follows in the document.
+    function paintDecideList(sel) {
+      if (!el.decideList) return;
+      var night = sel.shift === 'night' && sel.format === 'in';
+      var esc = function (t) { return String(t).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); };
+      var treats = [];
+      if (sel.massage) treats.push('postpartum massage with hot stone therapy');
+      P.COUNTED.forEach(function (k) { if (sel[k]) treats.push(TREAT_LABEL[k]); });
+      var rows = [
+        'One postpartum specialist, reserved for your family for ' + sel.days + ' days',
+        sel.format === 'in' ? (night ? 'Live-in care, day and night' : 'Live-in care') : 'Live-out care',
+        (night ? 'Lunch and dinner' : 'Breakfast, lunch and dinner') + ' cooked fresh each day',
+        'Herbal rinse and belly binding every day'
+      ];
+      if (treats.length) { var t = sentence(treats); rows.push(t.charAt(0).toUpperCase() + t.slice(1)); }
+      rows.push('Hands-on baby care, and someone with you while you rest');
+      rows.push('Light housekeeping, laundry and ironing, and grocery collection');
+      rows.push('Herbal teas and lactation drinks');
+      el.decideList.innerHTML = rows.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('');
     }
+
+    // The + / − change figure beside the price came off (TJ, 25 Oct 2026); the count stays.
 
     /* ---------- The shape of the stay ---------- */
 
@@ -496,16 +489,16 @@
       var due = dueDate();
       if (due) { lines.push('DUE DATE  ' + dueLabel(due)); lines.push(''); }
       block('LENGTH AND FORMAT', sel.days + ' days · ' + formatLine(sel) +
-        (sel.format === 'out' ? ' · includes £30 a day for travel and accommodation' : ''));
+        (sel.format === 'out' ? ' · includes a daily supplement for travel and accommodation' : ''));
       block('YOUR SPECIALIST', 'One postpartum specialist, reserved for your family for the full ' + sel.days + ' days');
-      block('MOTHER AND BABY CARE', 'Hands-on baby care through the day' + (night ? ', and overnight from 11.30pm to 6am' : ''));
+      block('MOTHER AND BABY CARE', 'Hands-on baby care through the day' + (night ? ', and through the night' : ''));
       block('MEALS', mealsLine(sel));
       block('TREATMENTS', treatmentsLine(sel));
       block('HOME SUPPORT', 'Light housekeeping · laundry and ironing · grocery collection');
       block('WHAT MATTERS MOST', pri.length ? pri.join(' · ') : 'Not chosen yet');
       if (budget) block('CARE BUDGET', P.money(budget));
       lines.push('');
-      lines.push('Indicative fee  ' + P.money(result.fee) +
+      lines.push('Indicative fee  ' + P.money(result.fee / sel.days) + ' per day' +
         (P.CONFIG.introPricing ? '  (indicative, held for three months)' : ''));
       if (result.floored) lines.push('                at the minimum fee for this length');
       lines.push('');
@@ -534,8 +527,10 @@
 
     function paintPriorities() {
       var picked = priorities();
-      if (!el.prioCount) return;
-      if (!picked.length) el.prioCount.hidden = true;
+      // The "things noted for your call" line came off (Ami, 24 Oct 2026); it also
+      // moved the screen each time it appeared. Guarded so the rest still runs.
+      if (!el.prioCount) {}
+      else if (!picked.length) el.prioCount.hidden = true;
       else {
         el.prioCount.hidden = false;
         el.prioCount.textContent = (COUNTS[picked.length] || picked.length) +
@@ -625,13 +620,11 @@
     // shift are the client's and are left alone.
     function applyComplete(days) {
       var full = P.completeSelection(days);
-      form.querySelector('input[name="meals"][value="yes"]').checked = true;
       el.massage.checked = true;
       P.COUNTED.forEach(function (k) {
         var i = form.querySelector('input[name="' + k + '"]');
         if (i) i.checked = full[k];
       });
-      drawRhythms(days, full.rhythm);
     }
 
     if (el.restore) {
@@ -659,7 +652,7 @@
       var result = P.calculate(sel);
       paintSteps(sel);
       paintSummary(sel, result);
-      paintShape(sel);
+      // The day chart came off Your programme (Ami, 24 Oct 2026); paintShape is no longer called.
       paintPriorities();
       paintBudget(result, sel);
       el.briefText.textContent = briefFor(sel, result);
@@ -678,7 +671,9 @@
       if (!f) return;
       var v = {
         due: d ? dueIso(d) : '',
+        child: (document.querySelector('input[name="child"]:checked') || {}).value || '',
         fee: String(Math.round(result.fee)),
+        fee_per_day: String(Math.round(result.fee / sel.days)),
         days: String(sel.days),
         format: sel.format === 'in' ? 'live-in' : 'daytime',
         shift: sel.shift,
@@ -765,6 +760,9 @@
 
     var dueEl = document.getElementById('due');
     if (dueEl) dueEl.addEventListener('input', function () { update('due'); deck.dueChanged(); });
+    [].slice.call(document.querySelectorAll('input[name="child"]')).forEach(function (r) {
+      r.addEventListener('change', function () { deck.dueChanged(); });
+    });
 
     // The due date calendar (TJ, 13 Oct 2026). Looks like the single treatments booking
     // calendar (booking.js renderCalendar) with no limits: both arrows always live, every
@@ -803,7 +801,8 @@
           b.setAttribute('aria-pressed', String(b.getAttribute('data-date') === selected));
         });
         var v = readValue();
-        chosenEl.textContent = v ? fmtLong(v) : '';
+        // The chosen date line came off (TJ, 24 Oct 2026): the highlighted day shows the choice.
+        if (chosenEl) chosenEl.textContent = v ? fmtLong(v) : '';
       }
       function render() {
         monthEl.textContent = fmtMonth(cur);
@@ -895,7 +894,8 @@
      ------------------------------------------------------------ */
   function counter(node) {
     var shown = null, raf = 0;
-    function paint(v) { node.textContent = P.money(v); }
+    // The digits sit closer together, the £ as it was, matching the Programmes card (TJ, 25 Oct 2026).
+    function paint(v) { var m = P.money(v); node.innerHTML = m.charAt(0) + '<span class="dk-price__digits">' + m.slice(1) + '</span>'; }
     return {
       set: function (target, animate) {
         cancelAnimationFrame(raf);
@@ -998,7 +998,7 @@
     // data-join shares the screen of the page before it (two halves side by
     // side), so a step split for a phone is one screen on a laptop. The bar's
     // stops are screens. The grouping is read from the held layout.
-    var screens = [], screenOf = [], last = 0, sig = '';
+    var screens = [], screenOf = [], last = 0, sig = '', stepTotal = 0;
 
     // The frame sits directly under the site header, whatever height the
     // header is at this width (the three line wordmark makes it taller). The
@@ -1052,13 +1052,20 @@
     // at the window's centre; the previous and next dots are the live buttons.
     function buildStops() {
       stops.forEach(function (b) { b.remove(); });
-      line.style.setProperty('--last', String(Math.max(1, last)));
+      // The line ends at Your programme (TJ, 24 Oct 2026): the close and Done
+      // screens after it are not counted, so their stops are hidden and the
+      // track stops there. stepTotal also gives the label its "of" figure.
+      var dp = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'decide'; });
+      var lastStep = dp >= 0 ? screenOf[dp] : last;
+      stepTotal = lastStep;
+      line.style.setProperty('--last', String(Math.max(1, lastStep)));
       stops = screens.map(function (g, i) {
         var b = document.createElement('button');
         b.type = 'button';
         b.className = 'dk-line__stop';
         b.style.setProperty('--k', String(i));
         b.setAttribute('aria-label', 'Go to ' + title(i));
+        if (i > lastStep) b.hidden = true;
         var d = document.createElement('span');
         d.className = 'dk-line__dot';
         d.setAttribute('aria-hidden', 'true');
@@ -1088,8 +1095,10 @@
       // The quiet funnel (TJ, 13 Oct 2026): past the start, the header keeps only the logo
       // and Return to the site (FUNNEL-PLAN.md chat 1).
       if (app.hasAttribute('data-funnel')) document.body.classList.toggle('is-funnelled', i > 0);
-      line.style.setProperty('--pos', String(last ? i / last : 0));
-      line.style.setProperty('--i', String(i));
+      // Held at the last step on the screens after it, so the line never runs on.
+      var at = Math.min(i, stepTotal || last);
+      line.style.setProperty('--pos', String(last ? at / (stepTotal || last) : 0));
+      line.style.setProperty('--i', String(at));
       stops.forEach(function (s, k) {
         var open = k === i - 1 || k === i + 1;
         s.classList.toggle('is-past', k < i);
@@ -1102,12 +1111,14 @@
         s.setAttribute('aria-disabled', String(!open));
         s.setAttribute('aria-current', k === i ? 'step' : 'false');
       });
-      nameEl.textContent = title(i);
+      // "2 of 9 · How long" (TJ, 24 Oct 2026). The intro and the screens after
+      // Your programme carry their name only.
+      nameEl.textContent = (i > 0 && i <= stepTotal) ? i + ' of ' + stepTotal + ' \u00b7 ' + title(i) : title(i);
       paintNext();
       back.disabled = i === 0;
       back.classList.toggle('is-hidden', i === 0);
-      // The ember button only as Begin and Book a call; otherwise the link.
-      var primary = i === 0;
+      // Next is the ember button on every screen (Ami, 24 Oct 2026); it was a link past Begin.
+      var primary = true;
       next.classList.toggle('btn', primary);
       next.classList.toggle('btn--primary', primary);
       next.classList.toggle('dk-link', !primary);
@@ -1121,7 +1132,9 @@
     // The due date screen blocks Next until a valid date is in (FUNNEL-PLAN.md chat 2).
     // The screen is found from the page flagged data-block="due".
     var duePage = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'due'; });
-    function blocked() { return duePage >= 0 && !dueDate(); }
+    // The due screen also needs the child number (Ami, 24 Oct 2026): both, or no way on.
+    function childChosen() { return !!document.querySelector('input[name="child"]:checked'); }
+    function blocked() { return duePage >= 0 && (!dueDate() || !childChosen()); }
     function dueScreen() { return screenOf[duePage]; }
     // Book a call now? blocks Next until Yes or Not yet is on (chat 4). Only Not yet may pass
     // to the screen after it; Yes goes to Calendly instead.
@@ -1149,6 +1162,8 @@
 
     function go(i, instant) {
       i = Math.max(0, Math.min(last, i));
+      // No way past the opening screen without a postcode inside the area (Ami, 24 Oct 2026).
+      if (!pcOK && i > 0) i = 0;
       // No way forward past the due date screen without a date: Next, the arrow keys,
       // the stops, a Change link and a swipe all land here.
       if (blocked() && i > dueScreen()) i = dueScreen();
@@ -1161,8 +1176,41 @@
       clearTimeout(lockT);
       lockT = setTimeout(function () { target = null; realign(); }, free ? 1600 : 1400);
       if (free) glide(i, instant || REDUCED);
-      else root.scrollTo({ left: i * root.clientWidth, behavior: instant || REDUCED ? 'auto' : 'smooth' });
+      else root.scrollTo({ left: screenX(i), behavior: instant || REDUCED ? 'auto' : 'smooth' });
       paint(i);
+    }
+    // The postcode (Ami, 24 Oct 2026): checked when Begin is pressed (or Enter in the field),
+    // with the single treatments check (js/postcode-check.js). Inside the M25 the builder opens;
+    // outside, the client's Service Area Notice shows and it stays shut. Changing the postcode
+    // asks again.
+    var pcInput = document.getElementById('pc');
+    var pcMsg = document.querySelector('[data-pc-msg]');
+    var pcOK = !pcInput || typeof TPS_POSTCODE === 'undefined';
+    var pcBusy = false;
+    function pcSay(text, kind) {
+      if (!pcMsg) return;
+      pcMsg.textContent = text || '';
+      pcMsg.className = 'pc__msg' + (kind ? ' is-' + kind : '');
+    }
+    function checkPc() {
+      if (pcOK || pcBusy || !pcInput) return;
+      var v = pcInput.value.trim();
+      if (!v) { pcSay('Please enter your postcode to begin.', 'error'); pcInput.focus(); return; }
+      pcBusy = true; pcSay('Checking your postcode', 'busy');
+      TPS_POSTCODE.lookup(v).then(function (r) {
+        pcBusy = false;
+        if (r.error) { pcSay(r.error, 'error'); return; }
+        if (!r.inServiceArea) { pcSay(TPS_POSTCODE.OUTSIDE, 'out'); return; }
+        pcOK = true; pcSay('');
+        pcInput.value = r.postcode;
+        var f = document.querySelector('[data-capture]');
+        if (f && f.elements.postcode) f.elements.postcode.value = r.postcode;
+        go(1);
+      });
+    }
+    if (pcInput) {
+      pcInput.addEventListener('input', function () { if (pcOK) { pcOK = false; } pcSay(''); });
+      pcInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); checkPc(); } });
     }
     // Sending the form. UI only: TJ's colleague replaces action="#" or adds the request here, then
     // calls deck.done() on success (FUNNEL-PLAN.md section 9).
@@ -1192,6 +1240,7 @@
     back.addEventListener('click', function () { go(cur - 1); });
     next.addEventListener('click', function () {
       if (next.getAttribute('aria-disabled') === 'true') return;
+      if (cur === 0 && !pcOK) { checkPc(); return; }
       if (cur === last) return;
       if (cur === callScreen() && callChoice() === 'yes') { window.location.href = calendlyUrl(); return; }
       go(cur + 1);
@@ -1200,25 +1249,51 @@
     // The deck always rests exactly on a screen (TJ, 14 Oct 2026: the due date screen showed
     // about 180px left of centre in his Chrome). If a slide is interrupted part way, or the
     // window or a side panel changes size, or the tab returns, snap to the current screen.
+    // Since 25 Oct 2026 (TJ, the same symptom again, put right only by a toggle): the
+    // resting place is the current screen's own left edge, not the screen number times
+    // the width, so a screen that sits off that grid is still caught; and it is checked
+    // again when the fonts land and once the header has folded after Begin.
+    function screenX(i) {
+      var pg = pages[(screens[i] || [0])[0]];
+      if (!pg) return i * root.clientWidth;
+      return pg.getBoundingClientRect().left - root.getBoundingClientRect().left + root.scrollLeft;
+    }
     function realign() {
       if (free || fitting || target !== null) return;
-      var w = root.clientWidth, x = cur * w;
-      if (w && Math.abs(root.scrollLeft - x) > 1) root.scrollTo({ left: x, behavior: 'auto' });
+      var x = screenX(cur);
+      if (root.clientWidth && Math.abs(root.scrollLeft - x) > 1) root.scrollTo({ left: x, behavior: 'auto' });
     }
     var realignT = 0;
     function realignSoon() { clearTimeout(realignT); realignT = setTimeout(realign, 120); }
+    // The deck is checked every frame (TJ, 25 Oct 2026: the due date screen still came up
+    // about 180px left of centre in his Chrome and only centred after a toggle). Whenever no
+    // move is in flight and the deck is resting off its screen, it is put back at once, so
+    // no state can hold it off centre for longer than one frame. offsetLeft, not a rect, so
+    // the frame costs nothing.
+    (function watch() {
+      if (!free && !fitting && target === null && root.clientWidth) {
+        var pg = pages[(screens[cur] || [0])[0]];
+        var x = pg ? pg.offsetLeft : cur * root.clientWidth;
+        if (Math.abs(root.scrollLeft - x) > 1) root.scrollTo({ left: x, behavior: 'auto' });
+      }
+      requestAnimationFrame(watch);
+    })();
     window.addEventListener('resize', realignSoon, { passive: true });
     document.addEventListener('visibilitychange', function () { if (!document.hidden) realignSoon(); });
     if (window.ResizeObserver) new ResizeObserver(realignSoon).observe(root);
+    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', realignSoon);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(realignSoon);
 
     // Swiping: read the screen once scrolling settles, so the line and the
     // buttons follow a swipe exactly as they follow a tap.
+    root.addEventListener('scrollend', function () { if (target !== null) { target = null; clearTimeout(lockT); realign(); } });
     root.addEventListener('scroll', function () {
       if (free || fitting) return;
       clearTimeout(settleT);
       settleT = setTimeout(function () {
         var i = Math.max(0, Math.min(last, Math.round(root.scrollLeft / root.clientWidth)));
         if (target !== null) { if (i === target) { target = null; clearTimeout(lockT); } return; }
+        if (!pcOK && i > 0) { go(0); return; }
         if (blocked() && i > dueScreen()) { go(dueScreen()); return; }
         if (callBlocked() && i > callScreen() && cur <= callScreen()) { go(callScreen()); return; }
         if (decideBlocked() && i > decideScreen()) { go(decideScreen()); return; }
@@ -1293,6 +1368,11 @@
       if (fitting || !app || document.documentElement.hasAttribute('data-fit-hold')) return;
       fitting = true;
       var was = free, y = window.scrollY;
+      // Released page: hold whatever was just tapped (or the middle of the
+      // window) in the same place on screen, whatever changes size above it
+      // (TJ, 24 Oct 2026: a tap must never move the page under the finger).
+      var anchor = free ? anchorEl() : null;
+      var aTop = anchor ? anchor.getBoundingClientRect().top : 0;
       var curPage = screens.length ? screens[Math.min(cur, last)][0] : 0;
       app.classList.remove('is-free');
       document.body.classList.remove('dk-is-free');
@@ -1315,12 +1395,26 @@
         // Into the flowing page: the section being read comes to the top.
         // Back to the frame: the window to the top, the deck on the screen.
         if (free) window.scrollTo({ top: landY(to), behavior: 'instant' });
-        else { window.scrollTo({ top: 0, behavior: 'instant' }); root.scrollTo({ left: to * root.clientWidth, behavior: 'auto' }); }
-      } else if (free) window.scrollTo({ top: y, behavior: 'instant' });
-      else root.scrollTo({ left: to * root.clientWidth, behavior: 'auto' });
+        else { window.scrollTo({ top: 0, behavior: 'instant' }); root.scrollTo({ left: screenX(to), behavior: 'auto' }); }
+      } else if (free) {
+        var held = anchor && document.contains(anchor) && anchor.getClientRects().length;
+        window.scrollTo({ top: held ? anchor.getBoundingClientRect().top + window.scrollY - aTop : y, behavior: 'instant' });
+      }
+      else root.scrollTo({ left: screenX(to), behavior: 'auto' });
       fitting = false;
     }
 
+    // The element to hold still on the released page: the control just used,
+    // else whatever sits in the middle of the window.
+    function anchorEl() {
+      var a = document.activeElement;
+      if (a && a.closest && a.closest('.dk-page')) {
+        var shown = a.closest('label') || a;
+        if (shown.getClientRects().length) return shown;
+      }
+      var m = document.elementFromPoint(window.innerWidth / 2, window.innerHeight / 2);
+      return m && m.closest ? (m.closest('.tg, .due-day, .dk-step, .dk-page') || null) : null;
+    }
     // Released: where a section lands when scrolled to (just under the header).
     function landY(i) {
       var off = hdr ? hdr.getBoundingClientRect().height : 0;
@@ -1361,6 +1455,7 @@
         if (!free) return;
         var i = reading();
         if (target !== null) { if (i === target) { target = null; clearTimeout(lockT); } return; }
+        if (!pcOK && i > 0) { go(0); return; }
         if (blocked() && i > dueScreen()) { go(dueScreen()); return; }
         if (callBlocked() && i > callScreen() && cur <= callScreen()) { go(callScreen()); return; }
         if (decideBlocked() && i > decideScreen()) { go(decideScreen()); return; }
@@ -1375,7 +1470,7 @@
       rw = setTimeout(function () {
         var w = window.innerWidth, h = window.innerHeight;
         if (w !== lastW || Math.abs(h - lastH) >= 40) { lastW = w; lastH = h; fit(); }
-        else if (!free) root.scrollTo({ left: cur * root.clientWidth, behavior: 'auto' });
+        else if (!free) root.scrollTo({ left: screenX(cur), behavior: 'auto' });
       }, 120);
     });
 

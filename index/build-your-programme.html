@@ -83,7 +83,7 @@
     </a>
 
     <div class="nav__side nav__side--r">
-      <a class="tab tab--cta" href="https://calendly.com/thepostpartumsuite/30min">Enquire</a>
+      <a class="tab tab--cta" href="request-a-place.html">Check your dates</a>
     </div>
 
   </div>
@@ -157,8 +157,16 @@
         <div class="dk-start__copy">
           <h1 class="dk-h1 dk-h1--start">Bespoke Postpartum Programmes</h1>
           <span class="dk-kicker dk-kicker--under">Tailored to you</span>
-          <p class="dk-lede">Our four set programmes suit most families. If yours needs a different shape, choose the length, the hours, the meals and the treatments here, and watch an indicative fee update as you go.</p>
+          <p class="dk-lede">Our set programmes suit most families. If yours needs a different shape, choose the length, the hours, the meals and the treatments here, and watch an indicative fee update as you go.</p>
           <p class="dk-note">The fee is a guide, not a quote or a booking. We confirm your programme and fee after a consultation, once we know about your birth, your home and how you’re recovering.</p>
+          <!-- The postcode first (Ami, 24 Oct 2026): the same check as single treatments
+               (js/postcode-check.js, inside the M25). Begin checks it; outside, the client's
+               Service Area Notice shows and the builder does not open. -->
+          <div class="pc" data-pc>
+            <label class="tgl__hint capture__label" for="pc">Your postcode</label>
+            <input class="capture__email pc__input" id="pc" name="pc" type="text" autocomplete="postal-code" autocapitalize="characters" spellcheck="false" placeholder="SW1A 1AA" />
+            <p class="pc__msg" data-pc-msg role="status" aria-live="polite"></p>
+          </div>
         </div>
         <figure class="dk-start__frame">
           <img src="../assets/img/s3-rest.webp" alt="A mother resting back against the pillows while her specialist settles the baby" width="1200" height="1500" />
@@ -172,7 +180,6 @@
       <div class="dk-in">
         <fieldset class="step" id="step-due">
           <legend class="dk-step"><span class="dk-step__t">When is your baby due?</span></legend>
-          <p class="step__note step__note--lead">So we can hold the right dates for you, and the right price.</p>
           <div class="due">
             <input type="hidden" id="due" name="due" />
             <p class="due__note due__note--top" id="due-note">Already had your baby? Choose the birth date.</p>
@@ -184,7 +191,12 @@
               </div>
               <div class="due-cal__grid" data-due-grid role="group" aria-label="Choose a date" aria-describedby="due-note"></div>
             </div>
-            <p class="due__note due__chosen" id="due-chosen" data-due-chosen aria-live="polite"></p>
+          </div>
+          <!-- Which child (Ami, 24 Oct 2026). Information for the call only: the engine ignores it. -->
+          <div class="tgl tgl--child" role="radiogroup" aria-label="Which child">
+            <label class="tg"><input class="sr-only" type="radio" name="child" value="first" id="dkd-child-1" /><span class="tg__body"><span class="tg__t">First baby</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="child" value="second" id="dkd-child-2" /><span class="tg__body"><span class="tg__t">Second baby</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="child" value="third-or-more" id="dkd-child-3" /><span class="tg__body"><span class="tg__t">Third baby or more</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
         </fieldset>
       </div>
@@ -196,62 +208,44 @@
     <section class="dk-page" data-title="How long" aria-label="Step 02" data-section="builder-step-02" data-section-name="Step 02 How Long">
       <div class="dk-in">
         <fieldset class="step" id="step-02">
-          <legend class="dk-step"><span class="dk-step__t">How long?</span></legend>
-          <p class="step__note step__note--lead">Thirty days is the full confinement month. Changing the length resets the massage rhythm to that programme’s standard, so you always start from a complete programme.</p>
+          <legend class="dk-step"><span class="dk-step__t">Choose your programme length</span></legend>
           <div class="tgl" role="radiogroup" aria-label="How long">
-            <p class="tgl__hint" aria-hidden="true">Choose one</p>
-            <label class="tg"><input class="sr-only" type="radio" name="days" value="7" id="dkd-days-7" aria-describedby="dkd-days-7-m" checked /><span class="tg__body"><span class="tg__t">7 days</span><span class="tg__s" id="dkd-days-7-m"><span class="length__sub">A full week</span><span class="length__price">Complete programme £2,495</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input class="sr-only" type="radio" name="days" value="14" id="dkd-days-14" aria-describedby="dkd-days-14-m" /><span class="tg__body"><span class="tg__t">14 days</span><span class="tg__s" id="dkd-days-14-m"><span class="length__sub">Two weeks</span><span class="length__price">Complete programme £4,495</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input class="sr-only" type="radio" name="days" value="30" id="dkd-days-30" aria-describedby="dkd-days-30-m" /><span class="tg__body"><span class="tg__t">30 days</span><span class="tg__s" id="dkd-days-30-m"><span class="length__sub">Full confinement</span><span class="length__price">Complete programme £6,399</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="days" value="7" id="dkd-days-7" aria-describedby="dkd-days-7-m" checked /><span class="tg__body"><span class="tg__t">7 days</span><span class="tg__s" id="dkd-days-7-m"><span class="length__sub">A full week</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="days" value="14" id="dkd-days-14" aria-describedby="dkd-days-14-m" /><span class="tg__body"><span class="tg__t">14 days</span><span class="tg__s" id="dkd-days-14-m"><span class="length__sub">Two weeks</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="days" value="30" id="dkd-days-30" aria-describedby="dkd-days-30-m" /><span class="tg__body"><span class="tg__t">30 days</span><span class="tg__s" id="dkd-days-30-m"><span class="length__sub">Full postpartum month</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
         </fieldset>
       </div>
     </section>
 
-    <!-- 8. What matters most, one of two. On a phone each half is a screen; from
-         1024px wide the two halves share one screen (data-join, Claude's call: TJ,
-         12 Oct 2026, break a step into more screens where it will not fit). -->
+    <!-- 8. What matters most, one screen on every device (TJ, 24 Oct 2026). It was
+         two halves on phones, which made the step count differ by device. -->
     <section class="dk-page" data-title="What matters most" aria-label="Step 07" data-section="builder-step-07" data-section-name="Step 07 What Matters Most">
       <div class="dk-in">
         <fieldset class="step" id="step-07">
           <legend class="dk-step"><span class="dk-step__t">What matters most to you?</span></legend>
-          <p class="step__note step__note--lead">Choose as many as you like. These don’t change the fee. They’re the first thing we read before your call.</p>
+          <p class="step__note step__note--lead">As you continue to build your bespoke programme, recommendations will be highlighted.</p>
           <div class="tgl" role="group" aria-label="What matters most to you">
-            <p class="tgl__hint" aria-hidden="true">Choose any</p>
             <label class="tg"><input type="checkbox" class="sr-only" name="p-sleep" value="Sleep and rest" /><span class="tg__body"><span class="tg__t">Sleep and rest</span><span class="tg__s">A full night, and time to nap in the day</span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg"><input type="checkbox" class="sr-only" name="p-recovery" value="My own recovery" /><span class="tg__body"><span class="tg__t">My own recovery</span><span class="tg__s">Treatments, binding, and healing well</span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg"><input type="checkbox" class="sr-only" name="p-baby" value="Confidence with my baby" /><span class="tg__body"><span class="tg__t">Confidence with my baby</span><span class="tg__s">Feeding and settling, alongside someone experienced</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-          </div>
-        </fieldset>
-      </div>
-    </section>
-
-    <!-- 9. What matters most, two of two -->
-    <section class="dk-page" data-title="What matters most" data-join="align" aria-label="Step 07, part 2" data-section="builder-step-07b" data-section-name="Step 07 What Matters Most, part 2">
-      <div class="dk-in">
-        <fieldset class="step" id="step-07b">
-          <legend class="dk-step"><span class="dk-step__t">What matters most to you?</span></legend>
-          <div class="tgl" role="group" aria-label="What matters most to you">
-            <p class="tgl__hint" aria-hidden="true">Choose any</p>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-food" value="Warm, nourishing food" /><span class="tg__body"><span class="tg__t">Warm, nourishing food</span><span class="tg__s">Confinement meals, cooked for you daily</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-food" value="Warm, nourishing food" /><span class="tg__body"><span class="tg__t">Warm, nourishing food</span><span class="tg__s">Authentic meals cooked for the family daily.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg"><input type="checkbox" class="sr-only" name="p-house" value="Help with the house" /><span class="tg__body"><span class="tg__t">Help with the house</span><span class="tg__s">The washing, the kitchen and the shopping, handled</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input type="checkbox" class="sr-only" name="p-family" value="Support for the whole family" /><span class="tg__body"><span class="tg__t">Support for the whole family</span><span class="tg__s">Meals and calm for partners and older children too</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input type="checkbox" class="sr-only" name="p-family" value="Support for the whole family" /><span class="tg__body"><span class="tg__t">Support for the whole family</span><span class="tg__s">A calmer home for partners and children</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
-          <p class="prio__count" data-prio-count hidden></p>
         </fieldset>
       </div>
     </section>
 
     <!-- 1. Live-in or daytime -->
-    <section class="dk-page" data-title="Live-in or daytime" aria-label="Step 01" data-section="builder-step-01" data-section-name="Step 01 Live-in or Daytime">
+    <section class="dk-page" data-title="Live-in or live-out" aria-label="Step 01" data-section="builder-step-01" data-section-name="Step 01 Live-in or Daytime">
       <div class="dk-in">
         <fieldset class="step" id="step-01">
-          <legend class="dk-step"><span class="dk-step__t">Live-in, or daytime?</span></legend>
+          <legend class="dk-step"><span class="dk-step__t">Live-in or live-out?</span></legend>
           <p class="step__note step__note--lead">The care is the same either way. The difference is whether your specialist is in your home overnight.</p>
-          <div class="tgl" role="radiogroup" aria-label="Live-in, or daytime">
-            <p class="tgl__hint" aria-hidden="true">Choose one</p>
-            <label class="tg"><input class="sr-only" type="radio" name="format" value="in" id="dkl-format-in" aria-describedby="dkl-format-in-m" checked /><span class="tg__body"><span class="tg__t">Live-in care</span><span class="tg__s" id="dkl-format-in-m">She stays in your home for the whole programme.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input class="sr-only" type="radio" name="format" value="out" id="dkl-format-out" aria-describedby="dkl-format-out-m" /><span class="tg__body"><span class="tg__t">Daytime in-home care</span><span class="tg__s" id="dkl-format-out-m">She arrives each morning and leaves in the evening. Adds £30 a day towards her travel and accommodation.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+          <div class="tgl tgl--flush" role="radiogroup" aria-label="Live-in, or daytime">
+            <label class="tg"><input class="sr-only" type="radio" name="format" value="in" id="dkl-format-in" aria-describedby="dkl-format-in-m" checked /><span class="tg__body"><span class="tg__t">Live-in care</span><span class="tg__s" id="dkl-format-in-m">Your specialist lives with you throughout your programme.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="format" value="out" id="dkl-format-out" aria-describedby="dkl-format-out-m" /><span class="tg__body"><span class="tg__t">Daytime in-home care</span><span class="tg__s" id="dkl-format-out-m">Your specialist arrives each morning and leaves each evening. A daily supplement applies towards her travel and accommodation.</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
         </fieldset>
       </div>
@@ -261,86 +255,53 @@
     <section class="dk-page" data-title="Day or night" aria-label="Step 03" data-section="builder-step-03" data-section-name="Step 03 Day or Night">
       <div class="dk-in">
         <fieldset class="step" id="step-03">
-          <legend class="dk-step"><span class="dk-step__t">Daytime, or day and night?</span></legend>
-          <p class="step__note step__note--lead">With night care you sleep through while your specialist has your baby. She starts at 1pm, settles at 7pm, takes your baby from 11.30pm and brings her back to you at 6am.</p>
-          <div class="tgl" role="radiogroup" aria-label="Daytime, or day and night">
-            <p class="tgl__hint" aria-hidden="true">Choose one</p>
-            <label class="tg"><input class="sr-only" type="radio" name="shift" value="day" id="dkl-shift-day" aria-describedby="dkl-shift-day-m" checked /><span class="tg__body"><span class="tg__t">Daytime care</span><span class="tg__s" id="dkl-shift-day-m">7am to 7pm</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg" data-night-choice><input class="sr-only" type="radio" name="shift" value="night" id="dkl-shift-night" aria-describedby="dkl-shift-night-m" /><span class="tg__body"><span class="tg__t">Day and night care</span><span class="tg__s" id="dkl-shift-night-m">From 1pm, with your baby from 11.30pm to 6am</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+          <legend class="dk-step"><span class="dk-step__t">Daytime or day and night care</span></legend>
+          <p class="step__note step__note--lead">With night care, your specialist cares for your baby through the night while you rest. It covers 12 hours, arranged around your routine, and your baby is back with you by morning.</p>
+          <div class="tgl tgl--flush" role="radiogroup" aria-label="Daytime, or day and night">
+            <label class="tg"><input class="sr-only" type="radio" name="shift" value="day" id="dkl-shift-day" aria-describedby="dkl-shift-day-m" checked /><span class="tg__body"><span class="tg__t">Daytime care</span><span class="tg__s" id="dkl-shift-day-m">12 hours of care</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg" data-night-choice><input class="sr-only" type="radio" name="shift" value="night" id="dkl-shift-night" aria-describedby="dkl-shift-night-m" /><span class="tg__body"><span class="tg__t">Day and night care <span class="tg__rec" data-rec="night" hidden>(Recommended)</span></span><span class="tg__s" id="dkl-shift-night-m">Day care, and your baby through the night</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
           <p class="band band--haze" data-night-band hidden>Night care is available on live-in programmes. Go back to step 01 and choose live-in care to add it.</p>
         </fieldset>
       </div>
     </section>
 
-    <!-- 4. Meals -->
-    <section class="dk-page" data-title="Meals" aria-label="Step 04" data-section="builder-step-04" data-section-name="Step 04 Meals">
-      <div class="dk-in">
-        <fieldset class="step" id="step-04">
-          <legend class="dk-step"><span class="dk-step__t">Meals</span></legend>
-          <p class="step__note step__note--lead" data-meals-note>Cooked fresh in your kitchen for you and your family, guided by confinement principles. Herbal teas and lactation drinks are in every programme.</p>
-          <div class="tgl" role="radiogroup" aria-label="Meals">
-            <p class="tgl__hint" aria-hidden="true">Choose one</p>
-            <label class="tg"><input class="sr-only" type="radio" name="meals" value="yes" id="dkl-meals-yes" aria-describedby="dkl-meals-yes-m" checked /><span class="tg__body"><span class="tg__t">Yes, cook for us</span><span class="tg__s" id="dkl-meals-yes-m" data-meals-sub>Breakfast, lunch and dinner, every day</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input class="sr-only" type="radio" name="meals" value="no" id="dkl-meals-no" aria-describedby="dkl-meals-no-m" /><span class="tg__body"><span class="tg__t">No meals</span><span class="tg__s" id="dkl-meals-no-m">We’ll cook for ourselves</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-          </div>
-        </fieldset>
-      </div>
-    </section>
+    <!-- 4. Meals: the step came off (Ami, 24 Oct 2026). Meals are always in the fee;
+         Warm, nourishing food on What matters most stands for them. -->
 
-    <!-- 5. Recovery treatments, one of two (TJ, 12 Oct 2026: break a step into more
-         screens where it will not fit; the engine finds the inputs by name anywhere) -->
+    <!-- 5. Recovery treatments, one screen (Ami, 24 Oct 2026: the two screens merged,
+         session counts removed). The engine finds the inputs by name anywhere. -->
     <section class="dk-page" data-title="Recovery treatments" aria-label="Step 05" data-section="builder-step-05" data-section-name="Step 05 Recovery Treatments">
       <div class="dk-in">
         <fieldset class="step" id="step-05">
           <legend class="dk-step"><span class="dk-step__t">Recovery treatments</span></legend>
-          <p class="step__note step__note--lead">Herbal baths and belly binding are part of every programme. Choose the treatments you’d like alongside them. The number beside each one is how often it runs on the length you’ve chosen.</p>
+          <p class="step__note step__note--lead">Herbal rinse and belly binding are part of every programme. Choose the treatments you’d like alongside them.</p>
           <ul class="tgl tgl--included">
 
-            <li class="tg tg--included"><span class="tg__body"><span class="tg__t">Herbal bath</span><span class="tg__s">Fresh herbs such as lemongrass and pandan, run for you</span></span><span class="tg__aside">Included</span></li>
+            <li class="tg tg--included"><span class="tg__body"><span class="tg__t">Herbal rinse</span><span class="tg__s">A traditional herbal rinse, warm and freshly prepared, to finish your bath.</span></span><span class="tg__aside">Included</span></li>
 
             <li class="tg tg--included"><span class="tg__body"><span class="tg__t">Belly binding</span><span class="tg__s">Applied after your treatment, while your body is warm</span></span><span class="tg__aside">Included</span></li>
 
           </ul>
           <div class="tgl" role="group" aria-label="Recovery treatments">
-            <p class="tgl__hint" aria-hidden="true">Choose any</p>
-            <label class="tg"><input type="checkbox" class="sr-only" name="massage" checked /><span class="tg__body"><span class="tg__t">Postpartum massage with hot stone therapy</span><span class="tg__s">Warm oil through the back, hips and shoulders, with heated stones along the spine</span></span><span class="tg__aside" data-count="massage">3 sessions</span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input type="checkbox" class="sr-only" name="massage" checked /><span class="tg__body"><span class="tg__t">Postpartum massage with hot stone therapy <span class="tg__rec" data-rec="massage" hidden>(Recommended)</span></span><span class="tg__s">Warm oil through the back, hips and shoulders, with heated stones along the spine</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+
+            <label class="tg"><input type="checkbox" class="sr-only" name="scrub" checked /><span class="tg__body"><span class="tg__t">Full body scrub</span><span class="tg__s">A gentle full body exfoliation</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+
+            <label class="tg"><input type="checkbox" class="sr-only" name="reflex" checked /><span class="tg__body"><span class="tg__t">Foot reflexology</span><span class="tg__s">Steady pressure through the soles of the feet</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+
+            <label class="tg"><input type="checkbox" class="sr-only" name="facial" checked /><span class="tg__body"><span class="tg__t">Facial massage</span><span class="tg__s">Slow work through the face, jaw and neck</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+
+            <label class="tg"><input type="checkbox" class="sr-only" name="herbfoot" checked /><span class="tg__body"><span class="tg__t">Herbal foot spa</span><span class="tg__s">A warm herbal soak, then worked</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+
+            <label class="tg"><input type="checkbox" class="sr-only" name="thermal" checked /><span class="tg__body"><span class="tg__t">Thermal blanket treatment</span><span class="tg__s">Wrapped in a heated blanket while a deep, steady warmth builds</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
         </fieldset>
       </div>
     </section>
 
-    <!-- 6. Recovery treatments, two of two -->
-    <section class="dk-page" data-title="Recovery treatments" aria-label="Step 05, part 2" data-section="builder-step-05b" data-section-name="Step 05 Recovery Treatments, part 2">
-      <div class="dk-in">
-        <fieldset class="step" id="step-05b">
-          <legend class="dk-step"><span class="dk-step__t">Recovery treatments</span></legend>
-          <div class="tgl" role="group" aria-label="Recovery treatments">
-            <p class="tgl__hint" aria-hidden="true">Choose any</p>
-            <label class="tg"><input type="checkbox" class="sr-only" name="scrub" checked /><span class="tg__body"><span class="tg__t">Body scrub</span><span class="tg__s">A gentle full body exfoliation</span></span><span class="tg__aside" data-count="scrub">1 time</span><span class="tg__sw" aria-hidden="true"></span></label>
-
-            <label class="tg"><input type="checkbox" class="sr-only" name="reflex" checked /><span class="tg__body"><span class="tg__t">Foot reflexology</span><span class="tg__s">Steady pressure through the soles of the feet</span></span><span class="tg__aside" data-count="reflex">1 time</span><span class="tg__sw" aria-hidden="true"></span></label>
-
-            <label class="tg"><input type="checkbox" class="sr-only" name="facial" checked /><span class="tg__body"><span class="tg__t">Facial massage</span><span class="tg__s">Slow work through the face, jaw and neck</span></span><span class="tg__aside" data-count="facial">1 time</span><span class="tg__sw" aria-hidden="true"></span></label>
-
-            <label class="tg"><input type="checkbox" class="sr-only" name="herbfoot" checked /><span class="tg__body"><span class="tg__t">Herbal foot treatment</span><span class="tg__s">A warm herbal soak, then worked</span></span><span class="tg__aside" data-count="herbfoot">1 time</span><span class="tg__sw" aria-hidden="true"></span></label>
-
-            <label class="tg"><input type="checkbox" class="sr-only" name="thermal" checked /><span class="tg__body"><span class="tg__t">Thermal blanket treatment</span><span class="tg__s">Wrapped in a heated blanket while a deep, steady warmth builds</span></span><span class="tg__aside" data-count="thermal">1 time</span><span class="tg__sw" aria-hidden="true"></span></label>
-          </div>
-        </fieldset>
-      </div>
-    </section>
-
-    <!-- 7. Massage rhythm -->
-    <section class="dk-page" data-title="Massage rhythm" aria-label="Step 06" data-section="builder-step-06" data-section-name="Step 06 Massage Rhythm">
-      <div class="dk-in">
-        <fieldset class="step" id="step-06" data-step-rhythm>
-          <legend class="dk-step"><span class="dk-step__t">Massage rhythm</span></legend>
-          <p class="step__note step__note--lead" data-rhythm-note>Your 7-day programme includes 4 massages. Choose fewer and the fee comes down with it. Massage is never on back-to-back days, so your body has a day to rest between.</p>
-          <div class="tgl" role="radiogroup" aria-label="Massage rhythm"><p class="tgl__hint" aria-hidden="true">Choose one</p><div class="tgl__rows" data-rhythms></div></div>
-        </fieldset>
-      </div>
-    </section>
+    <!-- 7. Massage rhythm: the step came off (Ami, 24 Oct 2026). Every length runs its
+         standard rhythm, the one the published prices are built on. -->
 
     <!-- 10. Your programme, the conclusive screen (TJ, 13 Oct 2026). The fee, what she built and
          her days, with the one question beside it: Book a call (Calendly) or Not yet (the close).
@@ -351,73 +312,60 @@
       <div class="dk-in dk-sum dk-decide">
         <div class="dk-decide__prog">
           <p class="dk-card__label">Indicative fee</p>
-          <p class="dk-sumfee" data-count-fee aria-hidden="true">£2,495</p>
-          <p class="dk-decide__built" data-built-title>7 days · live-in care, 7am to 7pm</p>
-          <details class="dk-decide__more" data-decide-more>
-            <summary class="dk-decide__toggle">See your days and what’s included</summary>
-            <p class="dk-decide__shape-t" data-shape-title>7 days, laid out</p>
-            <div class="shape" data-shape>
-            <div class="shape__grid" data-shape-grid></div>
-            <ul class="shape__key">
-              <li class="key key--bath"><span class="key__mark" aria-hidden="true"></span>Herbal bath</li>
-              <li class="key key--massage"><span class="key__mark" aria-hidden="true"></span>Massage</li>
-              <li class="key key--treat"><span class="key__mark" aria-hidden="true"></span>Recovery treatment</li>
-              <li class="key key--night"><span class="key__mark" aria-hidden="true"></span>Night care</li>
-            </ul>
-            <p class="shape__empty" data-shape-empty hidden></p>
-          </div>
-            <p class="dk-decide__incl">Always included: one specialist reserved for your family, hands-on baby care, someone with you while you rest, light housekeeping, laundry and ironing, grocery collection, herbal teas and lactation drinks.</p>
-          </details>
+          <p class="dk-sumfee-row"><span class="dk-sumfee" data-count-fee aria-hidden="true">£356</span> <span class="dk-sumfee__per" aria-hidden="true">per day</span></p>
+          <p class="dk-decide__built" data-built-title>7 day bespoke programme</p>
+          <!-- One name, one hairline, one list (TJ, 25 Oct 2026): everything she receives, chosen
+               or included, in one size, no labels and no other lines. The full breakdown comes in
+               the document sent after the call to action. -->
+          <ul class="dk-decide__list" data-decide-list></ul>
         </div>
         <div class="dk-decide__ask">
           <h2 class="dk-step"><span class="dk-step__t">Ready to talk it through?</span></h2>
           <p class="step__note step__note--lead">Thirty minutes by phone or video. We’ll look at your choices, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call.</p>
           <div class="dk-decide__actions">
-            <a class="btn btn--primary dk-decide__book" href="https://calendly.com/thepostpartumsuite/30min" data-calendly>Book a call</a>
-            <button class="btn dk-decide__no" type="button" data-not-yet>Not yet</button>
+            <button class="btn btn--primary dk-decide__book" type="button" data-not-yet>Check your dates</button>
           </div>
           <pre class="brief__text" data-brief-text></pre>
         </div>
       </div>
     </section>
 
-    <!-- 17. The close (FUNNEL-PLAN.md chat 5, TJ, 13 Oct 2026). One screen, two versions chosen by the
-         due date: more than three calendar months away, hold this price; nearer, or already born,
-         check my dates. The script sets data-close on .dk; CSS shows the matching version. The form
-         is UI only: TJ's colleague wires form[data-capture] to the CRM and Resend (FUNNEL-PLAN.md 9). -->
-    <section class="dk-page dk-page--summary" data-title="Your programme" data-block="close" aria-label="Your programme" data-section="builder-close" data-section-name="Your Programme">
+    <!-- 17. Request a place (TJ and Ami, 24 Oct 2026): the one form every path lands on, here
+         carrying her programme. One version: the indicative price is held for 7 days (no more due
+         date split). The form is UI only: TJ's colleague wires form[data-capture] to the CRM and
+         Resend (FUNNEL-PLAN.md 9). -->
+    <section class="dk-page dk-page--summary" data-title="Check your dates" data-block="close" aria-label="Check your dates" data-section="builder-close" data-section-name="Check Your Dates">
       <div class="dk-in dk-sum dk-sum--close">
-        <div class="close__v close__v--hold">
-          <h2 class="dk-step"><span class="dk-step__t">Hold this price</span></h2>
-          <p class="step__note step__note--lead"><span data-due-phrase></span> Indicative pricing is held for three months, but send your programme to your email and we’ll hold this price for twelve months.</p>
-        </div>
-        <div class="close__v close__v--dates">
-          <h2 class="dk-step"><span class="dk-step__t">Check my dates</span></h2>
-          <p class="step__note step__note--lead"><span data-due-phrase></span> Send your programme to your email and we’ll check availability for your dates and come back to you within one working day.</p>
-        </div>
+        <h2 class="dk-step"><span class="dk-step__t">Check your dates</span></h2>
+        <p class="tgl__hint capture__label">What you’ll receive</p>
+        <ul class="close__gets">
+          <li>Whether your dates are open</li>
+          <li>Your programme summary, and your indicative price held for seven days</li>
+          <li>A short guide to your first weeks at home</li>
+        </ul>
         <form class="capture" data-capture method="post" action="#">
           <label class="tgl__hint capture__label" for="capture-name">Your name</label>
           <input class="capture__email capture__name" id="capture-name" name="name" type="text" required autocomplete="name" />
           <label class="tgl__hint capture__label capture__label--email" for="capture-email">Your email</label>
           <div class="capture__row">
             <input class="capture__email" id="capture-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" />
-            <button class="btn btn--primary capture__btn" type="submit"><span class="close__v close__v--hold">Hold my price</span><span class="close__v close__v--dates">Check my dates</span></button>
+            <button class="btn btn--primary capture__btn" type="submit">Check your dates</button>
           </div>
-          <input type="hidden" name="due" /><input type="hidden" name="fee" /><input type="hidden" name="days" /><input type="hidden" name="format" /><input type="hidden" name="shift" /><input type="hidden" name="meals" /><input type="hidden" name="treatments" /><input type="hidden" name="rhythm" /><input type="hidden" name="priorities" /><input type="hidden" name="budget" /><input type="hidden" name="summary" /><input type="hidden" name="close" /><input type="hidden" name="generated" />
+          <input type="hidden" name="due" /><input type="hidden" name="child" /><input type="hidden" name="postcode" /><input type="hidden" name="fee" /><input type="hidden" name="fee_per_day" /><input type="hidden" name="days" /><input type="hidden" name="format" /><input type="hidden" name="shift" /><input type="hidden" name="meals" /><input type="hidden" name="treatments" /><input type="hidden" name="rhythm" /><input type="hidden" name="priorities" /><input type="hidden" name="budget" /><input type="hidden" name="summary" /><input type="hidden" name="close" /><input type="hidden" name="generated" />
         </form>
-        <p class="capture__note">We’ll send your programme summary too.</p>
-        <p class="dk-legal">Indicative pricing only, held for three months. Final programme, availability and fee are confirmed after consultation.</p>
+        <p class="dk-legal">Nothing is booked and nothing is paid. We confirm everything together on a call.</p>
       </div>
     </section>
 
-    <!-- 18. Done (FUNNEL-PLAN.md chat 5). Reached only by sending the form. -->
+    <!-- 18. On the list (reached only by sending the form). The call is offered here, after the
+         request, never before it (TJ and Ami, 24 Oct 2026). -->
     <section class="dk-page dk-page--summary" data-title="Done" data-block="done" aria-label="Done" data-section="builder-done" data-section-name="Done">
       <div class="dk-in dk-sum dk-sum--done">
-        <h2 class="dk-step"><span class="dk-step__t">Done</span></h2>
-        <p class="step__note step__note--lead" role="status">Your programme is on its way<span class="close__v close__v--hold">, and your price is held for twelve months</span><span class="close__v close__v--dates">, and we’ll come back to you within one working day</span>.</p>
+        <h2 class="dk-step"><span class="dk-step__t">Your dates are in view</span></h2>
+        <p class="step__note step__note--lead" role="status">Your summary and your guide are on their way, and your indicative price is held for seven days.</p>
         <div class="dk-actions">
+          <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min" data-calendly>Choose a time to talk</a>
           <a class="dk-link" href="index.html">Return to the site</a>
-          <a class="dk-link" href="https://calendly.com/thepostpartumsuite/30min" data-calendly>Book a call</a>
         </div>
       </div>
     </section>
@@ -529,12 +477,11 @@
       <div class="dk-fee" data-section="builder-fee" data-section-name="Indicative Fee">
         <span class="dk-fee__label">Indicative fee</span>
         <span class="dk-fee__row">
-          <strong class="dk-fee__amount" data-count-fee aria-hidden="true">£2,495</strong>
-          <span class="dk-fee__chip" data-fee-chip aria-hidden="true"></span>
+          <strong class="dk-fee__amount" data-count-fee aria-hidden="true">£356</strong><span class="dk-fee__per" aria-hidden="true">per day</span>
         </span>
-        <span class="sr-only" data-fee aria-live="polite">£2,495</span>
+        <span class="sr-only" data-fee aria-live="polite">£356 per day</span>
       </div>
-      <button class="dk-link dk-back is-hidden" type="button" data-back disabled>Back</button>
+      <button class="btn btn--outline dk-back is-hidden" type="button" data-back disabled>Back</button>
       <div class="dk-line" data-line>
         <p class="dk-bar__name" data-step-name>Start</p>
         <div class="dk-line__win">
@@ -600,6 +547,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="js/build-your-programme-pricing.js"></script>
+<script src="js/booking-m25.js"></script>
+<script src="js/postcode-check.js"></script>
 <script src="js/build-your-programme.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>

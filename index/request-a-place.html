@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Check your dates &middot; The Postpartum Suite</title>
+<meta name="description" content="We care for a few mothers each month. Tell us your due date and we will check whether your dates are still open." />
+<link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
+
+<!-- Not cosmetic and not optional. Without it, Chrome on Android and the
+     in-app browsers in Instagram and WhatsApp auto-invert the page and the
+     brand palette is destroyed. -->
+<meta name="color-scheme" content="light only" />
+<meta name="theme-color" content="#F3EFEC" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+
+<!-- site.css first for the tokens, the type roles, the buttons and the nav.
+     inner-pages.css adds only what an empty page needs and overrides nothing. -->
+<link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/inner-pages.css" />
+<link rel="stylesheet" href="css/footer.css" />
+<link rel="stylesheet" href="css/programmes.css" />
+<link rel="stylesheet" href="css/request.css" />
+</head>
+<body class="page--programmes page--request">
+
+<a class="skip" href="#content">Skip to content</a>
+
+<!-- v1's nav. is-scrolled from the start: this page opens on paper rather
+     than on a photographic hero, so the bar has nothing to resolve from,
+     which is the same choice build-your-programme.html makes. -->
+<header class="nav nav--glass" data-nav data-section="site-header" data-section-name="Header">
+  <div class="nav__inner">
+
+    <div class="nav__side nav__side--l">
+      <!-- The corner mark: the circular TPS logo in the far left corner
+           while the three-line wordmark is showing in the centre. Purely
+           decorative (the centre lockup is the real home link), so it is
+           hidden from assistive tech and not clickable. It leaves, and the
+           tabs slide left into its place, as the wordmark folds into the
+           centre circle; see the .nav--glass block in site.css. Wide
+           screens only. -->
+      <img class="nav__corner" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" aria-hidden="true" />
+      <!-- The five main menu items share one row, with the Menu chip taking
+           their place below 1100px. What We Do, Our Offering and About Us open
+           panels; Home and Gifts are page links (TJ, 22 Oct 2026: FAQs moved
+           into the What We Do panel, Gifts took its place in the bar). -->
+      <div class="nav__tabs" data-tabs>
+        <a class="tab" href="index.html">Home</a>
+        <button class="tab" type="button" data-tab="what-we-do" aria-expanded="false" aria-controls="panel-what-we-do">What We Do</button>
+        <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
+        <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
+        <a class="tab" href="gifts.html">Gifts</a>
+      </div>
+      <!-- Takes the place of the five above it below 1100px. A word, not a
+           glyph, in the same chip as everything else. -->
+      <button class="tab tab--menu" type="button" data-burger aria-expanded="false" aria-controls="panel-what-we-do">Menu</button>
+    </div>
+
+    <!-- #content, not #top. There has never been an element with id
+         "top" on this page, so the lockup was a dead link too: the one
+         control every visitor tries first did nothing. #content is the
+         main landmark, which is where home means on a single page. -->
+    <a class="nav__brand" href="index.html" aria-label="The Postpartum Suite, home">
+      <img class="nav__mark" src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" />
+      <span class="nav__wordmark" aria-hidden="true">
+        <span class="wm-line wm-line--1"></span>
+        <span class="wm-line wm-line--2"></span>
+        <span class="wm-line wm-line--3"></span>
+      </span>
+    </a>
+
+    <div class="nav__side nav__side--r">
+      <a class="tab tab--cta" href="request-a-place.html">Check your dates</a>
+    </div>
+
+  </div>
+
+  <div class="menu" data-menu hidden>
+
+    <!-- Stage one only, rebuilt 2026-09-21. The site structure names
+         thirty two pages across four menus; these are the seven built
+         first, so the menu lists exactly those and nothing else. Every
+         entry points at a real file. The rest return here as they are
+         built, group by group.
+
+         Nothing else on this page changed: the sections these pages will
+         eventually mirror stay exactly where they are. A section on the
+         homepage and a page of its own are two different things, and
+         whether the former ever links to the latter is a later call. -->
+    <section class="menu__panel" id="panel-what-we-do" data-panel="what-we-do" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">What We Do</h2>
+        <ul class="menu__list">
+          <li><a href="what-we-do.html">What We Do</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="menu__panel" id="panel-offerings" data-panel="offerings" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">Our Offerings</h2>
+        <ul class="menu__list">
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+          <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+          <li><a href="gifts.html">Gifts</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="menu__panel" id="panel-about" data-panel="about" hidden>
+      <div class="menu__group">
+        <h2 class="menu__head">About Us</h2>
+        <ul class="menu__list">
+          <li><a href="about.html">The Suite</a></li>
+          <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+        </ul>
+      </div>
+    </section>
+
+  </header>
+
+<div class="veil" data-veil hidden></div>
+
+<main id="content" tabindex="-1">
+
+  <!-- ============ REQUEST A PLACE (TJ and Ami, 24 Oct 2026) ============
+       The one front door: every Request a place button on the site lands here
+       (the bespoke builder has the same form at its end, carrying the
+       programme). The call is offered only after the request is sent. Ami's
+       own words for the lead (the home page's call to action). The form is UI
+       only: TJ's colleague wires form[data-request] to the CRM and Resend. -->
+  <section class="pg-lengths rq" data-section="request-a-place" data-section-name="Request a Place">
+    <div class="aurora aurora--voices" aria-hidden="true"><span class="aurora__field"></span></div>
+    <div class="pg-wrap">
+      <header class="pg-lengths__head">
+        <h1 class="pg-lengths__title">Check your dates</h1>
+        <p class="pg-lengths__script">We care for a few mothers each month</p>
+        <p class="pg-lengths__lede">Tell us your due date and we&rsquo;ll check whether your dates are still open. If they are, we hold them for seven days while you decide. If you&rsquo;re not ready yet, we keep you close, with a short guide to your first weeks at home and first word when a place opens.</p>
+      </header>
+
+      <div class="pg-card rq-card">
+        <form class="rq-form" data-request method="post" action="#" novalidate>
+          <p class="rq-label">What you&rsquo;ll receive</p>
+          <ul class="rq-gets">
+            <li>Whether your dates are open</li>
+            <li>Your indicative price, held for seven days</li>
+            <li>A short guide to your first weeks at home</li>
+          </ul>
+          <label class="rq-label" for="rq-due">Your due date, or your baby&rsquo;s birth date</label>
+          <input class="rq-input" id="rq-due" name="due" type="date" required />
+          <label class="rq-label" for="rq-name">Your name</label>
+          <input class="rq-input" id="rq-name" name="name" type="text" required autocomplete="name" />
+          <label class="rq-label" for="rq-email">Your email</label>
+          <input class="rq-input" id="rq-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" />
+          <label class="rq-label" for="rq-postcode">Your postcode</label>
+          <input class="rq-input rq-input--pc" id="rq-postcode" name="postcode" type="text" required autocomplete="postal-code" autocapitalize="characters" spellcheck="false" placeholder="SW1A 1AA" />
+          <input type="hidden" name="programme" />
+          <p class="rq-msg" data-request-msg role="status" aria-live="polite"></p>
+          <button class="btn btn--primary rq-btn" type="submit">Check your dates</button>
+          <p class="rq-legal">Nothing is booked and nothing is paid. We confirm everything together on a call.</p>
+        </form>
+
+        <div class="rq-done" data-request-done hidden>
+          <h2 class="rq-done__h">Your dates are in view</h2>
+          <p class="rq-done__p">Your summary and your guide are on their way, and your indicative price is held for seven days.</p>
+          <div class="rq-done__actions">
+            <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Choose a time to talk</a>
+            <a class="text-link" href="index.html">Return to the site</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="sf" data-section="site-footer" data-section-name="Footer">
+  <div class="sf__aurora" aria-hidden="true"><span class="sf__field"></span></div>
+  <div class="sf__inner">
+
+    <div class="sf__brand">
+      <a href="index.html" aria-label="The Postpartum Suite, home">
+        <picture>
+          <source media="(max-width: 760px)" srcset="../assets/img/logo-inline.webp" />
+          <img class="sf__logo" src="../assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="700" height="900" decoding="async" />
+        </picture>
+      </a>
+    </div>
+
+    <nav class="sf__col" aria-label="Footer">
+      <h2 class="sf__head">Explore</h2>
+      <ul>
+        <li><a href="what-we-do.html">What We Do</a></li>
+        <li><a href="programmes.html">Programmes</a></li>
+        <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+        <li><a href="single-treatments.html">Signature Treatments</a></li>
+        <li><a href="about.html">The Suite</a></li>
+        <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+      </ul>
+    </nav>
+
+    <div class="sf__col">
+      <h2 class="sf__head">Contact</h2>
+      <ul>
+        <li><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <p class="sf__tagline">The care mothers deserve, at home</p>
+
+  <div class="sf__base">
+    <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
+    <ul class="sf__legal">
+      <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
+      <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
+    </ul>
+  </div>
+  <script>document.querySelectorAll('[data-year]').forEach(function (e) { e.textContent = new Date().getFullYear(); });</script>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="js/inner-nav.js"></script>
+<script src="js/booking-m25.js"></script>
+<script src="js/postcode-check.js"></script>
+<script src="js/request.js"></script>
+<script src="js/nav-fold.js"></script>
+<script src="../lab/devpanel-loader.js"></script>
+</body>
+</html>
