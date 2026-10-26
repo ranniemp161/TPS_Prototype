@@ -1,27 +1,31 @@
 /* ============================================================
-   THE POSTCODE CHECK, shared (TJ, 25 Oct 2026)
+   THE AREA CHECK, shared (TJ, 25 Oct 2026)
 
-   The single treatments booking's own check (booking.js, POSTCODES),
-   lifted unchanged so the bespoke builder and Request a place use the same
-   verdict: postcodes.io (ONS and Ordnance Survey open data, free, no key)
-   finds the postcode, and the point is ray cast against the M25 ring in
-   booking-m25.js. Load booking-m25.js first.
+   Only the first part of the postcode is asked for, everywhere (the
+   bespoke builder and Check your dates): "SW7", not "SW7 2AZ" (TJ, 25 Oct
+   2026). postcodes.io (ONS and Ordnance Survey open data, free, no key)
+   gives the centre of that area, and the point is ray cast against the M25
+   ring in booking-m25.js, as the single treatments booking does for a full
+   postcode. An area that straddles the motorway is judged by its centre, so
+   a little slippage at the edge is accepted (TJ). A full postcode typed by
+   mistake is cut to its first part. Load booking-m25.js first.
    ============================================================ */
 var TPS_POSTCODE = (function () {
   'use strict';
   var POSTCODES_IO = 'https://api.postcodes.io';
-  var POSTCODE_PATTERN = /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i;
+  var OUTCODE = /^[A-Z]{1,2}\d[A-Z\d]?$/;
+  var FULL = /^([A-Z]{1,2}\d[A-Z\d]?)\s*\d[A-Z]{2}$/;
 
-  // "e48dl" and "E4  8DL" are the same postcode; the API wants the spaced form.
+  // "sw7", " SW7 " and "SW7 2AZ" all give "SW7".
   function normalise(input) {
-    var bare = String(input || '').replace(/\s+/g, '').toUpperCase();
-    if (bare.length < 5) return bare;
-    return bare.slice(0, -3) + ' ' + bare.slice(-3);
+    var s = String(input || '').trim().toUpperCase().replace(/\s+/g, ' ');
+    var m = FULL.exec(s.replace(/\s+/g, ''));
+    return m ? m[1] : s.replace(/\s+/g, '');
   }
-  function looksLike(input) { return POSTCODE_PATTERN.test(String(input || '').replace(/\s+/g, '')); }
+  function looksLike(input) { return OUTCODE.test(normalise(input)); }
 
   // Whether the point sits inside the M25: a ray cast east from it, counted
-  // against the ring's edges. Accurate to about 470m at the motorway itself.
+  // against the ring's edges.
   function insideM25(lat, lng) {
     var inside = false;
     for (var i = 0, j = M25_RING.length - 1; i < M25_RING.length; j = i++) {
@@ -34,24 +38,24 @@ var TPS_POSTCODE = (function () {
     return inside;
   }
 
-  // The verdict on a postcode: { postcode, inServiceArea } or { error }.
+  // The verdict on an area: { postcode: "SW7", inServiceArea } or { error }.
   function lookup(raw) {
-    var postcode = normalise(raw);
-    if (!looksLike(postcode)) return Promise.resolve({ error: 'That does not look like a UK postcode.' });
+    var area = normalise(raw);
+    if (!OUTCODE.test(area)) return Promise.resolve({ error: 'Please enter the first part of your postcode, for example SW7.' });
     var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var t = ctrl ? setTimeout(function () { ctrl.abort(); }, 8000) : 0;
-    return fetch(POSTCODES_IO + '/postcodes/' + encodeURIComponent(postcode), ctrl ? { signal: ctrl.signal } : {})
+    return fetch(POSTCODES_IO + '/outcodes/' + encodeURIComponent(area), ctrl ? { signal: ctrl.signal } : {})
       .then(function (r) {
         clearTimeout(t);
-        if (r.status === 404) return { error: 'We could not find that postcode. Please check it.' };
-        if (!r.ok) return { error: 'We could not check that postcode. Please try again.' };
+        if (r.status === 404) return { error: 'We could not find that area. Please check the first part of your postcode.' };
+        if (!r.ok) return { error: 'We could not check that area. Please try again.' };
         return r.json().then(function (body) {
           var res = body && body.result;
-          if (!res) return { error: 'We could not find that postcode. Please check it.' };
-          return { postcode: res.postcode, inServiceArea: insideM25(res.latitude, res.longitude) };
+          if (!res || res.latitude == null) return { error: 'We could not find that area. Please check the first part of your postcode.' };
+          return { postcode: res.outcode, inServiceArea: insideM25(res.latitude, res.longitude) };
         });
       })
-      .catch(function () { clearTimeout(t); return { error: 'We could not check that postcode. Please try again.' }; });
+      .catch(function () { clearTimeout(t); return { error: 'We could not check that area. Please try again.' }; });
   }
 
   // The client's own refusal (single-treatments.html, Service Area Notice).

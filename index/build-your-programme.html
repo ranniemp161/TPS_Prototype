@@ -163,8 +163,9 @@
                (js/postcode-check.js, inside the M25). Begin checks it; outside, the client's
                Service Area Notice shows and the builder does not open. -->
           <div class="pc" data-pc>
-            <label class="tgl__hint capture__label" for="pc">Your postcode</label>
-            <input class="capture__email pc__input" id="pc" name="pc" type="text" autocomplete="postal-code" autocapitalize="characters" spellcheck="false" placeholder="SW1A 1AA" />
+            <label class="tgl__hint capture__label" for="pc">Your area</label>
+            <p class="pc__hint" id="pc-hint">First part of your postcode, for example SW7</p>
+            <input class="capture__email pc__input" id="pc" name="pc" type="text" autocapitalize="characters" spellcheck="false" placeholder="SW7" maxlength="8" aria-describedby="pc-hint" />
             <p class="pc__msg" data-pc-msg role="status" aria-live="polite"></p>
           </div>
         </div>
@@ -344,13 +345,30 @@
           <li>A short guide to your first weeks at home</li>
         </ul>
         <form class="capture" data-capture method="post" action="#">
-          <label class="tgl__hint capture__label" for="capture-name">Your name</label>
-          <input class="capture__email capture__name" id="capture-name" name="name" type="text" required autocomplete="name" />
-          <label class="tgl__hint capture__label capture__label--email" for="capture-email">Your email</label>
-          <div class="capture__row">
-            <input class="capture__email" id="capture-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" />
-            <button class="btn btn--primary capture__btn" type="submit">Check your dates</button>
+          <!-- The same details as Check your dates (TJ, 25 Oct 2026); area, due date and
+               which baby were given earlier in the builder and travel in the hidden fields. -->
+          <div class="rq-pair">
+            <div>
+              <label class="tgl__hint capture__label" for="cap-first">First name</label>
+              <input class="capture__email" id="cap-first" name="first_name" type="text" required autocomplete="given-name" placeholder="Your first name" />
+            </div>
+            <div>
+              <label class="tgl__hint capture__label" for="cap-last">Last name</label>
+              <input class="capture__email" id="cap-last" name="last_name" type="text" required autocomplete="family-name" placeholder="Your last name" />
+            </div>
           </div>
+          <label class="tgl__hint capture__label" for="cap-email">Email</label>
+          <input class="capture__email" id="cap-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" />
+          <label class="tgl__hint capture__label" for="cap-phone">Phone number</label>
+          <div class="rq-phone">
+            <span class="rq-phone__cc" aria-hidden="true">UK +44</span>
+            <input class="capture__email" id="cap-phone" name="phone" type="tel" required autocomplete="tel-national" inputmode="tel" placeholder="07700 900123" />
+          </div>
+          <label class="rq-check" for="cap-privacy">
+            <input id="cap-privacy" name="privacy" type="checkbox" required />
+            <span>I accept the <a class="text-link" href="https://booking.thepostpartumsuite.com/privacy" target="_blank" rel="noopener">privacy policy</a></span>
+          </label>
+          <button class="btn btn--primary capture__btn" type="submit">Check your dates</button>
           <input type="hidden" name="due" /><input type="hidden" name="child" /><input type="hidden" name="postcode" /><input type="hidden" name="fee" /><input type="hidden" name="fee_per_day" /><input type="hidden" name="days" /><input type="hidden" name="format" /><input type="hidden" name="shift" /><input type="hidden" name="meals" /><input type="hidden" name="treatments" /><input type="hidden" name="rhythm" /><input type="hidden" name="priorities" /><input type="hidden" name="budget" /><input type="hidden" name="summary" /><input type="hidden" name="close" /><input type="hidden" name="generated" />
         </form>
         <p class="dk-legal">Nothing is booked and nothing is paid. We confirm everything together on a call.</p>

@@ -25,3 +25,93 @@
 .rq-done__p { margin: .8rem 0 1.4rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.55; color: var(--ink-soft); }
 .rq-done__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
 @media (max-width: 860px) { .rq-btn { justify-self: stretch; } }
+
+/* The waiting list's fields (TJ, 25 Oct 2026): first and last name side by
+   side, the phone with its fixed UK +44, the area hint, which baby, and the
+   privacy tick. Shared by the Check your dates page and the builder's form. */
+.rq-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.rq-pair > div { display: grid; gap: .45rem; align-content: start; }
+.rq-phone { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: stretch; }
+.rq-phone__cc {
+  display: inline-flex; align-items: center; padding: 0 14px; min-height: 46px; border-radius: var(--r-badge, 8px);
+  border: 1px solid rgba(10, 10, 10, .14); background: rgba(255, 255, 255, .6);
+  font-family: var(--f-read); font-size: 1rem; color: var(--ink); white-space: nowrap;
+}
+.rq-hint, .pc__hint { margin: -.15rem 0 .1rem; font-family: var(--f-read); font-size: .8125rem; line-height: 1.4; color: var(--ink-mute); }
+.rq-babies { margin: .9rem 0 0; padding: 0; border: 0; display: grid; gap: .55rem; }
+.rq-radio, .rq-check { display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: var(--f-read); font-size: .95rem; line-height: 1.4; color: var(--ink-soft); }
+.rq-radio input, .rq-check input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--ember); }
+.rq-check { margin-top: .9rem; }
+@media (max-width: 420px) { .rq-pair { grid-template-columns: 1fr; } }
+/* Heard by screen readers, not shown: the question over the three baby choices. */
+.rq-babies legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* The due date pop-up (TJ, 25 Oct 2026). The calendar rules are the bespoke
+   builder's (build-your-programme.css, .due-cal and .due-day), which mirror
+   the single treatments booking's; repeated here as that sheet is not loaded. */
+.rq-date { position: relative; }
+.rq-date__field { cursor: pointer; padding-right: 44px; }
+.rq-date__icon { position: absolute; right: 14px; top: 23px; width: 18px; height: 18px; margin-top: -9px; fill: none; stroke: var(--ink-soft); stroke-width: 1.5; stroke-linecap: round; pointer-events: none; }
+.rq-cal {
+  position: absolute; z-index: 20; left: 0; top: calc(100% + 8px); width: min(340px, 100%);
+  padding: 16px; border-radius: var(--r-card); border: 1px solid rgba(10, 10, 10, .1);
+  background: var(--paper); box-shadow: 0 18px 50px -20px rgba(10, 10, 10, .28);
+}
+.rq-cal[hidden] { display: none; }
+.due-cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.due-cal__month { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: .875rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
+.due-cal__step {
+  display: flex; height: 44px; width: 44px; align-items: center; justify-content: center;
+  border-radius: var(--r-button); border: 1px solid var(--hairline); background: var(--paper);
+  color: var(--ink); cursor: pointer; transition: border-color 140ms var(--ease-out);
+}
+.due-cal__step:hover { border-color: var(--sand); }
+.due-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.due-cal__wd { padding-bottom: .5rem; text-align: center; font-family: var(--f-body); font-weight: 500; font-size: .625rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-mute); }
+.due-day {
+  display: flex; aspect-ratio: 1; align-items: center; justify-content: center; padding: 0;
+  border-radius: var(--r-button); border: 1px solid var(--hairline); background: var(--paper);
+  font-family: var(--f-read); font-size: .875rem; color: var(--ink); cursor: pointer;
+  transition: border-color 140ms var(--ease-out), background-color 140ms var(--ease-out);
+}
+.due-day:hover { border-color: var(--action); }
+.due-day[aria-pressed="true"] { border-color: var(--action); background: var(--action); color: var(--paper); }
+.due-day[aria-current="date"]:not([aria-pressed="true"]) { font-weight: 700; text-decoration: underline; }
+.due-day--pad { visibility: hidden; pointer-events: none; }
+@media (max-width: 420px) { .rq-cal { width: 100%; padding: 12px; } .due-cal__grid { gap: 2px; } }
+
+/* A softer ground (TJ, 26 Oct 2026): still cream, with the Gifts page's warm
+   coral red as a light wash drifting at the edges, in place of the heavier
+   dusty pink cloud behind the heading and form. */
+.page--request .pg-lengths .aurora--voices .aurora__field {
+  --a: transparent 0%, var(--coral-mid) 6%, var(--ember) 10%, transparent 22%, var(--blush) 30%, transparent 40%;
+  --b: transparent 0%, var(--blush) 6%, var(--coral-mid) 12%, transparent 24%, var(--canvas) 33%, transparent 46%;
+  opacity: .34; filter: blur(80px);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,.25) 30%, #000 100%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,.25) 30%, #000 100%);
+}
+
+/* The quiet top (TJ, 26 Oct 2026): no site header here, only Back with a
+   chevron, top left, in the builder's Return to the site style, and the
+   circular logo in the centre. */
+.page--request .nav, .page--request .veil { display: none !important; }
+.rq-top {
+  position: absolute; z-index: 30; top: 0; left: 0; right: 0;
+  display: flex; align-items: center; justify-content: center;
+  height: clamp(72px, 9vh, 96px); padding: 0 clamp(16px, 2.4vw, 32px);
+}
+.rq-back {
+  position: absolute; left: clamp(16px, 2.4vw, 32px); top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 2px;
+  font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-mute); text-decoration: none; text-underline-offset: 4px; transition: color 240ms var(--ease-out);
+}
+.rq-back svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.rq-back:hover { color: var(--ink); }
+.rq-back:hover span { text-decoration: underline; }
+.rq-back:focus-visible, .rq-top__mark:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; border-radius: 2px; }
+.rq-top__mark { display: block; line-height: 0; }
+.rq-top__mark img { width: clamp(40px, 3.4vw, 48px); height: auto; }
+/* With the header gone the section starts at the very top, so the wash runs
+   up behind Back and the logo with no line where the header ended. */
+.page--request .pg-lengths.rq { margin-top: 0; padding-top: calc(clamp(72px, 9vh, 96px) + clamp(16px, 3vh, 40px)); }

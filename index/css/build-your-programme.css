@@ -2663,3 +2663,33 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 .dk-sum--close .close__gets { width: fit-content; max-width: 100%; margin-inline: auto; text-align: left; }
 @media (max-width: 860px) { .dk-sum--close .close__gets { margin-inline: 0; } }
 .dk-sum--done .step__note--lead { text-wrap: balance; }
+
+/* The waiting list's fields (TJ, 25 Oct 2026): first and last name side by
+   side, the phone with its fixed UK +44, the area hint, which baby, and the
+   privacy tick. Shared by the Check your dates page and the builder's form. */
+.rq-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+.rq-pair > div { display: grid; gap: .45rem; align-content: start; }
+.rq-phone { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: stretch; }
+.rq-phone__cc {
+  display: inline-flex; align-items: center; padding: 0 14px; min-height: 46px; border-radius: var(--r-badge, 8px);
+  border: 1px solid rgba(10, 10, 10, .14); background: rgba(255, 255, 255, .6);
+  font-family: var(--f-read); font-size: 1rem; color: var(--ink); white-space: nowrap;
+}
+.rq-hint, .pc__hint { margin: -.15rem 0 .1rem; font-family: var(--f-read); font-size: .8125rem; line-height: 1.4; color: var(--ink-mute); }
+.rq-babies { margin: .9rem 0 0; padding: 0; border: 0; display: grid; gap: .55rem; }
+.rq-radio, .rq-check { display: flex; align-items: center; gap: 10px; cursor: pointer; font-family: var(--f-read); font-size: .95rem; line-height: 1.4; color: var(--ink-soft); }
+.rq-radio input, .rq-check input { width: 18px; height: 18px; margin: 0; flex: none; accent-color: var(--ember); }
+.rq-check { margin-top: .9rem; }
+@media (max-width: 420px) { .rq-pair { grid-template-columns: 1fr; } }
+
+.dk-sum--close .capture { display: grid; gap: .45rem; text-align: left; max-width: 520px; margin-inline: auto; width: 100%; }
+.dk-sum--close .capture .capture__label { display: block; margin: .6rem 0 0; }
+.dk-sum--close .capture .capture__btn { justify-self: start; margin-top: .6rem; }
+.dk-sum--close .rq-phone__cc { min-height: 0; }
+@media (max-width: 860px) { .dk-sum--close .capture .capture__btn { justify-self: stretch; } }
+/* The builder's form reads down the left like the Check your dates page. */
+.dk-sum--close .capture, .dk-sum--close .capture .capture__label { text-align: left; }
+.dk-sum--close .capture .capture__btn { margin-left: 0; margin-right: auto; }
+.dk-sum--close .capture .rq-check { justify-content: flex-start; }
+@media (max-width: 860px) { .dk-sum--close .capture .capture__btn { margin-right: 0; } }
+.dk:not(.is-free) .dk-sum--close .capture .capture__label { text-align: left; }

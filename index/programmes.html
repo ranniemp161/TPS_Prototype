@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Programmes &middot; The Postpartum Suite</title>
-<meta name="description" content="The three lengths, what changes between them, and everything included." />
+<title>Live-in care programmes &middot; The Postpartum Suite</title>
+<meta name="description" content="Live-in care programmes from seven days to thirty, with four kinds of care in every programme and what each one includes." />
 <link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
 
 <!-- Not cosmetic and not optional. Without it, Chrome on Android and the
@@ -130,18 +130,27 @@
 
 
   <!-- ============ THE THREE LENGTHS, on the testimonials' line ============
-       Prices are the pricing engine's complete programme (live in, daytime,
-       everything included). Placeholders until Ami confirms. -->
+       The per day prices are fixed display figures from the sales brochure
+       (TJ, 26 Oct 2026), not the pricing engine's. -->
   <section class="pg-lengths" data-pg data-section="programme-lengths" data-section-name="Programmes Hero and Pricing">
     <div class="aurora aurora--voices" aria-hidden="true"><span class="aurora__field"></span></div>
     <div class="pg-wrap">
       <!-- The hero and the pricing are one section (TJ, 22 Oct 2026): the
-           title, one Quentin line and one sentence, then the line and the card. -->
+           title, one Quentin line and one sentence, then the line and the card.
+           Words from the sales brochure's cover (TJ, 26 Oct 2026). -->
       <header class="pg-lengths__head">
-        <h1 class="pg-lengths__title">Our Postpartum Programmes</h1>
-        <p class="pg-lengths__script">For as long as you need us</p>
-        <p class="pg-lengths__lede">Every programme brings the same four areas of care into your home each day. What changes is how long your specialist is with you.</p>
+        <h1 class="pg-lengths__title">Live-in care programmes</h1>
+        <p class="pg-lengths__script">Care for your baby. And for you.</p>
+        <p class="pg-lengths__lede">Three programmes, from seven days to thirty.</p>
       </header>
+
+      <!-- How we look after you, between the hero and the line: a heading and
+           the brochure's paragraph, nothing stacked (TJ, 26 Oct 2026, from the
+           sales brochure). -->
+      <section class="pg-look" aria-labelledby="pg-look-h">
+        <h2 class="pg-h2" id="pg-look-h">How we look after you</h2>
+        <p class="pg-look__p">We offer three programmes ranging from seven to thirty days. Throughout your chosen programme, a dedicated postpartum specialist will care for you and your baby. Each programme includes the same services and treatments with longer programmes offering extended support and more frequent treatment as your recovery progresses.</p>
+      </section>
 
       <div class="pg-line">
         <div class="pg-car tv2__car" data-pg-car>
@@ -163,49 +172,147 @@
         </button>
       <div class="pg-card" data-pg-card>
         <div class="pg-price pg-swap">
-          <h3 class="pg-price__days" data-pg-days>Fourteen days</h3>
-          <!-- One price, per day, on one line (TJ, 23 Oct 2026, Ami's directive). -->
-          <p class="pg-price__fee"><span class="pg-price__from">Starting from</span> <span class="pg-price__num" data-pg-fee>£321</span> <span class="pg-price__per">per day</span></p>
-          <p class="pg-price__held">Live in care, 7am to 7pm, with everything included. Daytime care and day and night care are available, and the fee is confirmed at your consultation.</p>
+          <h3 class="pg-price__days" data-pg-days>14 Days</h3>
+          <!-- One price, per day, on one line (TJ, 23 Oct 2026, Ami's directive).
+               "from £… per day", the brochure's fixed figure (TJ, 26 Oct 2026). -->
+          <p class="pg-price__fee"><span class="pg-price__from">from</span> <span class="pg-price__num" data-pg-fee>£<span class="pg-price__digits">298</span></span> <span class="pg-price__per">per day</span></p>
+          <!-- The brochure's single live-in framing (TJ, 26 Oct 2026): the
+               daytime and day and night sentence is gone, the brochure's sub
+               line takes its place. -->
+          <p class="pg-price__held">Daily live-in support, 7am to 7pm.</p>
           <div class="pg-price__cta"><a class="btn btn--primary" href="request-a-place.html">Check your dates</a></div>
-          <!-- Down to the full breakdown (Ami, 24 Oct 2026). -->
+          <!-- Down to the full breakdown (Ami, 24 Oct 2026), now the brochure's
+               table (TJ, 26 Oct 2026). -->
           <p class="pg-price__more"><a class="text-link" href="#what-is-included">See the full breakdown</a></p>
         </div>
-        <div class="pg-swap pg-treat" data-pg-treat>
-          <p class="pg-counts__h">Your treatments across the stay</p>
-          <!-- Phones only: the rows fold away behind this so the card fits the
-               first screen (TJ, 22 Oct 2026). -->
-          <button class="pg-treat__toggle" type="button" data-pg-treat-toggle aria-expanded="false" aria-controls="pg-counts">
-            <span>Your treatments across the stay</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 12h12" /><path class="pg-treat__v" d="M12 6v12" /></svg>
-          </button>
-          <ul class="pg-counts" id="pg-counts" data-pg-counts></ul>
-        </div>
-        <!-- Phones: the button sits under the treatments fold, last on the card
-             (TJ, 23 Oct 2026). The one in the price block is hidden there. -->
+        <!-- The four kinds of care, one row each in the brochure's order (TJ,
+             26 Oct 2026): two counted for the length, two in words, every row
+             the same height so they read as one list. -->
+        <dl class="pg-swap pg-care">
+          <div class="pg-care__row"><dt>Mother and baby care</dt><dd>Hands on support with your baby</dd></div>
+          <div class="pg-care__row"><dt>Treatments</dt><dd><span class="pg-care__num" data-pg-treat>15</span> treatments</dd></div>
+          <div class="pg-care__row"><dt>Meals</dt><dd><span class="pg-care__num" data-pg-meals>42</span> meals</dd></div>
+          <div class="pg-care__row"><dt>Home support</dt><dd>Light housekeeping</dd></div>
+        </dl>
+        <!-- Phones: the button sits last on the card (TJ, 23 Oct 2026). The one
+             in the price block is hidden there. -->
         <div class="pg-price__cta pg-price__cta--foot pg-swap"><a class="btn btn--primary" href="request-a-place.html">Check your dates</a></div>
       </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ THE SAME, WHATEVER THE LENGTH ============ -->
-  <section class="pg-same" id="what-is-included" data-section="what-is-included" data-section-name="What Is Included">
-    <div class="pg-wrap pg-same__grid">
-      <div>
-        <h2 class="pg-h2">Included in every programme</h2>
-        <p class="pg-same__p">Nothing is added or removed by length. What changes is how many times your treatments repeat, and how much of your recovery the programme spans.</p>
+  <!-- ============ FOUR KINDS OF CARE, IN EVERY PROGRAMME ============
+       The brochure's four columns replace Included in every programme
+       (TJ, 26 Oct 2026, from the sales brochure). -->
+  <section class="pg-same" data-section="four-kinds-of-care" data-section-name="Four Kinds of Care">
+    <div class="pg-wrap">
+      <header class="pg-same__head">
+        <h2 class="pg-h2">Four kinds of care, in every programme</h2>
+        <p class="pg-same__script">You recover. We take care of the rest.</p>
+        <p class="pg-same__p">Daily live-in support, 7am to 7pm.</p>
+      </header>
+      <div class="pg-kinds">
+        <div class="pg-kind">
+          <h3 class="pg-kind__h">Mother and baby care</h3>
+          <p class="pg-kind__p">Hands on support with your baby, and thoughtful care for you, every day.</p>
+          <ul class="pg-kind__list">
+            <li>Care for your baby while you rest</li>
+            <li>Accompanying you and baby on outings</li>
+          </ul>
+        </div>
+        <div class="pg-kind">
+          <h3 class="pg-kind__h">Treatments</h3>
+          <p class="pg-kind__p">Hands on care that repeats through your stay, not offered once as a treat.</p>
+          <ul class="pg-kind__list">
+            <li>Belly binding, daily</li>
+            <li>Herbal baths for you, daily</li>
+            <li>Thermal blanket treatment</li>
+          </ul>
+        </div>
+        <div class="pg-kind">
+          <h3 class="pg-kind__h">Meals</h3>
+          <p class="pg-kind__p">Three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
+          <ul class="pg-kind__list">
+            <li>Fresh postpartum meals, 3 a day</li>
+            <li>Herbal teas</li>
+            <li>Lactation support drinks</li>
+          </ul>
+        </div>
+        <div class="pg-kind">
+          <h3 class="pg-kind__h">Home support</h3>
+          <p class="pg-kind__p">Everyday life, taken care of from the moment we arrive.</p>
+          <ul class="pg-kind__list">
+            <li>Laundry and ironing</li>
+            <li>Light house cleaning, organising baby wardrobe</li>
+            <li>Grocery collection</li>
+          </ul>
+        </div>
       </div>
-      <div>
-        <ul class="pg-same__list">
-          <li><b>One specialist, yours alone</b>Reserved for your family for the whole stay, so you have the same person throughout.</li>
-          <li><b>Mother and baby care</b>Hands on care for your baby through the day, and someone with you while you rest.</li>
-          <li><b>Meals</b>Breakfast, lunch and dinner cooked fresh in your kitchen, with herbal teas and lactation drinks.</li>
-          <li><b>Daily treatments</b>A herbal bath and belly binding every day, with your massage and treatments on the rhythm of your programme.</li>
-          <li><b>Home support</b>Light housekeeping, laundry and ironing, and grocery collection.</li>
-          <li><b>Live in or daytime</b>Live in care is recommended. Daytime care, 7am to 7pm, adds £30 a day towards travel and accommodation.</li>
+      <p class="pg-same__note">Introductory pricing is held for bookings taken in 2026. All prices are indicative until confirmed at your consultation.</p>
+    </div>
+  </section>
+
+  <!-- ============ WHAT EACH PROGRAMME INCLUDES ============
+       The brochure's comparison table and its pricing band (TJ, 26 Oct 2026,
+       from the sales brochure). The card's "See the full breakdown" lands
+       here. On phones each row stacks its three lengths. -->
+  <section class="pg-compare" id="what-is-included" data-section="what-is-included" data-section-name="What Each Programme Includes">
+    <div class="pg-wrap">
+      <header class="pg-compare__head">
+        <h2 class="pg-h2">What each programme includes</h2>
+        <p class="pg-compare__lede">Every programme includes the same four areas of care. Programmes provide continued support and additional treatments.</p>
+      </header>
+
+      <div class="pg-tablecard">
+        <table class="pg-table">
+          <thead>
+            <tr><th scope="col">Programme</th><th scope="col">7 days</th><th scope="col">14 days</th><th scope="col">30 days</th></tr>
+          </thead>
+          <tbody>
+            <tr class="pg-table__group"><th colspan="4" scope="colgroup">Mother and baby care</th></tr>
+            <tr>
+              <th scope="row">Hands on support with your baby, and thoughtful care for you</th>
+              <td data-len="7 days">Every day</td><td data-len="14 days">Every day</td><td data-len="30 days">Every day</td>
+            </tr>
+            <tr class="pg-table__group"><th colspan="4" scope="colgroup">Treatments</th></tr>
+            <tr class="pg-table__treat">
+              <th scope="row">Postpartum treatments<small>Postpartum massage with hot stone therapy, belly binding daily, herbal baths daily, thermal blanket treatment, foot reflexology, facial massage, herbal foot spa and full body scrub</small></th>
+              <td data-len="7 days"><span class="pg-table__num">8</span> treatments</td><td data-len="14 days"><span class="pg-table__num">15</span> treatments</td><td data-len="30 days"><span class="pg-table__num">30</span> treatments</td>
+            </tr>
+            <tr class="pg-table__group"><th colspan="4" scope="colgroup">Meals</th></tr>
+            <tr>
+              <th scope="row">Three fresh meals a day, cooked in your own home for you and your family</th>
+              <td data-len="7 days">Every day</td><td data-len="14 days">Every day</td><td data-len="30 days">Every day</td>
+            </tr>
+            <tr class="pg-table__group"><th colspan="4" scope="colgroup">Home support</th></tr>
+            <tr>
+              <th scope="row">Laundry and ironing</th>
+              <td data-len="7 days">Baby's clothes</td><td data-len="14 days">Yours &amp; baby's clothes</td><td data-len="30 days">Yours &amp; baby's clothes</td>
+            </tr>
+            <tr>
+              <th scope="row">Light housekeeping</th>
+              <td data-len="7 days">Included</td><td data-len="14 days">Included</td><td data-len="30 days">Included</td>
+            </tr>
+            <tr>
+              <th scope="row">Grocery collection</th>
+              <td data-len="7 days">Included</td><td data-len="14 days">Included</td><td data-len="30 days">Included</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="pg-table__foot"><em>Treatment totals are for the whole stay, alongside the daily care in every programme.</em></p>
+      </div>
+
+      <!-- Programme pricing: the brochure's lede and its three fixed per day
+           figures, in the card's price treatment (TJ, 26 Oct 2026). -->
+      <div class="pg-pricing">
+        <h3 class="pg-pricing__h">Programme pricing</h3>
+        <p class="pg-pricing__lede">Every programme delivers the same daily care. What you choose is how long it lasts.</p>
+        <ul class="pg-pricing__list">
+          <li><span class="pg-pricing__len">7 days of care</span><span class="pg-price__fee"><span class="pg-price__from">from</span> <span class="pg-price__num">£<span class="pg-price__digits">360</span></span> <span class="pg-price__per">per day</span></span></li>
+          <li><span class="pg-pricing__len">14 days of care</span><span class="pg-price__fee"><span class="pg-price__from">from</span> <span class="pg-price__num">£<span class="pg-price__digits">298</span></span> <span class="pg-price__per">per day</span></span></li>
+          <li><span class="pg-pricing__len">30 days of care</span><span class="pg-price__fee"><span class="pg-price__from">from</span> <span class="pg-price__num">£<span class="pg-price__digits">224</span></span> <span class="pg-price__per">per day</span></span></li>
         </ul>
-        <p class="pg-same__note">Day and night care is available on live in programmes, so your specialist takes your baby through the night. Introductory pricing is held for bookings taken in 2026. All prices are indicative until confirmed at your consultation.</p>
       </div>
     </div>
   </section>
@@ -273,7 +380,6 @@
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="js/build-your-programme-pricing.js"></script>
 <script src="js/inner-nav.js"></script>
 <script src="js/programmes.js"></script>
 <script src="js/nav-fold.js"></script>

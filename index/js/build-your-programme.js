@@ -1195,7 +1195,7 @@
     function checkPc() {
       if (pcOK || pcBusy || !pcInput) return;
       var v = pcInput.value.trim();
-      if (!v) { pcSay('Please enter your postcode to begin.', 'error'); pcInput.focus(); return; }
+      if (!v) { pcSay('Please enter the first part of your postcode to begin.', 'error'); pcInput.focus(); return; }
       pcBusy = true; pcSay('Checking your postcode', 'busy');
       TPS_POSTCODE.lookup(v).then(function (r) {
         pcBusy = false;
