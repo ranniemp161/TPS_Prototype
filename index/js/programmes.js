@@ -4,21 +4,27 @@
    The testimonials' line device (home.js, actVoices) cut down to three
    fixed stops, 7, 14 and 30 days, with no wrap. The track slides so the
    chosen length sits under the centre circle, and the card under the line
-   swaps its figures. Prices and counts come from the pricing engine
-   (build-your-programme-pricing.js), so the page and the builder agree.
+   swaps its figures. The per day price and the treatment total are the
+   sales brochure's fixed display figures (TJ, 26 Oct 2026); the pricing
+   engine is no longer read here, and the bespoke builder keeps its own.
    ============================================================ */
 
 (function () {
   'use strict';
 
   var root = document.querySelector('[data-pg]');
-  if (!root || typeof TPS_PRICING === 'undefined') return;
+  if (!root) return;
 
-  var P = TPS_PRICING;
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var LENGTHS = [7, 14, 30];
   // Numerals on the cards (Ami, 24 Oct 2026), over the no numerals in titles rule.
   var WORDS = { 7: '7 Days', 14: '14 Days', 30: '30 Days' };
+  // The brochure's figures, display only (TJ, 26 Oct 2026, from the sales
+  // brochure): "from £… per day" and the treatments across the whole stay.
+  var PER_DAY = { 7: 360, 14: 298, 30: 224 };
+  var TREATMENTS = { 7: 8, 14: 15, 30: 30 };
+  // Three meals a day across the stay (TJ, 26 Oct 2026).
+  var MEALS = { 7: 21, 14: 42, 30: 90 };
   var START = 1;            // the page opens on 14 days (TJ, 23 Oct 2026)
 
   var track = root.querySelector('[data-pg-track]');
@@ -29,7 +35,8 @@
   var out = {
     days:  root.querySelector('[data-pg-days]'),
     fee:   root.querySelector('[data-pg-fee]'),
-    counts: root.querySelector('[data-pg-counts]')
+    treat: root.querySelector('[data-pg-treat]'),
+    meals: root.querySelector('[data-pg-meals]')
   };
 
   // p is the virtual position under the centre circle, never wrapped, so the
@@ -42,25 +49,6 @@
   var items = {};           // virtual stop -> element
   var p = START;
   var timer = null;
-
-  function times(n) { return n === 1 ? 'Once' : n + ' times'; }
-
-  function figures(d) {
-    var sel = P.completeSelection(d);
-    var fee = P.calculate(sel).fee;
-    var m = P.massageSessions(sel.rhythm, d);
-    var rows = [
-      ['Postpartum massage with hot stone therapy', m + ' sessions'],
-      ['Body scrub', times(P.STD[d].scrub)],
-      ['Foot reflexology', times(P.STD[d].reflex)],
-      ['Facial massage', times(P.STD[d].facial)],
-      ['Herbal foot treatment', times(P.STD[d].herbfoot)],
-      ['Thermal blanket treatment', times(P.STD[d].thermal)]
-    ];
-    // Only the per day price shows (TJ, 23 Oct 2026, Ami's directive),
-    // rounded down so "Starting from" stays true.
-    return { perDay: Math.floor(fee / d), rows: rows };
-  }
 
   function makeItem(k) {
     var d = LENGTHS[mod(k)];
@@ -86,16 +74,14 @@
   }
 
   function fill() {
-    var d = LENGTHS[mod(p)], f = figures(d);
+    var d = LENGTHS[mod(p)];
     out.days.textContent = WORDS[d];
     // The digits sit closer together, the £ as it was (TJ, 25 Oct 2026).
-    var money = P.money(f.perDay);
-    out.fee.innerHTML = money.charAt(0) + '<span class="pg-price__digits">' + money.slice(1) + '</span>';
-    out.counts.innerHTML = f.rows.map(function (r) {
-      return '<li><span>' + r[0] + '</span><b>' + r[1] + '</b></li>';
-    }).join('') +
-      '<li><span>Herbal bath and belly binding</span><b>Every day</b></li>';
-    if (live) live.textContent = WORDS[d] + ', starting from ' + P.money(f.perDay) + ' per day';
+    out.fee.innerHTML = '£<span class="pg-price__digits">' + PER_DAY[d] + '</span>';
+    if (out.treat) out.treat.textContent = TREATMENTS[d];
+    if (out.meals) out.meals.textContent = MEALS[d];
+    if (live) live.textContent = WORDS[d] + ', from £' + PER_DAY[d] + ' per day, ' + TREATMENTS[d] + ' treatments, ' + MEALS[d] + ' meals';
+    fit();
   }
 
   function paint() {
@@ -127,34 +113,27 @@
     }, 330);
   }
 
-  // Phones: the treatment rows fold behind a toggle (CSS hides it on desktop).
-  var treat = root.querySelector('[data-pg-treat]');
-  var treatBtn = root.querySelector('[data-pg-treat-toggle]');
-  if (treat && treatBtn) {
-    treatBtn.addEventListener('click', function () {
-      var open = treatBtn.getAttribute('aria-expanded') !== 'true';
-      treatBtn.setAttribute('aria-expanded', String(open));
-      treat.classList.toggle('is-open', open);
-      // Opening brings the line and the whole open card, button included,
-      // into one screen: the line settles just under the header
-      // (TJ, 23 Oct 2026). Closing leaves the page where it is.
-      // The header folds to --nav-h once the page scrolls, so that is the
-      // height to clear. On a screen too short for both, the card's foot
-      // wins, so the button is always in view.
-      if (open) {
-        var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 0;
-        var lineTop = root.querySelector('.pg-line').getBoundingClientRect().top + window.scrollY;
-        var cardBottom = card.getBoundingClientRect().bottom + window.scrollY;
-        var top = lineTop - navH - 6;
-        if (cardBottom - top > window.innerHeight) top = cardBottom - window.innerHeight + 8;
-        window.scrollTo({ top: Math.max(0, top), behavior: REDUCED ? 'auto' : 'smooth' });
-      }
-    });
+  /* The card above the fold on any laptop window (TJ, 26 Oct 2026): --pg-fit
+     runs from 1 down until the card's foot clears the window, and the hero's
+     spacing and type follow it (programmes.css). Phones keep their own layout. */
+  var section = root;
+  function fit() {
+    if (window.innerWidth <= 860) { section.style.removeProperty('--pg-fit'); return; }
+    var f = 1;
+    section.style.setProperty('--pg-fit', f);
+    var room = window.innerHeight - 16;
+    while (f > 0.35 && card.getBoundingClientRect().bottom + window.scrollY > room) {
+      f = Math.round((f - 0.05) * 100) / 100;
+      section.style.setProperty('--pg-fit', f);
+    }
   }
 
   sync();
   fill();
   paint();
+  var rt = 0;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(fit, 120); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
   if (prev) prev.addEventListener('click', function () { move(-1); });
   if (next) next.addEventListener('click', function () { move(1); });
 

@@ -4134,7 +4134,7 @@ html:not(.js) .arrive { display: none; }
 }
 .cta--card .programmes-bespoke.cta__alt { margin-top: clamp(24px, 4vh, 36px); }
 
-/* "Every single day" in Quentin under the heading (TJ, 25 Oct 2026), white on the silk. */
+/* The Quentin line under the heading (TJ, 25 Oct 2026), white on the silk. */
 .act--care .script { color: #FFFFFF; margin: .2rem 0 0; }
 @media (min-width: 1000px) { .act--care .script { font-size: calc(1.2 * clamp(1.8rem, 3.4vw, 2.9rem)); } }
 
@@ -4227,4 +4227,47 @@ html:not(.js) .arrive { display: none; }
    centred wordmark (TJ and Ami, 24 Oct 2026). */
 @media (max-width: 520px) {
   .tab.tab--cta { width: 86px; min-width: 0; height: auto; min-height: var(--tab-h); padding: 5px 8px; white-space: normal; text-align: center; font-size: .72rem; line-height: 1.12; }
+}
+
+/* The bespoke line outside the card, under it (TJ, 25 Oct 2026): not part of
+   the call to action, and smaller than the card's text. */
+.act--cta .programmes-bespoke.cta__alt--out {
+  margin: clamp(18px, 2.6vh, 26px) auto 0; max-width: 46rem;
+  text-align: center; font-size: .875rem; line-height: 1.55; color: var(--ink-mute);
+}
+
+/* Four kinds of care, brochure copy (TJ, 26 Oct 2026). The sub line is plain
+   body text under the Quentin line. Each card's short line is followed by a
+   quiet list in the card's own text: a small dash per item, the .rq-gets
+   idiom in white on the silk. No hairlines between items (TJ, 26 Oct 2026). */
+.act--care .care__sub { margin: .6rem auto 0; text-align: center; color: rgba(255, 255, 255, .86); }
+.care__list { list-style: none; margin: .8rem 0 0; padding: 0; }
+.care__list li {
+  position: relative; padding: .2rem 0 .2rem 1.1rem;
+  font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: rgba(255, 255, 255, .86);
+}
+.care__list li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em); width: 8px; height: 1px; background: rgba(255, 255, 255, .62); }
+
+/* The call to action's light in the testimonials' colour (TJ, 26 Oct 2026).
+   The section stays cream with a hard edge against the rose testimonials
+   above; only the drifting ribbons change, from the default recipe's faint
+   mauve to the dusty rose the testimonials actually read as (sampled from
+   the rendered section: #C39A9D in its deeper patches, Rose Mist and #D8C1C8
+   in its lighter ones). The testimonials' ember and coral ribbons were tried
+   first and read peachy on cream, which clashed (TJ, 26 Oct 2026). */
+.act--cta .aurora__field {
+  --a: transparent 0%, #C39A9D 5%, #CFAAAE 9%, transparent 20%, var(--rose-mist) 27%, transparent 36%;
+  --b: transparent 0%, #CFAAAE 5%, #C39A9D 9%, transparent 22%, #D8C1C8 30%, transparent 44%;
+  background-image: repeating-linear-gradient(100deg, var(--a));
+  background-size: 300%;
+  filter: blur(70px);
+  opacity: .62;
+  -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  -webkit-mask-composite: initial; mask-composite: initial;
+}
+.act--cta .aurora__field::after {
+  background-image: repeating-linear-gradient(123deg, var(--b));
+  background-size: 235%;
+  animation-duration: 140s;
 }

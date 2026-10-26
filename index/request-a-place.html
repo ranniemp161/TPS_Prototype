@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Check your dates &middot; The Postpartum Suite</title>
-<meta name="description" content="We care for a few mothers each month. Tell us your due date and we will check whether your dates are still open." />
+<meta name="description" content="We care for a few mothers each month. Places are limited, so tell us your due date and we will check whether your dates are open." />
 <link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
 
 <!-- Not cosmetic and not optional. Without it, Chrome on Android and the
@@ -127,6 +127,13 @@
 
 <div class="veil" data-veil hidden></div>
 
+<!-- The quiet top (TJ, 26 Oct 2026): the site header is hidden on this page.
+     Only Back, top left, and the circular logo, which links home. -->
+<div class="rq-top">
+  <a class="rq-back" href="index.html" data-rq-back><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" /></svg><span>Back</span></a>
+  <a class="rq-top__mark" href="index.html" aria-label="The Postpartum Suite, home"><img src="../assets/img/tps-mark-only.webp" alt="" width="567" height="558" /></a>
+</div>
+
 <main id="content" tabindex="-1">
 
   <!-- ============ REQUEST A PLACE (TJ and Ami, 24 Oct 2026) ============
@@ -141,34 +148,67 @@
       <header class="pg-lengths__head">
         <h1 class="pg-lengths__title">Check your dates</h1>
         <p class="pg-lengths__script">We care for a few mothers each month</p>
-        <p class="pg-lengths__lede">Tell us your due date and we&rsquo;ll check whether your dates are still open. If they are, we hold them for seven days while you decide. If you&rsquo;re not ready yet, we keep you close, with a short guide to your first weeks at home and first word when a place opens.</p>
+        <p class="pg-lengths__lede">Whether you&rsquo;re ready or just curious, start here. Tell us your due date and we&rsquo;ll check whether your dates are open. If you want to go further, book a call and tell us about your situation.</p>
       </header>
 
       <div class="pg-card rq-card">
+        <!-- The waiting list's fields under the Check your dates reason (TJ, 25 Oct 2026):
+             the same details for Ami's list, with no gifts listed here; those belong to
+             the bespoke builder, where she has built a programme. -->
         <form class="rq-form" data-request method="post" action="#" novalidate>
-          <p class="rq-label">What you&rsquo;ll receive</p>
-          <ul class="rq-gets">
-            <li>Whether your dates are open</li>
-            <li>Your indicative price, held for seven days</li>
-            <li>A short guide to your first weeks at home</li>
-          </ul>
-          <label class="rq-label" for="rq-due">Your due date, or your baby&rsquo;s birth date</label>
-          <input class="rq-input" id="rq-due" name="due" type="date" required />
-          <label class="rq-label" for="rq-name">Your name</label>
-          <input class="rq-input" id="rq-name" name="name" type="text" required autocomplete="name" />
-          <label class="rq-label" for="rq-email">Your email</label>
+          <div class="rq-pair">
+            <div>
+              <label class="rq-label" for="rq-first">First name</label>
+              <input class="rq-input" id="rq-first" name="first_name" type="text" required autocomplete="given-name" placeholder="Your first name" />
+            </div>
+            <div>
+              <label class="rq-label" for="rq-last">Last name</label>
+              <input class="rq-input" id="rq-last" name="last_name" type="text" required autocomplete="family-name" placeholder="Your last name" />
+            </div>
+          </div>
+          <label class="rq-label" for="rq-email">Email</label>
           <input class="rq-input" id="rq-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.com" />
-          <label class="rq-label" for="rq-postcode">Your postcode</label>
-          <input class="rq-input rq-input--pc" id="rq-postcode" name="postcode" type="text" required autocomplete="postal-code" autocapitalize="characters" spellcheck="false" placeholder="SW1A 1AA" />
-          <input type="hidden" name="programme" />
+          <label class="rq-label" for="rq-phone">Phone number</label>
+          <div class="rq-phone">
+            <span class="rq-phone__cc" aria-hidden="true">UK +44</span>
+            <input class="rq-input" id="rq-phone" name="phone" type="tel" required autocomplete="tel-national" inputmode="tel" placeholder="07700 900123" />
+          </div>
+          <label class="rq-label" for="rq-area">Your area</label>
+          <p class="rq-hint" id="rq-area-hint">First part of your postcode, for example SW7</p>
+          <input class="rq-input rq-input--pc" id="rq-area" name="postcode" type="text" required autocapitalize="characters" spellcheck="false" placeholder="SW7" maxlength="8" aria-describedby="rq-area-hint" />
+          <label class="rq-label" for="rq-due">Due date</label>
+          <!-- The site's own calendar in a pop-up (TJ, 25 Oct 2026): the same calendar as the
+               bespoke builder and the single treatments booking, an exact day. -->
+          <div class="rq-date" data-rq-date>
+            <input class="rq-input rq-date__field" id="rq-due" type="text" readonly placeholder="Choose a date" aria-haspopup="dialog" aria-expanded="false" aria-controls="rq-cal" data-rq-date-field />
+            <svg class="rq-date__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3.5" y="5" width="17" height="15" rx="2" /><path d="M3.5 9.5h17M8 3v4M16 3v4" /></svg>
+            <input type="hidden" name="due" data-rq-due />
+            <div class="rq-cal" id="rq-cal" role="dialog" aria-label="Choose your due date" data-rq-cal hidden>
+              <div class="due-cal__head">
+                <button type="button" class="due-cal__step" data-rq-step="-1" aria-label="Previous month"><span aria-hidden="true">&larr;</span></button>
+                <p class="due-cal__month" data-rq-month aria-live="polite"></p>
+                <button type="button" class="due-cal__step" data-rq-step="1" aria-label="Next month"><span aria-hidden="true">&rarr;</span></button>
+              </div>
+              <div class="due-cal__grid" data-rq-grid role="group"></div>
+            </div>
+          </div>
+          <fieldset class="rq-babies">
+            <legend class="sr-only">Which baby is this</legend>
+            <label class="rq-radio"><input type="radio" name="child" value="first" required /><span>First baby</span></label>
+            <label class="rq-radio"><input type="radio" name="child" value="second" /><span>Second baby</span></label>
+            <label class="rq-radio"><input type="radio" name="child" value="third-or-more" /><span>Third baby or more</span></label>
+          </fieldset>
+          <label class="rq-check" for="rq-privacy">
+            <input id="rq-privacy" name="privacy" type="checkbox" required />
+            <span>I accept the <a class="text-link" href="https://booking.thepostpartumsuite.com/privacy" target="_blank" rel="noopener">privacy policy</a></span>
+          </label>
           <p class="rq-msg" data-request-msg role="status" aria-live="polite"></p>
           <button class="btn btn--primary rq-btn" type="submit">Check your dates</button>
-          <p class="rq-legal">Nothing is booked and nothing is paid. We confirm everything together on a call.</p>
         </form>
 
         <div class="rq-done" data-request-done hidden>
           <h2 class="rq-done__h">Your dates are in view</h2>
-          <p class="rq-done__p">Your summary and your guide are on their way, and your indicative price is held for seven days.</p>
+          <p class="rq-done__p">We&rsquo;ll be in touch about your dates. If you&rsquo;d like to talk now, choose a time below.</p>
           <div class="rq-done__actions">
             <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Choose a time to talk</a>
             <a class="text-link" href="index.html">Return to the site</a>

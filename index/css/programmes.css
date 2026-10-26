@@ -3,8 +3,10 @@
 
    Hero, then the three lengths on the testimonials' line device scaled to
    the page's width, then the call to action. The line, dots, stops and
-   tip reuse the tv2 tokens from site.css. Prices come from the pricing
-   engine's complete programme, placeholders until Ami confirms.
+   tip reuse the tv2 tokens from site.css. Prices and treatment totals are
+   the sales brochure's fixed display figures (TJ, 26 Oct 2026), followed by
+   How we look after you, Four kinds of care and What each programme
+   includes, all from the brochure.
    ============================================================ */
 
 .page--programmes main { background: var(--canvas); }
@@ -72,8 +74,8 @@
 .pg-cta .aurora--voices .aurora__field { opacity: .5; filter: blur(56px); }
 .pg-lengths .aurora--voices .aurora__field::after,
 .pg-cta .aurora--voices .aurora__field::after { animation-duration: 90s; }
-/* The ribbons reach past the section's foot into Included in Every
-   Programme and dissolve there, so the cream is only the middle of that
+/* The ribbons reach past the section's foot into Four Kinds of Care
+   (was Included in Every Programme) and dissolve there, so the cream is only the middle of that
    section (TJ, 23 Oct 2026). The section clips sideways only, so the field
    can hang below it; .pg-same sits above it so its words stay clean. */
 .pg-lengths { overflow: visible; overflow-x: clip; }
@@ -162,20 +164,6 @@
   .pg-price__days { font-size: clamp(2.53rem, 3.335vw, 2.99rem); }
 }
 
-/* What changes with the length: the treatment counts */
-.pg-counts__h {
-  margin: 0 0 .5rem; font-family: var(--f-body); text-transform: uppercase; letter-spacing: .16em; font-size: .68rem; color: var(--ink-mute);
-}
-.pg-counts { list-style: none; margin: 0; padding: 0; }
-.pg-counts li {
-  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
-  padding: 10px 0; border-bottom: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14));
-  font-family: var(--f-read); font-size: clamp(.9rem, 1.05vw, 1rem); color: var(--ink);
-}
-.pg-counts li:last-child { border-bottom: 0; }
-.pg-counts b { font-family: var(--f-mono); font-weight: 500; font-size: .85rem; letter-spacing: .02em; color: var(--ember-deep); white-space: nowrap; }
-.pg-counts .pg-counts__always { font-family: var(--f-body); font-weight: 500; font-size: .72rem; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-mute); }
-
 /* The swap: the card's words fade out sideways the way the line moves, and
    the new ones fade in from the other side (TJ, 23 Oct 2026). --pg-dir is 1
    for a longer programme (the track moves left), -1 for a shorter one. */
@@ -183,21 +171,116 @@
 .pg-card.is-swapping .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * -28px)); }
 .pg-card.is-entering .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * 28px)); transition: none; }
 
-/* ---- the same, whatever the length ---- */
-.pg-same { position: relative; z-index: 1; padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(40px, 6vh, 72px); }
-.pg-same__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: clamp(24px, 5vw, 72px); align-items: start; }
+/* ---- how we look after you ---- */
+/* Between the hero and the line: the brochure's heading and paragraph, in
+   the page's heading and body type, nothing stacked (TJ, 26 Oct 2026). */
+.pg-look { max-width: 62ch; margin: clamp(28px, 4.5vh, 52px) auto clamp(28px, 4.5vh, 48px); text-align: center; }
+.pg-look__p { margin: 1rem auto 0; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--ink-soft); }
+
 .pg-h2 {
   margin: 0; font-family: var(--f-display); text-transform: uppercase; font-weight: 400;
   font-size: clamp(1.7rem, 2.8vw, 2.4rem); line-height: 1.05; letter-spacing: .02em; color: var(--ink); text-wrap: balance;
 }
-.pg-same__p { margin: 1rem 0 0; max-width: 40ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--ink-soft); }
-.pg-same__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 clamp(20px, 3vw, 40px); }
-.pg-same__list li {
-  padding: 12px 0; border-bottom: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14));
-  font-family: var(--f-read); font-size: clamp(.92rem, 1.05vw, 1rem); line-height: 1.5; color: var(--ink);
+
+/* ---- four kinds of care, in every programme ---- */
+/* The brochure's four columns replace Included in every programme: the
+   heading, one Quentin line, the sub line, then Mother and baby care,
+   Treatments, Meals and Home support (TJ, 26 Oct 2026). */
+.pg-same { position: relative; z-index: 1; padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(40px, 6vh, 72px); }
+.pg-same__head { text-align: center; max-width: 720px; margin: 0 auto; }
+.pg-same__script { margin: .5rem 0 0; text-wrap: balance; font-family: var(--f-script); font-size: clamp(1.5rem, 2.4vw, 2.05rem); line-height: 1.15; color: var(--ember-deep); }
+.pg-same__p { margin: .8rem 0 0; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--ink-soft); }
+.pg-kinds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px clamp(20px, 2.6vw, 36px); margin-top: clamp(32px, 5vh, 56px); }
+.pg-kind { padding-top: 16px; border-top: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14)); }
+.pg-kind__h { margin: 0; font-family: var(--f-body); font-weight: 600; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
+.pg-kind__p { margin: .6rem 0 0; font-family: var(--f-read); font-size: clamp(.92rem, 1.05vw, 1rem); line-height: 1.55; color: var(--ink-soft); }
+.pg-kind__list { list-style: none; margin: .9rem 0 0; padding: 0; }
+.pg-kind__list li {
+  position: relative; padding: 6px 0 6px 16px;
+  font-family: var(--f-read); font-size: clamp(.9rem, 1vw, .96rem); line-height: 1.45; color: var(--ink);
 }
-.pg-same__list li b { display: block; font-family: var(--f-body); font-weight: 600; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); margin-bottom: 2px; }
-.pg-same__note { margin: 1.4rem 0 0; font-family: var(--f-read); font-size: .9rem; line-height: 1.6; color: var(--ink-mute); max-width: 60ch; }
+.pg-kind__list li::before { content: ""; position: absolute; left: 0; top: calc(6px + .62em); width: 5px; height: 5px; border-radius: 50%; background: var(--ember); }
+.pg-same__note { margin: clamp(28px, 4vh, 44px) auto 0; text-align: center; font-family: var(--f-read); font-size: .9rem; line-height: 1.6; color: var(--ink-mute); max-width: 60ch; }
+
+/* ---- what each programme includes ---- */
+/* The brochure's comparison table on the page's glass card, then the
+   Programme pricing band in the card's price treatment (TJ, 26 Oct 2026). */
+.pg-compare { position: relative; z-index: 1; padding: clamp(40px, 6vh, 72px) var(--gutter) clamp(48px, 7vh, 88px); }
+.pg-compare__head { text-align: center; max-width: 720px; margin: 0 auto; }
+.pg-compare__lede { margin: 1rem auto 0; max-width: 60ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--ink-soft); }
+.pg-tablecard, .pg-pricing {
+  margin: clamp(28px, 4vh, 44px) auto 0; max-width: 960px;
+  padding: clamp(20px, 3vw, 40px); border-radius: var(--r-card);
+  background: rgba(255, 255, 255, .62); border: 1px solid rgba(166, 76, 69, .18);
+  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+}
+.pg-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.pg-table thead th:first-child { width: 46%; }
+.pg-table thead th {
+  padding: 0 12px 14px; border-bottom: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14));
+  font-family: var(--f-body); font-weight: 500; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-mute); text-align: center;
+}
+.pg-table thead th:first-child { text-align: left; }
+.pg-table__group th {
+  padding: 24px 12px 4px; text-align: left;
+  font-family: var(--f-body); font-weight: 600; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ember);
+}
+.pg-table tbody th[scope="row"] {
+  padding: 12px; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14));
+  font-family: var(--f-read); font-weight: 400; font-size: clamp(.92rem, 1.05vw, 1rem); line-height: 1.5; color: var(--ink);
+}
+.pg-table tbody th small { display: block; margin-top: 6px; font-size: .8rem; line-height: 1.5; color: var(--ink-mute); }
+.pg-table td {
+  padding: 12px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14));
+  font-family: var(--f-read); font-size: clamp(.9rem, 1vw, .96rem); line-height: 1.4; color: var(--ink-soft);
+}
+.pg-table__num { display: block; font-family: var(--f-display); font-weight: 400; font-size: clamp(2.4rem, 3.6vw, 3.2rem); line-height: 1; color: var(--ink); }
+.pg-table__foot { margin: 18px 0 0; font-family: var(--f-read); font-size: .88rem; line-height: 1.55; color: var(--ink-mute); }
+
+.pg-pricing { text-align: center; }
+.pg-pricing__h {
+  margin: 0; font-family: var(--f-display); text-transform: uppercase; font-weight: 400;
+  font-size: clamp(1.4rem, 2.2vw, 1.9rem); line-height: 1.05; letter-spacing: .02em; color: var(--ink);
+}
+.pg-pricing__lede { margin: .8rem auto 0; max-width: 52ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.6; color: var(--ink-soft); }
+.pg-pricing__list { list-style: none; margin: clamp(18px, 3vh, 28px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pg-pricing__list li { display: flex; flex-direction: column; align-items: center; padding: 8px 12px; }
+.pg-pricing__list li + li { border-left: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14)); }
+.pg-pricing__len { font-family: var(--f-body); font-weight: 500; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-mute); }
+.pg-pricing .pg-price__fee { margin: .8rem 0 0; justify-content: center; }
+
+@media (max-width: 1000px) {
+  .pg-kinds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Phones: the table never scrolls sideways (TJ, 26 Oct 2026). Each row
+   stacks: its label across the width, then the three lengths side by side,
+   each named small above its value. The column heads stay for screen
+   readers only. */
+@media (max-width: 700px) {
+  .pg-table, .pg-table tbody, .pg-table tr, .pg-table th, .pg-table td { display: block; }
+  .pg-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .pg-table tbody tr:not(.pg-table__group) {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 8px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14));
+  }
+  .pg-table__group th { padding: 22px 0 2px; }
+  .pg-table tbody th[scope="row"] { grid-column: 1 / -1; padding: 8px 0 10px; border-bottom: 0; }
+  .pg-table td { padding: 0 2px; border-bottom: 0; font-size: .88rem; }
+  .pg-table td::before {
+    content: attr(data-len); display: block; margin-bottom: 4px;
+    font-family: var(--f-body); font-weight: 500; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute);
+  }
+  .pg-table__num { font-size: 2.2rem; }
+  .pg-tablecard, .pg-pricing { padding: 20px 18px; }
+  .pg-pricing__list { grid-template-columns: minmax(0, 1fr); }
+  .pg-pricing__list li { padding: 14px 0; }
+  .pg-pricing__list li + li { border-left: 0; border-top: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14)); }
+}
+
+@media (max-width: 560px) {
+  .pg-kinds { grid-template-columns: minmax(0, 1fr); }
+}
 
 /* ---- call to action ---- */
 /* The same ground as the top (TJ, 23 Oct 2026). Its ribbons start
@@ -235,32 +318,15 @@
   .pg-price__fee { margin-top: .7rem; }
 }
 
-/* The fold toggle exists only on phones; on desktop the rows always show. */
-.pg-treat__toggle { display: none; }
+/* The phone copy of the button; the treatment rows' fold is gone with the
+   rows (TJ, 26 Oct 2026). */
 .pg-price__cta--foot { display: none; }
 
 @media (max-width: 860px) {
   .pg-lengths { --tv-s: 42%; }
-  /* Phones: the treatment rows fold away behind one line so the whole card
-     sits on the first screen (TJ, 22 Oct 2026). Tap to open. */
-  .pg-treat .pg-counts__h { display: none; }
-  .pg-treat__toggle {
-    display: flex; width: 100%; justify-content: space-between; align-items: center; gap: 12px;
-    margin: 0; padding: 14px 0 0; border: 0; border-top: 1px solid rgba(10, 10, 10, .14); background: none; cursor: pointer;
-    font-family: var(--f-read); font-size: .95rem; color: var(--ink); text-align: left;
-  }
-  .pg-treat__toggle svg { width: 20px; height: 20px; flex: none; fill: none; stroke: var(--ember-deep); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform 260ms var(--tease); }
-  /* A plus that becomes a minus when open (TJ, 23 Oct 2026). */
-  .pg-treat__v { transition: opacity 200ms var(--tease); }
-  .pg-treat__toggle[aria-expanded="true"] .pg-treat__v { opacity: 0; }
+  /* Phones: the button sits last on the card (TJ, 26 Oct 2026). */
   .pg-price > .pg-price__cta { display: none; }
   .pg-price__cta--foot { display: block; margin-top: 0; }
-  .pg-treat__toggle:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
-  .pg-treat .pg-counts { display: none; margin-top: 6px; }
-  .pg-treat.is-open .pg-counts { display: block; }
-  /* Open, the rows are tighter so the line and the whole card fit one
-     phone screen (TJ, 23 Oct 2026). */
-  .pg-treat .pg-counts li { padding: 7px 0; font-size: .9rem; line-height: 1.35; }
   /* Tighter rhythm on phones so price, note and button fit with the line. */
   .pg-lengths__head { margin-bottom: 10px; }
   .pg-car { height: 50px; }
@@ -270,19 +336,20 @@
   .pg-price__fee { margin-top: .8rem; font-size: 1.664rem; }   /* 20 percent down, twice (TJ, 25 Oct 2026) */
   .pg-price__cta { margin-top: 1rem; }
   .pg-card { grid-template-columns: minmax(0, 1fr); gap: 24px; }
-  .pg-same__grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
   /* Phones: a much smaller gap into the call to action (TJ, 23 Oct 2026). */
   .pg-same { padding-bottom: 20px; padding-top: 24px; }
   /* Phones (TJ, 23 Oct 2026): a larger title, "Our Postpartum" filling the
      width, and the Quentin line larger but a little narrower than it. */
-  .pg-lengths__title { font-size: min(calc((100vw - 2 * var(--gutter)) / 12.7), 3.4rem); white-space: nowrap; }
-  .pg-lengths__script { font-size: min(6.8vw, 2.35rem); }
+  .pg-lengths__title { font-size: min(calc((100vw - 2 * var(--gutter)) / 10.6), 3.4rem); white-space: nowrap; }
+  .pg-lengths__script { font-size: min(calc((100vw - 2 * var(--gutter)) / 15.4), 2.35rem); white-space: nowrap; }
+  /* The brochure's title and Quentin line (TJ, 26 Oct 2026) keep the same
+     rule: the title fills the width on one line (10.6 is its width in ems),
+     the Quentin line one line a little narrower (14.65 ems, set to 95 percent). */
   /* Phones (TJ, 23 Oct 2026): more room under the header, a much smaller gap
      between the card and Included in Every Programme. */
   .pg-lengths { padding-top: 38px; padding-bottom: 28px; }
   .pg-cta { padding-top: 16px; }
   .page--programmes { --pg-reach: 160px; }
-  .pg-same__list { grid-template-columns: 1fr; }
   .pg-stage { max-width: none; }
   /* Phones: both arrows sit side by side in the card's top right corner,
      level with the length's name (card padding 22px, name 2.1rem tall), in
@@ -300,6 +367,8 @@
    into the card's arrows. */
 @media (min-width: 861px) {
   .pg-same .pg-h2 { font-size: 40px; }
+  /* The brochure's other headings match it (TJ, 26 Oct 2026). */
+  .pg-look .pg-h2, .pg-compare .pg-h2 { font-size: 40px; }
   /* The length name 15 percent up, the price 20 percent down (TJ, 25 Oct 2026). */
   .pg-price__days { font-size: 46px; }
 }
@@ -310,6 +379,63 @@
    figure keep their place. The £ keeps its own spacing. */
 .pg-price__digits { letter-spacing: -0.044em; margin-right: 0.044em; }
 
-/* The card's link down to Included in every programme (Ami, 24 Oct 2026). */
+/* The card's link down to What each programme includes (Ami, 24 Oct 2026;
+   the brochure's table since TJ, 26 Oct 2026). */
 .pg-price__more { margin: .9rem 0 0; font-family: var(--f-read); font-size: .9rem; }
 #what-is-included { scroll-margin-top: calc(var(--nav-h, 72px) + 16px); }
+
+/* ---- the card's four kinds of care (TJ, 26 Oct 2026) ----
+   Replaces the single treatment total: one column of four rows in the
+   brochure's order, each a small label then its line. Treatments and meals
+   carry the length's count in the display face, only a little larger than
+   the words, so the four rows are the same height and read as one list. */
+.pg-care {
+  margin: 0; align-self: center; display: grid;
+  padding-left: clamp(24px, 4vw, 56px);
+  border-left: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14));
+}
+.pg-care__row { display: grid; gap: .3rem; padding: calc(.85rem * var(--pg-fit, 1)) 0; border-top: 1px solid var(--hairline, rgba(10, 10, 10, .08)); }
+.pg-care__row:first-child { border-top: 0; padding-top: 0; }
+.pg-care__row:last-child { padding-bottom: 0; }
+.pg-care dt { font-family: var(--f-body); font-size: .68rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--ember); }
+.pg-care dd { margin: 0; display: flex; align-items: baseline; gap: .45rem; min-height: 1.9rem; font-family: var(--f-read); font-size: clamp(1rem, 1.2vw, 1.12rem); line-height: 1.35; color: var(--ink); }
+.pg-care__num { font-family: var(--f-display); font-size: 1.7rem; line-height: 1; color: var(--ink); }
+@media (max-width: 860px) {
+  .pg-care { padding-left: 0; padding-top: 14px; border-left: 0; border-top: 1px solid var(--hairline-firm, rgba(10, 10, 10, .14)); }
+  .pg-care__row { padding: .7rem 0; }
+  .pg-care__row:first-child { padding-top: 0; }
+  .pg-care dd { font-size: 1rem; min-height: 1.6rem; }
+  .pg-care__num { font-size: 1.5rem; }
+}
+
+/* ---- How we look after you, quieter and wider (TJ, 26 Oct 2026) ----
+   The heading in Karla capitals, not the display face; the paragraph runs
+   wider so it takes two or three lines and the card comes up. */
+.pg-look { max-width: 980px; margin: calc(clamp(20px, 3vh, 36px) * var(--pg-fit, 1)) auto calc(clamp(16px, 2.6vh, 32px) * var(--pg-fit, 1)); }
+.pg-look .pg-h2, .pg-look .pg-h2 { font-family: var(--f-read); font-weight: 500; font-size: 1rem; letter-spacing: .16em; line-height: 1.4; }
+@media (min-width: 861px) { .pg-look .pg-h2 { font-size: calc(1.05rem * max(var(--pg-fit, 1), .85)); } }
+.pg-look__p { margin-top: .6rem; max-width: none; }
+
+/* ---- the first screen fits itself (TJ, 26 Oct 2026) ----
+   programmes.js lowers --pg-fit from 1 until the whole card shows in the
+   window, on any laptop size; spacing shrinks first in step with it, type
+   less so. Phones are left to their own rules above. */
+@media (min-width: 861px) {
+  .pg-lengths { padding-top: calc(clamp(32px, 5.5vh, 64px) * var(--pg-fit, 1)); }
+  .pg-lengths__head { margin-bottom: 0; }
+  .pg-lengths__title { font-size: calc(clamp(2rem, min(4.2vw, 6.4vh), 3.4rem) * max(var(--pg-fit, 1), .75)); }
+  .pg-lengths__script { font-size: calc(clamp(1.6rem, min(2.6vw, 4vh), 2.25rem) * max(var(--pg-fit, 1), .75)); margin-top: calc(.5rem * var(--pg-fit, 1)); }
+  .pg-lengths__lede { margin-top: calc(.8rem * var(--pg-fit, 1)); }
+  .pg-look__p { font-size: calc(clamp(.95rem, 1.1vw, 1.04rem) * max(var(--pg-fit, 1), .9)); }
+  .pg-car { height: calc(64px * max(var(--pg-fit, 1), .8)); }
+  .pg-stage { margin-top: calc(clamp(28px, 4vh, 44px) * var(--pg-fit, 1)); }
+  .pg-card { padding: calc(clamp(26px, 3.4vw, 44px) * max(var(--pg-fit, 1), .6)) clamp(26px, 3.4vw, 44px); }
+  .pg-price__days { font-size: calc(46px * max(var(--pg-fit, 1), .75)); }
+  .pg-price__cta { margin-top: calc(1.5rem * var(--pg-fit, 1)); }
+}
+/* Very short windows (720 high): the paragraph's lines close up a little and
+   the line under it tightens, still in step with --pg-fit. */
+@media (min-width: 861px) {
+  .pg-look__p { line-height: calc(1.35 + .3 * min(var(--pg-fit, 1), 1)); }
+  .pg-car { height: calc(64px * max(var(--pg-fit, 1), .7)); }
+}
