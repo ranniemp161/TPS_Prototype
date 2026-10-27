@@ -1,0 +1,28 @@
+// Block centres against the window centre (TJ, 13 Oct 2026, every step centred).
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const b = await chromium.launch({ channel: 'chrome' });
+for (const [w, h] of [[1865, 905], [1440, 900]]) {
+  const p = await b.newPage({ viewport: { width: w, height: h } });
+  await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+  await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1300);
+  const measure = () => p.evaluate(() => {
+    const s = [...document.querySelectorAll('.dk-page')].find(x => x.getAttribute('aria-hidden') !== 'true');
+    const out = [];
+    const sel = ['.dk-step__t', '.step__note--lead', '.tgl__hint', '.tgl', '.due-cal', '.due__chosen', '.capture', '.capture__row', '.capture__note', '.dk-legal', '.dk-actions'];
+    sel.forEach(q => { const e = [...s.querySelectorAll(q)].find(x => x.getBoundingClientRect().width > 0); if (!e) return;
+      let r = e.getBoundingClientRect();
+      if (e.matches('.dk-step__t,.step__note--lead,.due__chosen,.capture__note,.dk-legal')) { const rg = document.createRange(); rg.selectNodeContents(e); const rr = [...rg.getClientRects()]; if (rr.length) r = { left: Math.min(...rr.map(x => x.left)), right: Math.max(...rr.map(x => x.right)) }; }
+      out.push(q + ' ' + Math.round((r.left + r.right) / 2 - innerWidth / 2)); });
+    return { name: document.querySelector('[data-step-name]').textContent, out };
+  });
+  console.log('== ' + w + 'x' + h);
+  for (let k = 0; k < 20; k++) {
+    const m = await measure(); console.log(m.name + ': ' + m.out.join(', '));
+    if (m.name === 'Due date') { await p.evaluate(() => { const f = document.getElementById('due'); f.value = '2027-05-15'; f.dispatchEvent(new Event('input', { bubbles: true })); }); await p.waitForTimeout(300); }
+    if (m.name === 'Your programme' && await p.$('[data-section="builder-decide"]:not([aria-hidden="true"])')) { await p.click('[data-not-yet]'); await p.waitForTimeout(1200); const c = await measure(); console.log('Close: ' + c.out.join(', ')); await p.fill('#capture-name', 'Test Mother'); await p.fill('#capture-email', 'a@b.com'); await p.click('.capture__btn'); await p.waitForTimeout(1200); const d = await measure(); console.log('Done: ' + d.out.join(', ')); break; }
+    await p.click('[data-next]'); await p.waitForTimeout(1100);
+  }
+  await p.close();
+}
+await b.close();

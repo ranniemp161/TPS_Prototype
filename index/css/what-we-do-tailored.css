@@ -18,8 +18,8 @@
    ============================================================ */
 
 .ty {
-  --ty-ground: var(--ink-mute, #5A524F);
-  --ty-ink: #fff;
+  --ty-ground: var(--g-dark);
+  --ty-ink: var(--t-on-dark);
   --ty-op: .55;
   position: relative; isolation: isolate;
   background: var(--ty-ground); color: var(--ty-ink);
@@ -36,7 +36,7 @@
 .ty__field {
   position: absolute; inset: -40px; display: block;
   background-image: repeating-linear-gradient(100deg,
-    transparent 0%, var(--blush) 8%, var(--rose-mist) 15%, transparent 25%, var(--haze) 33%, transparent 44%);
+    transparent 0%, var(--g-tint) 8%, var(--g-soft) 15%, transparent 25%, var(--g-haze) 33%, transparent 44%);
   background-size: 300%; background-position: 50% 50%;
   filter: blur(44px); opacity: var(--ty-op);
   -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
@@ -45,7 +45,7 @@
 .ty__field::after {
   content: ""; position: absolute; inset: 0;
   background-image: repeating-linear-gradient(123deg,
-    transparent 0%, var(--rose-mist) 7%, var(--canvas) 13%, transparent 25%, var(--blush) 35%, transparent 48%);
+    transparent 0%, var(--g-soft) 7%, var(--g-canvas) 13%, transparent 25%, var(--g-tint) 35%, transparent 48%);
   background-size: 235%;
   animation: ty-aurora 62s linear infinite;
 }
@@ -76,12 +76,12 @@
 /* The slot sets the row's height; the card fills it and scrolls inside if Read more runs long. */
 .ty__head > .ty__card { height: 0; min-height: 100%; }
 
-.ty__card { position: relative; isolation: isolate; padding: clamp(22px, 2.6vw, 38px); display: grid; gap: clamp(10px, 1.6vh, 16px); align-content: center; justify-items: start; color: var(--ink); min-height: 0; }
+.ty__card { position: relative; isolation: isolate; padding: clamp(22px, 2.6vw, 38px); display: grid; gap: clamp(10px, 1.6vh, 16px); align-content: center; justify-items: start; color: var(--t-ink); min-height: 0; }
 /* The frost is a layer of its own so its right edge can fade out. */
 .ty__card.glass { background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .ty__card::before {
   content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background: rgba(243, 239, 236, .70); border: 1px solid rgba(255, 255, 255, .6); border-radius: var(--r-card);
+  background: color-mix(in srgb, var(--g-canvas) 70%, transparent); border: 1px solid rgba(255, 255, 255, .6); border-radius: var(--r-card);
   backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
   /* Eased, not linear: nine stops on a smoothstep from solid to clear across the
      right 46 percent, so there is no edge anywhere for the eye to find. */
@@ -98,18 +98,18 @@
 /* The lead in two lines on phones (TJ, 12 Oct 2026): no comma, the second line led
    by an ellipsis. Desktop reads as before: one sentence, the comma, no ellipsis. */
 .ty__lead-dots { display: none; }
-.ty__lead { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.15rem, min(1.8vw, 2.9vh), 1.75rem); line-height: 1.06; letter-spacing: .005em; color: var(--ink); text-wrap: balance; }
+.ty__lead { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.15rem, min(1.8vw, 2.9vh), 1.75rem); line-height: 1.06; letter-spacing: .005em; color: var(--t-ink); text-wrap: balance; }
 .ty .tl-readmore__copy { display: grid; gap: clamp(8px, 1.2vh, 12px); }
-.ty .tl-readmore__copy p { margin: 0; font-family: var(--f-read); font-size: clamp(.84rem, .8rem + .16vw, .95rem); line-height: 1.55; color: var(--ink-soft); }
+.ty .tl-readmore__copy p { margin: 0; font-family: var(--f-read); font-size: clamp(.84rem, .8rem + .16vw, .95rem); line-height: 1.55; color: var(--t-soft); }
 .ty .tl-readmore__extra { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 480ms var(--ease-out); }
 .ty .tl-readmore__extra > div { display: grid; gap: clamp(8px, 1.2vh, 12px); overflow: hidden; min-height: 0; }
 .ty .tl-readmore.is-open .tl-readmore__extra { grid-template-rows: 1fr; }
 .ty .tl-readmore__toggle {
   all: unset; cursor: pointer; margin-top: clamp(10px, 1.4vh, 14px);
   font-family: var(--f-body); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px;
+  color: var(--t-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 5px;
 }
-.ty .tl-readmore__toggle:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+.ty .tl-readmore__toggle:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
 .ty .tl-readmore__toggle .when-open { display: none; }
 .ty .tl-readmore.is-open .tl-readmore__toggle .when-closed { display: none; }
 .ty .tl-readmore.is-open .tl-readmore__toggle .when-open { display: inline; }
@@ -180,10 +180,10 @@
 .ty__title {
   position: absolute; left: var(--gutter, 24px); bottom: clamp(40px, 9vh, 96px); margin: 0; z-index: 1;
   font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; white-space: nowrap;
-  font-size: clamp(3.2rem, 8vw, 8rem); line-height: 1.02; color: #fff;
+  font-size: clamp(3.2rem, 8vw, 8rem); line-height: 1.02; color: var(--t-on-dark);
   transform-origin: 0 0;
 }
-.ty__title--ink { color: var(--ink); }
+.ty__title--ink { color: var(--t-ink); }
 /* Where the title comes to rest: a line above the photograph and the card. */
 .ty__tslot { display: none; }
 

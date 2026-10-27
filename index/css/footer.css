@@ -5,10 +5,10 @@
    text everywhere: measured at 5 to 1 or better at every point of the drift. Fallbacks are the brand
    hex values, so it renders on pages that do not load site.css. No shadows. */
 .sf {
-  --sf-ground: var(--ink-mute, #5A524F);
-  --sf-text: #FFFFFF;
-  --sf-soft: #FFFFFF;
-  --sf-mute: #FFFFFF;
+  --sf-ground: var(--g-dark);
+  --sf-text: var(--t-on-dark);
+  --sf-soft: var(--t-on-dark);
+  --sf-mute: var(--t-on-dark);
   --sf-rule: rgba(255, 255, 255, .4);
   --sf-op: .55;
   --sf-veil: 0;
@@ -25,7 +25,7 @@
 .sf__field {
   position: absolute; inset: -40px; display: block;
   background-image: repeating-linear-gradient(100deg,
-    transparent 0%, var(--blush, #E2CAC6) 8%, var(--rose-mist, #D7C2C9) 15%, transparent 25%, var(--haze, #E3D7D3) 33%, transparent 44%);
+    transparent 0%, var(--g-tint) 8%, var(--g-soft) 15%, transparent 25%, var(--g-haze) 33%, transparent 44%);
   background-size: 300%; background-position: 50% 50%;
   filter: blur(44px);
   opacity: var(--sf-op);
@@ -36,12 +36,12 @@
 .sf__field::after {
   content: ""; position: absolute; inset: 0;
   background-image: repeating-linear-gradient(123deg,
-    transparent 0%, var(--rose-mist, #D7C2C9) 7%, var(--canvas, #F3EFEC) 13%, transparent 25%, var(--blush, #E2CAC6) 35%, transparent 48%);
+    transparent 0%, var(--g-soft) 7%, var(--g-canvas) 13%, transparent 25%, var(--g-tint) 35%, transparent 48%);
   background-size: 235%;
   animation: sf-aurora 62s linear infinite;
 }
 /* A thin pale veil lifts the dark patches of the drift so ink text holds contrast. */
-.sf__aurora::after { content: ""; position: absolute; inset: 0; background: var(--canvas, #F3EFEC); opacity: var(--sf-veil); }
+.sf__aurora::after { content: ""; position: absolute; inset: 0; background: var(--g-canvas); opacity: var(--sf-veil); }
 @keyframes sf-aurora { from { background-position: 50% 50%; } to { background-position: 350% 50%; } }
 @media (prefers-reduced-motion: reduce) { .sf__field::after { animation: none; } }
 

@@ -1,0 +1,11 @@
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const out = process.argv[2];
+const b = await chromium.launch({ channel: 'chrome' });
+const p = await b.newPage({ viewport: { width: 390, height: 844 } });
+await p.goto(pathToFileURL(process.cwd() + '/index/programmes.html').href);
+await p.waitForLoadState('load'); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1200);
+await p.click('[data-pg-next]'); await p.waitForTimeout(110);
+await p.screenshot({ path: out + '/mid-next.png', clip: { x: 0, y: 380, width: 390, height: 380 } });
+console.log(await p.evaluate(() => getComputedStyle(document.querySelector('.pg-card')).overflow));
+await b.close();

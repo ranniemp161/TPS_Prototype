@@ -8,7 +8,7 @@
    what-we-do-hands.js adds .is-live; otherwise (phones, reduced motion) each kind is a
    photograph followed by its words.
    ============================================================ */
-.hd { position: relative; isolation: isolate; background: var(--canvas); color: var(--ink); }
+.hd { position: relative; isolation: isolate; background: var(--g-canvas); color: var(--t-ink); }
 .hd[hidden], .det[hidden] { display: none !important; }
 .hd__stage { position: relative; }
 
@@ -17,22 +17,22 @@
 .hd__pic { display: block; width: 100%; height: auto; max-width: none; }
 
 /* ---- Words ---- */
-.hd__name { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.6rem, 5vw, 5.6rem); line-height: .92; letter-spacing: .005em; color: var(--ink); text-wrap: balance; }
+.hd__name { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.6rem, 5vw, 5.6rem); line-height: .92; letter-spacing: .005em; color: var(--t-ink); text-wrap: balance; }
 /* Instrument Serif is for capitals only (TJ, 8 Oct 2026), so the sub-header is
    Montserrat: medium weight, larger than the paragraph, smaller than the title. */
-.hd__promise { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.02rem, .9rem + .45vw, 1.3rem); line-height: 1.35; letter-spacing: -.005em; color: var(--ink); text-wrap: balance; }
-.hd__para { margin: 0; font-family: var(--f-read); font-size: clamp(.92rem, .84rem + .2vw, 1.02rem); line-height: 1.6; color: var(--ink-soft); }
+.hd__promise { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.02rem, .9rem + .45vw, 1.3rem); line-height: 1.35; letter-spacing: -.005em; color: var(--t-ink); text-wrap: balance; }
+.hd__para { margin: 0; font-family: var(--f-read); font-size: clamp(.92rem, .84rem + .2vw, 1.02rem); line-height: 1.6; color: var(--t-soft); }
 .hd__kind { display: grid; gap: clamp(12px, 1.6vh, 18px); }
 
 /* ---- Detail items: quiet rows, each opening its paragraph in place ---- */
-.hd__items { list-style: none; margin: clamp(4px, .8vh, 10px) 0 0; padding: 0; border-top: 1px solid rgba(10, 10, 10, .14); }
-.hd__item { border-bottom: 1px solid rgba(10, 10, 10, .14); }
-.hd__toggle { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 11px 2px; font-family: var(--f-read); font-size: .95rem; line-height: 1.3; color: var(--ink); }
-.hd__toggle::after { content: "+"; flex: none; font-size: 1.15rem; line-height: 1; color: var(--ink-mute); transition: transform 280ms var(--ease-out); }
+.hd__items { list-style: none; margin: clamp(4px, .8vh, 10px) 0 0; padding: 0; border-top: 1px solid var(--line-firm); }
+.hd__item { border-bottom: 1px solid var(--line-firm); }
+.hd__toggle { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 11px 2px; font-family: var(--f-read); font-size: .95rem; line-height: 1.3; color: var(--t-ink); }
+.hd__toggle::after { content: "+"; flex: none; font-size: 1.15rem; line-height: 1; color: var(--t-mute); transition: transform 280ms var(--ease-out); }
 .hd__toggle[aria-expanded="true"]::after { transform: rotate(45deg); }
-.hd__toggle:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+.hd__toggle:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .hd__more { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 420ms var(--ease-out); }
-.hd__more > p { overflow: hidden; margin: 0; font-family: var(--f-read); font-size: .92rem; line-height: 1.6; color: var(--ink-soft); }
+.hd__more > p { overflow: hidden; margin: 0; font-family: var(--f-read); font-size: .92rem; line-height: 1.6; color: var(--t-soft); }
 .hd__item.is-open .hd__more { grid-template-rows: 1fr; }
 .hd__item.is-open .hd__more > p { padding: 0 2px 14px; }
 
@@ -56,13 +56,13 @@
 .hd.is-live .hd__pic:first-child { opacity: 1; }
 /* A soft light veil over the left, where the words sit, fading out before her. */
 .hd.is-live .hd__veil { position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background: linear-gradient(to right, rgba(243, 239, 236, .82) 0%, rgba(243, 239, 236, .66) 30%, rgba(243, 239, 236, .28) 46%, rgba(243, 239, 236, 0) 58%); }
+  background: linear-gradient(to right, color-mix(in srgb, var(--g-canvas) 82%, transparent) 0%, color-mix(in srgb, var(--g-canvas) 66%, transparent) 30%, color-mix(in srgb, var(--g-canvas) 28%, transparent) 46%, color-mix(in srgb, var(--g-canvas) 0%, transparent) 58%); }
 .hd.is-live .hd__copy { position: absolute; z-index: 2; left: var(--gutter, 24px); top: var(--nav-h); bottom: 0; width: min(36vw, 520px); }
 .hd.is-live .hd__kind { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); visibility: hidden; }
 .hd.is-live .hd__kind.is-on { visibility: visible; }
 .hd.is-live .hd__rail { display: flex; position: absolute; z-index: 2; left: var(--gutter, 24px); bottom: clamp(24px, 5vh, 48px); gap: 8px; }
 .hd.is-live .hd__rail span { width: 26px; height: 2px; background: rgba(10, 10, 10, .2); transition: background-color 300ms var(--ease-out); }
-.hd.is-live .hd__rail span.is-on { background: var(--ember); }
+.hd.is-live .hd__rail span.is-on { background: var(--acc); }
 /* Tight screens: the paragraph shortens to three lines, the rest one tap away. */
 .hd.is-tight .hd__para { max-height: calc(3 * 1.6em); overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent); mask-image: linear-gradient(to bottom, #000 60%, transparent); }
 .hd.is-tight .hd__name { font-size: clamp(2.2rem, 4vw, 4.2rem); }
@@ -123,25 +123,25 @@
    Phones: Read more takes over the screen as before.
    ============================================================ */
 .hd__text { display: block; }
-.hd__promise { margin: 0; font-family: var(--f-read); font-weight: 400; font-size: 1em; line-height: 1.6; letter-spacing: 0; color: var(--ink-soft); text-wrap: pretty; }
-.hd__para { margin: 0; font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--ink-soft); }
+.hd__promise { margin: 0; font-family: var(--f-read); font-weight: 400; font-size: 1em; line-height: 1.6; letter-spacing: 0; color: var(--t-soft); text-wrap: pretty; }
+.hd__para { margin: 0; font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--t-soft); }
 .hd__para > p { margin: 0; }
 /* --hd-gap: 1 normally; what-we-do-hands.js tightens it, for all four kinds
    together, only on a window too short for the stack at the 13px floor. */
 .hd__para > p + p, .hd__more > p + p { margin-top: calc(.8em * var(--hd-gap, 1)); }
 .hd__read {
   all: unset; box-sizing: border-box; cursor: pointer;
-  font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--ink);
+  font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--t-ink);
   text-decoration: underline; text-underline-offset: .18em; text-decoration-color: rgba(10, 10, 10, .4);
 }
-.hd__read:hover { color: var(--ember-deep); }
-.hd__read:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+.hd__read:hover { color: var(--acc-hover); }
+.hd__read:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .hd__full { display: none; }
 .hd__items { list-style: none; margin: 0; padding: 0; border: 0; }
 .hd__item { border: 0; }
-.hd__sub { margin: calc(1.1em * var(--hd-gap, 1)) 0 .25em; font-family: var(--f-body); font-size: 1em; font-weight: 600; line-height: 1.6; color: var(--ink); }
+.hd__sub { margin: calc(1.1em * var(--hd-gap, 1)) 0 .25em; font-family: var(--f-body); font-size: 1em; font-weight: 600; line-height: 1.6; color: var(--t-ink); }
 .hd__more { display: block; }
-.hd__more > p { margin: 0; padding: 0; font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--ink-soft); }
+.hd__more > p { margin: 0; padding: 0; font-family: var(--f-read); font-size: 1em; line-height: 1.6; color: var(--t-soft); }
 
 /* ---- Desktop ---- */
 .hd.is-live .hd__name { font-size: clamp(1.56rem, 3vw, 3.36rem); }
@@ -168,7 +168,7 @@
 /* the wash: the whole photograph */
 .hd.is-live .hd__veil::after {
   content: ""; position: absolute; inset: 0;
-  background: rgba(243, 239, 236, .86);
+  background: color-mix(in srgb, var(--g-canvas) 86%, transparent);
   /* slower (TJ, 21 Oct 2026): the white emerges over 1.4s, no light switch */
   opacity: 0; transition: opacity 1400ms cubic-bezier(.45, 0, .25, 1);
 }
@@ -204,7 +204,7 @@
 .hd.is-live .hd__kind.is-switching.is-closing .hd__full { transition: opacity 700ms var(--ease-out); }
 .hd__fly {
   position: fixed; z-index: 60; pointer-events: none; margin: 0; overflow: hidden;
-  font-family: var(--f-read); line-height: 1.6; color: var(--ink-soft);
+  font-family: var(--f-read); line-height: 1.6; color: var(--t-soft);
   transition: left 1000ms cubic-bezier(.45, 0, .25, 1), top 1000ms cubic-bezier(.45, 0, .25, 1), width 1000ms cubic-bezier(.45, 0, .25, 1), height 1000ms cubic-bezier(.45, 0, .25, 1);
 }
 .hd__fly .hd__promise { display: block; margin: 0 0 calc(.8em * var(--hd-gap, 1)); }
@@ -228,9 +228,9 @@
   padding: calc(20px * var(--fit)) var(--gutter, 24px); overflow-y: auto; overscroll-behavior: contain;
   font-size: calc(.92rem * var(--fit));
   background:
-    linear-gradient(rgba(243, 239, 236, .9), rgba(243, 239, 236, .9)),
+    linear-gradient(color-mix(in srgb, var(--g-canvas) 90%, transparent), color-mix(in srgb, var(--g-canvas) 90%, transparent)),
     var(--hd-bg, none) center / cover no-repeat,
-    var(--canvas);
+    var(--g-canvas);
 }
 .hd:not(.is-live) .hd__kind.is-reading .hd__full { display: block; }
 .hd:not(.is-live) .hd__kind.is-reading .hd__name { font-size: calc(2rem * var(--fit)); }

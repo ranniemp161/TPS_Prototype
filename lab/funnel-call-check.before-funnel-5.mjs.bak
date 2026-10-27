@@ -1,0 +1,85 @@
+/* FUNNEL-PLAN.md chat 4: Book a call now? node lab/funnel-call-check.mjs */
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const b = await chromium.launch({ channel: 'chrome' });
+let bad = 0; const ok = (c, m) => { if (!c) { bad++; console.log('FAIL', m); } else console.log('ok  ', m); };
+for (const [w, h] of [[1440, 900], [390, 844]]) {
+  const p = await b.newPage({ viewport: { width: w, height: h } });
+  const errs = []; p.on('pageerror', e => errs.push(e.message));
+  await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+  await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1500);
+  const tag = w + 'x' + h;
+  const st = () => p.evaluate(() => ({
+    name: document.querySelector('[data-step-name]').textContent,
+    next: document.querySelector('[data-next]').textContent,
+    dis: document.querySelector('[data-next]').getAttribute('aria-disabled'),
+    cls: document.querySelector('[data-next]').className,
+    vis: getComputedStyle(document.querySelector('[data-next]')).visibility,
+    stop: [...document.querySelectorAll('.dk-line__stop')].findIndex(s => s.classList.contains('is-on')),
+    n: document.querySelectorAll('.dk-line__stop').length,
+  }));
+  const step = async () => { await p.click('[data-next]'); await p.waitForTimeout(1100); };
+  let s;
+  await step(); await p.fill('#due', '2027-03-15'); await p.waitForTimeout(300);
+  for (let k = 0; k < 40; k++) { s = await st(); if (s.name === 'Book a call') break; await step(); }
+  ok(s.name === 'Book a call', tag + ' walked to Book a call');
+  ok(s.stop === s.n - 2, tag + ' it is the second to last stop (' + s.stop + ' of ' + s.n + ')');
+  ok(s.next === 'Continue', tag + ' Next reads Continue: ' + s.next);
+  ok(s.dis === 'true', tag + ' Continue blocked with nothing chosen');
+  const info = await p.evaluate(() => ({
+    title: document.querySelector('#step-call .dk-step__t').textContent,
+    lead: document.querySelector('#step-call .step__note').textContent,
+    hint: document.querySelector('#step-call .tgl__hint').textContent,
+    checked: document.querySelectorAll('input[name="call"]:checked').length,
+    rows: [...document.querySelectorAll('input[name="call"]')].map(i => i.value + '|' + i.closest('.tg').querySelector('.tg__t').textContent + '|' + i.closest('.tg').querySelector('.tg__s').textContent),
+    legal: document.querySelector('.dk-sum--call .dk-legal').textContent,
+    dash: /[–—]/.test(document.querySelector('[data-section="builder-book-call"]').textContent),
+    ovx: document.documentElement.scrollWidth > innerWidth,
+  }));
+  ok(info.title === 'Would you like to book a call now?', tag + ' title');
+  ok(info.lead === 'Thirty minutes by phone or video. We’ll look at your choices, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call.', tag + ' lead exact');
+  ok(info.hint === 'Choose one' && info.checked === 0, tag + ' hint and nothing checked');
+  ok(JSON.stringify(info.rows) === JSON.stringify(['yes|Yes, book a call|Pick a time with Amidat', 'no|Not yet|Send my programme to my email instead']), tag + ' rows ' + JSON.stringify(info.rows));
+  ok(/^Indicative pricing only\./.test(info.legal) && !info.dash && !info.ovx, tag + ' legal line, no dashes, no overflow');
+  await p.screenshot({ path: `lab/funnel/call-empty-${tag}.png` });
+  await p.click('[data-next]', { force: true }); await p.waitForTimeout(1000);
+  s = await st(); ok(s.name === 'Book a call', tag + ' clicking blocked Continue stays');
+  await p.keyboard.press('ArrowRight'); await p.waitForTimeout(1000);
+  s = await st(); ok(s.name === 'Book a call', tag + ' arrow key stays');
+  await p.evaluate(() => { const d = document.querySelector('[data-deck]'); d.scrollTo({ left: (Math.round(d.scrollLeft / d.clientWidth) + 1) * d.clientWidth, behavior: 'auto' }); });
+  await p.waitForTimeout(1500);
+  s = await st(); ok(s.name === 'Book a call' && s.dis === 'true', tag + ' swipe snaps back');
+  // No
+  await p.click('.tg:has(input[name="call"][value="no"])'); await p.waitForTimeout(500);
+  s = await st(); ok(!s.dis && s.next === 'Continue', tag + ' Not yet unblocks Continue');
+  await p.screenshot({ path: `lab/funnel/call-no-${tag}.png` });
+  await p.click('[data-next]'); await p.waitForTimeout(1300);
+  s = await st();
+  ok(s.name === 'Your programme' && s.stop === s.n - 1, tag + ' Continue on No moves to the placeholder');
+  ok(s.vis === 'hidden', tag + ' Next hidden on the placeholder (' + s.vis + ', ' + s.cls + ')');
+  ok(!/btn--primary/.test(s.cls), tag + ' no ember Book a call button');
+  const ph = await p.evaluate(() => ({ t: document.querySelector('[data-section="builder-close"] .dk-step__t').textContent, kids: document.querySelector('[data-section="builder-close"] .dk-sum').children.length }));
+  ok(ph.t === 'Your programme' && ph.kids === 1, tag + ' placeholder holds only the title');
+  await p.screenshot({ path: `lab/funnel/call-close-${tag}.png` });
+  await p.click('[data-back]'); await p.waitForTimeout(1300);
+  s = await st(); ok(s.name === 'Book a call', tag + ' Back returns to Book a call');
+  // Yes
+  await p.click('.tg:has(input[name="call"][value="yes"])'); await p.waitForTimeout(500);
+  s = await st(); ok(!s.dis && s.next === 'Continue', tag + ' Yes unblocks Continue');
+  let hit = null;
+  await p.route(/calendly\.com/, r => { hit = r.request().url(); r.abort(); });
+  await p.click('[data-next]'); await p.waitForTimeout(1500);
+  ok(!!hit, tag + ' Continue on Yes requests calendly.com: ' + (hit || '').slice(0, 90));
+  if (hit) {
+    const u = new URL(hit);
+    ok(u.pathname === '/thepostpartumsuite/30min', tag + ' path ' + u.pathname);
+    const a1 = u.searchParams.get('a1'), a2 = u.searchParams.get('a2');
+    ok(a2 === '2027-03-15', tag + ' a2 = ' + a2);
+    ok(/DUE DATE {2}15 Mar 2027/.test(a1 || '') && /\n/.test(a1 || '') && (a1 || '').length > 50, tag + ' a1 carries the programme text (' + (a1 || '').length + ' chars)');
+    ok(/a1=[^&]*%0A/.test(hit) && !/a1=[^&]* /.test(hit), tag + ' a1 is URL encoded');
+  }
+  ok(!errs.length, tag + ' no errors ' + errs.join('; '));
+  await p.close();
+}
+await b.close();
+console.log(bad ? bad + ' failed' : 'all passed');

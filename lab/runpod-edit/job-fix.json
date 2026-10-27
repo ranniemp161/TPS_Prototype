@@ -1,0 +1,36 @@
+{
+ "seed": 1,
+ "keep_weights": true,
+ "models": [
+  {
+   "key": "qwen2511",
+   "repo": "Qwen/Qwen-Image-Edit-2511",
+   "steps": 40,
+   "cfg": 4.0
+  }
+ ],
+ "runs": [
+  {
+   "key": "oxblood",
+   "only": [
+    "massage"
+   ],
+   "seed": 1,
+   "prompts": {
+    "massage": "Change only the pale pink bed sheet and pillowcase to a very pale, washed out soft dusty rose, a light pastel tone close to white, not a deep or saturated colour. The white towel on her head stays white. Everything else stays exactly as in the original photograph: the same people, faces, skin, hair, poses and clothing, the same walls, floors, bedding, furniture, curtains, windows and objects, the same warm natural light and the same framing. Do not add or remove any person or object. Do not add a colour cast or tint to the whole image. A subtle, natural edit."
+   }
+  },
+  {
+   "key": "navy",
+   "only": [
+    "massage",
+    "s8-confinement-arrival"
+   ],
+   "seed": 1,
+   "prompts": {
+    "massage": "Change only the pale pink bed sheet and pillowcase to a very pale, washed out soft dusty blue, a light pastel tone close to white, not a deep or saturated colour. The white towel on her head stays white. Everything else stays exactly as in the original photograph: the same people, faces, skin, hair, poses and clothing, the same walls, floors, bedding, furniture, curtains, windows and objects, the same warm natural light and the same framing. Do not add or remove any person or object. Do not add a colour cast or tint to the whole image. A subtle, natural edit.",
+    "s8-confinement-arrival": "Change only the small pink stool in the hallway to muted ink navy blue. The woman standing by the front door on the left is the care specialist: change her pink uniform to a navy blue tunic and trousers with thin white piping. The mother on the right holding the baby keeps her own cream loungewear exactly as it is; do not dress her in navy or in a uniform. Everything else stays exactly as in the original photograph: the same people, faces, skin, hair, poses and clothing, the same walls, floors, bedding, furniture, curtains, windows and objects, the same warm natural light and the same framing. Do not add or remove any person or object. Do not add a colour cast or tint to the whole image. A subtle, natural edit."
+   }
+  }
+ ]
+}

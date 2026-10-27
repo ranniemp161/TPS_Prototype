@@ -7,19 +7,19 @@
    entry, one parallax photograph, one line that draws as you read.
    ============================================================ */
 
-.os { background: var(--canvas); color: var(--ink); }
+.os { background: var(--g-canvas); color: var(--t-ink); }
 .os-wrap { width: 100%; max-width: 1080px; margin-inline: auto; padding-inline: var(--gutter, 24px); }
 .os-measure { max-width: calc(62ch + 2 * var(--gutter, 24px)); margin-inline: auto; }
 
 .os-h2 { margin: 0 0 1.4rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(2rem, 4.2vw, 3.4rem); text-wrap: balance; }
-.os-h3 { margin: 0 0 1.2rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: 1.05; font-size: clamp(1.35rem, 2.4vw, 1.9rem); color: var(--ink-soft); text-wrap: balance; }
-.os-p { margin: 0 0 1.1rem; font-family: var(--f-read); font-size: clamp(1rem, .96rem + .2vw, 1.1rem); line-height: 1.7; color: var(--ink-soft); text-wrap: pretty; }
-.os-p strong, .os-open__lede strong { font-weight: 700; color: var(--ink); }
+.os-h3 { margin: 0 0 1.2rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: 1.05; font-size: clamp(1.35rem, 2.4vw, 1.9rem); color: var(--t-soft); text-wrap: balance; }
+.os-p { margin: 0 0 1.1rem; font-family: var(--f-read); font-size: clamp(1rem, .96rem + .2vw, 1.1rem); line-height: 1.7; color: var(--t-soft); text-wrap: pretty; }
+.os-p strong, .os-open__lede strong { font-weight: 700; color: var(--t-ink); }
 
 /* A pull line between paragraphs: serif capitals in ember, a hairline each side. */
 .os-pull {
-  margin: 2rem 0; padding: 1.1rem 0; border-top: 1px solid var(--hairline-firm); border-bottom: 1px solid var(--hairline-firm);
-  font-family: var(--f-display); text-transform: uppercase; font-size: clamp(1.3rem, 2.2vw, 1.7rem); line-height: 1.1; color: var(--ember-deep);
+  margin: 2rem 0; padding: 1.1rem 0; border-top: 1px solid var(--line-firm); border-bottom: 1px solid var(--line-firm);
+  font-family: var(--f-display); text-transform: uppercase; font-size: clamp(1.3rem, 2.2vw, 1.7rem); line-height: 1.1; color: var(--reach-script);
 }
 
 /* ---------- 1. The question ---------- */
@@ -27,14 +27,14 @@
 .os-open__aurora { z-index: 0; }
 .os-open__in { position: relative; z-index: 1; padding-inline: var(--gutter, 24px); }
 .os-open__h { margin: 0 auto; max-width: 14ch; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .02em; font-size: clamp(2.6rem, min(7vw, 11vh), 6rem); text-wrap: balance; }
-.os-open__lede { margin: 1.8rem auto 0; max-width: 48ch; font-family: var(--f-read); font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem); line-height: 1.6; color: var(--ink-soft); }
+.os-open__lede { margin: 1.8rem auto 0; max-width: 48ch; font-family: var(--f-read); font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem); line-height: 1.6; color: var(--t-soft); }
 /* Split hero (TJ, 16 Oct 2026): the picture on the left, the question on the
    right, left aligned. Stacks on phones and tablets, picture first. */
 /* The page's main already clears the header and holds the side margins, so
    the split hero adds only a little of its own. */
 .os-open--split { text-align: left; padding-top: clamp(8px, 2vh, 24px); padding-bottom: clamp(48px, 8vh, 96px); }
 .os-open--split .os-open__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 88px); align-items: center; max-width: 1280px; margin-inline: auto; }
-.os-open__pic { margin: 0; aspect-ratio: 1600 / 1470; max-height: calc(100svh - var(--nav-h) - clamp(80px, 14vh, 168px)); justify-self: end; border-radius: var(--r-media, 16px); overflow: hidden; background: var(--canvas); }
+.os-open__pic { margin: 0; aspect-ratio: 1600 / 1470; max-height: calc(100svh - var(--nav-h) - clamp(80px, 14vh, 168px)); justify-self: end; border-radius: var(--r-media, 16px); overflow: hidden; background: var(--g-canvas); }
 .os-open__pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .os-open--split .os-open__h { margin: 0; max-width: 11ch; }
 .os-open--split .os-open__lede { margin-left: 0; max-width: 40ch; }
@@ -48,7 +48,7 @@
 /* ---------- 2. The story ---------- */
 .os-story { padding: clamp(64px, 10vh, 120px) 0; }
 .os-story__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
-.os-story__pic { position: sticky; top: calc(var(--nav-h) + 32px); margin: 0; border-radius: var(--r-media, 16px); overflow: hidden; aspect-ratio: 4 / 5; background: var(--haze); }
+.os-story__pic { position: sticky; top: calc(var(--nav-h) + 32px); margin: 0; border-radius: var(--r-media, 16px); overflow: hidden; aspect-ratio: 4 / 5; background: var(--g-haze); }
 .os-story__pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .os-story__text { max-width: 62ch; }
 /* Flipped (TJ, 16 Oct 2026): the hero above is picture left, words right, so
@@ -64,26 +64,26 @@
 /* Her five needs, lifted from the paragraph above them, in the specialist
    section's hairline language. aria-hidden: the paragraph already says it. */
 .os-needs { list-style: none; margin: .4rem 0 2rem; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
-.os-needs li { position: relative; padding: 11px 0 11px 18px; font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
-.os-needs li::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--hairline-firm); }
+.os-needs li { position: relative; padding: 11px 0 11px 18px; font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--t-soft); }
+.os-needs li::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--line-firm); }
 html.js .os-needs li { opacity: 0; transform: translateY(6px); }
-html.js .os-needs li::before { background: var(--ember); transform: scaleY(0); transform-origin: 50% 0; }
+html.js .os-needs li::before { background: var(--acc); transform: scaleY(0); transform-origin: 50% 0; }
 html.js .os-needs.is-in li { opacity: 1; transform: none; transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); transition-delay: calc(var(--i, 0) * 110ms + 120ms); }
-html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--hairline-firm); transition: transform .6s var(--ease-out), background-color 1.4s ease; transition-delay: calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms + .9s); }
+html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--line-firm); transition: transform .6s var(--ease-out), background-color 1.4s ease; transition-delay: calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms + .9s); }
 
 /* ---------- 4. Our founders ---------- */
-.os-founders { padding: clamp(64px, 10vh, 120px) 0; background: linear-gradient(to bottom, var(--canvas), rgba(226, 202, 198, .35) 50%, var(--canvas)); }
+.os-founders { padding: clamp(64px, 10vh, 120px) 0; background: linear-gradient(to bottom, var(--g-canvas), color-mix(in srgb, var(--g-tint) 35%, transparent) 50%, var(--g-canvas)); }
 .os-founders__head { text-align: center; margin-bottom: clamp(32px, 5vh, 56px); }
 .os-founders__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); align-items: start; }
-.os-founder { background: var(--paper); border: 1px solid var(--hairline); border-radius: var(--r-card, 10px); padding: clamp(20px, 2.4vw, 32px); }
-.os-founder__pic { aspect-ratio: 4 / 5; border-radius: var(--r-media, 16px); overflow: hidden; margin-bottom: 1.4rem; background: var(--haze); }
+.os-founder { background: var(--g-paper); border: 1px solid var(--line); border-radius: var(--r-card, 10px); padding: clamp(20px, 2.4vw, 32px); }
+.os-founder__pic { aspect-ratio: 4 / 5; border-radius: var(--r-media, 16px); overflow: hidden; margin-bottom: 1.4rem; background: var(--g-haze); }
 /* Placeholder portrait: haze, the TPS mark faint in the middle. */
-.os-founder__pic--placeholder { display: grid; place-items: center; background: linear-gradient(160deg, var(--haze), var(--blush)); }
+.os-founder__pic--placeholder { display: grid; place-items: center; background: linear-gradient(160deg, var(--g-haze), var(--g-tint)); }
 .os-founder__pic--placeholder img { width: 28%; height: auto; opacity: .22; }
 /* A real portrait fills the frame, face kept in view (TJ, 23 Oct 2026). */
 .os-founder__pic:not(.os-founder__pic--placeholder) img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; }
 .os-founder__name { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.5rem, 2.2vw, 1.9rem); line-height: 1; }
-.os-founder__role { margin: .5rem 0 1.2rem; font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-mute); }
+.os-founder__role { margin: .5rem 0 1.2rem; font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
 .os-founder .os-p { font-size: 1rem; }
 .os-founders__close { text-align: center; margin-top: clamp(32px, 5vh, 56px); }
 
@@ -93,9 +93,9 @@ html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--hai
 .os-trad__img { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; object-position: 34% 60%; will-change: transform; }
 /* The original bath photograph (TJ, 16 Oct 2026), not the tall plate made for
    the home page's bath scroll. Framed on the mother, left of centre. */
-.os-trad__band::after { content: ""; position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(to top, rgba(243, 239, 236, .6), rgba(243, 239, 236, 0)); pointer-events: none; }
-.os-trad__card { position: relative; z-index: 1; margin: 0 var(--gutter, 24px) clamp(32px, 6vh, 64px) max(var(--gutter, 24px), calc((100vw - 1080px) / 2)); max-width: 640px; padding: clamp(22px, 3vw, 40px); border-radius: var(--r-card, 10px); background: rgba(243, 239, 236, .62); }
-.os-trad__card .os-p { color: var(--ink-soft); }
+.os-trad__band::after { content: ""; position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(to top, color-mix(in srgb, var(--g-canvas) 60%, transparent), color-mix(in srgb, var(--g-canvas) 0%, transparent)); pointer-events: none; }
+.os-trad__card { position: relative; z-index: 1; margin: 0 var(--gutter, 24px) clamp(32px, 6vh, 64px) max(var(--gutter, 24px), calc((100vw - 1080px) / 2)); max-width: 640px; padding: clamp(22px, 3vw, 40px); border-radius: var(--r-card, 10px); background: color-mix(in srgb, var(--g-canvas) 62%, transparent); }
+.os-trad__card .os-p { color: var(--t-soft); }
 .os-trad__card .os-h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); }
 /* With the original bath photograph the mother sits left of centre, so on
    desktop the card moves to the right, over the steam, and leaves her clear
@@ -107,7 +107,7 @@ html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--hai
   .os-trad__card { margin: 0 clamp(32px, 4vw, 64px) 0 auto; max-width: 560px; }
 }
 /* The page's one Quentin line. */
-.os-script { margin: clamp(48px, 8vh, 88px) auto; max-width: 24ch; text-align: center; font-family: var(--f-script); font-weight: 400; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.15; color: var(--ember); }
+.os-script { margin: clamp(48px, 8vh, 88px) auto; max-width: 24ch; text-align: center; font-family: var(--f-script); font-weight: 400; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.15; color: var(--reach-link); }
 
 /* ---------- 6. The details: a line that draws as you read ---------- */
 .os-details { padding: clamp(64px, 10vh, 120px) 0; }
@@ -119,22 +119,22 @@ html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--hai
 .os-act { position: relative; width: 50%; padding: 0 clamp(28px, 4vw, 56px) clamp(36px, 6vh, 64px); }
 .os-act:nth-child(even) { margin-left: 0; text-align: right; }
 .os-act:nth-child(odd) { margin-left: 50%; }
-.os-act p { margin: 0; font-family: var(--f-read); font-size: clamp(1rem, .96rem + .25vw, 1.15rem); line-height: 1.65; color: var(--ink-soft); }
+.os-act p { margin: 0; font-family: var(--f-read); font-size: clamp(1rem, .96rem + .25vw, 1.15rem); line-height: 1.65; color: var(--t-soft); }
 .os-act__dot { position: absolute; top: .55em; width: var(--tdot); height: var(--tdot); border-radius: 50%; background: var(--tline-ink); transform: scale(0); transition: transform 420ms var(--ease-out); }
 .os-act:nth-child(even) .os-act__dot { right: calc(var(--tdot) / -2); }
 .os-act:nth-child(odd) .os-act__dot { left: calc(var(--tdot) / -2); }
 html.js .os-act p { opacity: 0; transform: translateY(10px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
 .os-act.is-reached .os-act__dot { transform: scale(1); }
 html.js .os-act.is-reached p { opacity: 1; transform: none; }
-.os-act__big { font-family: var(--f-display) !important; text-transform: uppercase; font-size: clamp(1.4rem, 2.4vw, 2rem) !important; line-height: 1.1 !important; color: var(--ink) !important; }
+.os-act__big { font-family: var(--f-display) !important; text-transform: uppercase; font-size: clamp(1.4rem, 2.4vw, 2rem) !important; line-height: 1.1 !important; color: var(--t-ink) !important; }
 
 /* ---------- 7. The same intention ---------- */
 .os-close { position: relative; overflow: hidden; padding: clamp(72px, 12vh, 140px) 0; text-align: center; }
 .os-close__aurora { z-index: 0; }
 .os-close__in { position: relative; z-index: 1; }
-.os-final { margin: clamp(40px, 7vh, 72px) auto 1.6rem; max-width: 16ch; font-family: var(--f-display); text-transform: uppercase; line-height: 1; letter-spacing: .02em; font-size: clamp(2.2rem, min(6vw, 9vh), 4.8rem); text-wrap: balance; color: var(--ink); }
-.os-sign { font-family: var(--f-read); font-size: 1rem; color: var(--ink-soft); line-height: 1.6; }
-.os-sign strong { font-weight: 700; color: var(--ink); }
+.os-final { margin: clamp(40px, 7vh, 72px) auto 1.6rem; max-width: 16ch; font-family: var(--f-display); text-transform: uppercase; line-height: 1; letter-spacing: .02em; font-size: clamp(2.2rem, min(6vw, 9vh), 4.8rem); text-wrap: balance; color: var(--t-ink); }
+.os-sign { font-family: var(--f-read); font-size: 1rem; color: var(--t-soft); line-height: 1.6; }
+.os-sign strong { font-weight: 700; color: var(--t-ink); }
 
 /* ---------- Contact ---------- */
 .os-contact { padding: clamp(48px, 8vh, 96px) 0 clamp(64px, 10vh, 120px); }

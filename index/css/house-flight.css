@@ -13,7 +13,7 @@
      --blend  0 to 1   sky lifting into the page ground at the end
    ============================================================ */
 
-.page--care { background: var(--canvas); }
+.page--care { background: var(--g-canvas); }
 
 /* ---------- the track and the stage ---------- */
 
@@ -22,7 +22,7 @@
   /* care.js replaces this with the measured track. The fallback is close
      enough that a failed script still leaves a scrollable, readable page. */
   height: 970svh;
-  background: var(--canvas);
+  background: var(--g-canvas);
 }
 
 /* Above the Four Kinds of Care while it dissolves to show it (home-flight.js). */
@@ -47,7 +47,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: var(--blush);
+  background: var(--g-tint);
 }
 
 /* Oversized a little so the pointer drift never shows an edge. */
@@ -84,7 +84,7 @@
 .flight__blend {
   position: absolute;
   inset: 0;
-  background: var(--canvas);
+  background: var(--g-canvas);
   opacity: var(--blend);
   pointer-events: none;
 }
@@ -98,7 +98,7 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  background: var(--paper);
+  background: var(--g-paper);
   opacity: 0;
   pointer-events: none;
   will-change: opacity;
@@ -136,7 +136,7 @@
   font-family: var(--f-script);
   font-size: clamp(2.6rem, 6vw, 6rem);
   line-height: 1.1;
-  color: var(--ember-deep);
+  color: var(--reach-script);
   text-align: center;
   white-space: nowrap;
   will-change: opacity;
@@ -177,7 +177,7 @@
   font-family: var(--f-read);
   font-size: clamp(1rem, 1.25vw, 1.12rem);
   line-height: 1.55;
-  color: var(--ink);
+  color: var(--t-ink);
   max-width: 34ch;
   margin: 1rem 0 0;
   text-wrap: pretty;
@@ -263,8 +263,8 @@
   font-weight: 500;
   text-decoration: none;
   text-align: center;
-  background: var(--action);
-  color: var(--paper);
+  background: var(--acc);
+  color: var(--t-on-accent);
   border-radius: var(--r-button);
   font-size: 1.05rem;
   padding: 16px 34px;
@@ -279,7 +279,7 @@
   pointer-events: auto;
 }
 @media (hover: hover) and (pointer: fine) {
-  .flight-enquire:hover { background: var(--action-hover); }
+  .flight-enquire:hover { background: var(--acc-hover); }
 }
 @media (min-width: 768px) {
   .flight-enquire {
@@ -307,7 +307,7 @@
     box-sizing: border-box;
     padding: clamp(22px, 3vh, 32px) clamp(28px, 3vw, 44px);
     border-radius: var(--r-card);
-    background: rgba(243, 239, 236, .62);
+    background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
     backdrop-filter: blur(14px) saturate(1.2);
     -webkit-backdrop-filter: blur(14px) saturate(1.2);
     /* top/left animate directly, a real glide from position to position;
@@ -341,20 +341,20 @@
   .deskcard[data-room] { cursor: pointer; }
   .deskcard .cards__name {
     font-size: clamp(1.1rem, 2.6vw, 1.8rem);
-    color: rgba(90, 82, 79, .9);
+    color: color-mix(in srgb, var(--g-dark) 90%, transparent);
     /* The glide moves the panel; only the words fade, on their own timer
        so they never appear mid-flight over the wrong background. */
     opacity: var(--deskcard-text-o, 0);
     transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
   }
   .deskcard .cards__line {
-    background: rgba(90, 82, 79, .38);
+    background: color-mix(in srgb, var(--g-dark) 38%, transparent);
     opacity: var(--deskcard-text-o, 0);
     transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
   }
   .deskcard .cards__desc {
     font-size: clamp(.85rem, 1.15vw, .98rem);
-    color: rgba(90, 82, 79, .78);
+    color: color-mix(in srgb, var(--g-dark) 78%, transparent);
     opacity: var(--deskcard-text-o, 0);
     transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
   }
@@ -406,18 +406,18 @@
 .cards__card[data-room] { cursor: pointer; }
 .cards__card .cards__name {
   font-size: clamp(1.1rem, 2.6vw, 1.8rem);
-  color: rgba(90, 82, 79, .9);
+  color: color-mix(in srgb, var(--g-dark) 90%, transparent);
 }
-.cards__card .cards__line { background: rgba(90, 82, 79, .38); }
+.cards__card .cards__line { background: color-mix(in srgb, var(--g-dark) 38%, transparent); }
 .cards__card .cards__desc {
   font-size: clamp(.85rem, 1.15vw, .98rem);
-  color: rgba(90, 82, 79, .78);
+  color: color-mix(in srgb, var(--g-dark) 78%, transparent);
 }
 
 /* ---------- after the house ---------- */
 
 .care-close {
-  background: var(--canvas);
+  background: var(--g-canvas);
   padding-block: clamp(72px, 12vh, 140px) clamp(96px, 16vh, 180px);
 }
 .care-close__title { max-width: 20ch; }
@@ -431,7 +431,7 @@
   gap: 0 clamp(20px, 3vw, 44px);
 }
 .care-close__list li {
-  border-top: 1px solid var(--hairline-firm);
+  border-top: 1px solid var(--line-firm);
   padding-top: 1.1rem;
   display: flex;
   flex-direction: column;
@@ -443,13 +443,13 @@
   font-weight: 600;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--ember);
+  color: var(--acc);
 }
 .care-close__what {
   font-family: var(--f-read);
   font-size: 1rem;
   line-height: 1.55;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .care-close__next { margin-top: clamp(48px, 8vh, 88px); }
@@ -463,12 +463,12 @@
 .care-close__text-link {
   font-family: var(--f-read);
   font-weight: 500;
-  color: var(--ink);
+  color: var(--t-ink);
   text-decoration: underline;
-  text-decoration-color: var(--hairline-firm);
+  text-decoration-color: var(--line-firm);
   text-underline-offset: 5px;
 }
-.care-close__text-link:hover { text-decoration-color: var(--ember); color: var(--ember-deep); }
+.care-close__text-link:hover { text-decoration-color: var(--reach-link); color: var(--acc-hover); }
 
 /* ---------- short windows ---------- */
 
@@ -597,7 +597,7 @@
   .cards__card { width: calc(100vw - var(--gutter) * 1.5); }
   .cards__card .cards__name {
     font-size: clamp(1.6rem, 9vw, 2.1rem);
-    color: var(--ink);
+    color: var(--t-ink);
   }
   .cards__card .cards__line {
     width: min(300px, 72vw);
@@ -608,7 +608,7 @@
   .cards__card .cards__desc {
     max-width: 30ch;
     font-size: 1.15rem;
-    color: var(--ink-soft);
+    color: var(--t-soft);
   }
 
   .care-close__list { grid-template-columns: 1fr; gap: 22px; }
@@ -647,7 +647,7 @@
   position: relative;
   /* what-we-do-zones.js replaces this with the measured track. */
   height: 700svh;
-  background: var(--canvas);
+  background: var(--g-canvas);
 }
 
 .zones__stage {
@@ -670,7 +670,7 @@
   /* Starts under the header, not behind it, so the frosted bar never smudges
      the top of the house: the floors slide in from, and out to, beneath it. */
   inset: var(--nav-h) 0 0 0;
-  background: var(--canvas);
+  background: var(--g-canvas);
   overflow: hidden;
 }
 .zones__poster,
@@ -736,7 +736,7 @@
   font-family: var(--f-script);
   font-size: clamp(2.1rem, 2.9vw, 3.1rem);
   line-height: 1;
-  color: var(--ember);
+  color: var(--reach-script-acc);
   margin-bottom: .18em;
 }
 .zones__caps {
@@ -746,7 +746,7 @@
   font-size: clamp(1.45rem, 2vw, 2.15rem);
   line-height: 1.04;
   letter-spacing: .02em;
-  color: var(--ink);
+  color: var(--t-ink);
   text-wrap: balance;
 }
 /* The rooms: small spaced capitals on a fine vertical line. The room in view
@@ -765,18 +765,18 @@
   position: relative;
 }
 .zones__rooms::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: var(--tline); background: var(--tline-track); }
-.zones__fill { position: absolute; left: 0; top: 0; width: var(--tline); height: var(--zf, 0px); background: var(--tline-ink); transition: height 640ms var(--tease); pointer-events: none; }
+.zones__fill { position: absolute; left: 0; top: 0; width: var(--tline); height: var(--zf, 0px); background: var(--reach-script); transition: height 640ms var(--tease); pointer-events: none; }
 .zones__tip {
   position: absolute; left: 0; top: 0; z-index: 1; pointer-events: none;
   width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) 0 0 calc(var(--ttip) / -2 + var(--tline) / 2);
-  border-radius: 50%; background: var(--tline-ink);
+  border-radius: 50%; background: var(--reach-script);
   transform: translateY(var(--zf, 0px)); transition: transform 640ms var(--tease);
 }
 .zones__room { position: relative; }
 .zones__room::after {
   content: ""; position: absolute; left: 0; top: calc(var(--zh) / 2); pointer-events: none;
   width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2 + var(--tline) / 2);
-  border-radius: 50%; background: var(--tline-ink);
+  border-radius: 50%; background: var(--reach-script);
   transform: scale(0); transition: transform 360ms var(--ease-out) 200ms;
 }
 .zones__room.is-past::after { transform: scale(1); }
@@ -790,7 +790,7 @@
   font-weight: 500;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -799,8 +799,8 @@
   transition: color 200ms var(--ease-out);
 }
 .zones__rooms button:hover,
-.zones__room.is-open button { color: var(--ink); }
-.zones__rooms button:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+.zones__room.is-open button { color: var(--t-ink); }
+.zones__rooms button:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
 
 /* The words for the room, opening beneath its name. */
 .zones__more {
@@ -815,7 +815,7 @@
   font-family: var(--f-body);
   font-size: .92rem;
   line-height: 1.55;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   opacity: 0;
   transform: translateY(-6px);
   transition: opacity 360ms var(--ease-out), transform 520ms var(--ease-out);
@@ -896,14 +896,14 @@
   .zones__tab:nth-of-type(3) { justify-self: end; }
   .zones__tab {
     font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--ink-mute); background: transparent; border: 0; border-radius: 0; padding: 14px 0 15px; min-height: 44px; cursor: pointer;
+    color: var(--t-mute); background: transparent; border: 0; border-radius: 0; padding: 14px 0 15px; min-height: 44px; cursor: pointer;
     transition: color 200ms var(--ease-out); -webkit-tap-highlight-color: transparent;
     position: relative;
   }
-  .zones__tab::after { content: ""; position: absolute; left: 50%; bottom: 0; width: var(--tdot); height: var(--tdot); margin: 0 0 calc(var(--tdot) / -2 + var(--tline) / 2) calc(var(--tdot) / -2); border-radius: 50%; background: var(--tline-ink); transform: scale(0); transition: transform 360ms var(--ease-out) 200ms; }
+  .zones__tab::after { content: ""; position: absolute; left: 50%; bottom: 0; width: var(--tdot); height: var(--tdot); margin: 0 0 calc(var(--tdot) / -2 + var(--tline) / 2) calc(var(--tdot) / -2); border-radius: 50%; background: var(--reach-script); transform: scale(0); transition: transform 360ms var(--ease-out) 200ms; }
   .zones__tab.is-past::after { transform: scale(1); }
-  .zones__tab[aria-selected="true"] { color: var(--ink); }
-  .zones__tab:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+  .zones__tab[aria-selected="true"] { color: var(--t-ink); }
+  .zones__tab:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
   /* A start before the rooms (TJ, 11 Oct 2026): an empty stretch on the left where
      the line rests, a short length already drawn with the circle at its tip
      (what-we-do-zones.js); the three rooms closer together, evenly spaced, to the
@@ -914,11 +914,11 @@
      circle, where the line rests; tapping it returns to no room. Hidden under the
      moving circle while nothing is chosen. A 44px tap area around it. */
   .zones__home { all: unset; position: absolute; z-index: 1; left: var(--mr, 0px); bottom: 0; width: 44px; height: 44px; margin: 0 0 -22px -22px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-  .zones__home::after { content: ""; position: absolute; left: 50%; top: 50%; width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--tline-ink); }
-  .zones__home:focus-visible { outline: 2px solid var(--ember); outline-offset: -8px; border-radius: 50%; }
+  .zones__home::after { content: ""; position: absolute; left: 50%; top: 50%; width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--reach-script); }
+  .zones__home:focus-visible { outline: 2px solid var(--focus); outline-offset: -8px; border-radius: 50%; }
   .zones__marker { z-index: 2; }
-  .zones__marker { position: absolute; left: 0; bottom: 0; height: var(--tline); width: var(--mc, 0px); background: var(--tline-ink); transition: width 640ms var(--tease); pointer-events: none; }
-  .zones__marker::after { content: ""; position: absolute; right: 0; top: 50%; width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) calc(var(--ttip) / -2) 0 0; border-radius: 50%; background: var(--tline-ink); }
+  .zones__marker { position: absolute; left: 0; bottom: 0; height: var(--tline); width: var(--mc, 0px); background: var(--reach-script); transition: width 640ms var(--tease); pointer-events: none; }
+  .zones__marker::after { content: ""; position: absolute; right: 0; top: 50%; width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) calc(var(--ttip) / -2) 0 0; border-radius: 50%; background: var(--reach-script); }
 
   /* The words for the open room appear and expand beneath. The box takes the
      height of the open panel (set by what-we-do-zones.js), so a longer text opens the
@@ -926,7 +926,7 @@
   .zones__panels { position: relative; margin-top: 18px; overflow: hidden; transition: height 460ms var(--ease-out); }
   .zones__panel { position: absolute; left: 0; right: 0; top: 0; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity 360ms var(--ease-out), transform 460ms var(--ease-out), visibility 0s linear 360ms; }
   .zones__panel.is-active { opacity: 1; visibility: visible; transform: none; transition-delay: 120ms, 120ms, 0s; }
-  .zones__panel p { margin: 0; text-align: center; text-wrap: balance; font-family: var(--f-body); font-size: 1rem; line-height: 1.6; color: var(--ink-mute); }
+  .zones__panel p { margin: 0; text-align: center; text-wrap: balance; font-family: var(--f-body); font-size: 1rem; line-height: 1.6; color: var(--t-mute); }
 }
 @media (prefers-reduced-motion: reduce) {
   .zones__poster { transition: opacity 700ms linear; }
@@ -986,20 +986,20 @@
   pointer-events: none;
   opacity: 0;
   background: linear-gradient(to top,
-    rgba(243, 239, 236, .9) 0%,
-    rgba(243, 239, 236, .82) 20%,
-    rgba(243, 239, 236, .4) 42%,
-    rgba(243, 239, 236, .12) 70%,
-    rgba(243, 239, 236, 0) 100%);
+    color-mix(in srgb, var(--g-canvas) 90%, transparent) 0%,
+    color-mix(in srgb, var(--g-canvas) 82%, transparent) 20%,
+    color-mix(in srgb, var(--g-canvas) 40%, transparent) 42%,
+    color-mix(in srgb, var(--g-canvas) 12%, transparent) 70%,
+    color-mix(in srgb, var(--g-canvas) 0%, transparent) 100%);
 }
 .route__line, .route__fill {
   position: absolute; left: 0; width: 100%; top: var(--above); height: var(--tline); pointer-events: none;
 }
 .route__line { background: var(--tline-track); }
-.route__fill { background: var(--tline-ink); transform-origin: 0 50%; transform: scaleX(0); will-change: transform; }
+.route__fill { background: var(--reach-script); transform-origin: 0 50%; transform: scaleX(0); will-change: transform; }
 .route__tip {
   position: absolute; left: 0; top: var(--above); z-index: 3; pointer-events: none;
-  width: var(--ttip); height: var(--ttip); border-radius: 50%; background: var(--tline-ink);
+  width: var(--ttip); height: var(--ttip); border-radius: 50%; background: var(--reach-script);
   margin: calc(var(--ttip) / -2 + var(--tline) / 2) 0 0 calc(var(--ttip) / -2);
   will-change: transform;
 }
@@ -1008,7 +1008,7 @@
 .route__dot {
   position: absolute; left: 0; top: var(--above); z-index: 2; padding: 0; border: 0; cursor: pointer;
   width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2 + var(--tline) / 2) 0 0 calc(var(--tdot) / -2);
-  border-radius: 50%; background: var(--tline-ink);
+  border-radius: 50%; background: var(--reach-script);
   transform: scale(var(--d, 0));
   pointer-events: none;
 }
@@ -1016,7 +1016,7 @@
 .route.is-live .route__stop.is-born .route__dot { pointer-events: auto; }
 .route__stem {
   position: absolute; left: 0; bottom: var(--below); width: var(--tline); height: var(--stem);
-  background: var(--tline-ink); transform: scaleY(var(--p, 0)); transform-origin: 50% 100%;
+  background: var(--reach-script); transform: scaleY(var(--p, 0)); transform-origin: 50% 100%;
   pointer-events: none;
 }
 .route__text {
@@ -1053,7 +1053,7 @@
   letter-spacing: normal;
   line-height: 1.7;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -1065,7 +1065,7 @@
 .route__stop.is-right button.route__name { text-align: left; }
 .route__stop.is-left button.route__name { text-align: right; margin-left: auto; }
 .route.is-live .route__stop.is-current button.route__name { pointer-events: auto; }
-.route__stops button:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+.route__stops button:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
 .route__more {
   /* the room's words sit below the line (TJ, 14 Oct 2026): under the stem, left aligned
      for right side stops, right aligned for left side stops */
@@ -1089,7 +1089,7 @@
   text-transform: uppercase;
   /* every title on one line (TJ, 15 Oct 2026) */
   white-space: nowrap;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 .route__stops button.route__head {
   display: block;
@@ -1110,7 +1110,7 @@
   font-weight: 400;
   font-size: var(--route-title);
   line-height: 1.5;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 /* Phone: the same line, in the lower blurred area of the screen, the stems
@@ -1178,7 +1178,7 @@
 .route__end {
   position: absolute; left: 0; top: var(--above); z-index: 2; pointer-events: none;
   width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2 + var(--tline) / 2) 0 0 calc(var(--tdot) / -2);
-  border-radius: 50%; background: var(--tline-ink);
+  border-radius: 50%; background: var(--reach-script);
   transform: scale(var(--d, 0));
 }
 .route-layer {
@@ -1215,10 +1215,10 @@
   .route.is-live .route__step .route__arrow { pointer-events: auto; }
   .route__arrow {
     width: 48px; height: 48px; margin: 0 -10px; padding: 0; border: 0; background: none;
-    color: var(--ink); cursor: pointer; transition: opacity 200ms var(--tease);
+    color: var(--t-ink); cursor: pointer; transition: opacity 200ms var(--tease);
   }
   .route__arrow svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-  .route__arrow:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; border-radius: 50%; }
+  .route__arrow:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 50%; }
   .route__arrow[disabled] { opacity: .25; cursor: default; }
   .route__dot {
     transform: scale(calc(.6 + .4 * var(--d, 0)));

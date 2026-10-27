@@ -535,7 +535,7 @@ function actPeak() {
     // and the answer both present and readable without any motion. The
     // question reads white here, matching the fallen night it sits over.
     gsap.set(night, { opacity: 1 });
-    gsap.set(ask, { opacity: 1, color: '#FFFFFF' });
+    gsap.set(ask, { opacity: 1, color: getComputedStyle(document.documentElement).getPropertyValue('--t-on-dark').trim() });
     gsap.set(answer, { opacity: 1, y: 0 });
     gsap.set(clock, { opacity: 0 });
     return;

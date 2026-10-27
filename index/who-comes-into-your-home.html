@@ -3,6 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Palette switch, prototype only, removed when Ami picks (TJ, 26 Oct 2026) -->
+<script>
+(function () {
+  var d = document.documentElement, p = null, r = null, q = null;
+  try { q = new URLSearchParams(location.search); p = q.get('palette'); r = q.get('reach'); } catch (e) {}
+  try {
+    if (p) localStorage.setItem('tps-palette', p); else p = localStorage.getItem('tps-palette');
+    if (r) localStorage.setItem('tps-reach', r); else r = localStorage.getItem('tps-reach');
+  } catch (e) {}
+  if (p) d.setAttribute('data-palette', p);
+  if (r) d.setAttribute('data-reach', r);
+})();
+</script>
 <title>Who Comes Into Your Home &middot; The Postpartum Suite</title>
 <meta name="description" content="Profiles, and the standard behind them." />
 <link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
@@ -313,5 +326,6 @@
 <script src="js/who-comes.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
+<script src="../lab/palettes.js"></script><script src="../lab/palette-panel.js"></script>
 </body>
 </html>

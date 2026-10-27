@@ -1,0 +1,14 @@
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const b = await chromium.launch({ channel: 'chrome' });
+const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1200);
+const name = () => p.evaluate(() => document.querySelector('[data-step-name]').textContent);
+const step = async () => { await p.click('[data-next]'); await p.waitForTimeout(900); };
+await step(); await p.fill('#due', '2027-05-15'); await p.waitForTimeout(300);
+for (let k = 0; k < 40 && (await name()) !== 'Your programme'; k++) await step();
+const names = [];
+for (let i = 0; i < 6; i++) { names.push(await name()); await p.screenshot({ path: `lab/choice-study/end${i}.png`, clip: { x: 0, y: 90, width: 1440, height: 720 } }); if ((await name()) === 'Book a call') break; await step(); }
+console.log(names.join(' > '));
+await b.close();

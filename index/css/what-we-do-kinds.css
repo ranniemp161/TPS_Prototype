@@ -10,7 +10,7 @@
    ============================================================ */
 .kc {
   --kc-veil: .5;
-  position: relative; isolation: isolate; background: var(--canvas); color: var(--ink);
+  position: relative; isolation: isolate; background: var(--g-canvas); color: var(--t-ink);
 }
 .kc[hidden], .stack[hidden] { display: none !important; }
 .kc__stage { position: relative; overflow: hidden; }
@@ -19,24 +19,24 @@
 .kc__grounds { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .kc__ground { position: absolute; inset: -8%; width: 116%; height: 116%; max-width: none; object-fit: cover; filter: blur(42px) saturate(1.05); transform: scale(1.06); opacity: 0; will-change: opacity, transform; }
 .kc__ground:first-child { opacity: 1; }
-.kc__grounds::after { content: ""; position: absolute; inset: 0; background: var(--canvas); opacity: var(--kc-veil); }
+.kc__grounds::after { content: ""; position: absolute; inset: 0; background: var(--g-canvas); opacity: var(--kc-veil); }
 
 /* ---- Names ---- */
 .kc__names { display: none; }
 .kc__name { display: block; overflow: hidden; padding-bottom: .08em; }
-.kc__name > span { display: block; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.6rem, 4.8vw, 5.2rem); line-height: .94; letter-spacing: .005em; color: var(--ink); text-wrap: balance; }
+.kc__name > span { display: block; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(2.6rem, 4.8vw, 5.2rem); line-height: .94; letter-spacing: .005em; color: var(--t-ink); text-wrap: balance; }
 
 /* ---- Cards ---- */
 .kc__deck { position: relative; z-index: 2; }
-.kc__card { position: relative; display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1fr); gap: clamp(18px, 2.2vw, 32px); padding: clamp(14px, 1.4vw, 20px); background: rgba(243, 239, 236, .74); }
+.kc__card { position: relative; display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1fr); gap: clamp(18px, 2.2vw, 32px); padding: clamp(14px, 1.4vw, 20px); background: color-mix(in srgb, var(--g-canvas) 74%, transparent); }
 .kc__pic { margin: 0; border-radius: calc(var(--r-card) - 3px); overflow: hidden; aspect-ratio: 4 / 5; align-self: start; }
 .kc__pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .kc__copy { display: flex; flex-direction: column; gap: .8rem; padding: clamp(6px, 1vw, 16px) clamp(4px, .8vw, 12px) clamp(6px, 1vw, 14px) 0; min-width: 0; }
 .kc__h { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.6rem, 2.4vw, 2.3rem); line-height: 1; }
-.kc__promise { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.25rem, 1.65vw, 1.6rem); line-height: 1.15; color: var(--ink); text-wrap: balance; }
-.kc__copy .wp { margin: 0; font-size: clamp(.9rem, .82rem + .2vw, 1rem); line-height: 1.58; color: var(--ink-soft); }
+.kc__promise { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.25rem, 1.65vw, 1.6rem); line-height: 1.15; color: var(--t-ink); text-wrap: balance; }
+.kc__copy .wp { margin: 0; font-size: clamp(.9rem, .82rem + .2vw, 1rem); line-height: 1.58; color: var(--t-soft); }
 .kc__chips { list-style: none; margin: .2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.kc__chips li { font-family: var(--f-read); font-size: .82rem; line-height: 1.2; padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(10, 10, 10, .12); background: rgba(255, 255, 255, .42); color: var(--ink); }
+.kc__chips li { font-family: var(--f-read); font-size: .82rem; line-height: 1.2; padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(10, 10, 10, .12); background: rgba(255, 255, 255, .42); color: var(--t-ink); }
 .kc__copy .sc__link { margin-top: auto; align-self: flex-start; }
 
 /* ---- Progress rail: four ticks, the active one Ember ---- */
@@ -60,7 +60,7 @@
 .kc.is-live .kc__card { position: absolute; left: 0; right: 0; top: 50%; transform-origin: 50% 0; will-change: transform, opacity; }
 .kc.is-live .kc__rail { display: flex; position: absolute; z-index: 1; left: var(--gutter, 24px); bottom: clamp(28px, 6vh, 56px); gap: 8px; }
 .kc.is-live .kc__rail span { width: 26px; height: 2px; background: rgba(10, 10, 10, .16); transition: background-color 300ms var(--ease-out); }
-.kc.is-live .kc__rail span.is-on { background: var(--ember); }
+.kc.is-live .kc__rail span.is-on { background: var(--acc); }
 
 /* The name on the left already titles the card, so the card's own heading is
    kept for screen readers only while the stage is live. */

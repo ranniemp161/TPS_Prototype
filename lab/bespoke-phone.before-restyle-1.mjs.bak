@@ -1,0 +1,19 @@
+/* Build 10 phone check: the ticker band and the steps at 390x844. node lab/bespoke-phone.mjs <outdir> */
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const out = process.argv[2];
+const b = await chromium.launch({ channel: 'chrome' });
+const p = await b.newPage({ viewport: { width: 390, height: 844 } });
+const errs = []; p.on('pageerror', e => errs.push(e.message));
+await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+await p.waitForLoadState('load'); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1200);
+const y = id => p.evaluate(i => document.getElementById(i).getBoundingClientRect().top + scrollY, id);
+for (const [id, tag] of [['step-02', 'len'], ['step-05', 'treat'], ['step-06', 'rhythm']]) {
+  await p.evaluate(v => scrollTo(0, v), (await y(id)) - 150); await p.waitForTimeout(900);
+  await p.screenshot({ path: `${out}/ph-${tag}.png` });
+}
+await p.evaluate(() => document.querySelector('input[name="massage"]').click()); await p.waitForTimeout(250);
+await p.screenshot({ path: `${out}/ph-rolling.png` });
+const fee = await p.evaluate(() => ({ ticking: document.body.classList.contains('is-ticking'), panelFeeShown: getComputedStyle(document.querySelector('.build__summary .fee')).display, overflow: document.documentElement.scrollWidth - innerWidth }));
+console.log(JSON.stringify(fee), 'errors', JSON.stringify(errs));
+await b.close();

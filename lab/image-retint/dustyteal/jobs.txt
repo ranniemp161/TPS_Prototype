@@ -1,0 +1,15 @@
+bath-steam|1:1
+bind|4:5
+care|16:9
+hero_household-wide_v2_ironing|16:9
+hero_night-shift_v1|16:9
+massage|1:1
+meal|16:9
+s8-confinement-arrival|4:5
+tb-bellybinding|1:1
+tb-hotstone|1:1
+tb-postpartum|4:5
+tb-traditional|1:1
+tungku-held|1:1
+tungku-stones|16:9
+home-handover|16:9

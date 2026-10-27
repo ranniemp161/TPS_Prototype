@@ -1,0 +1,78 @@
+/* TJ, 13 Oct 2026: the header in the funnel and every screen centred. node lab/header-centre-check.mjs */
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+import fs from 'node:fs';
+fs.mkdirSync('lab/funnel', { recursive: true });
+const b = await chromium.launch({ channel: 'chrome' });
+let bad = 0; const ok = (c, m) => { if (!c) { bad++; console.log('FAIL', m); } else console.log('ok  ', m); };
+for (const [w, h] of [[1440, 900], [1835, 605], [390, 844]]) {
+  const tag = w + 'x' + h, desk = w > 860;
+  const p = await b.newPage({ viewport: { width: w, height: h } });
+  const errs = []; p.on('pageerror', e => errs.push(e.message));
+  await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+  await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1500);
+  const hdr = () => p.evaluate(() => {
+    const R = s => { const e = document.querySelector(s); if (!e) return null; const c = getComputedStyle(e), r = e.getBoundingClientRect(); return { on: c.visibility !== 'hidden' && c.display !== 'none' && +c.opacity > .5 && r.width > 0 && r.height > 0, l: r.left, r: r.right, t: r.top, b: r.bottom }; };
+    const mid = innerWidth / 2;
+    return { funnel: document.body.classList.contains('is-funnelled'), ret: R('.nav__return'), mark: R('.nav__mark'), word: [...document.querySelectorAll('.wm-line')].some(e => +getComputedStyle(e).opacity > .1), corner: R('.nav__corner'), tabs: R('.nav__tabs'), menu: R('.tab--menu'), cta: R('.tab--cta'), href: document.querySelector('.nav__brand').getAttribute('href'), mid };
+  });
+  const s0 = await hdr();
+  ok(!s0.funnel && s0.word && s0.cta.on, tag + ' Start: full header (wordmark and Enquire shown)');
+  ok(!s0.ret.on, tag + ' Start: no return link');
+  await p.screenshot({ path: `lab/funnel/hc-start-${tag}.png` });
+  await p.click('[data-next]'); await p.waitForTimeout(1800);
+  const s1 = await hdr();
+  ok(s1.funnel && s1.ret.on, tag + ' step 1: return link shown');
+  ok(s1.ret.r <= s1.mark.l, tag + ' return link left of the circle, not overlapping (' + Math.round(s1.ret.r) + ' vs ' + Math.round(s1.mark.l) + ')');
+  ok(s1.ret.l < s1.mid / 2, tag + ' return link at the left');
+  ok(!s1.word, tag + ' wordmark hidden');
+  ok(s1.mark.on && Math.abs((s1.mark.l + s1.mark.r) / 2 - s1.mid) < 3, tag + ' circle visible and centred');
+  ok(!s1.tabs.on && !s1.menu.on && !s1.cta.on, tag + ' no right side controls (tabs, menu, Enquire hidden)');
+  ok(!s1.corner || !s1.corner.on, tag + ' corner mark hidden');
+  ok(s1.href === 'index.html', tag + ' circle links to index.html');
+  ok(await p.evaluate(() => { const a = document.querySelector('.nav__return'); return a.getAttribute('href') === 'index.html' && a.getBoundingClientRect().height >= 44; }), tag + ' return link href and 44px height');
+  const chev = await p.evaluate(() => { const c = getComputedStyle(document.querySelector('.nav__return'), '::before'); return c.content + ' ' + c.borderLeftWidth; });
+  ok(/"/.test(chev) && !/^none/.test(chev), tag + ' chevron drawn ' + chev);
+  // the due date screen
+  await p.screenshot({ path: `lab/funnel/hc-due-${tag}.png` });
+  const centre = async (name) => {
+    const m = await p.evaluate(() => {
+      const d = document.querySelector('[data-deck]'), dr = d.getBoundingClientRect();
+      const pg = [...document.querySelectorAll('.dk-page')].find(x => { const r = x.getBoundingClientRect(); return r.left >= -2 && r.left < innerWidth - 2 && r.right > 2; });
+      const els = [...pg.querySelectorAll('.dk-in *')].filter(e => { const r = e.getBoundingClientRect(); const c = getComputedStyle(e); return r.height > 0 && r.width > 0 && c.visibility !== 'hidden' && c.display !== 'none' && !e.closest('[hidden]'); });
+      let t = 1e9, bt = -1e9; els.forEach(e => { const r = e.getBoundingClientRect(); if (r.height < 1) return; t = Math.min(t, r.top); bt = Math.max(bt, r.bottom); });
+      return { top: t - dr.top, bottom: dr.bottom - bt, tight: pg.classList.contains('is-tight'), free: document.querySelector('.dk').classList.contains('is-free'), fit: document.querySelector('.dk').getAttribute('data-fit') };
+    });
+    console.log('    ', name, JSON.stringify(m));
+    if (desk) ok(m.tight || m.free || Math.abs(m.top - m.bottom) <= 24, tag + ' ' + name + ' centred: top ' + Math.round(m.top) + ' bottom ' + Math.round(m.bottom));
+    return m;
+  };
+  if (desk) await centre('due date');
+  await p.evaluate(v => { const f = document.getElementById('due'); f.value = v; f.dispatchEvent(new Event('input', { bubbles: true })); }, '2027-03-15'); await p.waitForTimeout(400);
+  await p.click('[data-next]'); await p.waitForTimeout(1500);
+  await p.screenshot({ path: `lab/funnel/hc-step-${tag}.png` });
+  if (desk) await centre('first step after the due date');
+  // walk on, measuring each screen
+  let name = '', seenBook = false, seenClose = false;
+  for (let k = 0; k < 40; k++) {
+    name = await p.evaluate(() => document.querySelector('[data-step-name]').textContent);
+    if (name === 'Your programme') {   // 13 Oct 2026: the end was merged into one screen; seenBook now means Your programme
+      seenBook = true; if (desk) await centre('Your programme');
+      await p.click('[data-not-yet]'); await p.waitForTimeout(1500);
+      if (desk) await centre('close');
+      seenClose = true;
+      await p.fill('.capture__email', 'a@b.co'); await p.click('.capture__btn'); await p.waitForTimeout(1500);
+      name = await p.evaluate(() => document.querySelector('[data-step-name]').textContent);
+      if (desk) await centre('Done (' + name + ')');
+      await p.screenshot({ path: `lab/funnel/hc-done-${tag}.png` });
+      break;
+    }
+    if (desk && k > 0) await centre(name);
+    await p.click('[data-next]'); await p.waitForTimeout(1300);
+  }
+  ok(seenBook && seenClose, tag + ' reached Your programme, the close and Done');
+  ok(!errs.length, tag + ' no errors ' + errs.join('; '));
+  await p.close();
+}
+await b.close();
+console.log(bad ? bad + ' failed' : 'all passed');
