@@ -1,0 +1,89 @@
+// Restyle chat 7: the summary page. node lab/bespoke-summary-check.mjs <outdir>
+// Every screen fits (12 Oct 2026): the summary is seven pages (four screens from 1024px wide);
+// the walk goes to the last stop, the Change links are tapped from the screen that holds them,
+// and the summary is photographed screen by screen instead of scrolled (no page scrolls now).
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const out = process.argv[2];
+const b = await chromium.launch({ channel: 'chrome' });
+let fails = 0;
+const ok = (n, c, d = '') => { if (!c) fails++; console.log((c ? 'ok   ' : 'FAIL ') + n + (d ? '  ' + d : '')); };
+const sumPage = '[data-section="builder-summary"]';
+for (const [w, h] of [[1440, 900], [390, 844]]) {
+  console.log('--- ' + w);
+  const ctx = await b.newContext({ viewport: { width: w, height: h }, permissions: ['clipboard-read', 'clipboard-write'] });
+  const p = await ctx.newPage();
+  const errs = []; p.on('pageerror', e => errs.push(e.message));
+  await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+  await p.waitForLoadState('load'); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1200);
+  await p.fill('#due', '2027-03-15'); await p.waitForTimeout(300);   // the due date screen blocks Next until a date is in (FUNNEL-PLAN chat 2)
+  const pageNo = async () => { await p.waitForTimeout(150); return p.evaluate(() => [...document.querySelectorAll('.dk-line__stop')].findIndex(x => x.classList.contains('is-on'))); };
+  const top = async () => {};
+  const LAST = await p.evaluate(() => document.querySelectorAll('.dk-line__stop').length - 1);
+  const screenOfPage = (k) => p.evaluate((k) => { const d = document.querySelector('[data-deck]'); const pg = document.querySelectorAll('.dk-page')[k]; return Math.floor((pg.offsetLeft + 1) / d.clientWidth); }, k);
+  const screenOfSel = (sel) => p.evaluate((sel) => { const d = document.querySelector('[data-deck]'); const pg = document.querySelector(sel).closest('.dk-page'); return Math.floor((pg.offsetLeft + 1) / d.clientWidth); }, sel);
+  const go = async (i) => { for (let k = 0; k < 30; k++) { const n = await pageNo(); if (n === i) break; if (n < i && await p.$('[data-next][aria-disabled="true"]')) { await p.click('.tg:has(input[name="call"][value="no"])'); await p.waitForTimeout(300); } await p.click(n < i ? '[data-next]' : '[data-back]'); await p.waitForTimeout(1000); } };
+  await go(2); await p.click('.tg:has(input[name="days"][value="14"])'); await p.waitForTimeout(700);
+  await go(LAST - 2); await p.waitForTimeout(800);   // the Book a call screen (FUNNEL-PLAN chat 4); then the close and Done (chat 5)
+  const m = await p.evaluate((sel) => {
+    const sec = document.querySelector(sel);
+    const cards = [...sec.querySelectorAll('.dk-card')].map(el => { const s = getComputedStyle(el); return { c: el.className, bg: s.backgroundColor, bw: ['Top', 'Right', 'Bottom', 'Left'].map(k => s['border' + k + 'Width']).join(','), pad: s.padding }; });
+    return { cards, eyebrow: !!sec.querySelector('.eyebrow'), primary: [...document.querySelectorAll('.btn--primary')].filter(e => !e.closest('[data-capture]')).length, primaryWhere: [...document.querySelectorAll('.btn--primary')].filter(e => !e.closest('[data-capture]')).map(e => e.className.includes('dk-next') ? 'bar-next' : e.textContent.trim()), outline: document.querySelectorAll('.btn--outline').length, feebar: !!document.querySelector('.feebar'),
+      sumfee: sec.querySelector('.dk-sumfee').textContent, ticker: document.querySelector('.dk-fee__amount').textContent, overflowX: document.documentElement.scrollWidth > innerWidth, secOverflow: sec.scrollWidth > sec.clientWidth, next: document.querySelector('[data-next]').textContent };
+  }, sumPage);
+  console.log(JSON.stringify(m));
+  ok('every former card transparent, no border', m.cards.every(c => c.bg === 'rgba(0, 0, 0, 0)' && c.bw === '0px,0px,0px,0px'), JSON.stringify(m.cards.map(c => c.c.split(' ').slice(-1)[0] + ':' + c.bg)));
+  ok('no eyebrow', !m.eyebrow);
+  ok('no ember button on the Book a call screen (Next is the quiet Continue; the close form'+String.fromCharCode(39)+'s own button, chat 5, is not counted)', m.primary === 0, JSON.stringify(m.primaryWhere));
+  ok('markup has no other btn--primary', (await p.evaluate(() => [...document.querySelectorAll('a.btn--primary, .feebar .btn--primary')].length)) === 0);
+  ok('no btn--outline', m.outline === 0);
+  ok('feebar gone', !m.feebar);
+  ok('fee equals ticker', m.sumfee === m.ticker, m.sumfee + ' / ' + m.ticker);
+  ok('no sideways overflow', !m.overflowX && !m.secOverflow);
+  ok('bar says Continue', m.next === 'Continue');
+  const firstSum = await screenOfSel('[data-section="builder-summary"]');
+  for (let i = firstSum; i <= LAST - 1; i++) {   // Done is reached only by sending the form (chat 5)
+ await go(i); await p.waitForTimeout(500); await p.screenshot({ path: `${out}/summary-${w}-screen${i}.png` }); }
+  await top();
+  for (const g of [2, 4, 5, 6, 9]) {
+    await go(await screenOfSel(`.area__jump[data-goto="${g}"]`));
+    await p.evaluate((g) => document.querySelector(`.area__jump[data-goto="${g}"]`).click(), g);
+    await p.waitForTimeout(1800);
+    const pg = await pageNo(); const want = await screenOfPage(g);
+    ok('Change jumps to page ' + g, pg === want, 'screen ' + pg + ' want ' + want);
+  }
+  await go(await screenOfSel('#budget'));
+  const feeBefore = await p.evaluate(() => document.querySelector('.dk-sumfee').textContent);
+  await p.waitForTimeout(1500); await p.fill('#budget', '2500'); await p.waitForTimeout(600);
+  const fit = await p.evaluate(() => { const f = document.querySelector('[data-budget-fit]'); const bs = [...document.querySelectorAll('[data-fit-apply]')].filter(x => !x.hidden); return { shown: !f.hidden, head: f.querySelector('[data-fit-head]').textContent, btns: bs.map(x => x.textContent + '|' + x.getAttribute('data-days')), ans: document.querySelector('[data-budget-answer]').textContent.slice(0, 60) }; });
+  console.log(JSON.stringify(fit));
+  ok('recommender shows fit and an Apply', fit.shown && fit.btns.length > 0);
+  await p.waitForTimeout(300);
+  await p.screenshot({ path: `${out}/summary-${w}-budget.png` });
+  const vis = await p.evaluate(() => { const bs = [...document.querySelectorAll('[data-fit-apply]')].filter(x => !x.hidden); const s = getComputedStyle(bs[0]); return { n: bs.length, bg: s.backgroundColor, bw: s.borderTopWidth, ul: s.textDecorationLine, h: bs[0].getBoundingClientRect().height }; });
+  console.log(JSON.stringify(vis));
+  ok('Apply is a link (no bg, no border, underlined)', vis.bg === 'rgba(0, 0, 0, 0)' && vis.bw === '0px' && vis.ul === 'underline');
+  const days = await p.evaluate(() => [...document.querySelectorAll('[data-fit-apply]')].find(x => !x.hidden).getAttribute('data-days'));
+  await p.evaluate(() => [...document.querySelectorAll('[data-fit-apply]')].find(x => !x.hidden).click());
+  await p.waitForTimeout(1500);
+  // Bar in one layer (12 Oct 2026): wait for the deck to land on 02 and the roll to finish (headless raster stalls).
+  await p.waitForFunction(() => Math.round(document.querySelector('[data-deck]').scrollLeft / document.querySelector('[data-deck]').clientWidth) === 2 && document.querySelector('.dk-sumfee').textContent === document.querySelector('[data-fee]').textContent, null, { timeout: 8000 }).catch(() => {});
+  const after = await p.evaluate(() => ({ days: document.querySelector('input[name="days"]:checked').value, page: Math.round(document.querySelector('[data-deck]').scrollLeft / document.querySelector('[data-deck]').clientWidth), fee: document.querySelector('.dk-sumfee').textContent, ticker: document.querySelector('.dk-fee__amount').textContent }));
+  console.log(JSON.stringify(after), 'fee before', feeBefore);
+  ok('Apply sets the stay and the fee follows', after.days === days && after.fee === after.ticker && after.fee !== feeBefore, JSON.stringify(after));
+  await go(LAST - 1);
+  await p.evaluate(() => document.querySelector('[data-brief-copy]').click());
+  await p.waitForTimeout(300);
+  const cp = await p.evaluate(async () => ({ label: document.querySelector('[data-brief-copy]').textContent, clip: await navigator.clipboard.readText(), brief: document.querySelector('[data-brief-text]').textContent }));
+  ok('Copy my programme summary copies', cp.label === 'Copied' && cp.clip.split(String.fromCharCode(13)).join('') === cp.brief && cp.brief.length > 50, cp.label + ' brief ' + cp.brief.length + ' clip ' + cp.clip.length);
+  await p.waitForTimeout(2000);
+  ok('label restores', (await p.evaluate(() => document.querySelector('[data-brief-copy]').textContent)) === 'Copy my programme summary');
+  await go(await screenOfSel('.dk-sumhero')); await p.waitForTimeout(300);
+  const box = await p.evaluate(() => { const r = document.querySelector('.dk-sumhero').getBoundingClientRect(); return { x: r.left, y: r.top, width: r.width, height: r.height }; });
+  await p.screenshot({ path: `${out}/summary-${w}-hero.png`, clip: { x: Math.max(0, box.x), y: Math.max(0, box.y), width: Math.min(box.width, w), height: Math.min(box.height, h - box.y) } });
+  ok('no page errors', errs.length === 0, errs.join('|'));
+  await ctx.close();
+}
+await b.close();
+console.log(fails ? fails + ' FAILED' : 'ALL OK');
+process.exit(fails ? 1 : 0);

@@ -15,34 +15,96 @@
 }
 
 :root {
+  /* ==========================================================
+     PALETTE LAYER (TJ, 26 Oct 2026, PALETTE-PLAN.md)
+     Nothing below this block may know a colour. It may only know
+     a job. These role tokens are the only lines a palette changes.
+     The default here is coral, written with its exact original
+     values so the site renders as it did before the switch.
+     Accent roles are --acc, not --a: the aurora recipes already
+     use --a and --b as local gradient lists.
+     ========================================================== */
+
   /* Grounds */
-  --canvas:    #F3EFEC;
-  --paper:     #FFFFFF;
-  --blush:     #E2CAC6;
-  --rose-mist: #D7C2C9;
+  --g-canvas: #F3EFEC;  /* cream page */
+  --g-paper:  #FFFFFF;  /* white */
+  --g-soft:   #D7C2C9;  /* rose ground: testimonials, Programmes top (Rose Mist) */
+  --g-tint:   #E2CAC6;  /* blush used in panels and tints (Blush) */
+  --g-stone:  #C9B9B5;  /* warm stone (Sand) */
+  --g-haze:   #E3D7D3;  /* pale stone (Haze) */
+  --g-dark:   #5A524F;  /* footer and Four Kinds silk ground (Ink Mute) */
+  --g-taupe:  #8C7F79;  /* header glass on dark pages */
+  --g-taupe-lite: #8F8480;  /* builder toggle off, decline border */
 
   /* Ink */
-  --ink:       #0A0A0A;
-  --ink-soft:  #2C2C2C;
-  --ink-mute:  #5A524F;
+  --t-ink:       #0A0A0A;
+  --t-soft:      #2C2C2C;
+  --t-mute:      #5A524F;
+  --t-on-dark:   #FFFFFF;
+  --t-on-accent: #FFFFFF;
 
-  /* Coral tier */
-  --coral-mid:  #C86D58;
-  --coral-deep: #B95A4B;
-  --ember:      #A64C45;
-  --ember-deep: #8C362F;
+  /* Accent */
+  --acc:        #A64C45;  /* buttons, selected states (Ember) */
+  --acc-hover:  #8C362F;  /* (Ember Deep) */
+  --acc-deep:   #8C362F;  /* Quentin lines, timeline ink, the darkest accent */
+  --acc-emph:   var(--acc);  /* links, Recommended tags */
+  --acc-tint:   color-mix(in oklch, var(--acc) 12%, var(--g-canvas));
+  --acc-line:   color-mix(in srgb, var(--acc) 18%, transparent);  /* accent borders */
+  --acc-shadow: color-mix(in srgb, var(--acc) 28%, transparent);  /* accent tinted shadows */
 
-  /* Muted accents */
-  --sand: #C9B9B5;
-  --haze: #E3D7D3;
+  /* Light: the moving ribbons */
+  --rib-1: #C86D58;  /* lightest accent step (Coral Mid) */
+  --rib-2: #B95A4B;  /* middle accent step (Coral Deep) */
+  --rib-3: var(--acc);
+  --rib-4: var(--acc-deep);
+  --rib-light: #FFFFFF;
+  --rib-cta-1: #C39A9D;  /* call to action ribbons, sampled from the testimonials (TJ, 26 Oct 2026) */
+  --rib-cta-2: #CFAAAE;
+  --rib-cta-3: #D8C1C8;
+  --rib-bk-soft: #CA8882;  /* single treatments booking aurora */
+  --rib-bk-warm: #D66F4E;
 
-  /* Role aliases. Components point here, never at a raw value. */
-  --action:       var(--ember);
-  --action-hover: var(--ember-deep);
-  --emphasis:     var(--ember);
-  --rule:         var(--sand);
-  --hairline:     rgba(10, 10, 10, .08);
-  --hairline-firm:rgba(10, 10, 10, .14);
+  /* Lines */
+  --line:      rgba(10, 10, 10, .08);
+  --line-firm: rgba(10, 10, 10, .14);
+
+  /* States */
+  --err:   var(--acc-deep);
+  --ok:    #3F6B4A;
+  --focus: var(--acc);
+
+  /* Reach dial (section 7). Full reach: the accent goes everywhere. */
+  --reach-script: var(--acc-deep);
+  --reach-link:   var(--acc-emph);
+  --reach-price:  var(--acc);
+  /* Script lines and marks first set in the lighter coral steps or the
+     accent itself; they keep those shades in full reach (Opus, 26 Oct 2026). */
+  --reach-script-acc:  var(--acc);
+  --reach-script-soft: var(--rib-2);
+  --reach-script-pale: var(--rib-1);  /* on the dark silk ground */
+  --reach-ground: var(--acc-deep);  /* the gifts page's accent field */
+
+  /* Old names, kept as aliases so every existing rule follows the
+     palette. Phase 3 retargets each use to its role, then these go. */
+  --canvas:     var(--g-canvas);
+  --paper:      var(--g-paper);
+  --blush:      var(--g-tint);
+  --rose-mist:  var(--g-soft);
+  --ink:        var(--t-ink);
+  --ink-soft:   var(--t-soft);
+  --ink-mute:   var(--t-mute);
+  --coral-mid:  var(--rib-1);
+  --coral-deep: var(--rib-2);
+  --ember:      var(--acc);
+  --ember-deep: var(--acc-deep);
+  --sand:       var(--g-stone);
+  --haze:       var(--g-haze);
+  --action:       var(--acc);
+  --action-hover: var(--acc-hover);
+  --emphasis:     var(--acc-emph);
+  --rule:         var(--g-stone);
+  --hairline:     var(--line);
+  --hairline-firm:var(--line-firm);
 
   /* Faces, five jobs */
   --f-display: "Instrument Serif", Georgia, serif;
@@ -89,10 +151,183 @@
      Night. */
   --tline: 1px;
   --tline-track: rgba(10, 10, 10, .12);
-  --tline-ink: var(--ember-deep);
+  --tline-ink: var(--reach-script);
   --tdot: 11px;
   --ttip: 15px;
   --tease: cubic-bezier(.215, .61, .355, 1);
+}
+
+/* ============================================================
+   PALETTE DERIVATION (TJ, 26 Oct 2026, PALETTE-PLAN.md section 6)
+   A palette is a handful of seeds. Every other colour is derived
+   from them here by fixed rules, so every palette is cohesive by
+   construction. Coral is the exception: it keeps its original
+   hand set values in :root, so rollback is exact.
+
+   Seeds a palette sets:
+     --acc-h   accent hue (oklch angle)
+     --acc-c   accent chroma
+     --acc-l   accent lightness, held in the band .45 to .50 so
+               the accent is always deeper than the grey text
+     --cream-h cream warmth (hue of the canvas and stones)
+     and it picks one soft ground and one dark ground below.
+   ============================================================ */
+html[data-palette]:not([data-palette="coral"]) {
+  --acc-l: .48;
+  --acc-c: .08;
+  --acc-h: 150;
+  --cream-h: 60;
+
+  --acc:       oklch(var(--acc-l) var(--acc-c) var(--acc-h));
+  --acc-hover: oklch(calc(var(--acc-l) - .07) var(--acc-c) var(--acc-h));
+  --acc-deep:  oklch(calc(var(--acc-l) - .09) calc(var(--acc-c) * .9) var(--acc-h));
+
+  --rib-1: oklch(calc(var(--acc-l) + .12) calc(var(--acc-c) * .9) var(--acc-h));
+  --rib-2: oklch(calc(var(--acc-l) + .06) var(--acc-c) var(--acc-h));
+  --rib-cta-1: oklch(.725 calc(var(--acc-c) * .45) var(--acc-h));
+  --rib-cta-2: oklch(.772 calc(var(--acc-c) * .4) var(--acc-h));
+  --rib-cta-3: oklch(.832 calc(var(--acc-c) * .25) var(--acc-h));
+  --rib-bk-soft: oklch(.68 calc(var(--acc-c) * .6) var(--acc-h));
+  --rib-bk-warm: oklch(.62 var(--acc-c) var(--acc-h));
+
+  --g-canvas: oklch(.954 .006 var(--cream-h));
+  --g-stone:  oklch(.798 .016 var(--cream-h));
+  --g-haze:   oklch(.888 .012 var(--cream-h));
+  --g-taupe:  oklch(.61 .016 var(--cream-h));
+  --g-taupe-lite: oklch(.63 .014 var(--cream-h));
+
+  /* The three soft ground relationships (seed 4) */
+  --soft-accent: oklch(.86 calc(var(--acc-c) * .3) var(--acc-h));
+  --tint-accent: oklch(.88 calc(var(--acc-c) * .3) var(--acc-h));
+  --soft-stone:  oklch(.85 .016 var(--cream-h));
+  --tint-stone:  oklch(.88 .014 var(--cream-h));
+  --soft-rose:   #D7C2C9;
+  --tint-rose:   #E2CAC6;
+  --g-soft: var(--soft-stone);
+  --g-tint: var(--tint-stone);
+
+  /* The two dark ground relationships (seed 5) */
+  --dark-neutral: oklch(.445 .012 var(--cream-h));
+  --dark-accent:  oklch(.30 calc(var(--acc-c) * .5) var(--acc-h));
+  --g-dark: var(--dark-neutral);
+
+  /* Errors stay red whatever the accent */
+  --err: oklch(.47 .14 27);
+}
+
+/* ============================================================
+   FINALISTS (TJ, 26 Oct 2026). Picked from the button depth sheets in
+   lab/palette-proposals/. Each sets its exact button, tint and text
+   grey; the seeds match the button so the derived hover, deep and
+   ribbon steps follow it. Cream stays the base for all of them.
+   These run lighter than the .45 to .50 band above, by TJ's choice.
+   ============================================================ */
+html[data-palette="cognac"][data-palette] {
+  /* Cognac: button #AC7137, tint #E8E0D3, text #564F49 */
+  --acc-l: 0.600; --acc-c: 0.105; --acc-h: 63; --cream-h: 60;
+  --acc: #AC7137;
+  --g-tint: #E8E0D3; --g-soft: #E8E0D3;
+  --t-mute: #564F49;
+  --g-dark: var(--dark-neutral);
+  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
+     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
+  --acc-deep: #8E5516; --acc-emph: var(--acc-deep);
+  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+}
+html[data-palette="plum"][data-palette] {
+  /* Plum: button #9B5084, tint #DECAD6, text #595156 */
+  --acc-l: 0.539; --acc-c: 0.119; --acc-h: 340; --cream-h: 60;
+  --acc: #9B5084;
+  --g-tint: #DECAD6; --g-soft: #DECAD6;
+  --t-mute: #595156;
+  --g-dark: var(--dark-neutral);
+  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
+     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
+  --acc-deep: #863D71; --acc-emph: var(--acc-deep);
+  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+}
+html[data-palette="sage"][data-palette] {
+  /* Sage: button #809B7A, tint #CCD6C8, text #4F5550 */
+  --acc-l: 0.659; --acc-c: 0.057; --acc-h: 140; --cream-h: 60;
+  --acc: #809B7A;
+  --g-tint: #CCD6C8; --g-soft: #CCD6C8;
+  --t-mute: #4F5550;
+  --g-dark: var(--dark-neutral);
+  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
+     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
+  --acc-deep: #476041; --acc-emph: var(--acc-deep);
+  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+}
+html[data-palette="bronze"][data-palette] {
+  /* Bronze: button #A17740, tint #E2D5C6, text #58534D */
+  --acc-l: 0.599; --acc-c: 0.089; --acc-h: 72; --cream-h: 60;
+  --acc: #A17740;
+  --g-tint: #E2D5C6; --g-soft: #E2D5C6;
+  --t-mute: #58534D;
+  --g-dark: var(--dark-neutral);
+  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
+     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
+  --acc-deep: #7C541A; --acc-emph: var(--acc-deep);
+  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+}
+html[data-palette="oxblood"][data-palette] {
+  /* Oxblood: button #CF737B, tint #E9D0D1, text #5A5152 */
+  --acc-l: 0.660; --acc-c: 0.116; --acc-h: 15; --cream-h: 60;
+  --acc: #CF737B;
+  --g-tint: #E9D0D1; --g-soft: #E9D0D1;
+  --t-mute: #5A5152;
+  --g-dark: var(--dark-neutral);
+  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
+     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
+  --acc-deep: #953F49; --acc-emph: var(--acc-deep);
+  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+}
+html[data-palette="navy"][data-palette] {
+  /* Ink navy: button #6080BA, tint #CED8EB, text #50545B */
+  --acc-l: 0.600; --acc-c: 0.096; --acc-h: 262; --cream-h: 60;
+  --acc: #6080BA;
+  --g-tint: #CED8EB; --g-soft: #CED8EB;
+  --t-mute: #50545B;
+  --g-dark: var(--dark-neutral);
+  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
+     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
+  --acc-deep: #3D5B92; --acc-emph: var(--acc-deep);
+  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+}
+html[data-palette="dustyteal"][data-palette] {
+  /* Dusty teal: button #5CA09F, tint #C3DEDD, text #4D5656 */
+  --acc-l: 0.661; --acc-c: 0.069; --acc-h: 194; --cream-h: 60;
+  --acc: #5CA09F;
+  --g-tint: #C3DEDD; --g-soft: #C3DEDD;
+  --t-mute: #4D5656;
+  --g-dark: var(--dark-neutral);
+  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
+     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
+  --acc-deep: #1F6767; --acc-emph: var(--acc-deep);
+  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+}
+
+/* Reach (section 7): button only. The accent stays on buttons and
+   selected states (same weight as the palette selector and later,
+   so it wins); scripts, links and prices go to ink, and the
+   ribbons fall back to the grounds. */
+html[data-reach="button"][data-reach] {
+  --reach-script: var(--t-ink);
+  --reach-link:   var(--t-ink);
+  --reach-price:  var(--t-ink);
+  --reach-script-acc:  var(--t-ink);
+  --reach-script-soft: var(--t-ink);
+  --reach-script-pale: var(--t-on-dark);
+  --reach-ground: var(--g-dark);
+  --rib-1: var(--g-soft);
+  --rib-2: var(--g-tint);
+  --rib-3: var(--g-haze);
+  --rib-4: var(--g-stone);
+  --rib-cta-1: var(--g-soft);
+  --rib-cta-2: var(--g-tint);
+  --rib-cta-3: var(--g-haze);
+  --rib-bk-soft: var(--g-soft);
+  --rib-bk-warm: var(--g-tint);
 }
 
 @media (min-width: 768px)  { :root { --gutter: 28px; } }
@@ -106,8 +341,8 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--canvas);
-  color: var(--ink);
+  background: var(--g-canvas);
+  color: var(--t-ink);
   font-family: var(--f-read);
   font-size: 1rem;
   line-height: 1.6;
@@ -117,9 +352,9 @@ body {
 
 img { display: block; max-width: 100%; }
 
-::selection { background: var(--blush); color: var(--ink); }
+::selection { background: var(--g-tint); color: var(--t-ink); }
 :focus-visible {
-  outline: 2px solid var(--ember);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -136,13 +371,13 @@ main:focus { outline: none; }
   left: 10px;
   z-index: 80;
   padding: 12px 18px;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--g-paper);
+  color: var(--t-ink);
   font-family: var(--f-body);
   font-size: .82rem;
   font-weight: 500;
   text-decoration: none;
-  border: 1px solid var(--hairline-firm);
+  border: 1px solid var(--line-firm);
   border-radius: var(--r-badge);
   transform: translateY(calc(-100% - 20px));
   transition: transform 200ms var(--ease-out);
@@ -161,7 +396,7 @@ main:focus { outline: none; }
   letter-spacing: .02em;
   text-wrap: balance;
   margin: 0;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 /* Capped at 4rem, not 5. The headline is two authored lines now and it is
    set in capitals, which is far wider than the sentence case line it
@@ -191,7 +426,7 @@ main:focus { outline: none; }
   font-size: clamp(1rem, 1.4vw, 1.15rem);
   line-height: 1.55;
   max-width: 46ch;
-  color: var(--ink-soft);
+  color: var(--t-soft);
   margin: 1.4rem 0 0;
   text-wrap: pretty;
 }
@@ -201,11 +436,11 @@ main:focus { outline: none; }
   font-size: 1rem;
   line-height: 1.65;
   max-width: var(--measure);
-  color: var(--ink-soft);
+  color: var(--t-soft);
   margin: 0 0 .9rem;
   text-wrap: pretty;
 }
-.body--mute { color: var(--ink-mute); font-size: .95rem; }
+.body--mute { color: var(--t-mute); font-size: .95rem; }
 .body--wide { max-width: 66ch; }
 
 /* The narrative line. One short sentence, set large, doing the work
@@ -219,16 +454,16 @@ main:focus { outline: none; }
   max-width: 22ch;
   margin: 0;
   text-wrap: balance;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 .say--sm { font-size: clamp(1.25rem, 2.2vw, 1.8rem); max-width: 26ch; }
-.say--invert { color: var(--paper); }
+.say--invert { color: var(--g-paper); }
 
 .script {
   font-family: var(--f-script);
   font-size: clamp(1.8rem, 3.4vw, 2.9rem);
   line-height: 1.1;
-  color: var(--ember-deep);
+  color: var(--reach-script);
   margin: 1.6rem 0 0;
   /* Split evenly rather than leaving one word stranded. A handwriting face
      dropping a single word onto its own line reads as a mistake. */
@@ -240,7 +475,7 @@ main:focus { outline: none; }
   display: block;
   font-size: clamp(1.8rem, 4.6vw, 3.9rem);
   line-height: 1.14;
-  color: var(--paper);
+  color: var(--g-paper);
   max-width: 17ch;
   margin: 0;
 }
@@ -252,7 +487,7 @@ main:focus { outline: none; }
   font-weight: 600;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--ember);
+  color: var(--reach-link);
   margin-bottom: 1rem;
 }
 
@@ -261,7 +496,7 @@ main:focus { outline: none; }
   font-size: .78rem;
   font-weight: 500;
   letter-spacing: .08em;
-  color: var(--ember);
+  color: var(--reach-link);
   display: block;
   margin-bottom: .9rem;
 }
@@ -270,7 +505,7 @@ main:focus { outline: none; }
   font-family: var(--f-body);
   font-size: .8rem;
   line-height: 1.45;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   margin-top: .8rem;
 }
 
@@ -280,14 +515,14 @@ main:focus { outline: none; }
   font-weight: 600;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .note {
   font-family: var(--f-body);
   font-size: .8rem;
-  color: var(--ink-mute);
-  border-top: 1px solid var(--hairline);
+  color: var(--t-mute);
+  border-top: 1px solid var(--line);
   padding-top: 1rem;
   margin-top: 3rem;
   max-width: 60ch;
@@ -308,18 +543,18 @@ main:focus { outline: none; }
   cursor: pointer;
   transition: background-color 140ms var(--ease-out), transform 120ms var(--ease-out);
 }
-.btn--primary { background: var(--action); color: var(--paper); }
-.btn--primary:hover { background: var(--action-hover); }
+.btn--primary { background: var(--acc); color: var(--t-on-accent); }
+.btn--primary:hover { background: var(--acc-hover); }
 
 /* Ghost button: sits on the section ground with a slim ember outline. */
 .btn--outline {
   background: transparent;
-  color: var(--ember);
-  border: 1px solid var(--ember);
+  color: var(--acc);
+  border: 1px solid var(--acc);
   transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out),
               transform 120ms var(--ease-out);
 }
-.btn--outline:hover { background: var(--ember); color: var(--paper); }
+.btn--outline:hover { background: var(--acc); color: var(--t-on-accent); }
 
 .btn:active { transform: translateY(1px); }
 
@@ -335,7 +570,7 @@ main:focus { outline: none; }
 
 .act { position: relative; }
 
-.band { background: var(--blush); }
+.band { background: var(--g-tint); }
 
 /* ============================================================
    NAVIGATION, centred lockup
@@ -542,10 +777,10 @@ main:focus { outline: none; }
      directly on the picture. At 62% the blend can never fall below AA
      against ink, whatever the photograph underneath is doing, and it
      still reads as glass rather than as a filled button. */
-  background: rgba(243, 239, 236, .62);
+  background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  color: var(--ink);
+  color: var(--t-ink);
   font-family: var(--f-body);
   font-size: clamp(.72rem, .6rem + .28vw, .86rem);
   font-weight: 500;
@@ -570,16 +805,16 @@ main:focus { outline: none; }
 .nav.is-dark .tab {
   /* The dark frame needs its own value: at 0.04 the tint is no longer
      doing the compositing work that lets one mid tone serve both grounds. */
-  background: rgba(140, 127, 121, .46);
+  background: color-mix(in srgb, var(--g-taupe) 46%, transparent);
   /* The ink hairline that seats the chip on the light grounds would be
      invisible here, so the edge changes sides with the theme. */
   border-color: rgba(255, 255, 255, .22);
-  color: var(--paper);
+  color: var(--g-paper);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .tab:hover { background: rgba(243, 239, 236, .86); border-color: rgba(10, 10, 10, .18); }
-  .nav.is-dark .tab:hover { background: rgba(140, 127, 121, .62); }
+  .tab:hover { background: color-mix(in srgb, var(--g-canvas) 86%, transparent); border-color: rgba(10, 10, 10, .18); }
+  .nav.is-dark .tab:hover { background: color-mix(in srgb, var(--g-taupe) 62%, transparent); }
 }
 
 /* A finger is not a cursor. The row sizes itself against the window, which
@@ -593,8 +828,8 @@ main:focus { outline: none; }
    fill, and the reference does the same thing. */
 .tab[aria-expanded="true"],
 .nav.is-dark .tab[aria-expanded="true"] {
-  background: var(--action);
-  color: var(--paper);
+  background: var(--acc);
+  color: var(--t-on-accent);
 }
 
 /* Except the menu control. Its open state used to take the accent like any
@@ -604,8 +839,8 @@ main:focus { outline: none; }
    alone, which is what the reference does. */
 .tab--menu[aria-expanded="true"],
 .nav.is-dark .tab--menu[aria-expanded="true"] {
-  background: rgba(140, 127, 121, .78);
-  color: var(--paper);
+  background: color-mix(in srgb, var(--g-taupe) 78%, transparent);
+  color: var(--g-paper);
 }
 
 /* The one exception to the glass. The call to action keeps a solid fill
@@ -613,14 +848,14 @@ main:focus { outline: none; }
    a service people spend thousands on never dissolves into the row. */
 .tab--cta,
 .nav.is-dark .tab--cta {
-  background: var(--action);
-  color: var(--paper);
+  background: var(--acc);
+  color: var(--t-on-accent);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 @media (hover: hover) and (pointer: fine) {
   .tab--cta:hover,
-  .nav.is-dark .tab--cta:hover { background: var(--action-hover); }
+  .nav.is-dark .tab--cta:hover { background: var(--acc-hover); }
 }
 .tab:active { transform: translateY(1px); }
 
@@ -642,13 +877,13 @@ main:focus { outline: none; }
      it changes height between the text lockup and the circle below. */
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: -1;
-  background: rgba(243, 239, 236, .62);
+  background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
   pointer-events: none;
 }
 /* Over the one dark frame the strip takes the dark glass the chips used. */
-.nav--glass.is-dark::before { background: rgba(140, 127, 121, .46); }
+.nav--glass.is-dark::before { background: color-mix(in srgb, var(--g-taupe) 46%, transparent); }
 
 /* Tabs become plain labels on the strip. */
 .nav--glass .tab:not(.tab--cta),
@@ -660,8 +895,8 @@ main:focus { outline: none; }
 }
 @media (hover: hover) and (pointer: fine) {
   .nav--glass .tab:not(.tab--cta):hover,
-  .nav--glass.is-dark .tab:not(.tab--cta):hover { background: transparent; color: var(--ember); }
-  .nav--glass.is-dark .tab:not(.tab--cta):hover { color: var(--blush); }
+  .nav--glass.is-dark .tab:not(.tab--cta):hover { background: transparent; color: var(--acc); }
+  .nav--glass.is-dark .tab:not(.tab--cta):hover { color: var(--g-tint); }
 }
 /* ---- Logo on the glass bar (index.html only) ----
    At the top of the page the logo is the wordmark alone, three lines
@@ -837,24 +1072,24 @@ main:focus { outline: none; }
     padding: 0 6px 10px;
     background: transparent;
     border-color: transparent;
-    color: var(--ink);
+    color: var(--t-ink);
     white-space: nowrap;
   }
   .nav.nav--glass.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] {
     background: transparent;
-    color: var(--action);
+    color: var(--acc);
   }
   .nav.nav--glass.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"]::after {
     content: "";
     position: absolute;
     left: 6px; right: 6px; bottom: 0;
     height: 2px;
-    background: var(--action);
+    background: var(--acc);
   }
   /* On the one dark frame the glass is dark, so the row reads light. */
-  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab { color: var(--paper); }
-  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] { color: var(--blush); }
-  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"]::after { background: var(--blush); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab { color: var(--g-paper); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] { color: var(--g-tint); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"]::after { background: var(--g-tint); }
 
   /* The white panel starts where the glass ends, and no longer needs the
      82px of top padding that used to leave room for the row overlapping it. */
@@ -870,7 +1105,7 @@ main:focus { outline: none; }
 .nav--glass .tab--menu[aria-expanded="true"],
 .nav--glass.is-dark .tab--menu[aria-expanded="true"] {
   background: transparent;
-  color: var(--action);
+  color: var(--acc);
   font-weight: 600;
 }
 
@@ -887,8 +1122,8 @@ main:focus { outline: none; }
 .menu {
   position: absolute;
   top: 100%; left: 0; right: 0;
-  background: var(--paper);
-  border-bottom: 1px solid var(--hairline);
+  background: var(--g-paper);
+  border-bottom: 1px solid var(--line);
   overflow: hidden;
 }
 .menu__panel[hidden] { display: none; }
@@ -924,25 +1159,25 @@ main:focus { outline: none; }
   font-weight: 400;
   font-size: 1.15rem;
   line-height: 1;
-  color: var(--ember-deep);
+  color: var(--reach-script);
   margin: 0 0 1rem;
   padding-bottom: .8rem;
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--line);
 }
 .menu__list { list-style: none; margin: 0; padding: 0; }
-.menu__list li + li { border-top: 1px solid var(--hairline); }
+.menu__list li + li { border-top: 1px solid var(--line); }
 .menu__list a {
   display: block;
   padding: 10px 0;
   font-family: var(--f-read);
   font-size: .95rem;
   line-height: 1.4;
-  color: var(--ink-soft);
+  color: var(--t-soft);
   text-decoration: none;
   transition: color 140ms var(--ease-out), padding-left 180ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .menu__list a:hover { color: var(--ink); padding-left: 8px; }
+  .menu__list a:hover { color: var(--t-ink); padding-left: 8px; }
 }
 
 /* Entries with nowhere to go.
@@ -970,7 +1205,7 @@ main:focus { outline: none; }
      technicality nobody reading the page benefits from. The step from
      ink soft to ink mute is visible enough beside the live links, and
      the note under the list says what the step means. */
-  color: var(--ink-mute);
+  color: var(--t-mute);
   cursor: default;
 }
 
@@ -984,17 +1219,17 @@ main:focus { outline: none; }
   font-weight: 500;
   letter-spacing: .04em;
   line-height: 1.6;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   margin: 0;
   padding-top: .9rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
 }
 
 .veil {
   position: fixed;
   inset: var(--nav-h) 0 0;
   z-index: 50;
-  background: rgba(243, 239, 236, .55);
+  background: color-mix(in srgb, var(--g-canvas) 55%, transparent);
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
   opacity: 0;
@@ -1019,17 +1254,17 @@ main:focus { outline: none; }
     top: 100%; left: 0; right: 0;
     z-index: 2;
     padding: 14px var(--gutter);
-    background: var(--paper);
+    background: var(--g-paper);
     gap: 6px;
   }
   .nav.is-open .nav__side--l .nav__tabs .tab {
     flex: 1 1 0;
     min-width: 0;
-    background: var(--haze);
+    background: var(--g-haze);
     border-color: transparent;
-    color: var(--ink);
+    color: var(--t-ink);
   }
-  .nav.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] { background: var(--action); color: var(--paper); }
+  .nav.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] { background: var(--acc); color: var(--t-on-accent); }
   .menu { z-index: 1; }
   .menu__panel { padding-left: var(--gutter); padding-top: 82px; gap: 24px; }
 }
@@ -1076,11 +1311,11 @@ main:focus { outline: none; }
    that there is no dark section anywhere in this system. */
 .scrim--lead {
   background: linear-gradient(100deg,
-    rgba(243,239,236,.90) 0%,
-    rgba(243,239,236,.80) 26%,
-    rgba(243,239,236,.48) 46%,
-    rgba(243,239,236,.10) 66%,
-    rgba(243,239,236,0)   80%);
+    color-mix(in srgb, var(--g-canvas) 90%, transparent) 0%,
+    color-mix(in srgb, var(--g-canvas) 80%, transparent) 26%,
+    color-mix(in srgb, var(--g-canvas) 48%, transparent) 46%,
+    color-mix(in srgb, var(--g-canvas) 10%, transparent) 66%,
+    color-mix(in srgb, var(--g-canvas) 0%, transparent)   80%);
 }
 /* Light now, because the plate carries the type. This only seats the plate
    against the photograph so it does not float unanchored. */
@@ -1106,8 +1341,8 @@ main:focus { outline: none; }
    full size rather than shrinking the loudest thing on the page to fit. The
    lede is capped at 40ch independently, so nothing else in here moves. */
 .act--hero .stage__copy { max-width: 820px; }
-.act--hero .stage__copy .display { color: var(--ink); }
-.act--hero .stage__copy .lede { color: var(--ink-soft); max-width: 40ch; }
+.act--hero .stage__copy .display { color: var(--t-ink); }
+.act--hero .stage__copy .lede { color: var(--t-soft); max-width: 40ch; }
 /* Scoped to the hero rather than changing the shared .script size, because
    this line has to clear one line in the copy column and the others do not.
    At the shared 2.9rem cap it needed 761px in 724 and orphaned "too." */
@@ -1162,7 +1397,7 @@ main:focus { outline: none; }
    The photograph keeps its full width. object-position leans down so the
    bottom of the picture is kept and the top (which the fade covers) is what
    gives way. */
-.act--hero .stage { background: var(--canvas); }
+.act--hero .stage { background: var(--g-canvas); }
 .act--hero .stage__media { inset: var(--hero-top) 0 0 0; overflow: hidden; }
 .act--hero .stage__media img { object-position: 62% 50%; }
 /* No fade (TJ, 14 Oct 2026): the header ends on a clean edge and the photograph starts crisp. */
@@ -1205,7 +1440,7 @@ main:focus { outline: none; }
    its own for now. No drift-on override needed here; it falls through to
    the page's own white and always has. This act is otherwise unresolved
    pending a later pass. */
-.act--rest { padding-block: var(--section); background: var(--paper); }
+.act--rest { padding-block: var(--section); background: var(--g-paper); }
 .act--rest .wrap--narrow { margin-bottom: clamp(32px, 6vh, 64px); }
 
 .frame--bleed {
@@ -1346,7 +1581,7 @@ main:focus { outline: none; }
 .rail__close {
   width: clamp(280px, 30vw, 400px);
   align-self: center;
-  border-left: 1px solid var(--hairline-firm);
+  border-left: 1px solid var(--line-firm);
   padding-left: clamp(20px, 3vw, 36px);
 }
 
@@ -1387,7 +1622,7 @@ main:focus { outline: none; }
   line-height: 1.1;
   margin: 0 0 1.1rem;
   padding-bottom: .85rem;
-  border-bottom: 1px solid var(--ember);
+  border-bottom: 1px solid var(--acc);
 }
 /* A real 16:9 box rather than whatever height the flex leftover happened to
    be. The source photographs are 1920 by 1072, so they were being cropped to
@@ -1515,7 +1750,7 @@ main:focus { outline: none; }
      cut timed to the wipe passing over it, not a gradual ease across the
      whole crossfade, so it reads as the swipe itself changing the colour.
      See actPeak() in home.js. */
-  color: var(--ink);
+  color: var(--t-ink);
   opacity: 0;
   z-index: 1;
   will-change: opacity, color;
@@ -1557,14 +1792,14 @@ main:focus { outline: none; }
   height: clamp(30px, 4.4vw, 46px);
   margin-left: calc(clamp(30px, 4.4vw, 46px) / -2);
   border-radius: 50%;
-  background: var(--paper);
+  background: var(--g-paper);
   top: 0;
   will-change: transform;
 }
 .act--peak .sundial__line {
   position: absolute; left: 0; right: 0; bottom: 0;
   height: 1px;
-  background: var(--paper);
+  background: var(--g-paper);
   opacity: .55;
 }
 
@@ -1578,7 +1813,7 @@ main:focus { outline: none; }
   font-weight: 500;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: var(--paper);
+  color: var(--g-paper);
   white-space: nowrap;
 }
 
@@ -1612,7 +1847,7 @@ main:focus { outline: none; }
   letter-spacing: .13em;
   line-height: 1.5;
   white-space: nowrap;
-  color: var(--paper);
+  color: var(--g-paper);
 }
 
 /* The booking control, quieted to sit with them. The filled ember button
@@ -1623,7 +1858,7 @@ main:focus { outline: none; }
 .act--peak .peak__answer .btn {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, .45);
-  color: var(--paper);
+  color: var(--g-paper);
   font-family: var(--f-body);
   font-size: clamp(.68rem, .88vw, .82rem);
   font-weight: 400;
@@ -1654,7 +1889,7 @@ main:focus { outline: none; }
 /* Paper, straight after the darkest frame on the page. The change of
    light is the whole device: no rule, no band, no heading above it. */
 .act--turn {
-  background: var(--paper);
+  background: var(--g-paper);
   /* Less on top than below. devices.md section 8: a flow section directly
      after a pinned act takes reduced padding, because the pinned stage
      already needs a full viewport to scroll off and full padding on top of
@@ -1687,7 +1922,7 @@ main:focus { outline: none; }
   font-family: var(--f-read);
   font-size: 1rem;
   line-height: 1.65;
-  color: var(--ink-soft);
+  color: var(--t-soft);
   margin: 0 0 1.1rem;
   text-wrap: pretty;
   max-width: 52ch;
@@ -1701,7 +1936,7 @@ main:focus { outline: none; }
   margin-top: 1.1rem;
   max-width: 46ch;
   font-size: 1rem;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 .act--turn .stage__side .body { margin-bottom: 0; }
 
@@ -1722,7 +1957,7 @@ main:focus { outline: none; }
    of centre rather than sitting at 50%. */
 .stage__frame.stage__frame--turn {
   aspect-ratio: 4 / 5;
-  box-shadow: inset 0 0 0 1px var(--hairline);
+  box-shadow: inset 0 0 0 1px var(--line);
 }
 /* Phones (TJ, 16 Oct 2026): the heading, the copy and a smaller, centred
    photograph all fit in one screen. The text is set a touch tighter and
@@ -1812,7 +2047,7 @@ main:focus { outline: none; }
 /* Paper, straight after the darkest frame on the page. The change of
    light is the whole device: no rule, no band, no heading above it. */
 .act--turn {
-  background: var(--paper);
+  background: var(--g-paper);
   padding-block: clamp(84px, 13vh, 160px);
 }
 .turn .eyebrow { display: block; margin-bottom: 1.2rem; }
@@ -1827,7 +2062,7 @@ main:focus { outline: none; }
 
 /* ---------- Act 7: programmes ---------- */
 
-.act--programmes { padding-block: var(--section); background: var(--paper); }
+.act--programmes { padding-block: var(--section); background: var(--g-paper); }
 
 /* ============================================================
    THE AURORA, the programmes act only
@@ -1881,10 +2116,10 @@ main:focus { outline: none; }
      at all. These are widened to let the colour through as actual weather
      while white still carries most of the field. */
   --aurora-light: repeating-linear-gradient(100deg,
-    #FFFFFF 0%, #FFFFFF 6%, transparent 9%, transparent 15%, #FFFFFF 19%);
+    var(--rib-light) 0%, var(--rib-light) 6%, transparent 9%, transparent 15%, var(--rib-light) 19%);
   --aurora-colour: repeating-linear-gradient(100deg,
-    var(--ember) 8%, var(--coral-mid) 14%, var(--blush) 20%,
-    var(--rose-mist) 26%, var(--coral-deep) 32%);
+    var(--rib-3) 8%, var(--rib-1) 14%, var(--g-tint) 20%,
+    var(--g-soft) 26%, var(--rib-2) 32%);
 }
 
 .aurora__field {
@@ -1944,10 +2179,10 @@ main:focus { outline: none; }
   inset: 0;
   background-image:
     repeating-linear-gradient(123deg,
-      #FFFFFF 0%, #FFFFFF 8%, transparent 11%, transparent 18%, #FFFFFF 23%),
+      var(--rib-light) 0%, var(--rib-light) 8%, transparent 11%, transparent 18%, var(--rib-light) 23%),
     repeating-linear-gradient(123deg,
-      var(--coral-deep) 6%, var(--rose-mist) 13%, var(--haze) 21%,
-      var(--coral-mid) 28%, var(--ember-deep) 37%);
+      var(--rib-2) 6%, var(--g-soft) 13%, var(--g-haze) 21%,
+      var(--rib-1) 28%, var(--rib-4) 37%);
   background-size: 235%, 128%;
   animation: aurora 62s linear infinite;
 }
@@ -1995,7 +2230,7 @@ main:focus { outline: none; }
    padding. The .close card inside is untouched, but its top margin was
    spacing it off the pricing note above it, and there is nothing above it
    now, so that margin comes off here rather than by editing the card. */
-.act--close { padding-block: var(--section); background: var(--canvas); }
+.act--close { padding-block: var(--section); background: var(--g-canvas); }
 .act--close .close { margin-top: 0; }
 
 .sec-head { margin-bottom: clamp(40px, 7vh, 72px); }
@@ -2030,7 +2265,7 @@ main:focus { outline: none; }
   --dur-max:  30;                                   /* the scale, in days */
   --dur-cols: clamp(102px, 13vw, 146px) minmax(0, 1fr) minmax(0, 26ch);
   --dur-gap:  clamp(16px, 2.6vw, 40px);
-  border-top: 1px solid var(--hairline-firm);
+  border-top: 1px solid var(--line-firm);
 }
 
 .dur__scale,
@@ -2051,7 +2286,7 @@ main:focus { outline: none; }
   font-family: var(--f-body);
   font-size: .66rem;
   letter-spacing: .07em;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   white-space: nowrap;
 }
 /* The tick, not the label, is the true position: the label is centred on
@@ -2063,14 +2298,14 @@ main:focus { outline: none; }
   bottom: -7px;
   width: 1px;
   height: 6px;
-  background: var(--hairline-firm);
+  background: var(--line-firm);
 }
 
 .dur__list { list-style: none; margin: 0; padding: 0; }
 
 .dur__row {
   padding-block: clamp(18px, 2.4vh, 26px);
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--line);
 }
 .dur__row:last-child { border-bottom: none; }
 
@@ -2086,7 +2321,7 @@ main:focus { outline: none; }
   font-size: clamp(2.1rem, 3.4vw, 3rem);
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 .dur__unit {
   font-family: var(--f-body);
@@ -2094,7 +2329,7 @@ main:focus { outline: none; }
   font-weight: 600;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 /* 3px, not the 6px badge radius. At fourteen pixels tall a six-pixel
@@ -2108,7 +2343,7 @@ main:focus { outline: none; }
   border-radius: 3px;
   background:
     repeating-linear-gradient(to right,
-      var(--hairline-firm) 0 1px,
+      var(--line-firm) 0 1px,
       transparent 1px calc(700% / 30));
 }
 .dur__bar {
@@ -2116,21 +2351,21 @@ main:focus { outline: none; }
   inset: 0 auto 0 0;
   width: calc(var(--days) / var(--dur-max) * 100%);
   border-radius: 3px;
-  background: var(--sand);
+  background: var(--g-stone);
   transform-origin: left center;
 }
 
 /* Thirty takes the accent because it is the length the tradition is
    actually kept at, which is a fact about the programme rather than a
    recommendation about the sale. */
-.dur__row--full .dur__bar { background: var(--ember); }
-.dur__row--full .dur__n   { color: var(--ember); }
+.dur__row--full .dur__bar { background: var(--acc); }
+.dur__row--full .dur__n   { color: var(--reach-link); }
 
 .dur__note {
   font-family: var(--f-read);
   font-size: .95rem;
   line-height: 1.55;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   margin: 0;
   text-wrap: pretty;
 }
@@ -2173,14 +2408,14 @@ main:focus { outline: none; }
   font-family: var(--f-read);
   font-size: 1rem;
   line-height: 1.65;
-  color: var(--ink-soft);
+  color: var(--t-soft);
   margin: 1rem 0 0;
 }
 .programmes-bespoke.cta__alt {
   margin-top: clamp(36px, 6vh, 56px);
   font-size: 1rem;
   line-height: 1.65;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 /* ---------- The decision (retired 16 Oct 2026, markup removed) ---------- */
@@ -2188,8 +2423,8 @@ main:focus { outline: none; }
 .close {
   margin-top: clamp(56px, 10vh, 110px);
   padding: clamp(26px, 3.6vw, 44px);
-  background: var(--paper);
-  border: 1px solid var(--hairline-firm);
+  background: var(--g-paper);
+  border: 1px solid var(--line-firm);
   border-radius: var(--r-card);
   display: grid;
   gap: clamp(22px, 4vw, 56px);
@@ -2211,7 +2446,7 @@ main:focus { outline: none; }
   font-weight: 500;
   letter-spacing: .05em;
   line-height: 1.7;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   margin: 0;
 }
 
@@ -2221,9 +2456,9 @@ main:focus { outline: none; }
    footer were four consecutive things on two grounds; the last of them
    now closes the page instead of continuing it. */
 .foot {
-  background: var(--haze);
+  background: var(--g-haze);
   padding-block: clamp(48px, 8vh, 88px);
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
 }
 .foot__mark { width: 84px; height: auto; margin-bottom: 1.4rem; }
 
@@ -2276,7 +2511,7 @@ main:focus { outline: none; }
     min-height: 560px;
     display: flex;
     flex-direction: column;
-    background: var(--canvas);
+    background: var(--g-canvas);
   }
   .act--hero .stage__media {
     position: relative;
@@ -2344,7 +2579,7 @@ main:focus { outline: none; }
     align-self: stretch;
     border-left: 0;
     padding-left: 0;
-    border-top: 1px solid var(--hairline-firm);
+    border-top: 1px solid var(--line-firm);
     padding-top: clamp(20px, 4vh, 32px);
   }
 
@@ -2444,7 +2679,7 @@ main:focus { outline: none; }
 .bath__ground {
   position: absolute;
   inset: 0;
-  background: var(--canvas);
+  background: var(--g-canvas);
   opacity: 0;
   will-change: opacity;
 }
@@ -2493,10 +2728,10 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
    the steam is the subject and it keeps its contrast. */
 .scrim--bath {
   background: linear-gradient(to top right,
-    rgba(243, 239, 236, .92) 0%,
-    rgba(243, 239, 236, .74) 24%,
-    rgba(243, 239, 236, .30) 46%,
-    rgba(243, 239, 236, 0)   66%);
+    color-mix(in srgb, var(--g-canvas) 92%, transparent) 0%,
+    color-mix(in srgb, var(--g-canvas) 74%, transparent) 24%,
+    color-mix(in srgb, var(--g-canvas) 30%, transparent) 46%,
+    color-mix(in srgb, var(--g-canvas) 0%, transparent)   66%);
 }
 
 .bath__copy {
@@ -2571,7 +2806,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   line-height: 1.45;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
   margin: 0;
 }
 .bath__lead { margin-bottom: 1rem; }
@@ -2586,7 +2821,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   font-family: var(--f-display);
   font-size: clamp(2.25rem, 5vw, 4.75rem);
   line-height: .95;
-  color: var(--ink);
+  color: var(--t-ink);
   font-variant-numeric: tabular-nums;
   margin-bottom: .4rem;
 }
@@ -2730,7 +2965,7 @@ html:not(.js) .film { margin-top: 0; height: auto; }
   height: 100svh;
   min-height: 540px;
   overflow: hidden;
-  background: var(--canvas);
+  background: var(--g-canvas);
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--film-feather)), transparent 100%);
   mask-image: linear-gradient(to bottom, #000 calc(100% - var(--film-feather)), transparent 100%);
 }
@@ -2763,10 +2998,10 @@ html:not(.js) .film__stage { position: relative; }
   transform: translateY(-50%);
   border: 1px solid rgba(255, 255, 255, .5);
   border-radius: var(--r-badge);
-  background: rgba(243, 239, 236, .62);
+  background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  color: var(--ink);
+  color: var(--t-ink);
   font-family: var(--f-body);
   font-size: .8rem;
   font-weight: 500;
@@ -2780,9 +3015,9 @@ html:not(.js) .film__stage { position: relative; }
   fill: currentColor;
   transition: transform .3s ease;
 }
-.film__sound:hover { background: rgba(243, 239, 236, .78); }
+.film__sound:hover { background: color-mix(in srgb, var(--g-canvas) 78%, transparent); }
 .film__sound:hover svg { transform: translateX(3px); }
-.film__sound:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; }
+.film__sound:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
 .film.is-sound .film__sound { opacity: 0; pointer-events: none; }
 
 /* The timeline (TJ, 21 Oct 2026): the progression bar's own parts, the
@@ -2823,7 +3058,7 @@ html:not(.js) .film__stage { position: relative; }
 .film.is-paused .film__icon-play { display: block; }
 .film.is-paused .film__icon-pause { display: none; }
 .film__pause:focus-visible,
-.film__track:focus-visible { outline: 2px solid var(--ember); outline-offset: 4px; border-radius: var(--r-badge); }
+.film__track:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-badge); }
 .film__track {
   position: relative;
   flex: 1;
@@ -2857,7 +3092,7 @@ html:not(.js) .film__stage { position: relative; }
 }
 /* Full screen on a phone (the stage itself, where the browser allows it):
    the whole frame, letterboxed on the canvas, with the timeline on it. */
-.film__stage:fullscreen { background: var(--canvas); -webkit-mask-image: none; mask-image: none; }
+.film__stage:fullscreen { background: var(--g-canvas); -webkit-mask-image: none; mask-image: none; }
 .film__stage:fullscreen .film__video {
   inset: 0;
   height: 100%;
@@ -2914,7 +3149,7 @@ html:not(.js) .arrive { display: none; }
   .film { margin-top: 0; height: auto; }
   .film__stage { position: relative; -webkit-mask-image: none; mask-image: none; }
   .fog { display: none; }
-  .act--bath { height: auto; margin-top: 0; background: var(--canvas); }
+  .act--bath { height: auto; margin-top: 0; background: var(--g-canvas); }
   .bath { position: relative; }
   .bath__ground { opacity: 1; }
   /* The steam is the top of this photograph and it only means anything
@@ -2973,8 +3208,8 @@ html:not(.js) .arrive { display: none; }
   margin: 0 0 1rem;
   font-variant-numeric: tabular-nums;
 }
-.gal__count-now { color: var(--ink); }
-.gal__count-total { color: var(--ink-mute); }
+.gal__count-now { color: var(--t-ink); }
+.gal__count-total { color: var(--t-mute); }
 
 .gal__list {
   list-style: none;
@@ -3015,7 +3250,7 @@ html:not(.js) .arrive { display: none; }
   border-radius: var(--r-badge);
   overflow: hidden;
   cursor: pointer;
-  background: var(--haze);
+  background: var(--g-haze);
   opacity: .45;
   filter: saturate(.65);
   transition: opacity 340ms var(--ease-out), filter 340ms var(--ease-out);
@@ -3063,7 +3298,7 @@ html:not(.js) .arrive { display: none; }
   font-family: var(--f-body);
   font-size: .74rem;
   letter-spacing: .06em;
-  color: var(--ink-soft);
+  color: var(--t-soft);
   margin: 0 0 1.4rem;
 }
 /* The description is the last thing in this column now that the length has
@@ -3081,18 +3316,18 @@ html:not(.js) .arrive { display: none; }
   transition: color .2s ease;
 }
 .text-link:hover,
-.text-link:focus-visible { color: var(--coral-deep); }
+.text-link:focus-visible { color: var(--reach-script-soft); }
 /* On the grey silk the copy is white, so darker would read as dimmer. The
    link keeps the white and still turns coral on hover. */
 .act--silk .text-link { color: inherit; }
 .act--silk .text-link:hover,
-.act--silk .text-link:focus-visible { color: var(--coral-mid); }
+.act--silk .text-link:focus-visible { color: var(--reach-script-pale); }
 /* Links that are the point of their sentence (TJ, 16 Oct 2026): the "Learn
    more" under the treatments and the bespoke programmes door in the main
    call to action. They keep the accent so they read as an invitation; links
    inside ordinary body copy stay .text-link, quiet and only a little darker. */
 .cta-link {
-  color: var(--ember);
+  color: var(--reach-link);
   font-family: var(--f-body);
   font-weight: 500;
   text-decoration: underline;
@@ -3101,7 +3336,7 @@ html:not(.js) .arrive { display: none; }
   transition: color .2s ease;
 }
 .cta-link:hover,
-.cta-link:focus-visible { color: var(--ember-deep); }
+.cta-link:focus-visible { color: var(--reach-script); }
 
 /* .gal__all is unused since 16 Oct 2026; the link moved into the heading
    copy as a .text-link. The link to all programmes: the site's underlined
@@ -3116,13 +3351,13 @@ html:not(.js) .arrive { display: none; }
   font-weight: 500;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 5px;
   transition: color .2s ease;
 }
-.gal__all:hover { color: var(--ember); }
+.gal__all:hover { color: var(--reach-link); }
 @media (max-width: 700px) { .gal__all { font-size: .8125rem; } }
 
 /* The way out of the act (TJ, 16 Oct 2026), set like the treatments
@@ -3132,17 +3367,17 @@ html:not(.js) .arrive { display: none; }
   text-align: center;
   font-family: var(--f-read);
   font-size: clamp(1.05rem, 1.3vw, 1.25rem);
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 .programmes-bespoke__link {
-  color: var(--ember);
+  color: var(--reach-link);
   font-weight: 500;
   font-family: var(--f-body);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 5px;
 }
-.programmes-bespoke__link:hover { color: var(--ember-deep); }
+.programmes-bespoke__link:hover { color: var(--reach-script); }
 
 /* ---- Frame ---- */
 
@@ -3157,7 +3392,7 @@ html:not(.js) .arrive { display: none; }
   width: auto;
   border-radius: clamp(18px, 1.8vw, 28px);
   overflow: hidden;
-  background: var(--haze);
+  background: var(--g-haze);
 }
 .gal__img {
   position: absolute;
@@ -3207,7 +3442,7 @@ html:not(.js) .arrive { display: none; }
     right: calc(-1 * clamp(36px, 5vw, 80px));
     height: var(--gal-h);
     transform: translateY(-50%);
-    background: linear-gradient(to left, var(--blush), transparent);
+    background: linear-gradient(to left, var(--g-tint), transparent);
     pointer-events: none;
   }
 }
@@ -3273,9 +3508,9 @@ html:not(.js) .arrive { display: none; }
    The avatar previews and their white ring are gone, so there is no
    background variable left to keep; the ground is the section's own. */
 .voices {
-  --tv-fg:      #0A0A0A;
+  --tv-fg:      var(--t-ink);
   --tv-mute:    #737373;
-  --tv-accent:  #0A0A0A;
+  --tv-accent:  var(--t-ink);
 
   position: relative;
   z-index: 1;
@@ -3303,10 +3538,10 @@ html:not(.js) .arrive { display: none; }
    --voices-lead. */
 .act--turn { padding-bottom: 0; }
 .voices {
-  --voices-ground: var(--rose-mist);
+  --voices-ground: var(--g-soft);
   /* The ribbons darken the ground under the small grey labels, which fell
      to 1.8:1 on Rose Mist ribbons; Ink Soft clears 4.5:1 on all of it. */
-  --tv-mute: var(--ink-soft);
+  --tv-mute: var(--t-soft);
   isolation: isolate;
   overflow: hidden;
   padding-top: clamp(64px, 9vh, 112px);
@@ -3315,14 +3550,14 @@ html:not(.js) .arrive { display: none; }
   background: var(--voices-ground);
 }
 .voices > .tv2 { position: relative; z-index: 1; }
-.voices .tv2__stop { color: var(--ink-soft); }
-.voices .tv2__stop[aria-current="true"], .voices .tv2__stop:hover { color: var(--ink); }
+.voices .tv2__stop { color: var(--t-soft); }
+.voices .tv2__stop[aria-current="true"], .voices .tv2__stop:hover { color: var(--t-ink); }
 .aurora--voices {
   z-index: -1;
 }
 .aurora--voices .aurora__field {
-  --a: transparent 0%, var(--ember-deep) 5%, var(--ember) 9%, transparent 20%, var(--coral-deep) 27%, transparent 36%;
-  --b: transparent 0%, var(--ember) 5%, var(--ember-deep) 9%, transparent 22%, var(--blush) 30%, transparent 44%;
+  --a: transparent 0%, var(--rib-4) 5%, var(--rib-3) 9%, transparent 20%, var(--rib-2) 27%, transparent 36%;
+  --b: transparent 0%, var(--rib-3) 5%, var(--rib-4) 9%, transparent 22%, var(--g-tint) 30%, transparent 44%;
   background-image: repeating-linear-gradient(100deg, var(--a));
   background-size: 300%;
   filter: blur(70px);
@@ -3343,7 +3578,7 @@ html:not(.js) .arrive { display: none; }
    testimonials' grey with no line. Everything that sits directly on the
    ground is white; the cards' photographs keep their own colours. */
 .act--silk {
-  background: var(--ink-mute);
+  background: var(--t-mute);
   isolation: isolate;
   overflow: hidden;
 }
@@ -3351,8 +3586,8 @@ html:not(.js) .arrive { display: none; }
   z-index: -1;
 }
 .aurora--silk .aurora__field {
-  --a: transparent 0%, var(--blush) 8%, var(--rose-mist) 15%, transparent 25%, var(--haze) 33%, transparent 44%;
-  --b: transparent 0%, var(--rose-mist) 7%, var(--canvas) 13%, transparent 25%, var(--blush) 35%, transparent 48%;
+  --a: transparent 0%, var(--g-tint) 8%, var(--g-soft) 15%, transparent 25%, var(--g-haze) 33%, transparent 44%;
+  --b: transparent 0%, var(--g-soft) 7%, var(--g-canvas) 13%, transparent 25%, var(--g-tint) 35%, transparent 48%;
   background-image: repeating-linear-gradient(100deg, var(--a));
   background-size: 300%;
   filter: blur(44px);
@@ -3367,7 +3602,7 @@ html:not(.js) .arrive { display: none; }
 .act--silk .display,
 .act--silk .say,
 .act--silk .card__title,
-.act--silk .card .body { color: #FFFFFF; }
+.act--silk .card .body { color: var(--t-on-dark); }
 .act--silk .card__title {
   /* The title above the photograph is gone (TJ, 15 Oct 2026): the name is
      said once, on the line, riding with the card's dot. Kept for screen
@@ -3395,12 +3630,12 @@ html:not(.js) .arrive { display: none; }
 .care-line__track,
 .care-line__fill { position: absolute; left: 0; top: 0; height: var(--tline); }
 .care-line__track { right: 0; background: rgba(255, 255, 255, .32); }
-.care-line__fill { width: 50%; background: #FFFFFF; }
+.care-line__fill { width: 50%; background: var(--t-on-dark); }
 .care-line__tip {
   position: absolute; top: 0; left: 50%;
   width: var(--ttip); height: var(--ttip);
   margin: calc(var(--ttip) / -2 + var(--tline) / 2) 0 0 calc(var(--ttip) / -2);
-  border-radius: 50%; background: #FFFFFF;
+  border-radius: 50%; background: var(--t-on-dark);
 }
 .care-line__stops {
   list-style: none; margin: 0; padding: 0;
@@ -3415,7 +3650,7 @@ html:not(.js) .arrive { display: none; }
   border-radius: 50%; background: rgba(255, 255, 255, .55);
   transition: background-color 240ms var(--ease-out);
 }
-.care-line__stop.is-past::before { background: #FFFFFF; }
+.care-line__stop.is-past::before { background: var(--t-on-dark); }
 .care-line__stop button {
   /* above the line, not below it (TJ, 15 Oct 2026) */
   position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
@@ -3427,8 +3662,8 @@ html:not(.js) .arrive { display: none; }
   transition: color 200ms var(--ease-out);
 }
 .care-line__stop.is-current button,
-.care-line__stop button:hover { color: #FFFFFF; }
-.care-line__stop button:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }
+.care-line__stop button:hover { color: var(--t-on-dark); }
+.care-line__stop button:focus-visible { outline: 2px solid var(--t-on-dark); outline-offset: 2px; }
 @media (max-width: 700px) { .care-line { display: none; } }
 
 /* The line on phones (TJ, 16 Oct 2026): the desktop line turned upright, in
@@ -3457,7 +3692,7 @@ html:not(.js) .arrive { display: none; }
   .care-vline__track,
   .care-vline__fill { position: absolute; left: 0; top: 0; width: var(--tline); }
   .care-vline__track { bottom: 0; background: rgba(255, 255, 255, .32); }
-  .care-vline__fill { height: var(--at, 0px); background: #FFFFFF; }
+  .care-vline__fill { height: var(--at, 0px); background: var(--t-on-dark); }
   .care-vline__dot,
   .care-vline__tip { position: absolute; left: calc(var(--tline) / 2); border-radius: 50%; }
   .care-vline__dot {
@@ -3466,12 +3701,12 @@ html:not(.js) .arrive { display: none; }
     background: rgba(255, 255, 255, .55);
     transition: background-color 240ms var(--ease-out);
   }
-  .care-vline__dot.is-past { background: #FFFFFF; }
+  .care-vline__dot.is-past { background: var(--t-on-dark); }
   .care-vline__tip {
     top: var(--at, 0px);
     width: var(--ttip); height: var(--ttip);
     transform: translate(-50%, -50%);
-    background: #FFFFFF;
+    background: var(--t-on-dark);
   }
 }
 
@@ -3487,7 +3722,7 @@ html:not(.js) .arrive { display: none; }
   height: 2px;
   width: clamp(360px, 66vw, 780px);
   margin: clamp(28px, 6vh, 64px) auto 0;
-  background: var(--hairline-firm);
+  background: var(--line-firm);
 }
 
 .tv2 {
@@ -3525,7 +3760,7 @@ html:not(.js) .arrive { display: none; }
   font-family: var(--f-script);
   font-size: clamp(1.6875rem, 2.625vw, 2.25rem);
   line-height: 1.15;
-  color: var(--ember-deep);
+  color: var(--reach-script);
 }
 
 /* ---- the arrows ----
@@ -3547,12 +3782,12 @@ html:not(.js) .arrive { display: none; }
   padding: 0;
   border: 0;
   background: none;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   cursor: pointer;
   transition: color 180ms var(--ease-out);
 }
-.tv2__nav:hover { color: var(--ink); }
-.tv2__nav:focus-visible { outline: 2px solid var(--ember); outline-offset: 3px; }
+.tv2__nav:hover { color: var(--t-ink); }
+.tv2__nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
 .tv2__nav svg {
   width: 22px;
   height: 22px;
@@ -3715,13 +3950,13 @@ html:not(.js) .arrive { display: none; }
   line-height: 1.3;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   cursor: pointer;
   transition: color 320ms var(--tease);
 }
-.tv2__stop:hover { color: var(--ink); }
-.tv2__stop[aria-current="true"] { color: var(--ink); }
-.tv2__stop:focus-visible { outline: 2px solid var(--ember); outline-offset: 2px; }
+.tv2__stop:hover { color: var(--t-ink); }
+.tv2__stop[aria-current="true"] { color: var(--t-ink); }
+.tv2__stop:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 .tv2__tip {
   position: absolute;
@@ -3780,7 +4015,7 @@ html:not(.js) .arrive { display: none; }
    ============================================================ */
 .act--treatments-b {
   padding-block: clamp(90px, 10vh, 120px) clamp(70px, 8vh, 90px);
-  background: var(--canvas);
+  background: var(--g-canvas);
   position: relative;
   scroll-margin-top: calc(var(--nav-h) + 20px);
 }
@@ -3795,12 +4030,12 @@ html:not(.js) .arrive { display: none; }
   text-align: center;
   font-family: var(--f-read);
   font-size: clamp(1.05rem, 1.3vw, 1.25rem);
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 /* Explore full details, smaller (Ami, 24 Oct 2026). */
 .act--treatments-b .treatments-addon--sm { font-size: .85em; }
 .act--treatments-b .treatments-addon__link {
-  color: var(--ember);
+  color: var(--reach-link);
   font-weight: 600;
   text-decoration: none;
   border-bottom: 1px solid transparent;
@@ -3810,7 +4045,7 @@ html:not(.js) .arrive { display: none; }
 /* Same token as the text colour above, so the underline can never drift
    from the word it sits under, confirmed 2026-09-21. */
 .act--treatments-b .treatments-addon__link:hover {
-  border-bottom-color: var(--ember);
+  border-bottom-color: var(--acc);
 }
 .treatments-b-wrap {
   max-width: 1260px;
@@ -3852,7 +4087,7 @@ html:not(.js) .arrive { display: none; }
   padding: 0;
   margin: 0;
   cursor: pointer;
-  background: var(--blush);
+  background: var(--g-tint);
   overflow: hidden;
   transition: width .55s cubic-bezier(.65, 0, .35, 1);
   text-align: left;
@@ -3861,7 +4096,7 @@ html:not(.js) .arrive { display: none; }
 .tb-acc__panel.is-open {
   flex: 1 1 auto;
   width: auto;
-  background: var(--paper);
+  background: var(--g-paper);
   cursor: default;
 }
 .tb-acc__panel > img {
@@ -3898,10 +4133,10 @@ html:not(.js) .arrive { display: none; }
      mid stops bend the curve so the softening itself looks gradual
      rather than the blend simply starting on cue. */
   background: linear-gradient(to top,
-    var(--blush) 0%,
-    var(--blush) 22%,
-    color-mix(in srgb, var(--blush) 62%, transparent) 55%,
-    color-mix(in srgb, var(--blush) 22%, transparent) 78%,
+    var(--g-tint) 0%,
+    var(--g-tint) 22%,
+    color-mix(in srgb, var(--g-tint) 62%, transparent) 55%,
+    color-mix(in srgb, var(--g-tint) 22%, transparent) 78%,
     transparent 100%
   );
   pointer-events: none;
@@ -3940,7 +4175,7 @@ html:not(.js) .arrive { display: none; }
   letter-spacing: .1em;
   font-weight: 500;
   font-size: clamp(.68rem, .85vw, .8rem);
-  color: var(--ink);
+  color: var(--t-ink);
   white-space: nowrap;
   opacity: 1;
   transition: opacity .25s ease;
@@ -3959,7 +4194,7 @@ html:not(.js) .arrive { display: none; }
 .tb-acc__open-media {
   position: relative;
   overflow: hidden;
-  background: var(--blush);
+  background: var(--g-tint);
 }
 .tb-acc__open-media img {
   position: absolute; inset: 0;
@@ -3971,7 +4206,7 @@ html:not(.js) .arrive { display: none; }
      canvas ground by the far edge, so the block reads as fading into the
      page rather than stopping as a bordered box. TJ asked for this
      2026-09-21. */
-  background: linear-gradient(to right, var(--blush), var(--canvas));
+  background: linear-gradient(to right, var(--g-tint), var(--g-canvas));
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3983,7 +4218,7 @@ html:not(.js) .arrive { display: none; }
   font-size: clamp(.68rem, .85vw, .78rem);
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 .tb-acc__open-copy h3 {
   margin: 0;
@@ -3998,14 +4233,14 @@ html:not(.js) .arrive { display: none; }
   font-size: clamp(1.1rem, 2vw, 1.6rem);
   line-height: 1.15;
   letter-spacing: .02em;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 .tb-acc__open-copy p {
   margin: 0;
   font-family: var(--f-read);
   font-size: clamp(.86rem, 1.1vw, .98rem);
   line-height: 1.55;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   max-width: 36ch;
 }
 
@@ -4052,7 +4287,7 @@ html:not(.js) .arrive { display: none; }
   gap: 1.5rem;
   margin-top: 3rem;
   padding-top: 1.6rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
 }
 .dur__out .body { flex: 1 1 32ch; margin: 0; }
 .dur__out .btn { flex: none; }
@@ -4071,10 +4306,10 @@ html:not(.js) .arrive { display: none; }
 .care__line { max-width: min(860px, 100%); margin: clamp(18px, 3vh, 32px) auto 0; }
 .care__car { margin-top: 0; }
 .act--care .tv2__track-line { background: rgba(255, 255, 255, .32); }
-.act--care .tv2__fill, .act--care .tv2__tip, .act--care .tv2__dot { background: #FFFFFF; }
+.act--care .tv2__fill, .act--care .tv2__tip, .act--care .tv2__dot { background: var(--t-on-dark); }
 .act--care .tv2__stop { color: rgba(255, 255, 255, .62); }
-.act--care .tv2__stop[aria-current="true"], .act--care .tv2__stop:hover { color: #FFFFFF; }
-.act--care .tv2__stop:focus-visible { outline-color: #FFFFFF; }
+.act--care .tv2__stop[aria-current="true"], .act--care .tv2__stop:hover { color: var(--t-on-dark); }
+.act--care .tv2__stop:focus-visible { outline-color: var(--t-on-dark); }
 .care__stage { position: relative; max-width: min(760px, calc(100% - 136px)); margin: clamp(8px, 1.6vh, 18px) auto 0; }
 .care__cards { display: grid; }
 .care__card {
@@ -4099,8 +4334,8 @@ html:not(.js) .arrive { display: none; }
   width: 44px; height: 44px; margin: 0; padding: 0; border: 0; background: none;
   color: rgba(255, 255, 255, .72); cursor: pointer; z-index: 2; transition: color 180ms var(--tease);
 }
-.care__nav:hover { color: #FFFFFF; }
-.care__nav:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 3px; }
+.care__nav:hover { color: var(--t-on-dark); }
+.care__nav:focus-visible { outline: 2px solid var(--t-on-dark); outline-offset: 3px; }
 .care__nav svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .care__nav--prev { left: -64px; }
 .care__nav--next { right: -64px; }
@@ -4108,7 +4343,7 @@ html:not(.js) .arrive { display: none; }
   .care__stage { max-width: none; }
   .act--care .tv2__car { --tv-s: 48%; }
   /* On phones the arrows sit over the photograph's edges, on a soft disc. */
-  .care__nav { top: calc((100vw - 2 * var(--gutter)) * 9 / 32); width: 40px; height: 40px; border-radius: 50%; background: rgba(10, 10, 10, .32); color: #FFFFFF; }
+  .care__nav { top: calc((100vw - 2 * var(--gutter)) * 9 / 32); width: 40px; height: 40px; border-radius: 50%; background: rgba(10, 10, 10, .32); color: var(--t-on-dark); }
   .care__nav svg { width: 22px; height: 22px; }
   .care__nav--prev { left: 8px; }
   .care__nav--next { right: 8px; }
@@ -4135,7 +4370,7 @@ html:not(.js) .arrive { display: none; }
 .cta--card .programmes-bespoke.cta__alt { margin-top: clamp(24px, 4vh, 36px); }
 
 /* The Quentin line under the heading (TJ, 25 Oct 2026), white on the silk. */
-.act--care .script { color: #FFFFFF; margin: .2rem 0 0; }
+.act--care .script { color: var(--t-on-dark); margin: .2rem 0 0; }
 @media (min-width: 1000px) { .act--care .script { font-size: calc(1.2 * clamp(1.8rem, 3.4vw, 2.9rem)); } }
 
 
@@ -4188,7 +4423,7 @@ html:not(.js) .arrive { display: none; }
   height: auto; min-height: 0; aspect-ratio: 16 / 9;
   margin-inline: auto;
   border-radius: var(--r-media);
-  background: var(--ink-mute);
+  background: var(--t-mute);
   -webkit-mask-image: none; mask-image: none;
 }
 .film__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: none; -webkit-mask-image: none; mask-image: none; aspect-ratio: auto; }
@@ -4207,7 +4442,7 @@ html:not(.js) .arrive { display: none; }
    the canvas (TJ, 25 Oct 2026). Its white ground fades in from the canvas
    at the top and back out at the foot, so no straight line crosses the page
    at either join. */
-.act.act--turn { background: linear-gradient(to bottom, var(--canvas) 0, #FFFFFF 24%, #FFFFFF 76%, var(--canvas) 100%); }
+.act.act--turn { background: linear-gradient(to bottom, var(--g-canvas) 0, var(--g-paper) 24%, var(--g-paper) 76%, var(--g-canvas) 100%); }
 /* The film section's aurora fades out at its top and foot, so its edge never
    draws a line across the page (TJ, 25 Oct 2026). */
 .film > .aurora {
@@ -4233,7 +4468,7 @@ html:not(.js) .arrive { display: none; }
    the call to action, and smaller than the card's text. */
 .act--cta .programmes-bespoke.cta__alt--out {
   margin: clamp(18px, 2.6vh, 26px) auto 0; max-width: 46rem;
-  text-align: center; font-size: .875rem; line-height: 1.55; color: var(--ink-mute);
+  text-align: center; font-size: .875rem; line-height: 1.55; color: var(--t-mute);
 }
 
 /* Four kinds of care, brochure copy (TJ, 26 Oct 2026). The sub line is plain
@@ -4256,8 +4491,8 @@ html:not(.js) .arrive { display: none; }
    in its lighter ones). The testimonials' ember and coral ribbons were tried
    first and read peachy on cream, which clashed (TJ, 26 Oct 2026). */
 .act--cta .aurora__field {
-  --a: transparent 0%, #C39A9D 5%, #CFAAAE 9%, transparent 20%, var(--rose-mist) 27%, transparent 36%;
-  --b: transparent 0%, #CFAAAE 5%, #C39A9D 9%, transparent 22%, #D8C1C8 30%, transparent 44%;
+  --a: transparent 0%, var(--rib-cta-1) 5%, var(--rib-cta-2) 9%, transparent 20%, var(--g-soft) 27%, transparent 36%;
+  --b: transparent 0%, var(--rib-cta-2) 5%, var(--rib-cta-1) 9%, transparent 22%, var(--rib-cta-3) 30%, transparent 44%;
   background-image: repeating-linear-gradient(100deg, var(--a));
   background-size: 300%;
   filter: blur(70px);

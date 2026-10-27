@@ -127,7 +127,7 @@
     return { scale: S, origin: (ox / w * 100).toFixed(2) + '% ' + (oy / h * 100).toFixed(2) + '%' };
   }
   var RATIO = (+img.getAttribute('width')) / (+img.getAttribute('height'));
-  var CREAM = '#F3EFEC';
+  var CREAM = getComputedStyle(document.documentElement).getPropertyValue('--g-canvas').trim();
   var W = function () { return window.innerWidth; };
   var H = function () { return stage.clientHeight; };
   var TOP = function () { return Math.round(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) * 1.265) || 101; };

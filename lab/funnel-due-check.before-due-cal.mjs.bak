@@ -1,0 +1,48 @@
+/* FUNNEL-PLAN.md chat 2: the due date screen. node lab/funnel-due-check.mjs */
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const b = await chromium.launch({ channel: 'chrome' });
+let bad = 0; const ok = (c, m) => { if (!c) { bad++; console.log('FAIL', m); } else console.log('ok  ', m); };
+for (const [w, h] of [[1440, 900], [390, 844]]) {
+  const p = await b.newPage({ viewport: { width: w, height: h } });
+  const errs = []; p.on('pageerror', e => errs.push(e.message));
+  await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+  await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1500);
+  const st = () => p.evaluate(() => ({
+    name: document.querySelector('[data-step-name]').textContent,
+    dis: document.querySelector('[data-next]').getAttribute('aria-disabled'),
+    stop: [...document.querySelectorAll('.dk-line__stop')].findIndex(s => s.classList.contains('is-on')),
+    brief: document.querySelector('[data-brief-text]').textContent,
+    title: (document.querySelector('#step-due .dk-step__t') || {}).textContent,
+  }));
+  const tag = w + 'x' + h;
+  let s = await st(); ok(s.name === 'Start' && !s.dis, tag + ' start, Next live');
+  ok(!/DUE DATE/.test(s.brief), tag + ' no due line before a date');
+  await p.click('[data-next]'); await p.waitForTimeout(1500);
+  s = await st(); ok(s.name === 'Due date' && s.stop === 1, tag + ' Begin lands on the due date screen');
+  ok(s.title === 'When is your baby due?', tag + ' title');
+  ok(s.dis === 'true', tag + ' Next blocked (aria-disabled)');
+  await p.screenshot({ path: `lab/funnel/due-empty-${tag}.png` });
+  await p.click('[data-next]', { force: true }); await p.waitForTimeout(1200);
+  s = await st(); ok(s.stop === 1, tag + ' clicking blocked Next does not move');
+  await p.keyboard.press('ArrowRight'); await p.waitForTimeout(1200);
+  s = await st(); ok(s.stop === 1, tag + ' arrow key does not skip');
+  await p.evaluate(() => { const d = document.querySelector('[data-deck]'); d.scrollTo({ left: 2 * d.clientWidth, behavior: 'auto' }); });
+  await p.waitForTimeout(1500);
+  s = await st(); ok(s.stop === 1 && s.dis === 'true', tag + ' swipe does not skip');
+  await p.fill('#due', '2027-03-15'); await p.waitForTimeout(500);
+  s = await st(); ok(!s.dis, tag + ' Next live once a date is in');
+  ok(/DUE DATE  15 Mar 2027/.test(s.brief), tag + ' summary carries the DUE DATE line: ' + JSON.stringify(s.brief.split('\n').slice(0, 4)));
+  await p.screenshot({ path: `lab/funnel/due-filled-${tag}.png` });
+  await p.click('[data-next]'); await p.waitForTimeout(1500);
+  s = await st(); ok(s.name === 'Live-in or daytime' && s.stop === 2, tag + ' Next moves to Live-in or daytime');
+  await p.click('[data-back]'); await p.waitForTimeout(1500);
+  await p.fill('#due', ''); await p.waitForTimeout(400);
+  s = await st(); ok(s.dis === 'true' && !/DUE DATE/.test(s.brief), tag + ' clearing the date blocks again');
+  await p.fill('#due', '2026-08-01'); await p.waitForTimeout(400);
+  s = await st(); ok(!s.dis && /DUE DATE  1 Aug 2026/.test(s.brief), tag + ' a past date is allowed');
+  ok(!errs.length, tag + ' no errors ' + errs.join('; '));
+  await p.close();
+}
+await b.close();
+console.log(bad ? bad + ' failed' : 'all passed');

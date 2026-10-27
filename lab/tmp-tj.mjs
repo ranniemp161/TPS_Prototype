@@ -1,0 +1,11 @@
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const b = await chromium.launch({ channel: 'chrome' });
+const p = await b.newPage({ viewport: { width: 1864, height: 984 } });
+await p.goto(pathToFileURL(process.cwd() + '/index/build-your-programme.html').href);
+await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1500);
+await p.click('[data-next]'); await p.waitForTimeout(1300);
+await p.mouse.move(900, 500);
+await p.mouse.wheel(182, 0); await p.waitForTimeout(1500);
+console.log('after a small sideways wheel:', await p.evaluate(() => { const d = document.querySelector('[data-deck]'); const c = document.querySelector('.due-cal').getBoundingClientRect(); return 'scrollLeft=' + d.scrollLeft + ' off=' + Math.round(c.left + c.width / 2 - innerWidth / 2); }));
+await b.close();

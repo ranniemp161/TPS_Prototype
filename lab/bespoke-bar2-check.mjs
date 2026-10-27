@@ -1,0 +1,169 @@
+/* Bespoke Programmes, the bar in one layer with the sliding line (12 Oct 2026).
+   node lab/bespoke-bar2-check.mjs <outdir> [heights]
+   heights: only the deck, bar and band heights at the three sizes (for the before).
+   Otherwise: per page at 1440x900, 390x844 and 1835x605, which stops are visible
+   inside the line's window (box inside, not masked out, opacity > .05), the
+   current stop's offset from the window centre, the definite beginning and end,
+   screenshots of pages 0, 1, 4 and the last, frames during one Next slide, and the
+   fee roll and chip on a change of How long. */
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+import fs from 'node:fs';
+const out = process.argv[2];
+const onlyHeights = process.argv[3] === 'heights';
+fs.mkdirSync(out, { recursive: true });
+const b = await chromium.launch({ channel: 'chrome' });
+let fails = 0;
+const ok = (n, c, d = '') => { if (!c) fails++; console.log((c ? 'ok   ' : 'FAIL ') + n + (d ? '  ' + d : '')); };
+const url = pathToFileURL(process.cwd() + '/index/build-your-programme.html').href;
+
+for (const [w, h] of [[1440, 900], [390, 844], [1835, 605], [360, 640]]) {
+  console.log('--- ' + w + 'x' + h);
+  const p = await b.newPage({ viewport: { width: w, height: h } });
+  const errs = []; p.on('pageerror', e => errs.push(e.message));
+  try { await p.goto(url, { timeout: 30000 }); } catch (e) { await p.goto(url, { timeout: 60000 }); }
+  await p.waitForLoadState('load'); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1200);
+  const heights = await p.evaluate(() => {
+    const r = s => { const e = document.querySelector(s); return e ? Math.round(e.getBoundingClientRect().height) : null; };
+    const band = document.querySelector('.dk > .dk-fee');
+    return { deck: r('[data-deck]'), bar: r('.dk-bar'), band: band ? Math.round(band.getBoundingClientRect().height) : 0 };
+  });
+  console.log('heights', JSON.stringify(heights));
+  if (onlyHeights) { await p.close(); continue; }
+
+  // Every screen fits (12 Oct 2026): stops are screens (13 from 1024px wide, 17 on phones), not pages.
+  const last = await p.evaluate(() => document.querySelectorAll('.dk-line__stop').length - 1);
+  console.log('screens', last + 1);
+  const measure = () => p.evaluate(() => {
+    const win = document.querySelector('.dk-line__win');
+    const wr = win.getBoundingClientRect();
+    const cx = wr.left + wr.width / 2;
+    // the mask: alpha at x across the window (the gradient is read from CSS vars)
+    const fade = parseFloat(getComputedStyle(win).getPropertyValue('--dk-fadew')) / 100 || 0;
+    const alpha = x => { const f = (x - wr.left) / wr.width; if (f < 0 || f > 1) return 0; if (f < fade) return f / fade; if (f > 1 - fade) return (1 - f) / fade; return 1; };
+    const stops = [...document.querySelectorAll('.dk-line__stop')];
+    const vis = [];
+    stops.forEach((s, k) => {
+      const dot = s.querySelector('.dk-line__dot');
+      const r = dot.getBoundingClientRect();
+      const sx = r.left + r.width / 2;
+      const op = parseFloat(getComputedStyle(dot).opacity) * parseFloat(getComputedStyle(s).opacity);
+      const shown = getComputedStyle(s).visibility !== 'hidden' && op > .05;
+      const inside = r.left >= wr.left - .5 && r.right <= wr.right + .5;
+      const a = alpha(sx);
+      if (shown && inside && a > .5) vis.push({ k, x: +(sx - cx).toFixed(2), a: +a.toFixed(2), op: +op.toFixed(2), w: Math.round(r.width) });
+    });
+    const tip = document.querySelector('.dk-line__tip').getBoundingClientRect();
+    const rail = document.querySelector('.dk-line__rail').getBoundingClientRect();
+    const fill = document.querySelector('.dk-line__fill').getBoundingClientRect();
+    const on = stops.findIndex(s => s.classList.contains('is-on'));
+    const onDot = stops[on].querySelector('.dk-line__dot').getBoundingClientRect();
+    const name = document.querySelector('[data-step-name]').getBoundingClientRect();
+    const tabbable = stops.filter(s => s.tabIndex === 0).map(s => stops.indexOf(s));
+    return {
+      on, vis, tipOff: +((tip.left + tip.width / 2) - cx).toFixed(2), onOff: +((onDot.left + onDot.width / 2) - cx).toFixed(2),
+      nameOff: +((name.left + name.width / 2) - cx).toFixed(2), name: document.querySelector('[data-step-name]').textContent,
+      railLeft: +(rail.left - cx).toFixed(2), railRight: +(rail.right - cx).toFixed(2), fillW: +fill.width.toFixed(2), fillEnd: +(fill.right - cx).toFixed(2),
+      win: [Math.round(wr.left), Math.round(wr.width)], tabbable,
+      targets: stops.filter(s => s.tabIndex === 0).map(s => { const r = s.getBoundingClientRect(); return Math.round(r.width) + 'x' + Math.round(r.height); }),
+      labels: stops.filter(s => s.tabIndex === 0).map(s => s.getAttribute('aria-label')),
+      next: document.querySelector('[data-next]').textContent, overflowX: document.documentElement.scrollWidth - innerWidth,
+      deck: Math.round(document.querySelector('[data-deck]').getBoundingClientRect().height)
+    };
+  });
+  const next = async () => { await p.click('[data-next]'); await p.waitForTimeout(1000); };
+
+  for (let i = 0; i <= last; i++) {
+    const m = await measure();
+    const want = [i - 1, i, i + 1].filter(k => k >= 0 && k <= last);
+    const got = m.vis.map(v => v.k);
+    console.log(i, JSON.stringify(m));
+    ok(`page ${i}: visible stops ${JSON.stringify(got)}`, JSON.stringify(got) === JSON.stringify(want), 'want ' + JSON.stringify(want));
+    ok(`page ${i}: current centred`, Math.abs(m.tipOff) < .6 && Math.abs(m.onOff) < .6 && m.on === i, `tip ${m.tipOff} dot ${m.onOff} fill end ${m.fillEnd}`);
+    if (i === 0) ok('page 0: definite beginning (rail starts at the centre, fill empty)', Math.abs(m.railLeft) < 1 && m.fillW < 1, `rail left ${m.railLeft} fill ${m.fillW}`);
+    if (i === last) ok('last page: definite end (rail ends at the centre)', Math.abs(m.railRight) < 1, `rail right ${m.railRight}`);
+    if (i > 0) ok(`page ${i}: fill ends at the centre`, Math.abs(m.fillEnd) < .6, String(m.fillEnd));
+    ok(`page ${i}: tabbable stops are prev and next`, JSON.stringify(m.tabbable) === JSON.stringify(want.filter(k => k !== i)), JSON.stringify(m.tabbable) + ' ' + JSON.stringify(m.targets));
+    ok(`page ${i}: no sideways overflow`, m.overflowX <= 0);
+    if ([0, 1, 4, last].includes(i)) await p.screenshot({ path: `${out}/p${i}-${w}x${h}.png` });
+    if (i === 1 && (w === 1440 || w === 390)) {
+      // frames during one Next slide (1 to 2), the bar only
+      // The transitions are paused straight after the click and stepped through
+      // (a screenshot takes longer than the 650ms slide itself).
+      const bar = await p.$('.dk-bar');
+      await p.evaluate(() => {
+        document.querySelector('[data-next]').click();
+        getComputedStyle(document.querySelector('.dk-line__track')).transform;
+        window.__anims = document.querySelector('.dk-bar').getAnimations({ subtree: true });
+        window.__anims.forEach(a => a.pause());
+      });
+      for (let f = 0; f <= 6; f++) {
+        const t = Math.round(f * 650 / 6);
+        const fr = await p.evaluate(t => {
+          window.__anims.forEach(a => { a.currentTime = t; });
+          const win = document.querySelector('.dk-line__win').getBoundingClientRect(), cx = win.left + win.width / 2;
+          const fill = document.querySelector('.dk-line__fill').getBoundingClientRect();
+          const vis = [...document.querySelectorAll('.dk-line__stop')].map((s, k) => { const r = s.querySelector('.dk-line__dot').getBoundingClientRect(); const op = +getComputedStyle(s).opacity * +getComputedStyle(s.querySelector('.dk-line__dot')).opacity; return { k, x: Math.round(r.left + r.width / 2 - cx), op: +op.toFixed(2), inside: r.left >= win.left && r.right <= win.right }; }).filter(v => v.inside && v.op > .05);
+          return { n: window.__anims.length, track: getComputedStyle(document.querySelector('.dk-line__track')).transform, fillEnd: +(fill.right - cx).toFixed(1), vis };
+        }, t);
+        console.log('slide', w, t + 'ms', JSON.stringify(fr));
+        await bar.screenshot({ path: `${out}/slide-${w}-f${f}.png` });
+      }
+      await p.evaluate(() => window.__anims.forEach(a => a.finish()));
+      await p.waitForTimeout(800);
+      i++;
+      const m2 = await measure();
+      const want2 = [i - 1, i, i + 1];
+      ok(`page ${i}: visible stops ${JSON.stringify(m2.vis.map(v => v.k))}`, JSON.stringify(m2.vis.map(v => v.k)) === JSON.stringify(want2));
+      ok(`page ${i}: current centred`, Math.abs(m2.tipOff) < .6 && Math.abs(m2.onOff) < .6);
+      // the fee rolls and the chip shows: change How long to 14 (page 2)
+      const before = await p.evaluate(() => document.querySelector('[data-fee]').textContent);
+      await p.click('.dkd__day:has(input[value="14"])');
+      await p.waitForTimeout(200);
+      const mid = await p.evaluate(() => ({ roll: document.querySelector('.dk-bar [data-count-fee]').textContent, chip: document.querySelector('[data-fee-chip]').textContent, chipOn: document.querySelector('[data-fee-chip]').classList.contains('is-on'), chipOp: getComputedStyle(document.querySelector('[data-fee-chip]')).opacity, counting: document.querySelector('.dk-bar [data-count-fee]').classList.contains('is-counting') }));
+      await p.screenshot({ path: `${out}/fee-rolling-${w}.png` });
+      await p.waitForTimeout(800);
+      const after = await p.evaluate(() => ({ live: document.querySelector('[data-fee]').textContent, roll: document.querySelector('.dk-bar [data-count-fee]').textContent }));
+      console.log('fee', before, JSON.stringify(mid), JSON.stringify(after));
+      ok('fee rolls and chip shows on a change of How long', mid.counting && mid.chipOn && after.live === after.roll && after.live !== before && mid.roll !== after.roll, `${before} -> ${after.live}, mid ${mid.roll}, chip "${mid.chip}"`);
+      await p.click('.dkd__day:has(input[value="5"])'); await p.waitForTimeout(900);
+    }
+    if (i < last) await next();
+  }
+  // a jump: tap prev from the last page, then a Change link far back
+  await p.evaluate(() => document.querySelector('[data-goto="1"]').click());
+  await p.waitForTimeout(250);
+  await p.screenshot({ path: `${out}/jump-mid-${w}x${h}.png` });
+  await p.waitForTimeout(900);
+  const j = await measure();
+  ok('Change link to 01 lands with prev, current, next', j.on === 1 && JSON.stringify(j.vis.map(v => v.k)) === '[0,1,2]' && Math.abs(j.tipOff) < .6, JSON.stringify(j.vis.map(v => v.k)));
+  // tap the next dot, then the prev dot
+  await p.click('.dk-line__stop.is-next'); await p.waitForTimeout(1000);
+  let s = await measure(); ok('tap next dot goes to 2', s.on === 2);
+  await p.click('.dk-line__stop.is-prev'); await p.waitForTimeout(1000);
+  s = await measure(); ok('tap prev dot goes to 1', s.on === 1);
+  // keyboard: Tab to the next dot and press Enter
+  await p.focus('.dk-line__stop.is-next'); await p.keyboard.press('Enter'); await p.waitForTimeout(1000);
+  s = await measure(); ok('keyboard Enter on next dot goes to 2', s.on === 2);
+  await p.screenshot({ path: `${out}/focus-${w}x${h}.png` });
+  // the widest bar: the See my programme screen, 30 days, the chip showing
+  await p.click('.dkd__day:has(input[value="30"])'); await p.waitForTimeout(100);
+  for (let k = 0; k < 12; k++) { if ((await p.textContent('[data-next]')) === 'See my programme') break; await p.click('[data-next]'); await p.waitForTimeout(150); }
+  await p.waitForTimeout(800);
+  await p.evaluate(() => { const c = document.querySelector('[data-fee-chip]'); c.textContent = '+ £4,404'; clearTimeout(c._t); c.classList.add('is-on'); });
+  await p.waitForTimeout(300);
+  const wide = await p.evaluate(() => {
+    const r = s => document.querySelector(s).getBoundingClientRect();
+    const hit = (a, b) => a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+    const chip = r('[data-fee-chip]'), back = r('[data-back]'), nx = r('[data-next]'), amt = r('.dk-bar .dk-fee__amount'), name = r('[data-step-name]');
+    const clash = [['chip', chip], ['figure', amt]].flatMap(([n, a]) => [['back', back], ['next', nx], ['name', name]].filter(([, b]) => hit(a, b)).map(([m]) => n + '/' + m));
+    return { page: [...document.querySelectorAll('.dk-line__stop')].findIndex(s => s.classList.contains('is-on')), fee: document.querySelector('.dk-bar [data-count-fee]').textContent, clash, figureRight: Math.round(amt.right), chip: [Math.round(chip.left), Math.round(chip.top), Math.round(chip.right), Math.round(chip.bottom)], backLeft: Math.round(back.left), nextRight: Math.round(nx.right), nextText: document.querySelector('[data-next]').textContent, vw: innerWidth };
+  });
+  console.log('widest', JSON.stringify(wide));
+  ok('widest bar: fee and chip clear of Back, Next inside the screen', wide.clash.length === 0 && wide.nextRight <= wide.vw, JSON.stringify(wide));
+  await p.screenshot({ path: `${out}/widest-${w}x${h}.png` });
+  ok('no page errors', errs.length === 0, JSON.stringify(errs));
+  await p.close();
+}
+await b.close();
+console.log(fails ? `${fails} FAILED` : 'all passed');

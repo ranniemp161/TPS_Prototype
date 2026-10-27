@@ -296,7 +296,7 @@
     twin = document.createElement('span');
     twin.className = 'ty-sun';
     twin.setAttribute('aria-hidden', 'true');
-    twin.style.cssText = 'position:fixed;left:0;top:0;z-index:45;display:none;border-radius:50%;background:#fff;pointer-events:none;will-change:transform,width,height;';
+    twin.style.cssText = 'position:fixed;left:0;top:0;z-index:45;display:none;border-radius:50%;background:var(--g-paper);pointer-events:none;will-change:transform,width,height;';
     // Its dark half (TJ, 9 Oct 2026): a second disc over the first, clipped to
     // where the Day and Night photograph has risen behind it, in the colour the
     // sun is about to take, so the circle turns dark exactly as the photograph's

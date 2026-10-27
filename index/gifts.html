@@ -3,6 +3,19 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Palette switch, prototype only, removed when Ami picks (TJ, 26 Oct 2026) -->
+<script>
+(function () {
+  var d = document.documentElement, p = null, r = null, q = null;
+  try { q = new URLSearchParams(location.search); p = q.get('palette'); r = q.get('reach'); } catch (e) {}
+  try {
+    if (p) localStorage.setItem('tps-palette', p); else p = localStorage.getItem('tps-palette');
+    if (r) localStorage.setItem('tps-reach', r); else r = localStorage.getItem('tps-reach');
+  } catch (e) {}
+  if (p) d.setAttribute('data-palette', p);
+  if (r) d.setAttribute('data-reach', r);
+})();
+</script>
 <title>Gifts &middot; The Postpartum Suite</title>
 <meta name="description" content="Gifts from The Postpartum Suite, coming soon." />
 <link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
@@ -25,7 +38,7 @@
 <style>
   /* Holding page (TJ, 22 Oct 2026): a title on coral, saying coming soon. */
   .gifts-soon { position: relative; overflow: hidden; isolation: isolate; min-height: 100svh; display: grid; place-content: center; gap: 1rem; text-align: center;
-    padding: calc(var(--nav-h, 80px) + 40px) var(--gutter, 24px) 80px; background: #8C362F; color: #fff; }
+    padding: calc(var(--nav-h, 80px) + 40px) var(--gutter, 24px) 80px; background: var(--reach-ground); color: var(--t-on-dark); }
   .gifts-soon h1 { position: relative; z-index: 1; margin: 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(4rem, 12vw, 10rem); line-height: 1; }
   .gifts-soon p { position: relative; z-index: 1; margin: 0; font-family: var(--f-display); text-transform: uppercase; letter-spacing: .08em; font-size: clamp(1.1rem, 2vw, 1.6rem); }
   /* The note under Coming soon (TJ, 22 Oct 2026): body type, two short paragraphs. */
@@ -38,12 +51,12 @@
   .gifts-aurora__field { position: absolute; inset: -40px; display: block;
     background-image: repeating-linear-gradient(100deg, var(--a)); background-size: 300%; background-position: 50% 50%;
     filter: blur(44px); opacity: .8; will-change: transform;
-    --a: transparent 0%, #E2CAC6 7%, #FFFFFF 12%, transparent 22%, #D7C2C9 30%, transparent 40%;
+    --a: transparent 0%, var(--g-tint) 7%, var(--rib-light) 12%, transparent 22%, var(--g-soft) 30%, transparent 40%;
     -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
     mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%); }
   .gifts-aurora__field::after { content: ""; position: absolute; inset: 0;
     background-image: repeating-linear-gradient(123deg, var(--b)); background-size: 235%;
-    --b: transparent 0%, #FFFFFF 6%, #E2CAC6 12%, transparent 24%, #E3D7D3 33%, transparent 46%;
+    --b: transparent 0%, var(--rib-light) 6%, var(--g-tint) 12%, transparent 24%, var(--g-haze) 33%, transparent 46%;
     animation: gifts-aurora 62s linear infinite; }
   @keyframes gifts-aurora { from { background-position: 50% 50%; } to { background-position: 350% 50%; } }
   @media (prefers-reduced-motion: reduce) { .gifts-aurora__field::after { animation: none; } }
@@ -210,5 +223,6 @@
 <script src="js/inner-nav.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
+<script src="../lab/palettes.js"></script><script src="../lab/palette-panel.js"></script>
 </body>
 </html>

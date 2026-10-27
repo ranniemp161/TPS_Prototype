@@ -1,0 +1,61 @@
+/* The conclusive screen (TJ, 13 Oct 2026). node lab/decide-check.mjs */
+import { chromium } from 'playwright-core';
+import { pathToFileURL } from 'node:url';
+const b = await chromium.launch({ channel: 'chrome' });
+let bad = 0; const ok = (c, m) => { if (!c) { bad++; console.log('FAIL', m); } else console.log('ok  ', m); };
+const url = pathToFileURL(process.cwd() + '/index/build-your-programme.html').href;
+for (const [w, h] of [[1440, 900], [1835, 605], [1024, 768], [390, 844], [360, 640]]) {
+  const p = await b.newPage({ viewport: { width: w, height: h } });
+  const errs = []; p.on('pageerror', e => errs.push(e.message));
+  await p.route('**/calendly.com/**', r => r.abort());
+  const tag = w + 'x' + h;
+  const name = () => p.evaluate(() => document.querySelector('[data-step-name]').textContent);
+  const step = async () => { await p.click('[data-next]'); await p.waitForTimeout(1000); };
+  const walk = async () => {
+    await p.goto(url); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(1300);
+    await step(); await p.fill('#due', '2027-05-15'); await p.waitForTimeout(300);
+    const labels = [];
+    for (let k = 0; k < 30 && (await name()) !== 'Your programme'; k++) { labels.push(await p.evaluate(() => document.querySelector('[data-next]').textContent)); await step(); }
+    return labels;
+  };
+  const labels = await walk();
+  ok(labels[labels.length - 1] === 'See my programme', tag + ' Next before it reads See my programme');
+  const m = await p.evaluate(() => {
+    const sec = document.querySelector('[data-section="builder-decide"]'), deck = document.querySelector('[data-deck]').getBoundingClientRect();
+    const r = s => sec.querySelector(s).getBoundingClientRect();
+    const book = r('.dk-decide__book'), no = r('[data-not-yet]');
+    return {
+      fit: document.querySelector('.dk').getAttribute('data-fit'), tight: sec.classList.contains('is-tight'),
+      bookIn: book.top >= deck.top - 1 && book.bottom <= deck.bottom + 1 && book.height > 0, noIn: no.bottom <= deck.bottom + 1 && no.height > 0,
+      fee: sec.querySelector('.dk-sumfee').textContent, line: sec.querySelector('[data-built-title]').textContent,
+      chart: sec.querySelector('[data-shape-grid]').children.length, open: sec.querySelector('[data-decide-more]').open,
+      nextVis: getComputedStyle(document.querySelector('[data-next]')).visibility, ovx: document.documentElement.scrollWidth > innerWidth,
+      dash: /[–—]/.test(sec.innerText), title: sec.querySelector('.dk-step__t').textContent,
+      retired: !!document.querySelector('.dk-deck [data-section="builder-summary-budget"]'),
+    };
+  });
+  ok(m.title === 'Ready to talk it through?', tag + ' title');
+  ok(/^£[\d,]+$/.test(m.fee) && /days/.test(m.line) && m.chart > 0, tag + ' fee ' + m.fee + ', line "' + m.line + '", chart ' + m.chart + ' days');
+  ok(m.bookIn && m.noIn && m.fit !== 'free', tag + ' Book a call and Not yet visible without a scroll, frame held (fit ' + m.fit + (m.tight ? ', tight' : '') + ')');
+  ok(m.open === (w > 860), tag + ' days open on desktop, behind the expand on phones');
+  ok(m.nextVis === 'hidden' && !m.ovx && !m.dash && !m.retired, tag + ' no Next, no overflow, no dashes, budget gone from the walk');
+  await p.screenshot({ path: `lab/funnel/decide-${tag}.png` });
+  if (w <= 860) {
+    await p.click('.dk-decide__toggle'); await p.waitForTimeout(800);
+    ok(await p.evaluate(() => document.querySelector('[data-decide-more]').open), tag + ' the expand opens');
+    await p.screenshot({ path: `lab/funnel/decide-open-${tag}.png`, fullPage: true });
+    await p.click('.dk-decide__toggle'); await p.waitForTimeout(800);
+  }
+  await p.keyboard.press('ArrowRight'); await p.waitForTimeout(900);
+  ok((await name()) === 'Your programme', tag + ' arrow key cannot skip to the close');
+  await p.click('[data-not-yet]'); await p.waitForTimeout(1300);
+  ok(await p.evaluate(() => document.querySelector('.dk').getAttribute('data-close') === 'hold' && !!document.querySelector('[data-section="builder-close"]:not([aria-hidden="true"])')), tag + ' Not yet lands on Hold this price');
+  await p.click('[data-back]'); await p.waitForTimeout(1300);
+  ok((await name()) === 'Your programme', tag + ' Back returns to Your programme');
+  ok(!errs.length, tag + ' no page errors ' + errs.join('; '));
+  const [req] = await Promise.all([p.waitForRequest(/calendly\.com/, { timeout: 5000 }).catch(() => null), p.click('.dk-decide__book')]);
+  ok(req && /a1=/.test(req.url()) && /a2=2027-05-15/.test(req.url()), tag + ' Book a call goes to Calendly with the programme and due date');
+  await p.close();
+}
+await b.close();
+console.log(bad ? bad + ' failed' : 'all passed');

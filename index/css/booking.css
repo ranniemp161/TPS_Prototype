@@ -60,24 +60,24 @@
    declared here rather than added to site.css because they belong to this one
    effect and not to the brand's palette. */
 .bk-aurora {
-  --aurora-soft: #CA8882;
-  --aurora-warm: #D66F4E;
+  --aurora-soft: var(--rib-bk-soft);
+  --aurora-warm: var(--rib-bk-warm);
 
   --aurora-comb: repeating-linear-gradient(
     100deg,
-    var(--canvas) 0%,
-    var(--canvas) 7%,
+    var(--g-canvas) 0%,
+    var(--g-canvas) 7%,
     transparent 10%,
     transparent 12%,
-    var(--canvas) 16%
+    var(--g-canvas) 16%
   );
   --aurora-colour: repeating-linear-gradient(
     100deg,
-    var(--blush) 10%,
+    var(--g-tint) 10%,
     var(--aurora-soft) 15%,
     var(--aurora-warm) 20%,
-    var(--sand) 25%,
-    var(--blush) 30%
+    var(--g-stone) 25%,
+    var(--g-tint) 30%
   );
 
   position: fixed;
@@ -249,7 +249,7 @@
 /* ---------- The foot ---------- */
 
 .bk-foot {
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   padding-block: 2.5rem;
   margin-top: 3rem;
 }
@@ -260,7 +260,7 @@
   font-family: var(--f-script);
   font-size: clamp(1.75rem, 3.2vw, 2.25rem);
   line-height: 1;
-  color: var(--action);
+  color: var(--reach-link);
 }
 
 .bk-foot__row {
@@ -281,11 +281,11 @@
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   text-decoration: none;
 }
 
-.bk-foot__row a:hover { color: var(--ink); }
+.bk-foot__row a:hover { color: var(--t-ink); }
 
 /* ---------- The head of the page ---------- */
 
@@ -314,7 +314,7 @@
   font-size: 2.125rem;
   line-height: 1.1;
   margin: 0;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 @media (min-width: 640px) {
@@ -330,7 +330,7 @@
   font-weight: 300;
   font-size: .875rem;
   line-height: 1.55;
-  color: var(--ink-soft);
+  color: var(--t-soft);
   /* 30ch on a phone, not the 22ch it looks like it wants: 22ch breaks these
      two sentences over five lines, which costs 144px of a 390px screen —
      more than the photograph above it. */
@@ -354,7 +354,7 @@
 .bk-facts {
   width: min(680px, 100% - var(--gutter) * 2);
   margin: 2rem auto 0;
-  border-block: 1px solid var(--hairline);
+  border-block: 1px solid var(--line);
   padding-block: .9rem;
 }
 
@@ -379,11 +379,11 @@
   font-size: .6875rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-facts__line b { font-weight: 600; }
-.bk-facts__dot { display: none; color: var(--sand); }
+.bk-facts__dot { display: none; color: var(--g-stone); }
 
 @media (min-width: 640px) {
   .bk-facts { padding-block: 1rem; }
@@ -410,16 +410,16 @@
   /* Room before the footer (TJ, 16 Oct 2026). */
   margin: 3rem auto clamp(64px, 10vh, 120px);
   padding-top: 2rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   font-family: var(--f-read);
   font-size: .875rem;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   text-align: center;
 }
 
 .bk-foot-link a {
   font-weight: 600;
-  color: var(--action);
+  color: var(--reach-link);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -458,7 +458,7 @@
   font-size: .688rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--ember-deep);
+  color: var(--reach-script);
   margin-bottom: 1rem;
   padding: 0;
 }
@@ -537,20 +537,20 @@
   flex-direction: column;
   overflow: hidden;
   border-radius: var(--r-card);
-  border: 1px solid var(--hairline);
-  background: var(--paper);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
   transition: border-color 140ms var(--ease-out), background-color 140ms var(--ease-out);
 }
 
-.bk-card:hover { border-color: var(--sand); }
+.bk-card:hover { border-color: var(--g-stone); }
 
 .bk-pick input:checked ~ .bk-card {
-  border-color: var(--action);
-  background: rgba(226, 202, 198, .35);
+  border-color: var(--acc);
+  background: color-mix(in srgb, var(--g-tint) 35%, transparent);
 }
 
 .bk-pick input:focus-visible ~ .bk-card {
-  outline: 2px solid var(--action);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -571,7 +571,7 @@
   position: relative;
   flex-shrink: 0;
   overflow: hidden;
-  background: rgba(226, 202, 198, .4);
+  background: color-mix(in srgb, var(--g-tint) 40%, transparent);
   height: 160px;
   width: 100%;
 }
@@ -612,7 +612,7 @@
   font-size: clamp(1.1875rem, 2.4vw, 1.375rem);
   line-height: 1.38;
   letter-spacing: .06em;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .bk-card__price {
@@ -622,7 +622,7 @@
   font-size: .8125rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 /* How long the treatment runs. Under the name rather than beside the
@@ -634,21 +634,21 @@
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-card__desc {
   margin: .75rem 0 0;
   padding-top: .75rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   font-family: var(--f-read);
   font-size: .875rem;
   line-height: 1.6;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .bk-pick input:checked ~ .bk-card .bk-card__desc {
-  border-top-color: rgba(166, 76, 69, .25);
+  border-top-color: color-mix(in srgb, var(--acc) 25%, transparent);
 }
 
 .bk-back-to-list {
@@ -666,10 +666,10 @@
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
-.bk-back-to-list:hover { color: var(--ink); }
+.bk-back-to-list:hover { color: var(--t-ink); }
 .bk-back-to-list svg { width: 16px; height: 16px; }
 
 /* ---------- Add-ons ---------- */
@@ -701,7 +701,7 @@
   font-size: .9375rem;
   font-weight: 600;
   line-height: 1.35;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 /* The add-on card carries a real, visible tick box. The input itself stays
@@ -716,16 +716,16 @@
   align-items: center;
   justify-content: center;
   border-radius: .3rem;
-  border: 1px solid var(--sand);
-  background: var(--paper);
+  border: 1px solid var(--g-stone);
+  background: var(--g-paper);
   color: transparent;
   transition: background-color 140ms var(--ease-out), border-color 140ms var(--ease-out);
 }
 
 .bk-pick input:checked ~ .bk-card .bk-tick {
-  border-color: var(--action);
-  background: var(--action);
-  color: var(--paper);
+  border-color: var(--acc);
+  background: var(--acc);
+  color: var(--t-on-accent);
 }
 
 .bk-tick svg { width: 12px; height: 12px; }
@@ -742,7 +742,7 @@
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-addon__desc {
@@ -750,7 +750,7 @@
   font-family: var(--f-read);
   font-size: .875rem;
   line-height: 1.6;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 /* ---------- Calendar ---------- */
@@ -769,7 +769,7 @@
   font-size: .875rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .bk-cal__step {
@@ -779,14 +779,14 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--r-button);
-  border: 1px solid var(--hairline);
-  background: var(--paper);
-  color: var(--ink);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
+  color: var(--t-ink);
   cursor: pointer;
   transition: border-color 140ms var(--ease-out);
 }
 
-.bk-cal__step:hover:not(:disabled) { border-color: var(--sand); }
+.bk-cal__step:hover:not(:disabled) { border-color: var(--g-stone); }
 .bk-cal__step:disabled { cursor: not-allowed; opacity: .3; }
 
 /* A 375px screen leaves each square 43px at 4px gaps, a pixel under the
@@ -804,7 +804,7 @@
   font-size: .625rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-day {
@@ -813,29 +813,29 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--r-button);
-  border: 1px solid var(--hairline);
-  background: var(--paper);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
   font-family: var(--f-read);
   font-size: .875rem;
-  color: var(--ink);
+  color: var(--t-ink);
   cursor: pointer;
   transition: border-color 140ms var(--ease-out), background-color 140ms var(--ease-out);
 }
 
-.bk-day:hover:not(:disabled) { border-color: var(--action); }
+.bk-day:hover:not(:disabled) { border-color: var(--acc); }
 
 /* A closed day is still legible, just plainly not on offer. */
 .bk-day:disabled {
   cursor: not-allowed;
   border-color: transparent;
   background: none;
-  color: rgba(90, 82, 79, .35);
+  color: color-mix(in srgb, var(--g-dark) 35%, transparent);
 }
 
 .bk-day[aria-pressed="true"] {
-  border-color: var(--action);
-  background: var(--action);
-  color: var(--paper);
+  border-color: var(--acc);
+  background: var(--acc);
+  color: var(--t-on-accent);
 }
 
 .bk-day[aria-current="date"]:not([aria-pressed="true"]) {
@@ -848,7 +848,7 @@
   margin-top: 1rem;
   font-family: var(--f-read);
   font-size: .8125rem;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-cal__status { text-align: center; }
@@ -876,24 +876,24 @@
   min-height: 44px;
   width: 100%;
   border-radius: var(--r-button);
-  border: 1px solid var(--hairline);
-  background: var(--paper);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
   font-family: var(--f-body);
   font-weight: 500;
   font-size: .75rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
   cursor: pointer;
   transition: border-color 140ms var(--ease-out), background-color 140ms var(--ease-out);
 }
 
-.bk-time:hover { border-color: var(--action); }
+.bk-time:hover { border-color: var(--acc); }
 
 .bk-time[aria-pressed="true"] {
-  border-color: var(--action);
-  background: var(--action);
-  color: var(--paper);
+  border-color: var(--acc);
+  background: var(--acc);
+  color: var(--t-on-accent);
 }
 
 .bk-times__clock {
@@ -903,7 +903,7 @@
   font-size: .625rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 /* ---------- Fields ---------- */
@@ -923,10 +923,10 @@
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
-.bk-req { margin-left: .125rem; color: var(--action-hover); }
+.bk-req { margin-left: .125rem; color: var(--err); }
 
 .bk-input,
 .bk-shell {
@@ -934,24 +934,24 @@
   min-height: 44px;
   width: 100%;
   border-radius: var(--r-button);
-  border: 1px solid var(--hairline);
-  background: var(--paper);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
   padding: .5rem .75rem;
   font-family: var(--f-body);
   font-size: .9375rem;
-  color: var(--ink);
+  color: var(--t-ink);
   outline: none;
 }
 
-.bk-input:focus { border-color: var(--action); }
+.bk-input:focus { border-color: var(--acc); }
 
 /* The same field, drawn around something that is not only an input — a
    fixed country code and the box beside it. The border lights up for
    whatever inside it has focus, since the thing being typed into is no
    longer the border's own element. */
 .bk-shell { display: flex; align-items: center; gap: .5rem; }
-.bk-shell:focus-within { border-color: var(--action); }
-.bk-shell__code { flex-shrink: 0; color: var(--ink-mute); }
+.bk-shell:focus-within { border-color: var(--acc); }
+.bk-shell__code { flex-shrink: 0; color: var(--t-mute); }
 
 .bk-shell input {
   min-width: 0;
@@ -964,7 +964,7 @@
 }
 
 .bk-input[aria-invalid="true"],
-.bk-shell:has(input[aria-invalid="true"]) { border-color: var(--action-hover); }
+.bk-shell:has(input[aria-invalid="true"]) { border-color: var(--err); }
 
 .bk-input--pc { text-transform: uppercase; }
 .bk-input--pc::placeholder { text-transform: none; }
@@ -979,7 +979,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   margin-top: .5rem;
   font-family: var(--f-read);
   font-size: .8125rem;
-  color: var(--action-hover);
+  color: var(--err);
 }
 
 .bk-radios {
@@ -996,11 +996,11 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   gap: .5rem;
   font-family: var(--f-read);
   font-size: .9375rem;
-  color: var(--ink);
+  color: var(--t-ink);
   cursor: pointer;
 }
 
-.bk-radio input { width: 16px; height: 16px; accent-color: var(--action); }
+.bk-radio input { width: 16px; height: 16px; accent-color: var(--acc); }
 
 /* The refusal stands on its own rather than going through the field error,
    because it is not a field waiting to be filled in: nothing typed above
@@ -1008,13 +1008,13 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 .bk-refusal {
   margin: .75rem 0 0;
   border-radius: var(--r-button);
-  border: 1px solid var(--action);
-  background: rgba(226, 202, 198, .35);
+  border: 1px solid var(--acc);
+  background: color-mix(in srgb, var(--g-tint) 35%, transparent);
   padding: .75rem 1rem;
   font-family: var(--f-read);
   font-size: .875rem;
   line-height: 1.6;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .bk-address { margin-top: 1.5rem; }
@@ -1024,22 +1024,22 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-address__note {
   margin: .25rem 0 0;
   font-family: var(--f-read);
   font-size: .8125rem;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 /* ---------- Review ---------- */
 
 .bk-review {
   border-radius: var(--r-card);
-  border: 1px solid var(--hairline);
-  background: var(--paper);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
   padding: .25rem 1.25rem;
 }
 
@@ -1049,7 +1049,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   align-items: baseline;
   justify-content: space-between;
   gap: .25rem 1.5rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   padding-block: .75rem;
 }
 
@@ -1062,7 +1062,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-row__value {
@@ -1070,7 +1070,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   white-space: pre-line;
   font-family: var(--f-read);
   font-size: .9375rem;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 /* Naming the terms here means the dialog is the second time someone reads
@@ -1082,18 +1082,18 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-family: var(--f-read);
   font-size: .8125rem;
   line-height: 1.6;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-submit-error {
   margin: 1.5rem 0 0;
   border-radius: var(--r-button);
-  border: 1px solid var(--action);
-  background: rgba(226, 202, 198, .35);
+  border: 1px solid var(--acc);
+  background: color-mix(in srgb, var(--g-tint) 35%, transparent);
   padding: .75rem 1rem;
   font-family: var(--f-read);
   font-size: .875rem;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 /* ---------- Total and the step buttons ---------- */
@@ -1107,7 +1107,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   align-items: baseline;
   justify-content: space-between;
   gap: .25rem 1rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   padding-top: 1.25rem;
 }
 
@@ -1119,8 +1119,8 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   text-transform: uppercase;
 }
 
-.bk-total__label { font-size: .688rem; color: var(--ink-mute); }
-.bk-total__value { font-size: 1rem; color: var(--ink); }
+.bk-total__label { font-size: .688rem; color: var(--t-mute); }
+.bk-total__value { font-size: 1rem; color: var(--t-ink); }
 
 .bk-actions { margin-top: 1.5rem; scroll-margin-bottom: 1.5rem; }
 .bk-actions__row { display: flex; gap: .75rem; }
@@ -1142,27 +1142,27 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 .bk-btn--go {
   flex: 1;
-  background: var(--action);
-  color: var(--paper);
+  background: var(--acc);
+  color: var(--t-on-accent);
 }
 
-.bk-btn--go:hover:not(:disabled) { background: var(--action-hover); }
+.bk-btn--go:hover:not(:disabled) { background: var(--acc-hover); }
 
 .bk-btn--go:disabled {
   cursor: not-allowed;
   opacity: .4;
-  background: var(--action);
+  background: var(--acc);
 }
 
 .bk-btn--back {
   flex-shrink: 0;
-  border-color: var(--hairline);
-  background: var(--paper);
-  color: var(--ink);
+  border-color: var(--line);
+  background: var(--g-paper);
+  color: var(--t-ink);
   padding-inline: 1.25rem;
 }
 
-.bk-btn--back:hover { border-color: var(--sand); }
+.bk-btn--back:hover { border-color: var(--g-stone); }
 
 .bk-btn--wide { width: 100%; margin-top: 1rem; }
 .bk-btn--confirm { width: 100%; margin-top: 2rem; }
@@ -1173,12 +1173,12 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   margin-top: .75rem;
   border: 0;
   background: none;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
-.bk-btn--ghost:hover { color: var(--ink); }
+.bk-btn--ghost:hover { color: var(--t-ink); }
 
 /* Two different things share this line. "Choose a date to continue" is a
    nudge and stays quiet; a postcode we could not check is a failure, and
@@ -1188,26 +1188,26 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   text-align: center;
   font-family: var(--f-read);
   font-size: .8125rem;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-blocked:empty { margin: 0; }
-.bk-blocked[data-error] { color: var(--action-hover); }
+.bk-blocked[data-error] { color: var(--err); }
 
 .bk-retry {
   border-radius: var(--r-card);
-  border: 1px solid var(--hairline);
-  background: var(--paper);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
   padding: 1.5rem;
 }
 
-.bk-retry p { margin: 0; font-family: var(--f-read); font-size: .875rem; color: var(--ink-soft); }
+.bk-retry p { margin: 0; font-family: var(--f-read); font-size: .875rem; color: var(--t-soft); }
 
 .bk-retry button {
   margin-top: .75rem;
   min-height: 44px;
   border-radius: var(--r-button);
-  border: 1px solid var(--action);
+  border: 1px solid var(--acc);
   background: none;
   padding-inline: 1rem;
   font-family: var(--f-body);
@@ -1215,11 +1215,11 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-size: .75rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--action);
+  color: var(--acc);
   cursor: pointer;
 }
 
-.bk-retry button:hover { background: var(--action); color: var(--paper); }
+.bk-retry button:hover { background: var(--acc); color: var(--t-on-accent); }
 
 /* ---------- Dialogs ---------- */
 
@@ -1232,9 +1232,9 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   width: calc(100% - 2rem);
   max-width: 28rem;
   border-radius: 16px;
-  border: 1px solid var(--hairline);
-  background: var(--paper);
-  color: var(--ink);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
+  color: var(--t-ink);
   padding: 0;
 }
 
@@ -1269,12 +1269,12 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 }
 
 .bk-dialog__terms li {
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   padding-top: .75rem;
   font-family: var(--f-read);
   font-size: .875rem;
   line-height: 1.6;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .bk-dialog__ack {
@@ -1290,14 +1290,14 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   height: 20px;
   width: 20px;
   flex-shrink: 0;
-  accent-color: var(--action);
+  accent-color: var(--acc);
 }
 
 .bk-dialog__ack span {
   font-family: var(--f-read);
   font-size: .875rem;
   line-height: 1.6;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .bk-dialog p {
@@ -1305,7 +1305,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-family: var(--f-read);
   font-size: .9375rem;
   line-height: 1.6;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .bk-dialog__x {
@@ -1320,20 +1320,20 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   border: 0;
   border-radius: 999px;
   background: none;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   cursor: pointer;
   transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out);
 }
 
-.bk-dialog__x:hover { background: rgba(226, 202, 198, .4); color: var(--ink); }
+.bk-dialog__x:hover { background: color-mix(in srgb, var(--g-tint) 40%, transparent); color: var(--t-ink); }
 .bk-dialog__x svg { width: 16px; height: 16px; }
 
 /* ---------- Confirmation ---------- */
 
 .bk-done {
   border-radius: 16px;
-  border: 1px solid var(--hairline);
-  background: var(--paper);
+  border: 1px solid var(--line);
+  background: var(--g-paper);
   padding: 2rem;
   text-align: center;
   outline: none;
@@ -1347,7 +1347,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   letter-spacing: .02em;
   font-size: clamp(2rem, 5vw, 2.5rem);
   line-height: 1.1;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .bk-done__what {
@@ -1356,7 +1356,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-family: var(--f-read);
   font-size: .9375rem;
   line-height: 1.6;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .bk-done__addons { margin-top: 1.25rem; }
@@ -1368,7 +1368,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .bk-done__chips {
@@ -1381,13 +1381,13 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 .bk-done__chips span {
   border-radius: 999px;
-  border: 1px solid var(--hairline);
-  background: var(--canvas);
+  border: 1px solid var(--line);
+  background: var(--g-canvas);
   padding: .5rem 1rem;
   font-family: var(--f-read);
   font-size: .9375rem;
   font-weight: 500;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .bk-done__ref-label {
@@ -1397,7 +1397,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-size: .688rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 /* The reference is the one thing on this card set in IBM Plex Mono, and it
@@ -1410,12 +1410,12 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-family: var(--f-mono);
   font-size: 1.25rem;
   letter-spacing: .1em;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .bk-done__manage {
   margin-top: 2rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   padding-top: 1.5rem;
 }
 
@@ -1425,19 +1425,19 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   align-items: center;
   justify-content: center;
   border-radius: var(--r-button);
-  border: 1px solid var(--action);
+  border: 1px solid var(--acc);
   padding-inline: 1.5rem;
   font-family: var(--f-body);
   font-weight: 500;
   font-size: .8125rem;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--action);
+  color: var(--acc);
   text-decoration: none;
   transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out);
 }
 
-.bk-done__manage a:hover { background: var(--action); color: var(--paper); }
+.bk-done__manage a:hover { background: var(--acc); color: var(--t-on-accent); }
 
 /* The terms, kept where terms belong: last, small, and quiet. A
    confirmation should not close by raising its voice about what is
@@ -1448,7 +1448,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   font-family: var(--f-read);
   font-size: .75rem;
   line-height: 1.6;
-  color: rgba(90, 82, 79, .7);
+  color: color-mix(in srgb, var(--g-dark) 70%, transparent);
 }
 
 /* The one line this prototype says that the real app does not. Nothing
@@ -1457,14 +1457,14 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 .bk-proto {
   width: min(680px, 100% - var(--gutter) * 2);
   margin: 1.5rem auto 0;
-  border: 1px dashed var(--sand);
+  border: 1px dashed var(--g-stone);
   border-radius: var(--r-button);
   padding: .75rem 1rem;
   font-family: var(--f-body);
   font-size: .72rem;
   letter-spacing: .04em;
   line-height: 1.5;
-  color: var(--ink-mute);
+  color: var(--t-mute);
   text-align: center;
 }
 
@@ -1474,7 +1474,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 .bk-hero__strip::after {
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 55%;
   pointer-events: none;
-  background: linear-gradient(to bottom, var(--canvas) 0%, rgba(243, 239, 236, .78) 38%, rgba(243, 239, 236, 0) 100%);
+  background: linear-gradient(to bottom, var(--g-canvas) 0%, color-mix(in srgb, var(--g-canvas) 78%, transparent) 38%, color-mix(in srgb, var(--g-canvas) 0%, transparent) 100%);
 }
 
 /* Single treatments (TJ, 16 Oct 2026): the strip only, with a clean edge.

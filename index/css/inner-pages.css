@@ -18,7 +18,7 @@
   justify-content: center;
   padding-block: calc(var(--hero-top) + clamp(24px, 6vh, 80px)) clamp(90px, 14vh, 160px);
   padding-inline: var(--gutter);
-  background: var(--canvas);
+  background: var(--g-canvas);
 }
 
 .inner-stub {
@@ -32,7 +32,7 @@
   text-transform: uppercase;
   letter-spacing: .16em;
   font-size: clamp(.62rem, .8vw, .72rem);
-  color: var(--ember);
+  color: var(--reach-link);
 }
 
 .inner-stub__title {
@@ -43,7 +43,7 @@
   font-size: clamp(1.9rem, 4.4vw, 3.2rem);
   line-height: 1.1;
   letter-spacing: .02em;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .inner-stub__note {
@@ -51,7 +51,7 @@
   font-family: var(--f-read);
   font-size: clamp(.95rem, 1.2vw, 1.05rem);
   line-height: 1.6;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 /* ============================================================
@@ -73,7 +73,7 @@
   min-height: 0;
   padding-block: calc(var(--hero-top) + clamp(24px, 5vh, 56px)) 96px;
   padding-inline: var(--gutter);
-  background: var(--canvas);
+  background: var(--g-canvas);
 }
 
 .article {
@@ -87,7 +87,7 @@
   text-transform: uppercase;
   letter-spacing: .16em;
   font-size: clamp(.62rem, .8vw, .72rem);
-  color: var(--ember);
+  color: var(--reach-link);
   text-align: center;
 }
 
@@ -99,7 +99,7 @@
   font-size: clamp(1.9rem, 4.4vw, 3rem);
   line-height: 1.1;
   letter-spacing: .02em;
-  color: var(--ink);
+  color: var(--t-ink);
   text-align: center;
 }
 
@@ -109,7 +109,7 @@
   font-family: var(--f-read);
   font-size: clamp(1rem, 1.3vw, 1.1rem);
   line-height: 1.7;
-  color: var(--ink-soft);
+  color: var(--t-soft);
   text-align: center;
 }
 
@@ -138,7 +138,7 @@
   font-size: clamp(1.3rem, 2.2vw, 1.7rem);
   line-height: 1.2;
   letter-spacing: .01em;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 .block__text {
@@ -147,7 +147,7 @@
   font-family: var(--f-read);
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .block__text:last-child { margin-bottom: 0; }
@@ -160,7 +160,7 @@
   font-family: var(--f-read);
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .block__list li {
@@ -178,7 +178,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: var(--ember);
+  background: var(--acc);
 }
 
 /* A flagged gap: something a real client has to confirm, decide or
@@ -188,7 +188,7 @@
 .block__note {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
   max-width: 62ch;
 }
 
@@ -198,7 +198,7 @@
   text-transform: uppercase;
   letter-spacing: .1em;
   font-size: .68rem;
-  color: var(--ember);
+  color: var(--reach-link);
 }
 
 .block__note-text {
@@ -207,7 +207,7 @@
   font-style: italic;
   font-size: .92rem;
   line-height: 1.6;
-  color: var(--ink-mute);
+  color: var(--t-mute);
 }
 
 .article__actions {
@@ -222,14 +222,14 @@
   margin: 0 0 1.5rem;
   font-family: var(--f-body);
   font-size: .98rem;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 
 .article__contact > div {
   display: flex;
   gap: .5em;
   padding: .6rem 0;
-  border-top: 1px solid var(--hairline);
+  border-top: 1px solid var(--line);
 }
 
 .article__contact > div:first-child { border-top: none; }
@@ -237,7 +237,7 @@
 .article__contact dt {
   margin: 0;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--t-ink);
   min-width: 8ch;
 }
 

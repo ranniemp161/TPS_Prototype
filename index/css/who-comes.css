@@ -11,14 +11,14 @@
 
 .page--who main { padding-inline: 0; padding-bottom: 0; }
 .page--who .wide { max-width: 1280px; margin-inline: auto; padding-inline: var(--gutter); }
-.page--who .wp { margin: 0; font-family: var(--f-read); color: var(--ink-soft); line-height: 1.65; }
-.page--who .spec .wp { font-size: clamp(1.05rem, 1rem + .35vw, 1.25rem); color: var(--ink); }
+.page--who .wp { margin: 0; font-family: var(--f-read); color: var(--t-soft); line-height: 1.65; }
+.page--who .spec .wp { font-size: clamp(1.05rem, 1rem + .35vw, 1.25rem); color: var(--t-ink); }
 
 /* ---- The script line (the page's one Quentin accent, TJ, 19 Oct 2026):
    her promise, in the hero under the title. ---- */
 /* Hero subheader (TJ, 20 Oct 2026): answers the title, in Montserrat. */
 /* In capitals (TJ, 20 Oct 2026). */
-.wc-sub { margin: .4rem 0 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.1rem, 1rem + .5vw, 1.4rem); line-height: 1.35; color: var(--ink); text-transform: uppercase; letter-spacing: .06em; }
+.wc-sub { margin: .4rem 0 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.1rem, 1rem + .5vw, 1.4rem); line-height: 1.35; color: var(--t-ink); text-transform: uppercase; letter-spacing: .06em; }
 /* The three key points: the hero's own check style (specialist.css), one a
    line (three across wrapped each point onto two or three lines). */
 .page--who .wc-points { grid-template-columns: minmax(0, max-content); margin-top: 1rem; }
@@ -28,7 +28,7 @@
 .page--who .wc-points li { font-size: .805rem; }
 @media (max-width: 860px) { .page--who .wc-points li { font-size: .934rem; } }
 /* 20 percent larger (TJ, 20 Oct 2026); was clamp(1.9rem, 3.2vw, 2.8rem). */
-.wc-script { margin: -.2rem 0 .4rem; font-family: var(--f-script); font-weight: 400; font-size: clamp(2.28rem, 3.84vw, 3.36rem); line-height: 1.15; color: var(--ember); max-width: 18ch; }
+.wc-script { margin: -.2rem 0 .4rem; font-family: var(--f-script); font-weight: 400; font-size: clamp(2.28rem, 3.84vw, 3.36rem); line-height: 1.15; color: var(--reach-link); max-width: 18ch; }
 
 /* ---- Section headings: the What We Do capitals, one size down, their lines
    rising in as the hero's do (who-comes.js). Dash labels removed (TJ: they
@@ -36,7 +36,7 @@
 .wc-h2 {
   margin: 0 0 1.4rem; font-family: var(--f-display); font-weight: 400;
   font-size: clamp(2rem, 3.6vw, 3.2rem); line-height: 1; letter-spacing: -.005em;
-  text-transform: uppercase; text-wrap: balance; color: var(--ink);
+  text-transform: uppercase; text-wrap: balance; color: var(--t-ink);
 }
 .wc-h2 .kin-line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
 .wc-h2 .kin-line > span { display: block; will-change: transform, opacity; }
@@ -47,7 +47,7 @@
 .wc-st {
   position: relative;
   padding: clamp(96px, 18vh, 200px) var(--gutter);
-  background: var(--canvas);
+  background: var(--g-canvas);
   text-align: center;
 }
 .wc-st__text {
@@ -55,7 +55,7 @@
   max-width: 22ch; margin: 0 auto;
   font-family: var(--f-display); font-weight: 400;
   font-size: clamp(2rem, 4.4vw, 3.9rem); line-height: 1.08; letter-spacing: -.005em;
-  color: var(--ink); text-wrap: balance;
+  color: var(--t-ink); text-wrap: balance;
 }
 .wc-w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .08em; margin-bottom: -.08em; }
 .wc-w > span { display: inline-block; }
@@ -67,10 +67,10 @@
 }
 
 /* ---- What she is trained in: the photo stack ---- */
-.wc-tr { padding-block: clamp(72px, 12vh, 140px); background: var(--canvas); }
+.wc-tr { padding-block: clamp(72px, 12vh, 140px); background: var(--g-canvas); }
 .wc-tr__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
 .wc-tr__copy { position: sticky; top: calc(var(--hero-top) + 48px); }
-.wc-tr__copy .wp { max-width: 40ch; font-size: clamp(1rem, .95rem + .3vw, 1.15rem); color: var(--ink); }
+.wc-tr__copy .wp { max-width: 40ch; font-size: clamp(1rem, .95rem + .3vw, 1.15rem); color: var(--t-ink); }
 .wc-card {
   position: sticky;
   top: calc(var(--hero-top) + 24px + var(--k, 0) * 18px);
@@ -78,7 +78,7 @@
   aspect-ratio: 3 / 2;
   border-radius: var(--r-media);
   overflow: hidden;
-  background: var(--haze);
+  background: var(--g-haze);
   transform-origin: 50% 0;
 }
 .wc-card:last-child { margin-bottom: 0; }
@@ -87,72 +87,72 @@
   position: absolute; left: 16px; bottom: 16px;
   padding: 9px 14px;
   border-radius: var(--r-button);
-  background: rgba(243, 239, 236, .62);
+  background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
   font-family: var(--f-body); font-weight: 500;
   font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 
 /* ---- The checks on one drawn line ---- */
-.wc-ck { padding-block: clamp(72px, 12vh, 140px); background: var(--canvas); }
+.wc-ck { padding-block: clamp(72px, 12vh, 140px); background: var(--g-canvas); }
 .wc-ck__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
 .wc-ck__head { position: sticky; top: calc(var(--hero-top) + 48px); }
 .wc-ck__head .wp { max-width: 44ch; }
 .wc-ck__wrap { position: relative; padding-left: 40px; }
-.wc-ck__line { position: absolute; left: 4px; top: 0; bottom: 0; width: 1px; background: var(--hairline-firm); }
-.wc-ck__line > span { position: absolute; inset: 0; background: var(--ember); transform-origin: 50% 0; }
+.wc-ck__line { position: absolute; left: 4px; top: 0; bottom: 0; width: 1px; background: var(--line-firm); }
+.wc-ck__line > span { position: absolute; inset: 0; background: var(--acc); transform-origin: 50% 0; }
 .wc-ck__wrap.is-armed .wc-ck__line > span { transform: scaleY(0); }
 .wc-ck__list { list-style: none; margin: 0; padding: 0; }
 .wc-ck__list li {
   position: relative;
   padding: clamp(18px, 3.2vh, 30px) 0;
-  border-bottom: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--line);
   font-family: var(--f-display); font-weight: 400;
   font-size: clamp(1.5rem, 2.8vw, 2.4rem); line-height: 1.05;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--t-ink);
 }
 .wc-ck__list li:last-child { border-bottom: none; }
 .wc-ck__list li::before {
   content: ""; position: absolute; left: -40px; top: 50%;
   width: 9px; height: 9px; margin-top: -4.5px; border-radius: 50%;
-  background: var(--ink);
+  background: var(--t-ink);
 }
 .wc-ck__wrap.is-armed li { color: rgba(10, 10, 10, .22); }
-.wc-ck__wrap.is-armed li::before { background: var(--canvas); outline: 1px solid var(--hairline-firm); }
+.wc-ck__wrap.is-armed li::before { background: var(--g-canvas); outline: 1px solid var(--line-firm); }
 .wc-ck__wrap.is-armed li.is-lit { animation: wcLight 1.6s var(--ease-out) both; }
 .wc-ck__wrap.is-armed li.is-lit::before { animation: wcDot 1.6s var(--ease-out) both; outline-color: transparent; }
-@keyframes wcLight { 0% { color: rgba(10, 10, 10, .22); } 25% { color: var(--ember); } 100% { color: var(--ink); } }
-@keyframes wcDot { 0% { background: var(--canvas); } 25% { background: var(--ember); } 100% { background: var(--ink); } }
+@keyframes wcLight { 0% { color: rgba(10, 10, 10, .22); } 25% { color: var(--reach-link); } 100% { color: var(--t-ink); } }
+@keyframes wcDot { 0% { background: var(--g-canvas); } 25% { background: var(--acc); } 100% { background: var(--t-ink); } }
 
 /* ---- Before she arrives ---- */
-.wc-bf { padding-block: clamp(72px, 12vh, 140px) clamp(96px, 14vh, 160px); background: var(--canvas); }
+.wc-bf { padding-block: clamp(72px, 12vh, 140px) clamp(96px, 14vh, 160px); background: var(--g-canvas); }
 .wc-bf__media { position: relative; }
-.wc-bf__frame { position: relative; aspect-ratio: 16 / 8; border-radius: var(--r-media); overflow: hidden; background: var(--haze); }
+.wc-bf__frame { position: relative; aspect-ratio: 16 / 8; border-radius: var(--r-media); overflow: hidden; background: var(--g-haze); }
 .wc-bf__frame img { position: absolute; left: 0; top: -8%; width: 100%; height: 116%; object-fit: cover; object-position: 50% 40%; }
 .wc-bf__glass {
   position: absolute; right: clamp(20px, 3vw, 40px); bottom: clamp(20px, 3vw, 40px);
   max-width: 400px; padding: 24px 28px;
   border-radius: var(--r-card);
-  background: rgba(243, 239, 236, .62);
+  background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
   backdrop-filter: blur(14px) saturate(1.2);
   -webkit-backdrop-filter: blur(14px) saturate(1.2);
 }
-.wc-bf__glass p { margin: 0; font-family: var(--f-read); font-size: clamp(1rem, .95rem + .2vw, 1.1rem); line-height: 1.55; color: var(--ink); }
+.wc-bf__glass p { margin: 0; font-family: var(--f-read); font-size: clamp(1rem, .95rem + .2vw, 1.1rem); line-height: 1.55; color: var(--t-ink); }
 
 .wc-qs { max-width: 820px; margin: clamp(72px, 12vh, 128px) auto 0; }
-.wc-qs .q { border-bottom: 1px solid var(--hairline-firm); }
+.wc-qs .q { border-bottom: 1px solid var(--line-firm); }
 .wc-qs .q summary {
   list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
   padding: 20px 0; font-family: var(--f-display); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.2;
 }
 .wc-qs .q summary::-webkit-details-marker { display: none; }
-.wc-qs .q summary::after { content: "+"; font-family: var(--f-body); font-size: 1.3rem; color: var(--ink-mute); transition: transform 260ms var(--ease-out); flex: none; }
+.wc-qs .q summary::after { content: "+"; font-family: var(--f-body); font-size: 1.3rem; color: var(--t-mute); transition: transform 260ms var(--ease-out); flex: none; }
 .wc-qs .q[open] summary::after { transform: rotate(45deg); }
 .wc-qs .q > div { padding: 0 0 22px; }
-.wc-qs .q p { margin: 0; color: var(--ink-soft); max-width: 62ch; }
+.wc-qs .q p { margin: 0; color: var(--t-soft); max-width: 62ch; }
 .wc-qs__more { margin: 28px 0 0; }
 
 /* Reveals on this page's own blocks (the hero's are scoped in specialist.css). */
@@ -184,7 +184,7 @@ html.js .wc-tr [data-reveal].is-in, html.js .wc-ck [data-reveal].is-in, html.js 
    the hero meets the statement. */
 .wc-top { position: relative; }
 .wc-top__aurora { top: calc(-1 * (var(--hero-top) + clamp(24px, 5vh, 56px))); }
-.page--who main { background: var(--canvas); }
+.page--who main { background: var(--g-canvas); }
 .page--who .wc-top .spec,
 .page--who .wc-top .wc-st { position: relative; z-index: 1; background: transparent; }
 
@@ -201,11 +201,11 @@ html.js .wc-tr [data-reveal].is-in, html.js .wc-ck [data-reveal].is-in, html.js 
    facts on the right between hairlines, each rising in as it arrives. The
    handoff photograph and its glass follow, full width. */
 .wc-facts { list-style: none; margin: 0; padding: 0; }
-.wc-facts li { padding: clamp(22px, 3.6vh, 34px) 0; border-top: 1px solid var(--hairline-firm); }
-.wc-facts li:last-child { border-bottom: 1px solid var(--hairline-firm); }
+.wc-facts li { padding: clamp(22px, 3.6vh, 34px) 0; border-top: 1px solid var(--line-firm); }
+.wc-facts li:last-child { border-bottom: 1px solid var(--line-firm); }
 .wc-facts__head {
   margin: 0 0 .6rem; font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(1.45rem, 2.2vw, 1.95rem); line-height: 1.1; text-transform: uppercase; color: var(--ink);
+  font-size: clamp(1.45rem, 2.2vw, 1.95rem); line-height: 1.1; text-transform: uppercase; color: var(--t-ink);
 }
 .wc-facts .wp { max-width: 56ch; }
 .wc-life__media { margin-top: clamp(64px, 10vh, 112px); }

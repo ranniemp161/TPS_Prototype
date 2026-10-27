@@ -1700,3 +1700,57 @@ Home page card: We care for a few mothers each month / You could be one of them 
 The waiting list was the pre launch reason to give details; Check your dates is the same list for Ami with a new reason. So the standalone form (request-a-place.html) asks exactly what the waiting list asked: first and last name, email, phone (UK +44), your area (first part of the postcode, for example SW7), due date as month and year, which baby, and a privacy policy tick linking to booking.thepostpartumsuite.com/privacy. No gifts list on it: "What you'll receive" belongs only to the bespoke builder, where she has built a programme. The builder's form asks the same contact fields; area, due date and which baby travel from earlier steps.
 
 The area check everywhere (builder opening screen and the form) takes only the first part of the postcode: postcodes.io outcodes give the area's centre, tested against the M25 ring. An area straddling the motorway is judged by its centre; that slippage is accepted (TJ). Single treatments keeps its full postcode, as it needs the visit address.
+
+## Switchable palettes, the system (TJ, 26 Oct 2026)
+
+Ami finds the coral generic and wants to choose a new colour by seeing the whole site in it (PALETTE-PLAN.md). Built so the site can switch palette in one click with nothing left behind.
+
+Every colour on the site now reads a role token from the PALETTE LAYER at the top of css/site.css: grounds (--g-*), ink (--t-*), accent (--acc, --acc-hover, --acc-deep), ribbons (--rib-*), lines, states, and the reach roles (--reach-*). The old names (--ember, --coral-deep, --blush and the rest) are aliases of the roles until the switch is baked in. Accent roles are named --acc, not --a, because the aurora recipes already use --a and --b. Coral keeps its exact hand set values, and the whole site renders pixel identical to before (checked on 16 shots and on What We Do at 80 scroll positions).
+
+Every other palette is a few seeds (accent hue, chroma and lightness, cream warmth, and a choice of soft and dark ground) run through the PALETTE DERIVATION rules in oklch, so each one is cohesive by construction. The accent lightness is held at .45 to .50 so it always sits deeper than the grey text, which is where the earlier sage failed. Form errors stay red under every palette.
+
+Reach: data-reach="button" keeps colour on buttons and selected states only, and sends script lines, links, prices and the gifts field to ink and the neutral grounds. That is the two tone wild card, and it works with every palette.
+
+The panel (lab/palette-panel.js, list in lab/palettes.js) shows as a "Colours" pill on every page, without ?dev. Choices are remembered, and Copy link gives a link like programmes.html?palette=teal&reach=button. A head script on each page applies the choice before first paint. Panel, list and head script are prototype only and are removed when Ami picks.
+
+Guards: lab/palette-contrast.mjs (every palette and reach; 4.5:1, or 3:1 for the large Quentin lines), lab/palette-leak.mjs (no raw colour outside the palette blocks), lab/palette-shots.mjs and palette-diff.mjs.
+
+## First palettes, seeds and verdicts (Opus, 26 Oct 2026)
+
+Seeds are hue / chroma / lightness of the accent, cream warmth, soft ground.
+- coral: today's site, kept for comparison and rollback.
+- olive: 132 / .055 / .46, cream 78, sage soft ground. Sage with the contrast it lacked; the testimonials band reads sage. Holds.
+- teal: 192 / .065 / .47, cream 62, stone soft ground. Pops hardest against the pink uniform without fighting it. Holds.
+- brass: 68 / .062 / .47, cream 68, stone. First draft read mustard; deepened to a chocolate bronze, away from the orange Ami refused. Show last.
+- forest: 158 / .06 / .45, cream 72, mint soft ground. Between olive and teal. Holds.
+- slate: 250 / .045 / .47, cream 60, stone. Calm, slightly cool. Holds.
+- moss: 115 / .068 / .48. Reads army khaki, olive's weaker twin. Hidden from the panel.
+- warm charcoal: not built. It means near black buttons, which TJ and Ami ruled out; the two tone wild card is the button only reach instead.
+All shown palettes pass the contrast guard in both reaches.
+
+## Palette finalists added to the Colours panel (TJ, 26 Oct 2026)
+
+TJ picked seven finalists from the button depth sheets in lab/palette-proposals/: Cognac 6, Plum 5, Sage 7, Bronze 6, Oxblood 7, Ink navy 6 and Dusty teal 7. Each is its exact button, tint and text grey on the usual cream, set in site.css after the earlier palettes. Every earlier palette stays in the panel, and Moss is shown again, on TJ's ask to show everything.
+
+The buttons are TJ's chosen shades and several run lighter than the .45 to .50 band, so white labels on Sage, Oxblood and Dusty teal sit near 3:1. Links, prices and script lines take a darker step of the same colour so small text passes 4.5:1 on cream and tint (Opus, 26 Oct 2026). Backups: lab/site.before-palette-finalists.css.bak and lab/palettes.before-finalists.js.bak. Screens: lab/shots/palette/finalists/.
+
+## Dusty teal homepage photographs (TJ, 26 Oct 2026)
+
+TJ asked for every homepage photograph regraded for Dusty teal through Nano Banana Pro, with the specialist in a navy uniform, and for the site to switch to them when Dusty teal is picked. The video is left as it is for now (TJ). The regraded copies sit in assets/img/dustyteal/ under the original file names, sized to match the originals, with the bath scene's transparent edge restored from the original. lab/palette-images.js swaps each <img> to the palette's copy and puts the original back on any other palette; it loads on the homepage only. Sources, raw outputs, the prompt and before and after sheets are in lab/image-retint/dustyteal/. The fog layer is plain white and was not regraded.
+
+## Older palettes removed (TJ, 26 Oct 2026)
+
+Olive, teal, brass, forest, slate and moss are gone from the Colours panel and from site.css. The panel now runs coral, cognac, plum, sage, bronze, oxblood, ink navy, dusty teal. Backups: lab/site.before-palette-prune.css.bak and lab/palettes.before-prune.js.bak.
+
+## Homepage photographs for all palettes (TJ, 27 Oct 2026)
+
+Every finalist palette now carries its own regraded homepage photographs in
+`assets/img/<palette>/` (cognac, plum, sage, bronze, oxblood, navy, dustyteal),
+swapped in by `lab/palette-images.js` when that palette is picked. Coral keeps
+the originals. Dusty teal was made with Nano Banana Pro; the other six with
+Qwen Image Edit 2511 (Apache 2.0) on a disposable RunPod A100, one prompt per
+photo naming only the items to recolour. The care specialist wears navy in
+every palette. Reruns: oxblood and navy massage (bed too saturated), navy
+arrival (mother dressed in uniform). The specialist's pink undersleeve in the
+arrival photo is in the source and left as is. Check: `node lab/palette-images-check-all.mjs`.
+Open models output about 1 MP, so these are upscaled to the original sizes.

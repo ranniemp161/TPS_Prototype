@@ -18,9 +18,9 @@
    ============================================================ */
 
 /* ---- Base, from what-we-do.css ---- */
-.spec { padding-block: clamp(64px, 11vh, 120px); background: var(--canvas); }
+.spec { padding-block: clamp(64px, 11vh, 120px); background: var(--g-canvas); }
 .spec__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(32px, 6vw, 88px); align-items: center; }
-.spec__frame { aspect-ratio: 4 / 5; border-radius: var(--r-media); overflow: hidden; position: relative; max-width: 460px; background: var(--haze); }
+.spec__frame { aspect-ratio: 4 / 5; border-radius: var(--r-media); overflow: hidden; position: relative; max-width: 460px; background: var(--g-haze); }
 .spec__frame img { position: absolute; left: 0; top: -6%; width: 100%; height: 112%; object-fit: cover; object-position: 50% 30%; will-change: transform; }
 .spec__copy { display: grid; gap: 1.2rem; }
 @media (max-width: 860px) { .spec__grid { grid-template-columns: minmax(0, 1fr); } .spec__frame { max-width: 360px; } }
@@ -31,8 +31,8 @@
   font-size: clamp(2.4rem, 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
   text-transform: uppercase; text-wrap: balance;
 }
-.spec .wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(.98rem, .9rem + .3vw, 1.12rem); line-height: 1.5; color: var(--ink); max-width: 44ch; }
-.spec .wp { margin: 0; color: var(--ink-soft); max-width: 60ch; line-height: 1.65; }
+.spec .wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(.98rem, .9rem + .3vw, 1.12rem); line-height: 1.5; color: var(--t-ink); max-width: 44ch; }
+.spec .wp { margin: 0; color: var(--t-soft); max-width: 60ch; line-height: 1.65; }
 .spec .wp + .wp { margin-top: 1em; }
 .spec .wide { max-width: 1280px; margin-inline: auto; padding-inline: var(--gutter); }
 .spec .kin-line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
@@ -46,7 +46,7 @@ html.js .spec [data-reveal].is-in { opacity: 1; transform: none; }
    main has no side padding here (who-comes.css); .wide brings its own. ---- */
 .page--who .spec { padding-top: 0; }
 
-.spec__frame { background: var(--canvas); }
+.spec__frame { background: var(--g-canvas); }
 .spec__zoom { position: absolute; inset: 0; overflow: hidden; transform-origin: 50% 40%; }
 
 /* Closed state, only when the script is running and will open it. */
@@ -76,18 +76,18 @@ html.js .spec__frame.is-armed.is-open .spec__zoom { transform: scale(1.02); }
   font-weight: 500;
   letter-spacing: .16em;
   text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--t-soft);
 }
 .spec__checks li::before {
   content: "";
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 1px;
-  background: var(--hairline-firm);
+  background: var(--line-firm);
 }
 
 html.js .spec__checks li { opacity: 0; transform: translateY(6px); }
-html.js .spec__checks li::before { background: var(--ember); transform: scaleY(0); transform-origin: 50% 0; }
+html.js .spec__checks li::before { background: var(--acc); transform: scaleY(0); transform-origin: 50% 0; }
 html.js .spec__checks.is-in li {
   opacity: 1; transform: none;
   transition: opacity .7s var(--ease-out), transform .7s var(--ease-out);
@@ -95,7 +95,7 @@ html.js .spec__checks.is-in li {
 }
 html.js .spec__checks.is-in li::before {
   transform: scaleY(1);
-  background: var(--hairline-firm);
+  background: var(--line-firm);
   transition: transform .6s var(--ease-out), background-color 1.4s ease;
   transition-delay: calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms + .9s);
 }
@@ -134,5 +134,5 @@ html.js .spec__checks.is-in li::before {
   html.js .spec__frame.is-armed { clip-path: none; }
   html.js .spec__frame.is-armed .spec__zoom { transform: none; }
   html.js .spec__checks li { opacity: 1; transform: none; }
-  html.js .spec__checks li::before { transform: none; background: var(--hairline-firm); }
+  html.js .spec__checks li::before { transform: none; background: var(--line-firm); }
 }
