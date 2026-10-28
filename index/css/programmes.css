@@ -415,6 +415,12 @@
 .pg-look .pg-h2, .pg-look .pg-h2 { font-family: var(--f-read); font-weight: 500; font-size: 1rem; letter-spacing: .16em; line-height: 1.4; }
 @media (min-width: 861px) { .pg-look .pg-h2 { font-size: calc(1.05rem * max(var(--pg-fit, 1), .85)); } }
 .pg-look__p { margin-top: .6rem; max-width: none; }
+/* Ami's longer intro keeps the old three lines on laptops and desktops: the
+   paragraph steps out of the 1120px column and runs wider instead of taller
+   (TJ, 28 Oct 2026). */
+@media (min-width: 861px) {
+  .pg-look { width: min(100vw - 96px, 1440px); max-width: none; margin-left: 50%; margin-right: 0; transform: translateX(-50%); }
+}
 
 /* ---- the first screen fits itself (TJ, 26 Oct 2026) ----
    programmes.js lowers --pg-fit from 1 until the whole card shows in the

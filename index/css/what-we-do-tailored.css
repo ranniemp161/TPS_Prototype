@@ -165,8 +165,12 @@
 .ty__sum { margin: 0; font-family: var(--f-body); font-weight: 600; letter-spacing: .02em; font-size: clamp(.92rem, .82rem + .3vw, 1.08rem); color: var(--ty-ink); }
 .ty__sum b { font-family: var(--f-mono); font-weight: 500; }
 .ty__out { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 clamp(14px, 2.4vw, 32px); }
-.ty__out div { display: grid; gap: 6px; }
+.ty__out div { display: grid; gap: 6px; align-content: start; }
 .ty__out b { font-family: var(--f-mono); font-weight: 400; font-size: clamp(1.6rem, min(2.6vw, 4vh), 2.4rem); line-height: 1; letter-spacing: -.02em; color: var(--ty-ink); }
+/* Meals are a ceiling: a small Up to over that figure, hidden copies over the
+   other two so the numbers stay level (TJ, 28 Oct 2026). */
+.ty__upto { font-style: normal; font-family: var(--f-body); font-weight: 500; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; line-height: 1; margin-bottom: -2px; color: var(--ty-ink); opacity: .86; }
+.ty__upto--blank { visibility: hidden; }
 .ty__out span { font-family: var(--f-body); font-weight: 500; letter-spacing: .02em; font-size: clamp(.74rem, .66rem + .22vw, .86rem); text-transform: capitalize; color: var(--ty-ink); opacity: .86; }
 
 /* ---- The photograph and the title ----

@@ -88,7 +88,7 @@ var TPS_PRICING = (function () {
       if (!night) sum += RATE.breakfast * d * adj;          // breakfast sits outside night care
       sum += RATE.lunch * d * adj + RATE.dinner * d * adj;
     }
-    sum += RATE.bath    * d * adj;                          // herbal bath, daily, always
+    sum += RATE.bath    * d * adj;                          // herbal rinse, daily, always
     sum += RATE.grocery * d * adj;                          // grocery collection, always
     sum += RATE.massage * m * adj;                          // massage with hot stone
     sum += RATE.binding * d * adj;                          // belly binding, daily, always

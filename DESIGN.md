@@ -1754,3 +1754,38 @@ every palette. Reruns: oxblood and navy massage (bed too saturated), navy
 arrival (mother dressed in uniform). The specialist's pink undersleeve in the
 arrival photo is in the source and left as is. Check: `node lab/palette-images-check-all.mjs`.
 Open models output about 1 MP, so these are upscaled to the original sizes.
+
+## Programmes intro and contact addresses (TJ, 28 Oct 2026)
+
+Programmes, How we look after you: the paragraph is now Ami's intro copy,
+word for word. It is longer, so from 861px up the section steps out of the
+1120px column (window width less 96px, at most 1440px) and keeps the old
+three lines and height at 1280 to 1920 wide. Below about 1200px and on
+phones the window is too narrow for that, so it runs to more lines there.
+Contact: Customer Enquiries info@, Client relations team concierge@,
+Brand Partnerships partnerships@, from the client. Footer partial (synced to
+every page) shows each address under its label; About's contact list
+carries the same three above Instagram, aligned on wide screens and stacked
+on phones. Gifts still names info@ in its own sentence, left as is.
+
+## Up to on meals and treatments (TJ, 28 Oct 2026)
+
+Counted meals and treatments are a ceiling, not a fixed number, so they read
+"up to" site wide: Programmes card (Up to 15 treatments, Up to 42 meals) and
+its screen reader line, the comparison table's treatment totals, the Meals
+row and the table's meals heading; home's Meals card and the bath figures
+(a small UP TO over 90 meals and 30 treatments, a hidden one over 360 hours
+so the three numbers stay level); What We Do's three meals cards, the meals
+zone and the page description; the FAQ's What is included; Bespoke's massage
+session count. Hours of care, and daily belly binding and herbal baths, stay
+as they are.
+
+## Herbal bath is now herbal rinse (TJ, 28 Oct 2026)
+
+The treatment is called herbal rinse site wide, as the Bespoke builder already
+had it: Home, Programmes (list and table), What We Do (cards, the counter, the
+twelve hour day, both Your herbal rinse headings), the FAQ, and the Bespoke
+summary. The two photograph descriptions on Home and About now say a mother
+resting in a bath, since the picture shows a bath, not a rinse. The tailored
+counter on What We Do also gained Up to over its meals figure, and its three
+columns now sit top aligned so a one line label no longer drops its number.
