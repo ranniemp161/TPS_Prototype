@@ -242,6 +242,13 @@
 }
 
 .article__contact dd { margin: 0; }
+/* Three labelled addresses from the client (TJ, 28 Oct 2026): the addresses
+   line up on wide screens, and sit under their label on phones so none is cut. */
+.article__contact dt { min-width: 21ch; }
+@media (max-width: 560px) {
+  .article__contact > div { flex-direction: column; gap: .15em; }
+  .article__contact dt { min-width: 0; }
+}
 
 @media (max-width: 560px) {
   .block__image { aspect-ratio: 4 / 3; }

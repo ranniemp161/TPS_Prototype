@@ -162,7 +162,7 @@
 
   /* ---------- Length of stay ----------
      One control, and the numbers beside it change. Only figures the client's
-     copy states: three freshly cooked meals a day, a herbal bath every day,
+     copy states: three freshly cooked meals a day, a herbal rinse every day,
      belly binding every day. Nothing about price. */
   function ledger() {
     var roots = [].slice.call(document.querySelectorAll('[data-ledger]'));

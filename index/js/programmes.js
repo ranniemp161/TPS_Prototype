@@ -80,7 +80,7 @@
     out.fee.innerHTML = '£<span class="pg-price__digits">' + PER_DAY[d] + '</span>';
     if (out.treat) out.treat.textContent = TREATMENTS[d];
     if (out.meals) out.meals.textContent = MEALS[d];
-    if (live) live.textContent = WORDS[d] + ', from £' + PER_DAY[d] + ' per day, ' + TREATMENTS[d] + ' treatments, ' + MEALS[d] + ' meals';
+    if (live) live.textContent = WORDS[d] + ', from £' + PER_DAY[d] + ' per day, up to ' + TREATMENTS[d] + ' treatments, up to ' + MEALS[d] + ' meals';
     fit();
   }
 

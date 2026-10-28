@@ -277,7 +277,7 @@
       var mOut = document.querySelector('[data-count="massage"]');
       if (mOut) {
         var mc = P.massageSessions(sel.rhythm, sel.days);
-        mOut.textContent = sel.massage ? mc + (mc === 1 ? ' session' : ' sessions') : 'Not selected';
+        mOut.textContent = sel.massage ? 'Up to ' + mc + (mc === 1 ? ' session' : ' sessions') : 'Not selected';
       }
 
     }
@@ -406,7 +406,7 @@
       var d = sel.days;
       var night = sel.shift === 'night' && sel.format === 'in';
 
-      // Herbal baths run daily in every programme.
+      // Herbal rinse runs daily in every programme.
       var bathDays = {};
       spread(d, d).forEach(function (i) { bathDays[i] = true; });
 
@@ -469,7 +469,7 @@
 
     function dayLabel(n, bath, massage, treats, night) {
       var bits = [];
-      if (bath) bits.push('herbal bath');
+      if (bath) bits.push('herbal rinse');
       if (massage) bits.push('massage');
       if (treats) bits.push(treats === 1 ? 'a recovery treatment' : treats + ' recovery treatments');
       if (night) bits.push('night care');
