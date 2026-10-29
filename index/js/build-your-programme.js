@@ -498,8 +498,8 @@
       block('WHAT MATTERS MOST', pri.length ? pri.join(' · ') : 'Not chosen yet');
       if (budget) block('CARE BUDGET', P.money(budget));
       lines.push('');
-      lines.push('Indicative fee  ' + P.money(result.fee / sel.days) + ' per day' +
-        (P.CONFIG.introPricing ? '  (indicative, held for three months)' : ''));
+      lines.push('From  ' + P.money(result.fee / sel.days) + ' per day' +
+        (P.CONFIG.introPricing ? '  (held for three months)' : ''));
       if (result.floored) lines.push('                at the minimum fee for this length');
       lines.push('');
       lines.push('Final programme, availability and fee are confirmed after consultation.');
@@ -1006,14 +1006,28 @@
     var app = document.querySelector('.dk'), hdr = document.querySelector('[data-nav]'), bar = document.querySelector('.dk-bar');
     // Return to the site (top left, where the corner mark sits; TJ, 13 Oct 2026): added here, not in partials/header.html, so the shared header stays
     // identical on every page (FUNNEL-PLAN.md chat 1).
+    // It goes back to the page she came from, not always home (Ami, 28 Oct 2026):
+    // the referrer when it is another page of this site, kept for the visit so a
+    // reload still knows it; home when there is none (a link from outside).
+    var returnTo = 'index.html';
+    try {
+      var ref = document.referrer ? new URL(document.referrer) : null;
+      if (ref && ref.origin === location.origin && ref.pathname !== location.pathname) {
+        returnTo = ref.href;
+        sessionStorage.setItem('tps-byp-return', returnTo);
+      } else if (sessionStorage.getItem('tps-byp-return')) {
+        returnTo = sessionStorage.getItem('tps-byp-return');
+      }
+    } catch (e) {}
     if (app && app.hasAttribute('data-funnel') && hdr && !hdr.querySelector('.nav__return')) {
       var side = hdr.querySelector('.nav__side--l');
       if (side) {
         var ret = document.createElement('a');
-        ret.className = 'nav__return'; ret.href = 'index.html'; ret.textContent = 'Return to the site';
+        ret.className = 'nav__return'; ret.href = returnTo; ret.textContent = 'Return to the site';
         side.insertBefore(ret, side.firstChild);
       }
     }
+    document.querySelectorAll('[data-return]').forEach(function (a) { a.href = returnTo; });
     function fitTop() {
       if (app && hdr) app.style.setProperty('--dk-top', Math.round(hdr.getBoundingClientRect().height) + 'px');
       if (bar) document.documentElement.style.setProperty('--dk-bar-h', Math.round(bar.getBoundingClientRect().height) + 'px');

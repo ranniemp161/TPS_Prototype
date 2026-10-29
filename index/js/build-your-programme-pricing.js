@@ -99,9 +99,21 @@ var TPS_PRICING = (function () {
     return sum;
   }
 
+  // Treatments do not move the fee (Ami, 28 Oct 2026): whatever she ticks,
+  // the massage and the five counted treatments are priced at the standard
+  // set, so only length, format, shift and meals change the price.
+  function pricedSelection(sel) {
+    var p = {};
+    for (var k in sel) if (Object.prototype.hasOwnProperty.call(sel, k)) p[k] = sel[k];
+    p.massage = true;
+    p.rhythm = standardRhythm(sel.days);
+    for (var i = 0; i < COUNTED.length; i++) p[COUNTED[i]] = true;
+    return p;
+  }
+
   function calculate(sel) {
     var d   = sel.days;
-    var sum = rawSum(sel, RESERVATION[d]);
+    var sum = rawSum(pricedSelection(sel), RESERVATION[d]);
     var introFactor = CONFIG.introPricing ? CONFIG.introPrice[d] / CONFIG.fullPrice[d] : 1;
     // The daytime supplement is added after the discount and raises the floor.
     var supplement = sel.format === 'out' ? CONFIG.liveOutDailySupplement * d : 0;

@@ -1355,14 +1355,16 @@ function doorHandoff() {
   // Where the band's dense middle sits, as windows below the bath's bottom
   // edge. It starts well below (out of sight while the bath is held), rises
   // to just above the edge by the time the bath lets go, and then rides it.
-  const lift = { off: 0.7, away: 0 };
-  gsap.fromTo(lift, { off: 0.7 }, {
+  // Shorter since 28 Oct 2026 (Ami: shorten the empty mist after the bath):
+  // the band starts closer and later, and pulls away sooner.
+  const lift = { off: 0.5, away: 0 };
+  gsap.fromTo(lift, { off: 0.5 }, {
     off: -0.06,
     ease: 'none',
     immediateRender: false,
     scrollTrigger: {
       trigger: bathAct,
-      start: 'bottom 180%',
+      start: 'bottom 150%',
       end: 'bottom 100%',
       scrub: 0.7,
       invalidateOnRefresh: true
@@ -1380,8 +1382,8 @@ function doorHandoff() {
     immediateRender: false,
     scrollTrigger: {
       trigger: bathAct,
-      start: 'bottom 40%',
-      end: 'bottom 0%',
+      start: 'bottom 60%',
+      end: 'bottom 10%',
       scrub: 0.7,
       invalidateOnRefresh: true
     }
@@ -2068,7 +2070,8 @@ function actTreatmentsB() {
 function filmGap() {
   const turn = document.querySelector('.act--turn');
   const film = document.querySelector('.film');
-  const frame = film && film.querySelector('.film__stage');
+  // Measured to the heading above the frame since it was added (28 Oct 2026).
+  const frame = film && (film.querySelector('.film__head') || film.querySelector('.film__stage'));
   if (!turn || !film || !frame) return;
   const set = () => {
     film.style.marginTop = '0px';

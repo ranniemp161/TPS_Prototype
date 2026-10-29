@@ -2637,15 +2637,15 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 .dk .dk-decide__list li:last-child { border: 0; }
 .dk .dk-page.is-tight .dk-decide__list li { padding: .18rem 0; font-size: .875rem; }
 @media (max-width: 860px) { .dk .dk-decide__list { margin-bottom: 1.1rem; } }
-/* A very small dash before each item (TJ, 25 Oct 2026): a drawn 8px line, not a
-   typed character, sitting on the first line's middle; wrapped lines hang level
-   with the text. */
+/* A small bullet before each item (Ami, 28 Oct 2026; was a drawn dash, TJ,
+   25 Oct 2026): a drawn 4px dot, not a typed character, centred on the first
+   line's middle; wrapped lines hang level with the text. */
 .dk .dk-decide__list li { position: relative; padding-left: 1.1rem; }
 .dk .dk-decide__list li::before {
-  content: ""; position: absolute; left: 0; top: calc(.32rem + .725em);
-  width: 8px; height: 1px; background: var(--t-mute);
+  content: ""; position: absolute; left: 1px; top: calc(.32rem + .725em - 2px);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--t-mute);
 }
-.dk .dk-page.is-tight .dk-decide__list li::before { top: calc(.18rem + .725em); }
+.dk .dk-page.is-tight .dk-decide__list li::before { top: calc(.18rem + .725em - 2px); }
 .dk .dk-page.is-tight .dk-decide__list li { padding-left: 1.1rem; }
 
 /* Batch 6 (TJ and Ami, 24 Oct 2026). The postcode on the opening screen, and
