@@ -80,6 +80,11 @@
   font-size: .84rem; color: var(--sf-mute);
 }
 .sf__copy { margin: 0; }
+/* Social icons, the client's three accounts (TJ, 28 Oct 2026). */
+.sf__social { display: flex; gap: 18px; }
+.sf__social a { display: block; color: var(--sf-text); opacity: .85; transition: opacity .2s; }
+.sf__social a:hover, .sf__social a:focus-visible { opacity: 1; text-decoration: none; }
+.sf__social svg { display: block; width: 20px; height: 20px; }
 .sf__legal { display: flex; flex-wrap: wrap; gap: 8px 24px; }
 .sf__legal a { color: var(--sf-mute); }
 .sf__legal a:hover, .sf__legal a:focus-visible { color: var(--sf-text); }
@@ -92,4 +97,6 @@
   .sf__brand a { display: block; margin: 0; transform: none; }
   .sf__logo { width: min(84vw, 330px); height: auto; }
   .sf__tagline { white-space: nowrap; font-size: calc((100vw - 3rem) / 15); }
+  .sf__base { justify-content: center; text-align: center; }
+  .sf__social { order: -1; width: 100%; justify-content: center; }
 }
