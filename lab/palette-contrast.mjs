@@ -11,7 +11,7 @@ import { chromium } from 'playwright-core';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..');
 const pageFile = path.join(root, 'index', 'programmes.html');
-const palettesFile = path.join(here, 'palettes.js');
+const palettesFile = path.join(here, '..', 'index', 'js', 'palettes.js');
 const outDir = path.join(here, 'shots', 'palette');
 const outFile = path.join(outDir, 'contrast.json');
 const REACHES = ['full', 'button'];
@@ -98,7 +98,7 @@ async function loadPalettes(page) {
   if (!Array.isArray(list) || list.length === 0) {
     return { ids: FALLBACK_PALETTES, source: 'fallback (palettes.js had no TPS_PALETTES)' };
   }
-  return { ids: list.map((p) => p.id), source: 'lab/palettes.js', flagged: list.filter((p) => p.failed).map((p) => p.id) };
+  return { ids: list.map((p) => p.id), source: 'index/js/palettes.js', flagged: list.filter((p) => p.failed).map((p) => p.id) };
 }
 
 async function main() {
