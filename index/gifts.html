@@ -6,14 +6,16 @@
 <!-- Palette switch, prototype only, removed when Ami picks (TJ, 26 Oct 2026) -->
 <script>
 (function () {
-  var d = document.documentElement, p = null, r = null, q = null;
-  try { q = new URLSearchParams(location.search); p = q.get('palette'); r = q.get('reach'); } catch (e) {}
+  var d = document.documentElement, p = null, q = null;
+  try { q = new URLSearchParams(location.search); p = q.get('palette'); } catch (e) {}
   try {
     if (p) localStorage.setItem('tps-palette', p); else p = localStorage.getItem('tps-palette');
-    if (r) localStorage.setItem('tps-reach', r); else r = localStorage.getItem('tps-reach');
+    /* The reach toggle is gone, everything is Full (TJ, 2 Nov 2026); clear any saved Button only */
+    localStorage.removeItem('tps-reach');
   } catch (e) {}
+  /* Coral and Cognac and their five accent steps each, plus Coral 3 square (TJ, 2 Nov 2026); any other saved choice is cleared */
+  if (p && p !== 'coral' && p !== 'cognac' && p !== 'coral-square' && !/^(coral|cognac)-[1-5]$/.test(p)) { p = null; try { localStorage.removeItem('tps-palette'); } catch (e) {} }
   if (p) d.setAttribute('data-palette', p);
-  if (r) d.setAttribute('data-reach', r);
 })();
 </script>
 <title>Gifts &middot; The Postpartum Suite</title>

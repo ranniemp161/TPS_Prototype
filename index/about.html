@@ -6,14 +6,16 @@
 <!-- Palette switch, prototype only, removed when Ami picks (TJ, 26 Oct 2026) -->
 <script>
 (function () {
-  var d = document.documentElement, p = null, r = null, q = null;
-  try { q = new URLSearchParams(location.search); p = q.get('palette'); r = q.get('reach'); } catch (e) {}
+  var d = document.documentElement, p = null, q = null;
+  try { q = new URLSearchParams(location.search); p = q.get('palette'); } catch (e) {}
   try {
     if (p) localStorage.setItem('tps-palette', p); else p = localStorage.getItem('tps-palette');
-    if (r) localStorage.setItem('tps-reach', r); else r = localStorage.getItem('tps-reach');
+    /* The reach toggle is gone, everything is Full (TJ, 2 Nov 2026); clear any saved Button only */
+    localStorage.removeItem('tps-reach');
   } catch (e) {}
+  /* Coral and Cognac and their five accent steps each, plus Coral 3 square (TJ, 2 Nov 2026); any other saved choice is cleared */
+  if (p && p !== 'coral' && p !== 'cognac' && p !== 'coral-square' && !/^(coral|cognac)-[1-5]$/.test(p)) { p = null; try { localStorage.removeItem('tps-palette'); } catch (e) {} }
   if (p) d.setAttribute('data-palette', p);
-  if (r) d.setAttribute('data-reach', r);
 })();
 </script>
 <title>About &middot; The Postpartum Suite</title>
@@ -155,9 +157,11 @@
       <!-- Split hero (TJ, 16 Oct 2026): Ami with her newborn and her eldest on
            the left, the question on the right. The picture is a generated
            illustration standing in until a real photograph of Ami and her
-           children is taken (TPS images/tailored/about-hero-founder-illustration.jpg). -->
+           children is taken (TPS images/tailored/about-hero-founder-illustration.jpg).
+           Since 2 Nov 2026 (TJ) a generated photograph in the same pose
+           (TPS images/tailored/about-hero-family-v1.jpg) replaces the illustration. -->
       <figure class="os-open__pic">
-        <img src="../assets/img/about-founder-illustration.webp" alt="Illustration of a mother on the sofa cradling her newborn while her young daughter leans in beside her" width="1600" height="1470" fetchpriority="high" decoding="async" />
+        <img src="../assets/img/about-hero-family.webp" alt="A mother laughing on the sofa as she cradles her newborn, her young daughter leaning in to kiss the baby's head" width="1600" height="1470" fetchpriority="high" decoding="async" />
       </figure>
       <div class="os-open__words">
         <h1 class="os-open__h">Who is caring<br /> for the mother?</h1>
@@ -170,7 +174,7 @@
   <section class="os-story" data-section="the-story" data-section-name="The Story">
     <div class="os-wrap os-story__grid">
       <figure class="os-story__pic" data-os-rise>
-        <img src="../assets/img/our-story-sofa.webp" alt="A specialist leaning in beside a mother on the sofa as she holds her newborn" width="1400" height="1750" loading="lazy" decoding="async" />
+        <img src="../assets/img/our-story-sofa-specialist.webp" alt="A specialist sitting beside a mother on the sofa as she holds her newborn" width="1400" height="1750" loading="lazy" decoding="async" />
       </figure>
       <div class="os-story__text">
         <p class="os-p" data-os-rise>After Ami had her second baby, Aminat wanted to give her something that would genuinely support her recovery. Not another gift for the baby, but something centred on <strong>her</strong>.</p>
@@ -275,7 +279,7 @@
       <div class="os-measure">
         <p class="os-p" data-os-rise>The home still feels like her home. Her preferences continue to shape the experience, and her family keeps its own rhythm.</p>
         <p class="os-p" data-os-rise>We make that rhythm feel lighter.</p>
-        <p class="os-p" data-os-rise><strong>We are present when you need us and discreet when you don’t.</strong></p>
+        <p class="os-p" data-os-rise>We are present when you need us and discreet when you don’t.</p>
       </div>
     </div>
   </section>
@@ -290,7 +294,7 @@
       <p class="os-p" data-os-rise>Today, it informs every part of TPS, from the programmes we design and the practitioners we train to the meals prepared, treatments delivered and hours of rest we help protect.</p>
       <p class="os-p" data-os-rise>After months of preparing for a baby’s arrival, we believe the mother’s recovery deserves just as much thought.</p>
       <p class="os-final" data-os-lines>The baby has arrived. We are here for the mother.</p>
-      <p class="os-sign" data-os-rise><strong>Aminat &amp; Ami Sowunmi</strong><br /><em>Co-Founders, The Postpartum Suite</em></p>
+      <p class="os-sign" data-os-rise><strong>Aminat Sowunmi &amp; Ami Olowu</strong><br /><em>Co-Founders, The Postpartum Suite</em></p>
     </div>
   </section>
 

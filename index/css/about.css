@@ -177,3 +177,7 @@ html.js [data-os-rise].is-in { opacity: 1; transform: none; }
 .os-open__h, .os-open--split .os-open__h { font-size: clamp(2.52rem, 3.72vw, 3.3rem); max-width: none; } /* 20 percent up, on two lines (TJ) */
 .os-h2, .os-trad__card .os-h2, .os-final { font-size: clamp(1.625rem, 2.25vw, 2rem); }
 .os-h3, .os-founder__name, .os-pull { font-size: clamp(1.19rem, 1.55vw, 1.375rem); }
+
+/* The question in the lede (TJ, 2 Nov 2026): the lede's own weight, not bold,
+   in the accent colour, on its own line under the sentence. */
+.os-open__lede strong { display: block; font-weight: inherit; color: var(--acc); }

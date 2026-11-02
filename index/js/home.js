@@ -927,9 +927,11 @@ function actTurn() {
     // the scroll speed, and is fully open early in the hold.
     const turnFrame = act.querySelector('.stage__frame--turn');
     if (turnFrame && window.matchMedia('(max-width: 767px)').matches) {
+      // the frame's own corner, so Coral 3 square opens square (TJ, 2 Nov 2026)
+      const turnRad = getComputedStyle(turnFrame).borderTopLeftRadius || '16px';
       pinTl.fromTo(turnFrame,
-        { clipPath: 'inset(0% 36% 0% 36% round 16px)' },
-        { clipPath: 'inset(0% 0% 0% 0% round 16px)', ease: 'power2.inOut', duration: BEAT_EMERGE * 0.9, immediateRender: true },
+        { clipPath: 'inset(0% 36% 0% 36% round ' + turnRad + ')' },
+        { clipPath: 'inset(0% 0% 0% 0% round ' + turnRad + ')', ease: 'power2.inOut', duration: BEAT_EMERGE * 0.9, immediateRender: true },
         BEAT_EMERGE * 0.35);
     }
 
@@ -1481,7 +1483,7 @@ function homeFilm() {
   if (!section) return;
   const stage = section.querySelector('[data-film-stage]');
   const video = section.querySelector('[data-film-video]');
-  const sound = section.querySelector('[data-film-sound]');
+  const sound = section.querySelector('[data-film-mute]');
   if (!stage || !video) return;
 
   const phoneQ = window.matchMedia('(max-width: 767px)');
@@ -1520,7 +1522,16 @@ function homeFilm() {
       if (track) track.setAttribute('aria-valuenow', String(Math.round(p * 100)));
     }
   };
-  const barLoop = () => { if (!withSound) return; paintBar(); requestAnimationFrame(barLoop); };
+  // The timeline runs whenever the film is on screen, silent or not (TJ, 2 Nov 2026).
+  let barRunning = false;
+  const barLoop = () => { if (!inView && !withSound) { barRunning = false; return; } barRunning = true; paintBar(); requestAnimationFrame(barLoop); };
+  const startBar = () => { if (!barRunning) requestAnimationFrame(barLoop); };
+  const setSoundUi = (on) => {
+    if (!sound) return;
+    section.classList.toggle('is-sound', on);
+    sound.setAttribute('aria-pressed', on ? 'true' : 'false');
+    sound.setAttribute('aria-label', on ? 'Sound on. Mute' : 'Sound off. Play with sound');
+  };
   const setPaused = (paused) => {
     section.classList.toggle('is-paused', paused);
     if (pauseBtn) pauseBtn.setAttribute('aria-label', paused ? 'Play' : 'Pause');
@@ -1563,7 +1574,7 @@ function homeFilm() {
     withSound = false;
     video.muted = true;
     video.loop = true;
-    section.classList.remove('is-sound');
+    setSoundUi(false);
     setPaused(false);
     exitFull();
     if (inView) playSilent(); else video.pause();
@@ -1571,14 +1582,16 @@ function homeFilm() {
 
   if (sound) {
     sound.addEventListener('click', () => {
+      // Sound on mutes again and the film carries on looping (TJ, 2 Nov 2026).
+      if (withSound) { backToLoop(); return; }
       withSound = true;
       video.loop = false;
       video.muted = false;
       video.currentTime = 0;
-      section.classList.add('is-sound');
+      setSoundUi(true);
       setPaused(false);
       lastP = -1;
-      requestAnimationFrame(barLoop);
+      startBar();
       const p = video.play();
       if (p && p.catch) p.catch(() => {});
       // A phone goes full screen. The stage itself where the browser allows
@@ -1599,7 +1612,7 @@ function homeFilm() {
 
   new IntersectionObserver(entries => {
     inView = entries[0].isIntersecting;
-    if (inView) playSilent();
+    if (inView) { playSilent(); startBar(); }
     else if (withSound && !fsElement()) backToLoop();
     else if (!withSound) video.pause();
   }, { threshold: 0.15 }).observe(stage);

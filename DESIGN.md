@@ -2033,3 +2033,67 @@ Book a consultation's last line (the bespoke line) to Try a signature treatment 
 ## Text to text gaps, and a clear line above the treatments (TJ, 2 Nov 2026)
 
 TJ: match the space between the text, not between section edges. The visible gap above Book a consultation is the testimonials' names to its heading (1440x900 138px; earlier measures counted an invisible element 61px below the names). The bespoke line to Try a signature treatment now equals it at every desktop size (138, 136, 132, 145) via .act--treatments-b padding-top +61px at 768px and up; on phones the last thing above is the arrows and both gaps were already 71px. The pink drift of Book a consultation no longer fades out at its foot: it stops at the section edge against the treatments' flat canvas, giving the clear line TJ asked for. Backup: lab/site.before-treat-line.css.bak. Measure: lab/text-gaps.mjs.
+
+## Line halfway between Book a consultation and the treatments (TJ, 2 Nov 2026)
+
+The flat edge now sits exactly halfway between the bespoke line and Try a signature treatment (1440x900: 69 above, 69 below; 1920: 72/72; 390: 35/35). Text to text gap unchanged. Backup: lab/site.before-line-mid.css.bak. Measure: lab/line-mid.mjs.
+
+## Film controls always shown (TJ, 2 Nov 2026)
+
+Sheet row 37. The film plays muted on a loop with its control bar always visible: pause, the timeline (now moving during the silent loop too) and a sound button that replaces Play with sound (removed). Muted shows a speaker struck through; pressing it starts the film from the top with sound (a phone still goes full screen, as before); pressing it again mutes and the loop carries on; at the end the film returns to the muted loop. As the bar is always over moving footage, the controls are white on a soft shadow along the frame's foot. Check: lab/film-controls-check.mjs (the end is signalled directly, the test browser stalls playback with sound). Backups: lab/*.before-film-controls.*.bak.
+
+## About hero is a photograph (TJ, 2 Nov 2026)
+
+The illustration in the About opening is replaced by a generated photograph in the same pose (Nano Banana Pro, 2K, the illustration plus home-living and our-story-sofa as references): mother on the cream sofa with her newborn, her toddler leaning in to kiss the baby. Source TPS images/tailored/about-hero-family-v1.jpg, cropped from the top to the slot's 1600x1470 as assets/img/about-hero-family.webp. The illustration file stays in assets. Backup: lab/about.before-photo-hero.html.bak.
+
+## About lede question in the accent (TJ, 2 Nov 2026)
+
+"who is caring for the mother?" in the About opening lede is no longer bold: the lede's own weight, in the accent colour (--acc), on its own line under the sentence (.os-open__lede strong, about.css). Backup: lab/about.before-about-lede.css.bak.
+
+## About story photograph replaced (TJ, 2 Nov 2026)
+
+The sofa photograph beside the story (a specialist in a hijab with the mother) is replaced by a generated one in the same setup (Nano Banana Pro, 2K, 4:5): a ginger haired mother with her newborn and a Malaysian specialist in the pink tunic uniform from home-handover, no headscarf, in the site's cream, blush and daylight style. Source TPS images/tailored/about-sofa-specialist-v1.jpg, now assets/img/our-story-sofa-specialist.webp (1400x1750). The old file stays in assets. Backup: lab/about.before-sofa-photo.html.bak.
+
+## Founders' names (TJ, 2 Nov 2026)
+
+Sheet row 43. The founder cards already read Aminat Sowunmi and Ami Olowu (the spelling in the client's Founder doc, ABOUT-PLAN.md; TJ's note had Shwomi by voice to text). The sign off under them gave Ami the wrong surname, "Aminat & Ami Sowunmi"; now "Aminat Sowunmi & Ami Olowu". Backup: lab/about.before-names.html.bak.
+
+## About closing line plain (TJ, 2 Nov 2026)
+
+"We are present when you need us and discreet when you don't." (How we work in your home) is no longer bold; plain body text like the lines above it. Backup: lab/about.before-plain-closing.html.bak.
+
+## Palettes narrowed to Coral and Cognac (TJ, 2 Nov 2026)
+
+Sheet row 23. Plum, Sage, Bronze, Oxblood, Ink navy and Dusty teal are removed: from the Colours panel list (palettes.js), their blocks in site.css, and their photo sets in palette-images.js. Their regraded photographs moved to archive/palettes-removed-2026-11-02/. The head script on all ten pages now accepts only coral or cognac, so a removed palette in the URL is ignored and a saved one is cleared back to Coral. Checked: panel lists two, Cognac still swaps colour and its 19 regraded photos with none broken. Backups: lab/before-two-palettes/. Check: lab/two-palettes-check.mjs.
+
+## Ten accent steps for Coral and Cognac (TJ, 2 Nov 2026)
+
+The Colours panel now lists ten palettes, Coral 1 to 5 then Cognac 1 to 5, darkest to lightest. Within a family only the accent moves: oklch lightness offsets of .12 and .06 either side of the base, chroma and hue held (Coral base #A64C45 is oklch .5296 .1204 26.45; Cognac base seeds .600 .105 63). Cream grounds, tint, soft, text grey, dark ground and the Cognac regraded photographs are identical across each family. Step 3 is today's palette exactly: coral-3 has no block and renders as :root, plain cognac is an alias of cognac-3, and neither plain id is listed. The text step is the accent itself where it passes 4.5:1 on cream #F3EFEC and the family tint (Coral #E2CAC6, Cognac #E8E0D3), otherwise the lightest darker shade of the same chroma and hue that passes; links, prices and script lines take it. Cognac 3 keeps today's #8E5516, a little darker than the rule's #905718.
+
+| Step | Coral accent | Coral text step | Cognac accent | Cognac text step |
+|---|---|---|---|---|
+| 1 darkest | #7F2824 | #7F2824 (accent), script #66100E | #864E0A | #864E0A (accent) |
+| 2 | #923A35 | #923A35 (accent), script #79241F | #995F23 | #905718 |
+| 3 today | #A64C45 | #A64C45 (accent), script #8C362F | #AC7137 | #8E5516 |
+| 4 | #BA5E56 | #953C36 | #BF834A | #905718 |
+| 5 lightest | #CE7067 | #953C36 | #D3965C | #905718 |
+
+Coral hover and deep move with the accent from today's #8C362F (#66100E, #79241F, #8C362F, #A0483F, #B35950), and the two lighter ribbons move with it; the call to action and booking ribbons stay put. Coral 4 and 5 put links, prices, script lines and errors on #953C36. Cognac hover and ribbons follow --acc-l through the derivation block.
+
+What changed: palettes.js lists the ten ids; site.css derivation block now excludes every coral id (`:not([data-palette^="coral"])`), the cognac block matches every cognac id, and one short block per step follows; palette-images.js maps every cognac id to the cognac photo folder; palette-panel.js ticks the step 3 row for plain coral or cognac; the head script on all ten pages also accepts ids matching coral or cognac 1 to 5. Contrast maths: lab/ten-steps-contrast.py. Check: lab/ten-steps-check.mjs (screenshots in lab/ten-steps-shots/). Backups: lab/before-ten-steps/.
+
+## Square Coral and no reach toggle (TJ, 2 Nov 2026)
+
+Removed: the Full / Button only toggle. Everything is Full. The toggle is gone from palette-panel.js (with its styles, its click handler and its reach() helper), the `html[data-reach="button"]` block is gone from site.css, and the head script on all ten pages no longer reads `?reach=` or sets data-reach. It now removes any saved `tps-reach` on every load, so nobody stays stuck on Button only. Copy link drops any reach parameter. The `--reach-*` tokens in :root stay; they now hold the Full values only.
+
+Added: an eleventh palette, `coral-square`, named "Coral 3 square", listed after Cognac 5. Its colours are exactly Coral 3 (no colour token in its block, and the `^="coral"` prefix keeps it out of the generic palette block). palette-images.js needs no entry (it is Coral, original photographs). The head script allow list accepts `coral-square`.
+
+What goes square under `html[data-palette="coral-square"]` (site.css, after the cognac steps):
+
+1. The radius tokens: `--r-badge`, `--r-button`, `--r-card`, `--r-media`, `--r-mark` (build-your-programme.css) and `--r-input` (referenced with a fallback) all set to 0.
+2. Every element and every ::before and ::after held at `border-radius: 0 !important`, radio and check inputs left alone, plus the Bespoke summary's scrollbar thumb. This covers every literal radius in site.css, build-your-programme.css, booking.css, house-flight.css, what-we-do.css and its five section files, about.css, who-comes.css, specialist.css, inner-pages.css, programmes.css and request.css (buttons, tabs, cards, photos and frames, the film frame and sound button, the gallery thumbs and media, the dropdown menu, the glass pieces, badges and chips, inputs and the phone code box, the Bespoke cards, toggles, notices and summary, the calendar step buttons and day cells, the booking card, buttons and chips), and the radii GSAP writes inline (the What We Do opening frame, the home gallery's flying copy).
+3. Clip path corners: `--ph-rad` held at 0 on `.ty` and `.vt` (the scripts read the slot radius and treat 0 as 10), specialist.css already clips with `--r-media`, and home.js (phone turn frame) and specialist.js now clip with the frame's own computed corner instead of a fixed 16px.
+
+What keeps its circle (restored to 50%): the line dots, tips and stops (`.tv2__dot`, `.tv2__tip`, `.film__tip`, `.care-line__tip`, `.care-line__stop::before`, `.care-vline__dot`, `.care-vline__tip`, `.dk-line__*`, `.dkl__*`, `.dkd__*`, `.dk-dot::before`, `.dnl__*`, `.vt__cap`, `.vt__tip`, `.vt__dot`, `.vt__go::before`, `.ty__stop`, `.ty__tip` and its hit area, `.os-line__tip`, `.os-act__dot`, `.wd__row::before`, the house flight `.route__*` and `.zones__*` dots), the suns (`.sundial__sun`, `.dnl__sun`, the `.ty-sun` twin), the list bullets, the phone arrows over the care photographs (`.care__nav`), the booking dialog's round close button, and the round focus rings. The Colours panel is in a shadow root and untouched. One call: the Bespoke toggle's knob (`.tg__sw::after`) goes square with its track.
+
+Check: lab/square-check.mjs (screenshots in lab/square-shots/). Probe of every radius under the default Coral: lab/square-probe.mjs. Backups: lab/before-square/.

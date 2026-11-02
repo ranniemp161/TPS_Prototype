@@ -40,8 +40,8 @@
   var sw = {};
   list.forEach(function (p) { sw[p.id] = probe(p.id); });
 
-  function current() { return root.getAttribute('data-palette') || 'coral'; }
-  function reach() { return root.getAttribute('data-reach') === 'button' ? 'button' : 'full'; }
+  /* plain coral (or none) and plain cognac tick their step 3 row (TJ, 2 Nov 2026) */
+  function current() { var c = root.getAttribute('data-palette') || 'coral'; return c === 'coral' || c === 'cognac' ? c + '-3' : c; }
 
   function themeColor() {
     var m = document.querySelector('meta[name="theme-color"]');
@@ -70,19 +70,13 @@
     '.nm{flex:1}' +
     '.s{display:inline-block;width:16px;height:16px;border-radius:50%;border:1px solid #ddd;margin-left:-4px}' +
     '.sec{margin-top:8px;padding-top:8px;border-top:1px solid #ddd}' +
-    '.tg{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden}' +
-    '.tg button{flex:1;background:#fff;border:0;padding:6px 4px;font-size:12px}' +
-    '.tg button+button{border-left:1px solid #ddd}' +
-    '.tg button.on{background:#222;color:#fff}' +
-    '.cp{width:100%;margin-top:8px;background:#fff;border:1px solid #ddd;border-radius:8px;padding:7px;font-size:12px}' +
+    '.cp{width:100%;background:#fff;border:1px solid #ddd;border-radius:8px;padding:7px;font-size:12px}' +
     '</style>' +
     '<div class="wrap"><button class="pill" type="button" aria-expanded="false">Colours</button>' +
     '<div class="card" role="dialog" aria-label="Colours"><div class="head"><span>Colours</span>' +
     '<button class="x" type="button" aria-label="Close">&times;</button></div>' +
     '<div class="rows"></div>' +
-    '<div class="sec"><div class="tg"><button type="button" data-r="full">Full</button>' +
-    '<button type="button" data-r="button">Button only</button></div>' +
-    '<button class="cp" type="button">Copy link</button></div></div></div>';
+    '<div class="sec"><button class="cp" type="button">Copy link</button></div></div></div>';
 
   var wrap = sh.querySelector('.wrap'), rows = sh.querySelector('.rows');
   list.forEach(function (p) {
@@ -96,9 +90,8 @@
   });
 
   function paint() {
-    var c = current(), r = reach();
+    var c = current();
     [].forEach.call(rows.children, function (b) { b.firstChild.textContent = b.dataset.id === c ? '✓' : ''; });
-    [].forEach.call(sh.querySelectorAll('.tg button'), function (b) { b.classList.toggle('on', b.dataset.r === r); });
   }
   function setOpen(o) {
     wrap.classList.toggle('open', o);
@@ -112,14 +105,9 @@
     root.setAttribute('data-palette', b.dataset.id); store('tps-palette', b.dataset.id);
     themeColor(); paint();
   });
-  sh.querySelector('.tg').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    root.setAttribute('data-reach', b.dataset.r); store('tps-reach', b.dataset.r);
-    themeColor(); paint();
-  });
   sh.querySelector('.cp').addEventListener('click', function (e) {
     var btn = e.currentTarget, u = new URL(location.href);
-    u.searchParams.delete('panel'); u.searchParams.set('palette', current()); u.searchParams.set('reach', reach());
+    u.searchParams.delete('panel'); u.searchParams.set('palette', current()); u.searchParams.delete('reach');
     var link = u.toString();
     function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy link'; }, 1500); }
     function fallback() {

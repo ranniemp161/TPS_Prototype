@@ -8,7 +8,7 @@
     'massage', 'meal', 's8-confinement-arrival', 'tb-bellybinding', 'tb-hotstone', 'tb-postpartum',
     'tb-traditional', 'tungku-held', 'tungku-stones'];
   /* dustyteal: Nano Banana Pro. The other six: Qwen Image Edit 2511 on RunPod (27 Oct 2026). */
-  var SETS = { cognac: HOME, plum: HOME, sage: HOME, bronze: HOME, oxblood: HOME, navy: HOME, dustyteal: HOME };
+  var SETS = { cognac: HOME, 'cognac-1': HOME, 'cognac-2': HOME, 'cognac-3': HOME, 'cognac-4': HOME, 'cognac-5': HOME }; /* the other six removed; every cognac step keeps the regraded photographs (TJ, 2 Nov 2026) */
   var root = document.documentElement;
   var RX = /(^|\/)assets\/img\/([^\/?#]+)\.webp(\?.*)?$/;
   function apply() {
@@ -24,7 +24,8 @@
         orig = src; img.setAttribute('data-orig-src', orig);
       }
       var name = orig.match(RX)[2];
-      var want = set.indexOf(name) > -1 ? orig.replace(RX, '$1assets/img/' + pal + '/' + name + '.webp') : orig;
+      var dir = pal.replace(/-[1-5]$/, ''); /* every step of a family shares its folder */
+      var want = set.indexOf(name) > -1 ? orig.replace(RX, '$1assets/img/' + dir + '/' + name + '.webp') : orig;
       if (img.getAttribute('src') !== want) img.setAttribute('src', want);
     }
   }

@@ -6,14 +6,16 @@
 <!-- Palette switch, prototype only, removed when Ami picks (TJ, 26 Oct 2026) -->
 <script>
 (function () {
-  var d = document.documentElement, p = null, r = null, q = null;
-  try { q = new URLSearchParams(location.search); p = q.get('palette'); r = q.get('reach'); } catch (e) {}
+  var d = document.documentElement, p = null, q = null;
+  try { q = new URLSearchParams(location.search); p = q.get('palette'); } catch (e) {}
   try {
     if (p) localStorage.setItem('tps-palette', p); else p = localStorage.getItem('tps-palette');
-    if (r) localStorage.setItem('tps-reach', r); else r = localStorage.getItem('tps-reach');
+    /* The reach toggle is gone, everything is Full (TJ, 2 Nov 2026); clear any saved Button only */
+    localStorage.removeItem('tps-reach');
   } catch (e) {}
+  /* Coral and Cognac and their five accent steps each, plus Coral 3 square (TJ, 2 Nov 2026); any other saved choice is cleared */
+  if (p && p !== 'coral' && p !== 'cognac' && p !== 'coral-square' && !/^(coral|cognac)-[1-5]$/.test(p)) { p = null; try { localStorage.removeItem('tps-palette'); } catch (e) {} }
   if (p) d.setAttribute('data-palette', p);
-  if (r) d.setAttribute('data-reach', r);
 })();
 </script>
 <title>The Postpartum Suite — Live-in postpartum care</title>
@@ -372,12 +374,8 @@
            data-src-mobile="../assets/video/home-film-m.mp4"
            poster="../assets/img/home-film-poster.webp"
            muted loop playsinline preload="none" aria-label="The Postpartum Suite film"></video>
-    <button type="button" class="film__sound" data-film-sound>
-      <span>Play with sound</span>
-      <svg viewBox="0 0 10 12" aria-hidden="true" focusable="false"><path d="M0 0 L10 6 L0 12 Z" /></svg>
-    </button>
-    <!-- The film's timeline, only while it plays with sound (TJ, 21 Oct 2026):
-         the progression bar's hairline, fill and tip, with a pause beside it. -->
+    <!-- The film's timeline (TJ, 21 Oct 2026), always shown since 2 Nov 2026
+         (TJ, sheet row 37): pause, the progression line, and the sound button. -->
     <div class="film__bar" data-film-bar>
       <button type="button" class="film__pause" data-film-pause aria-label="Pause">
         <svg class="film__icon-pause" viewBox="0 0 10 12" aria-hidden="true" focusable="false"><rect x="1" y="0" width="2.4" height="12" /><rect x="6.6" y="0" width="2.4" height="12" /></svg>
@@ -388,6 +386,12 @@
         <span class="film__fill" data-film-fill aria-hidden="true"></span>
         <span class="film__tip" data-film-tip aria-hidden="true"></span>
       </div>
+      <!-- Sound (TJ, 2 Nov 2026): replaces Play with sound. Muted shows the
+           speaker struck through; turning it on starts the film from the top. -->
+      <button type="button" class="film__mute" data-film-mute aria-pressed="false" aria-label="Sound off. Play with sound">
+        <svg class="film__icon-muted" viewBox="0 0 20 16" aria-hidden="true" focusable="false"><path d="M1 5.5h3.5L9 1.5v13l-4.5-4H1z" /><path class="film__x" d="M13 5.5l5 5M18 5.5l-5 5" /></svg>
+        <svg class="film__icon-sound" viewBox="0 0 20 16" aria-hidden="true" focusable="false"><path d="M1 5.5h3.5L9 1.5v13l-4.5-4H1z" /><path class="film__x" d="M12.5 5.2a3.6 3.6 0 0 1 0 5.6M15 3a6.6 6.6 0 0 1 0 10" /></svg>
+      </button>
     </div>
   </div>
 </section>
