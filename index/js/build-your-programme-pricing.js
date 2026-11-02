@@ -62,7 +62,7 @@ var TPS_PRICING = (function () {
     14: ['w4', 'w3', 'w2'],
     30: ['w4', 'w3', 'w2']
   };
-  var WEEK_WORDS = { 4: 'Four times a week', 3: 'Three times a week', 2: 'Twice a week' };
+  var WEEK_WORDS = { 4: '4 times a week', 3: '3 times a week', 2: 'Twice a week' };
 
   function massageSessions(rhythm, days) {
     var n = parseInt(rhythm.slice(1), 10);

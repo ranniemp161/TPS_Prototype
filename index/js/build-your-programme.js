@@ -45,6 +45,26 @@
     var burger = root.querySelector('[data-burger]');
     var open = null;
 
+    // Desktop: the panel hangs under the tab that opened it, its text level with
+    // the tab's word (TJ, 1 Nov 2026). Sets --menu-x, which site.css reads only
+    // above 1100px, so phones keep their full width panel. It follows the tab
+    // while open, since the header fold slides the tabs on scroll.
+    function placeMenu(tab) {
+      var host = menu.offsetParent || root;
+      function set() {
+        var pad = parseFloat(getComputedStyle(tab).paddingLeft) || 0;
+        var x = tab.getBoundingClientRect().left + pad - host.getBoundingClientRect().left;
+        menu.style.setProperty('--menu-x', x.toFixed(1) + 'px');
+      }
+      set();
+      cancelAnimationFrame(menu._follow);
+      (function follow() {
+        if (menu.hidden || tab.getAttribute('aria-expanded') !== 'true') return;
+        set();
+        menu._follow = requestAnimationFrame(follow);
+      })();
+    }
+
     function close(focusTab) {
       if (!open) return;
       var was = tabs.filter(function (t) { return t.dataset.tab === open; })[0];
@@ -73,14 +93,19 @@
       open = name;
 
       menu.hidden = false;
+      placeMenu(tab);
       veil.hidden = false;
+      // Measure this list on its own: drop the last panel's height first, or a
+      // short list inherits a long one's (TJ, 1 Nov 2026).
+      var prevH = menu.offsetHeight;
+      menu.style.height = 'auto';
       var h = menu.scrollHeight;
       if (REDUCED) { gsap.set(menu, { height: 'auto' }); gsap.set(veil, { opacity: 1 }); return; }
       if (first) {
         gsap.fromTo(menu, { height: 0 }, { height: h, duration: 0.34, ease: EASE });
         gsap.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.26, ease: EASE });
       } else {
-        gsap.to(menu, { height: h, duration: 0.26, ease: EASE });
+        gsap.fromTo(menu, { height: prevH }, { height: h, duration: 0.26, ease: EASE });
       }
       gsap.fromTo(menu.querySelectorAll('.menu__group'),
         { opacity: 0, y: 10 },
@@ -499,7 +524,7 @@
       if (budget) block('CARE BUDGET', P.money(budget));
       lines.push('');
       lines.push('From  ' + P.money(result.fee / sel.days) + ' per day' +
-        (P.CONFIG.introPricing ? '  (held for three months)' : ''));
+        (P.CONFIG.introPricing ? '  (held for 3 months)' : ''));
       if (result.floored) lines.push('                at the minimum fee for this length');
       lines.push('');
       lines.push('Final programme, availability and fee are confirmed after consultation.');
@@ -521,9 +546,9 @@
       return { full: P.calculate(full).fee, floor: P.calculate(bare).fee };
     }
 
-    var WORDS = { 7: 'seven', 14: 'fourteen', 30: 'thirty' };
+    var WORDS = { 7: '7', 14: '14', 30: '30' }; // numerals (TJ, 1 Nov 2026)
     function word(d) { return WORDS[d] || String(d); }
-    var COUNTS = ['none', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'];
+    var COUNTS = ['none', '1', '2', '3', '4', '5', '6']; // numerals (TJ, 1 Nov 2026)
 
     function paintPriorities() {
       var picked = priorities();
@@ -575,8 +600,8 @@
       var head, body, action = null, alt = null, altAction = null;
       if (completeFit && completeFit.days === 30) {
         head = 'Every one of our programmes sits within that.';
-        body = 'The full thirty days, complete, is ' + P.money(completeFit.fee) + ' indicative.';
-        if (sel.days !== 30) action = { days: 30, complete: true, label: 'Show me the thirty day programme' };
+        body = 'The full 30 days, complete, is ' + P.money(completeFit.fee) + ' indicative.';
+        if (sel.days !== 30) action = { days: 30, complete: true, label: 'Show me the 30 day programme' };
       } else if (completeFit) {
         head = 'Our complete ' + word(completeFit.days) + ' day programme fits that.';
         body = P.money(completeFit.fee) + ' indicative, with every element of the published programme in it.';
@@ -588,7 +613,7 @@
       } else {
         var seven = bracket(7, format);
         head = 'That sits below where our shortest programme starts.';
-        body = 'Seven days begins at ' + P.money(seven.floor) + ' indicative, because your specialist is reserved for your family for the whole of it. Bring the figure to your call and we will talk through what is possible.';
+        body = '7 days begins at ' + P.money(seven.floor) + ' indicative, because your specialist is reserved for your family for the whole of it. Bring the figure to your call and we will talk through what is possible.';
       }
       if (completeFit && shapedFit && shapedFit.days > completeFit.days) {
         alt = 'Or ' + word(shapedFit.days) + ' days, shaped to fit. It starts at ' + P.money(shapedFit.fee) + ' indicative and we build up from there with you.';
@@ -897,18 +922,11 @@
     // The digits sit closer together, the £ as it was, matching the Programmes card (TJ, 25 Oct 2026).
     function paint(v) { var m = P.money(v); node.innerHTML = m.charAt(0) + '<span class="dk-price__digits">' + m.slice(1) + '</span>'; }
     return {
-      set: function (target, animate) {
+      // The price snaps straight to the new figure: no counting, and no
+      // line drawn under it (TJ, 1 Nov 2026). The animate flag is ignored.
+      set: function (target) {
         cancelAnimationFrame(raf);
-        if (shown === null || !animate || REDUCED) { shown = target; paint(target); return; }
-        var from = shown, t0 = performance.now(), dur = 650;
-        node.classList.remove('is-counting'); void node.offsetWidth; node.classList.add('is-counting');
-        (function tick(now) {
-          var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
-          shown = from + (target - from) * e;
-          paint(shown);
-          if (p < 1) raf = requestAnimationFrame(tick);
-          else { shown = target; paint(target); node.classList.remove('is-counting'); }
-        })(t0);
+        shown = target; paint(target);
       },
       value: function () { return shown; }
     };
@@ -1106,6 +1124,9 @@
     function paint(i) {
       cur = i;
       app.classList.toggle('is-start', i === 0);
+      // No price before How long (TJ, 1 Nov 2026): the bar's fee shows from the
+      // length screen on, where 30 days is already chosen.
+      app.classList.toggle('is-pre-price', lengthPage >= 0 && i < screenOf[lengthPage]);
       // The quiet funnel (TJ, 13 Oct 2026): past the start, the header keeps only the logo
       // and Return to the site (FUNNEL-PLAN.md chat 1).
       if (app.hasAttribute('data-funnel')) document.body.classList.toggle('is-funnelled', i > 0);
@@ -1146,6 +1167,8 @@
     // The due date screen blocks Next until a valid date is in (FUNNEL-PLAN.md chat 2).
     // The screen is found from the page flagged data-block="due".
     var duePage = pages.findIndex(function (p) { return p.getAttribute('data-block') === 'due'; });
+    // The How long page, found by its length choices; the price shows from here on.
+    var lengthPage = pages.findIndex(function (p) { return !!p.querySelector('input[name="days"]'); });
     // The due screen also needs the child number (Ami, 24 Oct 2026): both, or no way on.
     function childChosen() { return !!document.querySelector('input[name="child"]:checked'); }
     function blocked() { return duePage >= 0 && (!dueDate() || !childChosen()); }

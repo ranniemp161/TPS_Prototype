@@ -1789,3 +1789,247 @@ summary. The two photograph descriptions on Home and About now say a mother
 resting in a bath, since the picture shows a bath, not a rinse. The tailored
 counter on What We Do also gained Up to over its meals figure, and its three
 columns now sit top aligned so a one line label no longer drops its number.
+
+## Jost replaces Karla site wide (TJ, 1 Nov 2026)
+
+Everything that was Karla is now Jost, prices included: the `--f-read` token
+in site.css points at Jost, and Karla left the Google Fonts link on all ten
+pages (Jost loads 300 to 700 plus italic 400). The 29 Oct home page trial
+rule is deleted, replaced by the token. The FAQ right side (group headings
+and questions), set to Montserrat on 22 Oct to match the selector, is Jost
+too on TJ's call; the left selector stays Montserrat with the rest of the
+site's labels. Price numerals follow: card, bespoke bar and Your programme
+checked matching at 45.1px and 26.6px with the tightened digits
+(lab/price-match-check.mjs), and treatments still add £0
+(lab/treatments-price-check.mjs). Shots: lab/jost-shots.mjs, home, FAQs and
+Programmes at 1440 and 390. Note: lab/bespoke-check.mjs is stale, it still
+clicks the Meals step removed 25 Oct, and fails for that reason.
+
+## One bullet site wide, the Programmes dot (TJ, 1 Nov 2026)
+
+Every bulleted list uses the Four kinds of care dot from the Programmes page:
+a drawn 5px circle in the palette's accent (`--acc`), 16px of indent, centred
+on the first line, wrapped lines hanging level with the text. No dashes
+anywhere. Converted: home Four kinds of care (`.care__list`, was a white
+dash), the builder's Your programme (`.dk-decide__list`, was a 4px grey dot)
+and its last screen (`.close__gets`, was a dash), plus two styles with no
+list on any page right now (`.rq-gets`, `.block__list`). Lists that are not
+bullets keep their own devices: the drawn vertical lines (About, specialist
+checks), Who Comes Into Your Home's lighting dots, and What We Do's pills.
+The dot follows the palette: checked in Coral and Cognac at 1440 and 390
+(lab/bullet-shots.mjs, lab/bullet-shots-2.mjs). On the home grey band the
+accent dot is quieter than the old white dash.
+
+## Numerals in body text (TJ, 1 Nov 2026)
+
+Counts written as words are numerals in visible text: 37 changes across Home,
+Programmes, Bespoke, What We Do, the FAQs and the builder's scripts ("3
+programmes, from 7 days to 30", "Up to 3 fresh meals a day", "30 minutes by
+phone or video", "12 hours of care", "4 weeks before", the bath's "In 30
+days"). Programmes' intro is Ami's copy with only its numbers changed. Left as
+words: "one" (Be one of them, One postpartum specialist, one pair of hands),
+idioms (No two recoveries are the same, a one off), ordinals (second
+trimester), and titles, which still avoid numerals (Four kinds of care, Two
+sisters. Two perspectives. One shared standard.) until TJ decides whether
+titles change too. Code comments untouched. Tools: lab/number-words-scan.mjs
+lists what remains, lab/numerals-apply.mjs made the change (backups
+*.before-numerals.*.bak), lab/page-errors.mjs found no script errors.
+
+## Desktop dropdown under its own tab (TJ, 1 Nov 2026)
+
+Above 1100px each header panel opens directly under the tab that opened it,
+its links level with the tab's word, only as wide as its links, and only as
+tall as they need: 133px for two links, 210px for Our Offering's four (was a
+228px white band across the full width). It is the header's frosted glass
+with a hairline edge and rounded lower corners, no shadow. placeMenu() in
+home.js, inner-nav.js and build-your-programme.js sets --menu-x and follows
+the tab while the panel is open, so it stays under its word when the header
+folds on scroll. The page blur behind an open menu is unchanged. Phones and
+everything up to 1100px keep the full width panel, unchanged (TJ: desktop
+only). Check: lab/menu-open-shot.mjs, home and Programmes, 1440 and 1920, top
+and scrolled; links within 2px of the tab word in every case.
+
+## No heading in the desktop dropdown (TJ, 1 Nov 2026)
+
+The italic panel heading (What We Do, Our Offerings, About Us) is hidden above
+1100px: the open tab already shows in the palette's accent colour, so the
+dropdown is just its links. Panels are now 96px for two links and 172px for
+four. Phones keep the heading. The heading stays in the markup, so the
+mobile panel and the partial are unchanged.
+
+## Dropdown height when switching panels (TJ, 1 Nov 2026)
+
+Fix: going straight from a longer panel to a shorter one (Our Offering to
+About Us) kept the longer height, leaving 85px of empty glass under the last
+link. The menu's height was read while it still held the old panel's height.
+Now the old height is noted, the menu is set to auto, the new list is
+measured on its own, and the switch animates from one to the other. Every
+dropdown is its own height with 10px above the first link and 10px below the
+last, however it was reached. Same fix in home.js, inner-nav.js and
+build-your-programme.js. Check: lab/dropdown-switch-check.mjs, all 6 switch
+orders on Home, Programmes and Bespoke; the old scripts fail it, the new pass.
+
+## Page stays clear behind an open dropdown (TJ, 1 Nov 2026)
+
+Above 1100px the veil behind an open dropdown no longer tints or blurs the
+page; it stays as an invisible layer so a click anywhere still closes the
+menu. The dropdown's own frosted glass keeps its links readable over whatever
+sits behind. Phones keep the veil with their full width menu. Check:
+lab/veil-check.mjs (Home, Programmes, Bespoke at 1440 and 390).
+
+## Company phone number (TJ, 1 Nov 2026)
+
++44 7477 69330, used exactly as TJ wrote it (TJ's call, 1 Nov 2026: it is one
+digit shorter than a UK mobile; confirm with Ami before launch). Its own
+entry labelled Phone (TJ chose the label; Phone is not Ami's copy): last in
+the footer's Contact column on all ten pages (partial, synced) and in About's
+contact list between Brand Partnerships and Instagram. Tap to call
+(tel:+44747769330). Check: lab/phone-shots.mjs at 1440 and 390.
+
+## Bespoke price snaps to the new figure (TJ, 1 Nov 2026)
+
+Reverses the 25 Oct choice to keep the counting animation. When a choice
+changes the fee, the bottom bar and Your programme show the new figure at
+once (£356 straight to £361); no in between figures, and the accent line that
+drew under the price while it counted is gone with it (the .is-counting rule
+in build-your-programme.css is now unused). counter().set in
+build-your-programme.js simply paints the target. Programmes' card never
+counted. What We Do's Tailored For You day counter is untouched. Check:
+lab/price-snap-check.mjs, 4 changes at 1440 and 390; the old script fails it.
+
+## Bespoke opens on 30 days (TJ, 1 Nov 2026)
+
+The builder's How long step now opens with 30 days chosen (was 7), so the
+first price she sees is the lowest per day figure: £213 per day, against
+£356 for 7 days. The bar, Your programme and its name ("30 day bespoke
+programme") all start from 30 days. She can still pick 7 or 14. Only the
+checked radio moved; the pricing engine is untouched. Check:
+lab/bespoke-default-check.mjs at 1440 and 390.
+
+## A description under each length on How long (TJ, 1 Nov 2026)
+
+Each length on the builder's How long step carries a short description,
+always shown, under its existing line (A full week, 2 weeks, Full
+postpartum month), in the same small reading text (.length__desc). Copy is
+the home page's However long you need with us, trimmed by Opus and approved
+by TJ; the home page keeps its longer version. Resolves Ami's row on the
+Revisions tab ("expandable summary under 7, 14 and 30 days") as always
+visible rather than expandable. Fits at 1440x900, 390x844 and 360x640 (tight
+spacing at 360x640); the builder's other phone fits are unchanged.
+
+## No price before How long (TJ, 1 Nov 2026)
+
+The bar's fee is hidden on Start and Due date and appears on How long, where
+30 days is already chosen (TJ chose this over making her pick a length
+first), so the first price she sees is £213 per day. Going back before How
+long hides it again. The fee keeps its place in the bar, so nothing shifts
+when it fades in; hidden, it is silent to screen readers. .is-pre-price on
+.dk, set in paint() from the page holding the days choices. Check:
+lab/price-hidden-check.mjs walks Start, Due date, How long and back, at 1440
+and 390.
+
+## Check your dates: title, call length, legal line (TJ, 1 Nov 2026)
+
+Row 28: the Check your dates page's heading is "Date availability" (Opus's
+reading of TJ's note; every button stays Check your dates, the universal
+call to action). Row 27: both confirmation screens (the page and the end of
+the builder) now say the call is "30 minutes by phone" beside Choose a time
+to talk. Row 29: "Nothing is booked and nothing is paid. We confirm
+everything together on a call." removed from under the builder's form; the
+different "Nothing is booked on the call" sentence in the call descriptions
+stays. Row 30 (sending the form) waits for the back end. Row 31 (the page's
+copy) is proposed in chat, not built.
+
+## Check your dates after sending: no card (TJ, 1 Nov 2026)
+
+On the Check your dates page the Quentin line "We care for a few mothers
+each month" is gone. After sending, the card, the form and the lede go, and
+under the page title sit the body text (in the lede's type, centred) and the
+two actions, Choose a time to talk and Return to the site, centred. No second
+heading. The body text is lorem ipsum until TJ settles the copy (row 31).
+Check: lab/request-done-shot.mjs sends the form at 1440 and 390.
+
+## Check your dates confirmation copy (TJ, 1 Nov 2026)
+
+After sending: "Thank you. Your dates are with us, and your name is on the
+list we choose from each month. If you'd like to talk sooner, book a call
+and we can look at your dates together and find the care that fits." Opus's
+copy from TJ's direction, chosen by TJ from three endings, for Ami to see. No
+reply is promised, so nothing needs automating; the list is the outcome.
+Note: "30 minutes by phone" (row 27) is no longer on this page's
+confirmation; it stays on the builder's.
+
+## Programmes hero declutter (TJ, 1 Nov 2026)
+
+Sheet row 32. The lede "3 programmes, from 7 days to 30." and the "How we look after you" heading are removed from the Programmes hero. Ami's intro paragraph now runs straight under the Quentin line, split into two paragraphs with a blank line between them: the programmes and the specialist first, then what the care covers. The section keeps "How we look after you" as its screen reader label. Backups: lab/programmes.before-hero-declutter.*.bak.
+
+## Programmes intro, two lines each (TJ, 2 Nov 2026)
+
+On desktop (861px and up) the two intro paragraphs stay stacked and centred, each set to two even lines (balanced, max widths 66em and 47em). Two columns at the card's width were tried and turned down. The height comes back from the card's top and bottom padding (now clamp 20 to 30px, was 26 to 44px) and the gap between the 7, 14, 30 days line and the card (now clamp 12 to 22px, was 28 to 44px). Card bottom at 1440x900 is now 864 (was 883). Phone unchanged. Backup: lab/programmes.before-two-line-segments.css.bak. Check: lab/programmes-two-line-check.mjs.
+
+## Programmes pricing note removed (TJ, 2 Nov 2026)
+
+"Introductory pricing is held for bookings taken in 2026. All prices are indicative until confirmed at your consultation." removed from under Four kinds of care on the Programmes page. Backup: lab/programmes.before-remove-pricing-note.html.bak.
+
+## Programmes section gaps tightened, desktop (TJ, 2 Nov 2026)
+
+At 1440x900: hero card to Four kinds of care 153px to 92 (40% less); Four kinds of care to What each programme includes 111px to 89 (20% less); the includes card to Ready to talk it through 108px to 65 (40% less). Fixed paddings on .pg-lengths, .pg-same, .pg-compare and .pg-cta at 861px and up; phone unchanged. Backup: lab/programmes.before-section-gaps.css.bak. Measure: lab/programmes-gaps.mjs.
+
+## "From" above the price, and no length sub labels (TJ, 2 Nov 2026)
+
+Sheet row 34. On Programmes (hero card and the three prices under What each programme includes) "From" now sits on its own line above the figure, in the Bespoke From label's type (Montserrat 600, .8125rem, .12em, .75rem on phones), with "per day" beside the figure on its baseline. This matches the Bespoke bar and Your programme, which already worked this way; no other page shows a "from" price. On the Bespoke How long step, the sub labels "A full week", "2 weeks" and "Full postpartum month" are removed; the descriptions stay. Backups: lab/programmes.before-from-above.css.bak, lab/build-your-programme.before-length-subs.html.bak.
+
+## "From" and "per day" in one weight (TJ, 2 Nov 2026)
+
+Every price's "From" and "per day" labels are Montserrat 500, the weight the Bespoke "per day" already had. "From" was 600 everywhere; Programmes "per day" was 400. Covers .pg-price__from, .pg-price__per, .dk-fee__label, .dk-card__label, .dk-fee__per and .dk-sumfee__per. Backups: lab/*.before-from-weight.css.bak.
+
+## No fog under the bath (TJ, 2 Nov 2026)
+
+Sheet row 36. The fog stays for the bath's arrival only. The smoke band that trailed the bath's bottom edge as it left (.arrive, home.js doorHandoff) is hidden; home.js still places it but it never shows. The bath's own feather now does the whole dissolve: it grows to half a window (was 35 percent) between the bath's bottom at 102 and 70 percent of the window (was 80). Two seams this exposed were removed: What is Postpartum Care now starts on the page's cream and blends to paper over its top 45vh, and its pink aurora fades in from nothing over its top 40vh instead of being cut flat. Checked frame by frame with a real wheel at 1440 and 390 (lab/bath-exit-frames.mjs). Backups: lab/home.before-bath-no-fog.js.bak, lab/site.before-bath-no-fog.css.bak.
+
+## What is Postpartum Care moved up into the dissolve (TJ, 2 Nov 2026)
+
+Desktop only (861px and up): .act--turn margin-top -18vh, so the heading sits about 55 percent closer to the bath's bottom edge (1440x900: 308px to 146px; 1280x720: 211 to 81; 1920x1080: 402 to 207). Phones keep their 110px. The fade stays seamless. Backup: lab/site.before-turn-up.css.bak. Measure: lab/turn-gap.mjs. Awaiting TJ's eye.
+
+## Four kinds of care takes the footer's background (TJ, 2 Nov 2026)
+
+Home page .act--silk now uses the footer's recipe exactly: ground --g-dark, field opacity .55 (was .2), the footer's radial mask (was none) and the footer's sf-aurora 62s drift. Before, the ground matched but the weather was at under half strength, so the two read differently. Computed styles checked equal against .sf / .sf__field at 1440 and 390. Backup: lab/site.before-silk-as-footer.css.bak. Check: lab/silk-vs-footer.mjs.
+
+## Length thumbnails carry their number (TJ, 2 Nov 2026)
+
+Sheet row 39, home page However long you need with us. Each unselected thumbnail is dimmed to 80 percent brightness with its colour lowered (was opacity .45, saturate .65), and its number, 7, 14 or 30 in Instrument Serif, is a window in that dimming: the same photograph at full strength and full colour, clipped to the figure (.gal__num, background-clip: text, on the photo's own cover crop and object position). The selected thumbnail is at full strength and shows no number. A fade to 80 percent was tried first and dropped: over the pale ground the number vanished wherever the photo is white; dimming keeps the whole figure readable. Backups: lab/index.before-thumb-numbers.html.bak, lab/site.before-thumb-numbers.css.bak. Shots: lab/thumb-list-shot.mjs, lab/thumb-numbers-shot.mjs.
+Greater contrast (TJ, same day): unselected photos now brightness .6, saturate .35 (were .8 and .55); hover .75 and .6. Backup: lab/site.before-thumb-contrast.css.bak.
+Coral, not grey (TJ, same day): the unselected photo goes to saturate .25, brightness .95, under a wash of the accent (--acc, so it follows the palette) multiplied at .55 (.4 on hover); the selected photo has no wash. Backup: lab/site.before-thumb-coral.css.bak.
+Inverted (TJ, same day): the unselected photo is very faint (opacity .28, saturate .4; .45 on hover) and the number is the coloured part, the photo inside the figure multiplied by the accent mixed 75 percent with white (span uses --thumb set inline per thumb). The coral wash layer is gone. Selected photo full, no number. Backups: lab/*.before-thumb-invert.*.bak.
+Ink number, fainter photo (TJ, same day): unselected photo opacity .22 (20 percent below .28); the number is now solid --t-ink, the selected title's colour, for colour continuity (the coral photo fill is overridden at the end of site.css). Backup: lab/site.before-thumb-ink.css.bak.
+Softer number (TJ, same day): .gal__num opacity .8. Backup: lab/site.before-thumb-num-soft.css.bak.
+Number opacity .6 (TJ, same day, after .8 was still too strong).
+
+## Testimonials on the Gifts page's ground (TJ, 2 Nov 2026)
+
+Home page testimonials (.voices) now use the Gifts page background: the deep accent red (--reach-ground) with the Gifts drift (blush, rib light, canvas; opacity .8, the footer's radial mask, 62s). All text and line colours in the section are unchanged, as TJ asked. Its foot dissolves into the page's cream over min(30vh, 260px) (.voices::after), and the next section's aurora (.act--cta) fades in over its top 40vh so there is no line; pixel steps across the join are one level. Backup: lab/site.before-voices-gifts.css.bak. Shots: lab/voices-gifts-mock.mjs, lab/voices-foot-shot.mjs.
+
+## Testimonials top space halved (TJ, 2 Nov 2026)
+
+Section top to heading: 1440x900 129px to 65; 1280x720 113 to 56; 1920x1080 145 to 73; 390 116 to 58. .voices padding-top only. Backup: lab/site.before-voices-top.css.bak. Measure: lab/voices-top-gap.mjs.
+
+## Testimonials to Book a consultation, seamless (TJ, 2 Nov 2026)
+
+TJ saw lines in the first dissolve (a cream band laid over the red). Rebuilt as a crossfade: the red ground now lives on .aurora--voices with its drift, and that layer fades out on an eased curve over min(48vh, 440px), starting much higher. The testimonials run 80px further down and Book a consultation's top padding loses the same 80px, so the card does not move (1440: card top unchanged). Book a consultation's drift is pulled up under the fade by the same height and fades in on the mirror curve. .act--voices z-index 1 keeps that drift under the testimonials' text. Row to row steps across the join measured at 2 levels or less at 1440, 1920 and 390. .voices::after removed. Backup: lab/site.before-voices-seamless.css.bak. Check: lab/voices-join.mjs.
+
+## We care for a few mothers each month: no card, closer (TJ, 2 Nov 2026)
+
+The card around Book a consultation is gone (no glass, border or padding); the words sit on the section's drift. The heading is 40 percent closer to the end of the testimonials: 87px to 51px on desktop, 63px to 37px on phones (.act--cta padding-top 37px, 23px on phones). With the card gone the drift's flat bottom edge showed against the treatments, so it now eases out over its last 200px; row to row steps measured at 2 levels or less. Backup: lab/site.before-cta-no-card.css.bak. Measure: lab/cta-gap.mjs; shots lab/cta-shot.mjs.
+
+## Testimonials to Book a consultation, half the space (TJ, 2 Nov 2026)
+
+From the testimonials' last line to the Book a consultation heading: 1440x900 221px to 111; 1680x850 216 to 108; 1920x1080 239 to 120; 390 201 to 101. Taken from .voices padding-bottom only; the crossfade is unchanged and still has no step. Backup: lab/site.before-voices-cta-gap.css.bak. Measure: lab/voices-cta-gap.mjs.
+Further 30 percent (TJ, same day): 1440x900 111px to 77; 1680x850 108 to 75; 1920x1080 120 to 84; 390 101 to 71. Backup: lab/site.before-voices-cta-gap-2.css.bak.
+
+## Same gap below Book a consultation (TJ, 2 Nov 2026)
+
+Book a consultation's last line (the bespoke line) to Try a signature treatment now equals the testimonials' last line to the Book a consultation heading at every size (1440x900 77px, was 200; 1920x1080 84, was 218; 390 71, was 168). .act--cta padding-bottom matches its top (37px, 23px on phones); .act--treatments-b padding-top matches .voices padding-bottom. Backup: lab/site.before-cta-treat-gap.css.bak. Measure: lab/cta-treat-gap.mjs.
+
+## Text to text gaps, and a clear line above the treatments (TJ, 2 Nov 2026)
+
+TJ: match the space between the text, not between section edges. The visible gap above Book a consultation is the testimonials' names to its heading (1440x900 138px; earlier measures counted an invisible element 61px below the names). The bespoke line to Try a signature treatment now equals it at every desktop size (138, 136, 132, 145) via .act--treatments-b padding-top +61px at 768px and up; on phones the last thing above is the arrows and both gaps were already 71px. The pink drift of Book a consultation no longer fades out at its foot: it stops at the section edge against the treatments' flat canvas, giving the clear line TJ asked for. Backup: lab/site.before-treat-line.css.bak. Measure: lab/text-gaps.mjs.

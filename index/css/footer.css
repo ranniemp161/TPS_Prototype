@@ -15,7 +15,7 @@
   position: relative; z-index: 1; isolation: isolate; overflow: hidden;
   background: var(--sf-ground);
   color: var(--sf-text);
-  font-family: var(--f-body, "Karla", system-ui, sans-serif);
+  font-family: var(--f-body, "Jost", system-ui, sans-serif);
   padding: clamp(56px, 9vh, 96px) var(--gutter, 24px) 0;
 }
 

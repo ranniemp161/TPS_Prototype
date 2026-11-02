@@ -164,19 +164,20 @@
 }
 
 .block__list li {
-  padding-left: 1.1em;
+  padding-left: 16px;
   position: relative;
 }
 
 .block__list li + li { margin-top: .4rem; }
 
+/* The site's one bullet, the Programmes dot (TJ, 1 Nov 2026; was 4px). */
 .block__list li::before {
   content: "";
   position: absolute;
   left: 0;
-  top: .75em;
-  width: 4px;
-  height: 4px;
+  top: calc(.85em - 2.5px);
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: var(--acc);
 }

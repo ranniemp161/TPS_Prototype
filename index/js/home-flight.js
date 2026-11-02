@@ -118,7 +118,7 @@
       desc: 'Scroll and come in.',
       zone: { top: '86%', left: '14%' } },
     { name: 'kitchen', beat: 'kitchen', time: (tc(6, 28) + tc(7, 25)) / 2, rest: tc(6, 28), fx: 66, room: 'kitchen',
-      desc: 'Three fresh meals are cooked in your kitchen every day, made for you, your family and your recovery.',
+      desc: '3 fresh meals are cooked in your kitchen every day, made for you, your family and your recovery.',
       zone: { top: '78%', left: '20%' } },
     { name: 'living', beat: 'living', time: (tc(11, 16) + tc(12, 6)) / 2, rest: tc(11, 16), fx: 31, room: 'living',
       desc: 'The living room is where your days with your baby unfold, so we keep it feeling restful and composed.',

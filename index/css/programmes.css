@@ -445,3 +445,46 @@
   .pg-look__p { line-height: calc(1.35 + .3 * min(var(--pg-fit, 1), 1)); }
   .pg-car { height: calc(64px * max(var(--pg-fit, 1), .7)); }
 }
+
+/* Hero declutter (TJ, 1 Nov 2026, sheet row 32): no lede, no heading over the
+   paragraph, which is now two paragraphs with a blank line between them. */
+.pg-look .pg-look__p:first-child { margin-top: 0; }
+.pg-look .pg-look__p + .pg-look__p { margin-top: 1lh; }
+
+/* Two lines each, stacked (TJ, 2 Nov 2026). On desktop each paragraph is as
+   wide as two even lines need, centred: the first is 126em of text, the
+   second 89em, at the paragraph's own size. The space they take back comes
+   out of the card's top and bottom padding and the gap between the line and
+   the card. */
+@media (min-width: 861px) {
+  .pg-look .pg-look__p { margin-left: auto; margin-right: auto; text-wrap: balance; }
+  .pg-look .pg-look__p:first-child { max-width: 66em; }
+  .pg-look .pg-look__p + .pg-look__p { max-width: 47em; }
+  .pg-stage { margin-top: calc(clamp(12px, 2vh, 22px) * var(--pg-fit, 1)); }
+  .pg-card { padding-top: calc(clamp(20px, 2.2vw, 30px) * max(var(--pg-fit, 1), .6)); padding-bottom: calc(clamp(20px, 2.2vw, 30px) * max(var(--pg-fit, 1), .6)); }
+}
+
+/* Tighter section gaps on desktop (TJ, 2 Nov 2026). Measured at 1440x900:
+   hero card to Four kinds of care 153px, down 40% to 92; Four kinds of care
+   to What each programme includes 111px, down 20% to 89; the includes table
+   to Ready to talk it through 108px, down 40% to 65. */
+@media (min-width: 861px) {
+  .page--programmes .pg-lengths { padding-bottom: 49px; }
+  .page--programmes .pg-same { padding-top: 43px; padding-bottom: 43px; }
+  .page--programmes .pg-compare { padding-top: 43px; padding-bottom: 38px; }
+  .page--programmes .pg-cta { padding-top: 27px; }
+}
+
+/* "From" above the figure, as on the Bespoke bar and Your programme (TJ,
+   2 Nov 2026, sheet row 34): the label on its own line in the bespoke From
+   label's type, then the figure with "per day" beside it on its baseline.
+   The words still read in order: From £X per day. */
+.pg-price__fee { grid-template-columns: auto auto; grid-template-rows: auto auto; align-items: baseline; column-gap: .5rem; row-gap: 5px; }
+.pg-price__from { grid-column: 1 / -1; grid-row: 1; justify-self: start; font-size: .8125rem; font-weight: 600; letter-spacing: .12em; line-height: 1; }
+.pg-price__num { grid-column: 1; grid-row: 2; }
+.pg-price__per { grid-column: 2; grid-row: 2; padding-bottom: 0; }
+@media (max-width: 860px) { .pg-price__from { font-size: .75rem; letter-spacing: .1em; } }
+
+/* "From" and "per day" in one weight, the bespoke "per day"'s 500, on every
+   price (TJ, 2 Nov 2026). Matched in build-your-programme.css. */
+.pg-price__from, .pg-price__per { font-weight: 500; }

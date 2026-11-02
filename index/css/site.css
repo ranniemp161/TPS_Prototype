@@ -109,7 +109,7 @@
   /* Faces, five jobs */
   --f-display: "Instrument Serif", Georgia, serif;
   --f-body:    "Montserrat", ui-sans-serif, system-ui, sans-serif;
-  --f-read:    "Karla", ui-sans-serif, system-ui, sans-serif;
+  --f-read:    "Jost", ui-sans-serif, system-ui, sans-serif; /* was Karla; Jost site wide incl. prices (TJ, 1 Nov 2026) */
   --f-script:  "Quentin", cursive;
   --f-mono:    "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
@@ -1223,6 +1223,39 @@ main:focus { outline: none; }
   margin: 0;
   padding-top: .9rem;
   border-top: 1px solid var(--line);
+}
+
+/* Desktop dropdown (TJ, 1 Nov 2026): each panel opens under its own tab,
+   only as wide as its links and only as tall as they need, in the header's
+   frosted glass. --menu-x is the tab word's left edge, set by placeMenu() in
+   home.js, inner-nav.js and build-your-programme.js; the panel's text lines
+   up with it. Above 1100px only: phones keep the full width panel above. */
+@media (min-width: 1101px) {
+  .nav .menu {
+    left: calc(var(--menu-x, 24px) - 22px);
+    right: auto;
+    width: max-content;
+    min-width: 200px;
+    max-width: calc(100vw - 32px);
+    background: color-mix(in srgb, var(--g-canvas) 82%, transparent);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    border: 1px solid var(--line);
+    border-top: 0;
+    border-radius: 0 0 10px 10px;
+  }
+  .nav .menu__panel {
+    padding: 10px 22px;
+    grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+  /* No heading in the dropdown: the open tab already shows in the accent
+     colour, so the panel is just its links (TJ, 1 Nov 2026). */
+  .nav .menu__head { display: none; }
+  .nav .menu__list a { padding: 8px 0; white-space: nowrap; }
+  /* The page behind stays clear while a dropdown is open (TJ, 1 Nov 2026).
+     The veil stays as an invisible layer so a click anywhere still closes. */
+  .veil[data-veil] { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 
 .veil {
@@ -4488,10 +4521,12 @@ html:not(.js) .arrive { display: none; }
 .act--care .care__sub { margin: .6rem auto 0; text-align: center; color: rgba(255, 255, 255, .86); }
 .care__list { list-style: none; margin: .8rem 0 0; padding: 0; }
 .care__list li {
-  position: relative; padding: .2rem 0 .2rem 1.1rem;
+  position: relative; padding: .2rem 0 .2rem 16px;
   font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: rgba(255, 255, 255, .86);
 }
-.care__list li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em); width: 8px; height: 1px; background: rgba(255, 255, 255, .62); }
+/* The site's one bullet, the Programmes dot in the palette's accent (TJ,
+   1 Nov 2026; was a white dash). */
+.care__list li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em - 2.5px); width: 5px; height: 5px; border-radius: 50%; background: var(--acc); }
 
 /* The call to action's light in the testimonials' colour (TJ, 26 Oct 2026).
    The section stays cream with a hard edge against the rose testimonials
@@ -4515,4 +4550,259 @@ html:not(.js) .arrive { display: none; }
   background-image: repeating-linear-gradient(123deg, var(--b));
   background-size: 235%;
   animation-duration: 140s;
+}
+
+/* No smoke under the bath (TJ, 2 Nov 2026, sheet row 36). The fog belongs to
+   the bath's arrival only; as it leaves, its feathered edge dissolves straight
+   into the section below. home.js still places the band, but it is never shown. */
+.arrive { display: none !important; }
+/* With no smoke, the bath's feathered edge dissolves onto the page's cream,
+   and the turn below starts on paper, which left a straight line where the
+   two met. The turn's top now starts on the same cream and blends to paper,
+   so the bath melts into it with no edge (TJ, 2 Nov 2026, sheet row 36). */
+.act--turn { background: linear-gradient(to bottom, var(--g-canvas) 0, var(--g-paper) min(45vh, 420px)); }
+/* The turn's pink weather was cut flat at the section's top, which drew a
+   straight line under the bath once the smoke stopped covering it. The
+   whole aurora now fades in from nothing over its top 40 percent of a
+   window, so the bath dissolves into it with no edge (TJ, 2 Nov 2026). */
+.aurora--turn {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
+}
+/* What is Postpartum Care moves up into the bath's dissolve on desktop
+   (TJ, 2 Nov 2026): the gap from the bath's bottom edge to the heading was
+   308px at 1440x900; pulling the section up by 18vh takes about 55 percent
+   off it. Phones keep their gap (110px), already short. */
+@media (min-width: 861px) {
+  .act--turn { margin-top: -18vh; }
+}
+
+/* Four kinds of care on the home page takes the footer's background exactly
+   (TJ, 2 Nov 2026): the same ground (the footer's --g-dark), the same field
+   at the footer's .55 (was .2), the same radial mask and the same drift as
+   footer.css .sf / .sf__field. */
+.act--silk { background: var(--g-dark); }
+.aurora--silk .aurora__field {
+  opacity: .55;
+  -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+}
+.aurora--silk .aurora__field::after { animation: sf-aurora 62s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .aurora--silk .aurora__field::after { animation: none; } }
+
+/* The length thumbnails carry their number (TJ, 2 Nov 2026, sheet row 39).
+   An unselected photo sits at 80 percent with its colour lowered; its number,
+   7, 14 or 30 in the display face, is a window in that fade: the same
+   photograph at full strength and full colour, clipped to the figure's
+   shape, so the number is made of the picture, not inked on it. The span
+   covers the whole thumb with the photo on the same cover crop, so the
+   window lines up exactly. The selected photo is at full strength and its
+   number is not shown. */
+.gal__thumb { position: relative; opacity: 1; filter: none; container-type: size; }
+/* Dimmed to 80 percent, not faded: a fade to 80 percent over the pale
+   ground left the number invisible wherever the photo is white (towels,
+   walls); dimming keeps the whole figure readable (TJ, 2 Nov 2026). */
+/* Inverted (TJ, 2 Nov 2026): the unselected photo is very faint, and the
+   number is the coloured part: the same photograph inside the figure, in
+   full and washed with the accent coral (multiplied), so the number reads
+   as a coral window in a pale photo. */
+/* 20 percent fainter (TJ, 2 Nov 2026): .28 to .22. */
+.gal__thumb img { opacity: .22; filter: saturate(.4); transition: opacity 340ms var(--ease-out), filter 340ms var(--ease-out); }
+.gal__thumb.is-active img { opacity: 1; filter: none; }
+.gal__num {
+  z-index: 2;
+  background-image: linear-gradient(color-mix(in srgb, var(--acc) 75%, #fff), color-mix(in srgb, var(--acc) 75%, #fff)), var(--thumb);
+  background-blend-mode: multiply;
+}
+
+.gal__thumb.is-active img { opacity: 1; filter: none; }
+@media (hover: hover) and (pointer: fine) {
+  .gal__thumb:hover { opacity: 1; }
+  .gal__thumb:hover img { opacity: .45; }
+  .gal__thumb.is-active:hover img { opacity: 1; filter: none; }
+}
+.gal__num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background-size: cover; background-repeat: no-repeat;
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-fill-color: transparent;
+  font-family: var(--f-display); font-weight: 400; line-height: 1;
+  font-size: min(72cqh, 92cqw); letter-spacing: -.02em;
+  pointer-events: none;
+  transition: opacity 340ms var(--ease-out);
+}
+.gal__thumb.is-active .gal__num { opacity: 0; }
+
+/* The number in the selected title's colour, not coral (TJ, 2 Nov 2026):
+   the ink of "14 days of care", for colour continuity with the title. Last
+   in the sheet so it wins over the .gal__num block above. */
+.gal__thumb .gal__num { background: none; -webkit-background-clip: border-box; background-clip: border-box; color: var(--t-ink); -webkit-text-fill-color: var(--t-ink); }
+/* Softer number (TJ, 2 Nov 2026): 20 percent down, to .8. The selected
+   thumb's rule (.gal__thumb.is-active .gal__num, opacity 0) still wins. */
+.gal__thumb .gal__num { opacity: .6; } /* .6 since TJ's second pass, same day */
+.gal__thumb.is-active .gal__num { opacity: 0; }
+
+/* Testimonials on the Gifts page's ground (TJ, 2 Nov 2026): the deep accent
+   red (--reach-ground) with the Gifts page's blush and canvas drift
+   (gifts.html .gifts-aurora), everything else in the section unchanged.
+   Its foot dissolves into the page's cream, so it melts into the section
+   below with no edge. */
+.voices { --voices-ground: var(--reach-ground); }
+.aurora--voices .aurora__field {
+  --a: transparent 0%, var(--g-tint) 7%, var(--rib-light) 12%, transparent 22%, var(--g-soft) 30%, transparent 40%;
+  --b: transparent 0%, var(--rib-light) 6%, var(--g-tint) 12%, transparent 24%, var(--g-haze) 33%, transparent 46%;
+  background-image: repeating-linear-gradient(100deg, var(--a));
+  background-size: 300%; background-position: 50% 50%;
+  filter: blur(44px); opacity: .8;
+  -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+  mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
+}
+.aurora--voices .aurora__field::after {
+  background-image: repeating-linear-gradient(123deg, var(--b));
+  background-size: 235%;
+  animation: gifts-aurora 62s linear infinite;
+}
+@keyframes gifts-aurora { from { background-position: 50% 50%; } to { background-position: 350% 50%; } }
+@media (prefers-reduced-motion: reduce) { .aurora--voices .aurora__field::after { animation: none; } }
+.voices::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none;
+  height: min(30vh, 260px);
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--g-canvas) 0%, transparent), var(--g-canvas));
+}
+/* The section below starts with its own pink weather, which was cut flat at
+   its top and drew a line under the dissolve; it now fades in from nothing
+   over its top 40 percent of a window (TJ, 2 Nov 2026). */
+.act--cta > .aurora {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
+}
+/* Half the space above the testimonials' heading (TJ, 2 Nov 2026). The gap
+   is the padding plus 48px of the line's own top (40px on phones), so the
+   padding becomes half of the old padding less half of that. 1440x900: 129px
+   to 65px. */
+.voices { padding-top: max(0px, calc(clamp(64px, 9vh, 112px) / 2 - 24px)); }
+@media (max-width: 767px) { .voices { padding-top: max(0px, calc(clamp(64px, 9vh, 112px) / 2 - 20px)); } }
+
+/* A seamless join from the testimonials into Book a consultation (TJ,
+   2 Nov 2026). The cream band laid over the red (.voices::after) showed
+   lines, so it is gone. Instead the red ground and its drift live on one
+   layer that fades itself out (an eased curve, no straight ramp, so no
+   bands), starting much higher; the section runs 80px further down so the
+   fade ends lower, and the next section loses the same 80px so its card does
+   not move. Under the fade, the next section's own drift is pulled up by the
+   same height and fades in on the mirror curve, so one weather hands over to
+   the other with the page's cream between them. The testimonials sit above
+   that drift (z-index), so it never veils their text. */
+.voices { --voices-ground: transparent; --vfade: min(48vh, 440px); padding-bottom: calc(clamp(72px, 10vh, 120px) + 80px); }
+.voices::after { content: none; }
+.act--voices { z-index: 1; }
+.aurora--voices {
+  background: var(--reach-ground);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - var(--vfade)),
+    rgba(0,0,0,.97) calc(100% - var(--vfade) * .9), rgba(0,0,0,.90) calc(100% - var(--vfade) * .8),
+    rgba(0,0,0,.78) calc(100% - var(--vfade) * .7), rgba(0,0,0,.63) calc(100% - var(--vfade) * .6),
+    rgba(0,0,0,.50) calc(100% - var(--vfade) * .5), rgba(0,0,0,.37) calc(100% - var(--vfade) * .4),
+    rgba(0,0,0,.22) calc(100% - var(--vfade) * .3), rgba(0,0,0,.10) calc(100% - var(--vfade) * .2),
+    rgba(0,0,0,.03) calc(100% - var(--vfade) * .1), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - var(--vfade)),
+    rgba(0,0,0,.97) calc(100% - var(--vfade) * .9), rgba(0,0,0,.90) calc(100% - var(--vfade) * .8),
+    rgba(0,0,0,.78) calc(100% - var(--vfade) * .7), rgba(0,0,0,.63) calc(100% - var(--vfade) * .6),
+    rgba(0,0,0,.50) calc(100% - var(--vfade) * .5), rgba(0,0,0,.37) calc(100% - var(--vfade) * .4),
+    rgba(0,0,0,.22) calc(100% - var(--vfade) * .3), rgba(0,0,0,.10) calc(100% - var(--vfade) * .2),
+    rgba(0,0,0,.03) calc(100% - var(--vfade) * .1), transparent 100%);
+}
+.act--cta { --vfade: min(48vh, 440px); padding-top: max(16px, calc(var(--section) - 80px)); }
+.act--cta > .aurora {
+  top: calc(-1 * var(--vfade));
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0,
+    rgba(0,0,0,.03) calc(var(--vfade) * .1), rgba(0,0,0,.10) calc(var(--vfade) * .2),
+    rgba(0,0,0,.22) calc(var(--vfade) * .3), rgba(0,0,0,.37) calc(var(--vfade) * .4),
+    rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
+    rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
+    rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade));
+  mask-image: linear-gradient(to bottom, transparent 0,
+    rgba(0,0,0,.03) calc(var(--vfade) * .1), rgba(0,0,0,.10) calc(var(--vfade) * .2),
+    rgba(0,0,0,.22) calc(var(--vfade) * .3), rgba(0,0,0,.37) calc(var(--vfade) * .4),
+    rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
+    rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
+    rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade));
+}
+
+/* We care for a few mothers each month: no card, the words straight on the
+   background (TJ, 2 Nov 2026). And 40 percent closer to the end of the
+   testimonials: the gap to the heading was 87px (63px on phones), now 52px
+   (38px), the card's own top padding gone and the section's set to suit. */
+.act--cta .cta.cta--card {
+  background: none; border: 0; border-radius: 0;
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+  padding-top: 0; padding-bottom: 0;
+}
+.act--cta { padding-top: 37px; }
+@media (max-width: 767px) { .act--cta { padding-top: 23px; } }
+/* With the card gone, the drift's flat bottom edge showed against the
+   treatments below; it now eases out over its last 200px as well (TJ,
+   2 Nov 2026). Same top curve as above. */
+.act--cta > .aurora {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0,
+    rgba(0,0,0,.03) calc(var(--vfade) * .1), rgba(0,0,0,.10) calc(var(--vfade) * .2),
+    rgba(0,0,0,.22) calc(var(--vfade) * .3), rgba(0,0,0,.37) calc(var(--vfade) * .4),
+    rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
+    rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
+    rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade),
+    #000 calc(100% - 200px), rgba(0,0,0,.90) calc(100% - 160px), rgba(0,0,0,.63) calc(100% - 120px),
+    rgba(0,0,0,.37) calc(100% - 80px), rgba(0,0,0,.10) calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0,
+    rgba(0,0,0,.03) calc(var(--vfade) * .1), rgba(0,0,0,.10) calc(var(--vfade) * .2),
+    rgba(0,0,0,.22) calc(var(--vfade) * .3), rgba(0,0,0,.37) calc(var(--vfade) * .4),
+    rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
+    rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
+    rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade),
+    #000 calc(100% - 200px), rgba(0,0,0,.90) calc(100% - 160px), rgba(0,0,0,.63) calc(100% - 120px),
+    rgba(0,0,0,.37) calc(100% - 80px), rgba(0,0,0,.10) calc(100% - 40px), transparent 100%);
+}
+/* Half the space between the testimonials' last line and the Book a
+   consultation heading (TJ, 2 Nov 2026): 221px to 110px at 1440x900. Taken
+   from the testimonials' bottom padding only. */
+.voices { padding-bottom: calc(clamp(72px, 10vh, 120px) / 2 + 14.5px); }
+@media (max-width: 767px) { .voices { padding-bottom: calc(clamp(72px, 10vh, 120px) / 2 + 22px); } }
+/* A further 30 percent off that gap (TJ, 2 Nov 2026): 111px to 78px at
+   1440x900. Testimonials' bottom padding only. */
+.voices { padding-bottom: max(8px, calc(clamp(72px, 10vh, 120px) * .35 - 5.3px)); }
+@media (max-width: 767px) { .voices { padding-bottom: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); } }
+/* The same gap below Book a consultation as above it (TJ, 2 Nov 2026): its
+   last line to Try a signature treatment now mirrors the testimonials' last
+   line to its heading (77px at 1440x900, was 200px). Book a consultation's
+   bottom padding matches its top, and the treatments' top padding matches
+   the testimonials' bottom. */
+.act--cta { padding-bottom: 37px; }
+.act--treatments-b { padding-top: max(8px, calc(clamp(72px, 10vh, 120px) * .35 - 5.3px)); }
+@media (max-width: 767px) {
+  .act--cta { padding-bottom: 23px; }
+  .act--treatments-b { padding-top: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); }
+}
+/* Text to text, not section to section (TJ, 2 Nov 2026): the visible gap
+   above Book a consultation is from the testimonials' names under the dots
+   (138px at 1440x900), so the bespoke line to Try a signature treatment is
+   now the same, 61px more than before on desktop. On phones the last thing
+   above is the arrows, and that gap already matched (71px). */
+@media (min-width: 768px) {
+  .act--treatments-b { padding-top: max(8px, calc(clamp(72px, 10vh, 120px) * .35 + 55.7px)); }
+}
+/* A clear line between Book a consultation and the treatments (TJ, 2 Nov
+   2026): the pink drift no longer fades out at the bottom; it stops at the
+   section's edge against the treatments' flat canvas. Its top still fades. */
+.act--cta > .aurora {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0,
+    rgba(0,0,0,.03) calc(var(--vfade) * .1), rgba(0,0,0,.10) calc(var(--vfade) * .2),
+    rgba(0,0,0,.22) calc(var(--vfade) * .3), rgba(0,0,0,.37) calc(var(--vfade) * .4),
+    rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
+    rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
+    rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade));
+  mask-image: linear-gradient(to bottom, transparent 0,
+    rgba(0,0,0,.03) calc(var(--vfade) * .1), rgba(0,0,0,.10) calc(var(--vfade) * .2),
+    rgba(0,0,0,.22) calc(var(--vfade) * .3), rgba(0,0,0,.37) calc(var(--vfade) * .4),
+    rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
+    rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
+    rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade));
 }

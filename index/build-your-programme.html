@@ -37,7 +37,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
 
 <!-- site.css first for the tokens, the type roles, the buttons, the nav and
      the aurora. build-your-programme.css adds only what this page needs and overrides
@@ -224,9 +224,9 @@
         <fieldset class="step" id="step-02">
           <legend class="dk-step"><span class="dk-step__t">Choose your programme length</span></legend>
           <div class="tgl" role="radiogroup" aria-label="How long">
-            <label class="tg"><input class="sr-only" type="radio" name="days" value="7" id="dkd-days-7" aria-describedby="dkd-days-7-m" checked /><span class="tg__body"><span class="tg__t">7 days</span><span class="tg__s" id="dkd-days-7-m"><span class="length__sub">A full week</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input class="sr-only" type="radio" name="days" value="14" id="dkd-days-14" aria-describedby="dkd-days-14-m" /><span class="tg__body"><span class="tg__t">14 days</span><span class="tg__s" id="dkd-days-14-m"><span class="length__sub">Two weeks</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg"><input class="sr-only" type="radio" name="days" value="30" id="dkd-days-30" aria-describedby="dkd-days-30-m" /><span class="tg__body"><span class="tg__t">30 days</span><span class="tg__s" id="dkd-days-30-m"><span class="length__sub">Full postpartum month</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="days" value="7" id="dkd-days-7" aria-describedby="dkd-days-7-m" /><span class="tg__body"><span class="tg__t">7 days</span><span class="tg__s" id="dkd-days-7-m"><span class="length__desc">A full week with treatments running through it. Long enough for a rhythm to start, and for the difference to be something you feel.</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="days" value="14" id="dkd-days-14" aria-describedby="dkd-days-14-m" /><span class="tg__body"><span class="tg__t">14 days</span><span class="tg__s" id="dkd-days-14-m"><span class="length__desc">Treatments move to a weekly rhythm. Recovery stops being something you wait for and becomes something already underway.</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg"><input class="sr-only" type="radio" name="days" value="30" id="dkd-days-30" aria-describedby="dkd-days-30-m" checked /><span class="tg__body"><span class="tg__t">30 days</span><span class="tg__s" id="dkd-days-30-m"><span class="length__desc">The full month, kept the way tradition intends. Daily support, all 4 areas of care, treatments repeating throughout.</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
         </fieldset>
       </div>
@@ -335,7 +335,7 @@
         </div>
         <div class="dk-decide__ask">
           <h2 class="dk-step"><span class="dk-step__t">Ready to talk it through?</span></h2>
-          <p class="step__note step__note--lead">Thirty minutes by phone or video. We’ll look at your choices, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call.</p>
+          <p class="step__note step__note--lead">30 minutes by phone or video. We’ll look at your choices, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call.</p>
           <div class="dk-decide__actions">
             <button class="btn btn--primary dk-decide__book" type="button" data-not-yet>Check your dates</button>
           </div>
@@ -354,7 +354,7 @@
         <p class="tgl__hint capture__label">What you’ll receive</p>
         <ul class="close__gets">
           <li>Whether your dates are open</li>
-          <li>Your programme summary, and your price held for seven days</li>
+          <li>Your programme summary, and your price held for 7 days</li>
           <li>A short guide to your first weeks at home</li>
         </ul>
         <form class="capture" data-capture method="post" action="#">
@@ -384,7 +384,6 @@
           <button class="btn btn--primary capture__btn" type="submit">Check your dates</button>
           <input type="hidden" name="due" /><input type="hidden" name="child" /><input type="hidden" name="postcode" /><input type="hidden" name="fee" /><input type="hidden" name="fee_per_day" /><input type="hidden" name="days" /><input type="hidden" name="format" /><input type="hidden" name="shift" /><input type="hidden" name="meals" /><input type="hidden" name="treatments" /><input type="hidden" name="rhythm" /><input type="hidden" name="priorities" /><input type="hidden" name="budget" /><input type="hidden" name="summary" /><input type="hidden" name="close" /><input type="hidden" name="generated" />
         </form>
-        <p class="dk-legal">Nothing is booked and nothing is paid. We confirm everything together on a call.</p>
       </div>
     </section>
 
@@ -393,7 +392,7 @@
     <section class="dk-page dk-page--summary" data-title="Done" data-block="done" aria-label="Done" data-section="builder-done" data-section-name="Done">
       <div class="dk-in dk-sum dk-sum--done">
         <h2 class="dk-step"><span class="dk-step__t">Your dates are in view</span></h2>
-        <p class="step__note step__note--lead" role="status">Your summary and your guide are on their way, and your price is held for seven days.</p>
+        <p class="step__note step__note--lead" role="status">Your summary and your guide are on their way, and your price is held for 7 days. If you&rsquo;d like to talk sooner, book a call: 30 minutes by phone.</p>
         <div class="dk-actions">
           <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min" data-calendly>Choose a time to talk</a>
           <a class="dk-link" href="index.html" data-return>Return to the site</a>
@@ -417,7 +416,7 @@
           <div class="dk-card dk-card--fee dk-start__copy">
             <p class="dk-card__label">Indicative fee</p>
             <p class="dk-sumfee" data-count-fee aria-hidden="true">£2,495</p>
-            <p class="dk-card__small">Indicative pricing is held for three months.</p>
+            <p class="dk-card__small">Indicative pricing is held for 3 months.</p>
             <p class="dk-note" data-complete-notice>This is our complete 7-day programme.</p>
             <p class="dk-note" data-floor-notice hidden></p>
             <p class="dk-note" data-reserve-note>On live-in programmes, your specialist is reserved for your family alone for the whole stay. Taking out meals or treatments changes what she does each day, but the reservation is what most of the fee pays for.</p>
@@ -561,6 +560,7 @@
         <li><span class="sf__label">Customer Enquiries</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
         <li><span class="sf__label">Client relations team</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
         <li><span class="sf__label">Brand Partnerships</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Phone</span><a href="tel:+44747769330">+44 7477 69330</a></li>
       </ul>
     </div>
 
