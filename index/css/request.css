@@ -3,12 +3,13 @@
    Montserrat capitals for labels, Karla for anything read, Ember for actions. */
 .rq-card { display: block; max-width: 560px; }
 .rq-form { display: grid; gap: .45rem; }
-.rq-form[hidden], .rq-done[hidden] { display: none; }
+.rq-form[hidden], .rq-done[hidden], .rq-card[hidden], .pg-lengths__lede[hidden] { display: none; }
 .rq-label { margin: .7rem 0 0; font-family: var(--f-body); font-size: .68rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--t-mute); }
 .rq-label:first-child { margin-top: 0; }
 .rq-gets { list-style: none; margin: .2rem 0 .6rem; padding: 0; }
-.rq-gets li { position: relative; padding: .2rem 0 .2rem 1.1rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: var(--t-soft); }
-.rq-gets li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em); width: 8px; height: 1px; background: var(--t-mute); }
+.rq-gets li { position: relative; padding: .2rem 0 .2rem 16px; font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: var(--t-soft); }
+/* The site's one bullet, the Programmes dot (TJ, 1 Nov 2026; was a dash). */
+.rq-gets li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em - 2.5px); width: 5px; height: 5px; border-radius: 50%; background: var(--acc); }
 .rq-input {
   width: 100%; min-height: 46px; padding: 10px 14px; border-radius: var(--r-badge, 8px);
   border: 1px solid var(--line-firm); background: rgba(255, 255, 255, .85);
@@ -22,8 +23,18 @@
 .rq-legal { margin: .8rem 0 0; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--t-mute); }
 .rq-done__h { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.05; color: var(--t-ink); }
 .rq-done__h:focus { outline: none; }
-.rq-done__p { margin: .8rem 0 1.4rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.55; color: var(--t-soft); }
-.rq-done__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
+/* The confirmation sits under the title in the lede's own type, centred, with the
+   two actions centred under it (TJ, 1 Nov 2026). */
+.rq-done { text-align: center; }
+.rq-done__p { margin: .8rem auto 0; }
+.rq-done__p:focus { outline: none; }
+.rq-done__actions { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; margin-top: 1.6rem; }
+/* The button sits dead centre under the text, Return to the site under it (TJ, 1 Nov 2026). */
+/* Each sentence starts its own line and is balanced on its own, so neither
+   is squeezed narrow by the other (TJ, 1 Nov 2026). */
+.rq-done__line { display: block; text-wrap: balance; }
+/* A blank line between the two sentences (TJ, 1 Nov 2026). */
+.rq-done__line + .rq-done__line { margin-top: 1lh; }
 @media (max-width: 860px) { .rq-btn { justify-self: stretch; } }
 
 /* The waiting list's fields (TJ, 25 Oct 2026): first and last name side by

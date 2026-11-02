@@ -93,8 +93,11 @@
       form.elements.postcode.value = r.postcode;
       say('');
       form.hidden = true;
+      // The card and the lede go with the form; the confirmation takes the lede's place (TJ, 1 Nov 2026).
+      var card = form.closest('.rq-card'); if (card) card.hidden = true;
+      var lede = document.querySelector('.pg-lengths__head .pg-lengths__lede'); if (lede) lede.hidden = true;
       done.hidden = false;
-      var h = done.querySelector('h2'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
+      var h = done.querySelector('h2, p'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
       // Bring the confirmation into view, clear of the header (it was hidden under it).
       var nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 80;
       var y = done.getBoundingClientRect().top + window.scrollY - nav - 24;

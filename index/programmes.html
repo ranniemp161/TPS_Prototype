@@ -28,7 +28,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Karla:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
 
 <!-- site.css first for the tokens, the type roles, the buttons and the nav.
      inner-pages.css adds only what an empty page needs and overrides nothing. -->
@@ -154,15 +154,16 @@
       <header class="pg-lengths__head">
         <h1 class="pg-lengths__title">Live-in care programmes</h1>
         <p class="pg-lengths__script">Care for your baby. And for you.</p>
-        <p class="pg-lengths__lede">Three programmes, from seven days to thirty.</p>
       </header>
 
       <!-- How we look after you, between the hero and the line: a heading and
            the brochure's paragraph, nothing stacked (TJ, 26 Oct 2026, from the
            sales brochure). Paragraph replaced with Ami's intro copy (TJ, 28 Oct 2026). -->
-      <section class="pg-look" aria-labelledby="pg-look-h">
-        <h2 class="pg-h2" id="pg-look-h">How we look after you</h2>
-        <p class="pg-look__p">We offer three live-in care programmes, ranging from seven to thirty days, designed around you and your family's individual needs. Throughout your chosen programme, a dedicated postpartum specialist provides consistent, personalised support, with the flexibility to prioritise the care that matters most to you. From caring for your baby while you rest to preparing nourishing meals, treatments and practical household support, we tailor the experience to help make your first weeks at home feel supported and cared for.</p>
+      <!-- Hero declutter (TJ, 1 Nov 2026, sheet row 32): the lede and the How we
+           look after you heading removed; the paragraph split in two. -->
+      <section class="pg-look" aria-label="How we look after you">
+        <p class="pg-look__p">We offer 3 live-in care programmes, ranging from 7 to 30 days, designed around you and your family's individual needs. Throughout your chosen programme, a dedicated postpartum specialist provides consistent, personalised support, with the flexibility to prioritise the care that matters most to you.</p>
+        <p class="pg-look__p">From caring for your baby while you rest to preparing nourishing meals, treatments and practical household support, we tailor the experience to help make your first weeks at home feel supported and cared for.</p>
       </section>
 
       <div class="pg-line">
@@ -245,7 +246,7 @@
         </div>
         <div class="pg-kind">
           <h3 class="pg-kind__h">Meals</h3>
-          <p class="pg-kind__p">Up to three fresh meals a day, cooked in your own kitchen, for you and your family.</p>
+          <p class="pg-kind__p">Up to 3 fresh meals a day, cooked in your own kitchen, for you and your family.</p>
           <ul class="pg-kind__list">
             <li>Fresh postpartum meals, up to 3 a day</li>
             <li>Herbal teas</li>
@@ -262,7 +263,7 @@
           </ul>
         </div>
       </div>
-      <p class="pg-same__note">Introductory pricing is held for bookings taken in 2026. All prices are indicative until confirmed at your consultation.</p>
+      <!-- The introductory pricing note removed (TJ, 2 Nov 2026). -->
     </div>
   </section>
 
@@ -274,7 +275,7 @@
     <div class="pg-wrap">
       <header class="pg-compare__head">
         <h2 class="pg-h2">What each programme includes</h2>
-        <p class="pg-compare__lede">Every programme includes the same four areas of care. Programmes provide continued support and additional treatments.</p>
+        <p class="pg-compare__lede">Every programme includes the same 4 areas of care. Programmes provide continued support and additional treatments.</p>
       </header>
 
       <div class="pg-tablecard">
@@ -295,7 +296,7 @@
             </tr>
             <tr class="pg-table__group"><th colspan="4" scope="colgroup">Meals</th></tr>
             <tr>
-              <th scope="row">Up to three fresh meals a day, cooked in your own home for you and your family</th>
+              <th scope="row">Up to 3 fresh meals a day, cooked in your own home for you and your family</th>
               <td data-len="7 days">Every day</td><td data-len="14 days">Every day</td><td data-len="30 days">Every day</td>
             </tr>
             <tr class="pg-table__group"><th colspan="4" scope="colgroup">Home support</th></tr>
@@ -337,7 +338,7 @@
       <!-- One block, one button (TJ, 23 Oct 2026): the bespoke builder and
            single treatments are links inside the sentence, not buttons. -->
       <h2 class="pg-cta__script">Ready to talk it through?</h2>
-      <p class="pg-cta__p">Thirty minutes by phone or video. We look at your dates and what you need, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call. If the care you have in mind sits outside these three programmes, <a class="text-link" href="build-your-programme.html">build your own programme</a> and see an indicative fee as you go, or book <a class="text-link" href="single-treatments.html">single treatments</a> on their own.</p>
+      <p class="pg-cta__p">30 minutes by phone or video. We look at your dates and what you need, recommend the programme that fits, then confirm availability and fee. Nothing is booked on the call. If the care you have in mind sits outside these three programmes, <a class="text-link" href="build-your-programme.html">build your own programme</a> and see an indicative fee as you go, or book <a class="text-link" href="single-treatments.html">single treatments</a> on their own.</p>
       <div class="pg-cta__actions">
         <a class="btn btn--primary" href="request-a-place.html">Check your dates</a>
       </div>
@@ -377,6 +378,7 @@
         <li><span class="sf__label">Customer Enquiries</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
         <li><span class="sf__label">Client relations team</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
         <li><span class="sf__label">Brand Partnerships</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Phone</span><a href="tel:+44747769330">+44 7477 69330</a></li>
       </ul>
     </div>
 

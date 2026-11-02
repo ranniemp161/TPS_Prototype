@@ -2640,13 +2640,14 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 /* A small bullet before each item (Ami, 28 Oct 2026; was a drawn dash, TJ,
    25 Oct 2026): a drawn 4px dot, not a typed character, centred on the first
    line's middle; wrapped lines hang level with the text. */
-.dk .dk-decide__list li { position: relative; padding-left: 1.1rem; }
+/* Now the site's one bullet, the Programmes dot: 5px, accent (TJ, 1 Nov 2026). */
+.dk .dk-decide__list li { position: relative; padding-left: 16px; }
 .dk .dk-decide__list li::before {
-  content: ""; position: absolute; left: 1px; top: calc(.32rem + .725em - 2px);
-  width: 4px; height: 4px; border-radius: 50%; background: var(--t-mute);
+  content: ""; position: absolute; left: 0; top: calc(.32rem + .725em - 2.5px);
+  width: 5px; height: 5px; border-radius: 50%; background: var(--acc);
 }
-.dk .dk-page.is-tight .dk-decide__list li::before { top: calc(.18rem + .725em - 2px); }
-.dk .dk-page.is-tight .dk-decide__list li { padding-left: 1.1rem; }
+.dk .dk-page.is-tight .dk-decide__list li::before { top: calc(.18rem + .725em - 2.5px); }
+.dk .dk-page.is-tight .dk-decide__list li { padding-left: 16px; }
 
 /* Batch 6 (TJ and Ami, 24 Oct 2026). The postcode on the opening screen, and
    the Request a place form's three gifts, in the builder's own type. */
@@ -2656,8 +2657,9 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 .pc__msg { margin: .55rem 0 0; min-height: 1.4em; font-family: var(--f-read); font-size: .875rem; line-height: 1.45; color: var(--t-mute); }
 .pc__msg.is-error, .pc__msg.is-out { color: var(--err); }
 .close__gets { list-style: none; margin: .2rem 0 1.4rem; padding: 0; }
-.close__gets li { position: relative; padding: .2rem 0 .2rem 1.1rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: var(--t-soft); }
-.close__gets li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em); width: 8px; height: 1px; background: var(--t-mute); }
+.close__gets li { position: relative; padding: .2rem 0 .2rem 16px; font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: var(--t-soft); }
+/* The site's one bullet, the Programmes dot (TJ, 1 Nov 2026; was a dash). */
+.close__gets li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em - 2.5px); width: 5px; height: 5px; border-radius: 50%; background: var(--acc); }
 .dk-sum--close > .capture__label { display: block; margin-top: .6rem; }
 .dk-sum--done .dk-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; }
 .dk-sum--close .close__gets { width: fit-content; max-width: 100%; margin-inline: auto; text-align: left; }
@@ -2693,3 +2695,18 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 .dk-sum--close .capture .rq-check { justify-content: flex-start; }
 @media (max-width: 860px) { .dk-sum--close .capture .capture__btn { margin-right: 0; } }
 .dk:not(.is-free) .dk-sum--close .capture .capture__label { text-align: left; }
+
+/* A short description under each length's line on How long (TJ, 1 Nov 2026),
+   trimmed from the home page's However long you need with us. Same small
+   reading text as the line above it, on its own line. */
+.length__desc { display: block; margin-top: 4px; max-width: 46ch; }
+
+/* No price before How long (TJ, 1 Nov 2026). The fee keeps its place in the
+   bar, so nothing shifts when it arrives; hidden, it is also silent to
+   screen readers. */
+.dk-fee { transition: opacity 300ms var(--ease-out), visibility 0s linear 0s; }
+.dk.is-pre-price .dk-fee { opacity: 0; visibility: hidden; transition: opacity 200ms var(--ease-out), visibility 0s linear 200ms; }
+
+/* "From" and "per day" in one weight, 500, on every price (TJ, 2 Nov 2026).
+   Matched in programmes.css. */
+.dk-fee__label, .dk-card__label, .dk-fee__per, .dk-sumfee__per { font-weight: 500; }

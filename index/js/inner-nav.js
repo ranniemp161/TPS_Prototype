@@ -34,6 +34,26 @@
     var burger = root.querySelector('[data-burger]');
     var open = null;
 
+    // Desktop: the panel hangs under the tab that opened it, its text level with
+    // the tab's word (TJ, 1 Nov 2026). Sets --menu-x, which site.css reads only
+    // above 1100px, so phones keep their full width panel. It follows the tab
+    // while open, since the header fold slides the tabs on scroll.
+    function placeMenu(tab) {
+      var host = menu.offsetParent || root;
+      function set() {
+        var pad = parseFloat(getComputedStyle(tab).paddingLeft) || 0;
+        var x = tab.getBoundingClientRect().left + pad - host.getBoundingClientRect().left;
+        menu.style.setProperty('--menu-x', x.toFixed(1) + 'px');
+      }
+      set();
+      cancelAnimationFrame(menu._follow);
+      (function follow() {
+        if (menu.hidden || tab.getAttribute('aria-expanded') !== 'true') return;
+        set();
+        menu._follow = requestAnimationFrame(follow);
+      })();
+    }
+
     function close(focusTab) {
       if (!open) return;
       var was = tabs.filter(function (t) { return t.dataset.tab === open; })[0];
@@ -62,14 +82,19 @@
       open = name;
 
       menu.hidden = false;
+      placeMenu(tab);
       veil.hidden = false;
+      // Measure this list on its own: drop the last panel's height first, or a
+      // short list inherits a long one's (TJ, 1 Nov 2026).
+      var prevH = menu.offsetHeight;
+      menu.style.height = 'auto';
       var h = menu.scrollHeight;
       if (REDUCED) { gsap.set(menu, { height: 'auto' }); gsap.set(veil, { opacity: 1 }); return; }
       if (first) {
         gsap.fromTo(menu, { height: 0 }, { height: h, duration: 0.34, ease: EASE });
         gsap.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.26, ease: EASE });
       } else {
-        gsap.to(menu, { height: h, duration: 0.26, ease: EASE });
+        gsap.fromTo(menu, { height: prevH }, { height: h, duration: 0.26, ease: EASE });
       }
       gsap.fromTo(menu.querySelectorAll('.menu__group'),
         { opacity: 0, y: 10 },
