@@ -172,7 +172,8 @@
      --cream-h cream warmth (hue of the canvas and stones)
      and it picks one soft ground and one dark ground below.
    ============================================================ */
-html[data-palette]:not([data-palette="coral"]) {
+/* Every coral step is excluded, so the coral grounds never change (TJ, 2 Nov 2026) */
+html[data-palette]:not([data-palette^="coral"]) {
   --acc-l: .48;
   --acc-c: .08;
   --acc-h: 150;
@@ -216,13 +217,15 @@ html[data-palette]:not([data-palette="coral"]) {
 }
 
 /* ============================================================
-   FINALISTS (TJ, 26 Oct 2026). Picked from the button depth sheets in
+   FINALISTS (TJ, 26 Oct 2026). Narrowed to Cognac beside Coral (TJ, 2 Nov 2026). Picked from the button depth sheets in
    lab/palette-proposals/. Each sets its exact button, tint and text
    grey; the seeds match the button so the derived hover, deep and
    ribbon steps follow it. Cream stays the base for all of them.
    These run lighter than the .45 to .50 band above, by TJ's choice.
    ============================================================ */
-html[data-palette="cognac"][data-palette] {
+/* Cognac family: every id that starts cognac (cognac, cognac-1 to cognac-5).
+   Grounds, text grey and dark ground as chosen on 26 Oct 2026. */
+html[data-palette^="cognac"][data-palette] {
   /* Cognac: button #AC7137, tint #E8E0D3, text #564F49 */
   --acc-l: 0.600; --acc-c: 0.105; --acc-h: 63; --cream-h: 60;
   --acc: #AC7137;
@@ -234,101 +237,92 @@ html[data-palette="cognac"][data-palette] {
   --acc-deep: #8E5516; --acc-emph: var(--acc-deep);
   --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
 }
-html[data-palette="plum"][data-palette] {
-  /* Plum: button #9B5084, tint #DECAD6, text #595156 */
-  --acc-l: 0.539; --acc-c: 0.119; --acc-h: 340; --cream-h: 60;
-  --acc: #9B5084;
-  --g-tint: #DECAD6; --g-soft: #DECAD6;
-  --t-mute: #595156;
-  --g-dark: var(--dark-neutral);
-  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
-     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
-  --acc-deep: #863D71; --acc-emph: var(--acc-deep);
-  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+
+/* ============================================================
+   TEN ACCENT STEPS (TJ, 2 Nov 2026). Five Coral and five Cognac,
+   1 darkest to 5 lightest. Only the accent family moves: oklch
+   lightness offsets of .12 and .06 either side of the base, chroma
+   and hue held. Step 3 is today's palette; plain cognac is its alias
+   and plain coral (no attribute) is the default. The text step is the
+   accent itself where it passes 4.5:1 on cream and tint, otherwise the
+   lightest darker shade of the same chroma and hue that does.
+   Computed by lab/ten-steps-contrast.py.
+   ============================================================ */
+
+/* Coral steps. Hover and deep move with the accent from today's #8C362F,
+   the two lighter ribbons move with it too. Steps 4 and 5 put every text
+   role on the text step #953C36. */
+html[data-palette="coral-1"][data-palette] {
+  --acc-l: .4096; --acc-c: .1204; --acc-h: 26.45;
+  --acc: #7F2824; --acc-hover: #66100E; --acc-deep: #66100E;
+  --rib-1: #A04936; --rib-2: #913629;
 }
-html[data-palette="sage"][data-palette] {
-  /* Sage: button #809B7A, tint #CCD6C8, text #4F5550 */
-  --acc-l: 0.659; --acc-c: 0.057; --acc-h: 140; --cream-h: 60;
-  --acc: #809B7A;
-  --g-tint: #CCD6C8; --g-soft: #CCD6C8;
-  --t-mute: #4F5550;
-  --g-dark: var(--dark-neutral);
-  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
-     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
-  --acc-deep: #476041; --acc-emph: var(--acc-deep);
-  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+html[data-palette="coral-2"][data-palette] {
+  --acc-l: .4696; --acc-c: .1204; --acc-h: 26.45;
+  --acc: #923A35; --acc-hover: #79241F; --acc-deep: #79241F;
+  --rib-1: #B45B47; --rib-2: #A5483A;
 }
-html[data-palette="bronze"][data-palette] {
-  /* Bronze: button #A17740, tint #E2D5C6, text #58534D */
-  --acc-l: 0.599; --acc-c: 0.089; --acc-h: 72; --cream-h: 60;
-  --acc: #A17740;
-  --g-tint: #E2D5C6; --g-soft: #E2D5C6;
-  --t-mute: #58534D;
-  --g-dark: var(--dark-neutral);
-  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
-     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
-  --acc-deep: #7C541A; --acc-emph: var(--acc-deep);
-  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+/* coral-3 has no block: it renders exactly as :root */
+html[data-palette="coral-4"][data-palette] {
+  --acc-l: .5896; --acc-c: .1204; --acc-h: 26.45;
+  --acc: #BA5E56; --acc-hover: #A0483F; --acc-deep: #A0483F;
+  --rib-1: #DC7F6A; --rib-2: #CD6C5C;
+  --acc-text: #953C36;
+  --acc-emph: var(--acc-text); --err: var(--acc-text); --reach-script: var(--acc-text);
+  --reach-price: var(--acc-text); --reach-script-acc: var(--acc-text); --reach-script-soft: var(--acc-text);
 }
-html[data-palette="oxblood"][data-palette] {
-  /* Oxblood: button #CF737B, tint #E9D0D1, text #5A5152 */
-  --acc-l: 0.660; --acc-c: 0.116; --acc-h: 15; --cream-h: 60;
-  --acc: #CF737B;
-  --g-tint: #E9D0D1; --g-soft: #E9D0D1;
-  --t-mute: #5A5152;
-  --g-dark: var(--dark-neutral);
-  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
-     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
-  --acc-deep: #953F49; --acc-emph: var(--acc-deep);
-  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
-}
-html[data-palette="navy"][data-palette] {
-  /* Ink navy: button #6080BA, tint #CED8EB, text #50545B */
-  --acc-l: 0.600; --acc-c: 0.096; --acc-h: 262; --cream-h: 60;
-  --acc: #6080BA;
-  --g-tint: #CED8EB; --g-soft: #CED8EB;
-  --t-mute: #50545B;
-  --g-dark: var(--dark-neutral);
-  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
-     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
-  --acc-deep: #3D5B92; --acc-emph: var(--acc-deep);
-  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
-}
-html[data-palette="dustyteal"][data-palette] {
-  /* Dusty teal: button #5CA09F, tint #C3DEDD, text #4D5656 */
-  --acc-l: 0.661; --acc-c: 0.069; --acc-h: 194; --cream-h: 60;
-  --acc: #5CA09F;
-  --g-tint: #C3DEDD; --g-soft: #C3DEDD;
-  --t-mute: #4D5656;
-  --g-dark: var(--dark-neutral);
-  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
-     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
-  --acc-deep: #1F6767; --acc-emph: var(--acc-deep);
-  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
+html[data-palette="coral-5"][data-palette] {
+  --acc-l: .6496; --acc-c: .1204; --acc-h: 26.45;
+  --acc: #CE7067; --acc-hover: #B35950; --acc-deep: #B35950;
+  --rib-1: #F1927C; --rib-2: #E27F6E;
+  --acc-text: #953C36;
+  --acc-emph: var(--acc-text); --err: var(--acc-text); --reach-script: var(--acc-text);
+  --reach-price: var(--acc-text); --reach-script-acc: var(--acc-text); --reach-script-soft: var(--acc-text);
 }
 
-/* Reach (section 7): button only. The accent stays on buttons and
-   selected states (same weight as the palette selector and later,
-   so it wins); scripts, links and prices go to ink, and the
-   ribbons fall back to the grounds. */
-html[data-reach="button"][data-reach] {
-  --reach-script: var(--t-ink);
-  --reach-link:   var(--t-ink);
-  --reach-price:  var(--t-ink);
-  --reach-script-acc:  var(--t-ink);
-  --reach-script-soft: var(--t-ink);
-  --reach-script-pale: var(--t-on-dark);
-  --reach-ground: var(--g-dark);
-  --rib-1: var(--g-soft);
-  --rib-2: var(--g-tint);
-  --rib-3: var(--g-haze);
-  --rib-4: var(--g-stone);
-  --rib-cta-1: var(--g-soft);
-  --rib-cta-2: var(--g-tint);
-  --rib-cta-3: var(--g-haze);
-  --rib-bk-soft: var(--g-soft);
-  --rib-bk-warm: var(--g-tint);
+/* Cognac steps. Hover and the ribbons follow --acc-l through the
+   derivation block; the text step sits in --acc-deep as before. */
+html[data-palette="cognac-1"][data-palette] { --acc-l: .480; --acc: #864E0A; --acc-deep: #864E0A; }
+html[data-palette="cognac-2"][data-palette] { --acc-l: .540; --acc: #995F23; --acc-deep: #905718; }
+/* cognac-3 has no block: it is the family block above, exactly as cognac */
+html[data-palette="cognac-4"][data-palette] { --acc-l: .660; --acc: #BF834A; --acc-deep: #905718; }
+html[data-palette="cognac-5"][data-palette] { --acc-l: .720; --acc: #D3965C; --acc-deep: #905718; }
+
+/* Coral 3 square (TJ, 2 Nov 2026). Coral 3's colours exactly (no colour
+   token here, and the ^="coral" prefix keeps it out of the generic palette
+   block above), with every corner on the site square. The radius tokens go
+   to 0, then every element and pseudo element is held at 0, which covers the
+   literal radii in every css file and the radii GSAP writes inline. Things
+   that are circles by nature keep their circle: the line dots, tips and stops,
+   the bullets, the suns, the phone arrows over the photographs, the booking
+   dialog's close disc, the round focus rings, radio and check inputs. The
+   Bespoke toggle's knob goes square with its track. The Colours panel lives
+   in a shadow root, so none of this reaches it. */
+html[data-palette="coral-square"][data-palette] {
+  --r-badge: 0px; --r-button: 0px; --r-card: 0px; --r-media: 0px; --r-mark: 0px; --r-input: 0px;
 }
+html[data-palette="coral-square"] :not(input[type="radio"], input[type="checkbox"]),
+html[data-palette="coral-square"] ::before,
+html[data-palette="coral-square"] ::after { border-radius: 0 !important; }
+/* its own rule, so a browser without the scrollbar selector keeps the rest */
+html[data-palette="coral-square"] ::-webkit-scrollbar-thumb { border-radius: 0 !important; }
+/* the photograph reveals on What We Do clip with round --ph-rad, which the
+   scripts read from the slot (0 here falls back to 10), so hold it at 0 */
+html[data-palette="coral-square"] :is(.ty, .vt) { --ph-rad: 0px !important; }
+html[data-palette="coral-square"] :is(
+  .sundial__sun, .film__tip, .care-line__tip, .care-vline__dot, .care-vline__tip,
+  .tv2__dot, .tv2__tip, .care__nav,
+  .route__tip, .route__dot, .route__end, .route__arrow:focus-visible,
+  .zones__tip, .zones__home:focus-visible,
+  .dk-line__tip, .dk-line__dot, .dkl__stop, .dkl__tip, .dkd__stop, .dkd__tip,
+  .dnl__stop, .dnl__tip, .dnl__sun,
+  .vt__cap, .vt__tip, .vt__dot, .vt__go:focus-visible,
+  .ty__stop, .ty__tip, .ty-sun, .ty-sun > span,
+  .os-line__tip, .os-act__dot, .bk-dialog__x
+),
+html[data-palette="coral-square"] :is(.care-line__stop, .dk-dot, .zones__room, .zones__tab, .zones__home, .zones__marker, .vt__go, .ty__tip, .wd__row)::before,
+html[data-palette="coral-square"] :is(.zones__room, .zones__tab, .zones__home, .zones__marker)::after,
+html[data-palette="coral-square"] :is(.care__list, .block__list, .pg-kind__list, .wc-ck__list, .rq-gets, .dk-decide__list, .close__gets) li::before { border-radius: 50% !important; }
 
 @media (min-width: 768px)  { :root { --gutter: 28px; } }
 @media (min-width: 1100px) { :root { --gutter: 48px; } }
@@ -4806,3 +4800,42 @@ html:not(.js) .arrive { display: none; }
     rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
     rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade));
 }
+/* The line halfway between the bespoke line and Try a signature treatment
+   (TJ, 2 Nov 2026). --tgap is the treatments' top padding as set above; the
+   heading sits 14px below it. The text gap stays the same: Book a
+   consultation's bottom padding becomes half the whole gap and the
+   treatments' top padding gives up what it gains. */
+.act--cta { --cpad: 37px; --tgap: max(8px, calc(clamp(72px, 10vh, 120px) * .35 + 55.7px)); --half: calc((var(--cpad) + var(--tgap) + 14px) / 2); padding-bottom: var(--half); }
+.act--treatments-b { --cpad: 37px; --tgap: max(8px, calc(clamp(72px, 10vh, 120px) * .35 + 55.7px)); --half: calc((var(--cpad) + var(--tgap) + 14px) / 2); padding-top: calc(var(--tgap) + var(--cpad) - var(--half)); }
+@media (max-width: 767px) {
+  .act--cta, .act--treatments-b { --cpad: 23px; --tgap: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); }
+}
+
+/* The film's controls always show (TJ, 2 Nov 2026, sheet row 37): pause, the
+   timeline and a sound button, which replaces Play with sound. Muted shows
+   the speaker struck through; on shows the speaker with its waves. */
+.film__bar { opacity: 1; visibility: visible; transition: none; }
+.film__sound { display: none; }
+.film__mute {
+  flex: none; display: grid; place-items: center;
+  width: 36px; height: 32px; margin-right: -8px; padding: 0;
+  border: 0; background: none; color: var(--tline-ink); cursor: pointer;
+}
+.film__mute svg { width: 20px; height: 16px; fill: currentColor; }
+.film__mute .film__x { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+.film__icon-sound { display: none; }
+.film.is-sound .film__icon-sound { display: block; }
+.film.is-sound .film__icon-muted { display: none; }
+.film__mute:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-badge); }
+/* Always on, so always legible (TJ, 2 Nov 2026): over the moving film the
+   controls are white, on a soft shadow along the frame's foot. */
+.film__stage::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; pointer-events: none;
+  height: clamp(80px, 22%, 160px);
+  background: linear-gradient(to top, rgba(10,10,10,.42), rgba(10,10,10,.18) 55%, transparent);
+  border-radius: inherit;
+}
+.film__stage:fullscreen::after { border-radius: 0; }
+.film__bar { z-index: 2; --tline-ink: #fff; }
+.film__bar .film__line { background: rgba(255, 255, 255, .45); }
+.film__pause, .film__mute { color: #fff; }

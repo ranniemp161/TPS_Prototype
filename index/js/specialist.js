@@ -99,8 +99,10 @@
 
   if (reduced || !('IntersectionObserver' in window)) { showChecks(); return; }
 
-  var CLOSED = 'inset(0% 36% 0% 36% round 16px)';
-  var OPEN = 'inset(0% 0% 0% 0% round 16px)';
+  /* the frame's own corner, so Coral 3 square opens square (TJ, 2 Nov 2026) */
+  var RAD = getComputedStyle(frame).borderTopLeftRadius || '16px';
+  var CLOSED = 'inset(0% 36% 0% 36% round ' + RAD + ')';
+  var OPEN = 'inset(0% 0% 0% 0% round ' + RAD + ')';
 
   // Phones, or a page without GSAP: one soft opening.
   function soft() {
