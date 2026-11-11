@@ -2071,6 +2071,34 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 .dk-page.is-tight .dk-sum .fit__apply { margin-top: .1rem; }
 .dk-page.is-tight .dk-sum .fit__alt { margin-top: .3rem; }
 
+/* ---------- .is-snug: the second, closer step (TJ, 10 Nov 2026: every slide fits the window, spacing scales with height) ----------
+   Set by the fit check on laptop and tablet widths only, on a page still too tall after
+   .is-tight; phones never take it, and the released page drops it. Spacing closes up with the
+   window's height; type keeps its tight size and every control stays 40px or taller. */
+.dk:not(.is-free) .dk-page.is-snug .dk-in { padding-top: clamp(4px, 1vh, 10px); padding-bottom: clamp(4px, .8vh, 8px); }
+.dk:not(.is-free) .dk-page.is-snug .step__note--lead { margin-bottom: clamp(.2rem, .6vh, .4rem); }
+.dk:not(.is-free) .dk-page.is-snug .tg { min-height: 40px; padding: 0; }
+/* Due date: the three Which child choices share one row under the calendar. */
+.dk:not(.is-free) .dk-page.is-snug .tgl--child { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: clamp(14px, 2vw, 24px); max-width: 720px; }
+.dk:not(.is-free) .dk-page.is-snug .tgl--child > .tg { border-top: 1px solid var(--line); column-gap: 6px; }
+.dk:not(.is-free) .dk-page.is-snug .due__note--top { margin-bottom: .15rem; }
+.dk:not(.is-free) .dk-page.is-snug .due-cal__head { margin-bottom: 0; }
+/* Check your dates: Email and Phone number side by side, as First and Last name are. */
+.dk:not(.is-free) .dk-page.is-snug.dk-page--summary > .dk-sum { gap: clamp(4px, .9vh, 8px); }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close > .capture__label { margin-top: 0; }
+.dk:not(.is-free) .dk-page.is-snug .close__gets { margin: 0 auto clamp(.2rem, .8vh, .5rem); }
+.dk:not(.is-free) .dk-page.is-snug .close__gets li { padding-block: .05rem; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 12px; row-gap: .3rem; margin-top: 0; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture > * { grid-column: 1 / -1; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture > [for="cap-email"] { grid-column: 1; grid-row: 2; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture > #cap-email { grid-column: 1; grid-row: 3; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture > [for="cap-phone"] { grid-column: 2; grid-row: 2; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture > .rq-phone { grid-column: 2; grid-row: 3; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture .capture__label { margin-top: clamp(.1rem, .5vh, .35rem); }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .rq-pair > div { gap: .3rem; }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .rq-check { margin-top: clamp(.2rem, .8vh, .5rem); }
+.dk:not(.is-free) .dk-page.is-snug .dk-sum--close .capture .capture__btn { margin-top: clamp(.2rem, .8vh, .4rem); }
+
 /* ---------- .is-free: the release (the flowing page, lab/flow-attempt) ----------
    Only when a page still overflows or the window is under 500px tall: the
    window scrolls, the steps are sections down the page, the bar is fixed at
@@ -2710,3 +2738,31 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
 /* "From" and "per day" in one weight, 500, on every price (TJ, 2 Nov 2026).
    Matched in programmes.css. */
 .dk-fee__label, .dk-card__label, .dk-fee__per, .dk-sumfee__per { font-weight: 500; }
+
+/* The bar without the fee (TJ, 11 Nov 2026): no prices on the site. Back at
+   the left, the line centred, Next at the right, the two side columns equal
+   so the line's current stop sits in the middle of the page. Phones: Back and
+   Next on one row, the line across the full width below. */
+.dk-bar__in { grid-template-columns: 11.5rem minmax(0, 1fr) 11.5rem; grid-template-areas: "back line next"; }
+@media (max-width: 860px) {
+  .dk-bar__in { grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "back . next" "line line line"; }
+}
+
+/* ---- No small capitals, nothing too small (TJ, 11 Nov 2026, from Ami, TPS-0064, TPS-0065) ----
+   The little spaced capital labels ("YOUR AREA" and the rest) read as normal
+   words now, in the same label face, a step larger; the calendar's day numbers
+   and the choice titles come up to the body size. Page headings keep the
+   brand's capitals. */
+body .nav__return, .tgl__hint, .capture__label, .tg__aside, .tg__rec, .due-cal__month, .dk-bar__name, .dk-link {
+  text-transform: none; letter-spacing: .01em;
+}
+body .nav__return { font-size: .8125rem; }
+.tgl__hint, .capture__label { font-size: .875rem; }
+.tg__aside, .tg__rec { font-size: .8125rem; }
+.due-cal__month { font-size: 1rem; }
+.dk-bar__name { font-size: .8125rem; }
+.dk-link { font-size: .875rem; }
+.due-day { font-size: 1rem; }
+.tg__t { font-size: 1rem; }
+.page--builder .nav__return, .page--builder.is-funnelled .nav__return { text-transform: none; letter-spacing: .01em; font-size: .8125rem; }
+.tg--included .tg__aside { text-transform: none; letter-spacing: .01em; font-size: .8125rem; }

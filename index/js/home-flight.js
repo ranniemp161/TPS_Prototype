@@ -15,6 +15,7 @@
   var routeTip = section.querySelector('.route__tip');
   var routeFill = section.querySelector('.route__fill');
   var routeEnd = section.querySelector('[data-route-end]');
+  var routeHome = section.querySelector('[data-route-home]');
   var stopEls = [].slice.call(section.querySelectorAll('[data-stop]'));
   // Each stop's button: the small name for Arrival, the large title for the rooms after it (TJ, 15 Oct 2026).
   var stopBtns = stopEls.map(function (li) { return li.querySelector('.route__name, .route__head'); });
@@ -33,6 +34,12 @@
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var phoneQuery = matchMedia('(max-width: 767px)');
   var phone = phoneQuery.matches;
+  // Tapped, not scrolled (TJ, 8 Nov 2026): the page scrolls past the flight
+  // like any section; Start and the arrows move the film. The film's place is
+  // held in vraw (windows from the start of the track) instead of the page
+  // scroll, so everything that reads pos() works unchanged.
+  var TAP = !reduced;
+  var vraw = -1;
   var finePointer = matchMedia('(pointer: fine)').matches;
 
   // The film now starts just before the front door (TJ, 14 Oct 2026). The
@@ -74,7 +81,8 @@
   // with the roof in it (ROUTE_OUT, below). None of it with reduced motion:
   // the film runs to its end and the sections stack as before.
   var turnAct = document.querySelector('.act--turn');
-  var HELD = !!turnAct && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Only when the act comes after the flight (since 8 Nov 2026 it is above it, TJ).
+  var HELD = !!turnAct && !!(section.compareDocumentPosition(turnAct) & Node.DOCUMENT_POSITION_FOLLOWING) && !matchMedia('(prefers-reduced-motion: reduce)').matches;
   var PIN_T = 24.0;
   var PIN_VH = (PIN_T - DOOR) / (DURATION - DOOR) * TRACK_VH;
   if (HELD) turnAct.classList.add('is-handover');
@@ -138,6 +146,11 @@
 
   var vh = innerHeight;
   var trackTop = 0;
+  function pos() { return TAP ? trackTop + vraw * vh : scrollY; }
+  function setPos(y) {
+    if (TAP) { vraw = (y - trackTop) / vh; updateFromScroll(); }
+    else window.scrollTo({ top: y, behavior: 'instant' });
+  }
   var target = 0;
   var desired = 0;
   var lastDesired = 0;
@@ -148,6 +161,511 @@
   var settleTimer = 0;
   var inputMode = 'native';
   var ready = false;
+  // One continuous film (TJ, 8 Nov 2026). The four legs, each room to the
+  // next, are retimed to exactly 2.5s and joined into one 10s film
+  // (home-flight-legs.mp4, a 720p copy at 60fps for phones), with a reversed copy for
+  // going back. A tap plays the film at normal speed and pauses it on the
+  // next room's mark; nothing is scrubbed, sped up or seeked mid leg. Going
+  // back plays the reversed film over the forward one, then the forward film
+  // is seeked to the same room and the reversed one is hidden on the same
+  // frame. Film time runs linearly from one station to the next across a
+  // leg, so the route, beats and posters paint from the same clock as before.
+  // Each leg now eases in and out of its rooms (see easeP below).
+  var MARKS = [0, 2.5, 5, 7.5, 10];
+  var FILM_END = 10;
+  var LEG_MS = 2500;
+  var EPS = 1 / 60;
+  // Eased stops (TJ, 8 Nov 2026). Each leg of the film is baked with a
+  // trapezoid speed profile: it rises from rest over the leg's first 0.5s,
+  // holds, and falls back to rest over the last 0.7s, still covering the
+  // whole leg in 2.5s. easeP gives the share of a leg's travel covered at a
+  // share of its time, easePInv the reverse. The reversed film is the mirror
+  // of the forward one, so a back leg rises over 0.7s and falls over 0.5s;
+  // dir picks which.
+  var EASE_UP = 0.5 / 2.5, EASE_DOWN = 0.7 / 2.5;
+  var EASE_V = 1 / (1 - (EASE_UP + EASE_DOWN) / 2);
+  function easeP(u) {
+    if (u <= 0) return 0;
+    if (u >= 1) return 1;
+    if (u < EASE_UP) return EASE_V * u * u / (2 * EASE_UP);
+    if (u <= 1 - EASE_DOWN) return EASE_V * (EASE_UP / 2 + u - EASE_UP);
+    return 1 - EASE_V * (1 - u) * (1 - u) / (2 * EASE_DOWN);
+  }
+  function easePInv(f) {
+    if (f <= 0) return 0;
+    if (f >= 1) return 1;
+    if (f < EASE_V * EASE_UP / 2) return Math.sqrt(2 * EASE_UP * f / EASE_V);
+    if (f <= 1 - EASE_V * EASE_DOWN / 2) return EASE_UP + f / EASE_V - EASE_UP / 2;
+    return 1 - Math.sqrt(2 * EASE_DOWN * (1 - f) / EASE_V);
+  }
+  function easeSpeed(u) {
+    if (u < EASE_UP) return EASE_V * Math.max(0, u) / EASE_UP;
+    if (u <= 1 - EASE_DOWN) return EASE_V;
+    return EASE_V * Math.max(0, 1 - u) / EASE_DOWN;
+  }
+  // share of the leg's travel at share u of its time, and the inverse
+  function legProgress(u, dir) { return dir > 0 ? easeP(u) : 1 - easeP(1 - u); }
+  function legTimeAt(f, dir) { return dir > 0 ? easePInv(f) : 1 - easePInv(1 - f); }
+  function legSpeed(u, dir) { return dir > 0 ? easeSpeed(u) : easeSpeed(1 - u); }
+  // A cubic-bezier for the stretch of a leg from share u0 to u1 of its time,
+  // so a CSS transition over that stretch moves with the film. The handles
+  // keep the film's own speed at both ends; their lengths are fitted on a
+  // small grid. The whole leg comes out near cubic-bezier(0.25, 0, 0.7, 1)
+  // forward and its mirror back. Cached: only a few stretches ever occur.
+  var easeCache = {};
+  function easeCurve(u0, u1, dir) {
+    var key = dir + ':' + u0.toFixed(4) + ':' + u1.toFixed(4);
+    if (easeCache[key]) return easeCache[key];
+    var w = u1 - u0, q0 = legProgress(u0, dir), h = legProgress(u1, dir) - q0;
+    if (w < 0.0005 || h < 0.0005) return (easeCache[key] = 'linear');
+    var m0 = legSpeed(u0, dir) * w / h, m1 = legSpeed(u1, dir) * w / h;
+    var N = 24, truth = [];
+    for (var i = 0; i <= N; i++) truth.push((legProgress(u0 + w * i / N, dir) - q0) / h);
+    var S = 64, bx = new Array(S + 1), by = new Array(S + 1);
+    var best = 9, out = null;
+    for (var a = 0.05; a < 0.951; a += 0.05) {
+      for (var b = 0.05; b < 0.951; b += 0.05) {
+        var x1 = a, y1 = Math.min(a * m0, 1.5), x2 = 1 - b, y2 = 1 - Math.min(b * m1, 1.5);
+        for (var k = 0; k <= S; k++) {
+          var t = k / S, c1 = 3 * (1 - t) * (1 - t) * t, c2 = 3 * (1 - t) * t * t, c3 = t * t * t;
+          bx[k] = c1 * x1 + c2 * x2 + c3;
+          by[k] = c1 * y1 + c2 * y2 + c3;
+        }
+        var err = 0, j = 0;
+        for (i = 0; i <= N && err < best; i++) {
+          var x = i / N;
+          while (j < S - 1 && bx[j + 1] < x) j++;
+          var f = bx[j + 1] > bx[j] ? (x - bx[j]) / (bx[j + 1] - bx[j]) : 0;
+          err = Math.max(err, Math.abs(by[j] + (by[j + 1] - by[j]) * clamp(f, 0, 1) - truth[i]));
+        }
+        if (err < best) { best = err; out = [x1, y1, x2, y2]; }
+      }
+    }
+    return (easeCache[key] = out ? 'cubic-bezier(' + out.map(function (v) { return v.toFixed(3); }).join(', ') + ')' : 'linear');
+  }
+  var clipSuffix = phone || !finePointer ? '-m' : '';
+  var fwd = section.querySelector('[data-film-fwd]');
+  var rev = section.querySelector('[data-film-rev]');
+  var filmsReady = false;
+  var playing = null;     // { el, from, to, fromT, toT, finalIdx, dir, stopAt }
+  var stationIdx = 0;     // the room the film rests on
+  // The film's last frame is the treatment room itself (frame 10s), so the
+  // reversed film at 10 minus a mark shows exactly the forward film's frame
+  // at that mark.
+  function revTime(i) { return FILM_END - MARKS[i]; }
+  // the house leg starts on the wide house (film 0), before the glide to the door
+  function legT(k) { return k === 0 ? 0 : STATIONS[k]; }
+  // Seek, then call done once the frame is there (at once if it already is).
+  function seekTo(el, t, done) {
+    if (!el.seeking && Math.abs(el.currentTime - t) < 0.0005) { done(); return; }
+    var fired = false;
+    var guard = 0;
+    var fin = function () {
+      if (fired) return;
+      fired = true;
+      el.removeEventListener('seeked', fin);
+      clearTimeout(guard);
+      done();
+    };
+    guard = setTimeout(fin, 1500);
+    el.addEventListener('seeked', fin);
+    el.currentTime = t;
+  }
+  // Between legs the reversed film waits on the mirror of the current room,
+  // so the next back starts at once.
+  var revWant = -1;
+  function parkRev(i) {
+    if (!rev) return;
+    revWant = i;
+    seekTo(rev, revTime(i), function () {});
+  }
+  // The foot fade is baked into the desktop films only (TJ, 8 Nov 2026),
+  // which fill the stage. The phone films are left plain: there the film sits
+  // in a band and the live wash falls over the ghost below it.
+  var bakedFade = false;
+  function syncBake() {
+    bakedFade = TAP && !clipSuffix && !phone;
+    stage.classList.toggle('is-baked', bakedFade);
+  }
+  // The auroras of the sections either side of the flight sit exactly on the
+  // window's edges while it fills the screen, and their blurred layers are
+  // still composited every frame: in Chrome that alone dropped a third of a
+  // leg's frames (measured 8 Nov 2026). Any aurora not actually on screen is
+  // hidden while a leg plays and given back when it ends or the page moves.
+  var hiddenAuroras = [];
+  function restAuroras() {
+    var vh2 = innerHeight;
+    document.querySelectorAll('.aurora').forEach(function (a) {
+      if (a.closest('[data-flight]')) return;
+      var r = a.getBoundingClientRect();
+      if (r.bottom <= 8 || r.top >= vh2 - 8) { a.style.visibility = 'hidden'; hiddenAuroras.push(a); }
+    });
+  }
+  function wakeAuroras() {
+    hiddenAuroras.forEach(function (a) { a.style.visibility = ''; });
+    hiddenAuroras = [];
+  }
+  // Decided from where the page rests, not at the tap: the style change on
+  // those big blurred layers is itself a dropped frame or two.
+  var auroraTimer = 0;
+  function settleAuroras() {
+    clearTimeout(auroraTimer);
+    auroraTimer = setTimeout(function () {
+      var r = stage.getBoundingClientRect();
+      var fills = r.top <= 2 && r.bottom >= innerHeight - 2;
+      if (fills && !hiddenAuroras.length) restAuroras();
+      else if (!fills && hiddenAuroras.length) wakeAuroras();
+      // the breathing zoom pauses while the flight is not the whole window
+      stage.classList.toggle('is-away', !fills);
+    }, 120);
+  }
+  // Breathing (TJ, 8 Nov 2026): while the film rests on a room the picture
+  // very slowly zooms in and out (.is-resting, house-flight.css). Both films
+  // share the one wrapper, so a back swap stays on an identical frame. When a
+  // leg starts the zoom glides back to full size from wherever it is,
+  // alongside the film's own ease in; once the leg has landed it starts again
+  // from full size, where its keyframes begin.
+  var breathe = section.querySelector('[data-flight-breathe]');
+  function startBreath() {
+    if (!breathe || reduced) return;
+    breathe.style.transition = '';
+    breathe.style.transform = '';
+    stage.classList.add('is-resting');
+  }
+  function stopBreath() {
+    if (!breathe || !stage.classList.contains('is-resting')) return;
+    var now = getComputedStyle(breathe).transform;
+    breathe.style.transition = 'none';
+    breathe.style.transform = now && now !== 'none' ? now : 'scale(1)';
+    stage.classList.remove('is-resting');
+    void breathe.offsetWidth;
+    breathe.style.transition = 'transform 600ms ease-out';
+    breathe.style.transform = 'scale(1)';
+  }
+  // Sharp still (TJ, 9 Nov 2026): at rest the room's own source frame
+  // dissolves in over the paused film (.is-sharp, house-flight.css). All five
+  // are loaded up front for the film in use (the -m stills go with the -m
+  // films), so at a landing the still is already decoded. A leg takes it away
+  // at once, before the film moves, so a playing film is never covered.
+  var sharp = section.querySelector('[data-flight-sharp]');
+  // Leaving fade (TJ, 9 Nov 2026): a twin of the still that takes the resting
+  // picture and fades it out over the leg's eased start, so leaving a room is
+  // a dissolve, not a cut from sharp to soft. A twin, because the still itself
+  // is handed the next room's picture as the leg starts.
+  var sharpOut = null, sharpOutTimer = 0;
+  if (sharp) {
+    sharpOut = sharp.cloneNode(false);
+    sharpOut.removeAttribute('data-flight-sharp');
+    sharpOut.removeAttribute('src');
+    sharpOut.className = 'flight__sharp-out';
+    sharp.parentNode.insertBefore(sharpOut, sharp.nextSibling);
+  }
+  function mirrorOut() {
+    if (!sharpOut || !sharp) return;
+    var src = sharp.getAttribute('src');
+    if (!src || sharpOut.getAttribute('src') === src) return;
+    sharpOut.src = src;
+    if (typeof sharpOut.decode === 'function') sharpOut.decode().catch(function () {});
+  }
+  function fadeOutSharp() {
+    if (!sharpOut || sharpOut.getAttribute('src') !== sharp.getAttribute('src')) return;
+    clearTimeout(sharpOutTimer);
+    sharpOut.classList.remove('is-fading');
+    sharpOut.classList.add('is-on');
+    void sharpOut.offsetWidth;
+    sharpOut.classList.add('is-fading');
+    sharpOutTimer = setTimeout(function () { sharpOut.classList.remove('is-on', 'is-fading'); }, 520);
+  }
+  // The rooms that get the kitchen treatment (TJ, 9 Nov 2026), by station
+  // index: the kitchen, living room, nursery and treatment room. Their stills
+  // dissolve in during the slowdown and their stem and title wait for the
+  // stop. The house (0) keeps its plain dissolve at rest.
+  var ENHANCED = [false, true, true, true, true];
+  // Rooms whose desktop still is TJ's enhanced 4K frame, in two sizes: the 4K
+  // one only where the window has the pixels for it, 2560 x 1440 otherwise.
+  // A room is added here once its enhanced still is installed.
+  var BIG_STILL = { kitchen: true, living: true, nursery: true, treatment: true };
+  var sharpSrc = ['house', 'kitchen', 'living', 'nursery', 'treatment'].map(function (n) {
+    if (BIG_STILL[n] && !clipSuffix) return '../assets/img/flight-rest/' + (innerWidth * (devicePixelRatio || 1) > 2600 ? n : n + '-2560') + '.webp';
+    return '../assets/img/flight-rest/' + n + clipSuffix + '.webp';
+  });
+  var sharpPre = [];
+  var sharpWant = -1;
+  function preloadSharp() {
+    if (!sharp || sharpPre.length) return;
+    sharpPre = sharpSrc.map(function (src) { var im = new Image(); im.decoding = 'async'; im.src = src; return im; });
+  }
+  function showSharp(i) {
+    if (!sharp || reduced) return;
+    // already dissolving in from the leg's slowdown (dissolveEarly)
+    if (sharpWant === i && stage.classList.contains('is-sharp')) return;
+    sharpWant = i;
+    stage.classList.remove('is-sharp', 'is-early');
+    sharp.classList.remove('is-primed');
+    var src = sharpSrc[i];
+    var shown = function () {
+      if (sharpWant !== i || playing) return;
+      // one frame on the new picture at opacity 0, then the dissolve
+      requestAnimationFrame(function () { if (sharpWant === i && !playing) { stage.classList.add('is-sharp'); mirrorOut(); } });
+    };
+    var onLoad = function () { if (sharp.naturalWidth) shown(); };
+    if (sharp.getAttribute('src') !== src) sharp.src = src;
+    if (typeof sharp.decode === 'function') {
+      sharp.decode().then(shown, function () {
+        if (sharp.complete && sharp.naturalWidth) shown(); else sharp.addEventListener('load', onLoad, { once: true });
+      });
+    } else if (sharp.complete && sharp.naturalWidth) shown();
+    else sharp.addEventListener('load', onLoad, { once: true });
+  }
+  function hideSharp() {
+    sharpWant = -1;
+    var wasOn = !!sharp && stage.classList.contains('is-sharp') && parseFloat(getComputedStyle(sharp).opacity) > 0.5;
+    if (sharp) { stage.classList.remove('is-sharp', 'is-early'); sharp.classList.remove('is-primed'); }
+    if (wasOn && !reduced) fadeOutSharp();
+  }
+  // Early dissolve (TJ, 9 Nov 2026; the kitchen first, then every room in
+  // ENHANCED): on a leg that stops at one of these rooms, forward or back, the
+  // still is set and decoded as the jump starts, and starts its dissolve
+  // (1200ms, .is-early) when the film is 0.35s from the mark, checked on every
+  // video frame (watchLeg). The film slows to its mark underneath; the title
+  // and the breathing still wait for the stop. A jump that only passes a room
+  // never shows its still. Chrome neither rasterises nor uploads an image
+  // layer at opacity 0, even one marked to change opacity, so once decoded the
+  // still is primed (.is-primed, opacity 0.002, half a colour level at most)
+  // on the leg that ends at the room, and its upload happens as that leg sets
+  // off, not on the dissolve's first frame. While the film rests on a room the
+  // stills of the rooms either side are decoded ahead (warmSharp), so that
+  // work is done at rest too.
+  var EARLY_LEAD = 0.35;
+  var sharpReady = '';
+  function earlySharp(pl) { return !!sharp && !reduced && ENHANCED[pl.finalIdx] && pl.to === pl.finalIdx; }
+  function primeSharp() {
+    var pl = playing;
+    if (pl && earlySharp(pl) && !pl.early && sharpReady === sharpSrc[pl.to] && sharp.getAttribute('src') === sharpReady) sharp.classList.add('is-primed');
+  }
+  function prepSharp(pl) {
+    if (!sharp || reduced || !ENHANCED[pl.finalIdx]) return;
+    var src = sharpSrc[pl.finalIdx];
+    if (sharp.getAttribute('src') !== src) { sharpReady = ''; sharp.src = src; }
+    if (sharpReady === src) { primeSharp(); return; }
+    var ok = function () {
+      if (sharp.getAttribute('src') !== src || !sharp.naturalWidth) return;
+      sharpReady = src;
+      primeSharp();
+    };
+    var late = function () { if (sharp.complete) ok(); else sharp.addEventListener('load', ok, { once: true }); };
+    if (typeof sharp.decode === 'function') sharp.decode().then(ok, late); else late();
+  }
+  function warmSharp(i) {
+    [i - 1, i + 1].forEach(function (k) {
+      var im = sharpPre[k];
+      if (ENHANCED[k] && im && typeof im.decode === 'function') im.decode().catch(function () {});
+    });
+  }
+  function dissolveEarly(pl) {
+    pl.early = true;
+    // not decoded in time: the landing's own dissolve takes over (showSharp)
+    if (sharpReady !== sharpSrc[pl.to] || sharp.getAttribute('src') !== sharpReady) return;
+    sharpWant = pl.to;
+    sharp.classList.remove('is-primed');
+    stage.classList.add('is-early', 'is-sharp');
+    mirrorOut();
+  }
+  // The rest of the page is frozen while a leg plays (TJ, 8 Nov 2026): the
+  // aurora drift is paused (html.is-flight-playing, house-flight.css), the
+  // header glass goes flat (site.css) and GSAP's ticker sleeps, so the film
+  // has the frame budget to itself. A scroll of more than 2px gives it all
+  // back at once, the leg still playing.
+  var frozen = false, frozenY = 0;
+  function freezePage() {
+    if (frozen) return;
+    frozen = true;
+    frozenY = scrollY;
+    document.documentElement.classList.add('is-flight-playing');
+    if (window.gsap && gsap.ticker) gsap.ticker.sleep();
+  }
+  function thawPage() {
+    if (!frozen) return;
+    frozen = false;
+    document.documentElement.classList.remove('is-flight-playing');
+    if (window.gsap && gsap.ticker) gsap.ticker.wake();
+  }
+  addEventListener('scroll', function () {
+    if (frozen && Math.abs(scrollY - frozenY) > 2) thawPage();
+    if (hiddenAuroras.length) wakeAuroras();
+    settleAuroras();
+  }, { passive: true });
+  addEventListener('resize', settleAuroras);
+  if (TAP) setTimeout(settleAuroras, 0);
+  function playLegs(toIdx) {
+    if (!TAP || reduced || playing || !filmsReady) return;
+    toIdx = clamp(toIdx, 0, MARKS.length - 1);
+    if (toIdx === stationIdx) return;
+    cancelAnimationFrame(tweenRaf); tweening = false;
+    var dir = toIdx > stationIdx ? 1 : -1;
+    if (!hiddenAuroras.length) restAuroras();
+    hideSharp();
+    freezePage();
+    stopBreath();
+    playOne(stationIdx, stationIdx + dir, toIdx);
+  }
+  function legFor(from, to, finalIdx) {
+    var dir = to > from ? 1 : -1;
+    return { el: dir > 0 ? fwd : rev, from: from, to: to, fromT: legT(from), toT: legT(to),
+      finalIdx: finalIdx, dir: dir, stopAt: dir > 0 ? MARKS[to] : revTime(to) };
+  }
+  function playOne(from, to, finalIdx) {
+    var pl = playing = legFor(from, to, finalIdx);
+    var el = pl.el;
+    // after the leaving fade, so the next room's picture is not decoded and
+    // uploaded on the same frames as the fade and the film's first frames
+    setTimeout(function () { if (playing === pl) prepSharp(pl); }, 520);
+    var go = function () {
+      if (playing !== pl) return;
+      if (pl.dir < 0) rev.classList.add('is-on');
+      el.onended = function () { if (playing && playing.el === el) arrive(playing); };
+      var pr = el.play();
+      var started = function () { if (playing === pl) { startTween(pl); watchLeg(pl); } };
+      if (pr && pr.then) pr.then(started, function () { if (playing === pl) arrive(pl); }); else started();
+    };
+    // the film already waits on this room; the seek only guards against drift
+    seekTo(el, pl.dir > 0 ? MARKS[from] : revTime(from), go);
+  }
+  // Checked on every video frame (or animation frame where that is missing).
+  function watchLeg(pl) {
+    var el = pl.el;
+    var useV = typeof el.requestVideoFrameCallback === 'function';
+    var tick = function () {
+      if (playing !== pl) return;
+      if (!pl.early && earlySharp(pl) && el.currentTime >= pl.stopAt - EARLY_LEAD) dissolveEarly(pl);
+      if (el.ended || el.currentTime >= pl.stopAt - EPS) { arrive(pl); return; }
+      if (useV) el.requestVideoFrameCallback(tick); else requestAnimationFrame(tick);
+    };
+    tick();
+  }
+  // The leg's end state, written once.
+  function settleLeg(pl) {
+    stationIdx = pl.to;
+    // the transitions off first, so the exact end state lands at once
+    endTween();
+    paint(pl.toT);
+    lastPaint = pl.toT;
+    target = desired = pl.toT;
+    vraw = pl.to === 0 ? -LEAD_VH : trackForTime(pl.toT);
+  }
+  function arrive(pl) {
+    if (playing !== pl) return;
+    var el = pl.el;
+    // A room further along: the film plays straight on into the next leg,
+    // with no pause at the room it passes.
+    if (pl.finalIdx !== pl.to) {
+      settleLeg(pl);
+      var next = playing = legFor(pl.to, pl.to + pl.dir, pl.finalIdx);
+      primeSharp();
+      startTween(next);
+      watchLeg(next);
+      return;
+    }
+    el.pause();
+    el.onended = null;
+    var land = function () {
+      settleLeg(pl);
+      playing = null;
+      thawPage();
+      settleAuroras();
+      startBreath();
+      if (ENHANCED[pl.to]) revealStop(pl.to - 1, pl.toT);
+      showSharp(pl.to);
+      warmSharp(pl.to);
+      if (revWant !== pl.to) parkRev(pl.to);
+    };
+    if (pl.dir > 0) { seekTo(fwd, MARKS[pl.to], land); return; }
+    // back: hold the reversed film on the room, bring the forward film to the
+    // same frame under it, and only then take the reversed one away
+    revWant = pl.to;
+    seekTo(rev, revTime(pl.to), function () {
+      seekTo(fwd, MARKS[pl.to], function () {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { rev.classList.remove('is-on'); land(); });
+        });
+      });
+    });
+  }
+  // A leg's line, dots, titles and opening line run on CSS transitions (TJ,
+  // 8 Nov 2026), so nothing is written per frame while the film plays. Each
+  // ramp of the film (a title's rise or fall, a dot's growth, the opening
+  // line's fade) is mapped from film seconds to the leg's milliseconds: the
+  // part of it this leg crosses gives the delay and the length of that
+  // property's transition (.is-tween, house-flight.css). The values are then
+  // written once, at the leg's end state, and the browser runs them.
+  function rampSpan(ramps, pl, legMs) {
+    var span = pl.toT - pl.fromT;
+    var lo = Math.min(pl.fromT, pl.toT), hi = Math.max(pl.fromT, pl.toT);
+    // a film position inside the leg, to the real moment the eased film reaches it
+    var at = function (t) { return legTimeAt(clamp((t - pl.fromT) / span, 0, 1), pl.dir) * legMs; };
+    for (var r = 0; r < ramps.length; r++) {
+      var s0 = Math.max(ramps[r][0], lo), s1 = Math.min(ramps[r][1], hi);
+      if (s1 <= s0) continue;
+      var t0 = at(span > 0 ? s0 : s1), t1 = at(span > 0 ? s1 : s0);
+      return [Math.round(clamp(t0, 0, legMs)), Math.max(1, Math.round(clamp(t1, 0, legMs) - clamp(t0, 0, legMs)))];
+    }
+    return [0, 1];
+  }
+  function setTiming(el, name, sp) {
+    el.style.setProperty('--' + name + '-delay', sp[0] + 'ms');
+    el.style.setProperty('--' + name + '-ms', sp[1] + 'ms');
+  }
+  function introAt(time) { return phone ? 1 : 1 - smooth((time - (DOOR - 0.4)) / 0.5); }
+  function startTween(pl) {
+    var legMs = LEG_MS;
+    if (pl.toT === pl.fromT) return;
+    // the room's stem and title wait for the film to stop (revealStop)
+    clearReveal();
+    holdStop = ENHANCED[pl.to] ? pl.to - 1 : -1;
+    section.style.setProperty('--leg-ms', legMs + 'ms');
+    if (route) route.style.setProperty('--leg-ms', legMs + 'ms');
+    // the fill holds on the house dot until the door (nowFraction), then runs with the film
+    // the fill and tip move with the film's eased speed over the part of the leg they cross
+    section.style.setProperty('--leg-ease', easeCurve(0, 1, pl.dir));
+    if (route) {
+      var fillSp = rampSpan([[DOOR, DURATION]], pl, legMs);
+      setTiming(route, 'fill', fillSp);
+      route.style.setProperty('--fill-ease', easeCurve(fillSp[0] / legMs, (fillSp[0] + fillSp[1]) / legMs, pl.dir));
+    }
+    stopEls.forEach(function (li, j) {
+      var w = WINDOWS[j];
+      var bj = tapFlow() ? STATIONS[j + 1] - 0.05 : births[j];
+      setTiming(li, 'p', rampSpan([[w[0], w[0] + 0.3], [w[1] - 0.3, w[1]]], pl, legMs));
+      setTiming(li, 'pw', rampSpan([[w[0] + 0.08, w[0] + 0.38], [w[1] - 0.3, w[1]]], pl, legMs));
+      setTiming(li, 'd', rampSpan([[bj, bj + 0.15]], pl, legMs));
+    });
+    setTiming(section, 'intro', rampSpan([[DOOR - 0.4, DOOR + 0.1]], pl, legMs));
+    section.classList.add('is-tween');
+    if (route) route.classList.add('is-tween');
+    // the end state, once
+    paintRoute(pl.toT);
+    paintBeats(pl.toT);
+    var i0 = introAt(pl.fromT), i1 = introAt(pl.toT);
+    if (intro) {
+      intro.style.opacity = i1.toFixed(3);
+      // hidden only once the fade is over, in settleLeg's paint
+      intro.style.visibility = i0 > 0.001 || i1 > 0.001 ? 'visible' : 'hidden';
+    }
+    if (introVeil) introVeil.style.opacity = (VEIL * i1).toFixed(3);
+    // phones pan to the next room's crop across the leg (object-position, .is-tween)
+    if (phone) {
+      var pair = scenePair(pl.toT);
+      stage.style.setProperty('--fx', mix(SCENES[pair.left].fx, SCENES[pair.right].fx, pair.amount).toFixed(1) + '%');
+    }
+  }
+  function endTween() {
+    if (!section.classList.contains('is-tween')) return;
+    section.classList.remove('is-tween');
+    if (route) route.classList.remove('is-tween');
+    // settle the style now, so a leg that follows starts its own transitions
+    // from this leg's end state
+    void getComputedStyle(route || section).transitionDuration;
+  }
   var posterOn = 0;
   var lastPaint = -1;
   var mx = 0, my = 0, tmx = 0, tmy = 0;
@@ -165,10 +683,11 @@
   // Tiny canvas, upscaled and blurred by CSS: one video decode, near zero draw cost.
   function drawGhost() {
     if (!gctx) return;
-    var src = ready ? video : posters[posterOn];
-    if (!src) return;
-    var sw = ready ? video.videoWidth : src.naturalWidth;
-    var sh = ready ? video.videoHeight : src.naturalHeight;
+    var src = TAP ? (rev && rev.classList.contains('is-on') ? rev : fwd) : (ready ? video : posters[posterOn]);
+    if (!src || (src.tagName === 'VIDEO' && src.readyState < 2)) return;
+    var isV = src.tagName === 'VIDEO';
+    var sw = isV ? src.videoWidth : src.naturalWidth;
+    var sh = isV ? src.videoHeight : src.naturalHeight;
     if (!sw || !sh) return;
     var cw = ghost.width, ch = ghost.height;
     var scale = Math.max(cw / sw, ch / sh) * GHOST_ZOOM;
@@ -235,14 +754,7 @@
     return clamp(enter * leave, 0, 1);
   }
 
-  function paint(time) {
-    var current = sceneAt(time);
-    if (current !== posterOn) {
-      posters[posterOn] && posters[posterOn].classList.remove('is-on');
-      posters[current] && posters[current].classList.add('is-on');
-      posterOn = current;
-    }
-
+  function paintBeats(time) {
     beats.forEach(function (beat) {
       var i = SCENES.findIndex(function (scene) { return scene.beat === beat.dataset.beat; });
       var opacity = i < 0 ? 0 : beatOpacity(i, time);
@@ -251,12 +763,23 @@
       beat.classList.toggle('is-live', opacity > 0.5);
       beat.style.transform = 'none';
     });
+  }
+
+  function paint(time) {
+    var current = sceneAt(time);
+    if (current !== posterOn) {
+      posters[posterOn] && posters[posterOn].classList.remove('is-on');
+      posters[current] && posters[current].classList.add('is-on');
+      posterOn = current;
+    }
+
+    paintBeats(time);
 
     // The opening line (TJ, 21 Oct 2026): up as the film arrives and through
     // the glide, gone as the door comes up, before the first stop's title.
     // Phones keep it up for the whole flight, above the film (TJ, 23 Oct 2026).
     if (intro) {
-      var io = phone ? 1 : 1 - smooth((time - (DOOR - 0.4)) / 0.5);
+      var io = introAt(time);
       intro.style.opacity = io.toFixed(3);
       intro.style.visibility = io > 0.001 ? 'visible' : 'hidden';
     }
@@ -308,7 +831,8 @@
   // grows when its stop is born and stays. The stop whose WINDOWS entry
   // holds the film time is current: its stem, wash and masked name and words
   // rise and fall with the film (see paintRoute, which writes --p, --pw and
-  // --d on each stop; the CSS draws everything from those, no transitions).
+  // --d on each stop; the CSS draws everything from those, with transitions
+  // only while a tapped leg plays, see startTween).
   // Measurements are cached in layoutRoute(); paintRoute runs on every paint.
   //
   // Where each stop sits (x is a fraction of the line) and which side of its
@@ -343,10 +867,14 @@
   // and the centre (TJ, 16 Oct 2026).
   // The arrival stop is gone and the line starts at the kitchen (TJ, 23 Oct
   // 2026): four stops, evenly spaced between the same two ends, 0.28 apart.
+  // The house has its own dot again, at the line's start (TJ, 8 Nov 2026),
+  // so the line reads as a journey from the first frame: five dots, evenly
+  // spaced between the same two ends. The house dot has no words.
+  var HOUSE_X = 0.08;
   var ROUTE_STOPS = [
-    { x: 0.08, side: 'right' },
-    { x: 0.36, side: 'right' },
-    { x: 0.64, side: 'left' },
+    { x: 0.29, side: 'right' },
+    { x: 0.50, side: 'right' },
+    { x: 0.71, side: 'left' },
     { x: 0.92, side: 'left' }
   ];
   // Each stop's [in, out] window in film seconds, read from the footage (TJ, 14 Oct 2026), in
@@ -379,7 +907,7 @@
   var lastEndD = -1;
   // The fill stops at the last stop (the daily treatments, TJ 16 Oct 2026).
   var knotT = [ROUTE_IN].concat(births, [DURATION]);
-  var knotX = [0].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [lastX]);
+  var knotX = [HOUSE_X].concat(ROUTE_STOPS.map(function (s) { return s.x; }), [lastX]);
   var lineW = 1;
   var bornNow = [];
   var currentNow = [];
@@ -392,7 +920,7 @@
     // frame, so a tap always leaves the tip on a dot (TJ, 23 Oct 2026).
     var kt = tapFlow() ? [DOOR].concat(STATIONS.slice(1), [DURATION]) : knotT;
     var kx = knotX;
-    if (time <= kt[0]) return 0;
+    if (time <= kt[0]) return kx[0];
     for (var k = 1; k < kt.length; k++) {
       if (time <= kt[k]) return kx[k - 1] + (kx[k] - kx[k - 1]) * (time - kt[k - 1]) / (kt[k] - kt[k - 1]);
     }
@@ -402,11 +930,16 @@
     if (!route || !stopEls.length) return;
     lineW = route.clientWidth || innerWidth;
     if (routeEnd) routeEnd.style.left = (END_X * lineW).toFixed(1) + 'px';
+    if (routeHome) routeHome.style.left = (HOUSE_X * lineW).toFixed(1) + 'px';
     var isPhone = innerWidth < 768;
     // Phones (TJ, 16 Oct 2026): the words leave the dots and sit as one
     // block under the line, so the CSS needs each stop's offset (--x) and
     // the line's width (--lw) to pull them back to the line's left edge.
     route.style.setProperty('--lw', lineW.toFixed(1) + 'px');
+    // desktop arrows sit just outside the line's ends, but never past the
+    // window's edge: on narrow windows they move in over the line's soft ends
+    var routeLeft = route.getBoundingClientRect().left;
+    route.style.setProperty('--arrow-band', Math.max(0, Math.min(64, Math.round(routeLeft - 4))) + 'px');
     stopEls.forEach(function (li, i) {
       var x = ROUTE_STOPS[i].x;
       var side = isPhone ? (x < 0.5 ? 'right' : 'left') : ROUTE_STOPS[i].side;
@@ -443,6 +976,34 @@
   }
   // Writes a stop's ramp variable only when it has moved by more than 0.001, so a
   // paint that changes nothing for this stop costs no style write.
+  // Titles after the stop (TJ, 9 Nov 2026; the kitchen first, then every room
+  // in ENHANCED): on a leg that ends at one of these rooms, forward or back,
+  // its stem and title stay down while the film moves (holdStop, set in
+  // startTween; the line, tip and dot run as before). At landing they rise
+  // over the still's dissolve: --p over 600ms ease out, --pw 120ms later.
+  var holdStop = -1;
+  var revealTimer = 0, revealEl = null;
+  function clearReveal() {
+    clearTimeout(revealTimer);
+    if (revealEl) revealEl.style.transition = '';
+    revealEl = null;
+  }
+  function revealStop(j, time) {
+    var li = stopEls[j];
+    if (!li) return;
+    clearReveal();
+    holdStop = -1;
+    li.style.transition = 'none';
+    writeRamp(lastP, j, '--p', 0);
+    writeRamp(lastPw, j, '--pw', 0);
+    // settle the zero first, so the rise starts from it
+    void getComputedStyle(li).getPropertyValue('--p');
+    void li.offsetWidth;
+    li.style.transition = '--p 600ms ease-out 0ms, --pw 600ms ease-out 120ms';
+    revealEl = li;
+    paintRoute(time);
+    revealTimer = setTimeout(clearReveal, 800);
+  }
   function writeRamp(cache, i, name, value) {
     if (cache[i] !== undefined && Math.abs(cache[i] - value) <= 0.001) return;
     cache[i] = value;
@@ -452,9 +1013,10 @@
   // and scrolling back runs them back.
   function paintRoute(time) {
     if (!route || !stopBtns.length) return;
-    var o = smooth((time - ROUTE_IN) / 0.5) * (1 - smooth((time - ROUTE_OUT) / 0.8));
+    var o = (TAP ? 1 : smooth((time - ROUTE_IN) / 0.5)) * (1 - smooth((time - ROUTE_OUT) / 0.8));
     route.style.opacity = o.toFixed(3);
-    if (routeWash) routeWash.style.opacity = o.toFixed(3);
+    // tapped on a desktop layout: the foot fade is baked into the desktop films (8 Nov 2026)
+    if (routeWash && !bakedFade) routeWash.style.opacity = o.toFixed(3);
     route.style.visibility = o > 0.01 ? 'visible' : 'hidden';
     route.classList.toggle('is-live', o > 0.5);
     var f = nowFraction(time);
@@ -486,6 +1048,7 @@
       var p = smooth((time - win[0]) / 0.3) * fall;
       var pw = smooth((time - win[0] - 0.08) / 0.3) * fall;
       var d = smooth((time - bj) / 0.15);
+      if (j === holdStop) { p = 0; pw = 0; }
       writeRamp(lastP, j, '--p', p);
       writeRamp(lastPw, j, '--pw', pw);
       writeRamp(lastD, j, '--d', d);
@@ -511,6 +1074,54 @@
 
   function loadClip() {
     if (reduced) return;
+    if (TAP) {
+      // no long film: the continuous tapped film and its reversed copy
+      stage.classList.add('is-tap');
+      ready = true;
+      if (!fwd || !rev) return;
+      var key = clipSuffix ? 'srcMobile' : 'src';
+      if (clipSuffix) fwd.poster = '../assets/img/home-flight-legs-poster-m.webp';
+      preloadSharp();
+      // Preroll (8 Nov 2026): a cold decoder stalled the first leg on phones
+      // by a frame or two. The reversed film, held on the same house frame,
+      // covers the forward one while it runs a few frames unseen and rewinds;
+      // only then are taps taken.
+      var primed = false;
+      var prime = function () {
+        seekTo(rev, revTime(0), function () {
+          rev.classList.add('is-on');
+          var back = function () {
+            fwd.pause();
+            seekTo(fwd, MARKS[0], function () {
+              requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                  rev.classList.remove('is-on');
+                  filmsReady = true;
+                  startBreath();
+                  showSharp(0);
+                  warmSharp(0);
+                });
+              });
+            });
+          };
+          var pr = fwd.play();
+          if (pr && pr.then) pr.then(function () { setTimeout(back, 160); }, back); else setTimeout(back, 160);
+        });
+      };
+      var check = function () {
+        if (primed || fwd.readyState < 3 || rev.readyState < 3) return;
+        primed = true;
+        if (stationIdx === 0) prime(); else { filmsReady = true; startBreath(); showSharp(stationIdx); warmSharp(stationIdx); parkRev(stationIdx); }
+      };
+      [fwd, rev].forEach(function (el) {
+        el.addEventListener('canplaythrough', check);
+        el.addEventListener('canplay', check);
+        el.preload = 'auto';
+        el.src = el.dataset[key];
+        el.load();
+      });
+      return;
+    }
     var source = phone || !finePointer ? video.dataset.srcMobile : video.dataset.src;
     var local = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
     if (local && window.fetch) {
@@ -531,9 +1142,20 @@
     revealing = !HELD && !reduced && REVEAL_VH > 0 && !!revealNext && revealNext.classList.contains('is-live');
     section.classList.toggle('is-reveal', revealing);
     if (revealing) section.style.marginBottom = -Math.round((1 + REVEAL_VH) * vh) + 'px';
+    // Home since 8 Nov 2026 (TJ): give back the stage's own blank window at the end,
+    // so the next section comes up as the film finishes dissolving (data-tail-vh).
+    else if (!HELD && !reduced && section.dataset.tailVh) section.style.marginBottom = -Math.round(parseFloat(section.dataset.tailVh) * vh) + 'px';
     // trackTop is where scrubbing starts, after the lead, so every
     // scrollTo below that adds a track position to it stays correct.
     trackTop = section.getBoundingClientRect().top + scrollY + LEAD_VH * vh;
+    if (TAP) {
+      // one window, no scroll track: the film is moved by taps
+      section.style.height = Math.round(vh) + 'px';
+      section.style.marginBottom = '';
+      revealing = false;
+      section.classList.remove('is-reveal');
+    }
+    syncBake();
     sizeGhost();
     layoutRoute();
     lastPaint = -1;
@@ -545,7 +1167,8 @@
   // themselves stay pinned at their max and cannot tell the two apart.
   var pastFlight = false;
   function updateFromScroll() {
-    var raw = (scrollY - trackTop) / vh;
+    if (playing) return;
+    var raw = (pos() - trackTop) / vh;
     var track = clamp(raw, 0, TRACK_VH);
     // The section carries an extra +1vh of height past TRACK_VH on
     // purpose (see layout()), runway after the scrubbing itself maxes
@@ -553,7 +1176,7 @@
     // should stay up for all of that too, not drop the instant the
     // video's own scrub distance is exhausted.
     // With the hand over, the act takes the window where the track ends.
-    pastFlight = scrollY - trackTop >= (HELD ? TRACK_VH : TRACK_VH + 1) * vh;
+    pastFlight = pos() - trackTop >= (HELD ? TRACK_VH : TRACK_VH + 1) * vh;
     var nextDesired = raw < 0 ? timeForLead(raw) : timeForTrack(track);
     var direct = performance.now() < wheelUntil || performance.now() < keyUntil || performance.now() < tapUntil || touchActive;
     desired = nextDesired;
@@ -572,21 +1195,25 @@
     lastDesired = desired;
   }
 
+  var lastMx = '', lastMy = '';
   function frame() {
-    if (Math.abs(target - lastPaint) > 0.0001) {
+    // while a leg plays its transitions carry the route, so no paint
+    if (!playing && Math.abs(target - lastPaint) > 0.0001) {
       paint(target);
       lastPaint = target;
     }
     paintFlightEnquire();
     paintStep();
-    if (ready && !video.seeking && Math.abs(video.currentTime - target) > DEAD_BAND) video.currentTime = target;
+    if (!TAP && !playing && ready && !video.seeking && Math.abs(video.currentTime - target) > DEAD_BAND) video.currentTime = target;
     drawGhost();
 
-    if (finePointer && !reduced) {
+    // the pointer drift holds still while a leg plays and only writes on a change
+    if (finePointer && !reduced && !playing) {
       mx += (tmx - mx) * 0.08;
       my += (tmy - my) * 0.08;
-      stage.style.setProperty('--mx', mx.toFixed(3));
-      stage.style.setProperty('--my', my.toFixed(3));
+      var sx = mx.toFixed(3), sy = my.toFixed(3);
+      if (sx !== lastMx) { lastMx = sx; stage.style.setProperty('--mx', sx); }
+      if (sy !== lastMy) { lastMy = sy; stage.style.setProperty('--my', sy); }
     }
     requestAnimationFrame(frame);
   }
@@ -594,7 +1221,8 @@
   stopBtns.forEach(function (btn, i) {
     var go = function () {
       var scene = SCENES.filter(function (s) { return s.name === stopEls[i].dataset.stop; })[0];
-      if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
+      if (scene && TAP) { locked = true; playLegs(STATIONS.indexOf(scene.rest)); }
+      else if (scene) window.scrollTo({ top: trackTop + trackForTime(scene.time) * vh, behavior: reduced ? 'auto' : 'smooth' });
     };
     btn.addEventListener('click', go);
     stopEls[i].querySelector('.route__dot').addEventListener('click', go);
@@ -630,7 +1258,7 @@
   var restSettling = false;
   var settleArmed = false;   // only a touch arms the settle; a wheel never does
   function scheduleRestSettle() {
-    if (!phone || restSettling || !settleArmed || tapFlow()) return;
+    if (TAP || !phone || restSettling || !settleArmed || tapFlow()) return;
     clearTimeout(restSettleTimer);
     restSettleTimer = setTimeout(function () {
       if (touchActive) { scheduleRestSettle(); return; }
@@ -661,7 +1289,7 @@
   }));
   var locked = false, tweening = false, tweenRaf = 0, snapTimer = 0;
   var swipeY = null, swipeLocked = false;
-  function tapFlow() { return phone && !reduced && !!stepBox; }
+  function tapFlow() { return (phone || TAP) && !reduced && !!stepBox; }
   function yForTime(time) { return trackTop + trackForTime(time) * vh; }
   // Where next on the last room comes to rest: the next section, just
   // under the header.
@@ -682,7 +1310,7 @@
   var tailPending = false;
   function catchTail() {
     tailPending = false;
-    if (tweening || !inHold(scrollY) || scrollY <= lastY() + 0.25 * vh) return false;
+    if (TAP || tweening || !inHold(scrollY) || scrollY <= lastY() + 0.25 * vh) return false;
     goStation(STATIONS.length - 1);
     return true;
   }
@@ -697,12 +1325,12 @@
   function tweenTo(y, ms, done) {
     cancelAnimationFrame(tweenRaf);
     tweening = true;
-    var from = scrollY, t0 = performance.now();
+    var from = pos(), t0 = performance.now();
     tapUntil = t0 + ms + 250;
     (function step(now) {
       var k = clamp((now - t0) / ms, 0, 1);
       var e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;
-      window.scrollTo({ top: from + (y - from) * e, behavior: 'instant' });
+      setPos(from + (y - from) * e);
       if (k < 1) tweenRaf = requestAnimationFrame(step);
       else { tweening = false; if (done) done(); }
     })(t0);
@@ -712,35 +1340,61 @@
   function goStation(i) {
     i = clamp(i, 0, STATIONS.length - 1);
     locked = true;
+    if (TAP) { playLegs(i); return; }
     tweenTo(yForTime(STATIONS[i]), msFor(target, STATIONS[i]));
   }
   // After the last room the film plays out and the page comes to rest at
   // the start of the next section, Mother and Baby Care (TJ, 23 Oct 2026).
   function leaveDown() {
     locked = false;
+    if (TAP) {
+      // play the film out, carry the page on to the next section, then set
+      // the flight back to its start, ready for Start again
+      tweenTo(trackTop + TRACK_VH * vh, msFor(target, DURATION), function () {
+        window.scrollTo({ top: landingY(), behavior: 'smooth' });
+        setTimeout(function () { vraw = -LEAD_VH; updateFromScroll(); }, 1200);
+      });
+      return;
+    }
     tweenTo(landingY(), msFor(target, DURATION) + 700);
   }
   function leaveUp() {
     locked = false;
+    if (TAP) { playLegs(0); return; }
     tweenTo(Math.max(0, trackTop - (LEAD_VH + 0.6) * vh), 900);
   }
+  // Tapped (TJ, 8 Nov 2026): the house, with "Fly through the service" up,
+  // is the first stop; the four rooms follow. The house has only next, the
+  // last room only back; the page itself is scrolled on by the reader.
+  function tapIndex() { return playing ? playing.to : stationIdx; }
   function step(dir) {
-    if (!tapFlow()) return;
+    if (!tapFlow() || playing) return;
+    if (TAP) {
+      var t = tapIndex() + dir;
+      if (t <= 0) leaveUp();
+      else if (t < STATIONS.length) goStation(t);
+      return;
+    }
     var i = stationNow() + dir;
     if (i < 0) return;
     if (i >= STATIONS.length) leaveDown(); else goStation(i);
   }
   function paintStep() {
     if (!tapFlow() || !stepBack) return;
-    var i = stationNow();
-    stepBack.disabled = i === 0;
+    if (TAP) {
+      var t = tapIndex();
+      stepBack.classList.toggle('is-gone', t === 0);
+      stepNext.classList.toggle('is-gone', t === STATIONS.length - 1);
+      return;
+    }
+    stepBack.disabled = stationNow() === 0;
   }
   if (stepBack) stepBack.addEventListener('click', function () { step(-1); });
   if (stepNext) stepNext.addEventListener('click', function () { step(1); });
   // Arriving by scroll: once the page comes to rest inside the film, it
   // settles on the nearest room and holds.
   addEventListener('scroll', function () {
-    if (!tapFlow() || tweening) return;
+    if (TAP || !tapFlow() || tweening) return;
     if (!inHold(scrollY)) { locked = false; clearTimeout(snapTimer); return; }
     // in the tail: straight back to the last room, once the finger is off
     if (!locked && scrollY > lastY() + 0.25 * vh) {
@@ -757,7 +1411,7 @@
     }, 180);
   }, { passive: true });
   addEventListener('touchstart', function (e) {
-    swipeLocked = tapFlow() && locked && !tweening;
+    swipeLocked = !TAP && tapFlow() && locked && !tweening;
     swipeY = e.touches[0].clientY;
   }, { passive: true });
   addEventListener('touchmove', function (e) {
@@ -785,6 +1439,7 @@
   // with the breakpoint, so crossing it re-measures the track.
   phoneQuery.addEventListener('change', function (event) {
     phone = event.matches;
+    syncBake();
     layoutRoute();
     lastPaint = -1;
   });
@@ -814,11 +1469,13 @@
     T: TRACK_VH,
     scenes: SCENES,
     state: function () {
-      var track = clamp((scrollY - trackTop) / vh, 0, TRACK_VH);
+      var track = clamp((pos() - trackTop) / vh, 0, TRACK_VH);
       return { t: track, progress: track / TRACK_VH, target: target, desired: desired, inputMode: inputMode,
         current: video.currentTime || 0, ready: reduced || ready, vh: vh, top: trackTop,
         duration: DURATION, trackVh: TRACK_VH, endVh: TRACK_VH, pinVh: HELD ? PIN_VH : TRACK_VH, pinT: PIN_T, held: HELD };
     },
+    // the tapped film's own state, for tests
+    tap: function () { return { playing: !!playing, station: stationIdx, ready: filmsReady }; },
     scrollToT: function (track) { window.scrollTo({ top: trackTop + clamp(track, 0, TRACK_VH) * vh, behavior: 'instant' }); },
     // the hand over's route, from the confinement pin (home.js)
     setHandover: function (e) { if (Math.abs(e - handE) < 0.0005) return; handE = e; lastPaint = -1; },

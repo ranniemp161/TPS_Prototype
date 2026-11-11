@@ -230,10 +230,8 @@
   display: flex;
   gap: .5em;
   padding: .6rem 0;
-  border-top: 1px solid var(--line);
 }
-
-.article__contact > div:first-child { border-top: none; }
+/* Hairlines between the contact rows removed (TJ, 10 Nov 2026) */
 
 .article__contact dt {
   margin: 0;

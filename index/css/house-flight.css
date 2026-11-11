@@ -148,7 +148,7 @@
      all move down by the band (--fh). No veil: nothing sits on the film. */
   /* The film's top edge blends in from the ground as its foot does, and
      sits lower, with more room under the line (TJ, 23 Oct 2026). */
-  .page--wwd { --fh: 100px; }
+  .flight { --fh: 100px; }
   .flight__intro {
     font-size: min(8.6vw, 3rem);
     top: calc(var(--nav-h) + 33px);
@@ -705,6 +705,10 @@
     mask-composite: intersect;
   }
 }
+/* The film's ground rendered one step darker than the page (242 238 235
+   against 243 239 236), which showed as a faint box; a hair of brightness
+   makes them the same (TJ, 11 Nov 2026). */
+.zones__poster, .zones__video { filter: brightness(1.0042); }
 .zones__poster { opacity: 0; transition: opacity 500ms var(--ease-out); }
 .zones__poster.is-on { opacity: 1; }
 .zones__video { opacity: 0; }
@@ -826,6 +830,18 @@
 /* Wide screens: the title keeps the left, and the rooms take the empty paper
    on the right of the house. */
 @media (min-width: 1100px) {
+  /* The house fits between the words (TJ, 11 Nov 2026). It was sized from the
+     window height alone, so in a narrow, tall window it ran under the room
+     list. Now the film's height is the smaller of the space under the header
+     and the height at which the house (0.424 of the film height either side
+     of the centre) still clears the wider of the two side columns, the room
+     list on the right or the title on the left, by 40px. On wide windows this
+     is the full height, so nothing changes there. */
+  .zones {
+    --zside: max(calc(max(24px, 2vw) + clamp(240px, 21vw, 380px)), calc(52px + clamp(220px, 18.8vw, 360px)));
+    --zfh: min(calc(100svh - var(--nav-h)), calc((50vw - var(--zside) - 40px) / .424));
+  }
+  .zones__film { top: calc(var(--nav-h) + (100svh - var(--nav-h) - var(--zfh)) / 2); bottom: auto; height: var(--zfh); }
   .zones__copy { inset: 0; width: auto; translate: none; pointer-events: none; }
   .zones__title {
     position: absolute;
@@ -833,7 +849,7 @@
        the film height either side of the centre. */
     --zw: clamp(220px, 18.8vw, 360px);
     width: var(--zw);
-    left: max(24px, calc(50vw - .424 * (100svh - var(--nav-h)) - 28px - var(--zw)));
+    left: max(24px, calc(50vw - .424 * var(--zfh) - 28px - var(--zw)));
     top: 50%;
     translate: 0 -50%;
   }
@@ -1244,3 +1260,163 @@
   .route__head .route__mask { margin: 0 auto; }
   .route__step { top: calc(var(--above) + 26px + 32px - 24px); }
 }
+
+/* ---------- Tapped, not scrolled (TJ, 8 Nov 2026) ----------
+   The line, its five dots and the arrows are up from the first frame. The
+   house is the first dot (no words); rooms still to come show small and
+   grey, as on phones, and grow as the fill reaches them. The house has only
+   next, the last room only back. On desktop the arrows sit bottom right in a
+   coral outline; phones keep theirs under the room's words. */
+.route__home {
+  position: absolute; left: 0; top: var(--above); z-index: 2; pointer-events: none;
+  width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2 + var(--tline) / 2) 0 0 calc(var(--tdot) / -2);
+  border-radius: 50%; background: var(--reach-script);
+}
+.route__dot { transform: scale(calc(.6 + .4 * var(--d, 0))); transition: background-color 300ms var(--tease); }
+.route__stop:not(.is-born) .route__dot { background: rgba(10, 10, 10, .22); }
+.route__arrow.is-gone { visibility: hidden; pointer-events: none !important; }
+/* Desktop arrows (TJ, 9 Nov 2026): bare coral chevrons, no circle, one at
+   each end of the line and level with it, just outside its soft ends. Two
+   extra mask layers open a band at the line's height outside the route's box
+   so the chevrons show while the line keeps its faded ends. The tap area stays
+   44px; on hover a chevron slides a few pixels its own way and deepens. */
+@media (min-width: 768px) {
+  .route {
+    --arrow-band: 56px;
+    -webkit-mask-image: linear-gradient(#000, #000), linear-gradient(to right, transparent 0, #000 var(--fade), #000 calc(100% - var(--fade)), transparent 100%), linear-gradient(#000, #000), linear-gradient(#000, #000);
+    mask-image: linear-gradient(#000, #000), linear-gradient(to right, transparent 0, #000 var(--fade), #000 calc(100% - var(--fade)), transparent 100%), linear-gradient(#000, #000), linear-gradient(#000, #000);
+    -webkit-mask-size: 4000px 400px, 100% 100%, var(--arrow-band) 64px, var(--arrow-band) 64px;
+    mask-size: 4000px 400px, 100% 100%, var(--arrow-band) 64px, var(--arrow-band) 64px;
+    -webkit-mask-position: center calc(var(--above) + 20px), 0 0, calc(-1 * var(--arrow-band)) calc(var(--above) - 32px), calc(100% + var(--arrow-band)) calc(var(--above) - 32px);
+    mask-position: center calc(var(--above) + 20px), 0 0, calc(-1 * var(--arrow-band)) calc(var(--above) - 32px), calc(100% + var(--arrow-band)) calc(var(--above) - 32px);
+  }
+  .route__step {
+    display: flex; justify-content: space-between; align-items: center;
+    position: absolute; left: calc(-1 * var(--arrow-band)); right: calc(-1 * var(--arrow-band));
+    top: calc(var(--above) + var(--tline) / 2 - 28px); height: 56px;
+    pointer-events: none; z-index: 6;
+  }
+  .route.is-live .route__step .route__arrow { pointer-events: auto; }
+  .route__arrow {
+    width: 56px; height: 56px; padding: 0; border: 0; background: none;
+    color: var(--acc); cursor: pointer;
+    display: grid; place-items: center;
+    transition: transform 240ms var(--tease), color 240ms var(--tease), opacity 200ms var(--tease);
+  }
+  .route__arrow svg { width: 38px; height: 38px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .route__arrow[data-step="1"]:hover { transform: translateX(4px); color: var(--acc-deep); }
+  .route__arrow[data-step="-1"]:hover { transform: translateX(-4px); color: var(--acc-deep); }
+  .route__arrow:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+}
+
+/* Tapped (TJ, 8 Nov 2026): one continuous film, paused at the rooms. The
+   forward film always shows; its reversed copy sits above it and shows only
+   while a leg plays back (home-flight.js). The posters and the long scroll
+   film are not used in this mode. */
+.flight__reel {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: var(--fx) 50%;
+  display: block; opacity: 0; pointer-events: none;
+}
+.flight__stage.is-tap .flight__reel--fwd { opacity: 1; }
+.flight__stage.is-tap .flight__reel--rev.is-on { opacity: 1; }
+.flight__stage.is-tap .flight__poster, .flight__stage.is-tap .flight__video { display: none; }
+
+/* Breathing (TJ, 8 Nov 2026): while the film rests on a room it very slowly
+   zooms in and out, easing into every turn (ease in out, alternate). Both
+   films sit in this one wrapper, so the back swap stays on an identical
+   frame. home-flight.js adds .is-resting between legs and glides the scale
+   back to 1 as a leg starts; .is-away pauses it while the flight does not
+   fill the window. The freeze (html.is-flight-playing) never touches it. */
+.flight__breathe {
+  position: absolute; inset: 0;
+  transform-origin: 50% 55%;
+  will-change: transform;
+}
+@keyframes flight-breathe { from { transform: scale(1); } to { transform: scale(1.035); } }
+@keyframes flight-breathe-m { from { transform: scale(1); } to { transform: scale(1.03); } }
+.flight__stage.is-resting .flight__breathe { animation: flight-breathe 7s ease-in-out infinite alternate; }
+@media (max-width: 767px) {
+  .flight__stage.is-resting .flight__breathe { animation-name: flight-breathe-m; }
+}
+.flight__stage.is-away .flight__breathe { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .flight__stage.is-resting .flight__breathe { animation: none; }
+}
+
+/* Sharp still (TJ, 9 Nov 2026): while the film rests on a room, that room's
+   own source frame (assets/img/flight-rest/) dissolves in over the paused
+   film, so the picture at rest is as sharp as the footage itself. It shares
+   the films' box, crop and breathing zoom, so it lands on them pixel for
+   pixel. home-flight.js adds .is-sharp once the still is decoded; the moment
+   a leg starts the class goes and the still vanishes with no fade, so the
+   moving film is never covered. Not used with reduced motion (no films). */
+.flight__sharp {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: var(--fx) 50%;
+  display: block; pointer-events: none;
+  opacity: 0; transition: opacity 750ms ease-in-out;
+  /* its own layer, so its fade runs on the compositor */
+  will-change: opacity;
+}
+.flight__stage.is-sharp .flight__sharp { opacity: 1; }
+.flight__stage:not(.is-sharp) .flight__sharp { transition: none; }
+/* The kitchen, living room, nursery and treatment room (TJ, 9 Nov 2026): the
+   dissolve starts 0.35s of film before the mark, while the film slows to it,
+   and runs 1200ms, gentle at both ends. */
+.flight__stage.is-sharp.is-early .flight__sharp { transition: opacity 1200ms cubic-bezier(0.45, 0, 0.25, 1); }
+/* Primed (those rooms): decoded and drawn at 0.002 while the leg sets off, so
+   Chrome uploads it then; a still at opacity 0 is never drawn, so its first
+   visible frame would carry the upload. */
+.flight__stage:not(.is-sharp) .flight__sharp.is-primed { opacity: 0.002; }
+/* Leaving (TJ, 9 Nov 2026): the twin holds the resting picture and fades it
+   out over the leg's eased start (the film barely moves in that time), so
+   the sharp picture melts into the moving film instead of cutting to it. */
+.flight__sharp-out {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: var(--fx) 50%;
+  display: block; pointer-events: none;
+  opacity: 0; will-change: opacity;
+}
+.flight__sharp-out.is-on { opacity: 1; }
+.flight__sharp-out.is-on.is-fading { opacity: 0; transition: opacity 450ms cubic-bezier(0.4, 0, 0.6, 1); }
+@media (prefers-reduced-motion: reduce) {
+  .flight__sharp { display: none; }
+  .flight__sharp-out { display: none; }
+}
+
+/* A tapped leg plays on its own (TJ, 8 Nov 2026). While it plays the rest of
+   the page is frozen (html.is-flight-playing, home-flight.js): the aurora
+   drift pauses where it is, so its big blurred layers stop repainting. */
+html.is-flight-playing .aurora__field,
+html.is-flight-playing .aurora__field::after { animation-play-state: paused; }
+
+/* The line, dots and titles run on CSS transitions while a leg plays, set
+   once at the leg's start (startTween, home-flight.js), so nothing is written
+   per frame. The ramp variables are registered so they can transition; they
+   inherit, as the dot, stem and words read them from their stop. Without
+   .is-tween nothing here transitions: the scroll fallback and the snap at a
+   leg's end stay instant. */
+@property --p { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --pw { syntax: '<number>'; inherits: true; initial-value: 0; }
+@property --d { syntax: '<number>'; inherits: true; initial-value: 0; }
+.route.is-tween .route__fill,
+.route.is-tween .route__tip { transition: transform var(--fill-ms, 2500ms) var(--fill-ease, linear) var(--fill-delay, 0ms); }
+.route.is-tween .route__stop {
+  transition: --p var(--p-ms, 300ms) linear var(--p-delay, 0ms),
+              --pw var(--pw-ms, 300ms) linear var(--pw-delay, 0ms),
+              --d var(--d-ms, 150ms) linear var(--d-delay, 0ms);
+}
+/* a dot turns red as it is born, not when the leg starts */
+.route.is-tween .route__dot { transition-delay: var(--d-delay, 0ms); }
+/* the opening line and its veil fade with the glide to the door */
+.flight.is-tween .flight__intro,
+.flight.is-tween .flight__veil { transition: opacity var(--intro-ms, 500ms) linear var(--intro-delay, 0ms); }
+/* phones: the crop pans to the next room's across the leg */
+.flight.is-tween .flight__reel { transition: object-position var(--leg-ms, 2500ms) var(--leg-ease, linear); }
+/* Tapped on the desktop layout, the foot fade is baked into the desktop
+   films themselves (home-flight-legs.mp4 and its reversed copy), so the live
+   layer goes. The phone films are plain and phones keep the live layer:
+   there the film sits in a band and the fade falls over the ghost below it
+   (syncBake, home-flight.js). */
+.flight__stage.is-baked .route__wash { display: none; }

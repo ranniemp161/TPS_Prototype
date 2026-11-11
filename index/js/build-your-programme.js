@@ -55,6 +55,16 @@
         var pad = parseFloat(getComputedStyle(tab).paddingLeft) || 0;
         var x = tab.getBoundingClientRect().left + pad - host.getBoundingClientRect().left;
         menu.style.setProperty('--menu-x', x.toFixed(1) + 'px');
+        // The dropdown starts right under the tab's word; its glass only begins
+        // where the header's own glass ends, so the two read as one (TJ, 7 Nov 2026).
+        var word = document.createRange(); word.selectNodeContents(tab);
+        var hostBox = host.getBoundingClientRect();
+        var y = word.getBoundingClientRect().bottom - hostBox.top;
+        menu.style.setProperty('--menu-y', y.toFixed(1) + 'px');
+        menu.style.setProperty('--menu-band', Math.max(0, hostBox.height - y).toFixed(1) + 'px');
+        // On pages marked data-band-plain, the band at the very top sits on the plain page,
+        // not on the content below, so the dropdown takes that flat colour to match it.
+        menu.classList.toggle('menu--on-page', window.scrollY < 2 && document.documentElement.hasAttribute('data-band-plain'));
       }
       set();
       cancelAnimationFrame(menu._follow);
@@ -1364,7 +1374,18 @@
       var inner = p.querySelector('.dk-in');
       return inner ? Math.ceil(Math.max(inner.scrollHeight, inner.getBoundingClientRect().height)) : p.scrollHeight;
     }
-    function overflows(p) { return need(p) > p.clientHeight + 1; }
+    // The header folds to its short bar after Begin (.is-funnelled), so every page after the start
+    // is shown about 21px taller than it measures from the start screen (TJ, 10 Nov 2026: every
+    // slide fits the window, spacing scales with height). On laptop and tablet widths those pages
+    // are measured with that room added back. The start screen fills whatever box it has, so it
+    // is measured as it stands. Phones measure as before.
+    function shownGain(p) {
+      if (NARROW.matches || !hdr || screenOf[pages.indexOf(p)] === 0) return 0;
+      var pad = parseFloat(getComputedStyle(app).paddingTop) || 0;
+      var fold = parseFloat(getComputedStyle(hdr).getPropertyValue('--nav-h')) || pad;
+      return Math.max(0, pad - fold);
+    }
+    function overflows(p) { return need(p) > p.clientHeight + shownGain(p) + 1; }
 
     // A joined half without a title of its own (data-join="align") starts its
     // rows level with the first row of the half beside it.
@@ -1414,12 +1435,21 @@
       app.classList.remove('is-free');
       document.body.classList.remove('dk-is-free');
       free = false;
-      pages.forEach(function (p) { p.classList.remove('is-tight'); });
+      pages.forEach(function (p) { p.classList.remove('is-tight', 'is-snug'); });
       group(); align();
       pages.forEach(function (p) { if (overflows(p)) p.classList.add('is-tight'); });
       align(); centre();
+      // A second, closer step on laptop and tablet widths (TJ, 10 Nov 2026: every slide fits the
+      // window, spacing scales with height): a page still too tall after .is-tight takes .is-snug.
+      // Phones keep the one step and release as before.
+      if (!NARROW.matches) {
+        pages.forEach(function (p) { if (overflows(p)) p.classList.add('is-snug'); });
+        align(); centre();
+      }
       var over = pages.filter(overflows);
       free = over.length > 0 || window.innerHeight < 500;
+      // Released, the page reads as it did before the second step (TJ, 10 Nov 2026).
+      if (free) pages.forEach(function (p) { p.classList.remove('is-snug'); });
       app.classList.toggle('is-free', free);
       document.body.classList.toggle('dk-is-free', free);
       app.setAttribute('data-over', over.map(function (p) { return pages.indexOf(p); }).join(' '));

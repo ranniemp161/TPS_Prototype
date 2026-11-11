@@ -234,6 +234,11 @@
   ];
 
   var T = 0, film = START;
+  /* The early start (TJ, 11 Nov 2026, from Ami): the floors fly in while the
+     section is still rising into view, so the reader never scrolls through an
+     empty page. LEAD screens of the track run before the stage reaches the
+     top: the whole 'enter' leg, so the house is drawn as the stage pins. */
+  var LEAD = 0.9;
   ROOMS.forEach(function (leg) {
     leg.from = film; leg.s0 = T;
     T += leg.w; film = leg.to;
@@ -406,7 +411,7 @@
   var vhPx = innerHeight, trackTop = 0;
   function layout() {
     vhPx = stage.offsetHeight || innerHeight;
-    if (vhPx > 0) section.style.height = Math.round((T + 1) * vhPx) + 'px';
+    if (vhPx > 0) section.style.height = Math.round((T - LEAD + 1) * vhPx) + 'px';
     trackTop = section.getBoundingClientRect().top + scrollY;
   }
   // The flight above sets its own height on the same events, which moves
@@ -419,7 +424,7 @@
   /* ---------- the frame ---------- */
   var lastT = -1;
   function frame(force) {
-    var raw = (scrollY - trackTop) / vhPx;
+    var raw = (scrollY - trackTop) / vhPx + LEAD;
     var t = clamp(raw, 0, T);
 
     // Start the clip two screens before the section, so it is decoded by
@@ -445,9 +450,9 @@
   window.__zones = {
     T: T, legs: ROOMS,
     state: function () {
-      return { t: clamp((scrollY - trackTop) / vhPx, 0, T), target: target, play: play,
+      return { t: clamp((scrollY - trackTop) / vhPx + LEAD, 0, T), target: target, play: play,
                current: video ? video.currentTime : 0, ready: clipReady, painted: lastT, vh: vhPx, top: trackTop };
     },
-    scrollToT: function (t) { window.scrollTo({ top: trackTop + t * vhPx, behavior: 'instant' }); }
+    scrollToT: function (t) { window.scrollTo({ top: trackTop + (t - LEAD) * vhPx, behavior: 'instant' }); }
   };
 })();

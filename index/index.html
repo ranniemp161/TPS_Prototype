@@ -1,23 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-band-plain>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- Palette switch, prototype only, removed when Ami picks (TJ, 26 Oct 2026) -->
-<script>
-(function () {
-  var d = document.documentElement, p = null, q = null;
-  try { q = new URLSearchParams(location.search); p = q.get('palette'); } catch (e) {}
-  try {
-    if (p) localStorage.setItem('tps-palette', p); else p = localStorage.getItem('tps-palette');
-    /* The reach toggle is gone, everything is Full (TJ, 2 Nov 2026); clear any saved Button only */
-    localStorage.removeItem('tps-reach');
-  } catch (e) {}
-  /* Coral and Cognac and their five accent steps each, plus Coral 3 square (TJ, 2 Nov 2026); any other saved choice is cleared */
-  if (p && p !== 'coral' && p !== 'cognac' && p !== 'coral-square' && !/^(coral|cognac)-[1-5]$/.test(p)) { p = null; try { localStorage.removeItem('tps-palette'); } catch (e) {} }
-  if (p) d.setAttribute('data-palette', p);
-})();
-</script>
 <title>The Postpartum Suite — Live-in postpartum care</title>
 <meta name="description" content="Live-in postpartum care for you and your baby. A trained specialist stays with you, from seven days to thirty, so your own recovery is the thing being looked after." />
 <link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
@@ -798,6 +783,11 @@
           <img class="sf__logo" src="../assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="700" height="900" decoding="async" />
         </picture>
       </a>
+      <ul class="sf__social">
+        <li><a href="https://www.instagram.com/thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></a></li>
+        <li><a href="https://www.tiktok.com/@thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M16.6 2h-3.3v13.4a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.2a6.2 6.2 0 1 0 5.3 6.2V8.6a7.9 7.9 0 0 0 4.4 1.4V6.7a4.4 4.4 0 0 1-4.4-4.4z"/></svg></a></li>
+        <li><a href="https://www.linkedin.com/company/the-postpartum-suite-ldt/" target="_blank" rel="noopener" aria-label="The Postpartum Suite on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4v11H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6v5.4h-4v-4.8c0-1.2 0-2.6-1.6-2.6s-1.9 1.2-1.9 2.5v4.9h-4z"/></svg></a></li>
+      </ul>
     </div>
 
     <nav class="sf__col" aria-label="Footer">
@@ -815,10 +805,10 @@
     <div class="sf__col">
       <h2 class="sf__head">Contact</h2>
       <ul>
-        <li><span class="sf__label">Customer Enquiries</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Client relations team</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Brand Partnerships</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Phone</span><a href="tel:+44747769330">+44 7477 69330</a></li>
+        <li><span class="sf__label">Customer Enquiries&nbsp;:</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Client relations team&nbsp;:</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Brand Partnerships&nbsp;:</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Phone&nbsp;:</span><a href="tel:+447477693300">+44 7477 693300</a></li>
       </ul>
     </div>
 
@@ -828,11 +818,6 @@
 
   <div class="sf__base">
     <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
-    <ul class="sf__social">
-      <li><a href="https://www.instagram.com/thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></a></li>
-      <li><a href="https://www.tiktok.com/@thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M16.6 2h-3.3v13.4a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.2a6.2 6.2 0 1 0 5.3 6.2V8.6a7.9 7.9 0 0 0 4.4 1.4V6.7a4.4 4.4 0 0 1-4.4-4.4z"/></svg></a></li>
-      <li><a href="https://www.linkedin.com/company/the-postpartum-suite-ldt/" target="_blank" rel="noopener" aria-label="The Postpartum Suite on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4v11H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6v5.4h-4v-4.8c0-1.2 0-2.6-1.6-2.6s-1.9 1.2-1.9 2.5v4.9h-4z"/></svg></a></li>
-    </ul>
     <ul class="sf__legal">
       <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
       <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
@@ -847,7 +832,6 @@
 <script src="js/home.js"></script>
 
 <script src="../lab/devpanel-loader.js"></script>
-<script src="js/palettes.js"></script><script src="js/palette-panel.js"></script><script src="js/palette-images.js"></script>
 <script src="../lab/scroll-recorder.js"></script>
 </body>
 </html>

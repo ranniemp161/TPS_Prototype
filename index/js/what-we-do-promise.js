@@ -17,13 +17,17 @@ const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 // Shorter again (TJ, 12 Oct 2026): swiping a long scrub is hard work on a phone,
 // so the whole hold is about 1.8 screens instead of 3.1, the sunset itself 0.9.
 const DN_PHONE = window.matchMedia('(max-width: 860px)').matches;
-const PEAK_PIN_VH = DN_PHONE ? 0.9 : 2.4;
+// Faster on desktop (TJ, 11 Nov 2026, from Ami, TPS-0053): the sunset 2.4 to 1.6
+// screens, the beat on full night .82 to .55. Glass and hold unchanged.
+const PEAK_PIN_VH = DN_PHONE ? 0.9 : 1.6;
 // Day and Night Care (TJ, 8 Oct 2026): after the two options land, a glass
 // phase (DN_GLASS_VH) frosts and splits the frame and opens both columns, then
 // the hold lets them be read. The hold was .6 before the merge.
-const DN_BEAT_VH = DN_PHONE ? 0.2 : 0.82;
+const DN_BEAT_VH = DN_PHONE ? 0.2 : 0.55;
 const DN_GLASS_VH = DN_PHONE ? 0.5 : 1.3;
-const PEAK_HOLD_VH = DN_PHONE ? 0.2 : 1.0;
+// The glass now has its own section below (TJ, 11 Nov 2026, TPS-0055), so the
+// sunset's hold is only a short rest on the note before the page moves on.
+const PEAK_HOLD_VH = DN_PHONE ? 0.2 : 0.45;
 // The sun is the clock (TJ, 9 Oct 2026). Night, and the one change from dark to
 // cream for everything on the frame and the header's menu, are worked out from
 // where the sun is, not from scroll, so the three can never drift apart: night
@@ -41,13 +45,16 @@ function actPeak() {
   const frame = act.querySelector('[data-reveal]');
   const stage = act.querySelector('[data-stage]');
   const night = act.querySelector('.dissolve__night');
-  const heads = [...act.querySelectorAll('[data-dn-heads]')];
+  // The two columns, their heads and bodies live in the split section below
+  // the sunset (data-dns) since 11 Nov 2026, so they are found from the page.
+  const split = document.querySelector('[data-dns]');
+  const heads = [...document.querySelectorAll('[data-dn-heads]')];
   const clock = act.querySelector('[data-peak-clock]');
   const sun = act.querySelector('[data-peak-sun]');
   const states = [...act.querySelectorAll('[data-peak-states] span')];
   const answer = act.querySelector('[data-peak-answer]');
   const wrap = act.closest('.dn-wrap');
-  const bodies = [...act.querySelectorAll('[data-dn-body]')];
+  const bodies = [...document.querySelectorAll('[data-dn-body]')];
 
   /* Phones: Day to Night on one line (TJ, 12 Oct 2026). The sun and the four
      times of day give way to the site's progression line: Day at the left,
@@ -73,8 +80,20 @@ function actPeak() {
   /* The glass, 0 to 1: frosting and split over the frame, the intro gives
      way, both bodies open to the same closed height, and the day column's
      text turns from cream to ink as its side lightens. */
+  let glassNow = 0;
+  // The names and hours belong to the glass: they stay out until the small
+  // title and the paragraph have gone, then fade up and take their room.
+  const setHeads = g => {
+    const ha = Math.min(1, Math.max(0, (g - 0.62) / 0.33));
+    heads.forEach(h => {
+      const nat = h.firstElementChild ? h.scrollHeight : 0;
+      if (!h._nat || ha === 0) h._nat = Math.max(h._nat || 0, nat);
+      h.style.setProperty('--dn-hh', (ha * (h._nat || 0)).toFixed(1));
+      h.style.setProperty('--dn-ha', ha.toFixed(3));
+    });
+  };
   const DN_CREAM = [243, 239, 236], DN_INK = [10, 10, 10];
-  const frameImgs = [...act.querySelectorAll('.peak__frame img')];
+  const frameImgs = [...document.querySelectorAll('.dns__frame img')];
   const setGlass = g => {
     if (!wrap) return;
     // The room drifts slowly behind the glass (TJ, 8 Oct 2026): a gentle push
@@ -119,7 +138,7 @@ function actPeak() {
 
   /* Read more: opens one column fully (scrolling inside if it is long);
      Read less closes it to the even height again. */
-  act.querySelectorAll('[data-dn-more]').forEach(btn => {
+  document.querySelectorAll('[data-dn-more]').forEach(btn => {
     btn.addEventListener('click', () => {
       const opt = btn.closest('.dnf__opt');
       const open = !opt.classList.contains('is-open');
@@ -244,10 +263,8 @@ function actPeak() {
   // occupies; every beat below is defined against 0 to 1 of the motion
   // itself and then remapped onto that fraction, so the beats' relative
   // timing to each other is untouched by adding the hold.
-  const TOTAL_VH = PEAK_PIN_VH + DN_BEAT_VH + DN_GLASS_VH + PEAK_HOLD_VH;
+  const TOTAL_VH = PEAK_PIN_VH + DN_BEAT_VH + PEAK_HOLD_VH;
   const MOTION_FRAC = PEAK_PIN_VH / TOTAL_VH;
-  const GLASS_FROM = (PEAK_PIN_VH + DN_BEAT_VH) / TOTAL_VH;
-  const GLASS_TO = (PEAK_PIN_VH + DN_BEAT_VH + DN_GLASS_VH) / TOTAL_VH;
 
   // Where each beat sits on the motion's own 0 to 1, before the hold is
   // added. Named because the order is the whole design and it has to be
@@ -263,6 +280,22 @@ function actPeak() {
   // The pin. Its tween carries nothing of its own: night, like everything else
   // on the frame, is set from the sun in onUpdate below, so it all runs on one
   // clock (TJ, 9 Oct 2026).
+  /* The split (TJ, 11 Nov 2026, from Ami, TPS-0055): its own section under the
+     sunset. As it scrolls into place the glass builds, splits and the two
+     columns open over DN_GLASS_VH screens, the pace they had inside the sunset,
+     ending a little after the section reaches the top; then it holds (its
+     height, in the stylesheet) while they are read. */
+  if (split) {
+    const sm = x => x * x * (3 - 2 * x);
+    ScrollTrigger.create({
+      trigger: split, start: 'top 80%',
+      end: () => '+=' + Math.round(window.innerHeight * DN_GLASS_VH),
+      scrub: 0.6, refreshPriority: -12, invalidateOnRefresh: true,
+      onUpdate: self => { glassNow = sm(self.progress); setHeads(glassNow); setGlass(glassNow); },
+      onRefresh: self => { glassNow = sm(self.progress); setHeads(glassNow); setGlass(glassNow); }
+    });
+  }
+
   const pinTween = gsap.to({ v: 0 }, {
     v: 1,
     scrollTrigger: {
@@ -331,22 +364,8 @@ function actPeak() {
         // The answer, last, on an otherwise clear frame. Once m reaches 1
         // (motion finished, whether that is exactly at the boundary or
         // because scroll is now inside the hold) this stays at fully in.
-        const a = between(m, ANSWER_IN, 1);
-        // The glass, after a short beat on the two options. The question
-        // gives way as the frame frosts, since it would sit on the light half.
-        const gl = between(self.progress, GLASS_FROM, GLASS_TO);
-        const g = gl * gl * (3 - 2 * gl);
-        // The names and hours belong to the glass: they stay out until the small
-        // title and the paragraph have gone (those are fully out by g 0.625), then
-        // fade up and take their room as part of the transition.
-        const ha = Math.min(1, Math.max(0, (g - 0.62) / 0.33));
-        heads.forEach(h => {
-          const nat = h.firstElementChild ? h.scrollHeight : 0;
-          if (!h._nat || ha === 0) h._nat = Math.max(h._nat || 0, nat);
-          h.style.setProperty('--dn-hh', (ha * (h._nat || 0)).toFixed(1));
-          h.style.setProperty('--dn-ha', ha.toFixed(3));
-        });
-        setGlass(g);
+        // The glass is driven by the split section below (dnSplit), not this pin.
+        const g = glassNow;
         if (dnl) {
           // The sun starts half way between the title and the line (TJ, 12 Oct
           // 2026), so its sky reaches from the line up to that point plus half
@@ -377,7 +396,11 @@ function actPeak() {
         // The small title and the paragraph wait for the dark (TJ, 9 Oct 2026):
         // they lift in once the sun has gone under the line and the clock has
         // cleared.
-        const it = between(m, GONE, GONE + 0.1), ie = 1 - Math.pow(1 - it, 3);
+        // Now earlier (TJ, 11 Nov 2026, from Ami, TPS-0054): they rise in through the
+        // afternoon as the darkness comes, not after the sun has set. Tied to the
+        // colour change (ne), so they arrive as the type turns cream and never sit
+        // in the grey middle where neither colour reads. Phones keep the old timing.
+        const it = dnl ? between(m, GONE, GONE + 0.1) : Math.min(1, Math.max(0, (ne - 0.55) / 0.4)), ie = 1 - Math.pow(1 - it, 3);
         if (wrap) {
           wrap.style.setProperty('--dn-in', ie.toFixed(3));
           wrap.style.setProperty('--dn-nv', n.toFixed(3));

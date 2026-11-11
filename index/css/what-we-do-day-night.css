@@ -289,3 +289,21 @@
   .dnl__sun { position: absolute; left: 4px; top: 0; width: var(--dnl-sun); height: var(--dnl-sun); border-radius: 50%; background: currentColor;
     transform: translateY(calc(var(--dnl-t) * (var(--dnl-sky) + 2px))); }
 }
+
+/* ---- The split, its own section (TJ, 11 Nov 2026, from Ami, TPS-0055) ----
+   Under the sunset. It scrolls into place like any section; its stage then
+   holds (sticky) while the glass finishes and the columns are read. Its
+   height is the screen it arrives in, plus the end of the glass, plus a
+   screen to read. The glass, the columns and their variables are unchanged
+   (they read --dn-g and friends from .dn-wrap). Same night photograph for now. */
+.dns { position: relative; height: calc(var(--dns-len, 2.5) * 100svh); background: #1d1715; }
+.dns__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.dns__frame { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.dns__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: transform; }
+.dns .dng { z-index: 1; }
+.dns__answer { position: absolute; inset: 0; z-index: 2; }
+@media (max-width: 860px) { .dns { --dns-len: 1.7; } }
+/* The day room as the section arrives; the half and half fades in with the
+   glass, done by the time the columns are a little more than half open
+   (TJ, 11 Nov 2026). Both pictures take the same drift (what-we-do-promise.js). */
+.dns__frame .dns__split { opacity: clamp(0, calc(var(--dn-g, 0) * 1.7), 1); }

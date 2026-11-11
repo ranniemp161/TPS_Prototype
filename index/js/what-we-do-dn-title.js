@@ -52,7 +52,9 @@
     // then 20 percent larger than half), shrinking smoothly over the same glide.
     var e = smooth(cur);
     wrap.style.setProperty('--dn-tx', (dx * e).toFixed(1) + 'px');
-    wrap.style.setProperty('--dn-ts', (1 - 0.4 * e).toFixed(4));
+    // Larger when settled (TJ, 11 Nov 2026, from Ami, TPS-0052): 0.6 to 0.75, then a
+    // further 15 percent, 0.8625.
+    wrap.style.setProperty('--dn-ts', (1 - 0.1375 * e).toFixed(4));
   }
   gsap.ticker.add(frame);
   window.addEventListener('resize', function () { shown = -1; });

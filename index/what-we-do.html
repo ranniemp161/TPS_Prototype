@@ -1,23 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-band-plain>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<!-- Palette switch, prototype only, removed when Ami picks (TJ, 26 Oct 2026) -->
-<script>
-(function () {
-  var d = document.documentElement, p = null, q = null;
-  try { q = new URLSearchParams(location.search); p = q.get('palette'); } catch (e) {}
-  try {
-    if (p) localStorage.setItem('tps-palette', p); else p = localStorage.getItem('tps-palette');
-    /* The reach toggle is gone, everything is Full (TJ, 2 Nov 2026); clear any saved Button only */
-    localStorage.removeItem('tps-reach');
-  } catch (e) {}
-  /* Coral and Cognac and their five accent steps each, plus Coral 3 square (TJ, 2 Nov 2026); any other saved choice is cleared */
-  if (p && p !== 'coral' && p !== 'cognac' && p !== 'coral-square' && !/^(coral|cognac)-[1-5]$/.test(p)) { p = null; try { localStorage.removeItem('tps-palette'); } catch (e) {} }
-  if (p) d.setAttribute('data-palette', p);
-})();
-</script>
 <title>What We Do &middot; The Postpartum Suite</title>
 <meta name="description" content="Hands on support for you and your baby, postpartum treatments that repeat through your stay, up to three fresh meals a day and everyday home support, from one dedicated specialist." />
 <link rel="icon" href="../assets/img/the-postpartum-suite-logo-mark.webp" />
@@ -157,7 +142,7 @@
        hero pins on its own and the introduction follows in flow.
        Motion in what-we-do-opening.js, styles in what-we-do-opening.css. Copy is the client's; the
        stay line is her Tailored sentence cut (TJ, 7 Oct 2026). -->
-  <section class="op" data-op data-section="hero" data-section-name="Hero">
+  <section class="op op--static" data-op data-section="hero" data-section-name="Hero">
     <div class="op__stage" data-op-stage>
       <div class="aurora op__aurora" data-op-aurora aria-hidden="true"><span class="aurora__field"></span></div>
       <div class="op__frame" data-op-frame>
@@ -189,13 +174,14 @@
           <p class="wp">9 months of carrying. Now let yourself be cared for.</p>
         </div>
       </div>
+      <!-- The picture beside Who is it for (TJ, 11 Nov 2026): the garden walk, made wide so the two women stay centred at any crop. -->
+      <figure class="op__pic"><img src="../assets/img/who-is-it-for-garden-walk.webp" alt="A new mother with a cup of tea walks through her garden beside her postpartum specialist, who carries the baby" width="3600" height="893" loading="lazy" /></figure>
     </div>
   </section>
 
-<!-- ============ SECTION: the house flight (moved from Home, TJ, 21 Oct 2026) ============
-     Six scroll beats, starting at the front door. A plain entry for now: it
-     scrolls straight in after Who is it for, and dissolves to the canvas at
-     its end. Motion: home-flight.js. Styles: house-flight.css. -->
+<!-- ============ SECTION: the house flight (moved from Home, TJ, 21 Oct 2026; back from Home, TJ, 9 Nov 2026) ============
+     Tapped room to room (home-flight.js). It scrolls straight in after Who
+     is it for, and dissolves to the canvas at its end. Styles: house-flight.css. -->
 <section class="flight" data-flight data-reveal-vh="1" aria-label="From the moment we arrive, through the home">
   <div class="flight__stage" data-stage>
     <div class="flight__film" data-film>
@@ -210,6 +196,21 @@
                data-src="../assets/video/home-flight.mp4"
                data-src-mobile="../assets/video/home-flight-m.mp4"
                muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
+        <!-- Tapped (TJ, 8 Nov 2026): one continuous film, paused at the rooms, and its reversed copy for going back (home-flight.js). -->
+        <!-- Breathing (TJ, 8 Nov 2026): both films in one wrapper, so they always share the same slow zoom. -->
+        <div class="flight__breathe" data-flight-breathe>
+        <video class="flight__reel flight__reel--fwd" data-film-fwd
+               data-src="../assets/video/home-flight-legs.mp4"
+               data-src-mobile="../assets/video/home-flight-legs-m.mp4"
+               poster="../assets/img/home-flight-legs-poster.webp"
+               muted playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+        <video class="flight__reel flight__reel--rev" data-film-rev
+               data-src="../assets/video/home-flight-legs-rev.mp4"
+               data-src-mobile="../assets/video/home-flight-legs-rev-m.mp4"
+               muted playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
+        <!-- Sharp still (TJ, 9 Nov 2026): the room's own source frame, dissolved in over the paused film at rest (home-flight.js). -->
+        <img class="flight__sharp" data-flight-sharp alt="" width="1920" height="1080" decoding="async" aria-hidden="true" />
+        </div>
       </div>
     </div>
 
@@ -254,6 +255,8 @@
       <div class="route__line" aria-hidden="true"></div>
       <div class="route__fill" aria-hidden="true"></div>
       <span class="route__tip" aria-hidden="true"></span>
+      <!-- The house, the line's first stop (TJ, 8 Nov 2026): a dot only. -->
+      <span class="route__home" data-route-home aria-hidden="true"></span>
       <!-- The last stop, What Is Confinement? (TJ, 15 Oct 2026): a dot only.
            The confinement section's own heading is its text. Born as the
            section starts to emerge; the fill reaches it as the emerge ends. -->
@@ -758,9 +761,10 @@
             <p class="ty__lead"><span class="ty__lead-a">No two recoveries are the same</span><span class="ty__lead-comma">,</span> <span class="ty__lead-b"><span class="ty__lead-dots" aria-hidden="true">...</span>so no two stays are either</span></p>
             <div class="ty__more tl-readmore" data-tl-readmore>
               <div class="tl-readmore__copy">
-            <p>Your care begins well before your postpartum specialist arrives.</p>
-            <p>We start with a consultation to understand your birth plan, your home and family, and what you most want from your recovery. Your pre-programme form then lets you share your dietary needs, preferences and the details that make your home yours.</p>
+            <!-- One block before Read more; the form sentence moved under it (TJ, 11 Nov 2026). Ami's words unchanged. -->
+            <p>Your care begins well before your postpartum specialist arrives. We start with a consultation to understand your birth plan, your home and family, and what you most want from your recovery.</p>
             <div class="tl-readmore__extra" id="tailored-more-copy"><div>
+              <p>Your pre-programme form then lets you share your dietary needs, preferences and the details that make your home yours.</p>
               <p>From there, your stay is shaped around you: when your treatments take place, what is cooked, how your baby's day runs and how much quiet time you would like.</p>
               <p>If your birth or recovery plan changes, your care adapts with you, following the guidance of your midwife or doctor.</p>
               <p>You can stay with us for 7, 14 or 30 days, with care from 7am to 7pm each day and night support available if required.</p>
@@ -864,14 +868,6 @@
         </div>
       </div>
 
-      <!-- The glass (TJ, 8 Oct 2026): after the two options land, frosted
-           glass builds over the whole night frame and splits, light on the
-           left for Day Care and dusk on the right for Day and Night Care. The
-           photograph stays underneath. what-we-do-promise.js drives it from the pin. -->
-      <div class="dng" data-dng aria-hidden="true">
-        <span class="dng__half dng__half--day"></span>
-        <span class="dng__half dng__half--night"></span>
-      </div>
 
       <!-- The answer is the fork: the two options land on the night frame in
            the answer slot (data-peak-answer, timed by what-we-do-promise.js as "Yes, we
@@ -886,6 +882,34 @@
           <p class="dnf__lede" data-dn-title>Care arranged around the hours<br /> you need most</p>
           <p class="dnf__intro" data-dn-intro>For some mothers, the days feel full and the nights are manageable. For others, it is the 3am feed that tests them most. You choose when your specialist is with you, and the care she brings is the same either way.</p>
         </div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ SECTION: Day Care and Day and Night Care, the split (TJ, 11 Nov 2026, from Ami, TPS-0055) ============
+     Its own section under the sunset. It scrolls into place like any section,
+     and as it comes in the frosted glass builds and splits and the two columns
+     open, at the pace they used to inside the sunset; then it holds while they
+     are read. The picture is one bedroom, day on the left and night on the right (TJ, 11 Nov 2026).
+     Driven by what-we-do-promise.js (dnSplit), styled in what-we-do-day-night.css. -->
+<section class="dns" data-dns data-section="day-care-options" data-section-name="Day Care Options">
+  <div class="dns__stage">
+    <div class="dns__frame">
+      <!-- The whole room by day as the section arrives; the half and half (night
+           side much darker) fades in with the glass (TJ, 11 Nov 2026). -->
+      <img class="dns__day" src="../assets/img/day-night-bedroom-day.webp" alt="The specialist holds the baby by a sunlit window while the mother sleeps" width="2400" height="1340" loading="lazy" decoding="async" />
+      <img class="dns__split" src="../assets/img/day-night-bedroom-split.webp" alt="" aria-hidden="true" width="2400" height="1340" loading="lazy" decoding="async" />
+    </div>
+    <!-- The glass (TJ, 8 Oct 2026): after the two options land, frosted
+           glass builds over the whole night frame and splits, light on the
+           left for Day Care and dusk on the right for Day and Night Care. The
+           photograph stays underneath. what-we-do-promise.js drives it from the pin. -->
+      <div class="dng" data-dng aria-hidden="true">
+        <span class="dng__half dng__half--day"></span>
+        <span class="dng__half dng__half--night"></span>
+      </div>
+    <div class="dnf dns__answer">
         <div class="dnf__cols">
           <div class="dnf__opt dnf__opt--day" data-dn-side="day">
             <div class="dnf__heads" data-dn-heads>
@@ -916,8 +940,7 @@
             <button class="dnf__more" type="button" data-dn-more aria-expanded="false" aria-controls="dn-body-night">Read more</button>
           </div>
         </div>
-      </div>
-    </figure>
+    </div>
   </div>
 </section>
 
@@ -1061,6 +1084,11 @@
           <img class="sf__logo" src="../assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="700" height="900" decoding="async" />
         </picture>
       </a>
+      <ul class="sf__social">
+        <li><a href="https://www.instagram.com/thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></a></li>
+        <li><a href="https://www.tiktok.com/@thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M16.6 2h-3.3v13.4a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.2a6.2 6.2 0 1 0 5.3 6.2V8.6a7.9 7.9 0 0 0 4.4 1.4V6.7a4.4 4.4 0 0 1-4.4-4.4z"/></svg></a></li>
+        <li><a href="https://www.linkedin.com/company/the-postpartum-suite-ldt/" target="_blank" rel="noopener" aria-label="The Postpartum Suite on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4v11H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6v5.4h-4v-4.8c0-1.2 0-2.6-1.6-2.6s-1.9 1.2-1.9 2.5v4.9h-4z"/></svg></a></li>
+      </ul>
     </div>
 
     <nav class="sf__col" aria-label="Footer">
@@ -1078,10 +1106,10 @@
     <div class="sf__col">
       <h2 class="sf__head">Contact</h2>
       <ul>
-        <li><span class="sf__label">Customer Enquiries</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Client relations team</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Brand Partnerships</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Phone</span><a href="tel:+44747769330">+44 7477 69330</a></li>
+        <li><span class="sf__label">Customer Enquiries&nbsp;:</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Client relations team&nbsp;:</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Brand Partnerships&nbsp;:</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Phone&nbsp;:</span><a href="tel:+447477693300">+44 7477 693300</a></li>
       </ul>
     </div>
 
@@ -1091,11 +1119,6 @@
 
   <div class="sf__base">
     <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
-    <ul class="sf__social">
-      <li><a href="https://www.instagram.com/thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg></a></li>
-      <li><a href="https://www.tiktok.com/@thepostpartumsuite" target="_blank" rel="noopener" aria-label="The Postpartum Suite on TikTok"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M16.6 2h-3.3v13.4a2.9 2.9 0 1 1-2.9-2.9c.3 0 .6 0 .9.1V9.2a6.2 6.2 0 1 0 5.3 6.2V8.6a7.9 7.9 0 0 0 4.4 1.4V6.7a4.4 4.4 0 0 1-4.4-4.4z"/></svg></a></li>
-      <li><a href="https://www.linkedin.com/company/the-postpartum-suite-ldt/" target="_blank" rel="noopener" aria-label="The Postpartum Suite on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4v11H3zM9.5 9.5h3.8v1.6h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6v5.4h-4v-4.8c0-1.2 0-2.6-1.6-2.6s-1.9 1.2-1.9 2.5v4.9h-4z"/></svg></a></li>
-    </ul>
     <ul class="sf__legal">
       <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
       <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
@@ -1119,6 +1142,5 @@
 <script src="js/home-flight.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
-<script src="js/palettes.js"></script><script src="js/palette-panel.js"></script>
 </body>
 </html>
