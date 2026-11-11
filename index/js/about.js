@@ -11,17 +11,25 @@
   var REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Masked lines: split a heading into its rendered lines.
+  // A <br> in the heading is kept as a forced line break (TJ, 10 Nov 2026).
   function splitLines(el) {
-    var words = el.textContent.trim().split(/\s+/);
+    var parts = el.innerHTML.split(/<br\s*\/?>/i).map(function (p) {
+      var d = document.createElement('div'); d.innerHTML = p; return d.textContent.trim().split(/[ \t\r\n]+/).filter(Boolean); // a non breaking space keeps its words together
+    });
     el.textContent = '';
-    var spans = words.map(function (w) {
-      var s = document.createElement('span'); s.textContent = w; s.style.display = 'inline-block';
-      el.appendChild(s); el.appendChild(document.createTextNode(' ')); return s;
+    var words = [], spans = [], starts = [];
+    parts.forEach(function (ws, pi) {
+      if (pi > 0) el.appendChild(document.createElement('br'));
+      ws.forEach(function (w, wi) {
+        var s = document.createElement('span'); s.textContent = w; s.style.display = 'inline-block';
+        el.appendChild(s); el.appendChild(document.createTextNode(' '));
+        words.push(w); spans.push(s); starts.push(wi === 0);
+      });
     });
     var rows = [], top = null;
     spans.forEach(function (s, i) {
       var t = s.offsetTop;
-      if (top === null || Math.abs(t - top) > 4) { rows.push([]); top = t; }
+      if (top === null || starts[i] || Math.abs(t - top) > 4) { rows.push([]); top = t; }
       rows[rows.length - 1].push(words[i]);
     });
     el.textContent = '';

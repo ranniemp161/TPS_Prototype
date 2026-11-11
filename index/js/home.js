@@ -881,7 +881,9 @@ function actTurn() {
   // was then never created and the act scrolled up at full opacity (TJ's
   // screenshots, 14 and 15 Oct 2026). Both scripts now decide from the same
   // facts, in either order.
-  const held = !REDUCED && !!document.querySelector('[data-flight]');
+  // Only when the flight sits above this act (since 8 Nov 2026 it sits below it, TJ).
+  const flightEl = document.querySelector('[data-flight]');
+  const held = !REDUCED && !!flightEl && !!(flightEl.compareDocumentPosition(act) & Node.DOCUMENT_POSITION_FOLLOWING);
   if (held) act.classList.add('is-handover');
   const BEAT_EMERGE = 1.0, BEAT_HOLD = 1.2;
   const BEATS = BEAT_EMERGE + BEAT_HOLD;
@@ -1094,6 +1096,16 @@ function nav() {
       var pad = parseFloat(getComputedStyle(tab).paddingLeft) || 0;
       var x = tab.getBoundingClientRect().left + pad - host.getBoundingClientRect().left;
       menu.style.setProperty('--menu-x', x.toFixed(1) + 'px');
+      // The dropdown starts right under the tab's word; its glass only begins
+      // where the header's own glass ends, so the two read as one (TJ, 7 Nov 2026).
+      var word = document.createRange(); word.selectNodeContents(tab);
+      var hostBox = host.getBoundingClientRect();
+      var y = word.getBoundingClientRect().bottom - hostBox.top;
+      menu.style.setProperty('--menu-y', y.toFixed(1) + 'px');
+      menu.style.setProperty('--menu-band', Math.max(0, hostBox.height - y).toFixed(1) + 'px');
+      // On pages marked data-band-plain, the band at the very top sits on the plain page,
+      // not on the content below, so the dropdown takes that flat colour to match it.
+      menu.classList.toggle('menu--on-page', window.scrollY < 2 && document.documentElement.hasAttribute('data-band-plain'));
     }
     set();
     cancelAnimationFrame(menu._follow);

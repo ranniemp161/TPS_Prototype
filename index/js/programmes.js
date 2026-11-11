@@ -21,7 +21,13 @@
   var WORDS = { 7: '7 Days', 14: '14 Days', 30: '30 Days' };
   // The brochure's figures, display only (TJ, 26 Oct 2026, from the sales
   // brochure): "from £… per day" and the treatments across the whole stay.
-  var PER_DAY = { 7: 360, 14: 298, 30: 224 };
+  // No prices on the site (TJ, 11 Nov 2026): the card shows who each length
+  // suits instead, Ami's words from the home page lengths.
+  var ABOUT = {
+    7: 'Seven days to exhale. We take care of the details while you and your baby find your feet.',
+    14: 'Two weeks of steady, unhurried care. Long enough to stop getting through the days and start enjoying them.',
+    30: 'A whole month, as it was always meant to be. Nothing asked of you but rest, healing and time with your baby.'
+  };
   var TREATMENTS = { 7: 8, 14: 15, 30: 30 };
   // Three meals a day across the stay (TJ, 26 Oct 2026).
   var MEALS = { 7: 21, 14: 42, 30: 90 };
@@ -34,7 +40,7 @@
   var live  = root.querySelector('[data-pg-live]');
   var out = {
     days:  root.querySelector('[data-pg-days]'),
-    fee:   root.querySelector('[data-pg-fee]'),
+    about: root.querySelector('[data-pg-about]'),
     treat: root.querySelector('[data-pg-treat]'),
     meals: root.querySelector('[data-pg-meals]')
   };
@@ -76,11 +82,10 @@
   function fill() {
     var d = LENGTHS[mod(p)];
     out.days.textContent = WORDS[d];
-    // The digits sit closer together, the £ as it was (TJ, 25 Oct 2026).
-    out.fee.innerHTML = '£<span class="pg-price__digits">' + PER_DAY[d] + '</span>';
+    if (out.about) out.about.textContent = ABOUT[d];
     if (out.treat) out.treat.textContent = TREATMENTS[d];
     if (out.meals) out.meals.textContent = MEALS[d];
-    if (live) live.textContent = WORDS[d] + ', from £' + PER_DAY[d] + ' per day, up to ' + TREATMENTS[d] + ' treatments, up to ' + MEALS[d] + ' meals';
+    if (live) live.textContent = WORDS[d] + '. ' + ABOUT[d] + ' Up to ' + TREATMENTS[d] + ' treatments and up to ' + MEALS[d] + ' meals.';
     fit();
   }
 

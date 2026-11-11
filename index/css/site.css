@@ -16,11 +16,9 @@
 
 :root {
   /* ==========================================================
-     PALETTE LAYER (TJ, 26 Oct 2026, PALETTE-PLAN.md)
-     Nothing below this block may know a colour. It may only know
-     a job. These role tokens are the only lines a palette changes.
-     The default here is coral, written with its exact original
-     values so the site renders as it did before the switch.
+     COLOUR ROLES. Nothing below this block may know a colour. It
+     may only know a job. The accent is Coral 2, chosen by Ami on
+     5 Nov 2026 and fixed here (TJ, 7 Nov 2026).
      Accent roles are --acc, not --a: the aurora recipes already
      use --a and --b as local gradient lists.
      ========================================================== */
@@ -44,17 +42,17 @@
   --t-on-accent: #FFFFFF;
 
   /* Accent */
-  --acc:        #A64C45;  /* buttons, selected states (Ember) */
-  --acc-hover:  #8C362F;  /* (Ember Deep) */
-  --acc-deep:   #8C362F;  /* Quentin lines, timeline ink, the darkest accent */
+  --acc:        #923A35;  /* buttons, selected states */
+  --acc-hover:  #79241F;
+  --acc-deep:   #79241F;  /* Quentin lines, timeline ink, the darkest accent */
   --acc-emph:   var(--acc);  /* links, Recommended tags */
   --acc-tint:   color-mix(in oklch, var(--acc) 12%, var(--g-canvas));
   --acc-line:   color-mix(in srgb, var(--acc) 18%, transparent);  /* accent borders */
   --acc-shadow: color-mix(in srgb, var(--acc) 28%, transparent);  /* accent tinted shadows */
 
   /* Light: the moving ribbons */
-  --rib-1: #C86D58;  /* lightest accent step (Coral Mid) */
-  --rib-2: #B95A4B;  /* middle accent step (Coral Deep) */
+  --rib-1: #B45B47;  /* lightest accent step */
+  --rib-2: #A5483A;  /* middle accent step */
   --rib-3: var(--acc);
   --rib-4: var(--acc-deep);
   --rib-light: #FFFFFF;
@@ -156,173 +154,6 @@
   --ttip: 15px;
   --tease: cubic-bezier(.215, .61, .355, 1);
 }
-
-/* ============================================================
-   PALETTE DERIVATION (TJ, 26 Oct 2026, PALETTE-PLAN.md section 6)
-   A palette is a handful of seeds. Every other colour is derived
-   from them here by fixed rules, so every palette is cohesive by
-   construction. Coral is the exception: it keeps its original
-   hand set values in :root, so rollback is exact.
-
-   Seeds a palette sets:
-     --acc-h   accent hue (oklch angle)
-     --acc-c   accent chroma
-     --acc-l   accent lightness, held in the band .45 to .50 so
-               the accent is always deeper than the grey text
-     --cream-h cream warmth (hue of the canvas and stones)
-     and it picks one soft ground and one dark ground below.
-   ============================================================ */
-/* Every coral step is excluded, so the coral grounds never change (TJ, 2 Nov 2026) */
-html[data-palette]:not([data-palette^="coral"]) {
-  --acc-l: .48;
-  --acc-c: .08;
-  --acc-h: 150;
-  --cream-h: 60;
-
-  --acc:       oklch(var(--acc-l) var(--acc-c) var(--acc-h));
-  --acc-hover: oklch(calc(var(--acc-l) - .07) var(--acc-c) var(--acc-h));
-  --acc-deep:  oklch(calc(var(--acc-l) - .09) calc(var(--acc-c) * .9) var(--acc-h));
-
-  --rib-1: oklch(calc(var(--acc-l) + .12) calc(var(--acc-c) * .9) var(--acc-h));
-  --rib-2: oklch(calc(var(--acc-l) + .06) var(--acc-c) var(--acc-h));
-  --rib-cta-1: oklch(.725 calc(var(--acc-c) * .45) var(--acc-h));
-  --rib-cta-2: oklch(.772 calc(var(--acc-c) * .4) var(--acc-h));
-  --rib-cta-3: oklch(.832 calc(var(--acc-c) * .25) var(--acc-h));
-  --rib-bk-soft: oklch(.68 calc(var(--acc-c) * .6) var(--acc-h));
-  --rib-bk-warm: oklch(.62 var(--acc-c) var(--acc-h));
-
-  --g-canvas: oklch(.954 .006 var(--cream-h));
-  --g-stone:  oklch(.798 .016 var(--cream-h));
-  --g-haze:   oklch(.888 .012 var(--cream-h));
-  --g-taupe:  oklch(.61 .016 var(--cream-h));
-  --g-taupe-lite: oklch(.63 .014 var(--cream-h));
-
-  /* The three soft ground relationships (seed 4) */
-  --soft-accent: oklch(.86 calc(var(--acc-c) * .3) var(--acc-h));
-  --tint-accent: oklch(.88 calc(var(--acc-c) * .3) var(--acc-h));
-  --soft-stone:  oklch(.85 .016 var(--cream-h));
-  --tint-stone:  oklch(.88 .014 var(--cream-h));
-  --soft-rose:   #D7C2C9;
-  --tint-rose:   #E2CAC6;
-  --g-soft: var(--soft-stone);
-  --g-tint: var(--tint-stone);
-
-  /* The two dark ground relationships (seed 5) */
-  --dark-neutral: oklch(.445 .012 var(--cream-h));
-  --dark-accent:  oklch(.30 calc(var(--acc-c) * .5) var(--acc-h));
-  --g-dark: var(--dark-neutral);
-
-  /* Errors stay red whatever the accent */
-  --err: oklch(.47 .14 27);
-}
-
-/* ============================================================
-   FINALISTS (TJ, 26 Oct 2026). Narrowed to Cognac beside Coral (TJ, 2 Nov 2026). Picked from the button depth sheets in
-   lab/palette-proposals/. Each sets its exact button, tint and text
-   grey; the seeds match the button so the derived hover, deep and
-   ribbon steps follow it. Cream stays the base for all of them.
-   These run lighter than the .45 to .50 band above, by TJ's choice.
-   ============================================================ */
-/* Cognac family: every id that starts cognac (cognac, cognac-1 to cognac-5).
-   Grounds, text grey and dark ground as chosen on 26 Oct 2026. */
-html[data-palette^="cognac"][data-palette] {
-  /* Cognac: button #AC7137, tint #E8E0D3, text #564F49 */
-  --acc-l: 0.600; --acc-c: 0.105; --acc-h: 63; --cream-h: 60;
-  --acc: #AC7137;
-  --g-tint: #E8E0D3; --g-soft: #E8E0D3;
-  --t-mute: #564F49;
-  --g-dark: var(--dark-neutral);
-  /* Text step: links, prices and script lines need 4.5:1 on cream and tint,
-     the light button does not, so they take this darker step (Opus, 26 Oct 2026) */
-  --acc-deep: #8E5516; --acc-emph: var(--acc-deep);
-  --reach-price: var(--acc-deep); --reach-script-acc: var(--acc-deep); --reach-script-soft: var(--acc-deep);
-}
-
-/* ============================================================
-   TEN ACCENT STEPS (TJ, 2 Nov 2026). Five Coral and five Cognac,
-   1 darkest to 5 lightest. Only the accent family moves: oklch
-   lightness offsets of .12 and .06 either side of the base, chroma
-   and hue held. Step 3 is today's palette; plain cognac is its alias
-   and plain coral (no attribute) is the default. The text step is the
-   accent itself where it passes 4.5:1 on cream and tint, otherwise the
-   lightest darker shade of the same chroma and hue that does.
-   Computed by lab/ten-steps-contrast.py.
-   ============================================================ */
-
-/* Coral steps. Hover and deep move with the accent from today's #8C362F,
-   the two lighter ribbons move with it too. Steps 4 and 5 put every text
-   role on the text step #953C36. */
-html[data-palette="coral-1"][data-palette] {
-  --acc-l: .4096; --acc-c: .1204; --acc-h: 26.45;
-  --acc: #7F2824; --acc-hover: #66100E; --acc-deep: #66100E;
-  --rib-1: #A04936; --rib-2: #913629;
-}
-html[data-palette="coral-2"][data-palette] {
-  --acc-l: .4696; --acc-c: .1204; --acc-h: 26.45;
-  --acc: #923A35; --acc-hover: #79241F; --acc-deep: #79241F;
-  --rib-1: #B45B47; --rib-2: #A5483A;
-}
-/* coral-3 has no block: it renders exactly as :root */
-html[data-palette="coral-4"][data-palette] {
-  --acc-l: .5896; --acc-c: .1204; --acc-h: 26.45;
-  --acc: #BA5E56; --acc-hover: #A0483F; --acc-deep: #A0483F;
-  --rib-1: #DC7F6A; --rib-2: #CD6C5C;
-  --acc-text: #953C36;
-  --acc-emph: var(--acc-text); --err: var(--acc-text); --reach-script: var(--acc-text);
-  --reach-price: var(--acc-text); --reach-script-acc: var(--acc-text); --reach-script-soft: var(--acc-text);
-}
-html[data-palette="coral-5"][data-palette] {
-  --acc-l: .6496; --acc-c: .1204; --acc-h: 26.45;
-  --acc: #CE7067; --acc-hover: #B35950; --acc-deep: #B35950;
-  --rib-1: #F1927C; --rib-2: #E27F6E;
-  --acc-text: #953C36;
-  --acc-emph: var(--acc-text); --err: var(--acc-text); --reach-script: var(--acc-text);
-  --reach-price: var(--acc-text); --reach-script-acc: var(--acc-text); --reach-script-soft: var(--acc-text);
-}
-
-/* Cognac steps. Hover and the ribbons follow --acc-l through the
-   derivation block; the text step sits in --acc-deep as before. */
-html[data-palette="cognac-1"][data-palette] { --acc-l: .480; --acc: #864E0A; --acc-deep: #864E0A; }
-html[data-palette="cognac-2"][data-palette] { --acc-l: .540; --acc: #995F23; --acc-deep: #905718; }
-/* cognac-3 has no block: it is the family block above, exactly as cognac */
-html[data-palette="cognac-4"][data-palette] { --acc-l: .660; --acc: #BF834A; --acc-deep: #905718; }
-html[data-palette="cognac-5"][data-palette] { --acc-l: .720; --acc: #D3965C; --acc-deep: #905718; }
-
-/* Coral 3 square (TJ, 2 Nov 2026). Coral 3's colours exactly (no colour
-   token here, and the ^="coral" prefix keeps it out of the generic palette
-   block above), with every corner on the site square. The radius tokens go
-   to 0, then every element and pseudo element is held at 0, which covers the
-   literal radii in every css file and the radii GSAP writes inline. Things
-   that are circles by nature keep their circle: the line dots, tips and stops,
-   the bullets, the suns, the phone arrows over the photographs, the booking
-   dialog's close disc, the round focus rings, radio and check inputs. The
-   Bespoke toggle's knob goes square with its track. The Colours panel lives
-   in a shadow root, so none of this reaches it. */
-html[data-palette="coral-square"][data-palette] {
-  --r-badge: 0px; --r-button: 0px; --r-card: 0px; --r-media: 0px; --r-mark: 0px; --r-input: 0px;
-}
-html[data-palette="coral-square"] :not(input[type="radio"], input[type="checkbox"]),
-html[data-palette="coral-square"] ::before,
-html[data-palette="coral-square"] ::after { border-radius: 0 !important; }
-/* its own rule, so a browser without the scrollbar selector keeps the rest */
-html[data-palette="coral-square"] ::-webkit-scrollbar-thumb { border-radius: 0 !important; }
-/* the photograph reveals on What We Do clip with round --ph-rad, which the
-   scripts read from the slot (0 here falls back to 10), so hold it at 0 */
-html[data-palette="coral-square"] :is(.ty, .vt) { --ph-rad: 0px !important; }
-html[data-palette="coral-square"] :is(
-  .sundial__sun, .film__tip, .care-line__tip, .care-vline__dot, .care-vline__tip,
-  .tv2__dot, .tv2__tip, .care__nav,
-  .route__tip, .route__dot, .route__end, .route__arrow:focus-visible,
-  .zones__tip, .zones__home:focus-visible,
-  .dk-line__tip, .dk-line__dot, .dkl__stop, .dkl__tip, .dkd__stop, .dkd__tip,
-  .dnl__stop, .dnl__tip, .dnl__sun,
-  .vt__cap, .vt__tip, .vt__dot, .vt__go:focus-visible,
-  .ty__stop, .ty__tip, .ty-sun, .ty-sun > span,
-  .os-line__tip, .os-act__dot, .bk-dialog__x
-),
-html[data-palette="coral-square"] :is(.care-line__stop, .dk-dot, .zones__room, .zones__tab, .zones__home, .zones__marker, .vt__go, .ty__tip, .wd__row)::before,
-html[data-palette="coral-square"] :is(.zones__room, .zones__tab, .zones__home, .zones__marker)::after,
-html[data-palette="coral-square"] :is(.care__list, .block__list, .pg-kind__list, .wc-ck__list, .rq-gets, .dk-decide__list, .close__gets) li::before { border-radius: 50% !important; }
 
 @media (min-width: 768px)  { :root { --gutter: 28px; } }
 @media (min-width: 1100px) { :root { --gutter: 48px; } }
@@ -978,7 +809,9 @@ main:focus { outline: none; }
    centre wordmark; narrower screens keep the tabs where they are and
    never show the corner mark. */
 .nav__corner { display: none; }
-@media (min-width: 1200px) {
+/* From 1520px, not 1200px (TJ, 11 Nov 2026): with the dropdown arrows the
+   shifted tabs ran into the wordmark from 1200 to 1366px wide. */
+@media (min-width: 1520px) {
   .nav--glass {
     --corner-h: clamp(46px, 3.2vw, 56px);
     --corner-shift: calc(var(--corner-h) * 1.016 + 28px);
@@ -1225,23 +1058,72 @@ main:focus { outline: none; }
    home.js, inner-nav.js and build-your-programme.js; the panel's text lines
    up with it. Above 1100px only: phones keep the full width panel above. */
 @media (min-width: 1101px) {
+  /* One piece with the header (TJ, 7 Nov 2026): the dropdown starts right
+     under the tab's word, inside the band, and its size comes only from its
+     own wording. --menu-y and --menu-band are set by placeMenu(). The box
+     itself is clear; ::before paints the header's exact glass from the foot
+     of the band down, so the band is never glazed twice. */
   .nav .menu {
+    top: var(--menu-y, 100%);
     left: calc(var(--menu-x, 24px) - 22px);
     right: auto;
+    z-index: 1;
     width: max-content;
-    min-width: 200px;
     max-width: calc(100vw - 32px);
-    background: color-mix(in srgb, var(--g-canvas) 82%, transparent);
+    background: transparent;
+    border: 0;
+  }
+  .nav .menu::before {
+    content: "";
+    position: absolute;
+    top: var(--menu-band, 0px); left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
     backdrop-filter: blur(14px) saturate(1.2);
     -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    border: 1px solid var(--line);
-    border-top: 0;
     border-radius: 0 0 10px 10px;
+    pointer-events: none;
   }
+  /* At the very top the band sits on the plain page while the dropdown would
+     sit on the hero, so the same glass would look different. Here it takes
+     the flat colour the band shows. */
+  .nav .menu--on-page::before {
+    background: var(--g-canvas);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  /* The one dark frame: the same dark glass as the band, with light words. */
+  .nav--glass.is-dark .menu::before { background: color-mix(in srgb, var(--g-taupe) 46%, transparent); }
+  .nav--glass.is-dark .menu__list a { color: var(--g-paper); }
   .nav .menu__panel {
-    padding: 10px 22px;
+    padding: 6px 22px 8px;
     grid-template-columns: 1fr;
     row-gap: 0;
+  }
+  /* The arrows widen the row, so tighten the tabs where it nears the wordmark. */
+  @media (max-width: 1300px) {
+    .nav--glass .nav__tabs .tab { padding-inline: 8px; }
+  }
+  /* Just above the Menu breakpoint the row is longest against the room it has:
+     tighter again, so it never comes near the wordmark (TJ, 11 Nov 2026). */
+  @media (max-width: 1180px) {
+    .nav--glass .nav__tabs .tab { padding-inline: 4px; }
+  }
+  /* A small arrow marks the three tabs that open a dropdown; it turns over
+     while its dropdown is open (TJ, 7 Nov 2026). */
+  .nav--glass .nav__tabs .tab[data-tab]::after {
+    content: "";
+    flex: none;
+    width: .36em;
+    height: .36em;
+    margin-left: .5em;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-.1em) rotate(45deg);
+    transition: transform 200ms var(--ease-out);
+  }
+  .nav--glass .nav__tabs .tab[data-tab][aria-expanded="true"]::after {
+    transform: translateY(.1em) rotate(225deg);
   }
   /* No heading in the dropdown: the open tab already shows in the accent
      colour, so the panel is just its links (TJ, 1 Nov 2026). */
@@ -4734,6 +4616,10 @@ html:not(.js) .arrive { display: none; }
 }
 .act--cta { padding-top: 37px; }
 @media (max-width: 767px) { .act--cta { padding-top: 23px; } }
+/* The paragraph widened so it runs to three lines on desktop, and no wider
+   (TPS-0044, 11 Nov 2026). It wraps to three from 548px; 568px leaves a
+   little room for font rendering. Phones unchanged. */
+@media (min-width: 1000px) { .act--cta .cta__lead { max-width: 35.5rem; } }
 /* With the card gone, the drift's flat bottom edge showed against the
    treatments below; it now eases out over its last 200px as well (TJ,
    2 Nov 2026). Same top curve as above. */
@@ -4839,3 +4725,147 @@ html:not(.js) .arrive { display: none; }
 .film__bar { z-index: 2; --tline-ink: #fff; }
 .film__bar .film__line { background: rgba(255, 255, 255, .45); }
 .film__pause, .film__mute { color: #fff; }
+
+/* ============================================================
+   ONE BODY TEXT ON DESKTOP (TJ, 8 Nov 2026, from the 5 Nov meeting)
+   Every body text listed below matches What Is Postpartum Care on
+   the home page: Jost, regular, 1rem. Desktop and tablet only, from
+   761px; phones are untouched until TJ decides the phone size.
+   !important because several of these sizes come from page files
+   loaded after this one, with stronger selectors.
+   Left out on purpose: headings, Quentin and capital pull quotes,
+   the Housekeeping Zones (locked by TJ) and the uppercase Day and
+   Night lede.
+   ============================================================ */
+@media (min-width: 761px) {
+  /* Home */
+  .act--hero .lede, .care__list li, .cta__alt--out,
+  /* Programmes and Request a Place */
+  .pg-look__p, .pg-kind__p, .pg-kind__list li, .pg-compare__lede,
+  .pg-table__foot, .pg-table__foot em, .pg-pricing__lede, .pg-cta__p,
+  .pg-lengths__lede, .rq-hint,
+  /* What We Do */
+  .op__more .wp, .hd__tease, .tl-readmore__copy p, .ty__sum,
+  .dnf__intro, .dnf__text p, .vt__body p, .vt__head .wlead,
+  /* Who Comes Into Your Home */
+  .wc-tr__copy .wp, .wc-bf__glass p,
+  /* About */
+  .os-open__lede, .os-p, .os-act p,
+  .article__contact, /* contact list, labels stay 600 (TJ, 10 Nov 2026) */
+  /* Bespoke builder */
+  .dk-lede, .dk-note, .pc__hint, .due__note, .step__note, .tg__s,
+  .dk-decide__list li, .close__gets li,
+  /* Signature Treatments */
+  .bk-head__lede, .bk-foot-link, .bk-dialog__terms li, .bk-dialog__body > p,
+  /* FAQs and Gifts */
+  .faq__groups details p, .gifts-soon__note p {
+    font-family: var(--f-read) !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+  }
+}
+
+/* The header goes flat while a fly through leg plays (TJ, 8 Nov 2026): its
+   blur over a moving video cost frames, so for those 2.5 seconds the band is
+   solid canvas (taupe over the one dark frame), no blur, no transition. It
+   is glass again the moment the leg ends or the page is scrolled. */
+html.is-flight-playing .nav--glass,
+html.is-flight-playing .nav--glass::before,
+html.is-flight-playing .nav--glass .menu::before {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+html.is-flight-playing .nav--glass::before,
+html.is-flight-playing .nav--glass .menu::before { background: var(--g-canvas); }
+html.is-flight-playing .nav--glass.is-dark::before,
+html.is-flight-playing .nav--glass.is-dark .menu::before { background: var(--g-taupe); }
+
+/* Home only (body.page--home): each section paints only inside its own box,
+   so the browser can skip the ones off screen. No content-visibility, which
+   would break the scroll measurements. */
+.page--home main > section { contain: paint; }
+/* Measured section by section (8 Nov 2026): these four paint past their own
+   box and were visibly cut, so they are left out. The hero's picture runs
+   under the bath, the confinement act and the flight overlap their
+   neighbours, and the consultation card's colour rises into Testimonials. */
+.page--home main > section:is(.act--hero, .act--turn, .flight, .act--cta) { contain: none; }
+
+/* Rose Mist ground (TJ, 10 Nov 2026, TPS-0056, Ami: a much lighter fuchsia):
+   the Programmes top and call to action move off the deep accent red onto
+   the palette's Rose Mist. The pale ribbons still drift over it. Request a
+   Place and Gifts keep their own grounds. */
+.page--programmes:not(.page--request) .aurora--voices { background: var(--g-soft); }
+
+/* Testimonials on plain cream (TJ, 10 Nov 2026, TPS-0043): the same ground as
+   Try a Signature Treatment, no pink drift, so the white section above meets
+   it with a clear edge. */
+.voices { background: var(--g-canvas); }
+/* A whisper of grey drift on the cream (TJ, 10 Nov 2026): warm greys with
+   the faintest coral in them, low and slow, behind everything in the
+   section (the field sits under the text, which keeps its full darkness).
+   The cream stays what the eye sees. */
+.voices .aurora--voices { background: var(--g-canvas); }
+.voices .aurora--voices .aurora__field {
+  /* More present (TJ, 10 Nov 2026, second pass): deeper stone, stronger, a
+     little sharper, and moving fast enough to notice. Still behind the text. */
+  --a: transparent 0%, var(--g-stone) 7%, var(--g-haze) 12%, transparent 22%,
+       color-mix(in oklch, var(--g-taupe-lite) 88%, var(--rib-1)) 30%, transparent 40%;
+  --b: transparent 0%, var(--g-haze) 6%, var(--g-stone) 12%, transparent 24%,
+       color-mix(in oklch, var(--g-stone) 80%, var(--rib-1)) 33%, transparent 46%;
+  opacity: .62;
+  filter: blur(46px);
+}
+.voices .aurora--voices .aurora__field::after { animation-duration: 26s; }
+
+/* The edge into We care for a few mothers each month sits exactly halfway
+   between the testimonial names and that heading (TJ, 10 Nov 2026). The total
+   gap is unchanged: the names sit 61px above the testimonials' foot (69px on
+   phones), so the edge moves up by taking from the testimonials' bottom
+   padding and giving the same to the next section's top padding. */
+main { --v-pb: max(8px, calc(clamp(72px, 10vh, 120px) * .35 - 5.3px)); --v-in: 61px; --c-pt: 37px; }
+@media (max-width: 767px) { main { --v-pb: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); --v-in: 69px; --c-pt: 23px; } }
+main { --v-half: calc((var(--v-in) + var(--v-pb) + var(--c-pt)) / 2); }
+.voices { padding-bottom: max(0px, calc(var(--v-half) - var(--v-in))); }
+/* When half is less than the names' own depth (phones, short screens), the
+   testimonials' foot comes up by the difference. */
+.voices .tv2 { margin-bottom: min(0px, calc(var(--v-half) - var(--v-in))); }
+.act--cta { padding-top: var(--v-half); }
+
+/* The bespoke line under Check your dates (TJ, 10 Nov 2026): its link was in
+   Montserrat, which read larger than the body text. Now Jost like the rest
+   of the line, same size as the body text, still in the lighter tone with
+   the accent link. */
+.cta__alt--out .cta-link { font-family: var(--f-read); font-weight: 400; font-size: inherit; }
+
+/* ============================================================
+   LINKS, SITE WIDE (TJ, 10 Nov 2026, TPS-0039)
+   Text links read as links everywhere: warm grey (Ink Mute), one step
+   lighter than the body text, with a fine stone underline set below the
+   letters. On hover, keyboard focus and click the words and the line turn
+   Coral 2 and the line gets a little heavier. Replaces the 16 Oct rules
+   (darker words with no line; accent cta links). Buttons, the menu, the
+   footer and the builder's own controls keep their own styles.
+   ============================================================ */
+html body :is(.text-link, .cta-link, main p a:not([class]), main li a:not([class]), main dd a:not([class])) {
+  color: var(--t-mute);
+  font-family: inherit;
+  font-weight: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--g-stone);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .28em;
+  transition: color .2s ease, text-decoration-color .2s ease, text-decoration-thickness .2s ease;
+}
+html body :is(.text-link, .cta-link, main p a:not([class]), main li a:not([class]), main dd a:not([class])):is(:hover, :focus-visible, :active) {
+  color: var(--acc);
+  text-decoration-color: var(--acc);
+  text-decoration-thickness: 1.5px;
+}
+/* On the grey silk the copy is white: the link stays white with a soft
+   white line, and turns the pale accent on hover. */
+html body .act--silk :is(.text-link, .cta-link, p a:not([class])) { color: inherit; text-decoration-color: rgba(255, 255, 255, .45); }
+html body .act--silk :is(.text-link, .cta-link, p a:not([class])):is(:hover, :focus-visible, :active) { color: var(--reach-script-pale); text-decoration-color: currentColor; }
+
+/* Four Kinds of Care on the home page: white bullet points (TJ, 10 Nov 2026,
+   TPS-0042, from the 5 Nov meeting), matching the white copy on the silk. */
+.act--silk .care__list li::before { background: #fff; }

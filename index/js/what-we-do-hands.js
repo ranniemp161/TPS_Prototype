@@ -214,6 +214,9 @@
   var UNITS = kinds.length * HOLD + (kinds.length - 1) * MOVE;
   var VH_PER_UNIT = 0.7;
   var tl = null, intro = null, lastW = 0, current = 0, zooms = [];
+  var drift = null, busy = false, goTo = null, lines = [], fades = [], cx = null;
+  var PLATE = { s0: 1.08, s1: 1.1, x0: 2, x1: -2 };
+  var CUT = { s: 1.12, xIn: 8, x0: 4, x1: 0, xOut: -3.5, sIn: 1.15 };
 
   /* Phones (TJ, 11 Oct 2026): each picture keeps its frame while the photograph
      inside grows as it crosses the screen, 1 to 1.2, about the hands, reaching
@@ -264,6 +267,9 @@
   function teardown() {
     [tl, intro].forEach(function (t) { if (t) { if (t.scrollTrigger) t.scrollTrigger.kill(); t.kill(); } });
     tl = intro = null;
+    if (drift) { drift.kill(); drift = null; }
+    goTo = null; busy = false;
+    gsap.set(plates.concat(cuts), { zIndex: '' });
     if (reading) setReading(reading, false);
     zooms.forEach(function (z) { if (z.scrollTrigger) z.scrollTrigger.kill(); z.kill(); });
     zooms = [];
@@ -288,18 +294,18 @@
     // film is still dissolving; the first kind's words are in before it.
     var prev = sec.previousElementSibling;
     var REVEAL = prev && prev.hasAttribute('data-flight') ? (parseFloat(prev.dataset.revealVh) || 0) : 0;
-    sec.style.setProperty('--hd-len', (1 + UNITS * VH_PER_UNIT + REVEAL).toFixed(2));
+    sec.style.setProperty('--hd-len', (1 + REVEAL).toFixed(2));   // one held screen; the kinds change on tap (TJ, 11 Nov 2026, TPS-0050)
 
     // If the tallest kind does not fit beside her, the tight layout takes over.
     var avail = copy.clientHeight - 24;
     var tallest = Math.max.apply(null, kinds.map(function (k) { return k.offsetHeight; }));
     if (tallest > avail) sec.classList.add('is-tight');
 
-    var lines = kinds.map(function (k) {
+    lines = kinds.map(function (k) {
       return [].slice.call(k.querySelectorAll('[data-hd-split]')).reduce(function (a, el) { return a.concat(splitLines(el)); }, []);
     });
     // Read more and the hidden full text fade together (TJ, 21 Oct 2026)
-    var fades = kinds.map(function (k) { return [].slice.call(k.querySelectorAll('[data-hd-fade]')); });
+    fades = kinds.map(function (k) { return [].slice.call(k.querySelectorAll('[data-hd-fade]')); });
 
     // One top per kind for both states (TJ, 21 Oct 2026), so Read more never
     // moves, and one stack width per kind (TJ): the widest of a few steps at
@@ -362,15 +368,13 @@
     var T0 = function (k) { return k * HOLD + (k - 1) * MOVE; };     // change into kind k starts
     var holdStart = function (k) { return k === 0 ? 0 : T0(k) + MOVE; };
     var holdEnd = function (k) { return k === N - 1 ? UNITS : T0(k + 1); };
-    var PLATE = { s0: 1.08, s1: 1.1, x0: 2, x1: -2 };
     // The hands' path sits right of centre so they clear the words; moving
     // right only exposes the cut out's transparent side, so only the leftward
     // travel (to -3.5) has to stay inside the 6 percent spare.
-    var CUT = { s: 1.12, xIn: 8, x0: 4, x1: 0, xOut: -3.5, sIn: 1.15 };
     // Per kind extra shift right, for the objects that reach furthest left
     // (the tray, the laundry), so every pair of hands clears the words.
     var SHIFT = [0, 3, 8, 10];
-    var cx = function (k, v) { return v + (SHIFT[k] || 0); };
+    cx = function (k, v) { return v + (SHIFT[k] || 0); };
     gsap.set(plates, { opacity: function (i) { return i === 0 ? 1 : 0; }, scale: PLATE.s0, xPercent: PLATE.x0, transformOrigin: '50% 50%' });
     gsap.set(cuts, { opacity: 0, scale: CUT.sIn, xPercent: function (k) { return cx(k, CUT.xIn); }, transformOrigin: '50% 50%' });
     gsap.set(kinds, { autoAlpha: function (i) { return i === 0 ? 1 : 0; } });
@@ -380,54 +384,100 @@
 
     // The first kind's words rise in as the section arrives.
     intro = gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 70%', end: REVEAL ? 'top 25%' : 'top top', scrub: 0.5, refreshPriority: -15 } });
-    intro.to(cuts[0], { opacity: 1, xPercent: cx(0, CUT.x0), scale: CUT.s, ease: 'power2.out', duration: 1 }, 0)
+    // sideways movement is left to the drift (startDrift), so the two never pull against each other
+    intro.to(cuts[0], { opacity: 1, scale: CUT.s, ease: 'power2.out', duration: 1 }, 0)
          .to(lines[0], { yPercent: 0, stagger: 0.06, ease: 'power2.out', duration: 0.6 }, 0.2)
          .to(fades[0], { opacity: 1, y: 0, ease: 'power2.out', duration: 0.4 }, 0.45);
 
-    tl = gsap.timeline({
-      defaults: { ease: 'none' },
-      scrollTrigger: {
-        trigger: sec, start: REVEAL ? function () { return 'top+=' + Math.round(REVEAL * window.innerHeight) + ' top'; } : 'top top', end: 'bottom bottom', scrub: 0.6,
-        invalidateOnRefresh: true,
-        refreshPriority: -15,
-        onUpdate: function (self) {
-          var u = self.progress * UNITS, idx = 0;
-          for (var k = 1; k < kinds.length; k++) { if (u >= k * HOLD + (k - 1) * MOVE + MOVE * 0.5) idx = k; }
-          setTick(idx);
-        }
-      }
-    });
-    tl.set({}, {}, UNITS);
+    /* The carousel (TJ, 11 Nov 2026, from Ami, TPS-0050). The four kinds no
+       longer change on scroll. Arrows either side of four dots move one kind
+       left or right, round and round with no end; a dot jumps to its kind.
+       The change keeps the layering: the hands slide out the way you are
+       going and fade, the room cross fades, the new hands slide in from the
+       other side, and the words rise out and in through their line masks.
+       While a kind is showing, its room and hands keep a slow drift. */
+    drift = null; busy = false; current = 0; setDots(0);
+    startDrift(0);
 
-    // Each room drifts slowly right to left and zooms in a touch, over the
-    // whole time it is on screen, including the change into and out of it,
-    // so the motion carries through every change.
-    plates.forEach(function (p, k) {
-      var a = k === 0 ? 0 : T0(k), b = k === N - 1 ? UNITS : T0(k + 1) + MOVE;
-      tl.fromTo(p, { xPercent: PLATE.x0, scale: PLATE.s0 }, { xPercent: PLATE.x1, scale: PLATE.s1, duration: b - a, immediateRender: false }, a);
-    });
-    // Each pair of hands drifts the same way, further, while its kind holds.
-    cuts.forEach(function (c, k) {
-      tl.fromTo(c, { xPercent: cx(k, CUT.x0) }, { xPercent: cx(k, CUT.x1), duration: holdEnd(k) - holdStart(k), immediateRender: false }, holdStart(k));
-    });
-
-    for (var i = 1; i < N; i++) {
-      var t0 = T0(i);
-      // The change: nothing leaves the frame. The hands slide a little further
-      // left and fade; the room cross fades behind (already drifting); the new
-      // hands fade in from slightly right and slightly larger, sliding into place.
-      tl.fromTo(cuts[i - 1], { xPercent: cx(i - 1, CUT.x1), opacity: 1 }, { xPercent: cx(i - 1, CUT.xOut), opacity: 0, ease: 'power1.in', duration: MOVE * 0.5, immediateRender: false }, t0)
-        .to(plates[i], { opacity: 1, ease: 'power1.inOut', duration: MOVE * 0.6 }, t0 + MOVE * 0.2)
-        .fromTo(cuts[i], { xPercent: cx(i, CUT.xIn), scale: CUT.sIn, opacity: 0 }, { xPercent: cx(i, CUT.x0), scale: CUT.s, opacity: 1, ease: 'power2.out', duration: MOVE * 0.6, immediateRender: false }, t0 + MOVE * 0.4)
-        .to(lines[i - 1], { yPercent: -110, stagger: 0.025, ease: 'power2.in', duration: MOVE * 0.4 }, t0)
-        .to(fades[i - 1], { opacity: 0, y: -10, ease: 'power1.in', duration: MOVE * 0.3 }, t0)
-        .set(kinds[i - 1], { autoAlpha: 0 }, t0 + MOVE * 0.5)
-        .set(kinds[i], { autoAlpha: 1 }, t0 + MOVE * 0.45)
-        .to(lines[i], { yPercent: 0, stagger: 0.035, ease: 'power2.out', duration: MOVE * 0.45 }, t0 + MOVE * 0.5)
-        .to(fades[i], { opacity: 1, y: 0, ease: 'power2.out', duration: MOVE * 0.3 }, t0 + MOVE * 0.7);
-    }
+    goTo = function (i, dir) {
+      if (busy || i === current) return;
+      busy = true;
+      if (intro) { intro.progress(1); if (intro.scrollTrigger) intro.scrollTrigger.kill(); intro.kill(); intro = null; }
+      var from = current;
+      closeAll(kinds[from]);
+      if (reading) setReading(reading, false, true);
+      if (drift) { drift.kill(); drift = null; }
+      current = i; setDots(i);
+      gsap.set([plates[i], cuts[i]], { zIndex: 2 });
+      gsap.set([plates[from], cuts[from]], { zIndex: 1 });
+      var D = 1.15;
+      var t = gsap.timeline({ onComplete: function () {
+        gsap.set(plates[from], { opacity: 0 });
+        gsap.set(lines[from], { yPercent: 110 });
+        gsap.set(kinds[from], { x: 0 });
+        busy = false; startDrift(i);
+      } });
+      // hands out the way we are going, a little, and fade
+      t.to(cuts[from], { xPercent: '-=' + (dir * 4), opacity: 0, ease: 'power1.in', duration: D * 0.45 }, 0)
+      // the room: the new one cross fades in over the old
+       .fromTo(plates[i], { opacity: 0, xPercent: PLATE.x0 + dir * 1.5, scale: PLATE.s0 }, { opacity: 1, xPercent: PLATE.x0, ease: 'power1.inOut', duration: D * 0.6 }, D * 0.15)
+      // the new hands slide in from the side we are coming from, a touch larger
+       .fromTo(cuts[i], { opacity: 0, scale: CUT.sIn, xPercent: cx(i, dir > 0 ? CUT.xIn : CUT.xOut) }, { opacity: 1, scale: CUT.s, xPercent: cx(i, CUT.x0), ease: 'power2.out', duration: D * 0.6 }, D * 0.35)
+      // the words: out through their masks, the block easing the way we go
+       .to(lines[from], { yPercent: -110, stagger: 0.025, ease: 'power2.in', duration: D * 0.35 }, 0)
+       .to(fades[from], { opacity: 0, y: -10, ease: 'power1.in', duration: D * 0.25 }, 0)
+       .to(kinds[from], { x: -dir * 40, ease: 'power1.in', duration: D * 0.4 }, 0)
+       .set(kinds[from], { autoAlpha: 0 }, D * 0.4)
+       .set(kinds[i], { autoAlpha: 1 }, D * 0.38)
+       .fromTo(kinds[i], { x: dir * 40 }, { x: 0, ease: 'power2.out', duration: D * 0.5 }, D * 0.4)
+       .fromTo(lines[i], { yPercent: 110 }, { yPercent: 0, stagger: 0.035, ease: 'power2.out', duration: D * 0.45 }, D * 0.42)
+       .fromTo(fades[i], { opacity: 0, y: 10 }, { opacity: 1, y: 0, ease: 'power2.out', duration: D * 0.3 }, D * 0.62);
+    };
   }
 
+  /* The slow drift while a kind is showing: the room a little, the hands a
+     little more, back and forth, sideways only, inside the spare edge. */
+  function startDrift(k) {
+    if (drift) drift.kill();
+    gsap.set(plates[k], { xPercent: PLATE.x0, scale: PLATE.s0 });
+    drift = gsap.timeline({ repeat: -1, yoyo: true, defaults: { ease: 'sine.inOut', duration: 9 } });
+    drift.to(plates[k], { xPercent: PLATE.x1, scale: PLATE.s1 }, 0)
+         .fromTo(cuts[k], { xPercent: cx(k, CUT.x0) }, { xPercent: cx(k, CUT.x1) }, 0);
+  }
+
+  /* The arrows and dots, built once; shown on desktop only (.is-live). */
+  var nav = document.createElement('div');
+  nav.className = 'hd__nav';
+  nav.innerHTML = '<button class="hd__arrow" type="button" data-hd-dir="-1" aria-label="Previous kind of care">' +
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+    '<span class="hd__dots"></span>' +
+    '<button class="hd__arrow" type="button" data-hd-dir="1" aria-label="Next kind of care">' +
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>';
+  var dotsBox = nav.querySelector('.hd__dots');
+  var dots = kinds.map(function (k, i) {
+    var d = document.createElement('button');
+    d.type = 'button'; d.className = 'hd__dot';
+    var nm = k.querySelector('.hd__name');
+    d.setAttribute('aria-label', nm ? nm.textContent.trim() : 'Kind ' + (i + 1));
+    dotsBox.appendChild(d); return d;
+  });
+  sec.querySelector('.hd__stage').appendChild(nav);
+  function setDots(i) { dots.forEach(function (d, k) { d.classList.toggle('is-on', k === i); d.setAttribute('aria-current', k === i ? 'true' : 'false'); }); }
+  var N_ = kinds.length;
+  nav.addEventListener('click', function (e) {
+    if (!goTo) return;
+    var a = e.target.closest('[data-hd-dir]');
+    if (a) { var dir = +a.getAttribute('data-hd-dir'); goTo((current + dir + N_) % N_, dir); return; }
+    var d = e.target.closest('.hd__dot');
+    if (d) { var i = dots.indexOf(d); if (i !== current) goTo(i, i > current ? 1 : -1); }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!goTo || !sec.classList.contains('is-live') || (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight')) return;
+    var r = sec.querySelector('.hd__stage').getBoundingClientRect();
+    if (r.top > window.innerHeight * 0.3 || r.bottom < window.innerHeight * 0.7) return;
+    var dir = e.key === 'ArrowRight' ? 1 : -1;
+    goTo((current + dir + N_) % N_, dir);
+  });
   var resizeT;
   window.addEventListener('resize', function () {
     clearTimeout(resizeT);

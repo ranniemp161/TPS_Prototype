@@ -330,3 +330,30 @@
      phones), so the 14 is there to drop into the sun whatever stay is chosen. */
   .ty.is-calm .ty__stop { transform: none; opacity: clamp(.45, calc((var(--sel) - var(--at)) * 3 + .45), 1); transition: opacity 300ms var(--ease-out); }
 }
+
+/* ---- The card heading and the numbers (TJ, 11 Nov 2026, from Ami, TPS-0051) ----
+   Desktop only. The heading about a third larger, in two lines: "No two
+   recoveries are the same," then "so no two stays are either". The body
+   text keeps the site's size; less of it shows before Read more (the markup),
+   so the card keeps its size. The numbers under the days take the days'
+   own face and size, so the two rows read as one family. */
+@media (min-width: 861px) {
+  .ty__lead { font-size: clamp(1.5rem, min(2.4vw, 3.9vh), 2.05rem); text-wrap: wrap; }   /* capped so the first line fits the closed card on big screens */
+  .ty__lead-a, .ty__lead-comma { white-space: nowrap; }
+  .ty__lead-b { display: block; }
+  /* Read more open, the card is wide: the heading on one line (TJ, 11 Nov 2026). */
+  .ty.is-wide .ty__lead { white-space: nowrap; }
+  .ty.is-wide .ty__lead-b { display: inline; }
+  /* Open, the text runs as wide as the one line heading, into the photograph,
+     so it takes fewer lines (TJ, 11 Nov 2026). The card's one column takes the
+     heading's width; the text adds nothing to that width (contain) and fills it. */
+  .ty.is-wide .ty__card { grid-template-columns: minmax(66%, max-content); }   /* never narrower than before on smaller screens */
+  .ty.is-wide .ty__card > * { max-width: none; }
+  .ty.is-wide .ty__more { contain: inline-size; justify-self: stretch; }
+  .ty.is-wide .tl-readmore__copy p { text-wrap: pretty; }   /* no single word left alone on a last line */
+  .ty.is-live.is-tight .ty__lead { font-size: clamp(1.3rem, 1.9vw, 1.6rem); }
+  .ty__out b { font-family: var(--f-display); font-size: clamp(1.8rem, min(3.4vw, 5vh), 3.1rem); letter-spacing: 0; }
+}
+@media (min-width: 861px) and (max-height: 860px) {
+  .ty.is-live.is-wide .ty__lead { font-size: 1.35rem; }
+}

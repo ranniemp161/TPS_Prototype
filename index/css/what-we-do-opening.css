@@ -95,16 +95,13 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
 
 /* The four kinds of care (TJ, 7 Oct 2026), two words each, on one line with a
    fine coral dash between; on phones one per line, the dash leading each. */
-.op__kinds { display: flex; flex-wrap: wrap; align-items: center; font-weight: 500; }
+/* No dashes, just space between them, and one line at every desktop and
+   tablet width; the stacked layout below 1360px is gone (TPS-0046, 11 Nov
+   2026). Phones keep their own layout (the 860px rules below). */
+.op__kinds { display: flex; flex-wrap: nowrap; align-items: center; column-gap: 1.84em; font-weight: 500; }   /* gap 15 percent wider, was 1.6em (TJ, 11 Nov 2026) */
 .op__kinds span { white-space: nowrap; }
-.op__kinds span + span::before { content: ""; display: inline-block; width: 12px; height: 1px; background: var(--reach-script-soft); vertical-align: middle; margin: 0 .6em; }
+.op__kinds span + span::before { content: none; }
 .op__copy--light .op__kinds span::before { background: var(--g-canvas); }
-/* Below 1360px wide the four will not sit on one line, so they stack, as on phones. */
-@media (max-width: 1359px) {
-  .op__kinds { display: grid; gap: 4px; }
-  .op__kinds span { display: flex; align-items: center; }
-  .op__kinds span::before, .op__kinds span + span::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--reach-script-soft); margin: 0 .7em 0 0; vertical-align: middle; flex: none; }
-}
 .op__line { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.02rem, min(.8rem + .75vw, 2.7vh), 1.4rem); line-height: 1.5; color: var(--t-ink); max-width: 38ch; }
 
 /* The introduction. Desktop: laid over the stage on the left, revealed in
@@ -152,15 +149,76 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
   .op__more { margin-top: -10px; }
 }
 
-/* Before script, and with reduced motion: the resolved hero, the photograph
-   full bleed under the statement in cream, then the introduction. */
-html:not(.js) .op__frame, .op--static .op__frame { inset: 0; border-radius: 0; opacity: 1; }
-html:not(.js) .op__scrim, .op--static .op__scrim { opacity: 1; }
-html:not(.js) .op__copy, .op--static .op__copy { top: auto; bottom: 6vh; color: var(--g-canvas); }
-html:not(.js) .op__line, .op--static .op__line, html:not(.js) .op__rows, .op--static .op__rows { color: var(--g-canvas); }
-.op--static .op__kicker, .op--static .op__head, .op--static .op__line, .op--static .op__rows { opacity: 1; }
-html:not(.js) .op__intro, .op--static .op__intro { position: relative; inset: auto; padding: 56px 0 72px; }
-html:not(.js) .op__intro-in, .op--static .op__intro-in { position: static; transform: none; width: auto; max-width: 1080px; margin: 0 auto; padding: 0 var(--gutter); }
+/* ---- Two plain sections (TJ, 11 Nov 2026, TPS-0047) ----
+   No pin, no scroll animation. The hero: the photograph from the header band's
+   foot to the foot of the window, the statement on it in cream at the lower
+   left, at the size it had at full screen before. Then "Who is it for?" as its
+   own section: the words on the left, the picture on the right. The page
+   carries .op--static in its markup, so this is the layout from the first
+   paint. The animated version is in archive/what-we-do-opening-animated-2026-11-11.*. */
+.op.op--static .op__frame { inset: auto; left: 0; right: 0; top: var(--hero-top); bottom: 0; border-radius: 0; opacity: 1; will-change: auto; }
+.op--static .op__scrim { opacity: 1; }
+.op--static .op__copy { top: auto; bottom: 7vh; transform: scale(.72); transform-origin: left bottom; }
+.op.op--static .op__kicker, .op.op--static .op__head, .op.op--static .op__line, .op.op--static .op__rows { opacity: 1; color: var(--g-canvas); }
+.op--static .op__rows b { color: var(--g-canvas); }
+/* Desktop spacing (TJ, 11 Nov 2026): the two fact lines close together and
+   pushed down; the four kinds of care midway between the headline and them,
+   the same space above and below. --op-mid is that space. */
+@media (min-width: 861px) {
+  .op--static .op__copy { --op-mid: clamp(30px, 4.6vh, 50px); gap: var(--op-mid); }
+  .op--static .op__rows { gap: 2px; }
+  /* less .6em: the rows' taller line height adds that much space around the
+     words, so the visible gaps above and below the kinds come out equal */
+  .op--static .op__kinds { margin-bottom: calc(var(--op-mid) - 2px - .6em); }
+  /* Slimmer (TJ, 11 Nov 2026): Montserrat Light, was Medium (500). */
+  .op--static .op__kinds { font-weight: 300; }
+}
+
+.op--static .op__intro {
+  position: relative; inset: auto; z-index: auto; pointer-events: auto; overflow: hidden;
+  display: grid; grid-template-columns: minmax(min-content, 1.1fr) minmax(0, 1fr); align-items: center;
+  column-gap: clamp(40px, 5vw, 80px);
+  padding: clamp(80px, 12vh, 140px) clamp(24px, 5vw, 72px);
+}
+.op--static .op__aurora--intro { display: block; }
+.op--static .op__intro-in { position: relative; z-index: 1; left: auto; top: auto; width: auto; max-width: none; transform: none; margin: 0; padding: 0; }
+.op__pic { display: none; }
+.op--static .op__pic { display: block; position: relative; z-index: 1; margin: 0; border-radius: 16px; overflow: hidden; aspect-ratio: 2752 / 1536; }
+.op--static .op__pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+@media (min-width: 861px) {
+  /* The whole photograph, no crop (TJ, 11 Nov 2026): the hero takes the
+     photograph's own shape, full width under the header band, instead of
+     filling the window, which cut its top and bottom on wide screens. */
+  .op--static .op__stage { height: auto; min-height: 0; padding-top: var(--hero-top); }
+  .op.op--static .op__frame { position: relative; inset: auto; width: 100%; aspect-ratio: 2752 / 1536; }
+  /* Who is it for, inverted from the hero (TJ, 11 Nov 2026): the picture on
+     the left, the words at the top right. */
+  /* The words keep their natural width on the right; the picture takes all
+     the rest, one fixed gap between them, so there is never an empty middle
+     (TJ, 11 Nov 2026). */
+  .op--static .op__intro { grid-template-columns: minmax(0, 1fr) max-content; column-gap: 60px; align-items: start; }
+  .op--static .op__pic { order: -1; }
+  .op--static .op__intro-in { justify-self: end; }   /* against the right margin, as the hero's words sit on the left */
+  /* "Who is it for?" the size "What we do" shows at in the hero (the hero's
+     words are drawn at 72 percent), TJ, 11 Nov 2026. */
+  .op--static .op__who { font-size: calc(.72 * clamp(3.6rem, min(7.6vw, 12.4vh), 7rem)); }
+  /* The picture as tall as the title and text together, cropped to fit
+     (TJ, 11 Nov 2026): it stretches to the row the words set. */
+  .op--static .op__pic { align-self: stretch; aspect-ratio: auto; }
+  .op--static .op__pic img { position: absolute; inset: 0; }
+}
+
+@media (max-width: 860px) {
+  /* Phones: the photograph from the folded header's foot, the statement centred
+     near its top in cream on the dimmed photograph, as the phone hero opened
+     before; then the introduction, with the picture under the words. */
+  .op--static .op__frame { top: var(--nav-h); }
+  .op--static .op__dim { opacity: .55; }
+  .op--static .op__copy { top: calc(var(--hero-top) + 38px); bottom: auto; transform: none; }
+  .op--static .op__kinds span + span:nth-child(2n)::before { background: var(--g-canvas); }
+  .op--static .op__intro { grid-template-columns: minmax(0, 1fr); row-gap: 32px; padding: 48px var(--gutter) 64px; }
+}
 
 /* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 3). Desktop untouched (TJ).
    The statement centred: "What we do", the headline, the four kinds on two lines

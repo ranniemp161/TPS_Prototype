@@ -131,13 +131,73 @@ html.js .os-act.is-reached p { opacity: 1; transform: none; }
 /* ---------- 7. The same intention ---------- */
 .os-close { position: relative; overflow: hidden; padding: clamp(72px, 12vh, 140px) 0; text-align: center; }
 .os-close__aurora { z-index: 0; }
+/* Full width (TJ, 10 Nov 2026): the section steps out of main's side gutter
+   so its fuchsia band runs edge to edge, with the contact card on top of it. */
+.os-close { margin-inline: calc(-1 * var(--gutter)); }
+/* Wider body (TJ, 10 Nov 2026): just enough that on desktop the first and last
+   paragraphs sit on one line and Today, it informs... on two. Narrower than
+   the contact card below it. */
+.os-close__in.os-measure { max-width: calc(760px + 2 * var(--gutter, 24px)); }
 .os-close__in { position: relative; z-index: 1; }
-.os-final { margin: clamp(40px, 7vh, 72px) auto 1.6rem; max-width: 16ch; font-family: var(--f-display); text-transform: uppercase; line-height: 1; letter-spacing: .02em; font-size: clamp(2.2rem, min(6vw, 9vh), 4.8rem); text-wrap: balance; color: var(--t-ink); }
+.os-final { margin: clamp(40px, 7vh, 72px) auto 1.6rem; max-width: 28ch; /* was 16ch; wide enough for each sentence on its own line (TJ, 10 Nov 2026) */ font-family: var(--f-display); text-transform: uppercase; line-height: 1; letter-spacing: .02em; font-size: clamp(2.2rem, min(6vw, 9vh), 4.8rem); text-wrap: balance; color: var(--t-ink); }
 .os-sign { font-family: var(--f-read); font-size: 1rem; color: var(--t-soft); line-height: 1.6; }
 .os-sign strong { font-weight: 700; color: var(--t-ink); }
 
 /* ---------- Contact ---------- */
-.os-contact { padding: clamp(48px, 8vh, 96px) 0 clamp(64px, 10vh, 120px); }
+/* Its own section (TJ, 10 Nov 2026): a white ground with a hard edge against
+   the cream above, the title across the top, the map of the area we serve on
+   the left, the details and the call to action on the right. */
+/* Card version (TJ, 10 Nov 2026): the section sits on the cream, the content
+   on a white card with the site's card radius; the title is centred. */
+.os-contact { padding: clamp(18px, 3.2vh, 38px) 0 clamp(64px, 10vh, 120px); }
+/* The gap from The Same Intention down to the card halved (TJ, 10 Nov 2026):
+   half its bottom padding here, half the card section's top padding above.
+   Then a further 20 percent off that gap (TJ, 10 Nov 2026). */
+.os-close { padding-bottom: clamp(28px, 4.6vh, 56px); }
+/* Care Should Be Felt in the Details down to The Same Intention, 40 percent
+   less (TJ, 10 Nov 2026), with the fuchsia edge exactly halfway: the same
+   half gap each side. Above, the last line's 1.1rem margin is part of it. */
+.os-details { padding-bottom: calc(clamp(43px, 7.2vh, 84px) - 1.1rem); }
+.os-close { padding-top: clamp(43px, 7.2vh, 84px); }
+.os-contact .os-wrap { max-width: 1180px; }
+.os-contact__card { background: var(--g-paper); border-radius: var(--r-card); padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 72px); }
+.os-contact__h { margin-bottom: clamp(28px, 4vh, 48px); text-align: center; }
+.os-contact__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.os-contact__info .article__contact { margin-bottom: 2rem; }
+.os-contact__info .article__actions { justify-content: flex-start; }
+.os-contact__area { margin: 1.4rem auto 0; max-width: 34ch; text-align: center; color: var(--t-ink); text-wrap: balance; }
+
+/* The map: the UK drawn in a fine ink line, Ireland faint for context, the
+   M25 area in the accent with a slow pulse at its centre. The coast draws in
+   once when the map comes into view. */
+.os-map { margin: 0; }
+.os-map__svg { display: block; width: 100%; max-width: 480px; height: auto; margin-inline: auto; overflow: visible; }
+/* No non-scaling stroke on the coast: it breaks pathLength, which the draw needs. */
+.os-map__uk, .os-map__ie { fill: none; stroke-linejoin: round; }
+.os-map__uk { stroke: var(--t-mute); stroke-width: 1.1; }
+.os-map__ie { stroke: var(--line-firm); stroke-width: 1.1; }
+.os-map__area { fill: var(--acc); fill-opacity: .22; stroke: var(--acc); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.os-map__dot { fill: var(--acc); }
+.os-map__pulse { fill: none; stroke: var(--acc); stroke-width: 1; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; animation: os-map-pulse 2.8s var(--ease-out) infinite; }
+.os-map__label { font-family: var(--f-body); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; fill: var(--t-ink); stroke: var(--g-paper); stroke-width: 4px; stroke-linejoin: round; paint-order: stroke; }
+@keyframes os-map-pulse { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
+
+html.js .os-map .os-map__uk, html.js .os-map .os-map__ie { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.4s var(--ease-out); }
+html.js .os-map .os-map__area, html.js .os-map .os-map__label, html.js .os-map .os-map__dot { opacity: 0; transition: opacity 700ms var(--ease-out) 1.6s; }
+html.js .os-map.is-in .os-map__uk, html.js .os-map.is-in .os-map__ie { stroke-dashoffset: 0; }
+html.js .os-map.is-in .os-map__area, html.js .os-map.is-in .os-map__label, html.js .os-map.is-in .os-map__dot { opacity: 1; }
+/* The figure itself does not rise; only its lines draw. */
+html.js .os-map[data-os-rise] { opacity: 1; transform: none; }
+
+@media (max-width: 860px) {
+  .os-contact__grid { grid-template-columns: minmax(0, 1fr); }
+  .os-map__svg { max-width: 320px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .os-map__pulse { animation: none; opacity: 0; }
+  html.js .os-map .os-map__uk, html.js .os-map .os-map__ie { stroke-dasharray: none; transition: none; }
+  html.js .os-map .os-map__area, html.js .os-map .os-map__label, html.js .os-map .os-map__dot { opacity: 1; transition: none; }
+}
 
 /* ---------- Entrances ---------- */
 html.js [data-os-rise] { opacity: 0; transform: translateY(14px); transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out); }
