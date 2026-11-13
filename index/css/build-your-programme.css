@@ -2786,3 +2786,10 @@ body .nav__return { font-size: .8125rem; }
 .dk .dk-decide .dk-decide__built { border-bottom: 0; }
 .dk .dk-decide__list li { border: 0; background: none; }
 .dk .dk-decide__list li::before { background: currentColor; }
+/* The step count, "1 of 7", in full black bold so it stands out (TJ, 13 Nov 2026). */
+.dk-bar__name .dk-bar__count { font-weight: 700; color: #000; }
+/* The bar's label was faded to 70 percent as a whole, which greyed the count.
+   Now the label is full strength: the step name stays a soft grey and the count
+   is black and a touch larger. */
+.dk-bar__name { opacity: 1; color: var(--t-mute); }
+.dk-bar__name .dk-bar__count { font-size: 1.08em; }

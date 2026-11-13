@@ -1161,9 +1161,9 @@
       // The numbers in bold (TJ, 13 Nov 2026, TPS-0096, from Ami).
       if (i > 0 && i <= stepTotal) {
         nameEl.textContent = '';
-        var nb1 = document.createElement('b'); nb1.textContent = i;
-        var nb2 = document.createElement('b'); nb2.textContent = stepTotal;
-        nameEl.append(nb1, ' of ', nb2, ' \u00b7 ' + title(i));
+        // "1 of 7" as one bold, full black unit (TJ, 13 Nov 2026).
+        var nb = document.createElement('b'); nb.className = 'dk-bar__count'; nb.textContent = i + ' of ' + stepTotal;
+        nameEl.append(nb, ' \u00b7 ' + title(i));
       } else nameEl.textContent = title(i);
       paintNext();
       back.disabled = i === 0;

@@ -578,3 +578,6 @@
 .pg-kind__h { font-family: var(--f-read); font-weight: 700; font-size: 1.02rem; letter-spacing: 0; text-transform: none; color: var(--t-ink); }
 .pg-table__group th { font-family: var(--f-read); font-weight: 700; font-size: .98rem; letter-spacing: 0; text-transform: none; color: var(--t-ink); }
 .pg-kind__list li::before { background: var(--t-ink); }
+/* "Programme" at the head of the table in normal case, not capitals (TJ, 13 Nov 2026).
+   The 7, 14 and 30 days column heads stay as they are. */
+.pg-table thead th:first-child { text-transform: none; letter-spacing: 0; font-size: .92rem; }
