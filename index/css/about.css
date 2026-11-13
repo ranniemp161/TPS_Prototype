@@ -241,3 +241,53 @@ html.js [data-os-rise].is-in { opacity: 1; transform: none; }
 /* The question in the lede (TJ, 2 Nov 2026): the lede's own weight, not bold,
    in the accent colour, on its own line under the sentence. */
 .os-open__lede strong { display: block; font-weight: inherit; color: var(--acc); }
+
+/* The wave (TJ, 13 Nov 2026, TPS-0089): rings spread from London out over the
+   country, clipped to the land, so the map reads as care that reaches across
+   England from its London base. */
+.os-map__wave { fill: var(--acc); fill-opacity: .16; stroke: var(--acc); stroke-opacity: .8; stroke-width: 1; vector-effect: non-scaling-stroke;
+  transform-box: fill-box; transform-origin: center; animation: os-map-wave 6s cubic-bezier(.22, .61, .36, 1) infinite; }
+.os-map__wave--2 { animation-delay: 3s; }
+@keyframes os-map-wave { 0% { transform: scale(.4); opacity: 0; } 8% { opacity: 1; } 100% { transform: scale(26); opacity: 0; } }
+html.js .os-map .os-map__wave { visibility: hidden; }
+html.js .os-map.is-in .os-map__wave { visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .os-map__wave { animation: none; opacity: 0; } }
+
+/* The three icons in place of the Instagram line (TJ, 13 Nov 2026, TPS-0090). */
+.os-social { list-style: none; display: flex; gap: 18px; margin: 0 0 2rem; padding: 0; }
+.os-social a { display: block; color: var(--t-ink); transition: color .2s ease; }
+.os-social a:hover, .os-social a:focus-visible { color: var(--acc); }
+.os-social svg { display: block; width: 26px; height: 26px; }
+.os-contact__info .article__contact { margin-bottom: 1.4rem; }
+/* The details on one line beside their labels, with a short, even gap (TJ,
+   13 Nov 2026): the labels make a column only as wide as the longest of them,
+   the addresses start just after it. On phones each address sits under its
+   label (inner-pages.css). */
+@media (min-width: 561px) {
+  .os-contact .article__contact { display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: 1.6em; row-gap: .75rem; }
+  .os-contact .article__contact > div { display: contents; }
+  .os-contact .article__contact dt { min-width: 0; }
+  .os-contact .article__contact dd { min-width: 0; }
+}
+/* Wide enough windows: the details column takes the width its longest
+   address needs, so no address ever breaks; the map takes the rest. */
+@media (min-width: 1000px) {
+  .os-contact__grid { grid-template-columns: minmax(0, 1fr) max-content; }
+  .os-contact .article__contact dd { white-space: nowrap; }
+  /* the opening line wraps to about the details' width, so the map keeps its room */
+  .os-contact__info > .os-p { max-width: 27rem; }
+}
+
+/* Our founders without portraits or cards (TJ, 13 Nov 2026, TPS-0091 and
+   TPS-0092): the two founders as two columns of text straight on the
+   section's ground, the closing line centred under them, and the section
+   pulled up so the gap from "That principle sits at the heart of TPS" to
+   "Our founders" is 60 percent smaller (about 230px to 90px at 1440). */
+.os-founder { background: none; border: 0; border-radius: 0; padding: 0; }
+.os-founders__grid { column-gap: clamp(32px, 6vw, 96px); }
+.os-founders__close { margin-inline: auto; text-align: center; text-wrap: balance; }
+.os-founders { margin-top: calc(-1.2 * clamp(64px, 10vh, 120px) - 19px); }
+
+/* Contact in the About Us menu lands here (TJ, 13 Nov 2026): the card stops
+   clear of the header rather than under it. */
+#contact { scroll-margin-top: calc(var(--nav-h, 80px) + 16px); }

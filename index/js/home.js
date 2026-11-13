@@ -1434,7 +1434,9 @@ function doorHandoff() {
   // the feather alone dissolves the photograph into the section below, so
   // it is deeper (half a window) and grows over a longer stretch.
   gsap.fromTo(bathEl, { '--bath-feather': '0px' }, {
-    '--bath-feather': () => Math.round(vh() * 0.5) + 'px',
+    // A short soft edge only (13 Nov 2026, TPS-0083): half a window read as a
+    // wash laid over the next section.
+    '--bath-feather': () => Math.round(vh() * 0.15) + 'px',
     ease: 'none',
     immediateRender: false,
     scrollTrigger: {
@@ -2239,3 +2241,29 @@ if (document.fonts && document.fonts.ready) {
 } else {
   window.addEventListener('load', boot);
 }
+
+/* ------------------------------------------------------------
+   What is Postpartum Care to the fly through (TJ, 13 Nov 2026): half the
+   gap it had. The section centres its words and photograph in a screen high
+   stage, so the space under them changes with the window; it is measured
+   here and the flight is pulled up by half of it (desktop only). The flight
+   re-measures itself on every ScrollTrigger refresh (home-flight.js).
+   ------------------------------------------------------------ */
+(function turnToFlightGap() {
+  const turn = document.querySelector('.act--turn');
+  const flight = document.querySelector('[data-flight]');
+  if (!turn || !flight) return;
+  const fit = () => {
+    flight.style.marginTop = '';
+    if (window.innerWidth < 861) return;
+    const side = turn.querySelector('.stage__side'), frame = turn.querySelector('.stage__frame');
+    const contentBottom = Math.max(side ? side.getBoundingClientRect().bottom : 0, frame ? frame.getBoundingClientRect().bottom : 0);
+    const gap = flight.getBoundingClientRect().top - contentBottom;
+    if (gap > 0) flight.style.marginTop = (-Math.round(gap / 2)) + 'px';
+  };
+  const refit = () => { fit(); if (window.ScrollTrigger) ScrollTrigger.refresh(); };
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+  let t = 0;
+  addEventListener('resize', () => { clearTimeout(t); t = setTimeout(refit, 200); });
+})();

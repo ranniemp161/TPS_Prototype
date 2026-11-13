@@ -303,6 +303,11 @@
 .dns .dng { z-index: 1; }
 .dns__answer { position: absolute; inset: 0; z-index: 2; }
 @media (max-width: 860px) { .dns { --dns-len: 1.7; } }
+/* One screen, no hold (13 Nov 2026, TPS-0080): the split arrives finished and
+   scrolls past like any section. */
+.dns { --dns-len: 1; }
+@media (max-width: 860px) { .dns { --dns-len: 1; } }
+.dns.is-static .dnf__more { pointer-events: auto; }
 /* The day room as the section arrives; the half and half fades in with the
    glass, done by the time the columns are a little more than half open
    (TJ, 11 Nov 2026). Both pictures take the same drift (what-we-do-promise.js). */

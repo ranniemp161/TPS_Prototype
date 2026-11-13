@@ -2766,3 +2766,23 @@ body .nav__return { font-size: .8125rem; }
 .tg__t { font-size: 1rem; }
 .page--builder .nav__return, .page--builder.is-funnelled .nav__return { text-transform: none; letter-spacing: .01em; font-size: .8125rem; }
 .tg--included .tg__aside { text-transform: none; letter-spacing: .01em; font-size: .8125rem; }
+
+/* Half length hairlines (TJ, 13 Nov 2026, TPS-0098, from Ami): every separator
+   between the choices on the steps runs half the width, from the left, the
+   same on every step. The line is drawn under its transparent border so the
+   row keeps its spacing. */
+.dk .dk-page :is(.tg, .prio) {
+  border-top-color: transparent;
+  background-image: linear-gradient(var(--line), var(--line));
+  background-repeat: no-repeat; background-size: 50% 1px; background-position: left top; background-origin: border-box; background-clip: border-box;
+}
+/* Recovery treatments: more room between its rows (TJ, 13 Nov 2026, TPS-0099). */
+.dk .dk-page[data-section="builder-step-05"] .tg { padding-top: 12px; padding-bottom: 14px; }
+/* The step counter's numbers in bold (TPS-0096). */
+.dk-bar__name b { font-weight: 700; }
+
+/* Your programme (TJ, 13 Nov 2026): no hairlines in the list or under its
+   heading, and the bullet points the colour of the text. */
+.dk .dk-decide .dk-decide__built { border-bottom: 0; }
+.dk .dk-decide__list li { border: 0; background: none; }
+.dk .dk-decide__list li::before { background: currentColor; }

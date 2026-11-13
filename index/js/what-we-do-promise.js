@@ -23,11 +23,14 @@ const PEAK_PIN_VH = DN_PHONE ? 0.9 : 1.6;
 // Day and Night Care (TJ, 8 Oct 2026): after the two options land, a glass
 // phase (DN_GLASS_VH) frosts and splits the frame and opens both columns, then
 // the hold lets them be read. The hold was .6 before the merge.
-const DN_BEAT_VH = DN_PHONE ? 0.2 : 0.55;
+const DN_BEAT_VH = DN_PHONE ? 0.2 : 0;
+// Desktop 0 since 13 Nov 2026 (TJ): this beat was room for the glass, which
+// moved to its own section on 11 Nov, so after night fell the screen sat still
+// for a whole screen of scrolling before the next section rose.
 const DN_GLASS_VH = DN_PHONE ? 0.5 : 1.3;
 // The glass now has its own section below (TJ, 11 Nov 2026, TPS-0055), so the
 // sunset's hold is only a short rest on the note before the page moves on.
-const PEAK_HOLD_VH = DN_PHONE ? 0.2 : 0.45;
+const PEAK_HOLD_VH = DN_PHONE ? 0.2 : 0.15;   // a short rest on the note (13 Nov 2026, TJ; was .45)
 // The sun is the clock (TJ, 9 Oct 2026). Night, and the one change from dark to
 // cream for everything on the frame and the header's menu, are worked out from
 // where the sun is, not from scroll, so the three can never drift apart: night
@@ -285,15 +288,27 @@ function actPeak() {
      columns open over DN_GLASS_VH screens, the pace they had inside the sunset,
      ending a little after the section reaches the top; then it holds (its
      height, in the stylesheet) while they are read. */
+  /* Static since 13 Nov 2026 (Ami, 12 Nov meeting, TPS-0080): the split arrives
+     finished, the half and half photograph, the glass and both columns already
+     in place, and scrolls past like any section. Its finished state is set on
+     the section itself, so the sunset above (which reads the same properties
+     from .dn-wrap) is untouched. The scroll driven version is in
+     lab/what-we-do-promise.before-static-split-13nov.js.bak. */
   if (split) {
-    const sm = x => x * x * (3 - 2 * x);
-    ScrollTrigger.create({
-      trigger: split, start: 'top 80%',
-      end: () => '+=' + Math.round(window.innerHeight * DN_GLASS_VH),
-      scrub: 0.6, refreshPriority: -12, invalidateOnRefresh: true,
-      onUpdate: self => { glassNow = sm(self.progress); setHeads(glassNow); setGlass(glassNow); },
-      onRefresh: self => { glassNow = sm(self.progress); setHeads(glassNow); setGlass(glassNow); }
-    });
+    const setStatic = () => {
+      split.style.setProperty('--dn-g', '1');
+      split.style.setProperty('--dn-b', '1');
+      split.style.setProperty('--dn-ink', DN_INK.join(', '));
+      split.classList.add('is-static');
+      setHeads(1);
+      bodies.forEach(b => {
+        if (b.closest('.dnf__opt').classList.contains('is-open')) return;
+        b.style.maxHeight = (parseFloat(getComputedStyle(b).getPropertyValue('--dn-closed')) || 0) + 'px';
+      });
+    };
+    setStatic();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(setStatic);
+    addEventListener('resize', setStatic);
   }
 
   const pinTween = gsap.to({ v: 0 }, {

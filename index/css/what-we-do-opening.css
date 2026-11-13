@@ -192,6 +192,11 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
      filling the window, which cut its top and bottom on wide screens. */
   .op--static .op__stage { height: auto; min-height: 0; padding-top: var(--hero-top); }
   .op.op--static .op__frame { position: relative; inset: auto; width: 100%; aspect-ratio: 2752 / 1536; }
+  /* Always inside the window (TJ, 13 Nov 2026): the photograph keeps its own
+     shape only while that fits under the header; on wider or shorter windows
+     the frame stops at the foot of the window and the photograph crops a
+     little top and bottom, so the words at its foot are never cut off. */
+  .op.op--static .op__frame { aspect-ratio: auto; height: min(calc(100vw * 1536 / 2752), calc(100svh - var(--hero-top))); }
   /* Who is it for, inverted from the hero (TJ, 11 Nov 2026): the picture on
      the left, the words at the top right. */
   /* The words keep their natural width on the right; the picture takes all

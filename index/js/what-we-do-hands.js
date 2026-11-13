@@ -18,6 +18,12 @@
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var wide = window.matchMedia('(min-width: 861px)');
+  // The desktop layout from the first moment (TJ, 13 Nov 2026). The build
+  // waits for the fonts; until then the section used to show its stacked phone
+  // layout, about six screens tall, and when the fonts arrived it shrank to one
+  // screen, so everything below jumped up by five screens under the reader and
+  // the page seemed to skip straight to the house plan.
+  if (wide.matches && !reduced) sec.classList.add('is-live');
   var plates = [].slice.call(sec.querySelectorAll('[data-hd-plate]'));
   var cuts = [].slice.call(sec.querySelectorAll('[data-hd-cut]'));
   var kinds = [].slice.call(sec.querySelectorAll('[data-hd-kind]'));
@@ -276,6 +282,7 @@
     revert();
     gsap.set(plates.concat(cuts, kinds, [].slice.call(sec.querySelectorAll('[data-hd-fade]'))), { clearProps: 'all' });
     sec.classList.remove('is-live', 'is-tight');
+    kinds.forEach(function (k) { k.classList.remove('is-scroll'); });
     sec.style.removeProperty('--hd-len');
     ticks.forEach(function (t) { t.classList.remove('is-on'); });
     current = 0;
@@ -329,7 +336,7 @@
       for (var wi = 0; wi < WIDTHS.length && chosen === null; wi++) {
         var wpx = Math.min(maxW, Math.round((stageW - 48) * WIDTHS[wi]));
         k.style.setProperty('--hd-w', wpx + 'px');
-        if (k.offsetHeight <= availH - 24) chosen = wpx;
+        if (k.offsetHeight <= availH - 36) chosen = wpx;   // 12px clear of the header, 24px clear of the controls (TPS-0077)
       }
       if (chosen === null) k.style.setProperty('--hd-w', maxW + 'px');
       var h = k.offsetHeight;
@@ -354,8 +361,19 @@
       var nameEl = k.querySelector('.hd__name');
       var nameH = nameEl.offsetHeight + parseFloat(getComputedStyle(nameEl).marginBottom);
       var lineH = parseFloat(getComputedStyle(k).fontSize) * 1.6;
-      var top = Math.round(Math.max(0, Math.min((availH - openH) / 2, availH - openH - 24)));
+      var top = Math.round(Math.max(12, Math.min((availH - openH) / 2, availH - openH - 24)));
       k.style.top = top + 'px';
+      // Too tall even at the widest and the 13px floor: the open text scrolls
+      // in its own box instead of running into the controls (TPS-0077).
+      k.classList.remove('is-scroll'); k.style.removeProperty('--hd-full-max');
+      if (openH > availH - 36) {
+        k.classList.add('is-measure');
+        var full = k.querySelector('.hd__full');
+        var fullTop = full ? full.getBoundingClientRect().top - k.getBoundingClientRect().top : nameH;
+        k.classList.remove('is-measure');
+        k.classList.add('is-scroll');
+        k.style.setProperty('--hd-full-max', Math.max(80, Math.round(availH - top - 24 - fullTop)) + 'px');
+      }
       var teaserLines = Math.floor((availH - top - nameH - 24 - lineH * 1.55) / lineH);
       tease(k, Math.max(2, Math.min(5, teaserLines)));
     });

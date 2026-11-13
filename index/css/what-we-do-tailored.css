@@ -73,6 +73,9 @@
 .ty { --ty-gap: clamp(16px, 2vw, 28px); }
 .ty__head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--ty-gap); }
 .ty__slot { display: block; aspect-ratio: 4 / 3; border-radius: var(--r-card); }
+/* Taller cards (TJ, 13 Nov 2026, TPS-0078): a fifth taller, so the words have
+   room open and closed and the new photograph shows more of the room. */
+.ty__slot { aspect-ratio: 4 / var(--ty-ar, 3.6); }   /* --ty-ar is lowered by the script on screens too short for the full height */
 /* The slot sets the row's height; the card fills it and scrolls inside if Read more runs long. */
 .ty__head > .ty__card { height: 0; min-height: 100%; }
 
@@ -193,6 +196,7 @@
 
 /* ---- Desktop, live: the held stage ---- */
 .ty.is-live { height: 343vh; }   /* 420vh less the opening's stretch (TJ, 21 Oct 2026) */
+.ty.is-live { height: 319vh; }   /* the rest after 30 days cut to a short beat (TJ, 13 Nov 2026, from Ami); the line's own pace unchanged */
 .ty.is-live .ty__stage { position: sticky; top: 0; height: 100vh; height: 100svh; }
 .ty.is-live .ty__track { height: 100%; align-content: center; box-sizing: border-box; }
 .ty.is-live .ty__card { opacity: var(--ty-ci, 0); transform: translateY(calc((1 - var(--ty-ci, 0)) * 18px)); }
@@ -338,7 +342,7 @@
    so the card keeps its size. The numbers under the days take the days'
    own face and size, so the two rows read as one family. */
 @media (min-width: 861px) {
-  .ty__lead { font-size: clamp(1.5rem, min(2.4vw, 3.9vh), 2.05rem); text-wrap: wrap; }   /* capped so the first line fits the closed card on big screens */
+  .ty__lead { font-size: clamp(1.4rem, min(2.1vw, 3.7vh), 2.05rem); text-wrap: wrap; }   /* 13 Nov 2026: a touch smaller so "No two recoveries are the same," stays inside the card on laptops */   /* capped so the first line fits the closed card on big screens */
   .ty__lead-a, .ty__lead-comma { white-space: nowrap; }
   .ty__lead-b { display: block; }
   /* Read more open, the card is wide: the heading on one line (TJ, 11 Nov 2026). */
@@ -357,3 +361,19 @@
 @media (min-width: 861px) and (max-height: 860px) {
   .ty.is-live.is-wide .ty__lead { font-size: 1.35rem; }
 }
+
+/* Room inside the open card (TJ, 13 Nov 2026, TPS-0078): a clear gap under the
+   heading, a little air between paragraphs, and Read less sits lower with
+   space above it. Not on the tight short-window layout, which needs every line. */
+.ty.is-live.is-wide:not(.is-tight) .ty__card { gap: clamp(12px, 1.5vh, 22px); }
+.ty.is-live.is-wide:not(.is-tight) .tl-readmore__copy,
+.ty.is-live.is-wide:not(.is-tight) .tl-readmore__extra > div { gap: clamp(6px, .9vh, 12px); }
+.ty.is-live.is-wide:not(.is-tight) .tl-readmore__toggle { margin-top: clamp(12px, 1.6vh, 28px); }
+/* Open card (TJ, 13 Nov 2026): the heading sits at the top and the words and
+   Read less at the bottom, each with the card's padding, so the room that was
+   left below the text now opens up between the heading and the body text. */
+.ty.is-live.is-wide:not(.is-tight) .ty__card { align-content: space-between; padding-block: clamp(22px, 3.2vh, 36px); }
+/* The body text sits 15 percent of that gap higher (TJ, 13 Nov 2026); Read less
+   stays where it is. --ty-lift is measured by what-we-do-tailored.js. */
+.ty.is-live.is-wide:not(.is-tight) .tl-readmore__copy,
+.ty.is-live.is-wide:not(.is-tight) .tl-readmore__extra { position: relative; top: calc(var(--ty-lift, 0px) * -1); }

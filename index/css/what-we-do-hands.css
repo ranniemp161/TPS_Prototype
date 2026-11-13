@@ -49,7 +49,7 @@
 .hd:not(.is-live) .hd__kind { padding: clamp(28px, 6vw, 48px) var(--gutter, 24px) clamp(44px, 9vw, 72px); max-width: 640px; }
 
 /* ---- Live: the held stage ---- */
-.hd.is-live { height: calc(100vh * var(--hd-len, 5)); }
+.hd.is-live { height: calc(100vh * var(--hd-len, 1)); }   /* default 1 since 13 Nov 2026: one screen from the first paint, so nothing below moves when the script finishes */
 .hd.is-live .hd__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
 .hd.is-live .hd__pics { position: absolute; inset: 0; z-index: 0; }   /* own layer: the carousel's stacking of pictures never rises over the veil or the words */
 .hd.is-live .hd__pic { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 66% 35%; opacity: 0; will-change: opacity; }
@@ -58,6 +58,18 @@
 .hd.is-live .hd__veil { position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(to right, color-mix(in srgb, var(--g-canvas) 82%, transparent) 0%, color-mix(in srgb, var(--g-canvas) 66%, transparent) 30%, color-mix(in srgb, var(--g-canvas) 28%, transparent) 46%, color-mix(in srgb, var(--g-canvas) 0%, transparent) 58%); }
 .hd.is-live .hd__copy { position: absolute; z-index: 2; left: var(--gutter, 24px); top: var(--nav-h); bottom: 0; width: min(36vw, 520px); }
+/* The words never reach the carousel controls (TJ, 13 Nov 2026, TPS-0077), at
+   any window size: the copy box stops a clear 24px above the arrows and dots
+   (their offset from the foot plus their 36px height), and the script fits
+   the open text inside that box. */
+.hd.is-live { --hd-nav-clear: calc(clamp(20px, 4.5vh, 40px) + 36px + 24px); }
+.hd.is-live .hd__copy { bottom: var(--hd-nav-clear); }
+/* Last resort for very short windows, where even the widest stack at the 13px
+   floor will not fit: the open text scrolls inside its own box (the script
+   adds .is-scroll and --hd-full-max only then; the text above it and Read less
+   stay put), so it still never runs into the controls. */
+.hd.is-live .hd__kind.is-reading.is-scroll .hd__full { max-height: var(--hd-full-max); overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 28px), transparent); }
 .hd.is-live .hd__kind { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); visibility: hidden; }
 .hd.is-live .hd__kind.is-on { visibility: visible; }
 

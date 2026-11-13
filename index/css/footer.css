@@ -111,3 +111,19 @@
   .sf__base { justify-content: center; text-align: center; }
   .sf__brand .sf__social { margin: 1rem 0 0; transform: none; }
 }
+
+/* Contact laid out as the About page's contact section (TJ, 13 Nov 2026,
+   TPS-0086 and TPS-0087, from Ami): each detail on one line, the label in a
+   column of its own and the same size as the detail, the colon straight
+   after the word. Where the window is too narrow the detail drops under its
+   label rather than being cut. The social icons stay as they are. */
+.sf__col:not(nav) li { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: .6em; }
+.sf__label { display: inline-block; font-size: .84rem; font-weight: 600; letter-spacing: 0; line-height: 1.4; color: var(--sf-text); }
+/* The details in italic, as on the About page (TJ, 13 Nov 2026). */
+.sf__label + a { font-size: .84rem; font-weight: 500; font-style: italic; white-space: nowrap; }
+/* Desktop: the labels make a column only as wide as the longest, the details
+   start just after it, and the rows still spread to the height of Explore. */
+@media (min-width: 761px) {
+  .sf__col:not(nav) ul { display: grid; grid-template-columns: max-content max-content; column-gap: 1.2em; align-content: space-between; }
+  .sf__col:not(nav) li { display: contents; }
+}
