@@ -299,8 +299,25 @@
           glideTo(stt.start + p * (stt.end - stt.start), 1100);
         };
       });
+      var ctaP = document.querySelector('.act--cta-day'); if (ctaP) ctaP.style.marginTop = '';
       flowApply();
       return;
+    }
+
+    // The call to action below follows "Every day is tailored to you" at half
+    // the gap it had (TJ, 13 Nov 2026), never closer than 40px, at any window
+    // size: worked out from where the closing line comes to rest when the
+    // section lets go, and where the call to action's title sits in its own box.
+    var cta = document.querySelector('.act--cta-day');
+    if (cta && close) {
+      cta.style.marginTop = '0px';
+      var trackOffD = trackTop - stage.getBoundingClientRect().top;
+      var closeEnd = trackOffD + (close.getBoundingClientRect().bottom - trackTop) + Math.min(0, TIP - lineEnd);
+      var below = stageH - closeEnd;
+      var ctaHead = cta.querySelector('h2');
+      var headOff = ctaHead ? ctaHead.getBoundingClientRect().top - cta.getBoundingClientRect().top : 0;
+      var gapNow = below + headOff;
+      cta.style.marginTop = (Math.max(40, Math.round(gapNow / 2)) - gapNow) + 'px';
     }
 
     tl = gsap.timeline({

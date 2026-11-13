@@ -91,16 +91,23 @@
 .due-day--pad { visibility: hidden; pointer-events: none; }
 @media (max-width: 420px) { .rq-cal { width: 100%; padding: 12px; } .due-cal__grid { gap: 2px; } }
 
-/* A softer ground (TJ, 26 Oct 2026): still cream, with the Gifts page's warm
-   coral red as a light wash drifting at the edges, in place of the heavier
-   dusty pink cloud behind the heading and form. */
+/* The testimonials' ground (TJ, 13 Nov 2026, TPS-0094, from the 12 Nov
+   meeting; replaces the 26 Oct coral wash): the home page testimonials'
+   cream with its slow warm grey drift (site.css, .voices .aurora--voices),
+   the same colours, strength, blur and pace. */
+.page--request { background: var(--g-canvas); }
+.page--request .pg-lengths { background: var(--g-canvas); }
+.page--request .pg-lengths .aurora--voices { background: var(--g-canvas); }
 .page--request .pg-lengths .aurora--voices .aurora__field {
-  --a: transparent 0%, var(--rib-1) 6%, var(--rib-3) 10%, transparent 22%, var(--g-tint) 30%, transparent 40%;
-  --b: transparent 0%, var(--g-tint) 6%, var(--rib-1) 12%, transparent 24%, var(--g-canvas) 33%, transparent 46%;
-  opacity: .34; filter: blur(80px);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,.25) 30%, #000 100%);
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(0,0,0,.25) 30%, #000 100%);
+  --a: transparent 0%, var(--g-stone) 7%, var(--g-haze) 12%, transparent 22%,
+       color-mix(in oklch, var(--g-taupe-lite) 88%, var(--rib-1)) 30%, transparent 40%;
+  --b: transparent 0%, var(--g-haze) 6%, var(--g-stone) 12%, transparent 24%,
+       color-mix(in oklch, var(--g-stone) 80%, var(--rib-1)) 33%, transparent 46%;
+  opacity: .62;
+  filter: blur(46px);
+  -webkit-mask-image: none; mask-image: none;
 }
+.page--request .pg-lengths .aurora--voices .aurora__field::after { animation-duration: 26s; }
 
 /* The quiet top (TJ, 26 Oct 2026): no site header here, only Back with a
    chevron, top left, in the builder's Return to the site style, and the

@@ -335,7 +335,7 @@
     function formatLine(sel) {
       var night = sel.shift === 'night' && sel.format === 'in';
       return (sel.format === 'in' ? 'Live-in care' : 'Daytime in-home care') + ', ' +
-        (night ? 'day and night' : '12 hours of care');
+        (night ? 'day & night' : '12 hours of care');
     }
 
     function treatmentsLine(sel) {
@@ -414,7 +414,7 @@
       P.COUNTED.forEach(function (k) { if (sel[k]) treats.push(TREAT_LABEL[k]); });
       var rows = [
         'One postpartum specialist, reserved for your family for ' + sel.days + ' days',
-        sel.format === 'in' ? (night ? 'Live-in care, day and night' : 'Live-in care') : 'Live-out care',
+        sel.format === 'in' ? (night ? 'Live-in care, day & night' : 'Live-in care') : 'Live-out care',
         (night ? 'Lunch and dinner' : 'Breakfast, lunch and dinner') + ' cooked fresh each day',
         'Herbal rinse and belly binding every day'
       ];
@@ -1158,7 +1158,13 @@
       });
       // "2 of 9 · How long" (TJ, 24 Oct 2026). The intro and the screens after
       // Your programme carry their name only.
-      nameEl.textContent = (i > 0 && i <= stepTotal) ? i + ' of ' + stepTotal + ' \u00b7 ' + title(i) : title(i);
+      // The numbers in bold (TJ, 13 Nov 2026, TPS-0096, from Ami).
+      if (i > 0 && i <= stepTotal) {
+        nameEl.textContent = '';
+        // "1 of 7" as one bold, full black unit (TJ, 13 Nov 2026).
+        var nb = document.createElement('b'); nb.className = 'dk-bar__count'; nb.textContent = i + ' of ' + stepTotal;
+        nameEl.append(nb, ' \u00b7 ' + title(i));
+      } else nameEl.textContent = title(i);
       paintNext();
       back.disabled = i === 0;
       back.classList.toggle('is-hidden', i === 0);

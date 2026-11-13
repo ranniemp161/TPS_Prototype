@@ -364,3 +364,34 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
   .page--faqs .faq__weather-field::after { animation: none; }
 }
 
+
+/* The call to action copied from the home page (13 Nov 2026, TPS-0081): its words
+   sit above the glow behind them, as they do on the home page (there the reveal
+   lifts them; this page has no reveal). */
+.page--wwd .act--cta > .wrap { position: relative; z-index: 1; }
+
+/* The call to action after A Day With Us sits on that section's ground (TJ,
+   13 Nov 2026): the same canvas, the same light aurora and veil
+   (what-we-do-timeline.css), its colours set here because they live on .vt. */
+.page--wwd .act--cta-day {
+  --vt-a1: var(--rib-1); --vt-a2: var(--g-soft); --vt-a3: var(--g-tint);
+  --vt-b1: var(--g-soft); --vt-b2: var(--rib-2); --vt-b3: var(--g-tint);
+  --vt-op: .40; --vt-veil: .16;
+  isolation: isolate; background: var(--g-canvas);
+}
+/* No edge where A Day With Us ends: the aurora here fades in from the plain
+   canvas over the top of the section. */
+.page--wwd .act--cta-day > .vt__aurora {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 min(36vh, 320px));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 min(36vh, 320px));
+}
+/* ...and A Day With Us lets its own aurora go to the plain canvas at its foot,
+   so the two meet on the same ground with no line. */
+.page--wwd .vt .vt__aurora {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - min(16vh, 150px)), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - min(16vh, 150px)), transparent);
+}
+/* It now sits a little over the foot of A Day With Us (the halved gap), so its
+   own ground is clear and the page's canvas and that section's fading aurora
+   show through; its aurora still fades in from the top. */
+.page--wwd .act--cta-day { background: transparent; }

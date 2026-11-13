@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#F3EFEC" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
 <link rel="stylesheet" href="css/site.css" />
 <link rel="stylesheet" href="css/house-flight.css" />
 <link rel="stylesheet" href="css/what-we-do.css" />
@@ -115,6 +115,7 @@
         <ul class="menu__list">
           <li><a href="about.html">The Suite</a></li>
           <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
         </ul>
       </div>
     </section>
@@ -179,133 +180,7 @@
     </div>
   </section>
 
-<!-- ============ SECTION: the house flight (moved from Home, TJ, 21 Oct 2026; back from Home, TJ, 9 Nov 2026) ============
-     Tapped room to room (home-flight.js). It scrolls straight in after Who
-     is it for, and dissolves to the canvas at its end. Styles: house-flight.css. -->
-<section class="flight" data-flight data-reveal-vh="1" aria-label="From the moment we arrive, through the home">
-  <div class="flight__stage" data-stage>
-    <div class="flight__film" data-film>
-      <div class="flight__tilt" data-tilt>
-        <img class="flight__poster is-on" data-poster="0" src="../assets/img/home-door.webp" alt="" width="1920" height="1080" />
-        <img class="flight__poster" data-poster="1" src="../assets/img/home-kitchen.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="2" src="../assets/img/home-living.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="3" src="../assets/img/home-nursery.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="4" src="../assets/img/home-treatment.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <img class="flight__poster" data-poster="5" src="../assets/img/home-window-exit.webp" alt="" width="1920" height="1080" loading="lazy" decoding="async" />
-        <video class="flight__video" data-video
-               data-src="../assets/video/home-flight.mp4"
-               data-src-mobile="../assets/video/home-flight-m.mp4"
-               muted playsinline preload="none" aria-hidden="true" tabindex="-1"></video>
-        <!-- Tapped (TJ, 8 Nov 2026): one continuous film, paused at the rooms, and its reversed copy for going back (home-flight.js). -->
-        <!-- Breathing (TJ, 8 Nov 2026): both films in one wrapper, so they always share the same slow zoom. -->
-        <div class="flight__breathe" data-flight-breathe>
-        <video class="flight__reel flight__reel--fwd" data-film-fwd
-               data-src="../assets/video/home-flight-legs.mp4"
-               data-src-mobile="../assets/video/home-flight-legs-m.mp4"
-               poster="../assets/img/home-flight-legs-poster.webp"
-               muted playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
-        <video class="flight__reel flight__reel--rev" data-film-rev
-               data-src="../assets/video/home-flight-legs-rev.mp4"
-               data-src-mobile="../assets/video/home-flight-legs-rev-m.mp4"
-               muted playsinline preload="auto" aria-hidden="true" tabindex="-1"></video>
-        <!-- Sharp still (TJ, 9 Nov 2026): the room's own source frame, dissolved in over the paused film at rest (home-flight.js). -->
-        <img class="flight__sharp" data-flight-sharp alt="" width="1920" height="1080" decoding="async" aria-hidden="true" />
-        </div>
-      </div>
-    </div>
-
-    <div class="aurora flight__aurora" aria-hidden="true"><span class="aurora__field"></span></div>
-    <canvas class="flight__ghost" data-ghost aria-hidden="true"></canvas>
-
-    <div class="flight__blend" data-blend aria-hidden="true"></div>
-    <!-- The opening veil (TJ, 21 Oct 2026): white over the whole film while
-         "Fly through the service" is up, dissolving with it. -->
-    <div class="flight__veil" data-flight-veil aria-hidden="true"></div>
-
-    <!-- The old per-scene titles are gone: the route bar (desktop) and the
-         card sweep (phone) now carry that copy, in the section 12 language.
-         These markers stay only for data-section/data-section-name, which
-         the dev panel and lab/state.mjs read for section tracking; none
-         carry visible text of their own. The window-exit beat's Enquire
-         button that used to live here is gone too: the flight-enquire
-         button below now covers the whole video, this scene included. -->
-    <div class="flight__copy">
-      <!-- The opening line (TJ, 21 Oct 2026): Quentin, centred over the
-           film as it arrives, gone as the door comes up (home-flight.js). -->
-      <p class="flight__intro" data-flight-intro>Fly through the service</p>
-      <div class="beat beat--intro" data-beat="exterior" data-section="exterior" data-section-name="Arrival" data-dev-scroll-t="0"></div>
-      <div class="beat beat--lead beat--kitchen" data-beat="kitchen" data-section="kitchen" data-section-name="Kitchen" data-dev-scroll-t="1.37"></div>
-      <div class="beat beat--lead beat--living" data-beat="living" data-section="living-room" data-section-name="Living Room" data-dev-scroll-t="3.37"></div>
-      <div class="beat beat--trail beat--nursery" data-beat="nursery" data-section="nursery" data-section-name="Nursery" data-dev-scroll-t="5.56"></div>
-      <div class="beat beat--lead beat--bedroom" data-beat="bedroom" data-section="treatment-room" data-section-name="Treatment Room" data-dev-scroll-t="7.88"></div>
-      <div class="beat beat--centre beat--close" data-beat="sky" data-section="window-exit" data-section-name="Window Exit" data-dev-scroll-t="10.09"></div>
-    </div>
-
-
-    <!-- The route (TJ, 14 Oct 2026): one fixed, centred line across the foot
-         of the film. A hairline for the whole way, a solid fill to "now"
-         with the circle at its tip, moved by the film's time. Each room has
-         a dot that grows when the fill reaches it and stays; while it is the
-         current room a stem rises from its dot and its name and words rise
-         out of masks beside the stem. home-flight.js places and drives it;
-         a tap on a name or a dot scrolls the film to that room. -->
-    <!-- The route's soft foot fade: full width, no edge, behind the route (driven with its opacity by home-flight.js). -->
-    <div class="route__wash" data-route-wash aria-hidden="true"></div>
-    <nav class="route" data-route aria-label="Rooms in the house">
-      <div class="route__line" aria-hidden="true"></div>
-      <div class="route__fill" aria-hidden="true"></div>
-      <span class="route__tip" aria-hidden="true"></span>
-      <!-- The house, the line's first stop (TJ, 8 Nov 2026): a dot only. -->
-      <span class="route__home" data-route-home aria-hidden="true"></span>
-      <!-- The last stop, What Is Confinement? (TJ, 15 Oct 2026): a dot only.
-           The confinement section's own heading is its text. Born as the
-           section starts to emerge; the fill reaches it as the emerge ends. -->
-      <!-- Ami's sayings for the rooms, from her zones copy (7 Oct 2026), and
-           "Treatments that restore" (TJ, 23 Oct 2026). The line starts at the
-           kitchen: the arrival stop is gone, every width (TJ, 23 Oct 2026). -->
-      <ol class="route__stops" data-route-stops>
-        <li class="route__stop" data-stop="kitchen">
-          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
-          <span class="route__stem" aria-hidden="true"></span>
-          <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A kitchen that nourishes you</span></span></button>
-          </div>
-        </li>
-        <li class="route__stop" data-stop="living">
-          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
-          <span class="route__stem" aria-hidden="true"></span>
-          <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A living room that stays calm</span></span></button>
-          </div>
-        </li>
-        <li class="route__stop" data-stop="nursery">
-          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
-          <span class="route__stem" aria-hidden="true"></span>
-          <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">A nursery prepared with care</span></span></button>
-          </div>
-        </li>
-        <li class="route__stop" data-stop="treatment">
-          <button type="button" class="route__dot" tabindex="-1" aria-hidden="true" data-stop-dot></button>
-          <span class="route__stem" aria-hidden="true"></span>
-          <div class="route__text">
-            <button type="button" class="route__head" aria-expanded="false"><span class="route__mask"><span class="route__in">Treatments that restore</span></span></button>
-          </div>
-        </li>
-      </ol>
-      <!-- Phones (TJ, 23 Oct 2026): the flight is tapped, not scrolled.
-           Back and next move the film one room; home-flight.js drives them. -->
-      <div class="route__step" data-route-step>
-        <button type="button" class="route__arrow" data-step="-1" aria-label="Previous room">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
-        </button>
-        <button type="button" class="route__arrow" data-step="1" aria-label="Next room">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
-        </button>
-      </div>
-    </nav>
-  </div>
-</section>
+<!-- The house flight moved to the home page in place of the film (Ami, 12 Nov 2026, TPS-0075). -->
 
   <!-- ============ SECTION: the four kinds of care ============
        MaisonFav's stacked cards (geometry measured, code ours). Each card
@@ -802,7 +677,7 @@
       <div class="ty__hero">
         <h2 class="ty__title" data-ty-title>Tailored To You</h2>
         <div class="ty__photo">
-          <img src="../assets/img/tailored-bedroom-v2.webp" alt="A mother sitting up in bed in a bright bedroom, watching her postpartum specialist settle the newborn in the bedside crib" width="1678" height="937" decoding="async" />
+          <img src="../assets/img/tailored-bedroom-v3.webp" alt="A mother sitting up in bed in a bright bedroom, watching her postpartum specialist settle the newborn in the bedside crib" width="2400" height="1340" decoding="async" />
           <span class="ty__title ty__title--ink" data-ty-title aria-hidden="true">Tailored To You</span>
         </div>
       </div>
@@ -1071,6 +946,28 @@
     </div>
   </section>
 
+<!-- ============ SECTION: call to action (13 Nov 2026, TJ, TPS-0081) ============
+     Follows A Day With Us, on its ground (the same light aurora). Draft wording
+     by TJ, 13 Nov 2026, for Ami to replace. -->
+<section class="act act--cta act--cta-day" data-act data-section="book-consultation-wwd" data-section-name="Book a Consultation">
+  <div class="vt__aurora" aria-hidden="true"><span class="vt__field"></span></div>
+  <div class="wrap">
+    <div class="cta cta--card">
+          <h2 class="display display--lg">Imagine your days like this</h2>
+          <p class="script">Shaped around you</p>
+          <p class="body cta__lead">Rest when you need it, meals made for you and your baby cared for close by. Share your due date with us and we will let you know if your dates are available. From there, a private consultation lets us plan your days around you and your home.</p>
+          <!-- The three steps (TJ, 13 Nov 2026, TPS-0095), as on the home page. -->
+          <ol class="steps3" aria-label="How it works">
+            <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h3 class="steps3__t"><span class="steps3__n">Step 1</span>Choose your programme</h3><p class="steps3__p">Seven, fourteen or thirty days of care, or a programme shaped around you.</p></li>
+            <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h3 class="steps3__t"><span class="steps3__n">Step 2</span>Book and reserve</h3><p class="steps3__p">Share your due date and we will confirm your dates and pricing. A private consultation and your deposit secure your place.</p></li>
+            <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h3 class="steps3__t"><span class="steps3__n">Step 3</span>Receive your care</h3><p class="steps3__p">Your specialist arrives as your baby does, and we take care of the rest.</p></li>
+          </ol>
+          <a class="btn btn--primary" href="request-a-place.html">Check your dates</a>
+        </div>
+    <p class="programmes-bespoke cta__alt cta__alt--out">Want something more bespoke? Visit the <a class="cta-link" href="build-your-programme.html">bespoke programmes</a> page.</p>
+  </div>
+</section>
+
 </main>
 
 <footer class="sf" data-section="site-footer" data-section-name="Footer">
@@ -1106,10 +1003,10 @@
     <div class="sf__col">
       <h2 class="sf__head">Contact</h2>
       <ul>
-        <li><span class="sf__label">Customer Enquiries&nbsp;:</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Client relations team&nbsp;:</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Brand Partnerships&nbsp;:</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Phone&nbsp;:</span><a href="tel:+447477693300">+44 7477 693300</a></li>
+        <li><span class="sf__label">Customer Enquiries:</span><a href="mailto:info@thepostpartumsuite.com">info@thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Client relations team:</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Brand Partnerships:</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Phone:</span><a href="tel:+447477693300">+44 7477 693300</a></li>
       </ul>
     </div>
 
@@ -1139,7 +1036,6 @@
 <script src="js/what-we-do-hands.js"></script>
 <script src="js/what-we-do-tailored.js"></script>
 <script src="js/what-we-do-dn-title.js"></script>
-<script src="js/home-flight.js"></script>
 <script src="js/nav-fold.js"></script>
 <script src="../lab/devpanel-loader.js"></script>
 </body>

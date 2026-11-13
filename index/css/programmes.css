@@ -566,3 +566,18 @@
 .pg-price__totals { margin: calc(.9rem * var(--pg-fit, 1)) 0 0; max-width: 30em; font-family: var(--f-read); font-size: 1rem; line-height: 1.5; color: var(--t-soft); }
 .pg-totals__n { font-family: var(--f-display); font-size: 1.6rem; line-height: 1; color: var(--t-ink); }
 .pg-price__totals + .pg-price__held { margin-top: .35rem; }
+
+/* The three steps in the pricing card, between its words and its button (TJ,
+   13 Nov 2026, TPS-0095), inside the card's own edges, with the same gap
+   above and below them. */
+.pg-pricing .steps3 { margin: 1.8rem auto 0; max-width: none; width: 100%; }
+
+/* Four kinds of care headings and the table's group headings: bold, sentence
+   case, not capitals, not coral (TJ, 13 Nov 2026, TPS-0085, from Ami). The
+   hero card's headings stay coral. The bullet points black (TPS-0101). */
+.pg-kind__h { font-family: var(--f-read); font-weight: 700; font-size: 1.02rem; letter-spacing: 0; text-transform: none; color: var(--t-ink); }
+.pg-table__group th { font-family: var(--f-read); font-weight: 700; font-size: .98rem; letter-spacing: 0; text-transform: none; color: var(--t-ink); }
+.pg-kind__list li::before { background: var(--t-ink); }
+/* "Programme" at the head of the table in normal case, not capitals (TJ, 13 Nov 2026).
+   The 7, 14 and 30 days column heads stay as they are. */
+.pg-table thead th:first-child { text-transform: none; letter-spacing: 0; font-size: .92rem; }

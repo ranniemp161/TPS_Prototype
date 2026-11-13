@@ -42,7 +42,11 @@
   // photograph in its slot, title on its line, card and figures in place. The
   // 0.24 of the old 420vh the opening used is gone (the section is 343vh), so
   // the line draws and travels over exactly the same scroll as before.
-  var L0 = 0, L1 = 0.132, L2 = 0.868;
+  // The rest after 30 days cut to a short beat (TJ, 13 Nov 2026, from Ami): it
+  // held the finished line for about a third of a screen before the 14 day
+  // circle could drop. The section is 319vh (was 343vh); the line draws and
+  // travels over exactly the same scroll as before, so only the wait is gone.
+  var L0 = 0, L1 = 0.1466, L2 = 0.9636;
   var lastW = 0, lastH = 0, phone = false;
   // One driver per mode, run every frame. Positions are read live from the
   // page rather than measured once, because the sections above change height
@@ -116,6 +120,24 @@
 
   function desktop() {
     sec.classList.add('is-live');
+    // Taller cards (TJ, 13 Nov 2026, TPS-0078): a fifth taller than the old
+    // 4 by 3, but never so tall that the figures under the line leave the
+    // screen; on shorter screens the height steps back towards the old one.
+    var stay = sec.querySelector('.ty__stay'), stg = sec.querySelector('.ty__stage');
+    var ar = 3.6;
+    sec.style.setProperty('--ty-ar', ar);
+    // The title's resting slot first, at the size geom() gives it, so the space
+    // it leaves is counted.
+    var sizeTslot = function () { var hw = sec.querySelector('.ty__head').getBoundingClientRect().width; tslot.style.height = Math.ceil(title.offsetHeight * 0.7 * hw / title.offsetWidth) + 'px'; };
+    sizeTslot();
+    // Measured from the layout itself (offsets), not the screen, so the figures'
+    // entrance movement at build time does not count.
+    var lowGap = function () {
+      var y = stay.offsetHeight, e = stay;
+      while (e && e !== stg) { y += e.offsetTop; e = e.offsetParent; }
+      return (e === stg ? stg.clientHeight : stg.getBoundingClientRect().bottom - stay.getBoundingClientRect().top) - y;
+    };
+    while (ar > 3.0 && lowGap() < 24) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); sizeTslot(); }
     var calm = window.innerHeight < CALM_H;
     if (!calm && !cardFits()) { sec.classList.add('is-tight'); if (!cardFits()) calm = true; }
     if (calm) sec.classList.add('is-calm');
@@ -132,7 +154,7 @@
       // anything is measured.
       var headW = sec.querySelector('.ty__head').getBoundingClientRect().width;
       tW = title.offsetWidth; tH = title.offsetHeight;
-      tS = 0.8 * headW / tW;
+      tS = 0.7 * headW / tW;   // 70 percent since 13 Nov 2026 (was 80), giving the taller cards room (TPS-0078)
       tslot.style.height = Math.ceil(tH * tS) + 'px';
       var stageR = stage.getBoundingClientRect();
       var slotR = slot.getBoundingClientRect();
@@ -156,6 +178,12 @@
       tX = ts.left - t0.left + (ts.width - tW * tS) / 2; tY = ts.top - t0.top;
     }
     geom();
+    // With everything in its resting place, grow the cards into any room left
+    // above the figures (at least 24px kept under them), never past 4 by 3.6.
+    if (!calm) {
+      while (ar < 3.6 && lowGap() > 32) { ar = Math.round((ar + 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); geom(); }
+      while (ar > 3.0 && lowGap() < 24) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); geom(); }
+    }
 
     function render(p, keepDays) {
       var e = 1;   // the split from the start (no opening)
@@ -333,4 +361,25 @@
   gsap.ticker.add(function () { if (drive) drive(); });
   var go = function () { build(); setupSun(); ScrollTrigger.refresh(); };
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else window.addEventListener('load', go);
+})();
+
+/* The open card's body text lifted by 15 percent of the gap under the heading
+   (TJ, 13 Nov 2026), Read less left where it is. Measured each time the card
+   opens and when the window changes. */
+(function () {
+  var sec = document.querySelector('[data-ty]');
+  if (!sec) return;
+  var card = sec.querySelector('.ty__card'), lead = sec.querySelector('.ty__lead'), copy = sec.querySelector('.tl-readmore__copy'), panel = sec.querySelector('[data-tl-readmore]');
+  if (!card || !lead || !copy || !panel) return;
+  function lift() {
+    card.style.setProperty('--ty-lift', '0px');
+    if (!panel.classList.contains('is-open') || sec.classList.contains('is-tight')) return;
+    var gap = copy.getBoundingClientRect().top - lead.getBoundingClientRect().bottom;
+    if (gap > 0) card.style.setProperty('--ty-lift', (gap * 0.25).toFixed(1) + 'px');   // 25 percent (TJ, 13 Nov 2026: another 10)
+  }
+  // Measured once the extra text has finished opening (a 480ms transition), with
+  // the lift taken off first so the gap is the true one.
+  var t = 0;
+  new MutationObserver(function () { card.style.setProperty('--ty-lift', '0px'); clearTimeout(t); t = setTimeout(lift, 650); }).observe(panel, { attributes: true, attributeFilter: ['class'] });
+  addEventListener('resize', function () { setTimeout(lift, 300); });
 })();

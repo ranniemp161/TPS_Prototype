@@ -24,7 +24,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
 
 <!-- site.css first for the tokens, the type roles, the buttons, the nav and
      the aurora. build-your-programme.css adds only what this page needs and overrides
@@ -128,6 +128,7 @@
         <ul class="menu__list">
           <li><a href="about.html">The Suite</a></li>
           <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
         </ul>
       </div>
     </section>
@@ -206,11 +207,11 @@
     <!-- Step order (TJ, 14 Oct 2026): due date, how long, what matters most (free, sets up the
          choices that cost), then live-in or daytime, day or night, meals, treatments, massage rhythm. -->
     <!-- 2. How long -->
-    <section class="dk-page" data-title="How long" aria-label="Step 02" data-section="builder-step-02" data-section-name="Step 02 How Long">
+    <section class="dk-page" data-title="Programme length" aria-label="Step 02" data-section="builder-step-02" data-section-name="Step 02 How Long">
       <div class="dk-in">
         <fieldset class="step" id="step-02">
           <legend class="dk-step"><span class="dk-step__t">Choose your programme length</span></legend>
-          <div class="tgl" role="radiogroup" aria-label="How long">
+          <div class="tgl" role="radiogroup" aria-label="Programme length">
             <label class="tg"><input class="sr-only" type="radio" name="days" value="7" id="dkd-days-7" aria-describedby="dkd-days-7-m" /><span class="tg__body"><span class="tg__t">7 days</span><span class="tg__s" id="dkd-days-7-m"><span class="length__desc">Seven days to exhale. We take care of the details while you and your baby find your feet.</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg"><input class="sr-only" type="radio" name="days" value="14" id="dkd-days-14" aria-describedby="dkd-days-14-m" /><span class="tg__body"><span class="tg__t">14 days</span><span class="tg__s" id="dkd-days-14-m"><span class="length__desc">Two weeks of steady, unhurried care. Long enough to stop getting through the days and start enjoying them.</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg"><input class="sr-only" type="radio" name="days" value="30" id="dkd-days-30" aria-describedby="dkd-days-30-m" checked /><span class="tg__body"><span class="tg__t">30 days</span><span class="tg__s" id="dkd-days-30-m"><span class="length__desc">A whole month, as it was always meant to be. Nothing asked of you but rest, healing and time with your baby.</span></span></span><span class="tg__sw" aria-hidden="true"></span></label>
@@ -256,11 +257,11 @@
     <section class="dk-page" data-title="Day or night" aria-label="Step 03" data-section="builder-step-03" data-section-name="Step 03 Day or Night">
       <div class="dk-in">
         <fieldset class="step" id="step-03">
-          <legend class="dk-step"><span class="dk-step__t">Daytime or day and night care</span></legend>
+          <legend class="dk-step"><span class="dk-step__t">Daytime or day &amp; night care</span></legend>
           <p class="step__note step__note--lead">With night care, your specialist cares for your baby through the night while you rest. It covers 12 hours, arranged around your routine, and your baby is back with you by morning.</p>
-          <div class="tgl tgl--flush" role="radiogroup" aria-label="Daytime, or day and night">
+          <div class="tgl tgl--flush" role="radiogroup" aria-label="Daytime, or day &amp; night">
             <label class="tg"><input class="sr-only" type="radio" name="shift" value="day" id="dkl-shift-day" aria-describedby="dkl-shift-day-m" checked /><span class="tg__body"><span class="tg__t">Daytime care</span><span class="tg__s" id="dkl-shift-day-m">12 hours of care</span></span><span class="tg__sw" aria-hidden="true"></span></label>
-            <label class="tg" data-night-choice><input class="sr-only" type="radio" name="shift" value="night" id="dkl-shift-night" aria-describedby="dkl-shift-night-m" /><span class="tg__body"><span class="tg__t">Day and night care <span class="tg__rec" data-rec="night" hidden>(Recommended)</span></span><span class="tg__s" id="dkl-shift-night-m">Day care, and your baby through the night</span></span><span class="tg__sw" aria-hidden="true"></span></label>
+            <label class="tg" data-night-choice><input class="sr-only" type="radio" name="shift" value="night" id="dkl-shift-night" aria-describedby="dkl-shift-night-m" /><span class="tg__body"><span class="tg__t">Day &amp; night care <span class="tg__rec" data-rec="night" hidden>(Recommended)</span></span><span class="tg__s" id="dkl-shift-night-m">Day care, and your baby through the night</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
           <p class="band band--haze" data-night-band hidden>Night care is available on live-in programmes. Go back to step 01 and choose live-in care to add it.</p>
         </fieldset>
@@ -542,10 +543,10 @@
     <div class="sf__col">
       <h2 class="sf__head">Contact</h2>
       <ul>
-        <li><span class="sf__label">Customer Enquiries&nbsp;:</span><a href="mailto:info@thepostpartumsuite.com">info@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Client relations team&nbsp;:</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Brand Partnerships&nbsp;:</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@<wbr />thepostpartumsuite.com</a></li>
-        <li><span class="sf__label">Phone&nbsp;:</span><a href="tel:+447477693300">+44 7477 693300</a></li>
+        <li><span class="sf__label">Customer Enquiries:</span><a href="mailto:info@thepostpartumsuite.com">info@thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Client relations team:</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Brand Partnerships:</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@thepostpartumsuite.com</a></li>
+        <li><span class="sf__label">Phone:</span><a href="tel:+447477693300">+44 7477 693300</a></li>
       </ul>
     </div>
 
