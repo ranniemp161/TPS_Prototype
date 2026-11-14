@@ -40,9 +40,37 @@
     });
   }
 
+  // Landing on a fragment (about.html#contact). The browser aims its smooth scroll
+  // at where the target stood when the page was still being built, then the
+  // headings split into lines and the page shortens under it, so the jump ends
+  // short or long. Once the layout has settled, put the target where
+  // scroll-margin-top says, instantly, unless the reader has already moved.
+  var moved = false;
+  ['wheel', 'touchstart', 'keydown', 'mousedown'].forEach(function (ev) {
+    window.addEventListener(ev, function () { moved = true; }, { passive: true, once: true });
+  });
+  function alignHash() {
+    if (moved || location.hash.length < 2) return;
+    var t = null;
+    try { t = document.querySelector(location.hash); } catch (e) { return; }
+    if (!t) return;
+    var root = document.documentElement, was = root.style.scrollBehavior;
+    root.style.scrollBehavior = 'auto';
+    var y = t.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(t).scrollMarginTop) || 0);
+    window.scrollTo(0, Math.max(0, y));
+    root.style.scrollBehavior = was;
+  }
+
   function start() {
     var lineEls = [].slice.call(document.querySelectorAll('[data-os-lines]'));
     if (!REDUCED) lineEls.forEach(splitLines);
+    alignHash();
+    // The browser's own fragment scroll can run on after the first correction,
+    // so check again at a few moments while the page settles.
+    function settle() {
+      [0, 150, 400, 900, 1600].forEach(function (ms) { setTimeout(function () { requestAnimationFrame(alignHash); }, ms); });
+    }
+    if (document.readyState === 'complete') settle(); else window.addEventListener('load', settle, { once: true });
 
     [].slice.call(document.querySelectorAll('[data-os-needs] li')).forEach(function (li, i) { li.style.setProperty('--i', i); });
 

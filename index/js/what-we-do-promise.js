@@ -139,8 +139,26 @@ function actPeak() {
   setClay();
   ScrollTrigger.create({ trigger: act, start: 'top bottom', end: 'top top', onUpdate: setClay, onRefresh: setClay, refreshPriority: -11 });
 
+  /* The frosted glass starts at the top of each column's text, not at the top
+     of the picture (14 Nov 2026, client: the blur reached up over the sleeping
+     woman). Each half's glass top is set from its own heads, so it follows the
+     text when the night column opens. Read by the vertical mask in
+     what-we-do-day-night.css (--dn-top-day, --dn-top-night). */
+  const setBlurTop = () => {
+    if (!split) return;
+    const dng = split.querySelector('.dng');
+    if (!dng) return;
+    const base = dng.getBoundingClientRect().top;
+    ['day', 'night'].forEach(side => {
+      const h = split.querySelector('.dnf__opt--' + side + ' .dnf__heads');
+      if (!h) return;
+      split.style.setProperty('--dn-top-' + side, Math.round(h.getBoundingClientRect().top - base) + 'px');
+    });
+  };
+
   /* Read more: opens one column fully (scrolling inside if it is long);
-     Read less closes it to the even height again. */
+     Read less closes it to the even height again. The day column has no
+     Read more (14 Nov 2026): its full text shows straight away. */
   document.querySelectorAll('[data-dn-more]').forEach(btn => {
     btn.addEventListener('click', () => {
       const opt = btn.closest('.dnf__opt');
@@ -150,6 +168,7 @@ function actPeak() {
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       const b = opt.querySelector('[data-dn-body]');
       if (!open) { b.scrollTop = 0; b.style.maxHeight = getComputedStyle(b).getPropertyValue('--dn-closed'); }
+      setBlurTop();
     });
   });
 
@@ -305,6 +324,7 @@ function actPeak() {
         if (b.closest('.dnf__opt').classList.contains('is-open')) return;
         b.style.maxHeight = (parseFloat(getComputedStyle(b).getPropertyValue('--dn-closed')) || 0) + 'px';
       });
+      setBlurTop();
     };
     setStatic();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(setStatic);

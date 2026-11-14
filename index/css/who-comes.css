@@ -259,3 +259,10 @@ html.js .wc-life .wc-life__media [data-reveal].is-in { transform: none; }
 @media (max-width: 860px) {
   .wc-life__media .wc-bf__glass { max-width: 92%; }
 }
+
+/* Hero title the same size as the About hero title (TJ, 14 Nov 2026). On a
+   phone it now wraps to two lines, as About does, so it stays inside the screen. */
+.page--who .spec .wh2 { font-size: clamp(2.52rem, 3.72vw, 3.3rem); }
+@media (max-width: 860px) {
+  .page--who .spec .wh2 { width: auto; max-width: 100%; white-space: normal; }
+}

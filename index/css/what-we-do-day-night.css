@@ -19,6 +19,10 @@
    ============================================================ */
 
 @property --dn-band-n { syntax: '<number>'; inherits: true; initial-value: .42; }
+/* Where each half's glass begins, measured from the top of the picture (set by
+   what-we-do-promise.js from the top of that column's text). */
+@property --dn-top-day { syntax: '<length-percentage>'; inherits: true; initial-value: 60%; }
+@property --dn-top-night { syntax: '<length-percentage>'; inherits: true; initial-value: 60%; }
 
 .dn-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
@@ -69,30 +73,28 @@
   .dng__half--day {
     -webkit-mask-image:
       linear-gradient(to right, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, rgba(0, 0, 0, .42) 0%, rgba(0, 0, 0, .42) 39%, #000 53%, #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-day) - 12px), #000 calc(var(--dn-top-day) + 36px), #000 100%);
     -webkit-mask-composite: source-in;
     mask-image:
       linear-gradient(to right, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, rgba(0, 0, 0, .42) 0%, rgba(0, 0, 0, .42) 39%, #000 53%, #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-day) - 12px), #000 calc(var(--dn-top-day) + 36px), #000 100%);
     mask-composite: intersect;
   }
-  /* The same band on the night half (TJ, 8 Oct 2026). Its strength is a
-     registered property so it can ease: while the night column is open, the
-     band fills back to full frost (the long text rises into it), and returns
-     when it closes. The day half keeps its band, its text never reaches it.
-     (.dng prefix: the base rule for this half comes later in the file.) */
+  /* The same on the night half. Its glass top is registered so it can ease:
+     when the night column opens, the long text rises and the glass top rises
+     with it (what-we-do-promise.js sets --dn-top-night), and returns when it
+     closes. (.dng prefix: the base rule for this half comes later in the file.) */
   .dng .dng__half--night {
     -webkit-mask-image:
       linear-gradient(to left, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, rgba(0, 0, 0, var(--dn-band-n)) 0%, rgba(0, 0, 0, var(--dn-band-n)) 39%, #000 53%, #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-night) - 12px), #000 calc(var(--dn-top-night) + 36px), #000 100%);
     -webkit-mask-composite: source-in;
     mask-image:
       linear-gradient(to left, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, rgba(0, 0, 0, var(--dn-band-n)) 0%, rgba(0, 0, 0, var(--dn-band-n)) 39%, #000 53%, #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-night) - 12px), #000 calc(var(--dn-top-night) + 36px), #000 100%);
     mask-composite: intersect;
-    transition: --dn-band-n 700ms var(--ease-out);
+    transition: --dn-top-night 700ms var(--ease-out);
   }
-  .dn-wrap:has(.dnf__opt--night.is-open) .dng .dng__half--night { --dn-band-n: 1; }
 }
 .dng__half--night {
   right: 0;
@@ -110,6 +112,11 @@
 }
 .dnf__opt > * { max-width: 34em; }
 .dnf__opt--day { color: rgb(var(--dn-ink)); }
+/* Day has no Read more (14 Nov 2026): its whole text shows, never clipped or
+   faded. The extra foot padding is the height the button used to take, so the
+   two headings still line up across the split. */
+.dnf__opt--day .dnf__body { max-height: none !important; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+@media (min-width: 861px) { .dnf__opt--day { padding-bottom: calc(clamp(28px, 4.5vh, 96px) + 31px); } }
 .dnf__opt--night { color: var(--t-on-dark); }
 
 /* The clay under the gap (TJ, 8 Oct 2026): the stretch below Tailored For You,

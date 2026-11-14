@@ -371,6 +371,7 @@
       setArea('priorities', pri.length ? pri.join(' · ') : 'Not chosen yet', !pri.length);
 
       paintDecideList(sel);
+      paintPayoff(sel);
 
       // The fee, per day (Ami, 24 Oct 2026: never a programme total): counted, not swapped.
       var value = Math.round(result.fee / sel.days);
@@ -423,6 +424,71 @@
       rows.push('Light housekeeping, laundry and ironing, and grocery collection');
       rows.push('Herbal teas and lactation drinks');
       el.decideList.innerHTML = rows.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('');
+    }
+
+    // The payoff card (TJ, 14 Nov 2026): what her choices add up to across the whole stay.
+    // Totals first as tiles (big number, short label: hours, nights, meals, treatments, rinse and binding), with the named treatments in one quiet line below, then one
+    // line for each thing she said matters most, three at most. Every figure comes from the
+    // same selection the fee engine reads, so the card is always true to her programme.
+    function paintPayoff(sel) {
+      var stats = document.querySelector('[data-pay-stats]');
+      var lines = document.querySelector('[data-pay-lines]');
+      var lede = document.querySelector('[data-pay-lede]');
+      var detail = document.querySelector('[data-pay-detail]');
+      if (!stats || !lines) return;
+      var d = sel.days;
+      var night = sel.shift === 'night' && sel.format === 'in';
+      var esc = function (t) { return String(t).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); };
+      if (lede) lede.textContent = 'One specialist, reserved for your family alone for ' + d + ' days.';
+
+      // The totals. Every treatment she kept is named with its count (TJ, 14 Nov 2026).
+      var rows = [];
+      rows.push([(night ? 24 : 12) * d, night ? 'hours of care, day and night' : 'hours of one to one care']);
+      if (night) rows.push([d, 'nights of care while you sleep']);
+      if (sel.meals) rows.push([(night ? 2 : 3) * d, 'fresh meals cooked for you']);
+      var m = sel.massage ? P.massageSessions(sel.rhythm, d) : 0;
+      var parts = [];
+      if (m) parts.push(m + ' hot stone massage' + (m === 1 ? '' : 's'));
+      var other = 0;
+      P.COUNTED.forEach(function (k) {
+        if (!sel[k]) return;
+        var n = P.STD[d][k]; other += n;
+        var label = TREAT_LABEL[k];
+        if (n > 1) {
+          if (k === 'scrub') label = 'full body scrubs';
+          else if (k === 'reflex') label = 'foot reflexology sessions';
+          else if (k === 'facial') label = 'facial massages';
+          else if (k === 'herbfoot') label = 'herbal foot spas';
+          else if (k === 'thermal') label = 'thermal blanket treatments';
+        }
+        parts.push(n + ' ' + label);
+      });
+      var total = m + other;
+      if (total) rows.push([total, 'restorative treatment' + (total === 1 ? '' : 's')]);
+      rows.push([d, 'days of herbal rinse and belly binding']);
+      if (detail) {
+        detail.textContent = total ? 'Your treatments: ' + sentence(parts) + '.' : '';
+        detail.hidden = !total;
+      }
+      stats.innerHTML = rows.map(function (r) {
+        return '<li><b class="dk-pay__n">' + r[0] + '</b><span class="dk-pay__l">' + esc(r[1]) + '</span></li>';
+      }).join('');
+
+      // One line for each thing she said matters most, all of them.
+      var say = [];
+      if (checked('p-sleep')) say.push(night
+        ? 'Every night, someone else is up with your baby, and your baby is back with you by morning.'
+        : '12 hours a day with your baby in experienced hands, so you can rest when you need to.');
+      if (checked('p-recovery')) say.push('Your healing is cared for every day, with binding, rinses and treatments woven through the stay.');
+      if (checked('p-baby')) say.push('Someone experienced beside you for every feed and every settle.');
+      if (checked('p-food')) say.push('Not one meal to plan, shop for or cook, for the whole ' + d + ' days.');
+      if (checked('p-house')) say.push('The washing, the ironing, the kitchen and the shopping, all handled.');
+      if (checked('p-family')) say.push('A calmer home for your partner and children, with meals cooked for the whole family.');
+      if (!say.length) say = [
+        'Hands-on baby care, and someone with you while you rest.',
+        'The washing, the kitchen and the shopping, all handled.'
+      ];
+      lines.innerHTML = say.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
     }
 
     // The + / − change figure beside the price came off (TJ, 25 Oct 2026); the count stays.
@@ -824,6 +890,15 @@
         return { year: s.getUTCFullYear(), month: s.getUTCMonth() + 1 };
       }
       function daysIn(c) { return new Date(Date.UTC(c.year, c.month, 0)).getUTCDate(); }
+      // TJ, 14 Nov 2026: due dates allowed up to the end of the month 10 months ahead; rolling from today.
+      // Offset 0 is the current month (local time, read each time the calendar renders); offsets 0 to 10
+      // are selectable, offset 11 onwards is not. The cutoff is the last day of the offset 10 month.
+      function limitInfo() {
+        var t = new Date();
+        var end = new Date(t.getFullYear(), t.getMonth() + 11, 0);
+        return { year: end.getFullYear(), month: end.getMonth() + 1, iso: iso(end.getFullYear(), end.getMonth() + 1, end.getDate()) };
+      }
+      function monthKey(c) { return c.year * 12 + c.month; }
       function fmtMonth(c) {
         return new Intl.DateTimeFormat('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(c.year, c.month - 1, 1)));
       }
@@ -840,6 +915,14 @@
         if (chosenEl) chosenEl.textContent = v ? fmtLong(v) : '';
       }
       function render() {
+        var lim = limitInfo();
+        if (monthKey(cur) > monthKey(lim)) cur = { year: lim.year, month: lim.month };
+        var nextBtn = root.querySelector('[data-due-step="1"]');
+        if (nextBtn) {
+          var atEnd = monthKey(cur) >= monthKey(lim);
+          if (atEnd) { nextBtn.setAttribute('disabled', ''); nextBtn.setAttribute('aria-disabled', 'true'); nextBtn.style.opacity = '.35'; nextBtn.style.cursor = 'default'; }
+          else { nextBtn.removeAttribute('disabled'); nextBtn.removeAttribute('aria-disabled'); nextBtn.style.opacity = ''; nextBtn.style.cursor = ''; }
+        }
         monthEl.textContent = fmtMonth(cur);
         grid.setAttribute('aria-label', 'Choose a date in ' + fmtMonth(cur));
         var html = WD.map(function (l) { return '<div class="due-cal__wd" aria-hidden="true">' + l + '</div>'; }).join('');
@@ -847,7 +930,7 @@
         for (var i = 0; i < blanks; i++) html += '<div></div>';
         for (var d = 1, n = daysIn(cur); d <= n; d++) {
           var di = iso(cur.year, cur.month, d);
-          html += '<button type="button" class="due-day" data-date="' + di + '"' + (di === todayIso ? ' aria-current="date"' : '') + ' aria-pressed="' + (di === selected) + '">' + d + '</button>';
+          html += '<button type="button" class="due-day" data-date="' + di + '"' + (di === todayIso ? ' aria-current="date"' : '') + ' aria-pressed="' + (di === selected) + '"' + (di > lim.iso ? ' disabled aria-disabled="true"' : '') + '>' + d + '</button>';
         }
         // Always six rows (TJ, 14 Oct 2026): the arrows and the days never move between months, so
         // she can click through months without the buttons shifting. Trailing cells are blank.
@@ -857,9 +940,10 @@
       }
       root.addEventListener('click', function (e) {
         var step = e.target.closest && e.target.closest('[data-due-step]');
-        if (step && root.contains(step)) { cur = addMonths(cur, +step.getAttribute('data-due-step')); render(); return; }
+        if (step && root.contains(step)) { if (step.disabled) return; cur = addMonths(cur, +step.getAttribute('data-due-step')); render(); return; }
         var day = e.target.closest && e.target.closest('.due-day');
         if (day && grid.contains(day)) {
+          if (day.disabled || day.getAttribute('data-date') > limitInfo().iso) return;
           dueEl.value = day.getAttribute('data-date');
           dueEl.dispatchEvent(new Event('input', { bubbles: true }));
         }
@@ -867,11 +951,13 @@
       // Anything that sets #due (a tap, a script) lands here: mirror it in the grid.
       dueEl.addEventListener('input', function () {
         var v = readValue();
+        if (v && iso(v.year, v.month, v.day) > limitInfo().iso) { dueEl.value = ''; v = null; }
         selected = v ? iso(v.year, v.month, v.day) : '';
         if (v && (v.year !== cur.year || v.month !== cur.month)) { cur = { year: v.year, month: v.month }; render(); }
         paintSelection();
       });
       var v0 = readValue();
+      if (v0 && iso(v0.year, v0.month, v0.day) > limitInfo().iso) { dueEl.value = ''; v0 = null; }
       if (v0) { selected = iso(v0.year, v0.month, v0.day); cur = { year: v0.year, month: v0.month }; }
       render(); paintSelection();
     })();

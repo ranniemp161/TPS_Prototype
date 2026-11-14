@@ -263,7 +263,7 @@
             <label class="tg"><input class="sr-only" type="radio" name="shift" value="day" id="dkl-shift-day" aria-describedby="dkl-shift-day-m" checked /><span class="tg__body"><span class="tg__t">Daytime care</span><span class="tg__s" id="dkl-shift-day-m">12 hours of care</span></span><span class="tg__sw" aria-hidden="true"></span></label>
             <label class="tg" data-night-choice><input class="sr-only" type="radio" name="shift" value="night" id="dkl-shift-night" aria-describedby="dkl-shift-night-m" /><span class="tg__body"><span class="tg__t">Day &amp; night care <span class="tg__rec" data-rec="night" hidden>(Recommended)</span></span><span class="tg__s" id="dkl-shift-night-m">Day care, and your baby through the night</span></span><span class="tg__sw" aria-hidden="true"></span></label>
           </div>
-          <p class="band band--haze" data-night-band hidden>Night care is available on live-in programmes. Go back to step 01 and choose live-in care to add it.</p>
+          <p class="band band--haze" data-night-band hidden>Night care comes with live-in care. Go back one step and choose live-in care to add it.</p>
         </fieldset>
       </div>
     </section>
@@ -312,13 +312,20 @@
          the days and Always included sit behind an expand so the call to action shows without a scroll. -->
     <section class="dk-page dk-page--summary" data-title="Your programme" data-block="decide" aria-label="Your programme" data-section="builder-decide" data-section-name="Your Programme">
       <div class="dk-in dk-sum dk-decide">
-        <div class="dk-decide__prog">
+        <div class="dk-decide__prog dk-pay">
           <!-- The fee came off (TJ, 11 Nov 2026): no prices on the site. -->
           <p class="dk-decide__built" data-built-title>7 day bespoke programme</p>
           <!-- One name, one hairline, one list (TJ, 25 Oct 2026): everything she receives, chosen
                or included, in one size, no labels and no other lines. The full breakdown comes in
                the document sent after the call to action. -->
-          <ul class="dk-decide__list" data-decide-list></ul>
+          <ul class="dk-decide__list" data-decide-list hidden></ul>
+          <!-- The payoff card (TJ, 14 Nov 2026): what her choices add up to across the whole
+               stay. The script fills the lede, the totals and the lines that answer what she
+               said matters most. No prices. -->
+          <p class="dk-pay__lede" data-pay-lede></p>
+          <ul class="dk-pay__stats" data-pay-stats></ul>
+          <p class="dk-pay__detail" data-pay-detail hidden></p>
+          <ul class="dk-pay__lines" data-pay-lines></ul>
         </div>
         <div class="dk-decide__ask">
           <h2 class="dk-step"><span class="dk-step__t">Ready to talk it through?</span></h2>

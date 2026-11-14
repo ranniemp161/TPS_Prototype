@@ -1915,28 +1915,37 @@ function gallery() {
    its entrance runs off an IntersectionObserver rather than on mount,
    and the custom cursor is not built where there is no fine pointer.
 
-   PLACEHOLDER CONTENT. None of these quotes, names or programmes belongs
-   to a real client. Replace all of it with cleared testimonials before
-   this is shown publicly.
+   Real, cleared client testimonials since 14 Nov 2026 (TPS-0102).
    ------------------------------------------------------------ */
+// Real testimonials from The Postpartum Suite's client feedback sheet (TJ, 14 Nov
+// 2026, TPS-0102). Consent as given on the sheet: Roubina and Helena agreed to
+// their first name; the third asked to stay anonymous, so no name is shown.
 const TV2 = [
   {
-    quote: "I came home expecting to cope. Instead someone cooked, held the baby, and told me to go back to bed.",
-    author: "Amara O.",
-    role: "14 day programme",
-    place: "Hackney"
+    quote: "I left feeling absolutely amazing! The massage was so relaxing and exactly what my body and mind needed after giving birth. I felt lighter, calmer and completely refreshed. It was such a lovely opportunity to take some time for myself, release all the tension and feel looked after. I felt relaxed, re-energised and so much more at ease afterwards. A truly wonderful experience that I would highly recommend to any new mum.",
+    author: "Roubina",
+    role: "Postpartum Massage",
+    place: ""
   },
   {
-    quote: "The bath was drawn every evening without me asking once. By the second week I had stopped bracing for the day ahead.",
-    author: "Priya N.",
+    quote: "It was the best massage I've ever had. I suffer from severe back pain so thank you for helping me feel relieved.",
+    author: "Helena",
+    role: "Postpartum Massage",
+    place: ""
+  },
+  {
+    quote: "My wife said she enjoyed it, she felt relaxed. So all good.",
+    author: "Anonymous",
+    role: "Postpartum Massage with Traditional Hot Stone",
+    place: ""
+  },
+  {
+    // Ami's wording of an anonymous client's own feedback, at that
+    // client's request; final text approved by TJ, 14 Nov 2026.
+    quote: "With our first baby, I felt like the hospital sent us home and left us to it. We had to work everything out ourselves. This time was completely different. I don't think my husband and I realised how much we needed postpartum care until we had it. Thank you, Ami and the whole team.",
+    author: "Anonymous",
     role: "30 day programme",
-    place: "Ealing"
-  },
-  {
-    quote: "It is not babysitting. She was there for me, and the baby was part of that. The distinction is the whole service.",
-    author: "Yewande M.",
-    role: "21 day programme",
-    place: "Lewisham"
+    place: ""
   }
 ];
 
@@ -2008,7 +2017,7 @@ function actVoices() {
     // new one.
     wordTimers.forEach(clearTimeout);
     wordTimers = [];
-    q.innerHTML = t.quote.split(' ')
+    q.innerHTML = ('“' + t.quote + '”').split(' ')
       .map(w => `<span class="tv2__w">${esc(w)}</span>`).join('');
     const words = [...q.children];
     if (REDUCED) {
@@ -2020,7 +2029,7 @@ function actVoices() {
     }
 
     name.textContent = t.author;
-    role.textContent = t.role + ' · ' + t.place;
+    role.textContent = [t.role, t.place].filter(Boolean).join(' · ');
     meta.classList.remove('is-in');
     // Two frames, not one: the class has to be off for a painted frame
     // before it goes back on, or the browser coalesces both into no

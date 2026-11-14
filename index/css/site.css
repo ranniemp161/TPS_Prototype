@@ -1298,6 +1298,18 @@ main:focus { outline: none; }
 @media (max-width: 1099px) {
   .act--hero .hero-br { display: none; }
 }
+/* The hero lede is one line (client, 14 Nov 2026). It is about 33.2em long,
+   so it shrinks with the window just enough to fit between the page gutters
+   (divisor 34 leaves a little slack) and never goes under 13px. Under 491px
+   even 13px will not fit, so phones keep the normal wrapping. !important
+   because the body-text rule further down fixes it at 1rem from 761px. */
+@media (min-width: 491px) {
+  .act--hero .stage__copy .lede {
+    white-space: nowrap;
+    max-width: none;
+    font-size: max(13px, min(1rem, calc((100vw - 2 * var(--gutter)) / 34))) !important;
+  }
+}
 /* The header band (TJ, 5 Oct 2026). At the top of the page the tall header
    sits on the page colour, not on the photograph, and the photograph begins
    below it with its top edge fading into that colour, so there is no line
@@ -4223,6 +4235,12 @@ html:not(.js) .arrive { display: none; }
    and the white type are the section's own (.act--silk). One card shows at
    a time, the others stacked under it, hidden. */
 .act--care { padding-block: var(--section); }
+/* TJ, 14 Nov 2026: the gap from the care cards' text to the Programmes
+   heading was halved. Each side takes half a section less 4px, so the
+   total (two paddings plus the heading's own offset) comes out at half. */
+.act--care { padding-bottom: calc(var(--section) / 2 - 4px); }
+/* TJ, 14 Nov 2026: 15% more space above the Programmes heading, then 10px more. */
+.act--care + .act--programmes { padding-top: calc((var(--section) / 2 - 4px) * 1.15 + 10px); }
 .care__head { text-align: center; margin-bottom: 0; }
 .care__line { max-width: min(860px, 100%); margin: clamp(18px, 3vh, 32px) auto 0; }
 .care__car { margin-top: 0; }

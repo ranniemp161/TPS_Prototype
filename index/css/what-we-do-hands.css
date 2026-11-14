@@ -89,6 +89,17 @@
   background: transparent; color: var(--coral-mid); cursor: pointer; transition: background-color 250ms var(--ease-out);
 }
 .hd__arrow:hover { background: rgba(255, 255, 255, .45); }
+/* Side arrows (client, 14 Nov 2026): the previous and next arrows stand at the
+   left and right of the stage, centred halfway down it, in full strength ink.
+   The nav row keeps the dots, centred, at the foot. The arrow is placed from
+   the nav's bottom edge: halfway down the stage is 50svh above the stage's
+   foot, less the nav's offset from the foot (same clamp as .hd__nav). */
+.hd.is-live .hd__arrow { position: absolute; color: var(--t-ink); bottom: calc(50vh - clamp(20px, 4.5vh, 40px) - 18px); bottom: calc(50svh - clamp(20px, 4.5vh, 40px) - 18px); }
+.hd.is-live .hd__arrow[data-hd-dir="-1"] { left: 0; }
+.hd.is-live .hd__arrow[data-hd-dir="1"] { right: 0; }
+/* TJ, 14 Nov 2026: the pale circle is always on so the arrows read over the photos; on hover the chevron turns coral. */
+.hd.is-live .hd__arrow { background: rgba(255, 255, 255, .45); transition: color .2s ease; }
+.hd.is-live .hd__arrow:hover { background: rgba(255, 255, 255, .45); color: var(--coral-mid); }
 .hd__arrow:focus-visible, .hd__dot:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; }
 .hd__arrow svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 .hd__dots { display: flex; align-items: center; gap: 18px; }

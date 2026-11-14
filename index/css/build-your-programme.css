@@ -2441,8 +2441,8 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 64px + 16px); }
    the days and Always included behind an expand.
    ============================================================ */
 .dk-retired { display: none !important; }
-.dk-page--summary > .dk-decide { max-width: 1080px; }
-.dk-decide { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); row-gap: 0; column-gap: clamp(40px, 5vw, 88px); align-items: center; }
+.dk-page--summary > .dk-decide { max-width: 1240px; }
+.dk-decide { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); row-gap: 0; column-gap: clamp(32px, 4vw, 72px); align-items: center; }
 .dk-decide__prog, .dk-decide__ask { min-width: 0; }
 .dk-decide .dk-sumfee { font-size: clamp(2.8rem, min(5vw, 8.4vh), 4.4rem); margin: .2rem 0 .3rem; }
 .dk-decide .dk-card__small { margin: 0 0 .9rem; }
@@ -2793,3 +2793,47 @@ body .nav__return { font-size: .8125rem; }
    is black and a touch larger. */
 .dk-bar__name { opacity: 1; color: var(--t-mute); }
 .dk-bar__name .dk-bar__count { font-size: 1.08em; }
+
+/* ============================================================
+   The payoff card on Your programme (TJ, 14 Nov 2026). The plain list
+   became a card: what her choices add up to across the whole stay,
+   then a line for each thing she said matters most.
+   ============================================================ */
+.dk .dk-decide__list[hidden] { display: none; }
+.dk .dk-pay {
+  /* TJ, 14 Nov 2026: one body size for all card text (the page's standard), numbers at half their earlier size. */
+  padding: clamp(18px, 2.2vw, 30px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: color-mix(in srgb, #fff 62%, transparent);
+  box-shadow: 0 18px 40px -28px rgba(60, 30, 25, .35);
+}
+.dk .dk-pay .dk-decide__built { padding-bottom: 0; }
+.dk-pay__lede { margin: .35rem 0 0; font-family: var(--f-read); font-size: var(--pay-fs); line-height: 1.45; color: var(--t-soft); }
+/* TJ, 14 Nov 2026: each total is a tile, big number over a short label, two across; the named treatments sit in one quiet line below. */
+.dk-pay__stats {
+  list-style: none; margin: clamp(.8rem, 2vh, 1.2rem) 0 0; padding: clamp(.8rem, 2vh, 1.2rem) 0;
+  border-block: 1px solid var(--line);
+  display: grid; grid-template-columns: minmax(0, 1fr); row-gap: .5rem;
+}
+.dk-pay__n { display: block; margin: 0; font-family: var(--f-display); font-weight: 400; font-size: var(--pay-nfs); line-height: 1; color: var(--acc); font-variant-numeric: lining-nums; }
+.dk-pay__l { display: block; font-family: var(--f-read); font-size: var(--pay-fs); line-height: 1.4; color: var(--t-ink); max-width: none; }
+.dk-pay__detail { margin: clamp(.7rem, 1.8vh, 1rem) 0 0; font-family: var(--f-read); font-size: var(--pay-fs); line-height: 1.45; color: var(--t-soft); }
+.dk-pay__detail[hidden] { display: none; }
+.dk-pay__lines { list-style: none; margin: clamp(.7rem, 1.8vh, 1.1rem) 0 0; padding: 0; display: grid; gap: .4rem; }
+.dk-pay__lines li { font-family: var(--f-read); font-size: var(--pay-fs); line-height: 1.45; color: var(--t-soft); }
+@media (max-width: 860px) {
+  .dk .dk-pay { margin-bottom: 1.1rem; }
+}
+
+/* TJ, 14 Nov 2026: totals stacked one per row, number then label on one line with a fixed number column; all card text 14px; the card column is wider. */
+.dk .dk-pay { --pay-fs: .875rem; --pay-nfs: clamp(1.05rem, min(1.5vw, 2.8vh), 1.45rem); --pay-ncol: calc(var(--pay-nfs) * 1.28 + 12px); }
+.dk-page.is-tight .dk-pay { --pay-nfs: 1.05rem; padding: 14px 18px; }
+.dk-pay__stats li { display: grid; grid-template-columns: var(--pay-ncol) minmax(0, 1fr); column-gap: 0; align-items: baseline; min-width: 0; }
+.dk-page.is-tight .dk-pay__lede { margin-top: .2rem; }
+.dk-page.is-tight .dk-pay__stats { margin-top: .5rem; padding: .5rem 0; row-gap: .3rem; }
+.dk-page.is-tight .dk-pay__detail { margin-top: .5rem; }
+.dk-page.is-tight .dk-pay__lines { margin-top: .5rem; gap: .25rem; }
+
+/* TJ and Ami, 14 Nov 2026: the Check your dates submit button sits centred under the form. */
+.dk .dk-sum--close .capture .capture__btn { justify-self: center; margin-left: auto; margin-right: auto; }
