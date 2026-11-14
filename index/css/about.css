@@ -149,7 +149,7 @@ html.js .os-act.is-reached p { opacity: 1; transform: none; }
    the left, the details and the call to action on the right. */
 /* Card version (TJ, 10 Nov 2026): the section sits on the cream, the content
    on a white card with the site's card radius; the title is centred. */
-.os-contact { padding: clamp(18px, 3.2vh, 38px) 0 clamp(64px, 10vh, 120px); }
+.os-contact { --os-contact-top: clamp(18px, 3.2vh, 38px); padding: var(--os-contact-top) 0 clamp(64px, 10vh, 120px); }
 /* The gap from The Same Intention down to the card halved (TJ, 10 Nov 2026):
    half its bottom padding here, half the card section's top padding above.
    Then a further 20 percent off that gap (TJ, 10 Nov 2026). */
@@ -288,6 +288,7 @@ html.js .os-map.is-in .os-map__wave { visibility: visible; }
 .os-founders__close { margin-inline: auto; text-align: center; text-wrap: balance; }
 .os-founders { margin-top: calc(-1.2 * clamp(64px, 10vh, 120px) - 19px); }
 
-/* Contact in the About Us menu lands here (TJ, 13 Nov 2026): the card stops
-   clear of the header rather than under it. */
-#contact { scroll-margin-top: calc(var(--nav-h, 80px) + 16px); }
+/* Contact in the About Us menu lands here. Client, 14 Nov 2026: the top edge of
+   the white card sits exactly on the bottom edge of the header bar (was 16px
+   clear of it, 13 Nov). The cream padding above the card goes under the bar. */
+#contact { scroll-margin-top: calc(var(--nav-h, 80px) - var(--os-contact-top)); }

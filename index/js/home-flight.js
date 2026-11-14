@@ -1389,6 +1389,19 @@
     }
     stepBack.disabled = stationNow() === 0;
   }
+  // Ami via TJ, 14 Nov 2026, "Click" hint beside the next arrow until the first click.
+  var stepHint = stepBox ? stepBox.querySelector('[data-route-hint]') : null;
+  function dropHint() {
+    if (!stepHint) return;
+    var h = stepHint; stepHint = null;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { h.hidden = true; return; }
+    h.classList.add('is-off');
+    setTimeout(function () { h.hidden = true; }, 300);
+  }
+  // The word is a second target for the next arrow: same click, so the step and dropHint both run.
+  if (stepHint && stepNext) stepHint.addEventListener('click', function () { stepNext.click(); });
+  if (stepBack) stepBack.addEventListener('click', dropHint);
+  if (stepNext) stepNext.addEventListener('click', dropHint);
   if (stepBack) stepBack.addEventListener('click', function () { step(-1); });
   if (stepNext) stepNext.addEventListener('click', function () { step(1); });
   // Arriving by scroll: once the page comes to rest inside the film, it

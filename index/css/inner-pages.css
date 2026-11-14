@@ -252,3 +252,10 @@
 @media (max-width: 560px) {
   .block__image { aspect-ratio: 4 / 3; }
 }
+
+/* Gifts page header (Ami via TJ, 14 Nov 2026): the glass bar let the pink
+   and wine aurora show through. On this page only the bar is solid cream,
+   the same cream it reads as on the home page. */
+body:has(.gifts-soon) .nav--glass::before {
+  background: var(--g-canvas);
+}

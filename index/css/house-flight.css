@@ -1309,6 +1309,45 @@
   .route__arrow:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
 }
 
+/* Ami via TJ, 14 Nov 2026, "Click" hint beside the next arrow until the first
+   click. Sits beside the next chevron on its line, absolute so nothing moves
+   when it goes. Type is the room titles': Montserrat, capitals, 2.2 times their
+   size. Fades out over 300ms, then hidden. */
+.route__hint {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-family: var(--f-body); font-size: calc(var(--route-title) * 2.2); font-weight: 400;
+  letter-spacing: normal; line-height: 1.7; text-transform: uppercase;
+  color: var(--t-ink); white-space: nowrap; pointer-events: none;
+  transition: opacity 300ms var(--tease);
+}
+.route.is-live .route__hint { pointer-events: auto; cursor: pointer; }
+.route.is-live .route__hint.is-off { pointer-events: none; }
+/* the chevron's tap area stays on top where the word's box overlaps it by a few px */
+.route__arrow { position: relative; z-index: 1; }
+.route__hint.is-off { opacity: 0; }
+.route__hint[hidden] { display: none; }
+/* Desktop 768 to 1439: no room beside the chevron (it sits at the viewport's
+   edge), so the word goes directly under it, below the line where the mask is open. */
+@media (min-width: 768px) {
+  .route__hint { top: 100%; transform: none; right: 6px; margin-top: 2px; }
+}
+/* Desktop 1440 and up: just right of the next chevron, on its line. The route's
+   mask only opens a 56px band past the line's right end, so that one band (the
+   4th layer, right end only) is widened to hold the word. Nothing else in the mask moves. */
+@media (min-width: 1440px) {
+  .route { --hint-room: 110px; }
+  .route {
+    -webkit-mask-size: 4000px 400px, 100% 100%, var(--arrow-band) 64px, calc(var(--arrow-band) + var(--hint-room)) 64px;
+    mask-size: 4000px 400px, 100% 100%, var(--arrow-band) 64px, calc(var(--arrow-band) + var(--hint-room)) 64px;
+    -webkit-mask-position: center calc(var(--above) + 20px), 0 0, calc(-1 * var(--arrow-band)) calc(var(--above) - 32px), calc(100% + var(--arrow-band) + var(--hint-room)) calc(var(--above) - 32px);
+    mask-position: center calc(var(--above) + 20px), 0 0, calc(-1 * var(--arrow-band)) calc(var(--above) - 32px), calc(100% + var(--arrow-band) + var(--hint-room)) calc(var(--above) - 32px);
+  }
+  .route__hint { top: 50%; transform: translateY(-50%); right: auto; margin-top: 0; left: calc(100% - 5px); }
+}
+/* Phones: just left of the next chevron, on its line */
+@media (max-width: 767px) { .route__hint { right: 33px; } }
+@media (prefers-reduced-motion: reduce) { .route__hint { transition: none; } }
+
 /* Tapped (TJ, 8 Nov 2026): one continuous film, paused at the rooms. The
    forward film always shows; its reversed copy sits above it and shows only
    while a leg plays back (home-flight.js). The posters and the long scroll
