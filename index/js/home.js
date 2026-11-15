@@ -7,6 +7,11 @@
    Nothing here bounces, overshoots, or asks for attention.
    ============================================================ */
 
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 document.documentElement.classList.add('js');
 
 gsap.registerPlugin(ScrollTrigger);
@@ -210,7 +215,7 @@ function actCare() {
       if (on && dir && !REDUCED) {
         // Start the arriving card on the side it comes in from.
         c.style.transition = 'none';
-        c.style.transform = 'translateX(' + (dir * 40) + 'px)';
+        c.style.transform = 'translateX(' + (dir * 40 * tpsU()) + 'px)';
         void c.offsetWidth;
         c.style.removeProperty('transition');
         c.style.removeProperty('transform');
@@ -257,7 +262,7 @@ function actPan() {
     // The rail is navigation, not decoration, so it cannot simply be frozen.
     stage.style.overflowX = 'auto';
     stage.style.height = 'auto';
-    stage.style.paddingBlock = '64px';
+    stage.style.paddingBlock = (64 * tpsU()) + 'px';
     rail.style.scrollSnapType = 'x proximity';
     return;
   }
@@ -381,7 +386,7 @@ function actPan() {
     const items = gsap.utils.toArray('.rail__item', rail).slice(1);
     items.forEach(item => {
       gsap.fromTo(item,
-        { opacity: 0.55, y: 18 },
+        { opacity: 0.55, y: 18 * tpsU() },
         {
           opacity: 1, y: 0, duration: 0.6, ease: EASE,
           scrollTrigger: {
@@ -440,7 +445,7 @@ function actPan() {
     // stacked, it enters like everything else.
     gsap.utils.toArray('.rail__item', rail).forEach(item => {
       gsap.fromTo(item,
-        { opacity: 0, y: 18 },
+        { opacity: 0, y: 18 * tpsU() },
         {
           opacity: 1, y: 0, duration: 0.62, ease: EASE,
           scrollTrigger: { trigger: item, start: 'top 88%', once: true }
@@ -635,7 +640,7 @@ function actPeak() {
   // position the image finishes arriving, with no gap and no overlap.
   gsap.set(night, { opacity: 0 });
   gsap.set(clock, { opacity: 0 });
-  gsap.set(answer, { opacity: 0, y: 16 });
+  gsap.set(answer, { opacity: 0, y: 16 * tpsU() });
 
   // The pin's total scroll range now carries the motion (PEAK_PIN_VH) and,
   // after it, a hold (PEAK_HOLD_VH) where nothing moves, added 2026-09-17 so
@@ -720,7 +725,7 @@ function actPeak() {
         // because scroll is now inside the hold) this stays at fully in.
         const a = between(m, ANSWER_IN, 1);
         answer.style.opacity = a;
-        answer.style.transform = `translateY(${(1 - a) * 16}px)`;
+        answer.style.transform = `translateY(${(1 - a) * 16 * tpsU()}px)`;
 
         // The question's colour is already settled to white by the wipe's
         // own trigger above before this pin ever engages, so nothing here
@@ -785,7 +790,7 @@ function durations() {
   // The line waits for the frame, arrives once, slowly, and then the act
   // holds: this is the authored silence the brief asks for, and it is only
   // silent if nothing is still moving when the reader gets here.
-  gsap.set(line, { opacity: 0, y: 26 });
+  gsap.set(line, { opacity: 0, y: 26 * tpsU() });
   gsap.to(line, {
     opacity: 1, y: 0, duration: 1.4, ease: EASE,
     scrollTrigger: { trigger: media, start: 'top 34%', once: true }
@@ -1032,7 +1037,7 @@ function actTurn() {
     });
   }
 
-  gsap.set(copy, { opacity: 0, y: REDUCED ? 0 : 16 });
+  gsap.set(copy, { opacity: 0, y: REDUCED ? 0 : 16 * tpsU() });
   const copyVars = { opacity: 1, y: 0, duration: held ? 1.2 : 0.75, stagger: 0.12, ease: EASE };
   if (held) entrances.push(gsap.to(copy, { ...copyVars, paused: true }));
   else gsap.to(copy, { ...copyVars, scrollTrigger: { trigger: act, start: 'top 70%', once: true } });
@@ -1054,7 +1059,7 @@ function actTurn() {
 function actFlow() {
   gsap.utils.toArray('[data-in]').forEach(block => {
     const kids = block.children.length ? block.children : [block];
-    gsap.set(kids, { opacity: 0, y: REDUCED ? 0 : 14 });
+    gsap.set(kids, { opacity: 0, y: REDUCED ? 0 : 14 * tpsU() });
     gsap.to(kids, {
       opacity: 1, y: 0,
       duration: REDUCED ? 0.01 : 0.62,
@@ -1172,7 +1177,7 @@ function nav() {
       gsap.fromTo(menu, { height: prevH }, { height: h, duration: 0.26, ease: EASE });
     }
     gsap.fromTo(menu.querySelectorAll('.menu__group'),
-      { opacity: 0, y: 10 },
+      { opacity: 0, y: 10 * tpsU() },
       { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: EASE, delay: first ? 0.08 : 0 });
   };
 
@@ -1262,14 +1267,14 @@ function mistHandoff() {
   gsap.set(veil, { opacity: 0 });
   gsap.set([ground, scrim], { opacity: 0 });
   gsap.set(bathImg, { y: riseBy });
-  gsap.set(line, { opacity: 0, y: 18 });
+  gsap.set(line, { opacity: 0, y: 18 * tpsU() });
 
   // The three figures start from zero and count up after the lines land.
   // The HTML carries the real totals, so this only runs when they are about
   // to be shown.
   const figBlock = bath.querySelector('[data-bath-figures]');
   const counts = figBlock ? [...figBlock.querySelectorAll('[data-bath-count]')] : [];
-  if (figBlock) gsap.set(figBlock, { opacity: 0, y: 14 });
+  if (figBlock) gsap.set(figBlock, { opacity: 0, y: 14 * tpsU() });
   counts.forEach((el) => { el.textContent = '0'; });
 
   const vh = () => window.innerHeight;
@@ -1326,7 +1331,7 @@ function mistHandoff() {
   // that rounds during the count and writes the exact total on completion.
   if (figBlock) {
     tl.fromTo(figBlock,
-      { opacity: 0, y: 14 },
+      { opacity: 0, y: 14 * tpsU() },
       { opacity: 1, y: 0, duration: 0.12, ease: EASE }, 0.50);
     counts.forEach((el) => {
       const target = Number(el.dataset.bathCount);
@@ -1776,10 +1781,10 @@ function gallery() {
     const copy = [idxEl, bodyEl, titleEl].filter(Boolean);
     if (REDUCED) { setCopy(btn); gsap.set(copy, { opacity: 1, y: 0 }); return; }
     gsap.to(copy, {
-      opacity: 0, y: -8, duration: 0.2, stagger: 0.03, ease: 'none',
+      opacity: 0, y: -8 * tpsU(), duration: 0.2, stagger: 0.03, ease: 'none',
       onComplete: () => {
         setCopy(btn);
-        gsap.fromTo(copy, { opacity: 0, y: 12 },
+        gsap.fromTo(copy, { opacity: 0, y: 12 * tpsU() },
           { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: EASE });
       }
     });

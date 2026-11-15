@@ -20,7 +20,7 @@
   margin-top: var(--hero-top);
   min-height: calc(100svh - var(--hero-top));
   display: grid; place-items: center;
-  padding: clamp(40px, 7vh, 88px) var(--gutter);
+  padding: clamp(2.5rem, 7vh, 5.5rem) var(--gutter);
   text-align: center;
 }
 .pg-hero__img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
@@ -33,7 +33,7 @@
     linear-gradient(to bottom, color-mix(in srgb, var(--g-canvas) 0%, transparent) 72%, color-mix(in srgb, var(--g-canvas) 90%, transparent) 100%),
     color-mix(in srgb, var(--g-canvas) 68%, transparent);
 }
-.pg-hero__in { max-width: 720px; margin: 0 auto; }
+.pg-hero__in { max-width: 45rem; margin: 0 auto; }
 .pg-eyebrow {
   margin: 0 0 1rem; font-family: var(--f-body); text-transform: uppercase; letter-spacing: .16em;
   font-size: clamp(.62rem, .8vw, .72rem); color: var(--reach-link);
@@ -59,7 +59,7 @@
   position: relative; isolation: isolate; overflow: hidden;
   margin-top: var(--hero-top);
   background: var(--g-soft);
-  padding: clamp(32px, 5.5vh, 64px) var(--gutter) clamp(64px, 9vh, 112px);
+  padding: clamp(2rem, 5.5vh, 4rem) var(--gutter) clamp(4rem, 9vh, 7rem);
 }
 .pg-lengths > .pg-wrap { position: relative; z-index: 1; }
 /* Cream with the red as an accent (TJ, 22 Oct 2026): the canvas ground, with
@@ -71,7 +71,7 @@
 /* The top and the call to action share one ground: canvas with the band 8
    ribbons at the same strength (TJ, 23 Oct 2026: the two pinks must match). */
 .pg-lengths .aurora--voices .aurora__field,
-.pg-cta .aurora--voices .aurora__field { opacity: .5; filter: blur(56px); }
+.pg-cta .aurora--voices .aurora__field { opacity: .5; filter: blur(3.5rem); }
 .pg-lengths .aurora--voices .aurora__field::after,
 .pg-cta .aurora--voices .aurora__field::after { animation-duration: 90s; }
 /* The ribbons reach past the section's foot into Four Kinds of Care
@@ -84,11 +84,11 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - var(--pg-reach) * 2.2), transparent 100%);
   mask-image: linear-gradient(to bottom, #000 0, #000 calc(100% - var(--pg-reach) * 2.2), transparent 100%);
 }
-.page--programmes { --pg-reach: 200px; }
-.pg-lengths .pg-card { border-color: var(--acc-line); box-shadow: 0 18px 50px -24px color-mix(in srgb, var(--acc-deep) 28%, transparent); }
-.pg-wrap { max-width: 1120px; margin: 0 auto; }
+.page--programmes { --pg-reach: 12.5rem; }
+.pg-lengths .pg-card { border-color: var(--acc-line); box-shadow: 0 1.125rem 3.125rem -1.5rem color-mix(in srgb, var(--acc-deep) 28%, transparent); }
+.pg-wrap { max-width: 70rem; margin: 0 auto; }
 
-.pg-lengths__head { text-align: center; margin-bottom: clamp(20px, 3.2vh, 36px); }
+.pg-lengths__head { text-align: center; margin-bottom: clamp(1.25rem, 3.2vh, 2.25rem); }
 .pg-lengths__title {
   margin: 0; font-family: var(--f-display); text-transform: uppercase; font-weight: 400;
   font-size: clamp(2rem, min(4.2vw, 6.4vh), 3.4rem); line-height: 1.02; letter-spacing: .02em; color: var(--t-ink); text-wrap: balance;
@@ -105,37 +105,37 @@
    slides under it, faded at both ends. Scaled to the page's width. */
 .pg-line { position: relative; }
 .pg-car {
-  position: relative; height: 64px;
+  position: relative; height: 4rem;
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0, #000 18%, #000 82%, transparent 100%);
 }
-.pg-car .tv2__track-line, .pg-car .tv2__fill { top: 12px; }
+.pg-car .tv2__track-line, .pg-car .tv2__fill { top: .75rem; }
 .pg-car .tv2__track { top: 0; }
-.pg-car .tv2__item { top: 12px; }
-.pg-car .tv2__tip { top: 12px; }
-.pg-car .tv2__stop { font-size: clamp(.78rem, 1vw, .9rem); top: 10px; }
+.pg-car .tv2__item { top: .75rem; }
+.pg-car .tv2__tip { top: .75rem; }
+.pg-car .tv2__stop { font-size: clamp(.78rem, 1vw, .9rem); top: .625rem; }
 /* The arrows sit either side of the card, centred on its height (TJ, 22 Oct 2026). */
-.pg-stage { position: relative; max-width: min(960px, calc(100% - 136px)); margin: clamp(28px, 4vh, 44px) auto 0; }
+.pg-stage { position: relative; max-width: min(60rem, calc(100% - 8.5rem)); margin: clamp(1.75rem, 4vh, 2.75rem) auto 0; }
 .pg-stage .pg-card { margin: 0; max-width: none; }
 .pg-nav {
-  position: absolute; top: 50%; transform: translateY(-50%); width: 44px; height: 44px; margin: 0; padding: 0; border: 0; background: none;
+  position: absolute; top: 50%; transform: translateY(-50%); width: 2.75rem; height: 2.75rem; margin: 0; padding: 0; border: 0; background: none;
   color: var(--t-mute); cursor: pointer; z-index: 2; transition: color 180ms var(--tease), opacity 180ms var(--tease);
 }
 .pg-nav:hover { color: var(--t-ink); }
-.pg-nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.pg-nav:focus-visible { outline: .125rem solid var(--focus); outline-offset: .1875rem; }
 .pg-nav[disabled] { opacity: .25; cursor: default; }
-.pg-nav svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.pg-nav--prev { left: -64px; }
-.pg-nav--next { right: -64px; }
-.pg-nav svg { width: 28px; height: 28px; }
+.pg-nav svg { width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.pg-nav--prev { left: -4rem; }
+.pg-nav--next { right: -4rem; }
+.pg-nav svg { width: 1.75rem; height: 1.75rem; }
 
 /* The current length's card under the line */
 .pg-card {
-  position: relative; margin: clamp(28px, 4vh, 44px) auto 0; max-width: 960px;
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: clamp(24px, 4vw, 56px);
-  padding: clamp(26px, 3.4vw, 44px); border-radius: var(--r-card);
+  position: relative; margin: clamp(1.75rem, 4vh, 2.75rem) auto 0; max-width: 60rem;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding: clamp(1.625rem, 3.4vw, 2.75rem); border-radius: var(--r-card);
   background: rgba(255, 255, 255, .62); border: 1px solid rgba(255, 255, 255, .7);
-  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(.875rem) saturate(1.2); -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
 }
 .pg-price__days {
   margin: 0; font-family: var(--f-display); text-transform: uppercase; font-weight: 400;
@@ -168,13 +168,13 @@
    the new ones fade in from the other side (TJ, 23 Oct 2026). --pg-dir is 1
    for a longer programme (the track moves left), -1 for a shorter one. */
 .pg-swap { transition: opacity 320ms var(--tease), transform 320ms var(--tease); }
-.pg-card.is-swapping .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * -28px)); }
-.pg-card.is-entering .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * 28px)); transition: none; }
+.pg-card.is-swapping .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * -1.75rem)); }
+.pg-card.is-entering .pg-swap { opacity: 0; transform: translateX(calc(var(--pg-dir, 1) * 1.75rem)); transition: none; }
 
 /* ---- how we look after you ---- */
 /* Between the hero and the line: the brochure's heading and paragraph, in
    the page's heading and body type, nothing stacked (TJ, 26 Oct 2026). */
-.pg-look { max-width: 62ch; margin: clamp(28px, 4.5vh, 52px) auto clamp(28px, 4.5vh, 48px); text-align: center; }
+.pg-look { max-width: 62ch; margin: clamp(1.75rem, 4.5vh, 3.25rem) auto clamp(1.75rem, 4.5vh, 3rem); text-align: center; }
 .pg-look__p { margin: 1rem auto 0; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--t-soft); }
 
 .pg-h2 {
@@ -186,56 +186,56 @@
 /* The brochure's four columns replace Included in every programme: the
    heading, one Quentin line, the sub line, then Mother and baby care,
    Treatments, Meals and Home support (TJ, 26 Oct 2026). */
-.pg-same { position: relative; z-index: 1; padding: clamp(56px, 8vh, 96px) var(--gutter) clamp(40px, 6vh, 72px); }
-.pg-same__head { text-align: center; max-width: 720px; margin: 0 auto; }
+.pg-same { position: relative; z-index: 1; padding: clamp(3.5rem, 8vh, 6rem) var(--gutter) clamp(2.5rem, 6vh, 4.5rem); }
+.pg-same__head { text-align: center; max-width: 45rem; margin: 0 auto; }
 .pg-same__script { margin: .5rem 0 0; text-wrap: balance; font-family: var(--f-script); font-size: clamp(1.5rem, 2.4vw, 2.05rem); line-height: 1.15; color: var(--reach-script); }
 .pg-same__p { margin: .8rem 0 0; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--t-soft); }
-.pg-kinds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px clamp(20px, 2.6vw, 36px); margin-top: clamp(32px, 5vh, 56px); }
-.pg-kind { padding-top: 16px; border-top: 1px solid var(--line-firm); }
+.pg-kinds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.75rem clamp(1.25rem, 2.6vw, 2.25rem); margin-top: clamp(2rem, 5vh, 3.5rem); }
+.pg-kind { padding-top: 1rem; border-top: 1px solid var(--line-firm); }
 .pg-kind__h { margin: 0; font-family: var(--f-body); font-weight: 600; font-size: .78rem; letter-spacing: .04em; text-transform: uppercase; color: var(--t-ink); }
 .pg-kind__p { margin: .6rem 0 0; font-family: var(--f-read); font-size: clamp(.92rem, 1.05vw, 1rem); line-height: 1.55; color: var(--t-soft); }
 .pg-kind__list { list-style: none; margin: .9rem 0 0; padding: 0; }
 .pg-kind__list li {
-  position: relative; padding: 6px 0 6px 16px;
+  position: relative; padding: .375rem 0 .375rem 1rem;
   font-family: var(--f-read); font-size: clamp(.9rem, 1vw, .96rem); line-height: 1.45; color: var(--t-ink);
 }
-.pg-kind__list li::before { content: ""; position: absolute; left: 0; top: calc(6px + .62em); width: 5px; height: 5px; border-radius: 50%; background: var(--acc); }
-.pg-same__note { margin: clamp(28px, 4vh, 44px) auto 0; text-align: center; font-family: var(--f-read); font-size: .9rem; line-height: 1.6; color: var(--t-mute); max-width: 60ch; }
+.pg-kind__list li::before { content: ""; position: absolute; left: 0; top: calc(.375rem + .62em); width: .3125rem; height: .3125rem; border-radius: 50%; background: var(--acc); }
+.pg-same__note { margin: clamp(1.75rem, 4vh, 2.75rem) auto 0; text-align: center; font-family: var(--f-read); font-size: .9rem; line-height: 1.6; color: var(--t-mute); max-width: 60ch; }
 
 /* ---- what each programme includes ---- */
 /* The brochure's comparison table on the page's glass card, then the
    Programme pricing band in the card's price treatment (TJ, 26 Oct 2026). */
-.pg-compare { position: relative; z-index: 1; padding: clamp(40px, 6vh, 72px) var(--gutter) clamp(48px, 7vh, 88px); }
-.pg-compare__head { text-align: center; max-width: 720px; margin: 0 auto; }
+.pg-compare { position: relative; z-index: 1; padding: clamp(2.5rem, 6vh, 4.5rem) var(--gutter) clamp(3rem, 7vh, 5.5rem); }
+.pg-compare__head { text-align: center; max-width: 45rem; margin: 0 auto; }
 .pg-compare__lede { margin: 1rem auto 0; max-width: 60ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--t-soft); }
 .pg-tablecard, .pg-pricing {
-  margin: clamp(28px, 4vh, 44px) auto 0; max-width: 960px;
-  padding: clamp(20px, 3vw, 40px); border-radius: var(--r-card);
+  margin: clamp(1.75rem, 4vh, 2.75rem) auto 0; max-width: 60rem;
+  padding: clamp(1.25rem, 3vw, 2.5rem); border-radius: var(--r-card);
   background: rgba(255, 255, 255, .62); border: 1px solid var(--acc-line);
-  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(.875rem) saturate(1.2); -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
 }
 .pg-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .pg-table thead th:first-child { width: 46%; }
 .pg-table thead th {
-  padding: 0 12px 14px; border-bottom: 1px solid var(--line-firm);
+  padding: 0 .75rem .875rem; border-bottom: 1px solid var(--line-firm);
   font-family: var(--f-body); font-weight: 500; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--t-mute); text-align: center;
 }
 .pg-table thead th:first-child { text-align: left; }
 .pg-table__group th {
-  padding: 24px 12px 4px; text-align: left;
+  padding: 1.5rem .75rem .25rem; text-align: left;
   font-family: var(--f-body); font-weight: 600; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--reach-link);
 }
 .pg-table tbody th[scope="row"] {
-  padding: 12px; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--line-firm);
+  padding: .75rem; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--line-firm);
   font-family: var(--f-read); font-weight: 400; font-size: clamp(.92rem, 1.05vw, 1rem); line-height: 1.5; color: var(--t-ink);
 }
-.pg-table tbody th small { display: block; margin-top: 6px; font-size: .8rem; line-height: 1.5; color: var(--t-mute); }
+.pg-table tbody th small { display: block; margin-top: .375rem; font-size: .8rem; line-height: 1.5; color: var(--t-mute); }
 .pg-table td {
-  padding: 12px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--line-firm);
+  padding: .75rem; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--line-firm);
   font-family: var(--f-read); font-size: clamp(.9rem, 1vw, .96rem); line-height: 1.4; color: var(--t-soft);
 }
 .pg-table__num { display: block; font-family: var(--f-display); font-weight: 400; font-size: clamp(2.4rem, 3.6vw, 3.2rem); line-height: 1; color: var(--t-ink); }
-.pg-table__foot { margin: 18px 0 0; font-family: var(--f-read); font-size: .88rem; line-height: 1.55; color: var(--t-mute); }
+.pg-table__foot { margin: 1.125rem 0 0; font-family: var(--f-read); font-size: .88rem; line-height: 1.55; color: var(--t-mute); }
 
 .pg-pricing { text-align: center; }
 .pg-pricing__h {
@@ -243,8 +243,8 @@
   font-size: clamp(1.4rem, 2.2vw, 1.9rem); line-height: 1.05; letter-spacing: .02em; color: var(--t-ink);
 }
 .pg-pricing__lede { margin: .8rem auto 0; max-width: 52ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.6; color: var(--t-soft); }
-.pg-pricing__list { list-style: none; margin: clamp(18px, 3vh, 28px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.pg-pricing__list li { display: flex; flex-direction: column; align-items: center; padding: 8px 12px; }
+.pg-pricing__list { list-style: none; margin: clamp(1.125rem, 3vh, 1.75rem) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pg-pricing__list li { display: flex; flex-direction: column; align-items: center; padding: .5rem .75rem; }
 .pg-pricing__list li + li { border-left: 1px solid var(--line-firm); }
 .pg-pricing__len { font-family: var(--f-body); font-weight: 500; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--t-mute); }
 .pg-pricing .pg-price__fee { margin: .8rem 0 0; justify-content: center; }
@@ -261,20 +261,20 @@
   .pg-table, .pg-table tbody, .pg-table tr, .pg-table th, .pg-table td { display: block; }
   .pg-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .pg-table tbody tr:not(.pg-table__group) {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 8px;
-    padding-bottom: 12px; border-bottom: 1px solid var(--line-firm);
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: .5rem;
+    padding-bottom: .75rem; border-bottom: 1px solid var(--line-firm);
   }
-  .pg-table__group th { padding: 22px 0 2px; }
-  .pg-table tbody th[scope="row"] { grid-column: 1 / -1; padding: 8px 0 10px; border-bottom: 0; }
-  .pg-table td { padding: 0 2px; border-bottom: 0; font-size: .88rem; }
+  .pg-table__group th { padding: 1.375rem 0 .125rem; }
+  .pg-table tbody th[scope="row"] { grid-column: 1 / -1; padding: .5rem 0 .625rem; border-bottom: 0; }
+  .pg-table td { padding: 0 .125rem; border-bottom: 0; font-size: .88rem; }
   .pg-table td::before {
-    content: attr(data-len); display: block; margin-bottom: 4px;
+    content: attr(data-len); display: block; margin-bottom: .25rem;
     font-family: var(--f-body); font-weight: 500; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute);
   }
   .pg-table__num { font-size: 2.2rem; }
-  .pg-tablecard, .pg-pricing { padding: 20px 18px; }
+  .pg-tablecard, .pg-pricing { padding: 1.25rem 1.125rem; }
   .pg-pricing__list { grid-template-columns: minmax(0, 1fr); }
-  .pg-pricing__list li { padding: 14px 0; }
+  .pg-pricing__list li { padding: .875rem 0; }
   .pg-pricing__list li + li { border-left: 0; border-top: 1px solid var(--line-firm); }
 }
 
@@ -289,32 +289,32 @@
 .pg-cta {
   position: relative; isolation: isolate; overflow: visible; overflow-x: clip;
   background: var(--g-canvas);
-  padding: clamp(32px, 5vh, 64px) var(--gutter) clamp(56px, 9vh, 104px); text-align: center;
+  padding: clamp(2rem, 5vh, 4rem) var(--gutter) clamp(3.5rem, 9vh, 6.5rem); text-align: center;
 }
 .pg-cta .aurora {
   top: calc(-1 * var(--pg-reach));
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--pg-reach) * 1.8));
   mask-image: linear-gradient(to bottom, transparent 0, #000 calc(var(--pg-reach) * 1.8));
 }
-.pg-cta > .pg-wrap { position: relative; z-index: 1; max-width: 640px; }
+.pg-cta > .pg-wrap { position: relative; z-index: 1; max-width: 40rem; }
 /* Quentin heading (TJ, 23 Oct 2026). */
 .pg-cta__script { margin: 0; font-family: var(--f-script); font-weight: 400; font-size: clamp(2.2rem, 3.6vw, 3rem); line-height: 1.15; color: var(--reach-script); }
 .pg-cta__p { margin: 1rem auto 0; max-width: 52ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.65; color: var(--t-soft); }
-.pg-cta__actions { margin-top: 1.8rem; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+.pg-cta__actions { margin-top: 1.8rem; display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; }
 
 @media (prefers-reduced-motion: reduce) {
   .pg-swap, .pg-car .tv2__track, .pg-car .tv2__stop { transition: none; }
 }
 
 /* Short laptop windows: tighter rhythm so the price still shows on the first screen. */
-@media (min-width: 861px) and (max-height: 780px) {
-  .pg-lengths { padding-top: 22px; }
+@media (min-width: 861px) and (max-width: 1100px) and (max-height: 780px) {
+  .pg-lengths { padding-top: 1.375rem; }
   .pg-eyebrow { margin-bottom: .6rem; }
-  .pg-lengths__head { margin-bottom: 12px; }
+  .pg-lengths__head { margin-bottom: .75rem; }
   .pg-lengths__lede { margin-top: .5rem; }
-  .pg-car { height: 52px; }
-  .pg-stage { margin-top: 14px; }
-  .pg-card { padding-top: 22px; }
+  .pg-car { height: 3.25rem; }
+  .pg-stage { margin-top: .875rem; }
+  .pg-card { padding-top: 1.375rem; }
   .pg-price__fee { margin-top: .7rem; }
 }
 
@@ -328,16 +328,16 @@
   .pg-price > .pg-price__cta { display: none; }
   .pg-price__cta--foot { display: block; margin-top: 0; }
   /* Tighter rhythm on phones so price, note and button fit with the line. */
-  .pg-lengths__head { margin-bottom: 10px; }
-  .pg-car { height: 50px; }
-  .pg-stage { margin-top: 6px; }
-  .pg-card { gap: 16px; padding: 22px 22px 18px; }
+  .pg-lengths__head { margin-bottom: .625rem; }
+  .pg-car { height: 3.125rem; }
+  .pg-stage { margin-top: .375rem; }
+  .pg-card { gap: 1rem; padding: 1.375rem 1.375rem 1.125rem; }
   .pg-price__days { font-size: 2.415rem; }   /* larger on phones (TJ, 23 Oct 2026); 15 percent up (TJ, 25 Oct 2026) */
   .pg-price__fee { margin-top: .8rem; font-size: 1.664rem; }   /* 20 percent down, twice (TJ, 25 Oct 2026) */
   .pg-price__cta { margin-top: 1rem; }
-  .pg-card { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .pg-card { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
   /* Phones: a much smaller gap into the call to action (TJ, 23 Oct 2026). */
-  .pg-same { padding-bottom: 20px; padding-top: 24px; }
+  .pg-same { padding-bottom: 1.25rem; padding-top: 1.5rem; }
   /* Phones (TJ, 23 Oct 2026): a larger title, "Our Postpartum" filling the
      width, and the Quentin line larger but a little narrower than it. */
   .pg-lengths__title { font-size: min(calc((100vw - 2 * var(--gutter)) / 10.6), 3.4rem); white-space: nowrap; }
@@ -347,30 +347,30 @@
      the Quentin line one line a little narrower (14.65 ems, set to 95 percent). */
   /* Phones (TJ, 23 Oct 2026): more room under the header, a much smaller gap
      between the card and Included in Every Programme. */
-  .pg-lengths { padding-top: 38px; padding-bottom: 28px; }
-  .pg-cta { padding-top: 16px; }
-  .page--programmes { --pg-reach: 160px; }
+  .pg-lengths { padding-top: 2.375rem; padding-bottom: 1.75rem; }
+  .pg-cta { padding-top: 1rem; }
+  .page--programmes { --pg-reach: 10rem; }
   .pg-stage { max-width: none; }
   /* Phones: both arrows sit side by side in the card's top right corner,
      level with the length's name (card padding 22px, name 2.1rem tall), in
      the space beside the name and price (TJ, 23 Oct 2026). The line keeps
      its own fade. */
-  .pg-nav { top: calc(22px + 1.05rem); right: auto; left: auto; }
+  .pg-nav { top: calc(1.375rem + 1.05rem); right: auto; left: auto; }
   /* The swapping words stay inside the card (TJ, 23 Oct 2026). */
   .pg-card { overflow: hidden; }
-  .pg-nav--prev { right: 54px; }
-  .pg-nav--next { right: 10px; }
+  .pg-nav--prev { right: 3.375rem; }
+  .pg-nav--next { right: .625rem; }
 }
 
 /* The card's length name and Included in Every Programme are both 40px on
    desktop (TJ, 23 Oct 2026). Phones keep their sizes: at 40px the name runs
    into the card's arrows. */
 @media (min-width: 861px) {
-  .pg-same .pg-h2 { font-size: 40px; }
+  .pg-same .pg-h2 { font-size: 2.5rem; }
   /* The brochure's other headings match it (TJ, 26 Oct 2026). */
-  .pg-look .pg-h2, .pg-compare .pg-h2 { font-size: 40px; }
+  .pg-look .pg-h2, .pg-compare .pg-h2 { font-size: 2.5rem; }
   /* The length name 15 percent up, the price 20 percent down (TJ, 25 Oct 2026). */
-  .pg-price__days { font-size: 46px; }
+  .pg-price__days { font-size: 2.875rem; }
 }
 
 /* The price's digits: half the space between them (TJ, 25 Oct 2026). Karla's
@@ -382,7 +382,7 @@
 /* The card's link down to What each programme includes (Ami, 24 Oct 2026;
    the brochure's table since TJ, 26 Oct 2026). */
 .pg-price__more { margin: .9rem 0 0; font-family: var(--f-read); font-size: .9rem; }
-#what-is-included { scroll-margin-top: calc(var(--nav-h, 72px) + 16px); }
+#what-is-included { scroll-margin-top: calc(var(--nav-h, 4.5rem) + 1rem); }
 
 /* ---- the card's four kinds of care (TJ, 26 Oct 2026) ----
    Replaces the single treatment total: one column of four rows in the
@@ -391,7 +391,7 @@
    the words, so the four rows are the same height and read as one list. */
 .pg-care {
   margin: 0; align-self: center; display: grid;
-  padding-left: clamp(24px, 4vw, 56px);
+  padding-left: clamp(1.5rem, 4vw, 3.5rem);
   border-left: 1px solid var(--line-firm);
 }
 .pg-care__row { display: grid; gap: .3rem; padding: calc(.85rem * var(--pg-fit, 1)) 0; border-top: 1px solid var(--line); }
@@ -401,7 +401,7 @@
 .pg-care dd { margin: 0; display: flex; align-items: baseline; gap: .45rem; min-height: 1.9rem; font-family: var(--f-read); font-size: clamp(1rem, 1.2vw, 1.12rem); line-height: 1.35; color: var(--t-ink); }
 .pg-care__num { font-family: var(--f-display); font-size: 1.7rem; line-height: 1; color: var(--t-ink); }
 @media (max-width: 860px) {
-  .pg-care { padding-left: 0; padding-top: 14px; border-left: 0; border-top: 1px solid var(--line-firm); }
+  .pg-care { padding-left: 0; padding-top: .875rem; border-left: 0; border-top: 1px solid var(--line-firm); }
   .pg-care__row { padding: .7rem 0; }
   .pg-care__row:first-child { padding-top: 0; }
   .pg-care dd { font-size: 1rem; min-height: 1.6rem; }
@@ -411,7 +411,7 @@
 /* ---- How we look after you, quieter and wider (TJ, 26 Oct 2026) ----
    The heading in Karla capitals, not the display face; the paragraph runs
    wider so it takes two or three lines and the card comes up. */
-.pg-look { max-width: 980px; margin: calc(clamp(20px, 3vh, 36px) * var(--pg-fit, 1)) auto calc(clamp(16px, 2.6vh, 32px) * var(--pg-fit, 1)); }
+.pg-look { max-width: 61.25rem; margin: calc(clamp(1.25rem, 3vh, 2.25rem) * var(--pg-fit, 1)) auto calc(clamp(1rem, 2.6vh, 2rem) * var(--pg-fit, 1)); }
 .pg-look .pg-h2, .pg-look .pg-h2 { font-family: var(--f-read); font-weight: 500; font-size: 1rem; letter-spacing: .16em; line-height: 1.4; }
 @media (min-width: 861px) { .pg-look .pg-h2 { font-size: calc(1.05rem * max(var(--pg-fit, 1), .85)); } }
 .pg-look__p { margin-top: .6rem; max-width: none; }
@@ -419,7 +419,7 @@
    paragraph steps out of the 1120px column and runs wider instead of taller
    (TJ, 28 Oct 2026). */
 @media (min-width: 861px) {
-  .pg-look { width: min(100vw - 96px, 1440px); max-width: none; margin-left: 50%; margin-right: 0; transform: translateX(-50%); }
+  .pg-look { width: min(100vw - 6rem, 90rem); max-width: none; margin-left: 50%; margin-right: 0; transform: translateX(-50%); }
 }
 
 /* ---- the first screen fits itself (TJ, 26 Oct 2026) ----
@@ -427,23 +427,23 @@
    window, on any laptop size; spacing shrinks first in step with it, type
    less so. Phones are left to their own rules above. */
 @media (min-width: 861px) {
-  .pg-lengths { padding-top: calc(clamp(32px, 5.5vh, 64px) * var(--pg-fit, 1)); }
+  .pg-lengths { padding-top: calc(clamp(2rem, 5.5vh, 4rem) * var(--pg-fit, 1)); }
   .pg-lengths__head { margin-bottom: 0; }
   .pg-lengths__title { font-size: calc(clamp(2rem, min(4.2vw, 6.4vh), 3.4rem) * max(var(--pg-fit, 1), .75)); }
   .pg-lengths__script { font-size: calc(clamp(1.6rem, min(2.6vw, 4vh), 2.25rem) * max(var(--pg-fit, 1), .75)); margin-top: calc(.5rem * var(--pg-fit, 1)); }
   .pg-lengths__lede { margin-top: calc(.8rem * var(--pg-fit, 1)); }
   .pg-look__p { font-size: calc(clamp(.95rem, 1.1vw, 1.04rem) * max(var(--pg-fit, 1), .9)); }
-  .pg-car { height: calc(64px * max(var(--pg-fit, 1), .8)); }
-  .pg-stage { margin-top: calc(clamp(28px, 4vh, 44px) * var(--pg-fit, 1)); }
-  .pg-card { padding: calc(clamp(26px, 3.4vw, 44px) * max(var(--pg-fit, 1), .6)) clamp(26px, 3.4vw, 44px); }
-  .pg-price__days { font-size: calc(46px * max(var(--pg-fit, 1), .75)); }
+  .pg-car { height: calc(4rem * max(var(--pg-fit, 1), .8)); }
+  .pg-stage { margin-top: calc(clamp(1.75rem, 4vh, 2.75rem) * var(--pg-fit, 1)); }
+  .pg-card { padding: calc(clamp(1.625rem, 3.4vw, 2.75rem) * max(var(--pg-fit, 1), .6)) clamp(1.625rem, 3.4vw, 2.75rem); }
+  .pg-price__days { font-size: calc(2.875rem * max(var(--pg-fit, 1), .75)); }
   .pg-price__cta { margin-top: calc(1.5rem * var(--pg-fit, 1)); }
 }
 /* Very short windows (720 high): the paragraph's lines close up a little and
    the line under it tightens, still in step with --pg-fit. */
 @media (min-width: 861px) {
   .pg-look__p { line-height: calc(1.35 + .3 * min(var(--pg-fit, 1), 1)); }
-  .pg-car { height: calc(64px * max(var(--pg-fit, 1), .7)); }
+  .pg-car { height: calc(4rem * max(var(--pg-fit, 1), .7)); }
 }
 
 /* Hero declutter (TJ, 1 Nov 2026, sheet row 32): no lede, no heading over the
@@ -460,8 +460,8 @@
   .pg-look .pg-look__p { margin-left: auto; margin-right: auto; text-wrap: balance; }
   .pg-look .pg-look__p:first-child { max-width: 66em; }
   .pg-look .pg-look__p + .pg-look__p { max-width: 47em; }
-  .pg-stage { margin-top: calc(clamp(12px, 2vh, 22px) * var(--pg-fit, 1)); }
-  .pg-card { padding-top: calc(clamp(20px, 2.2vw, 30px) * max(var(--pg-fit, 1), .6)); padding-bottom: calc(clamp(20px, 2.2vw, 30px) * max(var(--pg-fit, 1), .6)); }
+  .pg-stage { margin-top: calc(clamp(.75rem, 2vh, 1.375rem) * var(--pg-fit, 1)); }
+  .pg-card { padding-top: calc(clamp(1.25rem, 2.2vw, 1.875rem) * max(var(--pg-fit, 1), .6)); padding-bottom: calc(clamp(1.25rem, 2.2vw, 1.875rem) * max(var(--pg-fit, 1), .6)); }
 }
 
 /* Tighter section gaps on desktop (TJ, 2 Nov 2026). Measured at 1440x900:
@@ -469,17 +469,17 @@
    to What each programme includes 111px, down 20% to 89; the includes table
    to Ready to talk it through 108px, down 40% to 65. */
 @media (min-width: 861px) {
-  .page--programmes .pg-lengths { padding-bottom: 49px; }
-  .page--programmes .pg-same { padding-top: 43px; padding-bottom: 43px; }
-  .page--programmes .pg-compare { padding-top: 43px; padding-bottom: 38px; }
-  .page--programmes .pg-cta { padding-top: 27px; }
+  .page--programmes .pg-lengths { padding-bottom: 3.0625rem; }
+  .page--programmes .pg-same { padding-top: 2.6875rem; padding-bottom: 2.6875rem; }
+  .page--programmes .pg-compare { padding-top: 2.6875rem; padding-bottom: 2.375rem; }
+  .page--programmes .pg-cta { padding-top: 1.6875rem; }
 }
 
 /* "From" above the figure, as on the Bespoke bar and Your programme (TJ,
    2 Nov 2026, sheet row 34): the label on its own line in the bespoke From
    label's type, then the figure with "per day" beside it on its baseline.
    The words still read in order: From £X per day. */
-.pg-price__fee { grid-template-columns: auto auto; grid-template-rows: auto auto; align-items: baseline; column-gap: .5rem; row-gap: 5px; }
+.pg-price__fee { grid-template-columns: auto auto; grid-template-rows: auto auto; align-items: baseline; column-gap: .5rem; row-gap: .3125rem; }
 .pg-price__from { grid-column: 1 / -1; grid-row: 1; justify-self: start; font-size: .8125rem; font-weight: 600; letter-spacing: .12em; line-height: 1; }
 .pg-price__num { grid-column: 1; grid-row: 2; }
 .pg-price__per { grid-column: 2; grid-row: 2; padding-bottom: 0; }
@@ -493,7 +493,7 @@
    strip clips its contents, and on shorter windows and phones its height was
    scaled below the labels' own depth (62px), cutting the day labels in half.
    Whatever the window, the strip is now at least as deep as its labels. */
-.pg-car { min-height: 64px; }
+.pg-car { min-height: 4rem; }
 
 /* ---- One standard for the type (TJ, 11 Nov 2026, TPS-0058, TPS-0059, TPS-0061) ----
    The card's four care labels bold, not capitals (Quentin was tried and dropped). The
@@ -516,7 +516,7 @@
    little firmer, then the script heading and its sentence and button as they
    were in their own section. */
 .pg-pricing__onreq { margin: 1rem auto 0; max-width: 52ch; font-family: var(--f-read); font-size: clamp(.95rem, 1.1vw, 1.04rem); line-height: 1.6; color: var(--t-ink); font-weight: 500; }
-.pg-pricing .pg-cta__script { margin: clamp(28px, 4.5vh, 44px) 0 0; }
+.pg-pricing .pg-cta__script { margin: clamp(1.75rem, 4.5vh, 2.75rem) 0 0; }
 .pg-pricing .pg-cta__p { margin-top: .8rem; }
 /* Reordered (TJ, 11 Nov 2026): Ready to talk it through is the card's title,
    so no gap above it; the pricing line follows the button. */
@@ -540,7 +540,7 @@
    the button and the breakdown link. Right: the four kinds in one short line
    each, the counts having moved left. */
 .pg-price__about { margin: .6rem 0 0; max-width: 30em; font-family: var(--f-read); font-size: 1rem; line-height: 1.55; color: var(--t-soft); }
-.pg-tot { display: flex; gap: clamp(28px, 4vw, 52px); margin: calc(1.1rem * var(--pg-fit, 1)) 0 0; }
+.pg-tot { display: flex; gap: clamp(1.75rem, 4vw, 3.25rem); margin: calc(1.1rem * var(--pg-fit, 1)) 0 0; }
 .pg-tot__item { margin: 0; display: grid; justify-items: start; }
 .pg-tot__upto { font-family: var(--f-body); font-weight: 500; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--t-mute); }
 .pg-tot__n { font-family: var(--f-display); font-weight: 400; font-size: clamp(2.4rem, 3.4vw, 3rem); line-height: 1; color: var(--t-ink); margin-top: .2rem; }
@@ -549,7 +549,7 @@
 @media (max-width: 860px) { .pg-tot__n { font-size: 2.2rem; } }
 /* Short laptop windows: the totals and the spaces a little smaller so the card
    stays above the fold (TJ, 26 Oct 2026 rule). */
-@media (min-width: 861px) and (max-height: 820px) {
+@media (min-width: 861px) and (max-width: 1100px) and (max-height: 820px) {
   .pg-price__about { line-height: 1.45; margin-top: .4rem; }
   .pg-tot { margin-top: .6rem; }
   .pg-tot__n { font-size: 2rem; margin-top: 0; }
@@ -558,8 +558,8 @@
 }
 /* Below 820px tall the live-in line leaves the card; the same line heads Four
    Kinds of Care just below (TJ, 11 Nov 2026). */
-@media (min-width: 861px) and (max-height: 820px) { .pg-tot + .pg-price__held { display: none; } }
-@media (min-width: 861px) and (max-height: 740px) { .pg-tot__n { font-size: 1.8rem; } .pg-tot { margin-top: .45rem; } }
+@media (min-width: 861px) and (max-width: 1100px) and (max-height: 820px) { .pg-tot + .pg-price__held { display: none; } }
+@media (min-width: 861px) and (max-width: 1100px) and (max-height: 740px) { .pg-tot__n { font-size: 1.8rem; } .pg-tot { margin-top: .45rem; } }
 /* The totals as one sentence (TJ, 11 Nov 2026), replacing the big numbers and
    their small capitals: body text, the two numbers in Instrument Serif a step
    up, well below the card title's size. The .pg-tot rules above are unused. */

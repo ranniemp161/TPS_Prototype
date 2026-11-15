@@ -36,6 +36,11 @@
    same times rather than reshuffling on every render.
    ============================================================ */
 
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 /* ============================================================
    THE CATALOGUE
 
@@ -714,7 +719,7 @@ const STEP_REVIEW = 4;
 const FOLD_MS = 300;
 
 /** The breathing room left above the card and below the button, in pixels. */
-const SNAP_GAP = 24;
+const SNAP_BASE = 24;
 
 const REQUIRED_PLACEHOLDER = "Required";
 
@@ -1324,9 +1329,9 @@ function render() {
 function snapIntoFrame(lead, tail) {
   if (!lead) return;
   const frame = window.innerHeight;
-  const top = lead.getBoundingClientRect().top + window.scrollY - SNAP_GAP;
+  const top = lead.getBoundingClientRect().top + window.scrollY - (SNAP_BASE * tpsU());
   const bottom = tail
-    ? tail.getBoundingClientRect().bottom + window.scrollY + SNAP_GAP
+    ? tail.getBoundingClientRect().bottom + window.scrollY + (SNAP_BASE * tpsU())
     : top;
   const furthest = document.documentElement.scrollHeight - frame;
   const target = Math.min(

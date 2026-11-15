@@ -27,7 +27,7 @@
 .dn-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
 .dn-wrap {
-  --dn-pad: clamp(24px, 4vw, 72px);       /* inner padding of each half */
+  --dn-pad: clamp(1.5rem, 4vw, 4.5rem);       /* inner padding of each half */
   --dn-ink: 243, 239, 236;                /* day column text, cream to ink, set by what-we-do-promise.js */
   --dn-g: 0;                              /* glass progress 0 to 1, set by what-we-do-promise.js */
   --dn-lines: 7;                          /* the even, closed height of both bodies */
@@ -57,8 +57,8 @@
 .dng { position: absolute; inset: 0; pointer-events: none; }
 .dng__half {
   position: absolute; top: 0; bottom: 0; width: 58%;
-  backdrop-filter: blur(calc(18px * var(--dn-b, 0))) saturate(calc(1 + .15 * var(--dn-g)));
-  -webkit-backdrop-filter: blur(calc(18px * var(--dn-b, 0))) saturate(calc(1 + .15 * var(--dn-g)));
+  backdrop-filter: blur(calc(1.125rem * var(--dn-b, 0))) saturate(calc(1 + .15 * var(--dn-g)));
+  -webkit-backdrop-filter: blur(calc(1.125rem * var(--dn-b, 0))) saturate(calc(1 + .15 * var(--dn-g)));
 }
 .dng__half--day {
   left: 0;
@@ -73,11 +73,11 @@
   .dng__half--day {
     -webkit-mask-image:
       linear-gradient(to right, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-day) - 12px), #000 calc(var(--dn-top-day) + 36px), #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-day) - .75rem), #000 calc(var(--dn-top-day) + 2.25rem), #000 100%);
     -webkit-mask-composite: source-in;
     mask-image:
       linear-gradient(to right, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-day) - 12px), #000 calc(var(--dn-top-day) + 36px), #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-day) - .75rem), #000 calc(var(--dn-top-day) + 2.25rem), #000 100%);
     mask-composite: intersect;
   }
   /* The same on the night half. Its glass top is registered so it can ease:
@@ -87,11 +87,11 @@
   .dng .dng__half--night {
     -webkit-mask-image:
       linear-gradient(to left, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-night) - 12px), #000 calc(var(--dn-top-night) + 36px), #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-night) - .75rem), #000 calc(var(--dn-top-night) + 2.25rem), #000 100%);
     -webkit-mask-composite: source-in;
     mask-image:
       linear-gradient(to left, #000 0%, #000 78%, transparent 100%),
-      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-night) - 12px), #000 calc(var(--dn-top-night) + 36px), #000 100%);
+      linear-gradient(to bottom, transparent 0, transparent calc(var(--dn-top-night) - .75rem), #000 calc(var(--dn-top-night) + 2.25rem), #000 100%);
     mask-composite: intersect;
     transition: --dn-top-night 700ms var(--ease-out);
   }
@@ -107,8 +107,8 @@
 .dn-wrap .act--peak .peak__answer.dnf { inset: 0; right: 0; bottom: 0; display: block; text-align: left; }
 .dnf__cols { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; }
 .dnf__opt {
-  display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; min-width: 0;
-  padding: calc(var(--nav-h) + clamp(40px, 7vh, 72px)) var(--dn-pad) clamp(28px, 4.5vh, 96px);
+  display: flex; flex-direction: column; justify-content: flex-end; gap: .625rem; min-width: 0;
+  padding: calc(var(--nav-h) + clamp(2.5rem, 7vh, 4.5rem)) var(--dn-pad) clamp(1.75rem, 4.5vh, 6rem);
 }
 .dnf__opt > * { max-width: 34em; }
 .dnf__opt--day { color: rgb(var(--dn-ink)); }
@@ -116,7 +116,7 @@
    faded. The extra foot padding is the height the button used to take, so the
    two headings still line up across the split. */
 .dnf__opt--day .dnf__body { max-height: none !important; overflow: visible; -webkit-mask-image: none; mask-image: none; }
-@media (min-width: 861px) { .dnf__opt--day { padding-bottom: calc(clamp(28px, 4.5vh, 96px) + 31px); } }
+@media (min-width: 861px) { .dnf__opt--day { padding-bottom: calc(clamp(1.75rem, 4.5vh, 6rem) + 1.9375rem); } }
 .dnf__opt--night { color: var(--t-on-dark); }
 
 /* The clay under the gap (TJ, 8 Oct 2026): the stretch below Tailored For You,
@@ -140,7 +140,7 @@
    leave as the glass arrives. */
 .dn-wrap .act--peak .peak__frame { z-index: 1; }
 .dn-title {
-  position: absolute; left: var(--gutter); top: calc(var(--nav-h) + clamp(12px, 3vh, 34px)); z-index: 0; margin: 0;
+  position: absolute; left: var(--gutter); top: calc(var(--nav-h) + clamp(.75rem, 3vh, 2.125rem)); z-index: 0; margin: 0;
   /* Sized so that, at the left, it ends short of the centre line the circle falls down. */
   font-family: var(--f-script); font-weight: 400; font-size: clamp(2.4rem, 4.4vw, 4.6rem); line-height: 1.05;
   white-space: nowrap; color: var(--t-on-dark); pointer-events: none;
@@ -168,7 +168,7 @@
 }
 
 /* The small title and the paragraph, bottom right (TJ, 9 Oct 2026). */
-.dnf__note { position: absolute; right: var(--dn-pad); bottom: clamp(28px, 4.5vh, 96px); width: min(34em, 42%); z-index: 1; }
+.dnf__note { position: absolute; right: var(--dn-pad); bottom: clamp(1.75rem, 4.5vh, 6rem); width: min(34em, 42%); z-index: 1; }
 .dnf__note .dnf__intro { margin-bottom: 0; }
 
 /* Read at the hinge, while it is still night, then gives way to the copy. */
@@ -176,17 +176,17 @@
   /* The paragraph's own font, in capitals (TJ, 9 Oct 2026: the serif did not sit
      well), a quarter larger and more open, so it reads as the title over it; not
      bold (TJ), and "you need most" on a line of its own. */
-  margin: 0 0 clamp(12px, 1.8vh, 18px); font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
+  margin: 0 0 clamp(.75rem, 1.8vh, 1.125rem); font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
   font-size: clamp(1.12rem, 1.02rem + .42vw, 1.4rem); line-height: 1.25; letter-spacing: .08em; max-width: none;
   color: rgb(var(--dnt-c));
 }
-.dnf__intro { margin: 0 0 clamp(14px, 2.4vh, 26px); font-family: var(--f-read); font-size: clamp(.95rem, .85rem + .3vw, 1.08rem); line-height: 1.6; color: rgb(var(--dnt-c)); }
+.dnf__intro { margin: 0 0 clamp(.875rem, 2.4vh, 1.625rem); font-family: var(--f-read); font-size: clamp(.95rem, .85rem + .3vw, 1.08rem); line-height: 1.6; color: rgb(var(--dnt-c)); }
 /* Both give way as the glass arrives. Hidden until the photograph lands:
    what-we-do-promise.js lifts them in (opacity and a short rise) once it is in place. */
-.dnf__lede, .dnf__intro { opacity: calc(var(--dn-in, 0) * (1 - var(--dn-g) * 1.6)); transform: translateY(calc((1 - var(--dn-in, 0)) * 14px)); }
+.dnf__lede, .dnf__intro { opacity: calc(var(--dn-in, 0) * (1 - var(--dn-g) * 1.6)); transform: translateY(calc((1 - var(--dn-in, 0)) * .875rem)); }
 /* The names and hours arrive later (after the clock), and take their room
    with them, so the title and paragraph sit low, under the clock, until then. */
-.dnf__heads { display: grid; gap: 10px; overflow: hidden; height: calc(var(--dn-hh, 0) * 1px); opacity: var(--dn-ha, 0); }
+.dnf__heads { display: grid; gap: .625rem; overflow: hidden; height: calc(var(--dn-hh, 0) * 1px); opacity: var(--dn-ha, 0); }
 .dn-wrap { --dnt-c: 10, 10, 10; }
 /* Same font, size and spacing as the title above (TJ, 22 Oct 2026, Ami's font test). */
 .dnf__name {
@@ -203,22 +203,22 @@
   font-family: var(--f-read); font-size: clamp(.92rem, .82rem + .3vw, 1.04rem); line-height: 1.62;
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
-  margin-top: 6px;
+  margin-top: .375rem;
 }
 .dnf__text p { margin: 0; }
 .dnf__text p + p { margin-top: .8em; }
 .dnf__text b { font-weight: 700; }
 .dnf__ideal { font-style: italic; }
 .dnf__opt.is-open .dnf__body {
-  max-height: calc(100svh - var(--nav-h) - 260px) !important; overflow-y: auto;
+  max-height: calc(100svh - var(--nav-h) - 16.25rem + var(--dns-extra, 0px)) !important; overflow-y: hidden;
   -webkit-mask-image: none; mask-image: none;
 }
 .dnf__more {
-  align-self: flex-start; margin-top: 4px; padding: 0; border: 0; background: none; cursor: pointer;
+  align-self: flex-start; margin-top: .25rem; padding: 0; border: 0; background: none; cursor: pointer;
   font-family: var(--f-body); font-size: .82rem; font-weight: 500; letter-spacing: .04em; color: inherit;
   border-bottom: 1px solid currentColor; line-height: 1.6;
   opacity: clamp(0, calc((var(--dn-g) - .65) * 2.86), 1); pointer-events: none;
-  max-height: calc(var(--dn-g) * 40px); overflow: hidden;
+  max-height: calc(var(--dn-g) * 2.5rem); overflow: hidden;
 }
 .dn-wrap.is-glass .dnf__more { pointer-events: auto; }
 
@@ -232,15 +232,15 @@
     -webkit-mask-image: linear-gradient(to top, #000 0%, #000 78%, transparent 100%);
     mask-image: linear-gradient(to top, #000 0%, #000 78%, transparent 100%); }
   .dnf__cols { grid-template-columns: minmax(0, 1fr); grid-template-rows: 1fr 1fr; }
-  .dnf__opt { padding: 16px var(--gutter) 22px; gap: 6px; }
-  .dnf__note { left: var(--gutter); right: var(--gutter); width: auto; bottom: 28px; }
+  .dnf__opt { padding: 1rem var(--gutter) 1.375rem; gap: .375rem; }
+  .dnf__note { left: var(--gutter); right: var(--gutter); width: auto; bottom: 1.75rem; }
   /* Small enough that "Care arranged around the hours" holds one line. */
   .dnf__lede { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
-  .dnf__opt--day { padding-top: calc(var(--nav-h) + 12px); }
+  .dnf__opt--day { padding-top: calc(var(--nav-h) + .75rem); }
   .dnf__name { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
   .dn-wrap { --dn-lines: 4; }
   .dnf__intro { font-size: .85rem; line-height: 1.5; }
-  .dnf__opt.is-open .dnf__body { max-height: calc(50svh - 150px) !important; }
+  .dnf__opt.is-open .dnf__body { max-height: calc(50svh - 9.375rem + var(--dns-extra, 0px) / 2) !important; }
 }
 
 /* Deeper night (TJ, 8 Oct 2026): the night photograph is darkened further as the
@@ -250,7 +250,7 @@
 
 /* Phone text floor (MOBILE-PLAN item 2): Morning, Afternoon, Evening, Night were 8px. */
 @media (max-width: 860px) {
-  .dn-wrap .act--peak .peak__states { font-size: .8125rem; letter-spacing: .14em; display: grid; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; gap: 8px 22px; max-width: none; }
+  .dn-wrap .act--peak .peak__states { font-size: .8125rem; letter-spacing: .14em; display: grid; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; gap: .5rem 1.375rem; max-width: none; }
 }
 
 /* ---- Phones: Day to Night on one line (TJ, 12 Oct 2026) ----
@@ -266,12 +266,12 @@
   .dnl.is-live .dnl__end { pointer-events: auto; }
   .dnl__ends { display: flex; justify-content: space-between; }
   .dnl__end {
-    all: unset; box-sizing: border-box; cursor: pointer; min-height: 44px; padding: 12px 0;
+    all: unset; box-sizing: border-box; cursor: pointer; min-height: 2.75rem; padding: .75rem 0;
     font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
     color: inherit; pointer-events: none; -webkit-tap-highlight-color: transparent;
   }
-  .dnl__end:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
-  .dnl__rail { position: relative; height: 16px; }
+  .dnl__end:focus-visible { outline: .125rem solid currentColor; outline-offset: .125rem; }
+  .dnl__rail { position: relative; height: 1rem; }
   .dnl__rail::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: currentColor; opacity: .32; }
   .dnl__fill { position: absolute; left: 0; right: 0; top: 50%; height: var(--tline); background: currentColor; transform-origin: 0 50%; transform: scaleX(var(--dnl-t)); }
   .dnl__stop, .dnl__tip { position: absolute; top: 50%; border-radius: 50%; background: currentColor; }
@@ -291,10 +291,10 @@
   /* 15 percent larger than the first 30px (TJ). The sky's height is set by
      what-we-do-promise.js so the sun starts half way between the title and the
      line and sets all the way into it. */
-  .dnl { --dnl-sky: 120px; --dnl-sun: 34.5px; }
-  .dnl__sky { position: absolute; left: 50%; bottom: 50%; width: calc(var(--dnl-sun) + 8px); height: var(--dnl-sky); margin-left: calc((var(--dnl-sun) + 8px) / -2); overflow: hidden; }
-  .dnl__sun { position: absolute; left: 4px; top: 0; width: var(--dnl-sun); height: var(--dnl-sun); border-radius: 50%; background: currentColor;
-    transform: translateY(calc(var(--dnl-t) * (var(--dnl-sky) + 2px))); }
+  .dnl { --dnl-sky: 7.5rem; --dnl-sun: 2.1563rem; }
+  .dnl__sky { position: absolute; left: 50%; bottom: 50%; width: calc(var(--dnl-sun) + .5rem); height: var(--dnl-sky); margin-left: calc((var(--dnl-sun) + .5rem) / -2); overflow: hidden; }
+  .dnl__sun { position: absolute; left: .25rem; top: 0; width: var(--dnl-sun); height: var(--dnl-sun); border-radius: 50%; background: currentColor;
+    transform: translateY(calc(var(--dnl-t) * (var(--dnl-sky) + .125rem))); }
 }
 
 /* ---- The split, its own section (TJ, 11 Nov 2026, from Ami, TPS-0055) ----
@@ -303,8 +303,11 @@
    height is the screen it arrives in, plus the end of the glass, plus a
    screen to read. The glass, the columns and their variables are unchanged
    (they read --dn-g and friends from .dn-wrap). Same night photograph for now. */
-.dns { position: relative; height: calc(var(--dns-len, 2.5) * 100svh); background: #1d1715; }
-.dns__stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.dns { position: relative; height: calc(var(--dns-len, 2.5) * 100svh + var(--dns-extra, 0px)); background: #1d1715; }
+.dns__stage { position: sticky; top: 0; height: 100vh; height: calc(100svh + var(--dns-extra, 0px)); overflow: hidden; }
+/* Read more never scrolls inside a box (TJ, 15 Nov 2026): where the open text
+   is longer than the screen allows, the scene grows by --dns-extra (measured
+   by what-we-do-promise.js) and the page carries on scrolling as one. */
 .dns__frame { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
 .dns__frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; will-change: transform; }
 .dns .dng { z-index: 1; }

@@ -112,17 +112,17 @@
   --f-mono:    "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
   /* Radius scale, held across the page */
-  --r-badge:  6px;
-  --r-button: 8px;
-  --r-card:   10px;
-  --r-media:  16px;
+  --r-badge:  .375rem;
+  --r-button: .5rem;
+  --r-card:   .625rem;
+  --r-media:  1rem;
 
   /* Layout */
-  --max:     1080px;
+  --max:     67.5rem;
   --measure: 62ch;
-  --gutter:  24px;
-  --section: 96px;
-  --nav-h:   80px;
+  --gutter:  1.5rem;
+  --section: 6rem;
+  --nav-h:   5rem;
   /* The tall (top of page) header bar: --nav-h x 1.1 x --bar-grow (1.15).
      The hero photograph starts below it. */
   --hero-top: calc(var(--nav-h) * 1.265);
@@ -135,8 +135,8 @@
      Past it the row centres instead, because on a 3440 ultrawide, corners
      would put the wordmark most of a metre from Book a call and the bar
      would stop reading as one object. */
-  --nav-inset: 24px;
-  --nav-max:   2100px;
+  --nav-inset: 1.5rem;
+  --nav-max:   131.25rem;
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
 
@@ -150,19 +150,36 @@
   --tline: 1px;
   --tline-track: rgba(10, 10, 10, .12);
   --tline-ink: var(--reach-script);
-  --tdot: 11px;
-  --ttip: 15px;
+  --tdot: .6875rem;
+  --ttip: .9375rem;
   --tease: cubic-bezier(.215, .61, .355, 1);
 }
 
-@media (min-width: 768px)  { :root { --gutter: 28px; } }
-@media (min-width: 1100px) { :root { --gutter: 48px; } }
-@media (max-width: 700px)  { :root { --section: 64px; } }
+@media (min-width: 768px)  { :root { --gutter: 1.75rem; } }
+@media (min-width: 1100px) { :root { --gutter: 3rem; } }
+@media (max-width: 700px)  { :root { --section: 4rem; } }
 
 *, *::before, *::after { box-sizing: border-box; }
 
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* One master number for desktop screens (TJ, 15 Nov 2026). The site was
+   designed on a 1920 by 950 window. Every length is in rem, so on any window
+   from 1101 wide up the whole layout is that design scaled as one: the root
+   size is 16px times the smaller of width / 1920 and height / 950, kept
+   between 0.6 and 1.4. Phones and tablets keep 16px. Media queries that only
+   split the desktop range were folded so a scaled desktop always takes the
+   1920 by 950 layout. Scripts read the factor with tpsU(). */
+@media (min-width: 1101px) {
+  html { font-size: clamp(9.6px, min(100vw / 120, 100vh / 59.375), 22.4px); }
+}
+/* Touch screens this wide are tablets held in the hand (an iPad turned
+   sideways): the page never shrinks below 0.8, so the words stay readable.
+   At that size the layout is the 1440 wide one TJ approved. */
+@media (min-width: 1101px) and (pointer: coarse) {
+  html { font-size: clamp(12.8px, min(100vw / 120, 100vh / 59.375), 22.4px); }
+}
 
 body {
   margin: 0;
@@ -179,9 +196,9 @@ img { display: block; max-width: 100%; }
 
 ::selection { background: var(--g-tint); color: var(--t-ink); }
 :focus-visible {
-  outline: 2px solid var(--focus);
-  outline-offset: 3px;
-  border-radius: 2px;
+  outline: .125rem solid var(--focus);
+  outline-offset: .1875rem;
+  border-radius: .125rem;
 }
 /* The landing target itself is focusable so the skip actually moves the
    caret, but it is not a control and should never draw a ring of its own. */
@@ -192,10 +209,10 @@ main:focus { outline: none; }
    before the nav is. */
 .skip {
   position: fixed;
-  top: 10px;
-  left: 10px;
+  top: .625rem;
+  left: .625rem;
   z-index: 80;
-  padding: 12px 18px;
+  padding: .75rem 1.125rem;
   background: var(--g-paper);
   color: var(--t-ink);
   font-family: var(--f-body);
@@ -204,7 +221,7 @@ main:focus { outline: none; }
   text-decoration: none;
   border: 1px solid var(--line-firm);
   border-radius: var(--r-badge);
-  transform: translateY(calc(-100% - 20px));
+  transform: translateY(calc(-100% - 1.25rem));
   transition: transform 200ms var(--ease-out);
 }
 .skip:focus-visible { transform: translateY(0); }
@@ -233,10 +250,10 @@ main:focus { outline: none; }
 /* The hero headline is sized against the viewport's shorter axis too.
    A desktop-only clamp wraps it to five lines on a short window and the
    copy block then overflows the stage and clips at the top. */
-@media (max-height: 780px) {
+@media (max-width: 1100px) and (max-height: 780px) {
   .display--xl { font-size: clamp(2rem, 4.4vh, 3.2rem); }
   .act--hero .lede { font-size: .95rem; margin-top: 1rem; }
-  .act--hero .btn--primary { margin-top: 1.2rem; padding: 12px 20px; }
+  .act--hero .btn--primary { margin-top: 1.2rem; padding: .75rem 1.25rem; }
 }
 @media (max-width: 700px) {
   /* Same reason as the desktop cap: at 33.6px the first line needs 355px in
@@ -361,7 +378,7 @@ main:focus { outline: none; }
   font-size: 1rem;
   font-weight: 500;
   line-height: 1;
-  padding: 14px 24px;
+  padding: .875rem 1.5rem;
   border-radius: var(--r-button);
   border: none;
   text-decoration: none;
@@ -391,7 +408,7 @@ main:focus { outline: none; }
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
-.wrap--narrow { max-width: 780px; }
+.wrap--narrow { max-width: 48.75rem; }
 
 .act { position: relative; }
 
@@ -425,11 +442,11 @@ main:focus { outline: none; }
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 16px;
+  gap: 1rem;
 }
 .nav__side { display: flex; align-items: center; }
 .nav__side--r { justify-content: flex-end; }
-.nav__tabs { display: flex; gap: 8px; }
+.nav__tabs { display: flex; gap: .5rem; }
 
 /* The lockup sits dead centre, composed from two files rather than the
    single baked-in one, so the circle can survive as one continuous
@@ -442,7 +459,7 @@ main:focus { outline: none; }
    each number here is simply source-pixels / 900 and the composed
    stack lines up with the original artwork. */
 .nav__brand {
-  --lockup-h: clamp(120px, 13vw, 158px);
+  --lockup-h: clamp(7.5rem, 13vw, 9.875rem);
   position: relative;
   height: 100%;
   display: flex;
@@ -477,7 +494,7 @@ main:focus { outline: none; }
      reference holds, where this used to be 0.89 of them. Fluid so it keeps
      that relationship as they scale, and the offset is derived rather than
      typed so it stays centred in the bar at every size. */
-  --mark-h: clamp(46px, 3.2vw, 56px);
+  --mark-h: clamp(2.875rem, 3.2vw, 3.5rem);
   height: var(--mark-h);
   top: calc((var(--nav-h) - var(--mark-h)) / 2);
   /* Hangs back until the wordmark has cleared out from under it. */
@@ -527,7 +544,7 @@ main:focus { outline: none; }
 /* Leaving: bottom line first, collapsing upward toward the mark.
    Returning: top line first, the stack rebuilding downward, and only
    after the mark has finished expanding. */
-.nav.is-scrolled .wm-line { opacity: 0; transform: translateY(-10px); }
+.nav.is-scrolled .wm-line { opacity: 0; transform: translateY(-.625rem); }
 .nav.is-scrolled .wm-line--3 { transition-delay: 0ms; }
 .nav.is-scrolled .wm-line--2 { transition-delay: 55ms; }
 .nav.is-scrolled .wm-line--1 { transition-delay: 110ms; }
@@ -577,12 +594,12 @@ main:focus { outline: none; }
    Flex centring rather than a line-height, so nothing has to be recomputed
    if the height or the border ever change. */
 .tab {
-  --tab-h: clamp(34px, 2.4vw, 42px);
-  --tab-w: clamp(112px, 8.2vw, 152px);
+  --tab-h: clamp(2.125rem, 2.4vw, 2.625rem);
+  --tab-w: clamp(7rem, 8.2vw, 9.5rem);
   flex: none;
   width: var(--tab-w);
   height: var(--tab-h);
-  padding: 0 10px;
+  padding: 0 .625rem;
   /* TJ's chip, chosen off a rendered ladder that ran from 0.46 down to
      zero. No border at all, and a 0.04 taupe tint. On a photograph the
      backdrop blur does the defining; on the flat pale grounds the chip is
@@ -603,8 +620,8 @@ main:focus { outline: none; }
      against ink, whatever the photograph underneath is doing, and it
      still reads as glass rather than as a filled button. */
   background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(.875rem) saturate(1.2);
+  -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
   color: var(--t-ink);
   font-family: var(--f-body);
   font-size: clamp(.72rem, .6rem + .28vw, .86rem);
@@ -703,8 +720,8 @@ main:focus { outline: none; }
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: -1;
   background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(.875rem) saturate(1.2);
+  -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
   pointer-events: none;
 }
 /* Over the one dark frame the strip takes the dark glass the chips used. */
@@ -751,7 +768,7 @@ main:focus { outline: none; }
    text at roughly 62% of the bar's height with equal air above and below.
    The floor and the 38vw term hold it inside the gap between Menu and
    Enquire on a phone, where the width, not the height, is the limit. */
-.nav--glass .nav__brand { --lockup-h: clamp(150px, 38vw, calc(var(--bar-top-h) * 2.2)); }
+.nav--glass .nav__brand { --lockup-h: clamp(9.375rem, 38vw, calc(var(--bar-top-h) * 2.2)); }
 
 /* The wordmark's three lines sit low in its box (the box was drawn under
    the old circle), so shift the box until the block of text, not the box,
@@ -773,7 +790,7 @@ main:focus { outline: none; }
 /* The circle waits, hidden and a little small, at the middle of the bar. */
 .nav--glass .nav__mark,
 .nav--glass.is-scrolled .nav__mark {
-  --mark-h: clamp(46px, 3.2vw, 56px);
+  --mark-h: clamp(2.875rem, 3.2vw, 3.5rem);
   top: 50%;
   height: var(--mark-h);
   transform: translate(-50%, -50%) scale(.55);
@@ -793,10 +810,10 @@ main:focus { outline: none; }
    width. Each tab fits its own label, with tight padding and a small gap
    and stays clear of the centre wordmark. The Enquire button keeps its
    own width. */
-.nav--glass .nav__tabs { gap: 2px; }
+.nav--glass .nav__tabs { gap: .125rem; }
 .nav--glass .nav__tabs .tab {
   width: auto;
-  padding: 0 clamp(9px, 1vw, 16px);
+  padding: 0 clamp(.5625rem, 1vw, 1rem);
 }
 
 /* Corner mark and sliding tabs, wide screens only. At the top of the page
@@ -811,10 +828,10 @@ main:focus { outline: none; }
 .nav__corner { display: none; }
 /* From 1520px, not 1200px (TJ, 11 Nov 2026): with the dropdown arrows the
    shifted tabs ran into the wordmark from 1200 to 1366px wide. */
-@media (min-width: 1520px) {
+@media (min-width: 1101px) {
   .nav--glass {
-    --corner-h: clamp(46px, 3.2vw, 56px);
-    --corner-shift: calc(var(--corner-h) * 1.016 + 28px);
+    --corner-h: clamp(2.875rem, 3.2vw, 3.5rem);
+    --corner-shift: calc(var(--corner-h) * 1.016 + 1.75rem);
   }
   .nav--glass .nav__side--l { position: relative; }
   .nav--glass .nav__corner {
@@ -878,13 +895,13 @@ main:focus { outline: none; }
   /* 62px with 10px of padding under the text: the labels stay exactly
      where they were (the extra height is all below them) and there is
      about 10px more air between the text and the line on the glass edge. */
-  .nav--glass { --row-h: 62px; }
+  .nav--glass { --row-h: 3.875rem; }
   .nav--glass::before { transition: bottom 280ms var(--ease-out); }
   .nav.nav--glass.is-open::before { bottom: calc(var(--row-h) * -1); }
 
   .nav.nav--glass.is-open .nav__side--l .nav__tabs {
     height: var(--row-h);
-    padding: 0 calc(var(--gutter) - 6px);
+    padding: 0 calc(var(--gutter) - .375rem);
     gap: 0;
     background: transparent;
     align-items: stretch;
@@ -896,7 +913,7 @@ main:focus { outline: none; }
     flex: 0 1 auto;
     width: auto;
     height: auto;
-    padding: 0 6px 10px;
+    padding: 0 .375rem .625rem;
     background: transparent;
     border-color: transparent;
     color: var(--t-ink);
@@ -909,8 +926,8 @@ main:focus { outline: none; }
   .nav.nav--glass.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"]::after {
     content: "";
     position: absolute;
-    left: 6px; right: 6px; bottom: 0;
-    height: 2px;
+    left: .375rem; right: .375rem; bottom: 0;
+    height: .125rem;
     background: var(--acc);
   }
   /* On the one dark frame the glass is dark, so the row reads light. */
@@ -921,7 +938,7 @@ main:focus { outline: none; }
   /* The white panel starts where the glass ends, and no longer needs the
      82px of top padding that used to leave room for the row overlapping it. */
   .nav--glass .menu { top: calc(100% + var(--row-h)); }
-  .nav--glass .menu__panel { padding-top: clamp(24px, 4vw, 32px); }
+  .nav--glass .menu__panel { padding-top: clamp(1.5rem, 4vw, 2rem); }
 }
 @keyframes navRowIn { from { opacity: 0; } }
 
@@ -961,10 +978,10 @@ main:focus { outline: none; }
    at 24, and the panel read as belonging to nothing. The columns are a
    fixed 250px each, so widening the box does not stretch them. */
 .menu__panel {
-  padding: clamp(28px, 4vw, 44px) 0 clamp(32px, 5vw, 52px);
+  padding: clamp(1.75rem, 4vw, 2.75rem) 0 clamp(2rem, 5vw, 3.25rem);
   padding-inline: max(var(--nav-inset), (100% - var(--nav-max)) / 2);
   display: grid;
-  gap: clamp(28px, 5vw, 72px);
+  gap: clamp(1.75rem, 5vw, 4.5rem);
   grid-template-columns: 1fr;
 }
 /* The row gap is not the column gap. The panel is a two-column grid and
@@ -974,8 +991,8 @@ main:focus { outline: none; }
    between them; the rows do not. */
 @media (min-width: 720px) {
   .menu__panel {
-    grid-template-columns: repeat(2, minmax(0, 250px));
-    row-gap: clamp(24px, 3vw, 40px);
+    grid-template-columns: repeat(2, minmax(0, 15.625rem));
+    row-gap: clamp(1.5rem, 3vw, 2.5rem);
   }
 }
 
@@ -995,7 +1012,7 @@ main:focus { outline: none; }
 .menu__list li + li { border-top: 1px solid var(--line); }
 .menu__list a {
   display: block;
-  padding: 10px 0;
+  padding: .625rem 0;
   font-family: var(--f-read);
   font-size: .95rem;
   line-height: 1.4;
@@ -1004,7 +1021,7 @@ main:focus { outline: none; }
   transition: color 140ms var(--ease-out), padding-left 180ms var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .menu__list a:hover { color: var(--t-ink); padding-left: 8px; }
+  .menu__list a:hover { color: var(--t-ink); padding-left: .5rem; }
 }
 
 /* Entries with nowhere to go.
@@ -1021,7 +1038,7 @@ main:focus { outline: none; }
    active. */
 .menu__pending {
   display: block;
-  padding: 10px 0;
+  padding: .625rem 0;
   font-family: var(--f-read);
   font-size: .95rem;
   line-height: 1.4;
@@ -1065,11 +1082,11 @@ main:focus { outline: none; }
      of the band down, so the band is never glazed twice. */
   .nav .menu {
     top: var(--menu-y, 100%);
-    left: calc(var(--menu-x, 24px) - 22px);
+    left: calc(var(--menu-x, 1.5rem) - 1.375rem);
     right: auto;
     z-index: 1;
     width: max-content;
-    max-width: calc(100vw - 32px);
+    max-width: calc(100vw - 2rem);
     background: transparent;
     border: 0;
   }
@@ -1079,9 +1096,9 @@ main:focus { outline: none; }
     top: var(--menu-band, 0px); left: 0; right: 0; bottom: 0;
     z-index: -1;
     background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
-    backdrop-filter: blur(14px) saturate(1.2);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    border-radius: 0 0 10px 10px;
+    backdrop-filter: blur(.875rem) saturate(1.2);
+    -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
+    border-radius: 0 0 .625rem .625rem;
     pointer-events: none;
   }
   /* At the very top the band sits on the plain page while the dropdown would
@@ -1096,18 +1113,18 @@ main:focus { outline: none; }
   .nav--glass.is-dark .menu::before { background: color-mix(in srgb, var(--g-taupe) 46%, transparent); }
   .nav--glass.is-dark .menu__list a { color: var(--g-paper); }
   .nav .menu__panel {
-    padding: 6px 22px 8px;
+    padding: .375rem 1.375rem .5rem;
     grid-template-columns: 1fr;
     row-gap: 0;
   }
   /* The arrows widen the row, so tighten the tabs where it nears the wordmark. */
-  @media (max-width: 1300px) {
-    .nav--glass .nav__tabs .tab { padding-inline: 8px; }
+  @media (max-width: 1100px) {
+    .nav--glass .nav__tabs .tab { padding-inline: .5rem; }
   }
   /* Just above the Menu breakpoint the row is longest against the room it has:
      tighter again, so it never comes near the wordmark (TJ, 11 Nov 2026). */
-  @media (max-width: 1180px) {
-    .nav--glass .nav__tabs .tab { padding-inline: 4px; }
+  @media (max-width: 1100px) {
+    .nav--glass .nav__tabs .tab { padding-inline: .25rem; }
   }
   /* A small arrow marks the three tabs that open a dropdown; it turns over
      while its dropdown is open (TJ, 7 Nov 2026). */
@@ -1117,8 +1134,8 @@ main:focus { outline: none; }
     width: .36em;
     height: .36em;
     margin-left: .5em;
-    border-right: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
+    border-right: .0938rem solid currentColor;
+    border-bottom: .0938rem solid currentColor;
     transform: translateY(-.1em) rotate(45deg);
     transition: transform 200ms var(--ease-out);
   }
@@ -1128,7 +1145,7 @@ main:focus { outline: none; }
   /* No heading in the dropdown: the open tab already shows in the accent
      colour, so the panel is just its links (TJ, 1 Nov 2026). */
   .nav .menu__head { display: none; }
-  .nav .menu__list a { padding: 8px 0; white-space: nowrap; }
+  .nav .menu__list a { padding: .5rem 0; white-space: nowrap; }
   /* The page behind stays clear while a dropdown is open (TJ, 1 Nov 2026).
      The veil stays as an invisible layer so a click anywhere still closes. */
   .veil[data-veil] { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
@@ -1139,8 +1156,8 @@ main:focus { outline: none; }
   inset: var(--nav-h) 0 0;
   z-index: 50;
   background: color-mix(in srgb, var(--g-canvas) 55%, transparent);
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(.4375rem);
+  -webkit-backdrop-filter: blur(.4375rem);
   opacity: 0;
 }
 
@@ -1151,7 +1168,7 @@ main:focus { outline: none; }
   /* Only Menu and Enquire are on screen here and both are short words, so
      the chip can be narrower than the desktop minimum, which Programmes
      sets. That buys the wordmark room to breathe at phone width. */
-  .tab { --tab-w: clamp(96px, 26vw, 124px); }
+  .tab { --tab-w: clamp(6rem, 26vw, 7.75rem); }
   .tab--menu { display: inline-flex; }
   /* Enquire is the one thing that never leaves. */
   .nav__side--r .tab--cta { display: inline-flex; }
@@ -1162,9 +1179,9 @@ main:focus { outline: none; }
     position: absolute;
     top: 100%; left: 0; right: 0;
     z-index: 2;
-    padding: 14px var(--gutter);
+    padding: .875rem var(--gutter);
     background: var(--g-paper);
-    gap: 6px;
+    gap: .375rem;
   }
   .nav.is-open .nav__side--l .nav__tabs .tab {
     flex: 1 1 0;
@@ -1175,7 +1192,7 @@ main:focus { outline: none; }
   }
   .nav.is-open .nav__side--l .nav__tabs .tab[aria-expanded="true"] { background: var(--acc); color: var(--t-on-accent); }
   .menu { z-index: 1; }
-  .menu__panel { padding-left: var(--gutter); padding-top: 82px; gap: 24px; }
+  .menu__panel { padding-left: var(--gutter); padding-top: 5.125rem; gap: 1.5rem; }
 }
 
 /* ============================================================
@@ -1185,7 +1202,7 @@ main:focus { outline: none; }
 .stage {
   position: relative;
   height: 100svh;
-  min-height: 540px;
+  min-height: 33.75rem;
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -1200,7 +1217,7 @@ main:focus { outline: none; }
    the full viewport again and the photograph sits under it. */
 .act--hero .stage {
   height: 100svh;
-  min-height: 540px;
+  min-height: 33.75rem;
 }
 
 .stage__media { position: absolute; inset: 0; }
@@ -1238,18 +1255,18 @@ main:focus { outline: none; }
 .stage__copy {
   position: relative;
   z-index: 2;
-  padding: 0 var(--gutter) clamp(48px, 9vh, 96px);
+  padding: 0 var(--gutter) clamp(3rem, 9vh, 6rem);
   width: 100%;
-  max-width: 900px;
+  max-width: 56.25rem;
 }
-.stage__copy--low { padding-bottom: clamp(56px, 12vh, 120px); }
+.stage__copy--low { padding-bottom: clamp(3.5rem, 12vh, 7.5rem); }
 
 /* 820, not 720. The headline is two authored lines set in capitals now, and
    at 720 the gutters left only 624px of text, where "Live-in postpartum
    care," needs 685 at hero scale. Widening the column keeps the headline at
    full size rather than shrinking the loudest thing on the page to fit. The
    lede is capped at 40ch independently, so nothing else in here moves. */
-.act--hero .stage__copy { max-width: 820px; }
+.act--hero .stage__copy { max-width: 51.25rem; }
 .act--hero .stage__copy .display { color: var(--t-ink); }
 .act--hero .stage__copy .lede { color: var(--t-soft); max-width: 40ch; }
 /* Scoped to the hero rather than changing the shared .script size, because
@@ -1258,7 +1275,7 @@ main:focus { outline: none; }
 .act--hero .script { font-size: calc(1.1 * clamp(2.4rem, 6.2vw, 4rem)); }
 /* The script is 10 percent larger than the headline at every size, so the
    two media queries that shrink the headline shrink this with it. */
-@media (max-height: 780px) {
+@media (max-width: 1100px) and (max-height: 780px) {
   .act--hero .script { font-size: calc(1.1 * clamp(2rem, 4.4vh, 3.2rem)); }
 }
 @media (max-width: 700px) {
@@ -1307,7 +1324,7 @@ main:focus { outline: none; }
   .act--hero .stage__copy .lede {
     white-space: nowrap;
     max-width: none;
-    font-size: max(13px, min(1rem, calc((100vw - 2 * var(--gutter)) / 34))) !important;
+    font-size: max(.8125rem, min(1rem, calc((100vw - 2 * var(--gutter)) / 34))) !important;
   }
 }
 /* The header band (TJ, 5 Oct 2026). At the top of the page the tall header
@@ -1335,7 +1352,7 @@ main:focus { outline: none; }
   to   { transform: translateY(0);    opacity: 1; }
 }
 @keyframes softRise {
-  from { transform: translateY(26px); opacity: 0; }
+  from { transform: translateY(1.625rem); opacity: 0; }
   to   { transform: translateY(0);    opacity: 1; }
 }
 /* The same entrance as the opening header on What We Do: a 1s power3.out
@@ -1362,7 +1379,7 @@ main:focus { outline: none; }
    the page's own white and always has. This act is otherwise unresolved
    pending a later pass. */
 .act--rest { padding-block: var(--section); background: var(--g-paper); }
-.act--rest .wrap--narrow { margin-bottom: clamp(32px, 6vh, 64px); }
+.act--rest .wrap--narrow { margin-bottom: clamp(2rem, 6vh, 4rem); }
 
 .frame--bleed {
   margin: 0;
@@ -1371,7 +1388,7 @@ main:focus { outline: none; }
 }
 .frame--bleed img {
   width: 100%;
-  height: clamp(320px, 68vh, 720px);
+  height: clamp(20rem, 68vh, 45rem);
   object-fit: cover;
   object-position: center 42%;
   border-radius: var(--r-media);
@@ -1384,7 +1401,7 @@ main:focus { outline: none; }
    carry the frame's rounded corners while its contents overhang them. The
    figcaption stays outside, so it is never clipped and never drifts. */
 .frame__clip { border-radius: var(--r-media); overflow: hidden; }
-.js .frame--bleed .frame__clip { height: clamp(320px, 68vh, 720px); }
+.js .frame--bleed .frame__clip { height: clamp(20rem, 68vh, 45rem); }
 .js .frame--bleed .frame__clip img {
   position: relative;
   top: -10%;
@@ -1412,7 +1429,7 @@ main:focus { outline: none; }
   height: auto;
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(28px, 5vw, 56px);
+  gap: clamp(1.75rem, 5vw, 3.5rem);
   align-items: center;
   max-width: var(--max);
   margin-inline: auto;
@@ -1420,7 +1437,7 @@ main:focus { outline: none; }
   overflow: visible;
 }
 @media (min-width: 900px) {
-  .stage--split { grid-template-columns: 1.18fr .82fr; gap: clamp(36px, 5vw, 72px); }
+  .stage--split { grid-template-columns: 1.18fr .82fr; gap: clamp(2.25rem, 5vw, 4.5rem); }
 }
 
 .stage__frame {
@@ -1475,7 +1492,7 @@ main:focus { outline: none; }
 .rail {
   display: flex;
   align-items: flex-start;
-  gap: clamp(20px, 3vw, 36px);
+  gap: clamp(1.25rem, 3vw, 2.25rem);
   padding-inline: var(--gutter);
   will-change: transform;
 }
@@ -1484,26 +1501,26 @@ main:focus { outline: none; }
    section keeps its proportions. And it leaves card one fully clear of the
    fold on desktop with card two showing at the edge, which is the whole
    affordance: you can see there is more to the right. */
-.rail__item { flex: 0 0 auto; width: clamp(300px, 50vw, 780px); }
+.rail__item { flex: 0 0 auto; width: clamp(18.75rem, 50vw, 48.75rem); }
 /* The closing note at the end of the rail came out (TJ, 16 Oct 2026). Its
    travel stays: the rail ends with room for the last card to reach the
    middle of the screen, so the line's last dot (Home) is still reached.
    Desktop only; the phone stack does not travel. */
 @media (min-width: 701px) {
-  .act--pan .rail::after { content: ""; flex: 0 0 auto; width: calc(50vw - clamp(150px, 25vw, 390px) - var(--gutter)); }
+  .act--pan .rail::after { content: ""; flex: 0 0 auto; width: calc(50vw - clamp(9.375rem, 25vw, 24.375rem) - var(--gutter)); }
 }
 
 .rail__intro {
-  width: clamp(300px, 34vw, 460px);
+  width: clamp(18.75rem, 34vw, 28.75rem);
   align-self: center;
 }
 .rail__intro .display { margin-bottom: 1.2rem; }
 
 .rail__close {
-  width: clamp(280px, 30vw, 400px);
+  width: clamp(17.5rem, 30vw, 25rem);
   align-self: center;
   border-left: 1px solid var(--line-firm);
-  padding-left: clamp(20px, 3vw, 36px);
+  padding-left: clamp(1.25rem, 3vw, 2.25rem);
 }
 
 /* Not cards.
@@ -1607,7 +1624,7 @@ main:focus { outline: none; }
   padding-inline: 0;
   margin: 0;
   height: 100svh;
-  min-height: 540px;
+  min-height: 33.75rem;
   overflow: hidden;
 }
 .act--peak .peak__frame img {
@@ -1652,7 +1669,7 @@ main:focus { outline: none; }
    viewport, not to document flow. */
 .act--peak .peak__ask {
   position: fixed;
-  top: calc(var(--nav-h) + clamp(18px, 3vh, 34px));
+  top: calc(var(--nav-h) + clamp(1.125rem, 3vh, 2.125rem));
   /* Pulled in from the corner 2026-09-17: 15% of the screen width, on top
      of the existing gutter, not a resize of the gutter itself. */
   left: calc(var(--gutter) + 15vw);
@@ -1685,10 +1702,10 @@ main:focus { outline: none; }
 .act--peak .peak__clock {
   position: absolute;
   left: 50%; transform: translateX(-50%);
-  bottom: clamp(230px, 34vh, 400px);
-  width: min(560px, calc(100% - var(--gutter) * 2));
+  bottom: clamp(14.375rem, 34vh, 25rem);
+  width: min(35rem, calc(100% - var(--gutter) * 2));
   display: flex; flex-direction: column; align-items: center;
-  gap: clamp(20px, 3.4vh, 38px);
+  gap: clamp(1.25rem, 3.4vh, 2.375rem);
   opacity: 0;
   will-change: opacity;
   pointer-events: none;
@@ -1699,8 +1716,8 @@ main:focus { outline: none; }
    drawn line. The line itself is the sky box's own bottom edge. */
 .act--peak .sundial {
   position: relative;
-  width: min(340px, 64vw);
-  height: clamp(86px, 13vh, 132px);
+  width: min(21.25rem, 64vw);
+  height: clamp(5.375rem, 13vh, 8.25rem);
 }
 .act--peak .sundial__sky {
   position: absolute; inset: 0;
@@ -1709,9 +1726,9 @@ main:focus { outline: none; }
 .act--peak .sundial__sun {
   position: absolute;
   left: 50%;
-  width: clamp(30px, 4.4vw, 46px);
-  height: clamp(30px, 4.4vw, 46px);
-  margin-left: calc(clamp(30px, 4.4vw, 46px) / -2);
+  width: clamp(1.875rem, 4.4vw, 2.875rem);
+  height: clamp(1.875rem, 4.4vw, 2.875rem);
+  margin-left: calc(clamp(1.875rem, 4.4vw, 2.875rem) / -2);
   border-radius: 50%;
   background: var(--g-paper);
   top: 0;
@@ -1726,11 +1743,11 @@ main:focus { outline: none; }
 
 .act--peak .peak__states {
   display: flex;
-  gap: clamp(14px, 2.6vw, 34px);
+  gap: clamp(.875rem, 2.6vw, 2.125rem);
   justify-content: center;
   flex-wrap: nowrap;
   font-family: var(--f-body);
-  font-size: clamp(8px, .92vw, 11px);
+  font-size: clamp(.5rem, .92vw, .6875rem);
   font-weight: 500;
   letter-spacing: .2em;
   text-transform: uppercase;
@@ -1747,12 +1764,12 @@ main:focus { outline: none; }
   /* Raised 2026-09-17, TJ asked for it higher but still clearly under the
      four words: the clock block's own floor is clamp(230px, 34vh, 400px),
      so this stays under that with real margin at every size. */
-  bottom: clamp(140px, 20vh, 220px);
+  bottom: clamp(8.75rem, 20vh, 13.75rem);
   display: flex; flex-direction: column; align-items: flex-end;
-  gap: clamp(14px, 2.2vh, 22px);
+  gap: clamp(.875rem, 2.2vh, 1.375rem);
   text-align: right;
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(1rem);
   will-change: opacity, transform;
 }
 /* Set to match the question exactly, 2026-09-17. It was the display serif
@@ -1785,7 +1802,7 @@ main:focus { outline: none; }
   font-weight: 400;
   letter-spacing: .13em;
   text-transform: uppercase;
-  padding: 12px 22px;
+  padding: .75rem 1.375rem;
 }
 @media (hover: hover) and (pointer: fine) {
   .act--peak .peak__answer .btn:hover {
@@ -1800,7 +1817,7 @@ main:focus { outline: none; }
   .act--peak .peak__states {
     flex-wrap: wrap;
     max-width: 22ch;
-    gap: 8px clamp(12px, 4vw, 20px);
+    gap: .5rem clamp(.75rem, 4vw, 1.25rem);
   }
   .act--peak .peak__ask { max-width: 12ch; }
 }
@@ -1820,7 +1837,7 @@ main:focus { outline: none; }
      At 10vh alone a 670px window gives 67px of padding under an 80px bar,
      so the heading sat behind it. Measured at eight sizes: three had the
      heading overlapping the bar and four more had it within 10px. */
-  padding-block: clamp(104px, 10vh, 132px) clamp(84px, 13vh, 160px);
+  padding-block: clamp(6.5rem, 10vh, 8.25rem) clamp(5.25rem, 13vh, 10rem);
 }
 /* Redesigned 2026-09-07 onto the split-stage device (see "The split-stage
    device" above): .stage__side is a single reading column now rather than
@@ -1865,7 +1882,7 @@ main:focus { outline: none; }
    act's top at the window's top, its padding and stage fill the window, so
    the testimonials start at the fold and only show once scrolled to. */
 @media (min-width: 768px) {
-  .act--turn > .stage--split { min-height: calc(100svh - clamp(84px, 13vh, 160px)); }
+  .act--turn > .stage--split { min-height: calc(100svh - clamp(5.25rem, 13vh, 10rem)); }
 }
 
 /* The confinement photograph. Wider than the treatment act's portrait
@@ -1885,7 +1902,7 @@ main:focus { outline: none; }
    the photograph takes what is left. It opens from a narrow slot as the
    act arrives (home.js, actTurn). */
 @media (max-width: 767px) {
-  .act--turn .stage--split { gap: 16px; }
+  .act--turn .stage--split { gap: 1rem; }
   .act--turn .stage__side .display { margin-bottom: .5rem; }
   .act--turn .turn__standfirst,
   .act--turn .stage__side .body { margin-bottom: 0; font-size: .92rem; line-height: 1.45; }
@@ -1902,7 +1919,7 @@ main:focus { outline: none; }
      bottom edge sits that same distance above the screen's edge (TJ, 16 Oct
      2026). The section itself is not sized: the testimonials follow it. */
   .act.act--turn.is-handover > .stage--split,
-  .act.act--turn > .stage--split { height: calc(100svh - clamp(84px, 13vh, 160px) - var(--gutter)); min-height: 0; grid-template-rows: auto minmax(240px, 1fr); margin-bottom: var(--gutter); }
+  .act.act--turn > .stage--split { height: calc(100svh - clamp(5.25rem, 13vh, 10rem) - var(--gutter)); min-height: 0; grid-template-rows: auto minmax(15rem, 1fr); margin-bottom: var(--gutter); }
   /* The same gutter again under the stage, so the testimonials band starts a
      clear 24px below the photograph instead of touching it (TJ, 16 Oct 2026). */
   .act--turn .stage__frame.stage__frame--turn { width: 100%; aspect-ratio: auto; height: 100%; align-self: stretch; justify-self: stretch; }
@@ -1913,7 +1930,7 @@ main:focus { outline: none; }
   height: 114%;
   top: -7%;
 }
-.act--night .wrap--narrow { margin-bottom: clamp(96px, 20vh, 240px); }
+.act--night .wrap--narrow { margin-bottom: clamp(6rem, 20vh, 15rem); }
 
 /* The landing.
 
@@ -1935,14 +1952,14 @@ main:focus { outline: none; }
 }
 .nightframe img {
   width: 100%;
-  height: clamp(360px, 80vh, 840px);
+  height: clamp(22.5rem, 80vh, 52.5rem);
   object-fit: cover;
   object-position: center 46%;
 }
 /* .nightframe__media already clips for the wipe, so the plane only needs the
    overhang. Same treatment as act 2 on purpose: the closing reveal answers
    the opening one with the same gesture, and that includes the depth. */
-.js .nightframe__media { height: clamp(360px, 80vh, 840px); }
+.js .nightframe__media { height: clamp(22.5rem, 80vh, 52.5rem); }
 .js .nightframe__media img { position: relative; top: -9%; height: 118%; max-width: none; will-change: transform; }
 /* Density only where the script sits. The photograph is already dark at
    the foot, so this is seating rather than covering. */
@@ -1958,9 +1975,9 @@ main:focus { outline: none; }
 }
 .nightframe__line {
   position: absolute;
-  left:  calc(var(--gutter) + clamp(20px, 3.4vw, 56px));
-  right: calc(var(--gutter) + clamp(20px, 3.4vw, 56px));
-  bottom: clamp(26px, 5.5vh, 68px);
+  left:  calc(var(--gutter) + clamp(1.25rem, 3.4vw, 3.5rem));
+  right: calc(var(--gutter) + clamp(1.25rem, 3.4vw, 3.5rem));
+  bottom: clamp(1.625rem, 5.5vh, 4.25rem);
 }
 
 /* ---------- The turn: story hands over to answer ---------- */
@@ -1969,7 +1986,7 @@ main:focus { outline: none; }
    light is the whole device: no rule, no band, no heading above it. */
 .act--turn {
   background: var(--g-paper);
-  padding-block: clamp(84px, 13vh, 160px);
+  padding-block: clamp(5.25rem, 13vh, 10rem);
 }
 .turn .eyebrow { display: block; margin-bottom: 1.2rem; }
 /* The measure is set on the line, not on the block around it: a ch on the
@@ -2047,12 +2064,12 @@ main:focus { outline: none; }
   position: absolute;
   /* Slightly larger than the box it sits in, so the blur's own soft edge
      is cut off by the overflow rather than drawn as a rectangle inside it. */
-  inset: -40px;
+  inset: -2.5rem;
   display: block;
   background-image: var(--aurora-light), var(--aurora-colour);
   background-size: 300%, 200%;
   background-position: 50% 50%, 50% 50%;
-  filter: blur(46px);
+  filter: blur(2.875rem);
   /* Measured, not chosen by eye. At .58 the gallery's meta line met the
      ground at 3.52:1 where it owes 4.5, which is the same way the earlier
      Blush Drift attempt failed on this page. This is the strongest the
@@ -2154,7 +2171,7 @@ main:focus { outline: none; }
 .act--close { padding-block: var(--section); background: var(--g-canvas); }
 .act--close .close { margin-top: 0; }
 
-.sec-head { margin-bottom: clamp(40px, 7vh, 72px); }
+.sec-head { margin-bottom: clamp(2.5rem, 7vh, 4.5rem); }
 .sec-head .display { margin-bottom: 1.2rem; }
 /* Programmes: the Quentin line sits straight under the serif heading and
    finishes the sentence, "However long you stay, the same care" (TJ, 16 Oct 2026). */
@@ -2184,8 +2201,8 @@ main:focus { outline: none; }
 
 .dur {
   --dur-max:  30;                                   /* the scale, in days */
-  --dur-cols: clamp(102px, 13vw, 146px) minmax(0, 1fr) minmax(0, 26ch);
-  --dur-gap:  clamp(16px, 2.6vw, 40px);
+  --dur-cols: clamp(6.375rem, 13vw, 9.125rem) minmax(0, 1fr) minmax(0, 26ch);
+  --dur-gap:  clamp(1rem, 2.6vw, 2.5rem);
   border-top: 1px solid var(--line-firm);
 }
 
@@ -2197,7 +2214,7 @@ main:focus { outline: none; }
   align-items: center;
 }
 
-.dur__scale { padding-block: 12px 16px; }
+.dur__scale { padding-block: .75rem 1rem; }
 .dur__ruler { position: relative; display: block; height: 1.5rem; }
 .dur__mark {
   position: absolute;
@@ -2216,16 +2233,16 @@ main:focus { outline: none; }
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -7px;
+  bottom: -.4375rem;
   width: 1px;
-  height: 6px;
+  height: .375rem;
   background: var(--line-firm);
 }
 
 .dur__list { list-style: none; margin: 0; padding: 0; }
 
 .dur__row {
-  padding-block: clamp(18px, 2.4vh, 26px);
+  padding-block: clamp(1.125rem, 2.4vh, 1.625rem);
   border-bottom: 1px solid var(--line);
 }
 .dur__row:last-child { border-bottom: none; }
@@ -2260,8 +2277,8 @@ main:focus { outline: none; }
 .dur__track {
   position: relative;
   display: block;
-  height: 14px;
-  border-radius: 3px;
+  height: .875rem;
+  border-radius: .1875rem;
   background:
     repeating-linear-gradient(to right,
       var(--line-firm) 0 1px,
@@ -2271,7 +2288,7 @@ main:focus { outline: none; }
   position: absolute;
   inset: 0 auto 0 0;
   width: calc(var(--days) / var(--dur-max) * 100%);
-  border-radius: 3px;
+  border-radius: .1875rem;
   background: var(--g-stone);
   transform-origin: left center;
 }
@@ -2296,9 +2313,9 @@ main:focus { outline: none; }
    read the scale by. */
 @media (max-width: 760px) {
   .dur__scale,
-  .dur__row { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dur__row { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
   .dur__pad { display: none; }
-  .dur__row { padding-block: 22px; }
+  .dur__row { padding-block: 1.375rem; }
   .dur__mark:nth-child(odd) { display: none; }
 }
 
@@ -2309,7 +2326,7 @@ main:focus { outline: none; }
    quiet second door. */
 .cta {
   max-width: 46rem;
-  margin: clamp(72px, 13vh, 150px) auto 0;
+  margin: clamp(4.5rem, 13vh, 9.375rem) auto 0;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -2333,7 +2350,7 @@ main:focus { outline: none; }
   margin: 1rem 0 0;
 }
 .programmes-bespoke.cta__alt {
-  margin-top: clamp(36px, 6vh, 56px);
+  margin-top: clamp(2.25rem, 6vh, 3.5rem);
   font-size: 1rem;
   line-height: 1.65;
   color: var(--t-soft);
@@ -2342,13 +2359,13 @@ main:focus { outline: none; }
 /* ---------- The decision (retired 16 Oct 2026, markup removed) ---------- */
 
 .close {
-  margin-top: clamp(56px, 10vh, 110px);
-  padding: clamp(26px, 3.6vw, 44px);
+  margin-top: clamp(3.5rem, 10vh, 6.875rem);
+  padding: clamp(1.625rem, 3.6vw, 2.75rem);
   background: var(--g-paper);
   border: 1px solid var(--line-firm);
   border-radius: var(--r-card);
   display: grid;
-  gap: clamp(22px, 4vw, 56px);
+  gap: clamp(1.375rem, 4vw, 3.5rem);
   align-items: end;
 }
 @media (min-width: 820px) { .close { grid-template-columns: minmax(0, 1fr) auto; } }
@@ -2378,10 +2395,10 @@ main:focus { outline: none; }
    now closes the page instead of continuing it. */
 .foot {
   background: var(--g-haze);
-  padding-block: clamp(48px, 8vh, 88px);
+  padding-block: clamp(3rem, 8vh, 5.5rem);
   border-top: 1px solid var(--line);
 }
-.foot__mark { width: 84px; height: auto; margin-bottom: 1.4rem; }
+.foot__mark { width: 5.25rem; height: auto; margin-bottom: 1.4rem; }
 
 /* ---------- Entrances ---------- */
 
@@ -2429,7 +2446,7 @@ main:focus { outline: none; }
      becomes margin around the headline instead of a hole beneath it. */
   .act--hero .stage {
     height: 100svh;
-    min-height: 560px;
+    min-height: 35rem;
     display: flex;
     flex-direction: column;
     background: var(--g-canvas);
@@ -2450,7 +2467,7 @@ main:focus { outline: none; }
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: clamp(24px, 4vh, 36px) var(--gutter);
+    padding: clamp(1.5rem, 4vh, 2.25rem) var(--gutter);
     max-width: none;
   }
   /* The copy block is a flex column now, so the button would otherwise
@@ -2488,7 +2505,7 @@ main:focus { outline: none; }
   .rail {
     flex-direction: column;
     align-items: stretch;
-    gap: clamp(40px, 7vh, 64px);
+    gap: clamp(2.5rem, 7vh, 4rem);
     will-change: auto;
   }
   .rail__item { width: 100%; align-self: stretch; }
@@ -2501,7 +2518,7 @@ main:focus { outline: none; }
     border-left: 0;
     padding-left: 0;
     border-top: 1px solid var(--line-firm);
-    padding-top: clamp(20px, 4vh, 32px);
+    padding-top: clamp(1.25rem, 4vh, 2rem);
   }
 
   /* Act 5, the dissolve. Removed 2026-09-16: this block existed to keep the
@@ -2515,7 +2532,7 @@ main:focus { outline: none; }
 
 /* Anchor targets clear the sticky bar. Without this, jumping to
    #programmes parks its heading behind the nav. */
-[id] { scroll-margin-top: calc(var(--nav-h) + 20px); }
+[id] { scroll-margin-top: calc(var(--nav-h) + 1.25rem); }
 
 /* ============================================================
    THE MIST HANDOFF
@@ -2613,7 +2630,7 @@ main:focus { outline: none; }
   position: sticky;
   top: 0;
   height: 100svh;
-  min-height: 540px;
+  min-height: 33.75rem;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -2717,7 +2734,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   top: 15svh;
   left: 0;
   right: 0;
-  width: min(1200px, calc(100% - 2 * var(--gutter)));
+  width: min(75rem, calc(100% - 2 * var(--gutter)));
   margin-inline: auto;
   z-index: 3;
   /* Centred, at half the first size (TJ, 14 Oct 2026). */
@@ -2789,7 +2806,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   /* Phone (TJ, 16 Oct 2026): "Your recovery" and "Well deserved" are one
      block, and the block itself is centred, so its full width sits in the
      middle of the screen rather than each line being centred separately. */
-  .bath__copy { padding-bottom: clamp(44px, 9vh, 80px); justify-content: center; }
+  .bath__copy { padding-bottom: clamp(2.75rem, 9vh, 5rem); justify-content: center; }
   .bath__lines {
     max-width: none;
     width: max-content;
@@ -2884,7 +2901,7 @@ html:not(.js) .bath__img { position: static; height: 100%; transform: none; }
   /* home.js sets the measured height: the lead, one window held, and the
      stage's own window */
   height: 300svh;
-  margin-top: calc(-1 * max(100svh, 540px));
+  margin-top: calc(-1 * max(100svh, 33.75rem));
 }
 html:not(.js) .film { margin-top: 0; height: auto; }
 
@@ -2896,7 +2913,7 @@ html:not(.js) .film { margin-top: 0; height: auto; }
   position: sticky;
   top: 0;
   height: 100svh;
-  min-height: 540px;
+  min-height: 33.75rem;
   overflow: hidden;
   background: var(--g-canvas);
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - var(--film-feather)), transparent 100%);
@@ -2920,20 +2937,20 @@ html:not(.js) .film__stage { position: relative; }
 .film__sound {
   position: absolute;
   top: 50%;
-  right: clamp(24px, 3.4vw, 56px);
+  right: clamp(1.5rem, 3.4vw, 3.5rem);
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  width: 220px;
-  padding: 15px 18px;
+  gap: 1.5rem;
+  width: 13.75rem;
+  padding: .9375rem 1.125rem;
   transform: translateY(-50%);
   border: 1px solid rgba(255, 255, 255, .5);
   border-radius: var(--r-badge);
   background: color-mix(in srgb, var(--g-canvas) 62%, transparent);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(.875rem) saturate(1.2);
+  -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
   color: var(--t-ink);
   font-family: var(--f-body);
   font-size: .8rem;
@@ -2943,14 +2960,14 @@ html:not(.js) .film__stage { position: relative; }
   transition: opacity .5s ease, background-color .3s ease;
 }
 .film__sound svg {
-  width: 9px;
-  height: 11px;
+  width: .5625rem;
+  height: .6875rem;
   fill: currentColor;
   transition: transform .3s ease;
 }
 .film__sound:hover { background: color-mix(in srgb, var(--g-canvas) 78%, transparent); }
-.film__sound:hover svg { transform: translateX(3px); }
-.film__sound:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+.film__sound:hover svg { transform: translateX(.1875rem); }
+.film__sound:focus-visible { outline: .125rem solid var(--focus); outline-offset: .25rem; }
 .film.is-sound .film__sound { opacity: 0; pointer-events: none; }
 
 /* The timeline (TJ, 21 Oct 2026): the progression bar's own parts, the
@@ -2961,12 +2978,12 @@ html:not(.js) .film__stage { position: relative; }
   --film-p: 0;
   position: absolute;
   left: 50%;
-  bottom: clamp(24px, 6svh, 56px);
+  bottom: clamp(1.5rem, 6svh, 3.5rem);
   z-index: 2;
   display: flex;
   align-items: center;
-  gap: 18px;
-  width: min(1120px, calc(100% - 2 * var(--gutter)));
+  gap: 1.125rem;
+  width: min(70rem, calc(100% - 2 * var(--gutter)));
   transform: translateX(-50%);
   opacity: 0;
   visibility: hidden;
@@ -2977,25 +2994,25 @@ html:not(.js) .film__stage { position: relative; }
   flex: none;
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
-  margin-left: -10px;
+  width: 2rem;
+  height: 2rem;
+  margin-left: -.625rem;
   padding: 0;
   border: 0;
   background: none;
   color: var(--tline-ink);
   cursor: pointer;
 }
-.film__pause svg { width: 9px; height: 11px; fill: currentColor; }
+.film__pause svg { width: .5625rem; height: .6875rem; fill: currentColor; }
 .film__icon-play { display: none; }
 .film.is-paused .film__icon-play { display: block; }
 .film.is-paused .film__icon-pause { display: none; }
 .film__pause:focus-visible,
-.film__track:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-badge); }
+.film__track:focus-visible { outline: .125rem solid var(--focus); outline-offset: .25rem; border-radius: var(--r-badge); }
 .film__track {
   position: relative;
   flex: 1;
-  height: 24px;
+  height: 1.5rem;
   cursor: pointer;
   touch-action: none;
   -webkit-mask-image: linear-gradient(to right, #000 0, #000 92%, transparent 100%);
@@ -3048,9 +3065,9 @@ html:not(.js) .film__stage { position: relative; }
     mask-image: linear-gradient(to bottom, transparent 0, #000 16%, #000 84%, transparent 100%);
   }
   .film__sound {
-    top: calc(50% + 28.125vw + 20px);
+    top: calc(50% + 28.125vw + 1.25rem);
     right: var(--gutter);
-    width: 200px;
+    width: 12.5rem;
     transform: none;
   }
 }
@@ -3066,7 +3083,7 @@ html:not(.js) .film__stage { position: relative; }
   left: 0;
   right: 0;
   height: 100svh;
-  min-height: 540px;
+  min-height: 33.75rem;
   display: flex;
   align-items: flex-end;
   z-index: 41;
@@ -3114,19 +3131,19 @@ html:not(.js) .arrive { display: none; }
    above the day counts, so it no longer carries a section of its own. */
 
 .gal {
-  margin-bottom: clamp(48px, 8vh, 96px);
-  --gal-h: min(66svh, 620px);
-  --gal-gap: 10px;
+  margin-bottom: clamp(3rem, 8vh, 6rem);
+  --gal-h: min(66svh, 38.75rem);
+  --gal-gap: .625rem;
   --gal-n: 6;          /* set from JS at init to the real item count */
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: clamp(24px, 4vw, 48px);
+  gap: clamp(1.5rem, 4vw, 3rem);
   align-items: center;
 }
 @media (min-width: 1000px) {
   .gal {
     grid-template-columns: auto minmax(0, 1fr) auto;
-    gap: clamp(36px, 5vw, 80px);
+    gap: clamp(2.25rem, 5vw, 5rem);
   }
 }
 
@@ -3149,7 +3166,7 @@ html:not(.js) .arrive { display: none; }
   margin: 0;
   padding: 0;
   display: flex;
-  gap: 10px;
+  gap: .625rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -3176,7 +3193,7 @@ html:not(.js) .arrive { display: none; }
 
 .gal__thumb {
   display: block;
-  width: clamp(64px, 15vw, 88px);
+  width: clamp(4rem, 15vw, 5.5rem);
   aspect-ratio: 4 / 5;
   padding: 0;
   border: none;
@@ -3203,11 +3220,11 @@ html:not(.js) .arrive { display: none; }
    large photograph keeps the full width and is cropped to the height left
    above a bottom margin the width of the gutter. */
 @media (max-width: 767px) {
-  .act--programmes .sec-head { margin-bottom: 20px; }
+  .act--programmes .sec-head { margin-bottom: 1.25rem; }
   .act--programmes .sec-head .display { white-space: nowrap; font-size: min(2rem, calc((100vw - 2 * var(--gutter)) / 14.6)); }
   .act--programmes .sec-head .script { margin-bottom: .9rem; }
-  .gal { gap: 16px; }
-  .gal__list { gap: 10px; overflow: visible; }
+  .gal { gap: 1rem; }
+  .gal__list { gap: .625rem; overflow: visible; }
   .gal__row { flex: 1 1 0; min-width: 0; }
   .gal__thumb { width: 100%; aspect-ratio: 1 / 1; }
   .gal__heading { margin-bottom: .5rem; }
@@ -3215,7 +3232,7 @@ html:not(.js) .arrive { display: none; }
   /* Height = the screen less the section above it less the 24px margin.
      The section above grows as the width shrinks (more lines), hence the vw
      term; measured at 390 x 844 and 360 x 780. */
-  .act--programmes .gal .gal__media { width: 100%; aspect-ratio: auto; height: clamp(130px, calc(100svh - 830px + 53.3vw), 320px); }
+  .act--programmes .gal .gal__media { width: 100%; aspect-ratio: auto; height: clamp(8.125rem, calc(100svh - 51.875rem + 53.3vw), 20rem); }
 }
 
 /* ---- Copy ---- */
@@ -3265,7 +3282,7 @@ html:not(.js) .arrive { display: none; }
   font-weight: 500;
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
+  text-underline-offset: .3125rem;
   transition: color .2s ease;
 }
 .cta-link:hover,
@@ -3277,7 +3294,7 @@ html:not(.js) .arrive { display: none; }
 .gal__all {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 2.75rem;
   margin-top: 1.2rem;
   font-family: var(--f-body);
   font-size: .72rem;
@@ -3287,7 +3304,7 @@ html:not(.js) .arrive { display: none; }
   color: var(--t-ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
+  text-underline-offset: .3125rem;
   transition: color .2s ease;
 }
 .gal__all:hover { color: var(--reach-link); }
@@ -3308,7 +3325,7 @@ html:not(.js) .arrive { display: none; }
   font-family: var(--f-body);
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 5px;
+  text-underline-offset: .3125rem;
 }
 .programmes-bespoke__link:hover { color: var(--reach-script); }
 
@@ -3323,7 +3340,7 @@ html:not(.js) .arrive { display: none; }
   height: var(--gal-h);
   aspect-ratio: 4 / 5;
   width: auto;
-  border-radius: clamp(18px, 1.8vw, 28px);
+  border-radius: clamp(1.125rem, 1.8vw, 1.75rem);
   overflow: hidden;
   background: var(--g-haze);
 }
@@ -3353,7 +3370,7 @@ html:not(.js) .arrive { display: none; }
    tablets (below 1000px) keep their own corners. home.js reads these when
    a thumbnail flies into the frame. */
 @media (min-width: 1000px) {
-  .gal { --gal-r: clamp(18px, 1.8vw, 28px); }
+  .gal { --gal-r: clamp(1.125rem, 1.8vw, 1.75rem); }
   .gal__thumb { border-radius: 0; }
   .gal__row:first-child .gal__thumb { border-top-left-radius: var(--gal-r); }
   .gal__row:last-child .gal__thumb { border-bottom-left-radius: var(--gal-r); }
@@ -3371,8 +3388,8 @@ html:not(.js) .arrive { display: none; }
     position: absolute;
     z-index: -1;
     top: 50%;
-    left: calc(-1 * clamp(36px, 5vw, 80px));
-    right: calc(-1 * clamp(36px, 5vw, 80px));
+    left: calc(-1 * clamp(2.25rem, 5vw, 5rem));
+    right: calc(-1 * clamp(2.25rem, 5vw, 5rem));
     height: var(--gal-h);
     transform: translateY(-50%);
     background: linear-gradient(to left, var(--g-tint), transparent);
@@ -3394,8 +3411,8 @@ html:not(.js) .arrive { display: none; }
   .js .frame--bleed .frame__clip,
   .js .nightframe__media { height: auto; }
   .js .frame--bleed .frame__clip img,
-  .js .nightframe__media img { position: static; top: auto; height: clamp(320px, 68vh, 720px); }
-  .js .nightframe__media img { height: clamp(360px, 80vh, 840px); }
+  .js .nightframe__media img { position: static; top: auto; height: clamp(20rem, 68vh, 45rem); }
+  .js .nightframe__media img { height: clamp(22.5rem, 80vh, 52.5rem); }
   .js .xfade__img { inset: 0; height: 100%; }
   .js .card__media img { width: 100%; margin-left: 0; }
 }
@@ -3477,8 +3494,8 @@ html:not(.js) .arrive { display: none; }
   --tv-mute: var(--t-soft);
   isolation: isolate;
   overflow: hidden;
-  padding-top: clamp(64px, 9vh, 112px);
-  padding-bottom: clamp(72px, 10vh, 120px);
+  padding-top: clamp(4rem, 9vh, 7rem);
+  padding-bottom: clamp(4.5rem, 10vh, 7.5rem);
   /* Clear break (TJ, 15 Oct 2026): a solid ground that stops at a hard edge. */
   background: var(--voices-ground);
 }
@@ -3493,7 +3510,7 @@ html:not(.js) .arrive { display: none; }
   --b: transparent 0%, var(--rib-3) 5%, var(--rib-4) 9%, transparent 22%, var(--g-tint) 30%, transparent 44%;
   background-image: repeating-linear-gradient(100deg, var(--a));
   background-size: 300%;
-  filter: blur(70px);
+  filter: blur(4.375rem);
   opacity: .34;
   -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
   mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
@@ -3523,7 +3540,7 @@ html:not(.js) .arrive { display: none; }
   --b: transparent 0%, var(--g-soft) 7%, var(--g-canvas) 13%, transparent 25%, var(--g-tint) 35%, transparent 48%;
   background-image: repeating-linear-gradient(100deg, var(--a));
   background-size: 300%;
-  filter: blur(44px);
+  filter: blur(2.75rem);
   opacity: var(--silk-op, .2);
   -webkit-mask-image: none;
   mask-image: none;
@@ -3556,8 +3573,8 @@ html:not(.js) .arrive { display: none; }
   z-index: 3;
   left: 0;
   right: 0;
-  bottom: clamp(18px, 3.2svh, 34px);
-  height: 34px;
+  bottom: clamp(1.125rem, 3.2svh, 2.125rem);
+  height: 2.125rem;
   pointer-events: none;
 }
 .care-line__track,
@@ -3586,17 +3603,17 @@ html:not(.js) .arrive { display: none; }
 .care-line__stop.is-past::before { background: var(--t-on-dark); }
 .care-line__stop button {
   /* above the line, not below it (TJ, 15 Oct 2026) */
-  position: absolute; left: 0; bottom: calc(100% + 8px); transform: translateX(-50%);
+  position: absolute; left: 0; bottom: calc(100% + .5rem); transform: translateX(-50%);
   white-space: nowrap; pointer-events: auto;
   font-family: var(--f-body); font-size: .74rem; font-weight: 400;
   text-transform: uppercase; letter-spacing: normal;
   color: rgba(255, 255, 255, .62);
-  background: transparent; border: 0; padding: 4px 6px; cursor: pointer;
+  background: transparent; border: 0; padding: .25rem .375rem; cursor: pointer;
   transition: color 200ms var(--ease-out);
 }
 .care-line__stop.is-current button,
 .care-line__stop button:hover { color: var(--t-on-dark); }
-.care-line__stop button:focus-visible { outline: 2px solid var(--t-on-dark); outline-offset: 2px; }
+.care-line__stop button:focus-visible { outline: .125rem solid var(--t-on-dark); outline-offset: .125rem; }
 @media (max-width: 700px) { .care-line { display: none; } }
 
 /* The line on phones (TJ, 16 Oct 2026): the desktop line turned upright, in
@@ -3605,7 +3622,7 @@ html:not(.js) .arrive { display: none; }
    the line's top and height, each dot's top and --at, the fill's length. */
 .care-vline { display: none; }
 @media (max-width: 700px) {
-  .act--pan .rail__item.card { width: calc(100% - 44px); }
+  .act--pan .rail__item.card { width: calc(100% - 2.75rem); }
   /* The card's title, hidden on desktop where it rides on the line, shows
      again on phones, between the photograph and its paragraph (TJ, 16 Oct
      2026). */
@@ -3617,7 +3634,7 @@ html:not(.js) .arrive { display: none; }
   .care-vline {
     display: block;
     position: absolute;
-    right: calc(var(--gutter) + 22px);
+    right: calc(var(--gutter) + 1.375rem);
     width: 0;
     pointer-events: none;
     z-index: 2;
@@ -3652,28 +3669,28 @@ html:not(.js) .arrive { display: none; }
   position: relative;
   z-index: 1;
   border: 0;
-  height: 2px;
-  width: clamp(360px, 66vw, 780px);
-  margin: clamp(28px, 6vh, 64px) auto 0;
+  height: .125rem;
+  width: clamp(22.5rem, 66vw, 48.75rem);
+  margin: clamp(1.75rem, 6vh, 4rem) auto 0;
   background: var(--line-firm);
 }
 
 .tv2 {
   position: relative;
   width: 100%;
-  max-width: 576px;
+  max-width: 36rem;
   margin-inline: auto;
   /* The top is 48: the title sits at the top of the block with nothing
      pinned beside it. The bottom clears the names under the progress line. */
-  padding: 48px 32px 56px;
+  padding: 3rem 2rem 3.5rem;
   color: var(--tv-fg);
 }
-.tv2:focus-visible { outline: 2px solid var(--tv-accent); outline-offset: 4px; }
+.tv2:focus-visible { outline: .125rem solid var(--tv-accent); outline-offset: .25rem; }
 
 
 /* ---- the title ----
    Left aligned on the same edge as the quote. */
-.tv2__head { margin: 0 0 20px; }
+.tv2__head { margin: 0 0 1.25rem; }
 
 .tv2__title {
   margin: 0;
@@ -3689,7 +3706,7 @@ html:not(.js) .arrive { display: none; }
 /* Quentin, weight 400, the page's script role. Set large, as the Brand
    Pack requires of this face, and in Ember Deep like the hero's line. */
 .tv2__script {
-  margin: 10px 0 0;
+  margin: .625rem 0 0;
   font-family: var(--f-script);
   font-size: clamp(1.6875rem, 2.625vw, 2.25rem);
   line-height: 1.15;
@@ -3707,8 +3724,8 @@ html:not(.js) .arrive { display: none; }
   position: absolute;
   top: 50%;
   translate: 0 -50%;
-  width: 44px;
-  height: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -3720,31 +3737,31 @@ html:not(.js) .arrive { display: none; }
   transition: color 180ms var(--ease-out);
 }
 .tv2__nav:hover { color: var(--t-ink); }
-.tv2__nav:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+.tv2__nav:focus-visible { outline: .125rem solid var(--focus); outline-offset: .1875rem; }
 .tv2__nav svg {
-  width: 22px;
-  height: 22px;
+  width: 1.375rem;
+  height: 1.375rem;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.2;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.tv2__nav--prev { left: -76px; }
-.tv2__nav--next { right: -76px; }
+.tv2__nav--prev { left: -4.75rem; }
+.tv2__nav--next { right: -4.75rem; }
 
 /* Under 1000px there is no room beside the text column, and tucking them
    to its inside edges put them straight through the quote: measured, the
    back arrow overlapped the first line by 14px. So below that they stop
    flanking and become a pair at the foot of the block, under the names. */
 @media (max-width: 1000px) {
-  .tv2 { padding-bottom: 64px; }
+  .tv2 { padding-bottom: 4rem; }
   .tv2__nav { top: auto; bottom: 0; translate: none; }
   .tv2__nav--prev { left: 0; }
-  .tv2__nav--next { left: 56px; right: auto; }
+  .tv2__nav--next { left: 3.5rem; right: auto; }
 }
 @media (max-width: 700px) {
-  .tv2__nav--next { left: 50px; }
+  .tv2__nav--next { left: 3.125rem; }
 }
 
 /* ---- the quote ---- */
@@ -3764,8 +3781,8 @@ html:not(.js) .arrive { display: none; }
   display: inline-block;
   margin-right: .25em;
   opacity: 0;
-  transform: translateY(20px);
-  filter: blur(8px);
+  transform: translateY(1.25rem);
+  filter: blur(.5rem);
 }
 .tv2__w.is-in {
   opacity: 1;
@@ -3777,13 +3794,13 @@ html:not(.js) .arrive { display: none; }
 }
 
 /* ---- author ---- */
-.tv2__by { margin-top: 32px; }
+.tv2__by { margin-top: 2rem; }
 
 .tv2__meta {
   position: relative;
-  padding-left: 16px;
+  padding-left: 1rem;
   opacity: 0;
-  transform: translateX(-10px);
+  transform: translateX(-.625rem);
 }
 .tv2__meta.is-in {
   opacity: 1;
@@ -3813,7 +3830,7 @@ html:not(.js) .arrive { display: none; }
   text-transform: uppercase;
 }
 .tv2__name { color: var(--tv-fg); }
-.tv2__role { margin-top: 4px; color: var(--tv-mute); }
+.tv2__role { margin-top: .25rem; color: var(--tv-mute); }
 
 /* ---- progress: an endless line ----
    One circle is fixed at the centre of the quote column. A hairline runs
@@ -3826,8 +3843,8 @@ html:not(.js) .arrive { display: none; }
 .tv2__car {
   --tv-s: 40%;
   position: relative;
-  height: 58px;
-  margin-top: 40px;
+  height: 3.625rem;
+  margin-top: 2.5rem;
   overflow: hidden;
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
@@ -3836,7 +3853,7 @@ html:not(.js) .arrive { display: none; }
 .tv2__fill {
   position: absolute;
   left: 0;
-  top: 10px;
+  top: .625rem;
   height: var(--tline);
 }
 .tv2__track-line { right: 0; background: var(--tline-track); }
@@ -3852,7 +3869,7 @@ html:not(.js) .arrive { display: none; }
 }
 .tv2__item {
   position: absolute;
-  top: 10px;
+  top: .625rem;
   left: calc(50% + var(--q) * var(--tv-s));
   width: 0;
   height: 0;
@@ -3863,17 +3880,17 @@ html:not(.js) .arrive { display: none; }
   top: 0;
   width: var(--tdot);
   height: var(--tdot);
-  border-radius: 9999px;
+  border-radius: 624.9375rem;
   background: var(--tline-ink);
   transform: translate(-50%, -50%);
 }
 .tv2__stop {
   position: absolute;
   left: 0;
-  top: 8px;
+  top: .5rem;
   transform: translateX(-50%);
   margin: 0;
-  padding: 10px 8px;
+  padding: .625rem .5rem;
   border: 0;
   background: none;
   white-space: nowrap;
@@ -3889,15 +3906,15 @@ html:not(.js) .arrive { display: none; }
 }
 .tv2__stop:hover { color: var(--t-ink); }
 .tv2__stop[aria-current="true"] { color: var(--t-ink); }
-.tv2__stop:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.tv2__stop:focus-visible { outline: .125rem solid var(--focus); outline-offset: .125rem; }
 
 .tv2__tip {
   position: absolute;
   left: 50%;
-  top: 10px;
+  top: .625rem;
   width: var(--ttip);
   height: var(--ttip);
-  border-radius: 9999px;
+  border-radius: 624.9375rem;
   background: var(--tline-ink);
   transform: translate(-50%, -50%);
   z-index: 2;
@@ -3924,10 +3941,10 @@ html:not(.js) .arrive { display: none; }
 }
 
 @media (max-width: 700px) {
-  .tv2 { padding: 40px 24px 64px; }
-  .tv2__by { margin-top: 26px; }
-  .tv2__head { margin-bottom: 16px; }
-  .tv2__car { --tv-s: 45%; margin-top: 32px; }
+  .tv2 { padding: 2.5rem 1.5rem 4rem; }
+  .tv2__by { margin-top: 1.625rem; }
+  .tv2__head { margin-bottom: 1rem; }
+  .tv2__car { --tv-s: 45%; margin-top: 2rem; }
 }
 
 /* ============================================================
@@ -3947,10 +3964,10 @@ html:not(.js) .arrive { display: none; }
    page.
    ============================================================ */
 .act--treatments-b {
-  padding-block: clamp(90px, 10vh, 120px) clamp(70px, 8vh, 90px);
+  padding-block: clamp(5.625rem, 10vh, 7.5rem) clamp(4.375rem, 8vh, 5.625rem);
   background: var(--g-canvas);
   position: relative;
-  scroll-margin-top: calc(var(--nav-h) + 20px);
+  scroll-margin-top: calc(var(--nav-h) + 1.25rem);
 }
 /* The body scrub add-on line, sitting between the accordion and the
    section's end. Its own "Learn more" used to be a separate boxed button
@@ -3959,7 +3976,7 @@ html:not(.js) .arrive { display: none; }
    the way an article's own "read more" sits at the end of a paragraph
    rather than as a control of its own. */
 .act--treatments-b .treatments-addon {
-  margin: clamp(28px, 5vh, 48px) 0 0;
+  margin: clamp(1.75rem, 5vh, 3rem) 0 0;
   text-align: center;
   font-family: var(--f-read);
   font-size: clamp(1.05rem, 1.3vw, 1.25rem);
@@ -3981,15 +3998,15 @@ html:not(.js) .arrive { display: none; }
   border-bottom-color: var(--acc);
 }
 .treatments-b-wrap {
-  max-width: 1260px;
+  max-width: 78.75rem;
   margin-inline: auto;
-  padding-inline: clamp(20px, 4vw, 40px);
+  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
 }
 .act--treatments-b .sec-head {
   text-align: center;
   max-width: 52ch;
   margin-inline: auto;
-  margin-bottom: clamp(32px, 4vh, 48px);
+  margin-bottom: clamp(2rem, 4vh, 3rem);
 }
 /* Quentin sits straight under the serif capitals (TJ, 16 Oct 2026). */
 .act--treatments-b .sec-head .display { margin-bottom: .2rem; }
@@ -4006,15 +4023,15 @@ html:not(.js) .arrive { display: none; }
    roughly a fifth of the row per closed panel, the rest to the open one. */
 .tb-acc {
   display: flex;
-  gap: 3px;
-  height: min(58vh, 520px);
+  gap: .1875rem;
+  height: min(58vh, 32.5rem);
   border-radius: var(--r-media);
   overflow: hidden;
 }
 .tb-acc__panel {
   position: relative;
   flex: 0 0 auto;
-  width: clamp(96px, 12vw, 140px);
+  width: clamp(6rem, 12vw, 8.75rem);
   height: 100%;
   border: none;
   padding: 0;
@@ -4094,7 +4111,7 @@ html:not(.js) .arrive { display: none; }
    section title now carries that word once for the whole group instead. */
 .tb-acc__label {
   position: absolute;
-  left: 0; right: 0; bottom: clamp(16px, 3vh, 28px);
+  left: 0; right: 0; bottom: clamp(1rem, 3vh, 1.75rem);
   /* Above the blush gradient's z-index: 1, not on the default auto that
      resolves under it. The label went visually faint under the wash
      meant to sit behind it, the same mistake the gradient's own fix just
@@ -4102,7 +4119,7 @@ html:not(.js) .arrive { display: none; }
      reading the rule. */
   z-index: 2;
   text-align: center;
-  padding-inline: 8px;
+  padding-inline: .5rem;
   font-family: var(--f-body);
   text-transform: uppercase;
   letter-spacing: .1em;
@@ -4144,7 +4161,7 @@ html:not(.js) .arrive { display: none; }
   flex-direction: column;
   justify-content: center;
   gap: .5rem;
-  padding: clamp(20px, 3vw, 44px);
+  padding: clamp(1.25rem, 3vw, 2.75rem);
 }
 .tb-acc__meta {
   font-family: var(--f-body);
@@ -4189,16 +4206,16 @@ html:not(.js) .arrive { display: none; }
   .tb-acc {
     flex-direction: column;
     height: auto;
-    gap: 2px;
+    gap: .125rem;
   }
   .tb-acc__panel {
     width: 100%;
-    height: 72px;
+    height: 4.5rem;
     flex: 0 0 auto;
     transition: height .5s cubic-bezier(.65, 0, .35, 1);
   }
   .tb-acc__panel.is-open {
-    height: min(70vh, 620px);
+    height: min(70vh, 38.75rem);
     flex: 0 0 auto;
   }
   .tb-acc__label {
@@ -4206,7 +4223,7 @@ html:not(.js) .arrive { display: none; }
     transform: translateY(-50%);
   }
   .tb-acc__open { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
-  .tb-acc__open-media { min-height: 160px; }
+  .tb-acc__open-media { min-height: 10rem; }
 }
 
 /* The way out of the programmes act, added 2026-09-19 with the builder
@@ -4238,23 +4255,23 @@ html:not(.js) .arrive { display: none; }
 /* TJ, 14 Nov 2026: the gap from the care cards' text to the Programmes
    heading was halved. Each side takes half a section less 4px, so the
    total (two paddings plus the heading's own offset) comes out at half. */
-.act--care { padding-bottom: calc(var(--section) / 2 - 4px); }
+.act--care { padding-bottom: calc(var(--section) / 2 - .25rem); }
 /* TJ, 14 Nov 2026: 15% more space above the Programmes heading, then 10px more. */
-.act--care + .act--programmes { padding-top: calc((var(--section) / 2 - 4px) * 1.15 + 10px); }
+.act--care + .act--programmes { padding-top: calc((var(--section) / 2 - .25rem) * 1.15 + .625rem); }
 .care__head { text-align: center; margin-bottom: 0; }
-.care__line { max-width: min(860px, 100%); margin: clamp(18px, 3vh, 32px) auto 0; }
+.care__line { max-width: min(53.75rem, 100%); margin: clamp(1.125rem, 3vh, 2rem) auto 0; }
 .care__car { margin-top: 0; }
 .act--care .tv2__track-line { background: rgba(255, 255, 255, .32); }
 .act--care .tv2__fill, .act--care .tv2__tip, .act--care .tv2__dot { background: var(--t-on-dark); }
 .act--care .tv2__stop { color: rgba(255, 255, 255, .62); }
 .act--care .tv2__stop[aria-current="true"], .act--care .tv2__stop:hover { color: var(--t-on-dark); }
 .act--care .tv2__stop:focus-visible { outline-color: var(--t-on-dark); }
-.care__stage { position: relative; max-width: min(760px, calc(100% - 136px)); margin: clamp(8px, 1.6vh, 18px) auto 0; }
+.care__stage { position: relative; max-width: min(47.5rem, calc(100% - 8.5rem)); margin: clamp(.5rem, 1.6vh, 1.125rem) auto 0; }
 .care__cards { display: grid; }
 .care__card {
   grid-area: 1 / 1;
   opacity: 0; visibility: hidden;
-  transform: translateX(calc(var(--care-dir, 1) * -40px));
+  transform: translateX(calc(var(--care-dir, 1) * -2.5rem));
   transition: opacity 420ms var(--tease), transform 420ms var(--tease), visibility 0s linear 420ms;
 }
 .care__card.is-current {
@@ -4269,23 +4286,23 @@ html:not(.js) .arrive { display: none; }
   white-space: nowrap; margin: 0; padding: 0; border: 0;
 }
 .care__nav {
-  position: absolute; top: calc((min(760px, 100vw - 136px)) * 9 / 32); transform: translateY(-50%);
-  width: 44px; height: 44px; margin: 0; padding: 0; border: 0; background: none;
+  position: absolute; top: calc((min(47.5rem, 100vw - 8.5rem)) * 9 / 32); transform: translateY(-50%);
+  width: 2.75rem; height: 2.75rem; margin: 0; padding: 0; border: 0; background: none;
   color: rgba(255, 255, 255, .72); cursor: pointer; z-index: 2; transition: color 180ms var(--tease);
 }
 .care__nav:hover { color: var(--t-on-dark); }
-.care__nav:focus-visible { outline: 2px solid var(--t-on-dark); outline-offset: 3px; }
-.care__nav svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.care__nav--prev { left: -64px; }
-.care__nav--next { right: -64px; }
+.care__nav:focus-visible { outline: .125rem solid var(--t-on-dark); outline-offset: .1875rem; }
+.care__nav svg { width: 1.75rem; height: 1.75rem; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.care__nav--prev { left: -4rem; }
+.care__nav--next { right: -4rem; }
 @media (max-width: 700px) {
   .care__stage { max-width: none; }
   .act--care .tv2__car { --tv-s: 48%; }
   /* On phones the arrows sit over the photograph's edges, on a soft disc. */
-  .care__nav { top: calc((100vw - 2 * var(--gutter)) * 9 / 32); width: 40px; height: 40px; border-radius: 50%; background: rgba(10, 10, 10, .32); color: var(--t-on-dark); }
-  .care__nav svg { width: 22px; height: 22px; }
-  .care__nav--prev { left: 8px; }
-  .care__nav--next { right: 8px; }
+  .care__nav { top: calc((100vw - 2 * var(--gutter)) * 9 / 32); width: 2.5rem; height: 2.5rem; border-radius: 50%; background: rgba(10, 10, 10, .32); color: var(--t-on-dark); }
+  .care__nav svg { width: 1.375rem; height: 1.375rem; }
+  .care__nav--prev { left: .5rem; }
+  .care__nav--next { right: .5rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .care__card, .care__card.is-current { transition: none; transform: none; }
@@ -4301,12 +4318,12 @@ html:not(.js) .arrive { display: none; }
 .act--cta { position: relative; padding-block: var(--section); }
 .cta.cta--card {
   margin: 0 auto; max-width: 46rem;
-  padding: clamp(32px, 4.4vw, 56px) clamp(24px, 4vw, 56px);
+  padding: clamp(2rem, 4.4vw, 3.5rem) clamp(1.5rem, 4vw, 3.5rem);
   border-radius: var(--r-card);
   background: rgba(255, 255, 255, .62); border: 1px solid rgba(255, 255, 255, .7);
-  backdrop-filter: blur(14px) saturate(1.2); -webkit-backdrop-filter: blur(14px) saturate(1.2);
+  backdrop-filter: blur(.875rem) saturate(1.2); -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
 }
-.cta--card .programmes-bespoke.cta__alt { margin-top: clamp(24px, 4vh, 36px); }
+.cta--card .programmes-bespoke.cta__alt { margin-top: clamp(1.5rem, 4vh, 2.25rem); }
 
 /* The Quentin line under the heading (TJ, 25 Oct 2026), white on the silk. */
 .act--care .script { color: var(--t-on-dark); margin: .2rem 0 0; }
@@ -4323,7 +4340,7 @@ html:not(.js) .arrive { display: none; }
    included. Home page only; other pages follow once TJ has approved this.
    ============================================================ */
 :root { --hero-title: clamp(2.4rem, 6.2vw, 4rem); }
-@media (max-height: 780px) { :root { --hero-title: clamp(2rem, 4.4vh, 3.2rem); } }
+@media (max-width: 1100px) and (max-height: 780px) { :root { --hero-title: clamp(2rem, 4.4vh, 3.2rem); } }
 @media (max-width: 700px) { :root { --hero-title: clamp(1.8rem, 7.8vw, 3rem); } }
 @media (min-width: 1100px) { :root { --hero-title: 2.406vw; } }
 
@@ -4359,7 +4376,7 @@ html:not(.js) .arrive { display: none; }
 }
 .film__stage {
   position: relative; top: auto;
-  width: min(1120px, calc(100% - 2 * var(--gutter)));
+  width: min(70rem, calc(100% - 2 * var(--gutter)));
   height: auto; min-height: 0; aspect-ratio: 16 / 9;
   margin-inline: auto;
   border-radius: var(--r-media);
@@ -4367,13 +4384,13 @@ html:not(.js) .arrive { display: none; }
   -webkit-mask-image: none; mask-image: none;
 }
 /* The heading above the film (Ami, 28 Oct 2026): centred on the frame's width. */
-.film__head { position: relative; z-index: 1; width: min(1120px, calc(100% - 2 * var(--gutter))); margin: 0 auto clamp(20px, 3.2vh, 36px); text-align: center; }
+.film__head { position: relative; z-index: 1; width: min(70rem, calc(100% - 2 * var(--gutter))); margin: 0 auto clamp(1.25rem, 3.2vh, 2.25rem); text-align: center; }
 .film__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: none; -webkit-mask-image: none; mask-image: none; aspect-ratio: auto; }
-.film__sound { width: auto; gap: 16px; padding: 13px 18px; }
-.film__bar { width: calc(100% - 2 * clamp(16px, 2.4vw, 32px)); bottom: clamp(12px, 2.6vw, 28px); }
+.film__sound { width: auto; gap: 1rem; padding: .8125rem 1.125rem; }
+.film__bar { width: calc(100% - 2 * clamp(1rem, 2.4vw, 2rem)); bottom: clamp(.75rem, 2.6vw, 1.75rem); }
 @media (max-width: 767px) {
   .film__video { inset: 0; height: 100%; transform: none; -webkit-mask-image: none; mask-image: none; }
-  .film__sound { top: auto; bottom: 12px; right: 12px; width: auto; padding: 10px 14px; transform: none; }
+  .film__sound { top: auto; bottom: .75rem; right: .75rem; width: auto; padding: .625rem .875rem; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .film { height: auto; margin-top: 0; }
@@ -4396,20 +4413,20 @@ html:not(.js) .arrive { display: none; }
    has since moved out of this section, so only the section padding remains. */
 .act--programmes .gal { margin-bottom: 0; }
 /* Request a place under What is Postpartum Care (Ami, 24 Oct 2026). */
-.act--turn .turn__cta { margin: clamp(20px, 3vh, 32px) 0 0; }
+.act--turn .turn__cta { margin: clamp(1.25rem, 3vh, 2rem) 0 0; }
 /* The header button sizes to "Request a place" (TJ and Ami, 24 Oct 2026); it was
    a fixed width that suited "Enquire". Never narrower than before. */
-.tab.tab--cta { width: auto; min-width: var(--tab-w); padding: 0 clamp(14px, 1.2vw, 20px); white-space: nowrap; }
+.tab.tab--cta { width: auto; min-width: var(--tab-w); padding: 0 clamp(.875rem, 1.2vw, 1.25rem); white-space: nowrap; }
 /* Phones: the longer words stack in two lines so the button keeps clear of the
    centred wordmark (TJ and Ami, 24 Oct 2026). */
 @media (max-width: 520px) {
-  .tab.tab--cta { width: 86px; min-width: 0; height: auto; min-height: var(--tab-h); padding: 5px 8px; white-space: normal; text-align: center; font-size: .72rem; line-height: 1.12; }
+  .tab.tab--cta { width: 5.375rem; min-width: 0; height: auto; min-height: var(--tab-h); padding: .3125rem .5rem; white-space: normal; text-align: center; font-size: .72rem; line-height: 1.12; }
 }
 
 /* The bespoke line outside the card, under it (TJ, 25 Oct 2026): not part of
    the call to action, and smaller than the card's text. */
 .act--cta .programmes-bespoke.cta__alt--out {
-  margin: clamp(18px, 2.6vh, 26px) auto 0; max-width: 46rem;
+  margin: clamp(1.125rem, 2.6vh, 1.625rem) auto 0; max-width: 46rem;
   text-align: center; font-size: .875rem; line-height: 1.55; color: var(--t-mute);
 }
 
@@ -4420,12 +4437,12 @@ html:not(.js) .arrive { display: none; }
 .act--care .care__sub { margin: .6rem auto 0; text-align: center; color: rgba(255, 255, 255, .86); }
 .care__list { list-style: none; margin: .8rem 0 0; padding: 0; }
 .care__list li {
-  position: relative; padding: .2rem 0 .2rem 16px;
+  position: relative; padding: .2rem 0 .2rem 1rem;
   font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: rgba(255, 255, 255, .86);
 }
 /* The site's one bullet, the Programmes dot in the palette's accent (TJ,
    1 Nov 2026; was a white dash). */
-.care__list li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em - 2.5px); width: 5px; height: 5px; border-radius: 50%; background: var(--acc); }
+.care__list li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em - .1563rem); width: .3125rem; height: .3125rem; border-radius: 50%; background: var(--acc); }
 
 /* The call to action's light in the testimonials' colour (TJ, 26 Oct 2026).
    The section stays cream with a hard edge against the rose testimonials
@@ -4439,7 +4456,7 @@ html:not(.js) .arrive { display: none; }
   --b: transparent 0%, var(--rib-cta-2) 5%, var(--rib-cta-1) 9%, transparent 22%, var(--rib-cta-3) 30%, transparent 44%;
   background-image: repeating-linear-gradient(100deg, var(--a));
   background-size: 300%;
-  filter: blur(70px);
+  filter: blur(4.375rem);
   opacity: .62;
   -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
   mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
@@ -4459,14 +4476,14 @@ html:not(.js) .arrive { display: none; }
    and the turn below starts on paper, which left a straight line where the
    two met. The turn's top now starts on the same cream and blends to paper,
    so the bath melts into it with no edge (TJ, 2 Nov 2026, sheet row 36). */
-.act--turn { background: linear-gradient(to bottom, var(--g-canvas) 0, var(--g-paper) min(45vh, 420px)); }
+.act--turn { background: linear-gradient(to bottom, var(--g-canvas) 0, var(--g-paper) min(45vh, 26.25rem)); }
 /* The turn's pink weather was cut flat at the section's top, which drew a
    straight line under the bath once the smoke stopped covering it. The
    whole aurora now fades in from nothing over its top 40 percent of a
    window, so the bath dissolves into it with no edge (TJ, 2 Nov 2026). */
 .aurora--turn {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
-  mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 23.75rem));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 23.75rem));
 }
 /* What is Postpartum Care moves up into the bath's dissolve on desktop
    (TJ, 2 Nov 2026): the gap from the bath's bottom edge to the heading was
@@ -4552,7 +4569,7 @@ html:not(.js) .arrive { display: none; }
   --b: transparent 0%, var(--rib-light) 6%, var(--g-tint) 12%, transparent 24%, var(--g-haze) 33%, transparent 46%;
   background-image: repeating-linear-gradient(100deg, var(--a));
   background-size: 300%; background-position: 50% 50%;
-  filter: blur(44px); opacity: .8;
+  filter: blur(2.75rem); opacity: .8;
   -webkit-mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
   mask-image: radial-gradient(ellipse 95% 80% at 70% 40%, #000 14%, rgba(0,0,0,.55) 64%, rgba(0,0,0,.22) 100%);
 }
@@ -4565,22 +4582,22 @@ html:not(.js) .arrive { display: none; }
 @media (prefers-reduced-motion: reduce) { .aurora--voices .aurora__field::after { animation: none; } }
 .voices::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none;
-  height: min(30vh, 260px);
+  height: min(30vh, 16.25rem);
   background: linear-gradient(to bottom, color-mix(in srgb, var(--g-canvas) 0%, transparent), var(--g-canvas));
 }
 /* The section below starts with its own pink weather, which was cut flat at
    its top and drew a line under the dissolve; it now fades in from nothing
    over its top 40 percent of a window (TJ, 2 Nov 2026). */
 .act--cta > .aurora {
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
-  mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 380px));
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 23.75rem));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 min(40vh, 23.75rem));
 }
 /* Half the space above the testimonials' heading (TJ, 2 Nov 2026). The gap
    is the padding plus 48px of the line's own top (40px on phones), so the
    padding becomes half of the old padding less half of that. 1440x900: 129px
    to 65px. */
-.voices { padding-top: max(0px, calc(clamp(64px, 9vh, 112px) / 2 - 24px)); }
-@media (max-width: 767px) { .voices { padding-top: max(0px, calc(clamp(64px, 9vh, 112px) / 2 - 20px)); } }
+.voices { padding-top: max(0px, calc(clamp(4rem, 9vh, 7rem) / 2 - 1.5rem)); }
+@media (max-width: 767px) { .voices { padding-top: max(0px, calc(clamp(4rem, 9vh, 7rem) / 2 - 1.25rem)); } }
 
 /* A seamless join from the testimonials into Book a consultation (TJ,
    2 Nov 2026). The cream band laid over the red (.voices::after) showed
@@ -4592,7 +4609,7 @@ html:not(.js) .arrive { display: none; }
    same height and fades in on the mirror curve, so one weather hands over to
    the other with the page's cream between them. The testimonials sit above
    that drift (z-index), so it never veils their text. */
-.voices { --voices-ground: transparent; --vfade: min(48vh, 440px); padding-bottom: calc(clamp(72px, 10vh, 120px) + 80px); }
+.voices { --voices-ground: transparent; --vfade: min(48vh, 27.5rem); padding-bottom: calc(clamp(4.5rem, 10vh, 7.5rem) + 5rem); }
 .voices::after { content: none; }
 .act--voices { z-index: 1; }
 .aurora--voices {
@@ -4610,7 +4627,7 @@ html:not(.js) .arrive { display: none; }
     rgba(0,0,0,.22) calc(100% - var(--vfade) * .3), rgba(0,0,0,.10) calc(100% - var(--vfade) * .2),
     rgba(0,0,0,.03) calc(100% - var(--vfade) * .1), transparent 100%);
 }
-.act--cta { --vfade: min(48vh, 440px); padding-top: max(16px, calc(var(--section) - 80px)); }
+.act--cta { --vfade: min(48vh, 27.5rem); padding-top: max(1rem, calc(var(--section) - 5rem)); }
 .act--cta > .aurora {
   top: calc(-1 * var(--vfade));
   -webkit-mask-image: linear-gradient(to bottom, transparent 0,
@@ -4636,8 +4653,8 @@ html:not(.js) .arrive { display: none; }
   backdrop-filter: none; -webkit-backdrop-filter: none;
   padding-top: 0; padding-bottom: 0;
 }
-.act--cta { padding-top: 37px; }
-@media (max-width: 767px) { .act--cta { padding-top: 23px; } }
+.act--cta { padding-top: 2.3125rem; }
+@media (max-width: 767px) { .act--cta { padding-top: 1.4375rem; } }
 /* The paragraph widened so it runs to three lines on desktop, and no wider
    (TPS-0044, 11 Nov 2026). It wraps to three from 548px; 568px leaves a
    little room for font rendering. Phones unchanged. */
@@ -4652,36 +4669,36 @@ html:not(.js) .arrive { display: none; }
     rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
     rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
     rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade),
-    #000 calc(100% - 200px), rgba(0,0,0,.90) calc(100% - 160px), rgba(0,0,0,.63) calc(100% - 120px),
-    rgba(0,0,0,.37) calc(100% - 80px), rgba(0,0,0,.10) calc(100% - 40px), transparent 100%);
+    #000 calc(100% - 12.5rem), rgba(0,0,0,.90) calc(100% - 10rem), rgba(0,0,0,.63) calc(100% - 7.5rem),
+    rgba(0,0,0,.37) calc(100% - 5rem), rgba(0,0,0,.10) calc(100% - 2.5rem), transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0,
     rgba(0,0,0,.03) calc(var(--vfade) * .1), rgba(0,0,0,.10) calc(var(--vfade) * .2),
     rgba(0,0,0,.22) calc(var(--vfade) * .3), rgba(0,0,0,.37) calc(var(--vfade) * .4),
     rgba(0,0,0,.50) calc(var(--vfade) * .5), rgba(0,0,0,.63) calc(var(--vfade) * .6),
     rgba(0,0,0,.78) calc(var(--vfade) * .7), rgba(0,0,0,.90) calc(var(--vfade) * .8),
     rgba(0,0,0,.97) calc(var(--vfade) * .9), #000 var(--vfade),
-    #000 calc(100% - 200px), rgba(0,0,0,.90) calc(100% - 160px), rgba(0,0,0,.63) calc(100% - 120px),
-    rgba(0,0,0,.37) calc(100% - 80px), rgba(0,0,0,.10) calc(100% - 40px), transparent 100%);
+    #000 calc(100% - 12.5rem), rgba(0,0,0,.90) calc(100% - 10rem), rgba(0,0,0,.63) calc(100% - 7.5rem),
+    rgba(0,0,0,.37) calc(100% - 5rem), rgba(0,0,0,.10) calc(100% - 2.5rem), transparent 100%);
 }
 /* Half the space between the testimonials' last line and the Book a
    consultation heading (TJ, 2 Nov 2026): 221px to 110px at 1440x900. Taken
    from the testimonials' bottom padding only. */
-.voices { padding-bottom: calc(clamp(72px, 10vh, 120px) / 2 + 14.5px); }
-@media (max-width: 767px) { .voices { padding-bottom: calc(clamp(72px, 10vh, 120px) / 2 + 22px); } }
+.voices { padding-bottom: calc(clamp(4.5rem, 10vh, 7.5rem) / 2 + .9063rem); }
+@media (max-width: 767px) { .voices { padding-bottom: calc(clamp(4.5rem, 10vh, 7.5rem) / 2 + 1.375rem); } }
 /* A further 30 percent off that gap (TJ, 2 Nov 2026): 111px to 78px at
    1440x900. Testimonials' bottom padding only. */
-.voices { padding-bottom: max(8px, calc(clamp(72px, 10vh, 120px) * .35 - 5.3px)); }
-@media (max-width: 767px) { .voices { padding-bottom: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); } }
+.voices { padding-bottom: max(.5rem, calc(clamp(4.5rem, 10vh, 7.5rem) * .35 - .3312rem)); }
+@media (max-width: 767px) { .voices { padding-bottom: calc(clamp(4.5rem, 10vh, 7.5rem) * .35 + .275rem); } }
 /* The same gap below Book a consultation as above it (TJ, 2 Nov 2026): its
    last line to Try a signature treatment now mirrors the testimonials' last
    line to its heading (77px at 1440x900, was 200px). Book a consultation's
    bottom padding matches its top, and the treatments' top padding matches
    the testimonials' bottom. */
-.act--cta { padding-bottom: 37px; }
-.act--treatments-b { padding-top: max(8px, calc(clamp(72px, 10vh, 120px) * .35 - 5.3px)); }
+.act--cta { padding-bottom: 2.3125rem; }
+.act--treatments-b { padding-top: max(.5rem, calc(clamp(4.5rem, 10vh, 7.5rem) * .35 - .3312rem)); }
 @media (max-width: 767px) {
-  .act--cta { padding-bottom: 23px; }
-  .act--treatments-b { padding-top: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); }
+  .act--cta { padding-bottom: 1.4375rem; }
+  .act--treatments-b { padding-top: calc(clamp(4.5rem, 10vh, 7.5rem) * .35 + .275rem); }
 }
 /* Text to text, not section to section (TJ, 2 Nov 2026): the visible gap
    above Book a consultation is from the testimonials' names under the dots
@@ -4689,7 +4706,7 @@ html:not(.js) .arrive { display: none; }
    now the same, 61px more than before on desktop. On phones the last thing
    above is the arrows, and that gap already matched (71px). */
 @media (min-width: 768px) {
-  .act--treatments-b { padding-top: max(8px, calc(clamp(72px, 10vh, 120px) * .35 + 55.7px)); }
+  .act--treatments-b { padding-top: max(.5rem, calc(clamp(4.5rem, 10vh, 7.5rem) * .35 + 3.4813rem)); }
 }
 /* A clear line between Book a consultation and the treatments (TJ, 2 Nov
    2026): the pink drift no longer fades out at the bottom; it stops at the
@@ -4713,10 +4730,10 @@ html:not(.js) .arrive { display: none; }
    heading sits 14px below it. The text gap stays the same: Book a
    consultation's bottom padding becomes half the whole gap and the
    treatments' top padding gives up what it gains. */
-.act--cta { --cpad: 37px; --tgap: max(8px, calc(clamp(72px, 10vh, 120px) * .35 + 55.7px)); --half: calc((var(--cpad) + var(--tgap) + 14px) / 2); padding-bottom: var(--half); }
-.act--treatments-b { --cpad: 37px; --tgap: max(8px, calc(clamp(72px, 10vh, 120px) * .35 + 55.7px)); --half: calc((var(--cpad) + var(--tgap) + 14px) / 2); padding-top: calc(var(--tgap) + var(--cpad) - var(--half)); }
+.act--cta { --cpad: 2.3125rem; --tgap: max(.5rem, calc(clamp(4.5rem, 10vh, 7.5rem) * .35 + 3.4813rem)); --half: calc((var(--cpad) + var(--tgap) + .875rem) / 2); padding-bottom: var(--half); }
+.act--treatments-b { --cpad: 2.3125rem; --tgap: max(.5rem, calc(clamp(4.5rem, 10vh, 7.5rem) * .35 + 3.4813rem)); --half: calc((var(--cpad) + var(--tgap) + .875rem) / 2); padding-top: calc(var(--tgap) + var(--cpad) - var(--half)); }
 @media (max-width: 767px) {
-  .act--cta, .act--treatments-b { --cpad: 23px; --tgap: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); }
+  .act--cta, .act--treatments-b { --cpad: 1.4375rem; --tgap: calc(clamp(4.5rem, 10vh, 7.5rem) * .35 + .275rem); }
 }
 
 /* The film's controls always show (TJ, 2 Nov 2026, sheet row 37): pause, the
@@ -4726,20 +4743,20 @@ html:not(.js) .arrive { display: none; }
 .film__sound { display: none; }
 .film__mute {
   flex: none; display: grid; place-items: center;
-  width: 36px; height: 32px; margin-right: -8px; padding: 0;
+  width: 2.25rem; height: 2rem; margin-right: -.5rem; padding: 0;
   border: 0; background: none; color: var(--tline-ink); cursor: pointer;
 }
-.film__mute svg { width: 20px; height: 16px; fill: currentColor; }
+.film__mute svg { width: 1.25rem; height: 1rem; fill: currentColor; }
 .film__mute .film__x { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
 .film__icon-sound { display: none; }
 .film.is-sound .film__icon-sound { display: block; }
 .film.is-sound .film__icon-muted { display: none; }
-.film__mute:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; border-radius: var(--r-badge); }
+.film__mute:focus-visible { outline: .125rem solid var(--focus); outline-offset: .25rem; border-radius: var(--r-badge); }
 /* Always on, so always legible (TJ, 2 Nov 2026): over the moving film the
    controls are white, on a soft shadow along the frame's foot. */
 .film__stage::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; pointer-events: none;
-  height: clamp(80px, 22%, 160px);
+  height: clamp(5rem, 22%, 10rem);
   background: linear-gradient(to top, rgba(10,10,10,.42), rgba(10,10,10,.18) 55%, transparent);
   border-radius: inherit;
 }
@@ -4835,7 +4852,7 @@ html.is-flight-playing .nav--glass.is-dark .menu::before { background: var(--g-t
   --b: transparent 0%, var(--g-haze) 6%, var(--g-stone) 12%, transparent 24%,
        color-mix(in oklch, var(--g-stone) 80%, var(--rib-1)) 33%, transparent 46%;
   opacity: .62;
-  filter: blur(46px);
+  filter: blur(2.875rem);
 }
 .voices .aurora--voices .aurora__field::after { animation-duration: 26s; }
 
@@ -4844,8 +4861,8 @@ html.is-flight-playing .nav--glass.is-dark .menu::before { background: var(--g-t
    gap is unchanged: the names sit 61px above the testimonials' foot (69px on
    phones), so the edge moves up by taking from the testimonials' bottom
    padding and giving the same to the next section's top padding. */
-main { --v-pb: max(8px, calc(clamp(72px, 10vh, 120px) * .35 - 5.3px)); --v-in: 61px; --c-pt: 37px; }
-@media (max-width: 767px) { main { --v-pb: calc(clamp(72px, 10vh, 120px) * .35 + 4.4px); --v-in: 69px; --c-pt: 23px; } }
+main { --v-pb: max(.5rem, calc(clamp(4.5rem, 10vh, 7.5rem) * .35 - .3312rem)); --v-in: 3.8125rem; --c-pt: 2.3125rem; }
+@media (max-width: 767px) { main { --v-pb: calc(clamp(4.5rem, 10vh, 7.5rem) * .35 + .275rem); --v-in: 4.3125rem; --c-pt: 1.4375rem; } }
 main { --v-half: calc((var(--v-in) + var(--v-pb) + var(--c-pt)) / 2); }
 .voices { padding-bottom: max(0px, calc(var(--v-half) - var(--v-in))); }
 /* When half is less than the names' own depth (phones, short screens), the
@@ -4914,8 +4931,8 @@ html body .gifts-soon p a:not([class]):is(:hover, :focus-visible, :active) { col
    under each. The line runs from the first dot to the last.
    ============================================================ */
 .steps3 {
-  list-style: none; margin: 0 auto clamp(36px, 5vh, 56px); padding: 0;
-  --s3-gap: clamp(20px, 2.4vw, 40px);
+  list-style: none; margin: 0 auto clamp(2.25rem, 5vh, 3.5rem); padding: 0;
+  --s3-gap: clamp(1.25rem, 2.4vw, 2.5rem);
   max-width: 76rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
   column-gap: var(--s3-gap); position: relative; text-align: center;
 }
@@ -4924,10 +4941,10 @@ html body .gifts-soon p a:not([class]):is(:hover, :focus-visible, :active) { col
   /* from the first dot's centre to the last: each column's centre, gaps counted */
   left: calc((100% - 2 * var(--s3-gap)) / 6); right: calc((100% - 2 * var(--s3-gap)) / 6); background: var(--tline-ink); opacity: .55;
 }
-.steps3__item { position: relative; padding-top: calc(var(--tdot) + 18px); }
+.steps3__item { position: relative; padding-top: calc(var(--tdot) + 1.125rem); }
 .steps3__dot {
   position: absolute; top: 0; left: 50%; width: var(--tdot); height: var(--tdot);
-  border-radius: 9999px; background: var(--tline-ink); transform: translateX(-50%);
+  border-radius: 624.9375rem; background: var(--tline-ink); transform: translateX(-50%);
 }
 .steps3__t {
   margin: 0 0 .45rem; font-family: var(--f-read); font-weight: 500; font-size: clamp(1rem, .95rem + .2vw, 1.12rem);
@@ -4940,9 +4957,9 @@ html body .gifts-soon p a:not([class]):is(:hover, :focus-visible, :active) { col
 }
 /* Phones: the steps run down the page, the line down their left. */
 @media (max-width: 760px) {
-  .steps3 { grid-template-columns: minmax(0, 1fr); row-gap: 22px; text-align: left; max-width: 30rem; }
+  .steps3 { grid-template-columns: minmax(0, 1fr); row-gap: 1.375rem; text-align: left; max-width: 30rem; }
   .steps3::before { top: calc(var(--tdot) / 2); bottom: 1.4em; left: calc(var(--tdot) / 2); right: auto; width: var(--tline); height: auto; }
-  .steps3__item { padding: 0 0 0 calc(var(--tdot) + 18px); }
+  .steps3__item { padding: 0 0 0 calc(var(--tdot) + 1.125rem); }
   .steps3__dot { left: 0; top: .35em; transform: none; }
   .steps3__p { margin: 0; max-width: none; }
 }
@@ -4950,16 +4967,16 @@ html body .gifts-soon p a:not([class]):is(:hover, :focus-visible, :active) { col
    has room for two or three lines of text (TJ, 13 Nov 2026). */
 /* Inside the call to action card, between its words and its button (TJ,
    13 Nov 2026), a little wider than the card's text column. */
-.cta--card .steps3 { margin: clamp(28px, 4vh, 40px) auto clamp(28px, 4vh, 40px); }
+.cta--card .steps3 { margin: clamp(1.75rem, 4vh, 2.5rem) auto clamp(1.75rem, 4vh, 2.5rem); }
 @media (min-width: 761px) {
   /* The card is a centred column (flex), so a wider row stays centred on it;
      no transform, because the card's reveal (home.js) moves its children. */
-  .cta--card .steps3 { width: min(70rem, calc(100vw - 2 * var(--gutter, 24px) - 48px)); max-width: none; margin-inline: 0; align-self: center; flex: none; }
+  .cta--card .steps3 { width: min(70rem, calc(100vw - 2 * var(--gutter, 1.5rem) - 3rem)); max-width: none; margin-inline: 0; align-self: center; flex: none; }
 }
 /* The gap from the paragraph to the first step matches the gap from the
    last step to the button (TJ, 13 Nov 2026): the paragraph already keeps
    32px under it, so the steps add only the difference. */
-.cta--card .cta__lead + .steps3 { margin-top: max(0px, calc(clamp(28px, 4vh, 40px) - 32px)); }
+.cta--card .cta__lead + .steps3 { margin-top: max(0px, calc(clamp(1.75rem, 4vh, 2.5rem) - 2rem)); }
 
 /* "In 30 days" in bold, the same size (TJ, 13 Nov 2026, TPS-0082, from Ami). */
 .bath__lead { font-weight: 700; }

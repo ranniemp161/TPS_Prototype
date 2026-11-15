@@ -21,13 +21,6 @@
   "note": "TJ: likes it, universal across the site (5 Oct 2026)"
  },
  {
-  "id": "index/what-we-do.html:site-footer",
-  "page": "index/what-we-do.html",
-  "section": "site-footer",
-  "date": "2026-10-05",
-  "note": "TJ: likes it, universal across the site (5 Oct 2026)"
- },
- {
   "id": "index/index.html:site-header",
   "page": "index/index.html",
   "section": "site-header",
@@ -38,7 +31,14 @@
   "id": "index/index.html:site-footer",
   "page": "index/index.html",
   "section": "site-footer",
-  "date": "2026-10-05",
-  "note": "TJ: likes it, universal across the site (5 Oct 2026)"
+  "date": "2026-11-13",
+  "note": "TJ: footer contact as the About contact, one line each, colons, italic details, 13 Nov 2026"
+ },
+ {
+  "id": "index/what-we-do.html:site-footer",
+  "page": "index/what-we-do.html",
+  "section": "site-footer",
+  "date": "2026-11-13",
+  "note": "TJ: footer contact as the About contact, one line each, colons, italic details, 13 Nov 2026"
  }
 ]

@@ -1,8 +1,8 @@
 [
  "index/what-we-do.html:housekeeping-zones",
- "index/what-we-do.html:site-footer",
- "index/index.html:site-footer",
  "index/what-we-do.html:site-header",
  "index/index.html:site-header",
- "index/what-we-do.html:faq"
+ "index/what-we-do.html:faq",
+ "index/index.html:site-footer",
+ "index/what-we-do.html:site-footer"
 ]

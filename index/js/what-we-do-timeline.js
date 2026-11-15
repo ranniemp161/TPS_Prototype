@@ -13,6 +13,11 @@
    start with the glass merged into it (css), and the line, still drawn by scroll,
    can also be driven by tap: the next hour's dot shows greyed and a tap on it
    carries the page, and so the line, to that hour. */
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
   var sec = document.querySelector('[data-vt]');
@@ -146,7 +151,7 @@
       // so it is read from the first hour's rendered height (inline heights
       // were cleared in teardown, so this is the stylesheet's value).
       var pitch = items[0].getBoundingClientRect().height || 120;
-      var gap = parseFloat(cs.getPropertyValue('--vt-pitch-gap')) || 22;
+      var gap = tpsPx(cs.getPropertyValue('--vt-pitch-gap')) || 22 * tpsU();
       var hs = items.map(function () { return pitch; });
       var bodies = items.map(function (it) { return it.querySelector('.vt__body').getBoundingClientRect().height; });
       items.forEach(function (it, i) {
@@ -177,7 +182,7 @@
     var tX = subR.left - t0.left, tY = subR.top - t0.top;
     var tSf = parseFloat(getComputedStyle(sub).fontSize) / parseFloat(getComputedStyle(inkT).fontSize);
     // A clear gap below the photograph and card before the first circle (TJ, 9 Oct 2026).
-    var LGAP = phone ? 20 : 28;
+    var LGAP = phone ? 20 : 28 * tpsU();
     var lineStart = headR.bottom - trackTop + LGAP;
     var lineEnd = ys[ys.length - 1];
     axis.style.top = (lineStart - boxTop) + 'px';
@@ -317,7 +322,7 @@
       var ctaHead = cta.querySelector('h2');
       var headOff = ctaHead ? ctaHead.getBoundingClientRect().top - cta.getBoundingClientRect().top : 0;
       var gapNow = below + headOff;
-      cta.style.marginTop = (Math.max(40, Math.round(gapNow / 2)) - gapNow) + 'px';
+      cta.style.marginTop = (Math.max(40 * tpsU(), Math.round(gapNow / 2)) - gapNow) + 'px';
     }
 
     tl = gsap.timeline({

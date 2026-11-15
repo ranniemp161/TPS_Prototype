@@ -19,7 +19,7 @@
    ============================================================ */
 
 .op { position: relative; background: var(--g-canvas); }
-.op__stage { position: relative; height: 100vh; height: 100svh; min-height: 600px; overflow: hidden; background: var(--g-canvas); }
+.op__stage { position: relative; height: 100vh; height: 100svh; min-height: 37.5rem; overflow: hidden; background: var(--g-canvas); }
 
 /* ---- The header at the top of the page: one surface with the hero ---- */
 .page--wwd .nav--glass::before { opacity: 0; transition: opacity 320ms var(--ease-out); }
@@ -59,8 +59,8 @@ html.js .op__frame { opacity: 0; }
 
 /* ---- The statement ---- big, on the left, no panel. */
 .op__copy {
-  position: absolute; z-index: 2; left: clamp(24px, 5vw, 72px); top: 50%;
-  width: min(63vw, 940px); display: grid; gap: clamp(16px, 2.4vh, 28px);
+  position: absolute; z-index: 2; left: clamp(1.5rem, 5vw, 4.5rem); top: 50%;
+  width: min(63vw, 58.75rem); display: grid; gap: clamp(1rem, 2.4vh, 1.75rem);
   text-align: left; transform: none; transform-origin: left bottom;
 }
 html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { opacity: 0; }
@@ -68,7 +68,7 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
 .op__copy--light { z-index: 3; pointer-events: none; clip-path: inset(100% 0 0 0); }
 .op__copy--light .op__kicker, .op__copy--light .op__head, .op__copy--light .op__line,
 .op__copy--light .op__kicker, .op__copy--light .op__head, .op__copy--light .op__line, .op__copy--light .op__rows { color: var(--g-canvas); }
-.op__h { margin: 0; display: grid; gap: clamp(6px, 1vh, 12px); font-weight: 400; }
+.op__h { margin: 0; display: grid; gap: clamp(.375rem, 1vh, .75rem); font-weight: 400; }
 /* Hero scale (TJ, 7 Oct 2026): the text is the hero. Sized from the width and
    the height, so a short laptop window still fits it. "What we do" is coral. */
 .op__kicker { display: block; font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: clamp(3.6rem, min(7.6vw, 12.4vh), 7rem); line-height: 1; color: var(--reach-script-soft); }
@@ -87,7 +87,7 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
    size, no bullets, the way a list reads in conversation. Big and small text
    side by side read as templated, so there is one size and the weight does the
    work. */
-.op__rows { margin: 0; padding: 0; list-style: none; display: grid; gap: clamp(10px, 1.6vh, 16px); max-width: 40em; font-family: var(--f-body); font-weight: 400; font-size: clamp(1.02rem, min(.78rem + .8vw, 2.7vh), 1.45rem); line-height: 1.45; color: var(--t-ink); }
+.op__rows { margin: 0; padding: 0; list-style: none; display: grid; gap: clamp(.625rem, 1.6vh, 1rem); max-width: 40em; font-family: var(--f-body); font-weight: 400; font-size: clamp(1.02rem, min(.78rem + .8vw, 2.7vh), 1.45rem); line-height: 1.45; color: var(--t-ink); }
 .op__rows b { font-weight: 600; }
 /* The numerals are coral (TJ, 7 Oct 2026), the same coral as "What we do". On the
    cream copy over the photograph they go cream with the rest. On phones the
@@ -108,8 +108,8 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
    half 2 while the section is pinned. */
 .op__intro { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .op__intro-in {
-  position: absolute; left: clamp(24px, 5vw, 72px); top: 50%; width: min(60vw, 860px);
-  transform: translateY(-50%); display: grid; gap: clamp(14px, 2.2vh, 24px); pointer-events: auto;
+  position: absolute; left: clamp(1.5rem, 5vw, 4.5rem); top: 50%; width: min(60vw, 53.75rem);
+  transform: translateY(-50%); display: grid; gap: clamp(.875rem, 2.2vh, 1.5rem); pointer-events: auto;
 }
 .op__intro .wp { color: var(--t-ink); max-width: 60ch; }
 /* Who is it for (TJ, 8 Oct 2026): the question in Quentin, coral, the mirror
@@ -125,28 +125,28 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
 /* Quieter at rest (TJ, 8 Oct 2026): 15 percent smaller than hero rows scale,
    Montserrat 400, longer lines so the five blocks read as less text. */
 .op__more .wp { margin-top: 0; max-width: 30em; font-family: var(--f-body); font-weight: 400; font-size: clamp(.92rem, min(.646rem + .7225vw, 2.38vh), 1.275rem); line-height: 1.5; color: var(--t-ink); text-wrap: pretty; }
-.op__more .wp + .wp { margin-top: clamp(12px, 1.9vh, 18px); }
+.op__more .wp + .wp { margin-top: clamp(.75rem, 1.9vh, 1.125rem); }
 .op__intro-in--light { pointer-events: none !important; clip-path: inset(100% 0 0 0); }
 .op__intro-in--light .op__who, .op__intro-in--light .wp { color: var(--g-canvas); }
 
 /* ---- Phones and small tablets: statement on top, photograph beneath ---- */
 @media (max-width: 860px) {
-  .op__stage { min-height: 560px; }
-  .op__copy { left: 16px; right: 16px; top: auto; width: auto; gap: 14px; }
+  .op__stage { min-height: 35rem; }
+  .op__copy { left: 1rem; right: 1rem; top: auto; width: auto; gap: .875rem; }
   .op__kicker { font-size: clamp(2.8rem, min(14vw, 6.4vh), 3.8rem); }
   .op__head { font-size: clamp(1.7rem, min(8.6vw, 4.1vh), 2.6rem); }
   .op__hl { display: block; white-space: normal; }
   .op__line { font-size: clamp(.9rem, min(4.1vw, 2.2vh), 1.05rem); max-width: none; }
-  .op__kinds { display: grid; gap: 4px; }
+  .op__kinds { display: grid; gap: .25rem; }
   .op__kinds span { display: flex; align-items: center; }
-  .op__kinds span::before, .op__kinds span + span::before { content: ""; display: inline-block; width: 14px; height: 1px; background: var(--reach-script-soft); margin: 0 .7em 0 0; vertical-align: middle; flex: none; }
-  .op__intro { position: relative; inset: auto; z-index: auto; padding: 48px 0 64px; overflow: hidden; }
+  .op__kinds span::before, .op__kinds span + span::before { content: ""; display: inline-block; width: .875rem; height: 1px; background: var(--reach-script-soft); margin: 0 .7em 0 0; vertical-align: middle; flex: none; }
+  .op__intro { position: relative; inset: auto; z-index: auto; padding: 3rem 0 4rem; overflow: hidden; }
   .op__intro-in { position: relative; z-index: 1; left: auto; top: auto; width: auto; transform: none; padding: 0 var(--gutter); }
   .op__aurora--intro { display: block; }
   .op__intro-in--light { display: none; }
   .op__who { font-size: clamp(2.8rem, 13.4vw, 3.8rem); }
   .op__more .wp { max-width: none; font-size: .94rem; }
-  .op__more { margin-top: -10px; }
+  .op__more { margin-top: -.625rem; }
 }
 
 /* ---- Two plain sections (TJ, 11 Nov 2026, TPS-0047) ----
@@ -165,11 +165,11 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
    pushed down; the four kinds of care midway between the headline and them,
    the same space above and below. --op-mid is that space. */
 @media (min-width: 861px) {
-  .op--static .op__copy { --op-mid: clamp(30px, 4.6vh, 50px); gap: var(--op-mid); }
-  .op--static .op__rows { gap: 2px; }
+  .op--static .op__copy { --op-mid: clamp(1.875rem, 4.6vh, 3.125rem); gap: var(--op-mid); }
+  .op--static .op__rows { gap: .125rem; }
   /* less .6em: the rows' taller line height adds that much space around the
      words, so the visible gaps above and below the kinds come out equal */
-  .op--static .op__kinds { margin-bottom: calc(var(--op-mid) - 2px - .6em); }
+  .op--static .op__kinds { margin-bottom: calc(var(--op-mid) - .125rem - .6em); }
   /* Slimmer (TJ, 11 Nov 2026): Montserrat Light, was Medium (500). */
   .op--static .op__kinds { font-weight: 300; }
 }
@@ -177,13 +177,13 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
 .op--static .op__intro {
   position: relative; inset: auto; z-index: auto; pointer-events: auto; overflow: hidden;
   display: grid; grid-template-columns: minmax(min-content, 1.1fr) minmax(0, 1fr); align-items: center;
-  column-gap: clamp(40px, 5vw, 80px);
-  padding: clamp(80px, 12vh, 140px) clamp(24px, 5vw, 72px);
+  column-gap: clamp(2.5rem, 5vw, 5rem);
+  padding: clamp(5rem, 12vh, 8.75rem) clamp(1.5rem, 5vw, 4.5rem);
 }
 .op--static .op__aurora--intro { display: block; }
 .op--static .op__intro-in { position: relative; z-index: 1; left: auto; top: auto; width: auto; max-width: none; transform: none; margin: 0; padding: 0; }
 .op__pic { display: none; }
-.op--static .op__pic { display: block; position: relative; z-index: 1; margin: 0; border-radius: 16px; overflow: hidden; aspect-ratio: 2752 / 1536; }
+.op--static .op__pic { display: block; position: relative; z-index: 1; margin: 0; border-radius: 1rem; overflow: hidden; aspect-ratio: 2752 / 1536; }
 .op--static .op__pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 @media (min-width: 861px) {
@@ -202,7 +202,7 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
   /* The words keep their natural width on the right; the picture takes all
      the rest, one fixed gap between them, so there is never an empty middle
      (TJ, 11 Nov 2026). */
-  .op--static .op__intro { grid-template-columns: minmax(0, 1fr) max-content; column-gap: 60px; align-items: start; }
+  .op--static .op__intro { grid-template-columns: minmax(0, 1fr) max-content; column-gap: 3.75rem; align-items: start; }
   .op--static .op__pic { order: -1; }
   .op--static .op__intro-in { justify-self: end; }   /* against the right margin, as the hero's words sit on the left */
   /* "Who is it for?" the size "What we do" shows at in the hero (the hero's
@@ -220,9 +220,9 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
      before; then the introduction, with the picture under the words. */
   .op--static .op__frame { top: var(--nav-h); }
   .op--static .op__dim { opacity: .55; }
-  .op--static .op__copy { top: calc(var(--hero-top) + 38px); bottom: auto; transform: none; }
+  .op--static .op__copy { top: calc(var(--hero-top) + 2.375rem); bottom: auto; transform: none; }
   .op--static .op__kinds span + span:nth-child(2n)::before { background: var(--g-canvas); }
-  .op--static .op__intro { grid-template-columns: minmax(0, 1fr); row-gap: 32px; padding: 48px var(--gutter) 64px; }
+  .op--static .op__intro { grid-template-columns: minmax(0, 1fr); row-gap: 2rem; padding: 3rem var(--gutter) 4rem; }
 }
 
 /* Phones (TJ, 9 Oct 2026, MOBILE-PLAN item 3). Desktop untouched (TJ).
@@ -238,25 +238,25 @@ html.js .op__kicker, html.js .op__head, html.js .op__line, html.js .op__rows { o
   .op__copy--light { display: none; }
   .op__h { justify-items: center; }
   .op__kicker { font-size: clamp(3.22rem, min(17.25vw, 8.05vh), 4.6rem); }   /* 15 percent larger (TJ, 23 Oct 2026) */
-  .op__rows { justify-items: center; text-align: center; max-width: none; width: 100%; font-size: min(1.125rem, 4.6vw); gap: 10px; }
+  .op__rows { justify-items: center; text-align: center; max-width: none; width: 100%; font-size: min(1.125rem, 4.6vw); gap: .625rem; }
   /* "Baby Care" and "Restorative Treatments" need about 22 times the type size in width, so
      the kinds take 4.1vw (16px at 390 wide, 18px from 440) and each pair holds one line. */
-  .op__kinds { display: flex; flex-wrap: wrap; justify-content: center; row-gap: 2px; font-size: min(1.125rem, 4.1vw); }
+  .op__kinds { display: flex; flex-wrap: wrap; justify-content: center; row-gap: .125rem; font-size: min(1.125rem, 4.1vw); }
   .op__kinds::after { content: ""; flex-basis: 100%; order: 2; }
   .op__kinds span:nth-child(n+3) { order: 3; }
   .op__kinds span { display: inline; white-space: nowrap; }
   .op__kinds span::before, .op__kinds span + span:nth-child(odd)::before { content: none; }
-  .op__kinds span + span:nth-child(2n)::before { content: ""; display: inline-block; width: 12px; height: 1px; background: var(--reach-script-soft); vertical-align: middle; margin: 0 .55em; }
+  .op__kinds span + span:nth-child(2n)::before { content: ""; display: inline-block; width: .75rem; height: 1px; background: var(--reach-script-soft); vertical-align: middle; margin: 0 .55em; }
   /* A short phone: the text steps down a size so the photograph keeps 160px. */
   .op--tight .op__kicker { font-size: clamp(2.76rem, min(14.375vw, 6.67vh), 3.91rem); }
   .op--tight .op__head { font-size: clamp(1.5rem, min(7.6vw, 3.6vh), 2.2rem); }
-  .op--tight .op__rows { font-size: min(1rem, 4.2vw); gap: 6px; }
+  .op--tight .op__rows { font-size: min(1rem, 4.2vw); gap: .375rem; }
   .op--tight .op__kinds { font-size: min(1rem, 3.9vw); }
-  .op--tight .op__copy { gap: 10px; }
+  .op--tight .op__copy { gap: .625rem; }
   /* The question and its answer on the photograph, cream on the darkening (TJ,
      11 Oct 2026): one held screen, then the next section. */
-  .op__on { position: absolute; left: 16px; right: 16px; bottom: max(7svh, 40px); z-index: 4; display: grid; gap: min(12px, 1.5svh); text-align: center; pointer-events: none; }
-  .op__ask { margin: 0 0 min(10px, 1.2svh); font-family: var(--f-script); font-weight: 400; font-size: clamp(3rem, min(15vw, 8svh), 4.4rem); line-height: 1; white-space: nowrap; color: var(--g-canvas); opacity: 0; }
+  .op__on { position: absolute; left: 1rem; right: 1rem; bottom: max(7svh, 2.5rem); z-index: 4; display: grid; gap: min(.75rem, 1.5svh); text-align: center; pointer-events: none; }
+  .op__ask { margin: 0 0 min(.625rem, 1.2svh); font-family: var(--f-script); font-weight: 400; font-size: clamp(3rem, min(15vw, 8svh), 4.4rem); line-height: 1; white-space: nowrap; color: var(--g-canvas); opacity: 0; }
   .op__on-p { margin: 0; font-family: var(--f-body); font-weight: 400; font-size: min(.94rem, 2.3svh); line-height: 1.5; color: var(--g-canvas); text-wrap: pretty; opacity: 0; }
   /* The real introduction stays in the page for screen readers only. */
   .op--phone .op__intro { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

@@ -3,6 +3,11 @@
    M25). Outside, the client's Service Area Notice shows and nothing is sent.
    Inside, the form is replaced by the confirmation, which offers a time to
    talk. Sending is UI only for now: TJ's colleague adds the request here. */
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
   var form = document.querySelector('[data-request]');
@@ -99,8 +104,8 @@
       done.hidden = false;
       var h = done.querySelector('h2, p'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
       // Bring the confirmation into view, clear of the header (it was hidden under it).
-      var nav = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 80;
-      var y = done.getBoundingClientRect().top + window.scrollY - nav - 24;
+      var nav = tpsPx(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 80 * tpsU();
+      var y = done.getBoundingClientRect().top + window.scrollY - nav - 24 * tpsU();
       window.scrollTo({ top: Math.max(0, y), behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     });
   });
