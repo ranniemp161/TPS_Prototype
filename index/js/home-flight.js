@@ -1,4 +1,9 @@
 /* Homepage house flight: one native scroll distance maps linearly to one film time. */
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
 
@@ -939,7 +944,7 @@
     // desktop arrows sit just outside the line's ends, but never past the
     // window's edge: on narrow windows they move in over the line's soft ends
     var routeLeft = route.getBoundingClientRect().left;
-    route.style.setProperty('--arrow-band', Math.max(0, Math.min(64, Math.round(routeLeft - 4))) + 'px');
+    route.style.setProperty('--arrow-band', Math.max(0, Math.min(64 * tpsU(), Math.round(routeLeft - 4 * tpsU()))) + 'px');
     stopEls.forEach(function (li, i) {
       var x = ROUTE_STOPS[i].x;
       var side = isPhone ? (x < 0.5 ? 'right' : 'left') : ROUTE_STOPS[i].side;
@@ -948,8 +953,8 @@
       li.classList.toggle('is-right', side === 'right');
       li.classList.toggle('is-left', side === 'left');
       // the words never run past the line's end or into its fading edge
-      var room = (side === 'right' ? lineW * (1 - x) : lineW * x) - 16 - lineW * 0.04;
-      li.style.setProperty('--room', Math.max(150, room).toFixed(0) + 'px');
+      var room = (side === 'right' ? lineW * (1 - x) : lineW * x) - 16 * tpsU() - lineW * 0.04;
+      li.style.setProperty('--room', Math.max(150 * tpsU(), room).toFixed(0) + 'px');
       // Titles sit on one line (TJ, 15 Oct 2026). Where a title is wider than
       // the room beside its stem (phones), it is nudged along the line just
       // enough to stay inside the line's width, never clipped or wrapped.
@@ -962,7 +967,7 @@
         var mr = mask.getBoundingClientRect();
         var tw = mr.width;
         var dotX = x * lineW;
-        var want = side === 'right' ? dotX + 16 : dotX - 16 - tw;
+        var want = side === 'right' ? dotX + 16 * tpsU() : dotX - 16 * tpsU() - tw;
         // clear of the line's soft ends (--fade, 8 percent, 6 on phones);
         // a title too long for the space between them is centred
         var fadeVal = getComputedStyle(route).getPropertyValue('--fade').trim();
@@ -1296,7 +1301,7 @@
   function landingY() {
     var next = section.nextElementSibling;
     while (next && (next.hidden || next.offsetHeight === 0)) next = next.nextElementSibling;
-    var navH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 0;
+    var navH = tpsPx(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 0;
     return next ? next.getBoundingClientRect().top + scrollY - navH : trackTop + TRACK_VH * vh + 2;
   }
   function lastY() { return yForTime(STATIONS[STATIONS.length - 1]); }

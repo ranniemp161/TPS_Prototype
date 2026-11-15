@@ -9,6 +9,11 @@
    engine is no longer read here, and the bespoke builder keeps its own.
    ============================================================ */
 
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
 
@@ -126,7 +131,7 @@
     if (window.innerWidth <= 860) { section.style.removeProperty('--pg-fit'); return; }
     var f = 1;
     section.style.setProperty('--pg-fit', f);
-    var room = window.innerHeight - 16;
+    var room = window.innerHeight - 16 * tpsU();
     while (f > 0.35 && card.getBoundingClientRect().bottom + window.scrollY > room) {
       f = Math.round((f - 0.05) * 100) / 100;
       section.style.setProperty('--pg-fit', f);

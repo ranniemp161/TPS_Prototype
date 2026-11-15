@@ -19,6 +19,11 @@
    Day and Night, growing as it goes, and lands on the sun at the moment the
    clock begins, where the sun takes over.
    Reduced motion: the line complete at seven days, no flight. */
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
   var sec = document.querySelector('[data-ty]');
@@ -92,7 +97,7 @@
      finished desktop layout, photograph beside the card and the line across,
      tapped as on phones; the card then grows with its words. No scrollbar inside
      the card, ever. */
-  var CALM_H = 540;
+  var CALM_H = 540 * tpsU();
   // Does the card hold its words, open and closed? Measured with transitions off
   // and put back before they are switched on again, so nothing animates.
   function cardFits() {
@@ -109,7 +114,7 @@
       var kids = [].slice.call(card.children);
       var top = Math.min.apply(null, kids.map(function (k) { return k.getBoundingClientRect().top; }));
       var bot = Math.max.apply(null, kids.map(function (k) { return k.getBoundingClientRect().bottom; }));
-      var need = bot - top + 28;
+      var need = bot - top + 28 * tpsU();
       if (need > card.clientHeight + 2) ok = false;
     });
     panel.classList.toggle('is-open', wasOpen); sec.classList.toggle('is-wide', wasWide);
@@ -137,7 +142,7 @@
       while (e && e !== stg) { y += e.offsetTop; e = e.offsetParent; }
       return (e === stg ? stg.clientHeight : stg.getBoundingClientRect().bottom - stay.getBoundingClientRect().top) - y;
     };
-    while (ar > 3.0 && lowGap() < 24) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); sizeTslot(); }
+    while (ar > 3.0 && lowGap() < 24 * tpsU()) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); sizeTslot(); }
     var calm = window.innerHeight < CALM_H;
     if (!calm && !cardFits()) { sec.classList.add('is-tight'); if (!cardFits()) calm = true; }
     if (calm) sec.classList.add('is-calm');
@@ -181,8 +186,8 @@
     // With everything in its resting place, grow the cards into any room left
     // above the figures (at least 24px kept under them), never past 4 by 3.6.
     if (!calm) {
-      while (ar < 3.6 && lowGap() > 32) { ar = Math.round((ar + 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); geom(); }
-      while (ar > 3.0 && lowGap() < 24) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); geom(); }
+      while (ar < 3.6 && lowGap() > 32 * tpsU()) { ar = Math.round((ar + 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); geom(); }
+      while (ar > 3.0 && lowGap() < 24 * tpsU()) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); geom(); }
     }
 
     function render(p, keepDays) {
@@ -247,7 +252,7 @@
      Nothing drops from it into Day and Night on phones (TJ, 12 Oct 2026). */
   function flow() {
     sec.classList.add('is-flow');
-    var gut = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 24;
+    var gut = tpsPx(getComputedStyle(document.documentElement).getPropertyValue('--gutter')) || 24 * tpsU();
     // The photograph closes onto its frame between its top at 85 percent of
     // the screen and at 12 percent.
     var livePh = function () { var vh = window.innerHeight; return clamp((0.85 * vh - photo.getBoundingClientRect().top) / (0.73 * vh), 0, 1); };
@@ -261,7 +266,7 @@
         sec.style.setProperty('--ph-t', (e * gut).toFixed(1) + 'px');
         sec.style.setProperty('--ph-l', (e * gut).toFixed(1) + 'px');
         sec.style.setProperty('--ph-r', (e * gut).toFixed(1) + 'px');
-        sec.style.setProperty('--ph-rad', (e * 10).toFixed(1) + 'px');
+        sec.style.setProperty('--ph-rad', (e * 10 * tpsU()).toFixed(1) + 'px');
         shownA = a;
       }
     };

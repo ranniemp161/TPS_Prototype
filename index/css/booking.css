@@ -81,7 +81,7 @@
   );
 
   position: fixed;
-  inset: -10px;
+  inset: -.625rem;
   z-index: 0;
   pointer-events: none;
   opacity: .6;
@@ -90,7 +90,7 @@
   background-image: var(--aurora-comb), var(--aurora-colour);
   background-size: 300%, 200%;
   background-position: 50% 50%, 50% 50%;
-  filter: blur(45px);
+  filter: blur(2.8125rem);
 
   -webkit-mask-image: radial-gradient(ellipse 120% 70% at 50% 0%, black 5%, transparent 70%);
   mask-image: radial-gradient(ellipse 120% 70% at 50% 0%, black 5%, transparent 70%);
@@ -207,7 +207,7 @@
   --notch: radial-gradient(
     circle var(--notch-r) at var(--notch-x) 100%,
     transparent 0,
-    transparent calc(100% - 1.5px),
+    transparent calc(100% - .0938rem),
     #000 100%
   );
   -webkit-mask-image: var(--notch);
@@ -352,7 +352,7 @@
    The dot only earns its place when both are on that line, so it goes on
    a phone, where they stack. */
 .bk-facts {
-  width: min(680px, 100% - var(--gutter) * 2);
+  width: min(42.5rem, 100% - var(--gutter) * 2);
   margin: 2rem auto 0;
   border-block: 1px solid var(--line);
   padding-block: .9rem;
@@ -396,7 +396,7 @@
 /* Narrower than the copy above it, and it gives up the centring: a left
    edge is what makes a sequence of questions legible. */
 .bk-flow {
-  width: min(680px, 100% - var(--gutter) * 2);
+  width: min(42.5rem, 100% - var(--gutter) * 2);
   margin: 2rem auto 0;
   text-align: left;
 }
@@ -406,9 +406,9 @@
 }
 
 .bk-foot-link {
-  width: min(680px, 100% - var(--gutter) * 2);
+  width: min(42.5rem, 100% - var(--gutter) * 2);
   /* Room before the footer (TJ, 16 Oct 2026). */
-  margin: 3rem auto clamp(64px, 10vh, 120px);
+  margin: 3rem auto clamp(4rem, 10vh, 7.5rem);
   padding-top: 2rem;
   border-top: 1px solid var(--line);
   font-family: var(--f-read);
@@ -421,7 +421,7 @@
   font-weight: 600;
   color: var(--reach-link);
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: .25rem;
 }
 
 /* Only ever spoken, never drawn. Each step replaces the last, so focus
@@ -550,8 +550,8 @@
 }
 
 .bk-pick input:focus-visible ~ .bk-card {
-  outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline: .125rem solid var(--focus);
+  outline-offset: .125rem;
 }
 
 /* On a phone it stacks. Side by side at 375px leaves the copy a column
@@ -572,19 +572,19 @@
   flex-shrink: 0;
   overflow: hidden;
   background: color-mix(in srgb, var(--g-tint) 40%, transparent);
-  height: 160px;
+  height: 10rem;
   width: 100%;
 }
 
 .bk-tile img { width: 100%; height: 100%; object-fit: cover; }
 
 @media (min-width: 640px) {
-  .bk-tile { height: auto; width: 160px; align-self: stretch; }
-  .bk-addons .bk-tile { width: 96px; }
+  .bk-tile { height: auto; width: 10rem; align-self: stretch; }
+  .bk-addons .bk-tile { width: 6rem; }
 }
 
 @media (max-width: 639px) {
-  .bk-addons .bk-tile { height: 112px; }
+  .bk-addons .bk-tile { height: 7rem; }
 }
 
 .bk-card__body { min-width: 0; flex: 1; padding: 1rem; }
@@ -655,7 +655,7 @@
   display: inline-flex;
   align-items: center;
   gap: .375rem;
-  min-height: 44px;
+  min-height: 2.75rem;
   margin-top: .25rem;
   padding: 0;
   border: 0;
@@ -670,7 +670,7 @@
 }
 
 .bk-back-to-list:hover { color: var(--t-ink); }
-.bk-back-to-list svg { width: 16px; height: 16px; }
+.bk-back-to-list svg { width: 1rem; height: 1rem; }
 
 /* ---------- Add-ons ---------- */
 
@@ -710,8 +710,8 @@
 .bk-tick {
   margin-top: .125rem;
   display: flex;
-  height: 20px;
-  width: 20px;
+  height: 1.25rem;
+  width: 1.25rem;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
@@ -728,7 +728,7 @@
   color: var(--t-on-accent);
 }
 
-.bk-tick svg { width: 12px; height: 12px; }
+.bk-tick svg { width: .75rem; height: .75rem; }
 
 /* Indented to the title, not the tick box — these lines should read as one
    block of copy. */
@@ -774,8 +774,8 @@
 
 .bk-cal__step {
   display: flex;
-  height: 44px;
-  width: 44px;
+  height: 2.75rem;
+  width: 2.75rem;
   align-items: center;
   justify-content: center;
   border-radius: var(--r-button);
@@ -792,9 +792,9 @@
 /* A 375px screen leaves each square 43px at 4px gaps, a pixel under the
    44px tap target. The gap gives that pixel back on a phone, where it is
    needed, and stays roomier from 640 up. */
-.bk-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.bk-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .125rem; }
 
-@media (min-width: 640px) { .bk-cal__grid { gap: 4px; } }
+@media (min-width: 640px) { .bk-cal__grid { gap: .25rem; } }
 
 .bk-cal__wd {
   padding-bottom: .5rem;
@@ -873,7 +873,7 @@
 /* 44px minimum: this is a phone-first page and the grid is the densest tap
    target on it. */
 .bk-time {
-  min-height: 44px;
+  min-height: 2.75rem;
   width: 100%;
   border-radius: var(--r-button);
   border: 1px solid var(--line);
@@ -931,7 +931,7 @@
 .bk-input,
 .bk-shell {
   margin-top: .5rem;
-  min-height: 44px;
+  min-height: 2.75rem;
   width: 100%;
   border-radius: var(--r-button);
   border: 1px solid var(--line);
@@ -969,7 +969,7 @@
 .bk-input--pc { text-transform: uppercase; }
 .bk-input--pc::placeholder { text-transform: none; }
 
-textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
+textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
 
 /* Why a field is holding things up, under the field it is about. Rendered
    only when there is something to say — an empty slot left behind would
@@ -991,7 +991,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 .bk-radio {
   display: flex;
-  min-height: 44px;
+  min-height: 2.75rem;
   align-items: center;
   gap: .5rem;
   font-family: var(--f-read);
@@ -1000,7 +1000,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   cursor: pointer;
 }
 
-.bk-radio input { width: 16px; height: 16px; accent-color: var(--acc); }
+.bk-radio input { width: 1rem; height: 1rem; accent-color: var(--acc); }
 
 /* The refusal stands on its own rather than going through the field error,
    because it is not a field waiting to be filled in: nothing typed above
@@ -1126,7 +1126,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 .bk-actions__row { display: flex; gap: .75rem; }
 
 .bk-btn {
-  min-height: 48px;
+  min-height: 3rem;
   border-radius: var(--r-button);
   border: 1px solid transparent;
   padding-inline: 1.5rem;
@@ -1169,13 +1169,13 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 .bk-btn--ghost {
   width: 100%;
-  min-height: 44px;
+  min-height: 2.75rem;
   margin-top: .75rem;
   border: 0;
   background: none;
   color: var(--t-mute);
   text-decoration: underline;
-  text-underline-offset: 4px;
+  text-underline-offset: .25rem;
 }
 
 .bk-btn--ghost:hover { color: var(--t-ink); }
@@ -1205,7 +1205,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 .bk-retry button {
   margin-top: .75rem;
-  min-height: 44px;
+  min-height: 2.75rem;
   border-radius: var(--r-button);
   border: 1px solid var(--acc);
   background: none;
@@ -1231,7 +1231,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   margin: auto;
   width: calc(100% - 2rem);
   max-width: 28rem;
-  border-radius: 16px;
+  border-radius: 1rem;
   border: 1px solid var(--line);
   background: var(--g-paper);
   color: var(--t-ink);
@@ -1287,8 +1287,8 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 .bk-dialog__ack input {
   margin-top: .125rem;
-  height: 20px;
-  width: 20px;
+  height: 1.25rem;
+  width: 1.25rem;
   flex-shrink: 0;
   accent-color: var(--acc);
 }
@@ -1313,12 +1313,12 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
   top: .75rem;
   right: .75rem;
   display: flex;
-  height: 36px;
-  width: 36px;
+  height: 2.25rem;
+  width: 2.25rem;
   align-items: center;
   justify-content: center;
   border: 0;
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   background: none;
   color: var(--t-mute);
   cursor: pointer;
@@ -1326,12 +1326,12 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 }
 
 .bk-dialog__x:hover { background: color-mix(in srgb, var(--g-tint) 40%, transparent); color: var(--t-ink); }
-.bk-dialog__x svg { width: 16px; height: 16px; }
+.bk-dialog__x svg { width: 1rem; height: 1rem; }
 
 /* ---------- Confirmation ---------- */
 
 .bk-done {
-  border-radius: 16px;
+  border-radius: 1rem;
   border: 1px solid var(--line);
   background: var(--g-paper);
   padding: 2rem;
@@ -1380,7 +1380,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 }
 
 .bk-done__chips span {
-  border-radius: 999px;
+  border-radius: 62.4375rem;
   border: 1px solid var(--line);
   background: var(--g-canvas);
   padding: .5rem 1rem;
@@ -1421,7 +1421,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
 
 .bk-done__manage a {
   display: inline-flex;
-  min-height: 48px;
+  min-height: 3rem;
   align-items: center;
   justify-content: center;
   border-radius: var(--r-button);
@@ -1455,7 +1455,7 @@ textarea.bk-input { min-height: 88px; resize: vertical; line-height: 1.5; }
    here reached SimplyBook and no card was taken; saying so on the screen
    that would otherwise claim a booking is not optional. */
 .bk-proto {
-  width: min(680px, 100% - var(--gutter) * 2);
+  width: min(42.5rem, 100% - var(--gutter) * 2);
   margin: 1.5rem auto 0;
   border: 1px dashed var(--g-stone);
   border-radius: var(--r-button);

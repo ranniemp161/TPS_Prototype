@@ -11,11 +11,16 @@
    Every other page folds after FOLD pixels, or after data-nav-fold pixels if
    the header carries that attribute.
    ============================================================ */
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
   var root = document.querySelector('[data-nav]');
   if (!root) return;
-  var FOLD = parseFloat(root.getAttribute('data-nav-fold')) || 56;
+  var FOLD = parseFloat(root.getAttribute('data-nav-fold')) || 56 * tpsU();
   function update() {
     var y = window.scrollY || document.documentElement.scrollTop || 0;
     root.classList.toggle('is-scrolled', y > FOLD);

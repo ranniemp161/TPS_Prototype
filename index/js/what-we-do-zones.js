@@ -20,6 +20,11 @@
    Film timings were read off a contact sheet of the encoded clip
    (lab/zones-encode.mjs). If the film changes, re-read them.
    ============================================================ */
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
 
@@ -293,7 +298,7 @@
   function paintCopy(t) {
     blocks.forEach(function (b) {
       var o = b.win(t);
-      var tf = reduced ? 'none' : 'translate3d(0,' + ((1 - o) * 10).toFixed(1) + 'px,0)';
+      var tf = reduced ? 'none' : 'translate3d(0,' + ((1 - o) * 10 * tpsU()).toFixed(1) + 'px,0)';
       paint(b.el, o, tf, b.cache);
     });
   }

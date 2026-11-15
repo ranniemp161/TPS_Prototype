@@ -11,6 +11,11 @@
    with motion only; phones get photograph then words, each photograph zooming
    gently in its frame as it crosses the screen; reduced motion gets them still.
    Rebuilds on width change only. */
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
   var sec = document.querySelector('[data-hd]');
@@ -93,7 +98,7 @@
     var n = document.createElement('span');
     n.className = 'hd__notch';
     n.style.width = w + 'px';
-    n.style.height = Math.round(spot.bottom - tr.top + 4) + 'px';
+    n.style.height = Math.round(spot.bottom - tr.top + 4 * tpsU()) + 'px';
     n.style.shapeOutside = 'inset(' + Math.max(0, Math.round(spot.top - tr.top - 4)) + 'px 0 0 0)';
     first.insertBefore(n, first.firstChild);
   }
@@ -304,7 +309,7 @@
     sec.style.setProperty('--hd-len', (1 + REVEAL).toFixed(2));   // one held screen; the kinds change on tap (TJ, 11 Nov 2026, TPS-0050)
 
     // If the tallest kind does not fit beside her, the tight layout takes over.
-    var avail = copy.clientHeight - 24;
+    var avail = copy.clientHeight - 24 * tpsU();
     var tallest = Math.max.apply(null, kinds.map(function (k) { return k.offsetHeight; }));
     if (tallest > avail) sec.classList.add('is-tight');
 
@@ -328,15 +333,15 @@
     // the stack's left edge clears Read more, which stays at the left (TJ)
     var stLeft = sec.querySelector('.hd__stage').getBoundingClientRect().left;
     var btnRight = copy.getBoundingClientRect().left - stLeft + Math.max.apply(null, kinds.map(function (k) { var b = k.querySelector('[data-hd-read]'); return b ? b.offsetWidth : 0; }));
-    var clearW = Math.round(stageW - 2 * (btnRight + 32));
-    var maxW = Math.min(1180, clearW, Math.round((stageW - 48) * 0.88));
+    var clearW = Math.round(stageW - 2 * (btnRight + 32 * tpsU()));
+    var maxW = Math.min(1180 * tpsU(), clearW, Math.round((stageW - 48 * tpsU()) * 0.88));
     var fitWidth = function (k) {
       k.classList.add('is-measure');
       var chosen = null;
       for (var wi = 0; wi < WIDTHS.length && chosen === null; wi++) {
-        var wpx = Math.min(maxW, Math.round((stageW - 48) * WIDTHS[wi]));
+        var wpx = Math.min(maxW, Math.round((stageW - 48 * tpsU()) * WIDTHS[wi]));
         k.style.setProperty('--hd-w', wpx + 'px');
-        if (k.offsetHeight <= availH - 36) chosen = wpx;   // 12px clear of the header, 24px clear of the controls (TPS-0077)
+        if (k.offsetHeight <= availH - 36 * tpsU()) chosen = wpx;   // 12px clear of the header, 24px clear of the controls (TPS-0077)
       }
       if (chosen === null) k.style.setProperty('--hd-w', maxW + 'px');
       var h = k.offsetHeight;
@@ -361,20 +366,20 @@
       var nameEl = k.querySelector('.hd__name');
       var nameH = nameEl.offsetHeight + parseFloat(getComputedStyle(nameEl).marginBottom);
       var lineH = parseFloat(getComputedStyle(k).fontSize) * 1.6;
-      var top = Math.round(Math.max(12, Math.min((availH - openH) / 2, availH - openH - 24)));
+      var top = Math.round(Math.max(12 * tpsU(), Math.min((availH - openH) / 2, availH - openH - 24 * tpsU())));
       k.style.top = top + 'px';
       // Too tall even at the widest and the 13px floor: the open text scrolls
       // in its own box instead of running into the controls (TPS-0077).
       k.classList.remove('is-scroll'); k.style.removeProperty('--hd-full-max');
-      if (openH > availH - 36) {
+      if (openH > availH - 36 * tpsU()) {
         k.classList.add('is-measure');
         var full = k.querySelector('.hd__full');
         var fullTop = full ? full.getBoundingClientRect().top - k.getBoundingClientRect().top : nameH;
         k.classList.remove('is-measure');
         k.classList.add('is-scroll');
-        k.style.setProperty('--hd-full-max', Math.max(80, Math.round(availH - top - 24 - fullTop)) + 'px');
+        k.style.setProperty('--hd-full-max', Math.max(80 * tpsU(), Math.round(availH - top - 24 * tpsU() - fullTop)) + 'px');
       }
-      var teaserLines = Math.floor((availH - top - nameH - 24 - lineH * 1.55) / lineH);
+      var teaserLines = Math.floor((availH - top - nameH - 24 * tpsU() - lineH * 1.55) / lineH);
       tease(k, Math.max(2, Math.min(5, teaserLines)));
     });
 

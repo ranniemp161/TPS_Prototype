@@ -5,6 +5,11 @@
    measures after the pinned sections above it on this page, and the header's
    dark flip is -2 so it measures after that pin. */
 
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 gsap.registerPlugin(ScrollTrigger);
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -156,7 +161,7 @@ function actPeak() {
     });
   };
 
-  /* Read more: opens one column fully (scrolling inside if it is long);
+  /* Read more: opens one column fully (the scene grows if it is long);
      Read less closes it to the even height again. The day column has no
      Read more (14 Nov 2026): its full text shows straight away. */
   document.querySelectorAll('[data-dn-more]').forEach(btn => {
@@ -169,8 +174,32 @@ function actPeak() {
       const b = opt.querySelector('[data-dn-body]');
       if (!open) { b.scrollTop = 0; b.style.maxHeight = getComputedStyle(b).getPropertyValue('--dn-closed'); }
       setBlurTop();
+      dnGrow();
     });
   });
+
+  /* One scroll only (TJ, 15 Nov 2026): when the open text is longer than the
+     column allows (tablets), the scene grows to fit it, so it is read by
+     scrolling the page, never a box inside it. On phones the two columns share
+     the extra height, so it is counted twice. */
+  function dnGrow() {
+    const sec = document.querySelector('.dns'); if (!sec) return;
+    sec.style.setProperty('--dns-extra', '0px');
+    const opt = sec.querySelector('.dnf__opt.is-open');
+    if (opt) {
+      const b = opt.querySelector('[data-dn-body]'), share = window.matchMedia('(max-width: 860px)').matches ? 2 : 1;
+      let extra = 0;
+      for (let i = 0; i < 6; i++) {
+        const over = b.scrollHeight - b.clientHeight;
+        if (over <= 1) break;
+        extra += over * share + 4;
+        sec.style.setProperty('--dns-extra', extra + 'px');
+      }
+    }
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+  let dnGrowT = 0;
+  window.addEventListener('resize', () => { clearTimeout(dnGrowT); dnGrowT = setTimeout(dnGrow, 200); });
 
   if (REDUCED) {
     // The resolved end state: night fallen, the clock gone, the question
@@ -407,7 +436,7 @@ function actPeak() {
           // the sun; measured live (the two sit in the same pinned frame).
           const tb = dnTitle ? dnTitle.getBoundingClientRect().bottom : 0;
           const rr = dnlRail.getBoundingClientRect(), lineY = rr.top + rr.height / 2;
-          const sunH = dnlSun.offsetHeight || 35;
+          const sunH = dnlSun.offsetHeight || 35 * tpsU();
           const skyH = Math.max(sunH + 8, Math.round((lineY - tb) / 2 + sunH / 2));
           if (skyH !== dnlSkyH) { dnl.style.setProperty('--dnl-sky', skyH + 'px'); dnlSkyH = skyH; }
           const co = between(m, 0, CLOCK_IN) * (1 - between(g, 0, 0.45));
@@ -532,8 +561,8 @@ function navTheme() {
   // dark with it instead of cutting.
   ScrollTrigger.create({
     trigger: peak,
-    start: 'bottom 90px',
-    end: 'bottom 10px',
+    start: () => 'bottom ' + (90 * tpsU()) + 'px',
+    end: () => 'bottom ' + (10 * tpsU()) + 'px',
     invalidateOnRefresh: true,
     refreshPriority: -12,
     onUpdate: self => { tOut = 1 - self.progress; apply(); },

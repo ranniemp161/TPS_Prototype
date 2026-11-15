@@ -17,6 +17,11 @@
    choice the testimonial block on v1 makes and for the same reason.
    ============================================================ */
 
+/* The desktop master number (TJ, 15 Nov 2026): the root size over 16, so a
+   fixed distance in pixels here scales with the rest of the page. tpsPx turns
+   a length read from the styles (now in rem) into pixels. */
+function tpsU() { return (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16) / 16; }
+function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s*$/.test(String(v).trim()) ? n * 16 * tpsU() : n; }
 (function () {
   'use strict';
 
@@ -1474,7 +1479,7 @@
     function shownGain(p) {
       if (NARROW.matches || !hdr || screenOf[pages.indexOf(p)] === 0) return 0;
       var pad = parseFloat(getComputedStyle(app).paddingTop) || 0;
-      var fold = parseFloat(getComputedStyle(hdr).getPropertyValue('--nav-h')) || pad;
+      var fold = tpsPx(getComputedStyle(hdr).getPropertyValue('--nav-h')) || pad;
       return Math.max(0, pad - fold);
     }
     function overflows(p) { return need(p) > p.clientHeight + shownGain(p) + 1; }
@@ -1539,7 +1544,7 @@
         align(); centre();
       }
       var over = pages.filter(overflows);
-      free = over.length > 0 || window.innerHeight < 500;
+      free = over.length > 0 || window.innerHeight / tpsU() < 500;
       // Released, the page reads as it did before the second step (TJ, 10 Nov 2026).
       if (free) pages.forEach(function (p) { p.classList.remove('is-snug'); });
       app.classList.toggle('is-free', free);

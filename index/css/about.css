@@ -8,8 +8,8 @@
    ============================================================ */
 
 .os { background: var(--g-canvas); color: var(--t-ink); }
-.os-wrap { width: 100%; max-width: 1080px; margin-inline: auto; padding-inline: var(--gutter, 24px); }
-.os-measure { max-width: calc(62ch + 2 * var(--gutter, 24px)); margin-inline: auto; }
+.os-wrap { width: 100%; max-width: 67.5rem; margin-inline: auto; padding-inline: var(--gutter, 1.5rem); }
+.os-measure { max-width: calc(62ch + 2 * var(--gutter, 1.5rem)); margin-inline: auto; }
 
 .os-h2 { margin: 0 0 1.4rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(2rem, 4.2vw, 3.4rem); text-wrap: balance; }
 .os-h3 { margin: 0 0 1.2rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: 1.05; font-size: clamp(1.35rem, 2.4vw, 1.9rem); color: var(--t-soft); text-wrap: balance; }
@@ -23,32 +23,32 @@
 }
 
 /* ---------- 1. The question ---------- */
-.os-open { position: relative; overflow: hidden; padding: calc(var(--nav-h) + clamp(64px, 12vh, 140px)) 0 clamp(72px, 12vh, 140px); text-align: center; }
+.os-open { position: relative; overflow: hidden; padding: calc(var(--nav-h) + clamp(4rem, 12vh, 8.75rem)) 0 clamp(4.5rem, 12vh, 8.75rem); text-align: center; }
 .os-open__aurora { z-index: 0; }
-.os-open__in { position: relative; z-index: 1; padding-inline: var(--gutter, 24px); }
+.os-open__in { position: relative; z-index: 1; padding-inline: var(--gutter, 1.5rem); }
 .os-open__h { margin: 0 auto; max-width: 14ch; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .02em; font-size: clamp(2.6rem, min(7vw, 11vh), 6rem); text-wrap: balance; }
 .os-open__lede { margin: 1.8rem auto 0; max-width: 48ch; font-family: var(--f-read); font-size: clamp(1.05rem, 1rem + .3vw, 1.25rem); line-height: 1.6; color: var(--t-soft); }
 /* Split hero (TJ, 16 Oct 2026): the picture on the left, the question on the
    right, left aligned. Stacks on phones and tablets, picture first. */
 /* The page's main already clears the header and holds the side margins, so
    the split hero adds only a little of its own. */
-.os-open--split { text-align: left; padding-top: clamp(8px, 2vh, 24px); padding-bottom: clamp(48px, 8vh, 96px); }
-.os-open--split .os-open__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 88px); align-items: center; max-width: 1280px; margin-inline: auto; }
-.os-open__pic { margin: 0; aspect-ratio: 1600 / 1470; max-height: calc(100svh - var(--nav-h) - clamp(80px, 14vh, 168px)); justify-self: end; border-radius: var(--r-media, 16px); overflow: hidden; background: var(--g-canvas); }
+.os-open--split { text-align: left; padding-top: clamp(.5rem, 2vh, 1.5rem); padding-bottom: clamp(3rem, 8vh, 6rem); }
+.os-open--split .os-open__in { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5.5rem); align-items: center; max-width: 80rem; margin-inline: auto; }
+.os-open__pic { margin: 0; aspect-ratio: 1600 / 1470; max-height: calc(100svh - var(--nav-h) - clamp(5rem, 14vh, 10.5rem)); justify-self: end; border-radius: var(--r-media, 1rem); overflow: hidden; background: var(--g-canvas); }
 .os-open__pic img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .os-open--split .os-open__h { margin: 0; max-width: 11ch; }
 .os-open--split .os-open__lede { margin-left: 0; max-width: 40ch; }
 @media (max-width: 860px) {
-  .os-open--split .os-open__in { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .os-open--split .os-open__in { grid-template-columns: minmax(0, 1fr); gap: 1.75rem; }
   .os-open__pic { justify-self: stretch; max-height: none; }
   .os-open--split .os-open__in { padding-inline: 0; }
   .os-open--split .os-open__h { max-width: none; }
 }
 
 /* ---------- 2. The story ---------- */
-.os-story { padding: clamp(64px, 10vh, 120px) 0; }
-.os-story__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(32px, 5vw, 80px); align-items: start; }
-.os-story__pic { position: sticky; top: calc(var(--nav-h) + 32px); margin: 0; border-radius: var(--r-media, 16px); overflow: hidden; aspect-ratio: 4 / 5; background: var(--g-haze); }
+.os-story { padding: clamp(4rem, 10vh, 7.5rem) 0; }
+.os-story__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(2rem, 5vw, 5rem); align-items: start; }
+.os-story__pic { position: sticky; top: calc(var(--nav-h) + 2rem); margin: 0; border-radius: var(--r-media, 1rem); overflow: hidden; aspect-ratio: 4 / 5; background: var(--g-haze); }
 .os-story__pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .os-story__text { max-width: 62ch; }
 /* Flipped (TJ, 16 Oct 2026): the hero above is picture left, words right, so
@@ -60,23 +60,23 @@
 }
 
 /* ---------- 3. The care we felt was missing ---------- */
-.os-missing { padding: clamp(64px, 10vh, 120px) 0; }
+.os-missing { padding: clamp(4rem, 10vh, 7.5rem) 0; }
 /* Her five needs, lifted from the paragraph above them, in the specialist
    section's hairline language. aria-hidden: the paragraph already says it. */
-.os-needs { list-style: none; margin: .4rem 0 2rem; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 28px; }
-.os-needs li { position: relative; padding: 11px 0 11px 18px; font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--t-soft); }
+.os-needs { list-style: none; margin: .4rem 0 2rem; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.75rem; }
+.os-needs li { position: relative; padding: .6875rem 0 .6875rem 1.125rem; font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--t-soft); }
 .os-needs li::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--line-firm); }
-html.js .os-needs li { opacity: 0; transform: translateY(6px); }
+html.js .os-needs li { opacity: 0; transform: translateY(.375rem); }
 html.js .os-needs li::before { background: var(--acc); transform: scaleY(0); transform-origin: 50% 0; }
 html.js .os-needs.is-in li { opacity: 1; transform: none; transition: opacity .7s var(--ease-out), transform .7s var(--ease-out); transition-delay: calc(var(--i, 0) * 110ms + 120ms); }
 html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--line-firm); transition: transform .6s var(--ease-out), background-color 1.4s ease; transition-delay: calc(var(--i, 0) * 110ms), calc(var(--i, 0) * 110ms + .9s); }
 
 /* ---------- 4. Our founders ---------- */
-.os-founders { padding: clamp(64px, 10vh, 120px) 0; background: linear-gradient(to bottom, var(--g-canvas), color-mix(in srgb, var(--g-tint) 35%, transparent) 50%, var(--g-canvas)); }
-.os-founders__head { text-align: center; margin-bottom: clamp(32px, 5vh, 56px); }
-.os-founders__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); align-items: start; }
-.os-founder { background: var(--g-paper); border: 1px solid var(--line); border-radius: var(--r-card, 10px); padding: clamp(20px, 2.4vw, 32px); }
-.os-founder__pic { aspect-ratio: 4 / 5; border-radius: var(--r-media, 16px); overflow: hidden; margin-bottom: 1.4rem; background: var(--g-haze); }
+.os-founders { padding: clamp(4rem, 10vh, 7.5rem) 0; background: linear-gradient(to bottom, var(--g-canvas), color-mix(in srgb, var(--g-tint) 35%, transparent) 50%, var(--g-canvas)); }
+.os-founders__head { text-align: center; margin-bottom: clamp(2rem, 5vh, 3.5rem); }
+.os-founders__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.25rem, 3vw, 2.5rem); align-items: start; }
+.os-founder { background: var(--g-paper); border: 1px solid var(--line); border-radius: var(--r-card, .625rem); padding: clamp(1.25rem, 2.4vw, 2rem); }
+.os-founder__pic { aspect-ratio: 4 / 5; border-radius: var(--r-media, 1rem); overflow: hidden; margin-bottom: 1.4rem; background: var(--g-haze); }
 /* Placeholder portrait: haze, the TPS mark faint in the middle. */
 .os-founder__pic--placeholder { display: grid; place-items: center; background: linear-gradient(160deg, var(--g-haze), var(--g-tint)); }
 .os-founder__pic--placeholder img { width: 28%; height: auto; opacity: .22; }
@@ -85,16 +85,16 @@ html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--lin
 .os-founder__name { margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; font-size: clamp(1.5rem, 2.2vw, 1.9rem); line-height: 1; }
 .os-founder__role { margin: .5rem 0 1.2rem; font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
 .os-founder .os-p { font-size: 1rem; }
-.os-founders__close { text-align: center; margin-top: clamp(32px, 5vh, 56px); }
+.os-founders__close { text-align: center; margin-top: clamp(2rem, 5vh, 3.5rem); }
 
 /* ---------- 5. Traditions ---------- */
-.os-trad { padding-bottom: clamp(48px, 8vh, 96px); }
+.os-trad { padding-bottom: clamp(3rem, 8vh, 6rem); }
 .os-trad__band { position: relative; min-height: 78vh; min-height: 78svh; overflow: hidden; display: flex; align-items: flex-end; }
 .os-trad__img { position: absolute; inset: -8% 0; width: 100%; height: 116%; object-fit: cover; object-position: 34% 60%; will-change: transform; }
 /* The original bath photograph (TJ, 16 Oct 2026), not the tall plate made for
    the home page's bath scroll. Framed on the mother, left of centre. */
 .os-trad__band::after { content: ""; position: absolute; inset: auto 0 0; height: 30%; background: linear-gradient(to top, color-mix(in srgb, var(--g-canvas) 60%, transparent), color-mix(in srgb, var(--g-canvas) 0%, transparent)); pointer-events: none; }
-.os-trad__card { position: relative; z-index: 1; margin: 0 var(--gutter, 24px) clamp(32px, 6vh, 64px) max(var(--gutter, 24px), calc((100vw - 1080px) / 2)); max-width: 640px; padding: clamp(22px, 3vw, 40px); border-radius: var(--r-card, 10px); background: color-mix(in srgb, var(--g-canvas) 62%, transparent); }
+.os-trad__card { position: relative; z-index: 1; margin: 0 var(--gutter, 1.5rem) clamp(2rem, 6vh, 4rem) max(var(--gutter, 1.5rem), calc((100vw - 67.5rem) / 2)); max-width: 40rem; padding: clamp(1.375rem, 3vw, 2.5rem); border-radius: var(--r-card, .625rem); background: color-mix(in srgb, var(--g-canvas) 62%, transparent); }
 .os-trad__card .os-p { color: var(--t-soft); }
 .os-trad__card .os-h2 { font-size: clamp(1.7rem, 3vw, 2.6rem); }
 /* With the original bath photograph the mother sits left of centre, so on
@@ -103,33 +103,33 @@ html.js .os-needs.is-in li::before { transform: scaleY(1); background: var(--lin
 @media (min-width: 861px) {
   /* Pinned to the photograph's right edge and centred top to bottom, narrower,
      so her face stays clear (TJ, 22 Oct 2026). */
-  .os-trad__band { justify-content: flex-end; align-items: center; padding-block: clamp(40px, 7vh, 72px); }
-  .os-trad__card { margin: 0 clamp(32px, 4vw, 64px) 0 auto; max-width: 560px; }
+  .os-trad__band { justify-content: flex-end; align-items: center; padding-block: clamp(2.5rem, 7vh, 4.5rem); }
+  .os-trad__card { margin: 0 clamp(2rem, 4vw, 4rem) 0 auto; max-width: 35rem; }
 }
 /* The page's one Quentin line. */
-.os-script { margin: clamp(48px, 8vh, 88px) auto; max-width: 24ch; text-align: center; font-family: var(--f-script); font-weight: 400; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.15; color: var(--reach-link); }
+.os-script { margin: clamp(3rem, 8vh, 5.5rem) auto; max-width: 24ch; text-align: center; font-family: var(--f-script); font-weight: 400; font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.15; color: var(--reach-link); }
 
 /* ---------- 6. The details: a line that draws as you read ---------- */
-.os-details { padding: clamp(64px, 10vh, 120px) 0; }
+.os-details { padding: clamp(4rem, 10vh, 7.5rem) 0; }
 .os-details__h { text-align: center; }
-.os-line { list-style: none; position: relative; margin: clamp(32px, 6vh, 64px) auto clamp(40px, 6vh, 72px); padding: 0; max-width: 1000px; }
+.os-line { list-style: none; position: relative; margin: clamp(2rem, 6vh, 4rem) auto clamp(2.5rem, 6vh, 4.5rem); padding: 0; max-width: 62.5rem; }
 .os-line__axis { position: absolute; left: 50%; top: 0; bottom: 0; width: var(--tline); background: var(--tline-track); transform: translateX(-.5px); }
 .os-line__fill { position: absolute; inset: 0; background: var(--tline-ink); transform-origin: 50% 0; transform: scaleY(var(--os-fill, 0)); }
 .os-line__tip { position: absolute; left: 50%; top: 0; width: var(--ttip); height: var(--ttip); margin: calc(var(--ttip) / -2) 0 0 calc(var(--ttip) / -2); border-radius: 50%; background: var(--tline-ink); transform: translateY(var(--os-tip, 0px)); }
-.os-act { position: relative; width: 50%; padding: 0 clamp(28px, 4vw, 56px) clamp(36px, 6vh, 64px); }
+.os-act { position: relative; width: 50%; padding: 0 clamp(1.75rem, 4vw, 3.5rem) clamp(2.25rem, 6vh, 4rem); }
 .os-act:nth-child(even) { margin-left: 0; text-align: right; }
 .os-act:nth-child(odd) { margin-left: 50%; }
 .os-act p { margin: 0; font-family: var(--f-read); font-size: clamp(1rem, .96rem + .25vw, 1.15rem); line-height: 1.65; color: var(--t-soft); }
 .os-act__dot { position: absolute; top: .55em; width: var(--tdot); height: var(--tdot); border-radius: 50%; background: var(--tline-ink); transform: scale(0); transition: transform 420ms var(--ease-out); }
 .os-act:nth-child(even) .os-act__dot { right: calc(var(--tdot) / -2); }
 .os-act:nth-child(odd) .os-act__dot { left: calc(var(--tdot) / -2); }
-html.js .os-act p { opacity: 0; transform: translateY(10px); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+html.js .os-act p { opacity: 0; transform: translateY(.625rem); transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
 .os-act.is-reached .os-act__dot { transform: scale(1); }
 html.js .os-act.is-reached p { opacity: 1; transform: none; }
 .os-act__big { font-family: var(--f-display) !important; text-transform: uppercase; font-size: clamp(1.4rem, 2.4vw, 2rem) !important; line-height: 1.1 !important; color: var(--t-ink) !important; }
 
 /* ---------- 7. The same intention ---------- */
-.os-close { position: relative; overflow: hidden; padding: clamp(72px, 12vh, 140px) 0; text-align: center; }
+.os-close { position: relative; overflow: hidden; padding: clamp(4.5rem, 12vh, 8.75rem) 0; text-align: center; }
 .os-close__aurora { z-index: 0; }
 /* Full width (TJ, 10 Nov 2026): the section steps out of main's side gutter
    so its fuchsia band runs edge to edge, with the contact card on top of it. */
@@ -137,9 +137,9 @@ html.js .os-act.is-reached p { opacity: 1; transform: none; }
 /* Wider body (TJ, 10 Nov 2026): just enough that on desktop the first and last
    paragraphs sit on one line and Today, it informs... on two. Narrower than
    the contact card below it. */
-.os-close__in.os-measure { max-width: calc(760px + 2 * var(--gutter, 24px)); }
+.os-close__in.os-measure { max-width: calc(47.5rem + 2 * var(--gutter, 1.5rem)); }
 .os-close__in { position: relative; z-index: 1; }
-.os-final { margin: clamp(40px, 7vh, 72px) auto 1.6rem; max-width: 28ch; /* was 16ch; wide enough for each sentence on its own line (TJ, 10 Nov 2026) */ font-family: var(--f-display); text-transform: uppercase; line-height: 1; letter-spacing: .02em; font-size: clamp(2.2rem, min(6vw, 9vh), 4.8rem); text-wrap: balance; color: var(--t-ink); }
+.os-final { margin: clamp(2.5rem, 7vh, 4.5rem) auto 1.6rem; max-width: 28ch; /* was 16ch; wide enough for each sentence on its own line (TJ, 10 Nov 2026) */ font-family: var(--f-display); text-transform: uppercase; line-height: 1; letter-spacing: .02em; font-size: clamp(2.2rem, min(6vw, 9vh), 4.8rem); text-wrap: balance; color: var(--t-ink); }
 .os-sign { font-family: var(--f-read); font-size: 1rem; color: var(--t-soft); line-height: 1.6; }
 .os-sign strong { font-weight: 700; color: var(--t-ink); }
 
@@ -149,20 +149,20 @@ html.js .os-act.is-reached p { opacity: 1; transform: none; }
    the left, the details and the call to action on the right. */
 /* Card version (TJ, 10 Nov 2026): the section sits on the cream, the content
    on a white card with the site's card radius; the title is centred. */
-.os-contact { --os-contact-top: clamp(18px, 3.2vh, 38px); padding: var(--os-contact-top) 0 clamp(64px, 10vh, 120px); }
+.os-contact { --os-contact-top: clamp(1.125rem, 3.2vh, 2.375rem); padding: var(--os-contact-top) 0 clamp(4rem, 10vh, 7.5rem); }
 /* The gap from The Same Intention down to the card halved (TJ, 10 Nov 2026):
    half its bottom padding here, half the card section's top padding above.
    Then a further 20 percent off that gap (TJ, 10 Nov 2026). */
-.os-close { padding-bottom: clamp(28px, 4.6vh, 56px); }
+.os-close { padding-bottom: clamp(1.75rem, 4.6vh, 3.5rem); }
 /* Care Should Be Felt in the Details down to The Same Intention, 40 percent
    less (TJ, 10 Nov 2026), with the fuchsia edge exactly halfway: the same
    half gap each side. Above, the last line's 1.1rem margin is part of it. */
-.os-details { padding-bottom: calc(clamp(43px, 7.2vh, 84px) - 1.1rem); }
-.os-close { padding-top: clamp(43px, 7.2vh, 84px); }
-.os-contact .os-wrap { max-width: 1180px; }
-.os-contact__card { background: var(--g-paper); border-radius: var(--r-card); padding: clamp(40px, 6vw, 80px) clamp(24px, 5vw, 72px); }
-.os-contact__h { margin-bottom: clamp(28px, 4vh, 48px); text-align: center; }
-.os-contact__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.os-details { padding-bottom: calc(clamp(2.6875rem, 7.2vh, 5.25rem) - 1.1rem); }
+.os-close { padding-top: clamp(2.6875rem, 7.2vh, 5.25rem); }
+.os-contact .os-wrap { max-width: 73.75rem; }
+.os-contact__card { background: var(--g-paper); border-radius: var(--r-card); padding: clamp(2.5rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4.5rem); }
+.os-contact__h { margin-bottom: clamp(1.75rem, 4vh, 3rem); text-align: center; }
+.os-contact__grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(2rem, 6vw, 6rem); align-items: center; }
 .os-contact__info .article__contact { margin-bottom: 2rem; }
 .os-contact__info .article__actions { justify-content: flex-start; }
 .os-contact__area { margin: 1.4rem auto 0; max-width: 34ch; text-align: center; color: var(--t-ink); text-wrap: balance; }
@@ -171,7 +171,7 @@ html.js .os-act.is-reached p { opacity: 1; transform: none; }
    M25 area in the accent with a slow pulse at its centre. The coast draws in
    once when the map comes into view. */
 .os-map { margin: 0; }
-.os-map__svg { display: block; width: 100%; max-width: 480px; height: auto; margin-inline: auto; overflow: visible; }
+.os-map__svg { display: block; width: 100%; max-width: 30rem; height: auto; margin-inline: auto; overflow: visible; }
 /* No non-scaling stroke on the coast: it breaks pathLength, which the draw needs. */
 .os-map__uk, .os-map__ie { fill: none; stroke-linejoin: round; }
 .os-map__uk { stroke: var(--t-mute); stroke-width: 1.1; }
@@ -179,7 +179,7 @@ html.js .os-act.is-reached p { opacity: 1; transform: none; }
 .os-map__area { fill: var(--acc); fill-opacity: .22; stroke: var(--acc); stroke-width: 1; vector-effect: non-scaling-stroke; }
 .os-map__dot { fill: var(--acc); }
 .os-map__pulse { fill: none; stroke: var(--acc); stroke-width: 1; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; animation: os-map-pulse 2.8s var(--ease-out) infinite; }
-.os-map__label { font-family: var(--f-body); font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; fill: var(--t-ink); stroke: var(--g-paper); stroke-width: 4px; stroke-linejoin: round; paint-order: stroke; }
+.os-map__label { font-family: var(--f-body); font-size: .6875rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; fill: var(--t-ink); stroke: var(--g-paper); stroke-width: .25rem; stroke-linejoin: round; paint-order: stroke; }
 @keyframes os-map-pulse { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(2.6); opacity: 0; } }
 
 html.js .os-map .os-map__uk, html.js .os-map .os-map__ie { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.4s var(--ease-out); }
@@ -191,7 +191,7 @@ html.js .os-map[data-os-rise] { opacity: 1; transform: none; }
 
 @media (max-width: 860px) {
   .os-contact__grid { grid-template-columns: minmax(0, 1fr); }
-  .os-map__svg { max-width: 320px; }
+  .os-map__svg { max-width: 20rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .os-map__pulse { animation: none; opacity: 0; }
@@ -200,7 +200,7 @@ html.js .os-map[data-os-rise] { opacity: 1; transform: none; }
 }
 
 /* ---------- Entrances ---------- */
-html.js [data-os-rise] { opacity: 0; transform: translateY(14px); transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out); }
+html.js [data-os-rise] { opacity: 0; transform: translateY(.875rem); transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out); }
 html.js [data-os-rise].is-in { opacity: 1; transform: none; }
 .os-mline { display: block; overflow: hidden; padding-bottom: .08em; margin-bottom: -.08em; }
 .os-mline > span { display: block; transform: translateY(110%); transition: transform 900ms var(--ease-out); }
@@ -215,11 +215,11 @@ html.js [data-os-rise].is-in { opacity: 1; transform: none; }
   .os-founders__grid { grid-template-columns: minmax(0, 1fr); }
   .os-needs { grid-template-columns: minmax(0, 1fr); }
   .os-trad__band { min-height: 64svh; }
-  .os-trad__card { margin: 0 16px 24px; }
-  .os-line__axis { left: 12px; }
-  .os-line__tip { left: 12px; }
-  .os-act, .os-act:nth-child(odd), .os-act:nth-child(even) { width: auto; margin-left: 0; text-align: left; padding: 0 0 32px 40px; }
-  .os-act:nth-child(odd) .os-act__dot, .os-act:nth-child(even) .os-act__dot { left: calc(12px - var(--tdot) / 2); right: auto; }
+  .os-trad__card { margin: 0 1rem 1.5rem; }
+  .os-line__axis { left: .75rem; }
+  .os-line__tip { left: .75rem; }
+  .os-act, .os-act:nth-child(odd), .os-act:nth-child(even) { width: auto; margin-left: 0; text-align: left; padding: 0 0 2rem 2.5rem; }
+  .os-act:nth-child(odd) .os-act__dot, .os-act:nth-child(even) .os-act__dot { left: calc(.75rem - var(--tdot) / 2); right: auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -254,10 +254,10 @@ html.js .os-map.is-in .os-map__wave { visibility: visible; }
 @media (prefers-reduced-motion: reduce) { .os-map__wave { animation: none; opacity: 0; } }
 
 /* The three icons in place of the Instagram line (TJ, 13 Nov 2026, TPS-0090). */
-.os-social { list-style: none; display: flex; gap: 18px; margin: 0 0 2rem; padding: 0; }
+.os-social { list-style: none; display: flex; gap: 1.125rem; margin: 0 0 2rem; padding: 0; }
 .os-social a { display: block; color: var(--t-ink); transition: color .2s ease; }
 .os-social a:hover, .os-social a:focus-visible { color: var(--acc); }
-.os-social svg { display: block; width: 26px; height: 26px; }
+.os-social svg { display: block; width: 1.625rem; height: 1.625rem; }
 .os-contact__info .article__contact { margin-bottom: 1.4rem; }
 /* The details on one line beside their labels, with a short, even gap (TJ,
    13 Nov 2026): the labels make a column only as wide as the longest of them,
@@ -284,11 +284,11 @@ html.js .os-map.is-in .os-map__wave { visibility: visible; }
    pulled up so the gap from "That principle sits at the heart of TPS" to
    "Our founders" is 60 percent smaller (about 230px to 90px at 1440). */
 .os-founder { background: none; border: 0; border-radius: 0; padding: 0; }
-.os-founders__grid { column-gap: clamp(32px, 6vw, 96px); }
+.os-founders__grid { column-gap: clamp(2rem, 6vw, 6rem); }
 .os-founders__close { margin-inline: auto; text-align: center; text-wrap: balance; }
-.os-founders { margin-top: calc(-1.2 * clamp(64px, 10vh, 120px) - 19px); }
+.os-founders { margin-top: calc(-1.2 * clamp(4rem, 10vh, 7.5rem) - 1.1875rem); }
 
 /* Contact in the About Us menu lands here. Client, 14 Nov 2026: the top edge of
    the white card sits exactly on the bottom edge of the header bar (was 16px
    clear of it, 13 Nov). The cream padding above the card goes under the bar. */
-#contact { scroll-margin-top: calc(var(--nav-h, 80px) - var(--os-contact-top)); }
+#contact { scroll-margin-top: calc(var(--nav-h, 5rem) - var(--os-contact-top)); }
