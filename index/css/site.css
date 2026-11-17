@@ -4986,3 +4986,51 @@ html body .gifts-soon p a:not([class]):is(:hover, :focus-visible, :active) { col
 
 /* "In 30 days" in bold, the same size (TJ, 13 Nov 2026, TPS-0082, from Ami). */
 .bath__lead { font-weight: 700; }
+
+/* ============================================================
+   TESTIMONIALS, TWO AT ONCE (Ami via TJ, 17 Nov 2026)
+   The same quote, name and line as the single version, two side by side,
+   with a lit dot and name under each quote in view. Chosen by Ami from the
+   options page. The heading is centred and the names sit at one height
+   just above the line. Layout in rem, text in --t, as everywhere else.
+   ============================================================ */
+.tv2--two {
+  --tv-per: 2;
+  --tv-gap: 4rem;
+  max-width: 72rem;
+}
+.tv2--two .tv2__head { text-align: center; }
+.tv2--two .tv2__stage { position: relative; }
+.tv2--two .tv2__cols {
+  display: grid;
+  grid-template-columns: repeat(var(--tv-per), minmax(0, 1fr));
+  column-gap: var(--tv-gap);
+  align-items: stretch;
+}
+.tv2--two .tv2__col { display: flex; flex-direction: column; }
+.tv2--two .tv2__col[hidden] { display: none; }
+.tv2--two .tv2__col .tv2__by { margin-top: auto; padding-top: 2rem; }
+
+/* The line runs under both quotes; its ends fade less than the single one
+   did, so the dots under the outer quotes stay clear. */
+.tv2--two .tv2__car {
+  margin-top: 1.75rem;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+}
+.tv2--two .tv2__item { left: calc(var(--c0) + var(--q) * var(--st)); }
+.tv2--two .tv2__fill { left: var(--c0); width: calc((var(--tv-per) - 1) * var(--st)); }
+.tv2--two .tv2__tip { left: calc(var(--c0) + var(--i) * var(--st)); }
+
+/* Below 1000px the chevrons go to the foot, as before. */
+@media (max-width: 1000px) {
+  .tv2--two .tv2__stage { position: static; }
+  .tv2--two .tv2__nav--prev { left: 2rem; }
+  .tv2--two .tv2__nav--next { left: 5.5rem; }
+}
+/* Phones show one quote at a time, as before. */
+@media (max-width: 760px) {
+  .tv2--two { --tv-per: 1; }
+  .tv2--two .tv2__nav--prev { left: 1.5rem; }
+  .tv2--two .tv2__nav--next { left: 4.625rem; }
+}

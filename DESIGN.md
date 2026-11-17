@@ -2225,3 +2225,15 @@ Footer: the social icons sit at the foot of Contact, level with Explore's last l
 While you rest on desktop plays its arrival once as it comes into view, as on phones: the desktop film from its start to 3.3 seconds (the drawing fills with colour) and holds on the house in colour; the words rise in as it starts. A click on a room fades that room's lit poster over the film; the top stop fades back. Reduced motion, or a film that cannot play, shows the day poster.
 
 Footer: the social icons are the next line of Contact, one row's step below Phone and centred on that line, not at the foot of the column.
+
+## Testimonials two at once, contact emails upright (TJ and Ami, 17 Nov 2026)
+
+The home page testimonials show two quotes side by side, chosen by Ami from index/testimonial-options.html (the "Two" band). Each quote, its name with the rule and the word by word blur are as before. The line underneath has a lit dot and name under each quote in view, and the arrows step one testimonial at a time. The heading and script line are centred, and the names sit at one height just above the line however long the quotes are. Phones still show one quote. Layout in rem, text in --t. Backups: lab/index.before-two-up.html.bak, lab/site.before-two-up.css.bak, lab/home.before-two-up.js.bak.
+
+Email addresses in the footer Contact column and the About page Contact section are upright, not italic (Ami). The phone number is still italic, awaiting TJ.
+
+The Date availability page's three steps moved out of the form card into a row above it, laid out as on the home page (dots joined by the line, title and sentence under each); phones run them down the page as everywhere else. Inside the narrow card they made the form look long and thin (Ami). Fields unchanged. Programmes page "Ready to talk it through?" copy replaced with Ami's wording. The What We Do menu item reads "Our Postpartum Care". The home page "We care for a few mothers each month" paragraph and the Our Postpartum Care page "Imagine your days like this" paragraph are Ami's new wording; the Date availability page still has the old one, and the builder's "What you'll receive" list is Ami's two new lines (the brochure, and the free 30 minute consultation).
+
+After the Date availability form is sent: the heading becomes "Thank you, <first name>" (just "Thank you" if none), the steps, lede and card go, and Ami's three lines show (brochure delivered, check junk; arrange the free consultation from the brochure; we look forward to caring for you). The "Choose a time to talk" button is removed; "Return to the site" stays (Ami).
+
+After the bespoke builder is sent: heading "Your programme is on its way", Ami's three paragraphs (brochure delivered, check junk; arrange the free consultation from the brochure; we look forward to bringing your programme to life), and "Return to the site" as the one button. The call button and the "price held for 7 days" line are gone (Ami).

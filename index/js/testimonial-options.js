@@ -108,7 +108,7 @@
   function multi(root) {
     var cols = root.querySelector('[data-tvm-cols]');
     var car = root.querySelector('[data-tvm-car]');
-    var oldTip = car.querySelector('.tv2__tip');
+    var oldTip = car && car.querySelector(".tv2__tip");
     if (oldTip) oldTip.remove();
     var MAX = 3, slots = [], tips = [], p = 0;
 
@@ -125,19 +125,18 @@
       tip.className = 'tv2__tip tvm__tip';
       tip.setAttribute('aria-hidden', 'true');
       tip.style.setProperty('--i', i);
-      car.appendChild(tip);
-      tips.push(tip);
+      if (car) { car.appendChild(tip); tips.push(tip); }
     }
 
     function per() { return Math.round(parseFloat(getComputedStyle(root).getPropertyValue('--per'))) || 1; }
-    var line = nameLine(root.querySelector('[data-tvm-line]'), move, per);
+    var line = car ? nameLine(root.querySelector("[data-tvm-line]"), move, per) : { set: function () {} };
 
     function measure() {
       var P = per();
       var gap = parseFloat(getComputedStyle(cols).columnGap) || 0;
       var colW = (cols.clientWidth - (P - 1) * gap) / P;
-      car.style.setProperty('--c0', (colW / 2) + 'px');
-      car.style.setProperty('--st', (colW + gap) + 'px');
+      if (car) car.style.setProperty('--c0', (colW / 2) + 'px');
+      if (car) car.style.setProperty('--st', (colW + gap) + 'px');
       slots.forEach(function (s, i) { s.col.hidden = i >= P; });
       tips.forEach(function (t, i) { t.style.display = i >= P ? 'none' : ''; });
     }

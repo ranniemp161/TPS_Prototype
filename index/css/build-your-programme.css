@@ -2837,3 +2837,6 @@ body .nav__return { font-size: calc(.8125 * var(--t)); }
 
 /* TJ and Ami, 14 Nov 2026: the Check your dates submit button sits centred under the form. */
 .dk .dk-sum--close .capture .capture__btn { justify-self: center; margin-left: auto; margin-right: auto; }
+
+/* The thank you after the builder is three short paragraphs from Ami (TJ, 17 Nov 2026), a line apart. */
+.dk-sum--done .step__note--lead + .step__note--lead { margin-top: 1lh; }

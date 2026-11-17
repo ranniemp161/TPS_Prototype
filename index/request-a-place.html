@@ -95,7 +95,7 @@
       <div class="menu__group">
         <h2 class="menu__head">What We Do</h2>
         <ul class="menu__list">
-          <li><a href="what-we-do.html">Our Care</a></li>
+          <li><a href="what-we-do.html">Our Postpartum Care</a></li>
           <li><a href="faqs.html">FAQs</a></li>
         </ul>
       </div>
@@ -151,17 +151,19 @@
         <p class="pg-lengths__lede">Your care begins long before your baby arrives. Share your due date with us and we will let you know if your dates are available. From there, a private consultation lets us get to know you, your home and the recovery you have in mind.</p>
       </header>
 
+      <!-- What happens next (Ami via TJ, 17 Nov 2026): the site's three steps in a
+           row above the form, as on the home page; on phones they run down the page. -->
+      <ol class="steps3 rq-steps">
+        <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h2 class="steps3__t"><span class="steps3__n">Step 1</span>Share your details</h2><p class="steps3__p">Your due date and a few details about you.</p></li>
+        <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h2 class="steps3__t"><span class="steps3__n">Step 2</span>Receive our programme brochure</h2><p class="steps3__p">Everything you need to plan your care, sent straight to your inbox.</p></li>
+        <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h2 class="steps3__t"><span class="steps3__n">Step 3</span>Arrange your consultation</h2><p class="steps3__p">Inside the brochure, you will find an invitation to arrange your free private consultation at a time that suits you.</p></li>
+      </ol>
+
       <div class="pg-card rq-card">
         <!-- The waiting list's fields under the Check your dates reason (TJ, 25 Oct 2026):
              the same details for Ami's list, with no gifts listed here; those belong to
              the bespoke builder, where she has built a programme. -->
         <form class="rq-form" data-request method="post" action="#" novalidate>
-          <!-- What happens next (Ami via TJ, 17 Nov 2026): the site's three steps, above the fields. -->
-          <ol class="steps3 rq-steps">
-            <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h2 class="steps3__t"><span class="steps3__n">Step 1</span>Share your details</h2><p class="steps3__p">Your due date and a few details about you.</p></li>
-            <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h2 class="steps3__t"><span class="steps3__n">Step 2</span>Receive our programme brochure</h2><p class="steps3__p">Everything you need to plan your care, sent straight to your inbox.</p></li>
-            <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h2 class="steps3__t"><span class="steps3__n">Step 3</span>Arrange your consultation</h2><p class="steps3__p">Inside the brochure, you will find an invitation to arrange your free private consultation at a time that suits you.</p></li>
-          </ol>
           <div class="rq-pair">
             <div>
               <label class="rq-label" for="rq-first">First name</label>
@@ -218,9 +220,10 @@
            title stays, the lede and the form go, and the body text sits in the lede's
            place with the two actions under it. Copy by Opus, chosen by TJ (1 Nov 2026). -->
       <div class="rq-done" data-request-done hidden>
-        <p class="pg-lengths__lede rq-done__p" role="status"><span class="rq-done__line">Thank you. Your dates are with us, and your name is on the list we choose from each month.</span><span class="rq-done__line">If you&rsquo;d like to talk sooner, book a call and we can look at your dates together and find the care that fits.</span></p>
+        <!-- Wording from Ami (TJ, 17 Nov 2026). The page heading becomes "Thank you, <first name>"
+             when this shows (request.js), and the call button is gone. -->
+        <p class="pg-lengths__lede rq-done__p" role="status"><span class="rq-done__line">Your programme brochure has been delivered to your inbox. Should it not appear within a few minutes, please check your junk folder.</span><span class="rq-done__line">When you are ready, you can arrange your free 30 minute consultation directly from the brochure, to discuss the right programme for you.</span><span class="rq-done__line">We look forward to caring for you and your family through this precious chapter.</span></p>
         <div class="rq-done__actions">
-          <a class="btn btn--primary" href="https://calendly.com/thepostpartumsuite/30min">Choose a time to talk</a>
           <a class="text-link" href="index.html">Return to the site</a>
         </div>
       </div>

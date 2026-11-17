@@ -1954,36 +1954,69 @@ const TV2 = [
   }
 ];
 
+// Two at once since 17 Nov 2026 (Ami via TJ): the quote, the name with its
+// rule and the line of names are as before, shown two side by side, and the
+// line has a lit dot and name under every quote in view. The number in view
+// is --tv-per on .tv2 (2, and 1 on phones). Each column rebuilds word by
+// word out of blur exactly as the single quote did. The names line up at one
+// height just above the line, and the heading is centred (Ami).
 function actVoices() {
   const root = document.querySelector('[data-tv2]');
   if (!root) return;
 
-  const q     = root.querySelector('[data-tv2-quote]');
-  const name  = root.querySelector('[data-tv2-name]');
-  const role  = root.querySelector('[data-tv2-role]');
-  const meta  = root.querySelector('[data-tv2-meta]');
+  const cols  = root.querySelector('[data-tv2-cols]');
+  const car   = root.querySelector('[data-tv2-car]');
   const track = root.querySelector('[data-tv2-track]');
   const live  = root.querySelector('[data-tv2-live]');
   const prev  = root.querySelector('[data-tv2-prev]');
   const nxt   = root.querySelector('[data-tv2-next]');
-  if (!q || !name || !role || !meta || !track) return;
+  if (!cols || !car || !track) return;
 
   const esc = s => String(s).replace(/[&<>"]/g, c =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
   const n = TV2.length;
   const mod = k => ((k % n) + n) % n;
+  const MAX = 2;
+  const per = () => Math.round(parseFloat(getComputedStyle(root).getPropertyValue('--tv-per'))) || 1;
 
-  // p is the virtual position: the stop under the centre circle. It goes up
-  // or down one step at a time and is never wrapped, so the track can run on
-  // past the last testimonial and the first comes in from the right with no
-  // jump. Stop k is laid out k spacings along the track, and the track moves
-  // to -p spacings. Stop k always shows testimonial mod(k), so a stop keeps
-  // its name for its whole life.
+  // p is the virtual position of the first quote in view. It is never
+  // wrapped, so the line can run on past the last testimonial with no jump.
   let p = 0;
-  let wordTimers = [];
-  const WINDOW = 3;            // stops kept either side of the centre
-  const items = new Map();     // virtual stop -> element
+  const WINDOW = 5;
+  const items = new Map();
+
+  const slots = [];
+  const tips = [];
+  for (let i = 0; i < MAX; i++) {
+    const col = document.createElement('div');
+    col.className = 'tv2__col';
+    col.innerHTML =
+      `<blockquote class="tv2__quote"></blockquote>` +
+      `<div class="tv2__by"><div class="tv2__meta"><span class="tv2__rule" aria-hidden="true"></span>` +
+      `<span class="tv2__name"></span><span class="tv2__role"></span></div></div>`;
+    cols.appendChild(col);
+    slots.push({ col, q: col.querySelector('.tv2__quote'), meta: col.querySelector('.tv2__meta'),
+      name: col.querySelector('.tv2__name'), role: col.querySelector('.tv2__role'), timers: [] });
+    const tip = document.createElement('span');
+    tip.className = 'tv2__tip';
+    tip.setAttribute('aria-hidden', 'true');
+    tip.style.setProperty('--i', i);
+    car.appendChild(tip);
+    tips.push(tip);
+  }
+
+  // The dots sit under the middle of each column: --c0 is the first
+  // column's middle and --st the distance from one column to the next.
+  const measure = () => {
+    const P = per();
+    const gap = parseFloat(getComputedStyle(cols).columnGap) || 0;
+    const colW = (cols.clientWidth - (P - 1) * gap) / P;
+    car.style.setProperty('--c0', (colW / 2) + 'px');
+    car.style.setProperty('--st', (colW + gap) + 'px');
+    slots.forEach((s, i) => { s.col.hidden = i >= P; });
+    tips.forEach((t, i) => { t.style.display = i >= P ? 'none' : ''; });
+  };
 
   const makeItem = k => {
     const t = TV2[mod(k)];
@@ -1994,13 +2027,13 @@ function actVoices() {
       `<span class="tv2__dot" aria-hidden="true"></span>` +
       `<button class="tv2__stop" type="button" aria-label="Show testimonial from ${esc(t.author)}">${esc(t.author)}</button>`;
     el.querySelector('button').addEventListener('click', () => {
-      if (k !== p) move(k - p);
+      const P = per();
+      if (k < p) move(k - p);
+      else if (k > p + P - 1) move(k - (p + P - 1));
     });
     return el;
   };
 
-  // Keep the stops either side of the centre, and drop the ones well past
-  // the mask, which are already off the line.
   const sync = () => {
     for (let k = p - WINDOW; k <= p + WINDOW; k++) {
       if (!items.has(k)) {
@@ -2014,50 +2047,53 @@ function actVoices() {
     });
   };
 
-  const paint = () => {
-    const t = TV2[mod(p)];
-
-    // The quote is rebuilt word by word. Timers are cleared first, or a
-    // fast click leaves the previous set still staggering in behind the
-    // new one.
-    wordTimers.forEach(clearTimeout);
-    wordTimers = [];
-    q.innerHTML = ('“' + t.quote + '”').split(' ')
+  const fill = (s, t) => {
+    // Timers are cleared first, or a fast click leaves the previous set
+    // still staggering in behind the new one.
+    s.timers.forEach(clearTimeout);
+    s.timers = [];
+    s.q.innerHTML = ('“' + t.quote + '”').split(' ')
       .map(w => `<span class="tv2__w">${esc(w)}</span>`).join('');
-    const words = [...q.children];
-    if (REDUCED) {
-      words.forEach(w => w.classList.add('is-in'));
-    } else {
-      words.forEach((w, i) => {
-        wordTimers.push(setTimeout(() => w.classList.add('is-in'), i * 30));
-      });
-    }
-
-    name.textContent = t.author;
-    role.textContent = [t.role, t.place].filter(Boolean).join(' · ');
-    meta.classList.remove('is-in');
-    // Two frames, not one: the class has to be off for a painted frame
-    // before it goes back on, or the browser coalesces both into no
-    // change at all and the rule never draws.
-    requestAnimationFrame(() => requestAnimationFrame(() => meta.classList.add('is-in')));
-
-    track.style.transform = `translateX(calc(${-p} * var(--tv-s)))`;
-    items.forEach((el, k) => {
-      const btn = el.querySelector('button');
-      if (k === p) btn.setAttribute('aria-current', 'true');
-      else btn.removeAttribute('aria-current');
+    [...s.q.children].forEach((w, i) => {
+      if (REDUCED) w.classList.add('is-in');
+      else s.timers.push(setTimeout(() => w.classList.add('is-in'), i * 30));
     });
-
-    if (live) live.textContent = `Testimonial ${mod(p) + 1} of ${n}, ${t.author}: ${t.quote}`;
+    s.name.textContent = t.author;
+    s.role.textContent = [t.role, t.place].filter(Boolean).join(' · ');
+    s.meta.classList.remove('is-in');
+    // Two frames, not one, or the browser coalesces the off and on into no
+    // change and the rule never draws.
+    requestAnimationFrame(() => requestAnimationFrame(() => s.meta.classList.add('is-in')));
   };
 
-  // The chevrons and the names are real <button> elements, so focus, Enter
-  // and Space are the browser's job. Nothing here runs on a timer: the
-  // quote only moves when the reader asks for it.
+  const paint = () => {
+    const P = per();
+    slots.forEach((s, i) => { if (i < P) fill(s, TV2[mod(p + i)]); });
+    track.style.transform = `translateX(calc(${-p} * var(--st)))`;
+    items.forEach((el, k) => {
+      const btn = el.querySelector('button');
+      if (k >= p && k < p + P) btn.setAttribute('aria-current', 'true');
+      else btn.removeAttribute('aria-current');
+    });
+    if (live) {
+      live.textContent = slots.slice(0, P).map((s, i) => {
+        const t = TV2[mod(p + i)];
+        return `${t.author}: ${t.quote}`;
+      }).join(' ');
+    }
+  };
+
   const move = step => { p += step; sync(); paint(); };
   if (nxt)  nxt.addEventListener('click', () => move(1));
   if (prev) prev.addEventListener('click', () => move(-1));
 
+  let lastPer = per();
+  window.addEventListener('resize', () => {
+    measure();
+    if (per() !== lastPer) { lastPer = per(); paint(); }
+  });
+
+  measure();
   sync();
   paint();
 
