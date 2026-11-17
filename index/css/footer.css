@@ -141,3 +141,26 @@
   .sf__col:not(nav) li + li { margin-top: .55rem; }
   .sf__label { display: block; }
 }
+
+/* The social icons at the foot of Contact, the logo centred in its column (TJ,
+   17 Nov 2026). Contact's rows keep Explore's spacing instead of spreading to its
+   height; the icons take the foot of the column, level with Explore's last link. */
+.sf__col .sf__social { display: flex; gap: 1.125rem; margin: 1.5rem 0 0; transform: none; }
+@media (min-width: 761px) {
+  .sf__brand { justify-content: center; }
+  .sf__brand > a { margin-top: 0; }
+  /* Explore's step is its line (1.6 times the text) plus .55rem; Contact's line is 1.4 times
+     its smaller text, so the gap makes up the difference. */
+  .sf__col:not(nav) ul:not(.sf__social) { flex: none; align-content: start; justify-content: flex-start; row-gap: calc(.424 * var(--t) + .55rem); }
+  .sf__col .sf__social { justify-content: flex-start; margin: auto 0 .25rem -.1875rem; }
+}
+@media (max-width: 760px) {
+  .sf__col .sf__social { justify-content: center; }
+}
+/* The icons keep their own row, not the Contact list's two columns. */
+.sf__col:not(nav) ul.sf__social { display: flex; flex-direction: row; grid-template-columns: none; flex: none; }
+.sf__col:not(nav) .sf__social li { display: block; margin: 0; }
+@media (min-width: 761px) {
+  /* The rows' own gap does the spacing, as in Explore. */
+  .sf__col:not(nav) ul:not(.sf__social) li + li { margin-top: 0; }
+}

@@ -2213,3 +2213,9 @@ Tailored For You is click driven on every screen: it scrolls with the page, open
 While you rest on desktop: no film and no scroll. The house shows in colour, an unlabelled stop starts the line as on phones, and a click on a room crossfades to that room lit (the posters). Phones keep their tap version.
 
 Also: the Click hint in the fly through is a quarter smaller (21px on the master, in rem). Every "Check your dates" button and the builder's last step read "Check availability". Step 2 of the three steps reads "Request our brochure". The request form has three steps above the fields (Ami's wording), running down the card on every screen. The What We Do dropdown link reads "Our Care". What matters most has a Select all switch. The Gifts dropdown takes the bar's solid cream. "Mother of two" labels the 30 day testimonial.
+
+## Open card spacing and the footer icons (TJ, 17 Nov 2026)
+
+Tailored For You, Read more open: the gaps are set, not left over. They are the master screen's (30 above the heading, 25 under it, 9 between paragraphs, 32 and 33 around Read less) in rem, so they scale with the layout; the card and the photograph grow when the words need the room.
+
+Footer: the social icons sit at the foot of Contact, level with Explore's last link. Contact's rows take Explore's spacing (its line plus .55rem) instead of spreading to its height. The logo is centred in its column.
