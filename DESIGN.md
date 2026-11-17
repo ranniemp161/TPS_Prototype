@@ -2219,3 +2219,9 @@ Also: the Click hint in the fly through is a quarter smaller (21px on the master
 Tailored For You, Read more open: the gaps are set, not left over. They are the master screen's (30 above the heading, 25 under it, 9 between paragraphs, 32 and 33 around Read less) in rem, so they scale with the layout; the card and the photograph grow when the words need the room.
 
 Footer: the social icons sit at the foot of Contact, level with Explore's last link. Contact's rows take Explore's spacing (its line plus .55rem) instead of spreading to its height. The logo is centred in its column.
+
+## While you rest arrival on desktop, footer icons on the Contact line (TJ, 17 Nov 2026)
+
+While you rest on desktop plays its arrival once as it comes into view, as on phones: the desktop film from its start to 3.3 seconds (the drawing fills with colour) and holds on the house in colour; the words rise in as it starts. A click on a room fades that room's lit poster over the film; the top stop fades back. Reduced motion, or a film that cannot play, shows the day poster.
+
+Footer: the social icons are the next line of Contact, one row's step below Phone and centred on that line, not at the foot of the column.

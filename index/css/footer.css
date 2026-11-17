@@ -152,7 +152,9 @@
   /* Explore's step is its line (1.6 times the text) plus .55rem; Contact's line is 1.4 times
      its smaller text, so the gap makes up the difference. */
   .sf__col:not(nav) ul:not(.sf__social) { flex: none; align-content: start; justify-content: flex-start; row-gap: calc(.424 * var(--t) + .55rem); }
-  .sf__col .sf__social { justify-content: flex-start; margin: auto 0 .25rem -.1875rem; }
+  /* The icons are the next line of Contact (TJ, 17 Nov 2026): one row's step below Phone,
+     centred on where that line's text would sit (row 1.176t tall, step 1.6t + .55rem). */
+  .sf__col .sf__social { justify-content: flex-start; margin: calc(1.012 * var(--t) - .3875rem) 0 0 -.1875rem; }
 }
 @media (max-width: 760px) {
   .sf__col .sf__social { justify-content: center; }

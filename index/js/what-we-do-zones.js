@@ -215,27 +215,31 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
 
 
   /* ---------- desktop: click driven (TJ, 17 Nov 2026) ----------
-     No film and no scroll: the section scrolls with the page like any other.
-     The house shows fully drawn in colour (the day poster). The room list keeps
-     its line, with an unlabelled stop at the top where the circle rests, as on
-     phones. A click on a room crossfades to that room's lit picture (the house
-     dimmed, the room glowing), moves the circle to it and opens its words; a
-     click on the top stop returns to the house in colour. The old scroll film
+     As on phones: the section scrolls with the page like any other. When it
+     comes into view the film plays its arrival once (the floors fly in as a
+     drawing and fill with colour) and stops at STOP_D, the house in colour
+     before any light goes down; the words rise in as it starts. The room list
+     keeps its line, with an unlabelled stop at the top where the circle rests.
+     A click on a room fades in that room's lit picture (the posters) over the
+     film; the top stop fades back to the house in colour. With reduced motion,
+     or a film that cannot play, the day poster stands in. The old scroll film
      is in git history before this date. */
   function initClick() {
     section.classList.add('zones--click');
+    var title = section.querySelector('.zones__title'), line = section.querySelector('.zones__line');
     var list = section.querySelector('.zones__rooms');
     var btns = [].slice.call(section.querySelectorAll('[data-zroom]'));
     var posters = {};
     [].forEach.call(section.querySelectorAll('[data-zposter]'), function (el) { posters[el.dataset.zposter] = el; });
     var POSTER = { living: '1', kitchen: '2', nursery: '3' };
+    var STOP_D = 3.3;
     if (!list || !btns.length) return;
     var fill = document.createElement('span'); fill.className = 'zones__fill'; fill.setAttribute('aria-hidden', 'true');
     var tip = document.createElement('span'); tip.className = 'zones__tip'; tip.setAttribute('aria-hidden', 'true');
     var home = document.createElement('button');
     home.type = 'button'; home.className = 'zones__home'; home.setAttribute('aria-label', 'The whole house');
     list.appendChild(fill); list.appendChild(tip); list.appendChild(home);
-    var active = null;
+    var active = null, introDone = false, started = false, loaded = false;
     function place() {
       // The start: half way down the space above the first room, a little already drawn.
       var pad = btns[0].parentNode.offsetTop, bh = btns[0].offsetHeight, rest = Math.round(pad / 2);
@@ -246,6 +250,12 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       list.style.setProperty('--zf', (i < 0 ? rest : pad + i * bh + bh / 2) + 'px');
       btns.forEach(function (b, k) { b.parentNode.classList.toggle('is-past', i >= 0 && k <= i); });
     }
+    function paintPoster() {
+      // A room's picture over the film; the house in colour is the film's own
+      // last frame, or the day poster where the film never played.
+      var want = active ? POSTER[active] : (stage.classList.contains('has-clip') ? null : (introDone ? '0' : null));
+      Object.keys(posters).forEach(function (k) { posters[k].classList.toggle('is-on', k === want); });
+    }
     function select(key) {
       active = key;
       btns.forEach(function (b) {
@@ -255,15 +265,56 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
         b.parentNode.classList.toggle('is-open', on);
       });
       home.classList.toggle('is-home', !key);
-      var want = key ? POSTER[key] : '0';
-      Object.keys(posters).forEach(function (k) { posters[k].classList.toggle('is-on', k === want); });
+      place(); paintPoster();
+    }
+    function showWords() {
+      if (title) title.classList.add('is-in');
+      if (line) line.classList.add('is-in');
       place();
     }
-    btns.forEach(function (b) { b.addEventListener('click', function () { select(b.dataset.zroom); }); });
-    home.addEventListener('click', function () { select(null); });
+    function finishIntro() {
+      if (introDone) return;
+      introDone = true;
+      if (video && stage.classList.contains('has-clip')) { video.pause(); video.currentTime = STOP_D; }
+      showWords(); paintPoster();
+    }
+    function loadVideo() {
+      if (loaded || reduced || !video) return;
+      loaded = true;
+      video.preload = 'auto';
+      video.src = video.dataset.src;
+      video.load();
+    }
+    function startIntro() {
+      if (started) return;
+      started = true;
+      setTimeout(showWords, 350);
+      if (reduced || !video) { finishIntro(); return; }
+      loadVideo();
+      function watch() {
+        if (introDone) return;
+        if (video.currentTime >= STOP_D) { finishIntro(); return; }
+        requestAnimationFrame(watch);
+      }
+      video.addEventListener('playing', function () { stage.classList.add('has-clip'); paintPoster(); }, { once: true });
+      video.currentTime = 0;
+      var pr = video.play();
+      if (pr && pr.then) pr.then(function () { requestAnimationFrame(watch); }, finishIntro);
+      else requestAnimationFrame(watch);
+      // If the film cannot play, or starts and then stalls, settle on the house in colour.
+      setTimeout(function () { if (!introDone) finishIntro(); }, 8000);
+    }
+    btns.forEach(function (b) { b.addEventListener('click', function () { finishIntro(); select(b.dataset.zroom); }); });
+    home.addEventListener('click', function () { finishIntro(); select(null); });
     select(null);
     addEventListener('resize', place);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es, o) { if (es[0].isIntersecting) { loadVideo(); o.disconnect(); } }, { rootMargin: '200% 0px' }).observe(stage);
+      new IntersectionObserver(function (es, o) { if (es[0].isIntersecting) { startIntro(); o.disconnect(); } }, { threshold: 0.4 }).observe(stage);
+    } else {
+      finishIntro();
+    }
   }
   initClick();
 })();
