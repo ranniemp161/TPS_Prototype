@@ -353,7 +353,7 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
     // tighten, never under half, all four kinds together so they stay alike.
     var scale = 1, FS_MIN = 13 / 14.72, gap = 1, GAP_MIN = 0.5, result;
     for (;;) {
-      sec.style.setProperty('--hd-fs', (0.92 * scale).toFixed(4) + 'rem');
+      sec.style.setProperty('--hd-fs', 'calc(' + (0.92 * scale).toFixed(4) + ' * var(--t))');
       sec.style.setProperty('--hd-gap', gap.toFixed(2));
       result = kinds.map(fitWidth);
       if (result.every(function (r) { return r.fits; })) break;

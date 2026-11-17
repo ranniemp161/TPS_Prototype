@@ -28,10 +28,10 @@
 
 .spec .wh2 {
   margin: 0; font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(2.4rem, 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
+  font-size: clamp(calc(.1745 * var(--t) + 2.2255rem), 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
   text-transform: uppercase; text-wrap: balance;
 }
-.spec .wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(.98rem, .9rem + .3vw, 1.12rem); line-height: 1.5; color: var(--t-ink); max-width: 44ch; }
+.spec .wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(calc(.98 * var(--t)), calc(.9 * var(--t)) + .3vw, calc(1.12 * var(--t))); line-height: 1.5; color: var(--t-ink); max-width: 44ch; }
 .spec .wp { margin: 0; color: var(--t-soft); max-width: 60ch; line-height: 1.65; }
 .spec .wp + .wp { margin-top: 1em; }
 .spec .wide { max-width: 80rem; margin-inline: auto; padding-inline: var(--gutter); }
@@ -72,7 +72,7 @@ html.js .spec__frame.is-armed.is-open .spec__zoom { transform: scale(1.02); }
   position: relative;
   padding: .6875rem 0 .6875rem 1.25rem;
   font-family: var(--f-body);
-  font-size: .7rem;
+  font-size: calc(.7 * var(--t));
   font-weight: 500;
   letter-spacing: .16em;
   text-transform: uppercase;
@@ -103,7 +103,7 @@ html.js .spec__checks.is-in li::before {
 @media (max-width: 860px) {
   /* Two columns at 13px (MOBILE-PLAN item 2): one column at 11px took 300px. */
   .spec__checks { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1rem; }
-  .spec__checks li { font-size: .8125rem; letter-spacing: .08em; padding: .5625rem 0 .5625rem .875rem; }
+  .spec__checks li { font-size: calc(.8125 * var(--t)); letter-spacing: .08em; padding: .5625rem 0 .5625rem .875rem; }
 }
 
 /* Phones (TJ, 11 Oct 2026): the title above the portrait (moved there by
@@ -118,7 +118,7 @@ html.js .spec__checks.is-in li::before {
   /* Bigger (halfway between the first size and 14vw, TJ), and an even 32px above it and between it and the portrait (TJ, 11 Oct 2026). */
   /* One line again, wider than the portrait (TJ, 12 Oct 2026): sized to run to 16px
      from the screen edge, centred, the portrait's 24px margin passed on each side. */
-  .spec .wh2 { width: max-content; white-space: nowrap; justify-self: center; text-align: center; font-size: min(calc((100vw - 2rem) / 12.39), 3.06rem); }
+  .spec .wh2 { width: max-content; white-space: nowrap; justify-self: center; text-align: center; font-size: min(calc((100vw - calc(.7273 * var(--t) + 1.2727rem)) / 12.39), 3.06rem); }
   .spec { padding-top: 2.1rem; }
   .spec__grid { row-gap: 2.1rem; }
   .spec__grid > .wh2 .kin-line { overflow: visible; }

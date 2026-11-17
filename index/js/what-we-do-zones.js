@@ -213,251 +213,57 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
   phoneQuery.addEventListener('change', function () { location.reload(); });
   if (phoneQuery.matches) { initTap(); return; }
 
-  /* ---------- ROOMS ----------
-     'room' legs light one room and carry that room's ending. The film
-     starts at 1.0s, where the drawing is already complete, because the
-     stage is on screen before its own scroll begins and frame zero is an
-     empty page. It stops at 12.0s, back to a drawing, before the plan
-     slides out, so the section leaves on the house rather than on nothing. */
-  /* The bathroom was removed on 5 Oct 2026 (TJ). The film was recut to match:
-     the nursery frame is held for half a second and dissolves into the lit
-     house, so the old 8.9 to 10.6 and 10.6 to 12.0 stretches are now 7.6 to
-     8.9 and 8.9 to 10.3 (everything after the cut moved 1.7 seconds earlier).
-     The uncut files are kept beside the new ones as zones.with-bathroom.mp4
-     and zones-m.with-bathroom.mp4. */
-  var START = 0;
-  var ROOMS = [
-    { name: 'enter',    to: 1.0,  w: 0.90, kind: 'move', poster: -1 },
-    { name: 'build',    to: 3.3,  w: 0.90, kind: 'move', poster: 0 },
-    { name: 'dusk',     to: 4.05, w: 0.40, kind: 'move', poster: 0 },
-    { name: 'living',   to: 4.95, w: 0.85, kind: 'room', poster: 1 },
-    { name: 'kitchen',  to: 6.15, w: 0.85, kind: 'room', poster: 2 },
-    { name: 'nursery',  to: 7.6,  w: 0.85, kind: 'room', poster: 3 },
-    { name: 'all',      to: 8.9,  w: 0.85, kind: 'room', poster: 4 },
-    { name: 'outro',    to: 10.3, w: 0.50, kind: 'move', poster: 4 },
-    { name: 'exit',     to: 11.3, w: 0.90, kind: 'move', poster: -1 }
-  ];
 
-  var T = 0, film = START;
-  /* The early start (TJ, 11 Nov 2026, from Ami): the floors fly in while the
-     section is still rising into view, so the reader never scrolls through an
-     empty page. LEAD screens of the track run before the stage reaches the
-     top: the whole 'enter' leg, so the house is drawn as the stage pins. */
-  var LEAD = 0.9;
-  ROOMS.forEach(function (leg) {
-    leg.from = film; leg.s0 = T;
-    T += leg.w; film = leg.to;
-    leg.s1 = T;
-  });
-  var byName = {};
-  ROOMS.forEach(function (leg) { byName[leg.name] = leg; });
-
-  var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
-  var mix = function (a, b, k) { return a + (b - a) * k; };
-  var smooth = function (k) { k = clamp(k, 0, 1); return k * k * (3 - 2 * k); };
-  var ramp = function (t, a, b) { return smooth((t - a) / (b - a)); };
-
-  function legAt(t) {
-    for (var i = 0; i < ROOMS.length; i++) if (t < ROOMS[i].s1) return ROOMS[i];
-    return ROOMS[ROOMS.length - 1];
-  }
-  function mapTime(t) {
-    var leg = legAt(t);
-    return mix(leg.from, leg.to, clamp((t - leg.s0) / leg.w, 0, 1));
-  }
-
-  /* ---------- blocks ----------
-     The intro greets (already at full when the section arrives) and gives
-     way as the house dims; the sentence comes in with the night and holds
-     until the plan starts turning back into a drawing. */
-  var dusk = byName.dusk, outro = byName.outro, enter = byName.enter, exit = byName.exit;
-  var blocks = [
-    // The title never changes: it arrives with the house and leaves with it.
-    { el: section.querySelector('[data-zbeat="title"]'),
-      win: function (t) {
-        var inn = phoneQuery.matches ? ramp(t, enter.s1 + 0.05, enter.s1 + 0.4) : ramp(t, enter.s0 + 0.35, enter.s1 + 0.1);
-        return inn * (1 - ramp(t, exit.s0 - 0.05, exit.s0 + 0.3));
-      } },
-    // The rooms and the sentence come in with the night and go as the plan
-    // turns back into a drawing.
-    { el: section.querySelector('[data-zbeat="line"]'),
-      win: function (t) { return ramp(t, dusk.s0 + 0.1, dusk.s1 + 0.1) * (1 - ramp(t, outro.s0 - 0.05, outro.s0 + 0.3)); } }
-  ].filter(function (b) { return b.el; });
-
-  function paint(el, o, tf, cache) {
-    var oo = Math.round(o * 1000) / 1000;
-    if (oo !== cache.o) {
-      el.style.opacity = oo;
-      if (cache.vis !== false) el.style.visibility = oo > 0.001 ? 'visible' : 'hidden';
-      cache.o = oo;
+  /* ---------- desktop: click driven (TJ, 17 Nov 2026) ----------
+     No film and no scroll: the section scrolls with the page like any other.
+     The house shows fully drawn in colour (the day poster). The room list keeps
+     its line, with an unlabelled stop at the top where the circle rests, as on
+     phones. A click on a room crossfades to that room's lit picture (the house
+     dimmed, the room glowing), moves the circle to it and opens its words; a
+     click on the top stop returns to the house in colour. The old scroll film
+     is in git history before this date. */
+  function initClick() {
+    section.classList.add('zones--click');
+    var list = section.querySelector('.zones__rooms');
+    var btns = [].slice.call(section.querySelectorAll('[data-zroom]'));
+    var posters = {};
+    [].forEach.call(section.querySelectorAll('[data-zposter]'), function (el) { posters[el.dataset.zposter] = el; });
+    var POSTER = { living: '1', kitchen: '2', nursery: '3' };
+    if (!list || !btns.length) return;
+    var fill = document.createElement('span'); fill.className = 'zones__fill'; fill.setAttribute('aria-hidden', 'true');
+    var tip = document.createElement('span'); tip.className = 'zones__tip'; tip.setAttribute('aria-hidden', 'true');
+    var home = document.createElement('button');
+    home.type = 'button'; home.className = 'zones__home'; home.setAttribute('aria-label', 'The whole house');
+    list.appendChild(fill); list.appendChild(tip); list.appendChild(home);
+    var active = null;
+    function place() {
+      // The start: half way down the space above the first room, a little already drawn.
+      var pad = btns[0].parentNode.offsetTop, bh = btns[0].offsetHeight, rest = Math.round(pad / 2);
+      list.style.setProperty('--zh', bh + 'px');
+      list.style.setProperty('--zr', rest + 'px');
+      var i = btns.map(function (b) { return b.dataset.zroom; }).indexOf(active);
+      // Rooms above the chosen one are closed, so its row sits at pad + i rows.
+      list.style.setProperty('--zf', (i < 0 ? rest : pad + i * bh + bh / 2) + 'px');
+      btns.forEach(function (b, k) { b.parentNode.classList.toggle('is-past', i >= 0 && k <= i); });
     }
-    if (tf !== cache.tf) { el.style.transform = tf; cache.tf = tf; }
-  }
-  blocks.forEach(function (b) { b.cache = { o: -1, tf: '' }; });
-
-  function paintCopy(t) {
-    blocks.forEach(function (b) {
-      var o = b.win(t);
-      var tf = reduced ? 'none' : 'translate3d(0,' + ((1 - o) * 10 * tpsU()).toFixed(1) + 'px,0)';
-      paint(b.el, o, tf, b.cache);
-    });
-  }
-
-  /* ---------- rooms ---------- */
-  var roomBtns = [].slice.call(section.querySelectorAll('[data-zroom]'));
-  var roomOn = null, stageOn = -2;
-  // The line in the room list (TJ, 9 Oct 2026): a fill and the circle at its
-  // tip, added here so the markup stays a plain list.
-  var roomList = section.querySelector('.zones__rooms');
-  if (roomList) {
-    var zFill = document.createElement('span'); zFill.className = 'zones__fill'; zFill.setAttribute('aria-hidden', 'true');
-    var zTip = document.createElement('span'); zTip.className = 'zones__tip'; zTip.setAttribute('aria-hidden', 'true');
-    roomList.appendChild(zFill); roomList.appendChild(zTip);
-  }
-  // Depths are taken from the closed rows (each row is its button), so the
-  // target is right even while the last room's words are still closing.
-  function placeLine(stage) {
-    if (!roomList || !roomBtns.length) return;
-    var bh = roomBtns[0].offsetHeight;
-    roomList.style.setProperty('--zh', bh + 'px');
-    var depth = stage < 0 ? 0 : stage >= roomBtns.length ? roomBtns.length * bh : stage * bh + bh / 2;
-    roomList.style.setProperty('--zf', depth + 'px');
-    roomBtns.forEach(function (b, i) { b.parentNode.classList.toggle('is-past', i <= stage); });
-  }
-  function paintRooms(t) {
-    var current = null;
-    ['living', 'kitchen', 'nursery'].forEach(function (n) {
-      if (t >= byName[n].s0 - 0.12) current = n;
-    });
-    if (t >= byName.all.s0 - 0.12) current = null;
-    // -1 before the first room, 0 to 2 the rooms, 3 once the whole house lights.
-    var stage = t >= byName.all.s0 - 0.12 ? 3 : current ? ['living', 'kitchen', 'nursery'].indexOf(current) : -1;
-    if (stage !== stageOn) { placeLine(stage); stageOn = stage; }
-    if (current !== roomOn) {
-      roomBtns.forEach(function (b) {
-        var on = b.dataset.zroom === current;
+    function select(key) {
+      active = key;
+      btns.forEach(function (b) {
+        var on = b.dataset.zroom === key;
         b.setAttribute('aria-current', String(on));
         b.setAttribute('aria-expanded', String(on));
         b.parentNode.classList.toggle('is-open', on);
       });
-      roomOn = current;
+      home.classList.toggle('is-home', !key);
+      var want = key ? POSTER[key] : '0';
+      Object.keys(posters).forEach(function (k) { posters[k].classList.toggle('is-on', k === want); });
+      place();
     }
+    btns.forEach(function (b) { b.addEventListener('click', function () { select(b.dataset.zroom); }); });
+    home.addEventListener('click', function () { select(null); });
+    select(null);
+    addEventListener('resize', place);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);
   }
-  roomBtns.forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var leg = byName[btn.dataset.zroom];
-      if (!leg) return;
-      window.scrollTo({ top: trackTop + (leg.s0 + leg.w * 0.5) * vhPx, behavior: reduced ? 'auto' : 'smooth' });
-    });
-  });
-
-  /* ---------- posters ----------
-     First paint, the stand in while the clip loads, and the whole film
-     under reduced motion. */
-  var posters = [].slice.call(section.querySelectorAll('[data-zposter]'));
-  var posterOn = 0;
-  function paintPosters(t) {
-    var idx = legAt(t).poster;
-    if (idx !== posterOn) {
-      posters[posterOn] && posters[posterOn].classList.remove('is-on');
-      posters[idx] && posters[idx].classList.add('is-on');
-      posterOn = idx;
-    }
-  }
-
-  /* ---------- the clip ----------
-     Streamed straight into the element, never fetched whole first (see
-     care.js for the two failures that taught this). Loaded only once the
-     reader is near the section, so it never competes with the flight's
-     much larger film. The poster stays until a real frame has painted. */
-  var clipReady = false, loading = false;
-  var play = START, target = START;
-  var LERP = 0.14;
-  var deadband = (phoneQuery.matches || !finePointer) ? 0.02 : 0.008;
-
-  function markReady() {
-    if (clipReady) return;
-    clipReady = true;
-    stage.classList.add('has-clip');
-  }
-
-  function loadClip() {
-    if (loading || reduced || !video) return;
-    loading = true;
-    var mobile = phoneQuery.matches || !finePointer;
-    video.addEventListener('loadeddata', function once() {
-      video.removeEventListener('loadeddata', once);
-      var p = video.play();
-      var settle = function () {
-        video.pause();
-        video.addEventListener('seeked', function first() {
-          video.removeEventListener('seeked', first);
-          if (video.requestVideoFrameCallback) video.requestVideoFrameCallback(markReady);
-          setTimeout(markReady, video.requestVideoFrameCallback ? 800 : 120);
-        });
-        play = target;
-        video.currentTime = play;
-      };
-      if (p && p.then) p.then(settle, settle); else settle();
-    });
-    video.preload = 'auto';
-    video.src = mobile ? video.dataset.srcMobile : video.dataset.src;
-    video.load();
-  }
-
-  function stepPlayhead() {
-    if (!video || !video.src || video.readyState < 1) return;
-    var d = target - play;
-    play = Math.abs(d) < 0.001 ? target : play + d * LERP;
-    if (!video.seeking && Math.abs(video.currentTime - play) > deadband) video.currentTime = play;
-  }
-
-  /* ---------- layout ---------- */
-  var vhPx = innerHeight, trackTop = 0;
-  function layout() {
-    vhPx = stage.offsetHeight || innerHeight;
-    if (vhPx > 0) section.style.height = Math.round((T - LEAD + 1) * vhPx) + 'px';
-    trackTop = section.getBoundingClientRect().top + scrollY;
-  }
-  // The flight above sets its own height on the same events, which moves
-  // this section; measure after it has, on the next frame.
-  function relayout() { requestAnimationFrame(function () { layout(); frame(true); }); }
-  addEventListener('resize', relayout);
-  addEventListener('load', relayout);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
-
-  /* ---------- the frame ---------- */
-  var lastT = -1;
-  function frame(force) {
-    var raw = (scrollY - trackTop) / vhPx + LEAD;
-    var t = clamp(raw, 0, T);
-
-    // Start the clip two screens before the section, so it is decoded by
-    // the time the reader arrives.
-    if (!loading && raw > -2.5) loadClip();
-
-    if (force || t !== lastT) {
-      target = mapTime(t);
-      paintCopy(t);
-      paintRooms(t);
-      paintPosters(t);
-      lastT = t;
-    }
-    stepPlayhead();
-  }
-  function loop() { frame(false); requestAnimationFrame(loop); }
-
-  layout();
-  frame(true);
-  requestAnimationFrame(function () { layout(); frame(true); requestAnimationFrame(loop); });
-
-  // For lab/care-check.mjs: read only, nothing on the page depends on it.
-  window.__zones = {
-    T: T, legs: ROOMS,
-    state: function () {
-      return { t: clamp((scrollY - trackTop) / vhPx + LEAD, 0, T), target: target, play: play,
-               current: video ? video.currentTime : 0, ready: clipReady, painted: lastT, vh: vhPx, top: trackTop };
-    },
-    scrollToT: function (t) { window.scrollTo({ top: trackTop + (t - LEAD) * vhPx, behavior: 'instant' }); }
-  };
+  initClick();
 })();

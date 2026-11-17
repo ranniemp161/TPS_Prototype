@@ -12,30 +12,30 @@
 .page--who main { padding-inline: 0; padding-bottom: 0; }
 .page--who .wide { max-width: 80rem; margin-inline: auto; padding-inline: var(--gutter); }
 .page--who .wp { margin: 0; font-family: var(--f-read); color: var(--t-soft); line-height: 1.65; }
-.page--who .spec .wp { font-size: clamp(1.05rem, 1rem + .35vw, 1.25rem); color: var(--t-ink); }
+.page--who .spec .wp { font-size: clamp(calc(1.05 * var(--t)), calc(1 * var(--t)) + .35vw, calc(1.1364 * var(--t) + .1136rem)); color: var(--t-ink); }
 
 /* ---- The script line (the page's one Quentin accent, TJ, 19 Oct 2026):
    her promise, in the hero under the title. ---- */
 /* Hero subheader (TJ, 20 Oct 2026): answers the title, in Montserrat. */
 /* In capitals (TJ, 20 Oct 2026). */
-.wc-sub { margin: .4rem 0 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(1.1rem, 1rem + .5vw, 1.4rem); line-height: 1.35; color: var(--t-ink); text-transform: uppercase; letter-spacing: .06em; }
+.wc-sub { margin: .4rem 0 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(calc(1.1 * var(--t)), calc(1 * var(--t)) + .5vw, calc(1.12 * var(--t) + .28rem)); line-height: 1.35; color: var(--t-ink); text-transform: uppercase; letter-spacing: .06em; }
 /* The three key points: the hero's own check style (specialist.css), one a
    line (three across wrapped each point onto two or three lines). */
 .page--who .wc-points { grid-template-columns: minmax(0, max-content); margin-top: 1rem; }
 .page--who .wc-points li { white-space: nowrap; }
 /* The three points 15 percent larger (TJ, 20 Oct 2026): .7rem to .805rem,
    and .8125rem to .934rem on phones. This page only. */
-.page--who .wc-points li { font-size: .805rem; }
-@media (max-width: 860px) { .page--who .wc-points li { font-size: .934rem; } }
+.page--who .wc-points li { font-size: calc(.805 * var(--t)); }
+@media (max-width: 860px) { .page--who .wc-points li { font-size: calc(.934 * var(--t)); } }
 /* 20 percent larger (TJ, 20 Oct 2026); was clamp(1.9rem, 3.2vw, 2.8rem). */
-.wc-script { margin: -.2rem 0 .4rem; font-family: var(--f-script); font-weight: 400; font-size: clamp(2.28rem, 3.84vw, 3.36rem); line-height: 1.15; color: var(--reach-link); max-width: 18ch; }
+.wc-script { margin: -.2rem 0 .4rem; font-family: var(--f-script); font-weight: 400; font-size: clamp(calc(.3648 * var(--t) + 1.9152rem), 3.84vw, 3.36rem); line-height: 1.15; color: var(--reach-link); max-width: 18ch; }
 
 /* ---- Section headings: the What We Do capitals, one size down, their lines
    rising in as the hero's do (who-comes.js). Dash labels removed (TJ: they
    read as AI). ---- */
 .wc-h2 {
   margin: 0 0 1.4rem; font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(2rem, 3.6vw, 3.2rem); line-height: 1; letter-spacing: -.005em;
+  font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), 3.6vw, 3.2rem); line-height: 1; letter-spacing: -.005em;
   text-transform: uppercase; text-wrap: balance; color: var(--t-ink);
 }
 .wc-h2 .kin-line { display: block; overflow: hidden; padding-bottom: .12em; margin-bottom: -.12em; }
@@ -54,7 +54,7 @@
   position: relative; z-index: 1;
   max-width: 22ch; margin: 0 auto;
   font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(2rem, 4.4vw, 3.9rem); line-height: 1.08; letter-spacing: -.005em;
+  font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), 4.4vw, 3.9rem); line-height: 1.08; letter-spacing: -.005em;
   color: var(--t-ink); text-wrap: balance;
 }
 .wc-w { display: inline-block; overflow: hidden; vertical-align: bottom; padding-bottom: .08em; margin-bottom: -.08em; }
@@ -70,7 +70,7 @@
 .wc-tr { padding-block: clamp(4.5rem, 12vh, 8.75rem); background: var(--g-canvas); }
 .wc-tr__grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 6vw, 5.5rem); align-items: start; }
 .wc-tr__copy { position: sticky; top: calc(var(--hero-top) + 3rem); }
-.wc-tr__copy .wp { max-width: 40ch; font-size: clamp(1rem, .95rem + .3vw, 1.15rem); color: var(--t-ink); }
+.wc-tr__copy .wp { max-width: 40ch; font-size: clamp(calc(1 * var(--t)), calc(.95 * var(--t)) + .3vw, calc(1.1291 * var(--t) + .0209rem)); color: var(--t-ink); }
 .wc-card {
   position: sticky;
   top: calc(var(--hero-top) + 1.5rem + var(--k, 0) * 1.125rem);
@@ -91,7 +91,7 @@
   backdrop-filter: blur(.875rem) saturate(1.2);
   -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
   font-family: var(--f-body); font-weight: 500;
-  font-size: .7rem; letter-spacing: .16em; text-transform: uppercase;
+  font-size: calc(.7 * var(--t)); letter-spacing: .16em; text-transform: uppercase;
   color: var(--t-ink);
 }
 
@@ -110,7 +110,7 @@
   padding: clamp(1.125rem, 3.2vh, 1.875rem) 0;
   border-bottom: 1px solid var(--line);
   font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(1.5rem, 2.8vw, 2.4rem); line-height: 1.05;
+  font-size: clamp(calc(1.0909 * var(--t) + .4091rem), 2.8vw, calc(.1745 * var(--t) + 2.2255rem)); line-height: 1.05;
   text-transform: uppercase;
   color: var(--t-ink);
 }
@@ -140,16 +140,16 @@
   backdrop-filter: blur(.875rem) saturate(1.2);
   -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
 }
-.wc-bf__glass p { margin: 0; font-family: var(--f-read); font-size: clamp(1rem, .95rem + .2vw, 1.1rem); line-height: 1.55; color: var(--t-ink); }
+.wc-bf__glass p { margin: 0; font-family: var(--f-read); font-size: clamp(calc(1 * var(--t)), calc(.95 * var(--t)) + .2vw, calc(1.1 * var(--t))); line-height: 1.55; color: var(--t-ink); }
 
 .wc-qs { max-width: 51.25rem; margin: clamp(4.5rem, 12vh, 8rem) auto 0; }
 .wc-qs .q { border-bottom: 1px solid var(--line-firm); }
 .wc-qs .q summary {
   list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 1.25rem;
-  padding: 1.25rem 0; font-family: var(--f-display); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.2;
+  padding: 1.25rem 0; font-family: var(--f-display); font-size: clamp(calc(1.1364 * var(--t) + .1136rem), 1.8vw, calc(1.0909 * var(--t) + .4091rem)); line-height: 1.2;
 }
 .wc-qs .q summary::-webkit-details-marker { display: none; }
-.wc-qs .q summary::after { content: "+"; font-family: var(--f-body); font-size: 1.3rem; color: var(--t-mute); transition: transform 260ms var(--ease-out); flex: none; }
+.wc-qs .q summary::after { content: "+"; font-family: var(--f-body); font-size: calc(1.1345 * var(--t) + .1655rem); color: var(--t-mute); transition: transform 260ms var(--ease-out); flex: none; }
 .wc-qs .q[open] summary::after { transform: rotate(45deg); }
 .wc-qs .q > div { padding: 0 0 1.375rem; }
 .wc-qs .q p { margin: 0; color: var(--t-soft); max-width: 62ch; }
@@ -205,7 +205,7 @@ html.js .wc-tr [data-reveal].is-in, html.js .wc-ck [data-reveal].is-in, html.js 
 .wc-facts li:last-child { border-bottom: 1px solid var(--line-firm); }
 .wc-facts__head {
   margin: 0 0 .6rem; font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(1.45rem, 2.2vw, 1.95rem); line-height: 1.1; text-transform: uppercase; color: var(--t-ink);
+  font-size: clamp(calc(1.1073 * var(--t) + .3427rem), 2.2vw, calc(.78 * var(--t) + 1.17rem)); line-height: 1.1; text-transform: uppercase; color: var(--t-ink);
 }
 .wc-facts .wp { max-width: 56ch; }
 .wc-life__media { margin-top: clamp(4rem, 10vh, 7rem); }
@@ -244,7 +244,7 @@ html.js .wc-tr [data-reveal].is-in, html.js .wc-ck [data-reveal].is-in, html.js 
 }
 html.js .wc-life .wc-life__media [data-reveal] { transform: translateY(1.75rem); transition-duration: 1s; }
 html.js .wc-life .wc-life__media [data-reveal].is-in { transform: none; }
-.wc-life__media .wc-bf__glass p { font-size: clamp(1.05rem, 1rem + .3vw, 1.2rem); line-height: 1.6; }
+.wc-life__media .wc-bf__glass p { font-size: clamp(calc(1.05 * var(--t)), calc(1 * var(--t)) + .3vw, calc(1.1345 * var(--t) + .0655rem)); line-height: 1.6; }
 @media (max-width: 860px) {
   .wc-life__media .wc-bf__glass { margin: 1.25rem 0 0; }
 }
@@ -255,7 +255,7 @@ html.js .wc-life .wc-life__media [data-reveal].is-in { transform: none; }
 /* The handoff sentence centred, a little narrower than the photograph, 15
    percent larger (TJ, 20 Oct 2026). */
 .wc-life__media .wc-bf__glass { max-width: 86%; margin-inline: auto; text-align: center; }
-.wc-life__media .wc-bf__glass p { font-size: clamp(1.2075rem, 1.15rem + .345vw, 1.38rem); }
+.wc-life__media .wc-bf__glass p { font-size: clamp(calc(1.135 * var(--t) + .0725rem), calc(1.1291 * var(--t) + .0209rem) + .345vw, calc(1.1241 * var(--t) + .2559rem)); }
 @media (max-width: 860px) {
   .wc-life__media .wc-bf__glass { max-width: 92%; }
 }

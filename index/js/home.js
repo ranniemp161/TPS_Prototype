@@ -1948,7 +1948,7 @@ const TV2 = [
     // Ami's wording of an anonymous client's own feedback, at that
     // client's request; final text approved by TJ, 14 Nov 2026.
     quote: "With our first baby, I felt like the hospital sent us home and left us to it. We had to work everything out ourselves. This time was completely different. I don't think my husband and I realised how much we needed postpartum care until we had it. Thank you, Ami and the whole team.",
-    author: "Anonymous",
+    author: "Mother of two",
     role: "30 day programme",
     place: ""
   }
