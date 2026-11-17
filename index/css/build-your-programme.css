@@ -2840,3 +2840,11 @@ body .nav__return { font-size: calc(.8125 * var(--t)); }
 
 /* The thank you after the builder is three short paragraphs from Ami (TJ, 17 Nov 2026), a line apart. */
 .dk-sum--done .step__note--lead + .step__note--lead { margin-top: 1lh; }
+
+/* "What you will receive" in the script, as a prettier lead into the two points (Ami via TJ, 17 Nov 2026).
+   Quentin in Ember Deep like the site's other script lines; the points under it sit a touch larger and darker. */
+html body .dk-sum--close .close__script { margin: .35rem 0 .5rem; font-family: var(--f-script); font-weight: 400; font-size: calc(1.3 * var(--t) + .75rem); line-height: 1.15; letter-spacing: 0; text-transform: none; color: var(--reach-script); text-align: center; }
+@media (max-width: 860px) { html body .dk-sum--close .close__script { text-align: left; } }
+html body .dk-page.is-snug .dk-sum--close > .close__script { margin: .1rem 0 .3rem; }
+.dk-sum--close .close__gets li { font-size: calc(1 * var(--t)); color: var(--t-ink); }
+.dk-sum--close .close__gets li + li { margin-top: .25rem; }

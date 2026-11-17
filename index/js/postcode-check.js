@@ -52,7 +52,9 @@ var TPS_POSTCODE = (function () {
         return r.json().then(function (body) {
           var res = body && body.result;
           if (!res || res.latitude == null) return { error: 'We could not find that area. Please check the first part of your postcode.' };
-          return { postcode: res.outcode, inServiceArea: insideM25(res.latitude, res.longitude) };
+          // The London only rule is off (Ami via TJ, 17 Nov 2026: "We cover England"). The postcode
+          // must still be real; insideM25 stays here unused in case an area rule returns.
+          return { postcode: res.outcode, inServiceArea: true };
         });
       })
       .catch(function () { clearTimeout(t); return { error: 'We could not check that area. Please try again.' }; });

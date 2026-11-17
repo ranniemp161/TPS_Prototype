@@ -565,7 +565,8 @@
    up, well below the card title's size. The .pg-tot rules above are unused. */
 .pg-price__totals { margin: calc(.9rem * var(--pg-fit, 1)) 0 0; max-width: 30em; font-family: var(--f-read); font-size: calc(1 * var(--t)); line-height: 1.5; color: var(--t-soft); }
 .pg-totals__n { font-family: var(--f-display); font-size: calc(1.0473 * var(--t) + .5527rem); line-height: 1; color: var(--t-ink); }
-.pg-price__totals + .pg-price__held { margin-top: .35rem; }
+/* A line of space between the totals and the hours (Ami via TJ, 17 Nov 2026), on every screen. */
+.pg-price__totals + .pg-price__held { margin-top: calc(1rem * var(--pg-fit, 1)); }
 
 /* The three steps in the pricing card, between its words and its button (TJ,
    13 Nov 2026, TPS-0095), inside the card's own edges, with the same gap

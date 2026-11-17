@@ -583,7 +583,8 @@ async function lookupPostcode(raw) {
   return {
     postcode: result.postcode,
     district: result.admin_district ?? "",
-    inServiceArea: isInsideM25(result.latitude, result.longitude),
+    // The London only rule is off (Ami via TJ, 17 Nov 2026: "We cover England"); isInsideM25 stays unused.
+    inServiceArea: true,
   };
 }
 
