@@ -47,10 +47,19 @@ body.tvo { margin: 0; background: var(--g-canvas); }
 }
 .tvm__col[hidden] { display: none; }
 
+/* Ami, 17 Nov 2026: the heading sits in the middle, and every name and
+   treatment sits at one height, just above the line, however long its
+   quote. The columns stretch to the tallest quote and each label is pushed
+   to the foot of its column. */
+.tvm .tv2__head { text-align: center; }
+.tvm__cols { align-items: stretch; }
+.tvm__col { display: flex; flex-direction: column; }
+.tvm__col .tv2__by { margin-top: auto; padding-top: 2rem; }
+
 /* The line runs under all the quotes. Its ends fade less than the single
    one does, so the dots under the outer quotes stay clear. */
 .tvm .tvm__car {
-  margin-top: 2.5rem;
+  margin-top: 1.75rem;
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
 }
