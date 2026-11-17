@@ -101,6 +101,11 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       // The card and the lede go with the form; the confirmation takes the lede's place (TJ, 1 Nov 2026).
       var card = form.closest('.rq-card'); if (card) card.hidden = true;
       var lede = document.querySelector('.pg-lengths__head .pg-lengths__lede'); if (lede) lede.hidden = true;
+      // The steps go too, and the heading thanks her by her first name (Ami via TJ, 17 Nov 2026).
+      var steps = document.querySelector('.rq-steps'); if (steps) steps.hidden = true;
+      var title = document.querySelector('.pg-lengths__head .pg-lengths__title');
+      var first = (form.elements.first_name.value || '').trim();
+      if (title) { title.textContent = first ? 'Thank you, ' + first : 'Thank you'; document.title = 'Thank you · The Postpartum Suite'; }
       done.hidden = false;
       var h = done.querySelector('h2, p'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); }
       // Bring the confirmation into view, clear of the header (it was hidden under it).

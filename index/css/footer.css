@@ -121,6 +121,8 @@
 .sf__label { display: inline-block; font-size: calc(.84 * var(--t)); font-weight: 600; letter-spacing: 0; line-height: 1.4; color: var(--sf-text); }
 /* The details in italic, as on the About page (TJ, 13 Nov 2026). */
 .sf__label + a { font-size: calc(.84 * var(--t)); font-weight: 500; font-style: italic; white-space: nowrap; }
+/* Email addresses upright (Ami via TJ, 17 Nov 2026). */
+.sf__label + a[href^="mailto:"] { font-style: normal; }
 /* Desktop: the labels make a column only as wide as the longest, the details
    start just after it, and the rows still spread to the height of Explore. */
 @media (min-width: 761px) {

@@ -127,7 +127,7 @@
       <div class="menu__group">
         <h2 class="menu__head">What We Do</h2>
         <ul class="menu__list">
-          <li><a href="what-we-do.html">Our Care</a></li>
+          <li><a href="what-we-do.html">Our Postpartum Care</a></li>
           <li><a href="faqs.html">FAQs</a></li>
         </ul>
       </div>
@@ -700,45 +700,33 @@
 
   <div class="voices" aria-labelledby="voices-heading">
   <div class="aurora aurora--voices" aria-hidden="true"><span class="aurora__field"></span></div>
-  <div class="tv2" data-tv2>
+  <div class="tv2 tv2--two" data-tv2>
 
+    <!-- Two at once (Ami via TJ, 17 Nov 2026): the same quote, name and
+         line as before, two side by side, with a lit dot and name under
+         each quote in view. Phones still show one. actVoices builds the
+         columns and the tips. -->
     <header class="tv2__head">
       <h2 class="tv2__title" id="voices-heading">Testimonials</h2>
       <p class="tv2__script">What our clients say about us.</p>
     </header>
 
-    <!-- Two real buttons, so the keyboard and screen readers get this for
-         free. They sit outside the text column on a wide window and tuck
-         back inside it when there is no room. -->
-    <button class="tv2__nav tv2__nav--prev" type="button" data-tv2-prev aria-label="Previous testimonial">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
-    </button>
-    <button class="tv2__nav tv2__nav--next" type="button" data-tv2-next aria-label="Next testimonial">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
-    </button>
-
-    <div class="tv2__main">
-      <blockquote class="tv2__quote" data-tv2-quote></blockquote>
-
-      <div class="tv2__by">
-        <div class="tv2__meta" data-tv2-meta>
-          <span class="tv2__rule" aria-hidden="true"></span>
-          <span class="tv2__name" data-tv2-name></span>
-          <span class="tv2__role" data-tv2-role></span>
-        </div>
-      </div>
-
-      <!-- A fixed circle at the centre of the line. actVoices places one stop
-           per testimonial on the track that slides under it, and the names
-           under the stops are the buttons that change the quote. -->
-      <div class="tv2__car" data-tv2-car>
-        <span class="tv2__track-line" aria-hidden="true"></span>
-        <span class="tv2__fill" aria-hidden="true"></span>
-        <div class="tv2__track" data-tv2-track></div>
-        <span class="tv2__tip" aria-hidden="true"></span>
-      </div>
-      <p class="tv2__sr" aria-live="polite" data-tv2-live></p>
+    <div class="tv2__stage">
+      <button class="tv2__nav tv2__nav--prev" type="button" data-tv2-prev aria-label="Previous testimonial">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.5 5.5 8 12l6.5 6.5" /></svg>
+      </button>
+      <button class="tv2__nav tv2__nav--next" type="button" data-tv2-next aria-label="Next testimonial">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9.5 5.5 16 12l-6.5 6.5" /></svg>
+      </button>
+      <div class="tv2__cols" data-tv2-cols></div>
     </div>
+
+    <div class="tv2__car" data-tv2-car>
+      <span class="tv2__track-line" aria-hidden="true"></span>
+      <span class="tv2__fill" aria-hidden="true"></span>
+      <div class="tv2__track" data-tv2-track></div>
+    </div>
+    <p class="tv2__sr" aria-live="polite" data-tv2-live></p>
   </div>
   </div>
 </section>
@@ -753,7 +741,8 @@
     <div class="cta cta--card" data-in>
           <h2 class="display display--lg">We care for a few mothers each month</h2>
           <p class="script">Be one of them</p>
-          <p class="body cta__lead">Your care begins long before your baby arrives. Share your due date with us and we will let you know if your dates are available. From there, a private consultation lets us get to know you, your home and the recovery you have in mind.</p>
+          <!-- Wording from Ami (TJ, 17 Nov 2026). -->
+          <p class="body cta__lead">Your postpartum care begins long before your baby arrives. Choose your programme, share your due date to receive our brochure, and arrange your free private consultation. Your specialist then arrives as your baby does.</p>
           <!-- The three steps (TJ, 13 Nov 2026, TPS-0095, from the 12 Nov meeting):
                the path to booking, on the site's line and dots, inside the call to
                action, between its words and its button (TJ, 13 Nov 2026). Draft wording by The Founders Frame for Ami and the sales
