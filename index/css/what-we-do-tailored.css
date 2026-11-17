@@ -426,3 +426,20 @@
   .ty__nav:disabled { opacity: .3; cursor: default; }
   .ty__nav:disabled:hover { color: rgba(255, 255, 255, .72); }
 }
+
+/* The open card's spacing is set, not left over (TJ, 17 Nov 2026). It used to come
+   from the room the photograph's height left free, which vanished on smaller screens
+   once the text held its size. These are the gaps the master screen shows, in rem so
+   they scale with the layout; where the words and the gaps need more height, the card
+   and the photograph grow together. No lift: the gaps are the ones seen. */
+@media (min-width: 861px) {
+  .ty.is-live.is-calm.is-wide .ty__card { align-content: start; padding-block: 1.875rem 1.9375rem; gap: 1.5625rem; }
+  .ty.is-live.is-calm.is-wide .tl-readmore__copy,
+  .ty.is-live.is-calm.is-wide .tl-readmore__extra { top: 0; }
+  .ty.is-live.is-calm.is-wide .tl-readmore__copy,
+  .ty.is-live.is-calm.is-wide .tl-readmore__extra > div { gap: .5625rem; }
+  .ty.is-live.is-calm.is-wide .tl-readmore__copy p { line-height: 1.45; }
+  .ty.is-live.is-calm.is-wide .tl-readmore__toggle { margin-top: 2rem; }
+  /* The extra words run straight on from the first paragraph, as on the master screen. */
+  .ty.is-live.is-calm.is-wide .tl-readmore__extra { margin-top: -.5625rem; }
+}
