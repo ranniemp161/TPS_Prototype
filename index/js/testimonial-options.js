@@ -30,8 +30,9 @@
   /* The line of names: a fixed circle at the centre, the stops slide under
      it, one per testimonial, and each name is a button. Shared by all three
      bands. onPick(step) is called with how far to move. */
-  function nameLine(track, onPick) {
-    var WINDOW = 3, items = new Map(), v = 0;
+  function nameLine(track, onPick, lit) {
+    lit = lit || function () { return 1; };
+    var WINDOW = 6, items = new Map(), v = 0;
     function make(k) {
       var t = TV2[mod(k)];
       var el = document.createElement('div');
@@ -39,7 +40,11 @@
       el.style.setProperty('--q', k);
       el.innerHTML = '<span class="tv2__dot" aria-hidden="true"></span>' +
         '<button class="tv2__stop" type="button" aria-label="Show testimonial from ' + esc(t.author) + '">' + esc(t.author) + '</button>';
-      el.querySelector('button').addEventListener('click', function () { if (k !== v) onPick(k - v); });
+      el.querySelector('button').addEventListener('click', function () {
+        var L = lit();
+        if (k < v) onPick(k - v);
+        else if (k > v + L - 1) onPick(k - (v + L - 1));
+      });
       return el;
     }
     function set(next) {
@@ -50,10 +55,11 @@
       items.forEach(function (el, k) {
         if (Math.abs(k - v) > WINDOW) { el.remove(); items.delete(k); }
       });
-      track.style.transform = 'translateX(calc(' + (-v) + ' * var(--tv-s)))';
+      track.style.transform = 'translateX(calc(' + (-v) + ' * var(--st, var(--tv-s))))';
+      var L = lit();
       items.forEach(function (el, k) {
         var b = el.querySelector('button');
-        if (k === v) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+        if (k >= v && k < v + L) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
       });
     }
     return { set: set, get: function () { return v; } };
@@ -94,50 +100,78 @@
     root.classList.add('is-in');
   }
 
-  /* ---- Three or two at once ----
-     The cards are laid out three times over so the carousel can run on in
-     either direction; after each slide the track jumps back into the middle
-     copy without a transition, which the eye cannot see. */
+  /* ---- Two or three at once ----
+     The current display repeated side by side. Each column is the same
+     quote and name as the single version, and rebuilds the same way, word
+     by word out of blur. The line underneath has a lit dot and a name under
+     every quote in view, and slides one stop per click. */
   function multi(root) {
-    var track = root.querySelector('[data-tvm-track]');
-    var vp = track.parentNode;
-    var all = TV2.concat(TV2, TV2);
-    track.innerHTML = all.map(function (t) {
-      return '<figure class="tvm__card">' +
-        '<blockquote class="tvm__quote">“' + esc(t.quote) + '”</blockquote>' +
-        '<figcaption class="tv2__meta"><span class="tv2__rule" aria-hidden="true"></span>' +
-        '<span class="tv2__name">' + esc(t.author) + '</span>' +
-        '<span class="tv2__role">' + esc(t.role) + '</span></figcaption></figure>';
-    }).join('');
+    var cols = root.querySelector('[data-tvm-cols]');
+    var car = root.querySelector('[data-tvm-car]');
+    var oldTip = car.querySelector('.tv2__tip');
+    if (oldTip) oldTip.remove();
+    var MAX = 3, slots = [], tips = [], p = 0;
 
-    var p = n;   // the first card in view, in the middle copy
-    var line = nameLine(root.querySelector('[data-tvm-line]'), move);
+    for (var i = 0; i < MAX; i++) {
+      var col = document.createElement('div');
+      col.className = 'tvm__col';
+      col.innerHTML = '<blockquote class="tv2__quote"></blockquote>' +
+        '<div class="tv2__by"><div class="tv2__meta"><span class="tv2__rule" aria-hidden="true"></span>' +
+        '<span class="tv2__name"></span><span class="tv2__role"></span></div></div>';
+      cols.appendChild(col);
+      slots.push({ col: col, q: col.querySelector('.tv2__quote'), meta: col.querySelector('.tv2__meta'),
+        name: col.querySelector('.tv2__name'), role: col.querySelector('.tv2__role'), timers: [] });
+      var tip = document.createElement('span');
+      tip.className = 'tv2__tip tvm__tip';
+      tip.setAttribute('aria-hidden', 'true');
+      tip.style.setProperty('--i', i);
+      car.appendChild(tip);
+      tips.push(tip);
+    }
 
-    function step() {
-      var per = parseFloat(getComputedStyle(root).getPropertyValue('--per')) || 1;
-      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
-      return (vp.clientWidth + gap) / per;
+    function per() { return Math.round(parseFloat(getComputedStyle(root).getPropertyValue('--per'))) || 1; }
+    var line = nameLine(root.querySelector('[data-tvm-line]'), move, per);
+
+    function measure() {
+      var P = per();
+      var gap = parseFloat(getComputedStyle(cols).columnGap) || 0;
+      var colW = (cols.clientWidth - (P - 1) * gap) / P;
+      car.style.setProperty('--c0', (colW / 2) + 'px');
+      car.style.setProperty('--st', (colW + gap) + 'px');
+      slots.forEach(function (s, i) { s.col.hidden = i >= P; });
+      tips.forEach(function (t, i) { t.style.display = i >= P ? 'none' : ''; });
     }
-    function place(animate) {
-      track.style.transition = animate ? '' : 'none';
-      track.style.transform = 'translateX(' + (-p * step()) + 'px)';
-      if (!animate) { void track.offsetWidth; track.style.transition = ''; }
+
+    function fill(s, t) {
+      s.timers.forEach(clearTimeout); s.timers = [];
+      s.q.innerHTML = ('“' + t.quote + '”').split(' ')
+        .map(function (w) { return '<span class="tv2__w">' + esc(w) + '</span>'; }).join('');
+      [].slice.call(s.q.children).forEach(function (w, i) {
+        if (REDUCED) w.classList.add('is-in');
+        else s.timers.push(setTimeout(function () { w.classList.add('is-in'); }, i * 30));
+      });
+      s.name.textContent = t.author;
+      s.role.textContent = t.role;
+      s.meta.classList.remove('is-in');
+      requestAnimationFrame(function () { requestAnimationFrame(function () { s.meta.classList.add('is-in'); }); });
     }
-    function move(s) {
-      p += s;
-      line.set(line.get() + s);
-      place(!REDUCED);
-      if (REDUCED) settle();
+
+    function paint() {
+      var P = per();
+      slots.forEach(function (s, i) { if (i < P) fill(s, TV2[mod(p + i)]); });
+      line.set(p);
     }
-    function settle() {
-      if (p >= 2 * n || p < n) { p = n + mod(p - n); place(false); }
-    }
-    track.addEventListener('transitionend', function (e) { if (e.target === track) settle(); });
+    function move(s) { p += s; paint(); }
+
     root.querySelector('[data-tvm-next]').addEventListener('click', function () { move(1); });
     root.querySelector('[data-tvm-prev]').addEventListener('click', function () { move(-1); });
-    window.addEventListener('resize', function () { place(false); });
-    line.set(0);
-    place(false);
+    var lastPer = per();
+    window.addEventListener('resize', function () {
+      measure();
+      if (per() !== lastPer) { lastPer = per(); paint(); }
+    });
+    measure();
+    paint();
   }
 
   function boot() {

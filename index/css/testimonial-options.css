@@ -1,8 +1,9 @@
 /* Testimonial options page (TJ, 17 Nov 2026). Loaded after site.css, which
    carries the master number, the text unit and the whole of the current
-   testimonials block. Everything here is in rem for layout and --t for
-   text, the same rule as the rest of the site, so each option keeps the
-   same proportions on TJ's screen and on Ami's. */
+   testimonials block. Two and Three are the current display repeated side
+   by side: the same quote, the same name with its rule, the same line of
+   dots, with a lit dot and name under every quote in view. Layout is in
+   rem and text in --t, the same rule as the rest of the site. */
 
 body.tvo { margin: 0; background: var(--g-canvas); }
 
@@ -20,13 +21,12 @@ body.tvo { margin: 0; background: var(--g-canvas); }
   background: var(--g-canvas);
 }
 
-/* Each band shows on its own ground, not blended into the next. */
 .tvo .act--voices { position: relative; }
 .tvo .voices { background: var(--g-soft); padding-bottom: clamp(4.5rem, 10vh, 7.5rem); }
 
-/* ---- the multi card carousel ---- */
+/* ---- two or three at once ---- */
 .tvm {
-  --gap: 1.5rem;
+  --gap: 4rem;
   --per: 3;
   position: relative;
   z-index: 1;
@@ -35,70 +35,43 @@ body.tvo { margin: 0; background: var(--g-canvas); }
   padding: 3rem 2rem 3.5rem;
   color: var(--tv-fg);
 }
-.tvm--3 { max-width: 76rem; }
-.tvm--2 { max-width: 60rem; --per: 2; }
+.tvm--3 { max-width: 90rem; }
+.tvm--2 { max-width: 72rem; --per: 2; }
 
 .tvm__stage { position: relative; }
-.tvm__viewport { overflow: hidden; }
-.tvm__track {
-  display: flex;
-  gap: var(--gap);
-  width: 100%;
-  transition: transform .6s cubic-bezier(.22, 1, .36, 1);
+.tvm__cols {
+  display: grid;
+  grid-template-columns: repeat(var(--per), minmax(0, 1fr));
+  column-gap: var(--gap);
+  align-items: start;
 }
+.tvm__col[hidden] { display: none; }
 
-.tvm__card {
-  flex: 0 0 calc((100% - (var(--per) - 1) * var(--gap)) / var(--per));
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 1.75rem;
-  margin: 0;
-  padding: 2rem 1.875rem;
-  border: 1px solid rgba(255, 255, 255, .5);
-  border-radius: var(--r-media);
-  background: rgba(255, 255, 255, .3);
-  -webkit-backdrop-filter: blur(.75rem);
-  backdrop-filter: blur(.75rem);
+/* The line runs under all the quotes. Its ends fade less than the single
+   one does, so the dots under the outer quotes stay clear. */
+.tvm .tvm__car {
+  margin-top: 2.5rem;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 4%, #000 96%, transparent 100%);
 }
+.tvm__car .tv2__item { left: calc(var(--c0) + var(--q) * var(--st)); }
+.tvm__car .tv2__fill { left: var(--c0); width: calc((var(--per) - 1) * var(--st)); }
+.tvm__car .tvm__tip { left: calc(var(--c0) + var(--i) * var(--st)); }
 
-.tvm__quote {
-  margin: 0;
-  font-family: var(--f-read);
-  font-weight: 300;
-  font-size: calc(1 * var(--t) + .0625rem);
-  line-height: 1.6;
-  letter-spacing: -.015em;
-  color: var(--tv-fg);
-}
-.tvm--2 .tvm__quote { font-size: calc(1.05 * var(--t) + .1875rem); }
-
-.tvm .tv2__meta { opacity: 1; transform: none; }
-.tvm .tv2__rule { transform: none; }
-
-.tvm .tv2__car { margin-top: 2.5rem; max-width: 36rem; margin-inline: auto; }
-
-/* The chevrons sit outside the cards on a wide window, as they do now. */
 .tvm .tv2__nav { z-index: 2; }
 
 /* Below 1000px the chevrons go to the foot, as the current block does. */
 @media (max-width: 1000px) {
   .tvm { padding-bottom: 4rem; }
-  .tvm .tv2__nav { position: absolute; top: auto; bottom: 0; translate: none; }
   .tvm__stage { position: static; }
-  .tvm { position: relative; }
+  .tvm .tv2__nav { position: absolute; top: auto; bottom: 0; translate: none; }
   .tvm .tv2__nav--prev { left: 2rem; }
   .tvm .tv2__nav--next { left: 5.5rem; right: auto; }
 }
 
-/* Phones show one card at a time. */
+/* Phones show one quote at a time, as now. */
 @media (max-width: 760px) {
   .tvm, .tvm--2 { --per: 1; padding-inline: 1.5rem; }
   .tvm .tv2__nav--prev { left: 1.5rem; }
   .tvm .tv2__nav--next { left: 4.625rem; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .tvm__track { transition: none; }
 }
