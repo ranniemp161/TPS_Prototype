@@ -175,7 +175,7 @@
 .beat__title { margin: 0; }
 .beat__line {
   font-family: var(--f-read);
-  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  font-size: clamp(calc(1 * var(--t)), 1.25vw, calc(1.12 * var(--t)));
   line-height: 1.55;
   color: var(--t-ink);
   max-width: 34ch;
@@ -266,7 +266,7 @@
   background: var(--acc);
   color: var(--t-on-accent);
   border-radius: var(--r-button);
-  font-size: 1.05rem;
+  font-size: calc(1.05 * var(--t));
   padding: 1rem 2.125rem;
   opacity: 0;
   visibility: hidden;
@@ -288,7 +288,7 @@
     top: auto;
     bottom: 12.5vh;
     transform: translateX(-50%);
-    font-size: 1.15rem;
+    font-size: calc(1.1291 * var(--t) + .0209rem);
     padding: 1.125rem 2.5rem;
   }
 }
@@ -340,7 +340,7 @@
   .deskcard.is-live { pointer-events: auto; }
   .deskcard[data-room] { cursor: pointer; }
   .deskcard .cards__name {
-    font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+    font-size: clamp(calc(1.1 * var(--t)), 2.6vw, calc(.9164 * var(--t) + .8836rem));
     color: color-mix(in srgb, var(--g-dark) 90%, transparent);
     /* The glide moves the panel; only the words fade, on their own timer
        so they never appear mid-flight over the wrong background. */
@@ -353,7 +353,7 @@
     transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
   }
   .deskcard .cards__desc {
-    font-size: clamp(.85rem, 1.15vw, .98rem);
+    font-size: clamp(calc(.85 * var(--t)), 1.15vw, calc(.98 * var(--t)));
     color: color-mix(in srgb, var(--g-dark) 78%, transparent);
     opacity: var(--deskcard-text-o, 0);
     transition: opacity 320ms var(--ease-out) var(--deskcard-text-delay, 0ms);
@@ -405,12 +405,12 @@
 .cards__card:not(.is-live) { pointer-events: none; }
 .cards__card[data-room] { cursor: pointer; }
 .cards__card .cards__name {
-  font-size: clamp(1.1rem, 2.6vw, 1.8rem);
+  font-size: clamp(calc(1.1 * var(--t)), 2.6vw, calc(.9164 * var(--t) + .8836rem));
   color: color-mix(in srgb, var(--g-dark) 90%, transparent);
 }
 .cards__card .cards__line { background: color-mix(in srgb, var(--g-dark) 38%, transparent); }
 .cards__card .cards__desc {
-  font-size: clamp(.85rem, 1.15vw, .98rem);
+  font-size: clamp(calc(.85 * var(--t)), 1.15vw, calc(.98 * var(--t)));
   color: color-mix(in srgb, var(--g-dark) 78%, transparent);
 }
 
@@ -439,7 +439,7 @@
 }
 .care-close__name {
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   font-weight: 600;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -447,7 +447,7 @@
 }
 .care-close__what {
   font-family: var(--f-read);
-  font-size: 1rem;
+  font-size: calc(1 * var(--t));
   line-height: 1.55;
   color: var(--t-soft);
 }
@@ -596,7 +596,7 @@
      appearing to win on source order. */
   .cards__card { width: calc(100vw - var(--gutter) * 1.5); }
   .cards__card .cards__name {
-    font-size: clamp(1.6rem, 9vw, 2.1rem);
+    font-size: clamp(calc(1.0473 * var(--t) + .5527rem), 9vw, calc(.6109 * var(--t) + 1.4891rem));
     color: var(--t-ink);
   }
   .cards__card .cards__line {
@@ -607,7 +607,7 @@
   }
   .cards__card .cards__desc {
     max-width: 30ch;
-    font-size: 1.15rem;
+    font-size: calc(1.1291 * var(--t) + .0209rem);
     color: var(--t-soft);
   }
 
@@ -738,7 +738,7 @@
 .zones__script {
   display: block;
   font-family: var(--f-script);
-  font-size: clamp(2.1rem, 2.9vw, 3.1rem);
+  font-size: clamp(calc(.6109 * var(--t) + 1.4891rem), 2.9vw, 3.1rem);
   line-height: 1;
   color: var(--reach-script-acc);
   margin-bottom: .18em;
@@ -747,7 +747,7 @@
   display: block;
   font-family: var(--f-display);
   text-transform: uppercase;
-  font-size: clamp(1.45rem, 2vw, 2.15rem);
+  font-size: clamp(calc(1.1073 * var(--t) + .3427rem), 2vw, calc(.5473 * var(--t) + 1.6027rem));
   line-height: 1.04;
   letter-spacing: .02em;
   color: var(--t-ink);
@@ -790,7 +790,7 @@
   width: 100%;
   text-align: left;
   font-family: var(--f-body);
-  font-size: .76rem;
+  font-size: calc(.76 * var(--t));
   font-weight: 500;
   letter-spacing: .16em;
   text-transform: uppercase;
@@ -817,7 +817,7 @@
   margin: 0;
   padding: 0 0 1.125rem 1.875rem;
   font-family: var(--f-body);
-  font-size: .92rem;
+  font-size: calc(.92 * var(--t));
   line-height: 1.55;
   color: var(--t-mute);
   opacity: 0;
@@ -887,7 +887,7 @@
   .zones__poster { display: none; }
   .zones__video { object-fit: cover; }
   .zones__script { font-size: clamp(2.6rem, 10.92vw, 3.64rem); }
-  .zones__caps { font-size: clamp(1.4375rem, 6.44vw, 1.955rem); }
+  .zones__caps { font-size: clamp(calc(1.1108 * var(--t) + .3267rem), 6.44vw, calc(.7749 * var(--t) + 1.1801rem)); }
 
   .zones__stills { display: block; position: absolute; inset: 0; }
   .zones__still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; z-index: 0; transition: opacity 520ms var(--ease-out); }
@@ -911,7 +911,7 @@
   .zones__tab:nth-of-type(2) { justify-self: center; }
   .zones__tab:nth-of-type(3) { justify-self: end; }
   .zones__tab {
-    font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
+    font-family: var(--f-body); font-size: calc(.8125 * var(--t)); font-weight: 500; letter-spacing: .12em; text-transform: uppercase;
     color: var(--t-mute); background: transparent; border: 0; border-radius: 0; padding: .875rem 0 .9375rem; min-height: 2.75rem; cursor: pointer;
     transition: color 200ms var(--ease-out); -webkit-tap-highlight-color: transparent;
     position: relative;
@@ -942,7 +942,7 @@
   .zones__panels { position: relative; margin-top: 1.125rem; overflow: hidden; transition: height 460ms var(--ease-out); }
   .zones__panel { position: absolute; left: 0; right: 0; top: 0; opacity: 0; visibility: hidden; transform: translateY(.5rem); transition: opacity 360ms var(--ease-out), transform 460ms var(--ease-out), visibility 0s linear 360ms; }
   .zones__panel.is-active { opacity: 1; visibility: visible; transform: none; transition-delay: 120ms, 120ms, 0s; }
-  .zones__panel p { margin: 0; text-align: center; text-wrap: balance; font-family: var(--f-body); font-size: 1rem; line-height: 1.6; color: var(--t-mute); }
+  .zones__panel p { margin: 0; text-align: center; text-wrap: balance; font-family: var(--f-body); font-size: calc(1 * var(--t)); line-height: 1.6; color: var(--t-mute); }
 }
 @media (prefers-reduced-motion: reduce) {
   .zones__poster { transition: opacity 700ms linear; }
@@ -1059,7 +1059,7 @@
 /* One title style along the line (TJ, 15 Oct 2026): Arrival's face (Montserrat
    500, spaced capitals) for every stop's title, at Arrival's own size, .8rem
    (.74rem on phones), each on one line (TJ, 15 Oct 2026). */
-.route { --route-title: .8rem; }
+.route { --route-title: calc(.8 * var(--t)); --route-hint: 1.32rem; }
 .route__stops button.route__name {
   display: block;
   white-space: nowrap;
@@ -1165,8 +1165,8 @@
   .route__stop.is-left button.route__name,
   .route__head { white-space: normal; text-align: left; margin-left: 0; }
   .route__stops button.route__name,
-  .route__stops button.route__head { font-size: 1.1rem; line-height: 1.35; letter-spacing: .02em; margin-bottom: .625rem; }
-  .route__more p { font-size: 1rem; line-height: 1.6; }
+  .route__stops button.route__head { font-size: calc(1.1 * var(--t)); line-height: 1.35; letter-spacing: .02em; margin-bottom: .625rem; }
+  .route__more p { font-size: calc(1 * var(--t)); line-height: 1.6; }
   /* While the confinement act holds, the line at 60svh runs through its last
      paragraph on a phone. During the hand over the layer moves the line down
      into the gap between that paragraph and the photograph (home.js sets
@@ -1175,7 +1175,7 @@
   .route__text { width: min(40ch, 60vw, var(--room, 60vw)); }
   /* phones keep the words above the line, inside the text block */
   .route__more { position: static; width: auto; max-width: none; margin-top: 0; }
-  .route { --route-title: .74rem; }
+  .route { --route-title: calc(.74 * var(--t)); --route-hint: 1.221rem; }
   .route__stop[data-stop="nursery"] .route__more { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1311,11 +1311,12 @@
 
 /* Ami via TJ, 14 Nov 2026, "Click" hint beside the next arrow until the first
    click. Sits beside the next chevron on its line, absolute so nothing moves
-   when it goes. Type is the room titles': Montserrat, capitals, 2.2 times their
-   size. Fades out over 300ms, then hidden. */
+   when it goes. Type is the room titles': Montserrat, capitals. A quarter smaller than
+   it was (TJ, 15 Nov 2026): 21px on the master screen, in rem so it keeps that
+   proportion on every screen. Fades out over 300ms, then hidden. */
 .route__hint {
   position: absolute; top: 50%; transform: translateY(-50%);
-  font-family: var(--f-body); font-size: calc(var(--route-title) * 2.2); font-weight: 400;
+  font-family: var(--f-body); font-size: var(--route-hint); font-weight: 400;
   letter-spacing: normal; line-height: 1.7; text-transform: uppercase;
   color: var(--t-ink); white-space: nowrap; pointer-events: none;
   transition: opacity 300ms var(--tease);
@@ -1459,3 +1460,18 @@ html.is-flight-playing .aurora__field::after { animation-play-state: paused; }
    there the film sits in a band and the fade falls over the ghost below it
    (syncBake, home-flight.js). */
 .flight__stage.is-baked .route__wash { display: none; }
+
+/* While you rest on desktop, click driven (TJ, 17 Nov 2026): an ordinary
+   section one screen tall, the house in colour from the start, the words
+   showing. An unlabelled stop at the top of the line is the start, as on
+   phones; what-we-do-zones.js places it (--zr) and moves the circle (--zf). */
+@media (min-width: 1100px) {
+  .zones.zones--click { height: auto !important; }
+  .zones--click .zones__stage { position: relative; }
+  .zones--click .zones__video { display: none; }
+  .zones--click .zones__title, .zones--click .zones__line { opacity: 1; visibility: visible; }
+  .zones--click .zones__rooms { padding-top: 2.25rem; }
+  .zones--click .zones__home { all: unset; position: absolute; z-index: 2; left: 0; top: var(--zr, 0px); width: 2.75rem; height: 2.75rem; margin: -1.375rem 0 0 calc(-1.375rem + var(--tline) / 2); cursor: pointer; }
+  .zones--click .zones__home::after { content: ""; position: absolute; left: 50%; top: 50%; width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--reach-script); }
+  .zones--click .zones__home:focus-visible { outline: .125rem solid var(--focus); outline-offset: -.5rem; border-radius: 50%; }
+}

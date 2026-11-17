@@ -88,7 +88,7 @@
 /* Without the held stage (reduced motion, or before the script): no travelling title; the line in the card is simply shown, in coral. */
 .vt:not(.is-live) .vt__photo-title { display: none; }
 .vt:not(.is-live) .vt__sub { color: var(--reach-script-soft); }
-.vt__card .wlead { margin: 0; font-size: clamp(.88rem, .82rem + .22vw, 1rem); }
+.vt__card .wlead { margin: 0; font-size: clamp(calc(.88 * var(--t)), calc(.82 * var(--t)) + .22vw, calc(1 * var(--t))); }
 /* The card's entrance (TJ, 8 Oct 2026): as the photograph closes down into
    its slot, the glass lifts in beside it and its lines rise out of masks.
    Driven by what-we-do-timeline.js. */
@@ -116,9 +116,9 @@
 .vt__body { position: absolute; top: -.55rem; width: min(40ch, calc(50% - var(--vt-stem) - var(--vt-gap) - .5rem)); display: grid; gap: .45rem; }
 .vt__item--r .vt__body { left: calc(var(--vt-ax) + var(--vt-stem) + var(--vt-gap)); }
 .vt__item--l .vt__body { right: calc(100% - var(--vt-ax) + var(--vt-stem) + var(--vt-gap)); }
-.vt__body time { font-family: var(--f-mono); font-size: .85rem; font-weight: 500; letter-spacing: .02em; color: var(--t-ink); }
-.vt__body h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1.08; color: var(--t-ink); }
-.vt__body p { margin: 0; color: var(--t-soft); font-size: clamp(.95rem, .9rem + .2vw, 1.05rem); line-height: 1.55; }
+.vt__body time { font-family: var(--f-mono); font-size: calc(.85 * var(--t)); font-weight: 500; letter-spacing: .02em; color: var(--t-ink); }
+.vt__body h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(calc(1.0473 * var(--t) + .5527rem), 2.3vw, calc(.6109 * var(--t) + 1.4891rem)); line-height: 1.08; color: var(--t-ink); }
+.vt__body p { margin: 0; color: var(--t-soft); font-size: clamp(calc(.95 * var(--t)), calc(.9 * var(--t)) + .2vw, calc(1.05 * var(--t))); line-height: 1.55; }
 
 .vt__close { margin: 0 0 0 auto; width: min(52ch, 100%); padding-top: .75rem; text-align: center; font-style: italic; color: var(--t-soft); position: relative; left: 0; margin-inline: auto; }
 
@@ -142,9 +142,9 @@
   .vt__slot { aspect-ratio: 16 / 11; }
   .vt__photo img { object-position: 64% 50%; }
   .vt__photo-title { font-size: clamp(2.8rem, 14vw, 4.4rem); bottom: clamp(2.25rem, 7vh, 4rem); }
-  .vt__sub { font-size: clamp(2.4rem, 11vw, 3.2rem); }
-  .vt__card .wlead { font-size: .85rem; }   /* phone text floor (MOBILE-PLAN item 2) */
-  .vt__body time { font-size: .85rem; }   /* phone text floor (MOBILE-PLAN item 2) */
+  .vt__sub { font-size: clamp(calc(.1745 * var(--t) + 2.2255rem), 11vw, 3.2rem); }
+  .vt__card .wlead { font-size: calc(.85 * var(--t)); }   /* phone text floor (MOBILE-PLAN item 2) */
+  .vt__body time { font-size: calc(.85 * var(--t)); }   /* phone text floor (MOBILE-PLAN item 2) */
 }
 
 /* ---- Static (reduced motion, or before the script runs): plain list, line complete ---- */

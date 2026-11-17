@@ -26,11 +26,11 @@
 /* .wlabel removed (TJ, 9 Oct 2026): the small spaced label with a coral dash was an invented eyebrow, not the client's copy. */
 .wh2, .wwd-h2 {
   margin: 0; font-family: var(--f-display); font-weight: 400;
-  font-size: clamp(2.4rem, 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
+  font-size: clamp(calc(.1745 * var(--t) + 2.2255rem), 5.2vw, 4.6rem); line-height: .98; letter-spacing: -.005em;
   text-transform: uppercase; text-wrap: balance;
 }
-.wh3, .wwd-h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 1.95rem); line-height: 1.12; text-wrap: balance; }
-.wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(.98rem, .9rem + .3vw, 1.12rem); line-height: 1.5; color: var(--t-ink); max-width: 44ch; }
+.wh3, .wwd-h3 { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(calc(1.0909 * var(--t) + .4091rem), 2.2vw, calc(.78 * var(--t) + 1.17rem)); line-height: 1.12; text-wrap: balance; }
+.wlead { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: clamp(calc(.98 * var(--t)), calc(.9 * var(--t)) + .3vw, calc(1.12 * var(--t))); line-height: 1.5; color: var(--t-ink); max-width: 44ch; }
 .wp { margin: 0; color: var(--t-soft); max-width: 60ch; line-height: 1.65; }
 .wp + .wp { margin-top: 1em; }
 .wide { max-width: 80rem; margin-inline: auto; padding-inline: var(--gutter); }
@@ -54,8 +54,8 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 .wh__row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.75rem 3.5rem; }
 .wfigs { display: flex; flex-wrap: wrap; gap: 1.25rem clamp(1.5rem, 4.4vw, 4rem); margin: 0; padding: 0; list-style: none; }
 .wfigs li { display: grid; gap: .25rem; }
-.wfigs b { font-family: var(--f-mono); font-weight: 400; font-size: clamp(1.3rem, 2.2vw, 1.8rem); line-height: 1; letter-spacing: -.01em; }
-.wfigs span { font-family: var(--f-body); font-size: .7rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-soft); }
+.wfigs b { font-family: var(--f-mono); font-weight: 400; font-size: clamp(calc(1.1345 * var(--t) + .1655rem), 2.2vw, calc(.9164 * var(--t) + .8836rem)); line-height: 1; letter-spacing: -.01em; }
+.wfigs span { font-family: var(--f-body); font-size: calc(.7 * var(--t)); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-soft); }
 .wh__photo { position: relative; margin: clamp(2rem, 6vh, 4rem) var(--gutter) 0; height: min(76svh, 47.5rem); border-radius: var(--r-media); overflow: hidden; background: var(--g-haze); }
 .wh__photo img { position: absolute; left: 0; top: -4%; width: 100%; height: 108%; object-fit: cover; object-position: 55% 50%; will-change: transform; }
 /* The mist: the photograph melts into the page ground, as MaisonFav's does. */
@@ -81,12 +81,12 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 .sc:first-child { margin-top: 0; }
 .sc > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); }
 .sc__tab { position: absolute; z-index: 2; top: .875rem; left: .875rem; margin: 0; padding: .5625rem .875rem;
-  font-family: var(--f-display); font-weight: 400; font-size: 1.05rem; line-height: 1; letter-spacing: .06em; text-transform: uppercase; color: var(--t-ink); }
+  font-family: var(--f-display); font-weight: 400; font-size: calc(1.05 * var(--t)); line-height: 1; letter-spacing: .06em; text-transform: uppercase; color: var(--t-ink); }
 .sc__panel { position: absolute; z-index: 2; left: .875rem; bottom: .875rem; width: min(40rem, calc(100% - 1.75rem));
   padding: clamp(1.125rem, 2.6vw, 1.875rem); display: grid; gap: .8rem; }
-.sc__promise { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(1.4rem, 2.5svh + .6vw, 2rem); line-height: 1.12; color: var(--t-ink); text-wrap: balance; }
-.sc__panel .wp { color: var(--t-ink); font-size: clamp(.84rem, 1.5svh + .2vw, .95rem); line-height: 1.55; }
-.sc__link { justify-self: start; font-family: var(--f-body); font-size: .85rem; font-weight: 500; color: var(--t-ink); text-decoration: underline; text-underline-offset: .1875rem; text-decoration-thickness: 1px; }
+.sc__promise { margin: 0; font-family: var(--f-display); font-weight: 400; font-size: clamp(calc(1.12 * var(--t) + .28rem), 2.5svh + .6vw, calc(.7273 * var(--t) + 1.2727rem)); line-height: 1.12; color: var(--t-ink); text-wrap: balance; }
+.sc__panel .wp { color: var(--t-ink); font-size: clamp(calc(.84 * var(--t)), 1.5svh + .2vw, calc(.95 * var(--t))); line-height: 1.55; }
+.sc__link { justify-self: start; font-family: var(--f-body); font-size: calc(.85 * var(--t)); font-weight: 500; color: var(--t-ink); text-decoration: underline; text-underline-offset: .1875rem; text-decoration-thickness: 1px; }
 @media (max-width: 860px) {
   .sc { position: relative; top: auto; height: auto; border-radius: var(--r-media); margin-top: 1.25rem; display: grid; }
   .sc > img { position: relative; height: 46svh; min-height: 17.5rem; }
@@ -111,7 +111,7 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 .det__col { display: grid; gap: clamp(2.5rem, 8vh, 5.5rem); }
 .di { display: grid; gap: .7rem; padding-bottom: clamp(1.75rem, 5vh, 3.5rem); border-bottom: 1px solid var(--line-firm); }
 .di:last-child { border-bottom: 0; padding-bottom: 0; }
-.di .wp { font-size: 1.02rem; }
+.di .wp { font-size: calc(1.02 * var(--t)); }
 .di__thumb { display: none; }
 @media (max-width: 860px) {
   .det__grid { grid-template-columns: minmax(0, 1fr); }
@@ -142,8 +142,8 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 .wd__row { position: relative; display: grid; grid-template-columns: 5.2rem minmax(0, 1fr); gap: 1.125rem; padding: 1.625rem 0; border-bottom: 1px solid var(--line-firm); }
 .wd__row::before { content: ""; position: absolute; left: calc(clamp(1.75rem, 4vw, 3rem) * -1 - .25rem); top: 2.1rem; width: .5625rem; height: .5625rem; border-radius: 50%; background: var(--g-canvas); border: 1px solid var(--t-mute); transition: background-color 300ms var(--ease-out), border-color 300ms var(--ease-out); }
 .wd__row.is-past::before { background: var(--acc); border-color: var(--acc); }
-.wd__row time { font-family: var(--f-mono); font-size: .8rem; font-weight: 500; color: var(--t-soft); padding-top: .5rem; letter-spacing: .02em; }
-.wd__row h3 { margin: 0 0 .35rem; font-family: var(--f-display); font-weight: 400; font-size: 1.6rem; line-height: 1.15; }
+.wd__row time { font-family: var(--f-mono); font-size: calc(.8 * var(--t)); font-weight: 500; color: var(--t-soft); padding-top: .5rem; letter-spacing: .02em; }
+.wd__row h3 { margin: 0 0 .35rem; font-family: var(--f-display); font-weight: 400; font-size: calc(1.0473 * var(--t) + .5527rem); line-height: 1.15; }
 .wd__row p { margin: 0; color: var(--t-soft); max-width: 56ch; }
 .wd__close { margin: 0; padding: 1.75rem 0 0; font-style: italic; color: var(--t-soft); max-width: 52ch; }
 @media (max-width: 860px) {
@@ -166,22 +166,22 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 .faq__nav a {
   display: flex; justify-content: space-between; gap: .75rem; padding: .8125rem 0;
   border-bottom: 1px solid var(--line-firm);
-  font-family: var(--f-body); font-size: .9rem; color: var(--t-ink); text-decoration: none;
+  font-family: var(--f-body); font-size: calc(.9 * var(--t)); color: var(--t-ink); text-decoration: none;
   transition: color 180ms var(--ease-out), padding-left 260ms var(--ease-out);
 }
-.faq__nav a span { font-family: var(--f-mono); font-size: .75rem; color: var(--t-mute); }
+.faq__nav a span { font-family: var(--f-mono); font-size: calc(.75 * var(--t)); color: var(--t-mute); }
 .faq__nav a.is-active { color: var(--acc); font-weight: 600; padding-left: .625rem; }
 .faq__groups { display: grid; gap: clamp(2.5rem, 7vh, 4.5rem); }
 .faq__group { scroll-margin-top: calc(var(--nav-h) + 4.75rem); }
-.faq__side .wwd-h2 { font-size: clamp(2rem, 3.4vw, 3.1rem); }
+.faq__side .wwd-h2 { font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), 3.4vw, 3.1rem); }
 .faq__group > .wwd-h3 { padding-bottom: .875rem; border-bottom: 1px solid var(--acc); margin-bottom: .25rem; }
 .q { border-bottom: 1px solid var(--line-firm); }
 .q summary {
   list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: baseline; gap: 1.25rem;
-  padding: 1.25rem 0; font-family: var(--f-display); font-size: clamp(1.25rem, 1.8vw, 1.5rem); line-height: 1.2;
+  padding: 1.25rem 0; font-family: var(--f-display); font-size: clamp(calc(1.1364 * var(--t) + .1136rem), 1.8vw, calc(1.0909 * var(--t) + .4091rem)); line-height: 1.2;
 }
 .q summary::-webkit-details-marker { display: none; }
-.q summary::after { content: "+"; font-family: var(--f-body); font-size: 1.3rem; color: var(--t-mute); transition: transform 260ms var(--ease-out); flex: none; }
+.q summary::after { content: "+"; font-family: var(--f-body); font-size: calc(1.1345 * var(--t) + .1655rem); color: var(--t-mute); transition: transform 260ms var(--ease-out); flex: none; }
 .q[open] summary::after { transform: rotate(45deg); }
 .q > div { padding: 0 0 1.375rem; }
 .q p { margin: 0; color: var(--t-soft); max-width: 62ch; }
@@ -339,9 +339,9 @@ html.js [data-reveal].is-in { opacity: 1; transform: none; }
 /* The group headings and questions were the selector's Montserrat (TJ, 22 Oct
    2026); with Jost as the site's reading face they read Jost too (TJ, 1 Nov
    2026). Sizes unchanged: headings 1.2rem, questions 1.05rem, answers .95rem. */
-.page--faqs .faq__group > .wwd-h3 { font-family: var(--f-read); font-weight: 500; font-size: clamp(1.08rem, 1.3vw, 1.2rem); }
-.page--faqs .q summary { font-family: var(--f-read); font-size: clamp(1rem, 1.1vw, 1.05rem); padding: 1rem 0; }
-.page--faqs .q p { font-size: .95rem; }
+.page--faqs .faq__group > .wwd-h3 { font-family: var(--f-read); font-weight: 500; font-size: clamp(calc(1.08 * var(--t)), 1.3vw, calc(1.1345 * var(--t) + .0655rem)); }
+.page--faqs .q summary { font-family: var(--f-read); font-size: clamp(calc(1 * var(--t)), 1.1vw, calc(1.05 * var(--t))); padding: 1rem 0; }
+.page--faqs .q p { font-size: calc(.95 * var(--t)); }
 .page--faqs .faq__nav a.is-active { color: var(--faq-text); font-weight: 700; }
 .page--faqs .faq__nav a span { font-weight: 400; }
 

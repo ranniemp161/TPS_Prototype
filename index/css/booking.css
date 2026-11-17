@@ -258,7 +258,7 @@
   margin: 0;
   text-align: center;
   font-family: var(--f-script);
-  font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  font-size: clamp(calc(.9545 * var(--t) + .7955rem), 3.2vw, calc(.4091 * var(--t) + 1.8409rem));
   line-height: 1;
   color: var(--reach-link);
 }
@@ -278,7 +278,7 @@
   align-items: center;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -311,7 +311,7 @@
      that run to two and three words; this one is three capitalised words on
      one line and wants the extra air. */
   letter-spacing: .03em;
-  font-size: 2.125rem;
+  font-size: calc(.5795 * var(--t) + 1.5455rem);
   line-height: 1.1;
   margin: 0;
   color: var(--t-ink);
@@ -328,7 +328,7 @@
 .bk-head__lede {
   font-family: var(--f-read);
   font-weight: 300;
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   line-height: 1.55;
   color: var(--t-soft);
   /* 30ch on a phone, not the 22ch it looks like it wants: 22ch breaks these
@@ -341,7 +341,7 @@
 
 @media (min-width: 640px) {
   .bk-head__lede {
-    font-size: 1rem;
+    font-size: calc(1 * var(--t));
     max-width: 36ch;
     margin-top: 1.5rem;
   }
@@ -376,7 +376,7 @@
   margin: 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .6875rem;
+  font-size: calc(.6875 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -387,7 +387,7 @@
 
 @media (min-width: 640px) {
   .bk-facts { padding-block: 1rem; }
-  .bk-facts__line { flex-direction: row; gap: 1rem; font-size: .75rem; }
+  .bk-facts__line { flex-direction: row; gap: 1rem; font-size: calc(.75 * var(--t)); }
   .bk-facts__dot { display: inline; }
 }
 
@@ -412,7 +412,7 @@
   padding-top: 2rem;
   border-top: 1px solid var(--line);
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   color: var(--t-mute);
   text-align: center;
 }
@@ -455,7 +455,7 @@
   display: block;
   font-family: var(--f-body);
   font-weight: 600;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--reach-script);
@@ -470,7 +470,7 @@
 .bk-label {
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
 }
@@ -609,7 +609,7 @@
   font-weight: 400;
   text-transform: uppercase;
   min-width: 0;
-  font-size: clamp(1.1875rem, 2.4vw, 1.375rem);
+  font-size: clamp(calc(1.1335 * var(--t) + .054rem), 2.4vw, calc(1.125 * var(--t) + .25rem));
   line-height: 1.38;
   letter-spacing: .06em;
   color: var(--t-ink);
@@ -619,7 +619,7 @@
   flex-shrink: 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-ink);
@@ -631,7 +631,7 @@
   margin: .375rem 0 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -642,7 +642,7 @@
   padding-top: .75rem;
   border-top: 1px solid var(--line);
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   line-height: 1.6;
   color: var(--t-soft);
 }
@@ -663,7 +663,7 @@
   cursor: pointer;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -698,7 +698,7 @@
   align-items: flex-start;
   gap: .75rem;
   font-family: var(--f-read);
-  font-size: .9375rem;
+  font-size: calc(.9375 * var(--t));
   font-weight: 600;
   line-height: 1.35;
   color: var(--t-ink);
@@ -739,7 +739,7 @@
   margin: .375rem 0 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -748,7 +748,7 @@
 .bk-addon__desc {
   margin: .5rem 0 0;
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   line-height: 1.6;
   color: var(--t-soft);
 }
@@ -766,7 +766,7 @@
   margin: 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-ink);
@@ -801,7 +801,7 @@
   text-align: center;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .625rem;
+  font-size: calc(.625 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -816,7 +816,7 @@
   border: 1px solid var(--line);
   background: var(--g-paper);
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   color: var(--t-ink);
   cursor: pointer;
   transition: border-color 140ms var(--ease-out), background-color 140ms var(--ease-out);
@@ -847,7 +847,7 @@
 .bk-times__none {
   margin-top: 1rem;
   font-family: var(--f-read);
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   color: var(--t-mute);
 }
 
@@ -880,7 +880,7 @@
   background: var(--g-paper);
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .75rem;
+  font-size: calc(.75 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-ink);
@@ -900,7 +900,7 @@
   margin: 1rem 0 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .625rem;
+  font-size: calc(.625 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -920,7 +920,7 @@
 .bk-fieldset > legend {
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -938,7 +938,7 @@
   background: var(--g-paper);
   padding: .5rem .75rem;
   font-family: var(--f-body);
-  font-size: .9375rem;
+  font-size: calc(.9375 * var(--t));
   color: var(--t-ink);
   outline: none;
 }
@@ -978,7 +978,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   display: block;
   margin-top: .5rem;
   font-family: var(--f-read);
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   color: var(--err);
 }
 
@@ -995,7 +995,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   align-items: center;
   gap: .5rem;
   font-family: var(--f-read);
-  font-size: .9375rem;
+  font-size: calc(.9375 * var(--t));
   color: var(--t-ink);
   cursor: pointer;
 }
@@ -1012,7 +1012,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   background: color-mix(in srgb, var(--g-tint) 35%, transparent);
   padding: .75rem 1rem;
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   line-height: 1.6;
   color: var(--t-ink);
 }
@@ -1021,7 +1021,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
 .bk-address > span {
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -1030,7 +1030,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
 .bk-address__note {
   margin: .25rem 0 0;
   font-family: var(--f-read);
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   color: var(--t-mute);
 }
 
@@ -1059,7 +1059,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   flex-shrink: 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -1069,7 +1069,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   text-align: right;
   white-space: pre-line;
   font-family: var(--f-read);
-  font-size: .9375rem;
+  font-size: calc(.9375 * var(--t));
   color: var(--t-ink);
 }
 
@@ -1080,7 +1080,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   margin: .75rem auto 0;
   text-align: center;
   font-family: var(--f-read);
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   line-height: 1.6;
   color: var(--t-mute);
 }
@@ -1092,7 +1092,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   background: color-mix(in srgb, var(--g-tint) 35%, transparent);
   padding: .75rem 1rem;
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   color: var(--t-ink);
 }
 
@@ -1119,8 +1119,8 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   text-transform: uppercase;
 }
 
-.bk-total__label { font-size: .688rem; color: var(--t-mute); }
-.bk-total__value { font-size: 1rem; color: var(--t-ink); }
+.bk-total__label { font-size: calc(.688 * var(--t)); color: var(--t-mute); }
+.bk-total__value { font-size: calc(1 * var(--t)); color: var(--t-ink); }
 
 .bk-actions { margin-top: 1.5rem; scroll-margin-bottom: 1.5rem; }
 .bk-actions__row { display: flex; gap: .75rem; }
@@ -1132,7 +1132,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   padding-inline: 1.5rem;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   cursor: pointer;
@@ -1187,7 +1187,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   margin: .75rem 0 0;
   text-align: center;
   font-family: var(--f-read);
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   color: var(--t-mute);
 }
 
@@ -1201,7 +1201,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   padding: 1.5rem;
 }
 
-.bk-retry p { margin: 0; font-family: var(--f-read); font-size: .875rem; color: var(--t-soft); }
+.bk-retry p { margin: 0; font-family: var(--f-read); font-size: calc(.875 * var(--t)); color: var(--t-soft); }
 
 .bk-retry button {
   margin-top: .75rem;
@@ -1212,7 +1212,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   padding-inline: 1rem;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .75rem;
+  font-size: calc(.75 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--acc);
@@ -1254,7 +1254,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: .02em;
-  font-size: 1.75rem;
+  font-size: calc(.9545 * var(--t) + .7955rem);
   line-height: 1.1;
   padding-right: 3rem;
 }
@@ -1272,7 +1272,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   border-top: 1px solid var(--line);
   padding-top: .75rem;
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   line-height: 1.6;
   color: var(--t-soft);
 }
@@ -1295,7 +1295,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
 
 .bk-dialog__ack span {
   font-family: var(--f-read);
-  font-size: .875rem;
+  font-size: calc(.875 * var(--t));
   line-height: 1.6;
   color: var(--t-ink);
 }
@@ -1303,7 +1303,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
 .bk-dialog p {
   margin: 1rem 0 0;
   font-family: var(--f-read);
-  font-size: .9375rem;
+  font-size: calc(.9375 * var(--t));
   line-height: 1.6;
   color: var(--t-soft);
 }
@@ -1345,7 +1345,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   font-weight: 400;
   text-transform: uppercase;
   letter-spacing: .02em;
-  font-size: clamp(2rem, 5vw, 2.5rem);
+  font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), 5vw, 2.5rem);
   line-height: 1.1;
   color: var(--t-ink);
 }
@@ -1354,7 +1354,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   max-width: var(--measure);
   margin: 1rem auto 0;
   font-family: var(--f-read);
-  font-size: .9375rem;
+  font-size: calc(.9375 * var(--t));
   line-height: 1.6;
   color: var(--t-soft);
 }
@@ -1365,7 +1365,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   margin: 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -1385,7 +1385,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   background: var(--g-canvas);
   padding: .5rem 1rem;
   font-family: var(--f-read);
-  font-size: .9375rem;
+  font-size: calc(.9375 * var(--t));
   font-weight: 500;
   color: var(--t-ink);
 }
@@ -1394,7 +1394,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   margin: 2rem 0 0;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .688rem;
+  font-size: calc(.688 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t-mute);
@@ -1408,7 +1408,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
 .bk-done__ref {
   margin: .25rem 0 0;
   font-family: var(--f-mono);
-  font-size: 1.25rem;
+  font-size: calc(1.1364 * var(--t) + .1136rem);
   letter-spacing: .1em;
   color: var(--t-ink);
 }
@@ -1429,7 +1429,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   padding-inline: 1.5rem;
   font-family: var(--f-body);
   font-weight: 500;
-  font-size: .8125rem;
+  font-size: calc(.8125 * var(--t));
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--acc);
@@ -1446,7 +1446,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   max-width: var(--measure);
   margin: 1rem auto 0;
   font-family: var(--f-read);
-  font-size: .75rem;
+  font-size: calc(.75 * var(--t));
   line-height: 1.6;
   color: color-mix(in srgb, var(--g-dark) 70%, transparent);
 }
@@ -1461,7 +1461,7 @@ textarea.bk-input { min-height: 5.5rem; resize: vertical; line-height: 1.5; }
   border-radius: var(--r-button);
   padding: .75rem 1rem;
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   letter-spacing: .04em;
   line-height: 1.5;
   color: var(--t-mute);

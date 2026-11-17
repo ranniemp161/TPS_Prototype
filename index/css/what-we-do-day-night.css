@@ -142,7 +142,7 @@
 .dn-title {
   position: absolute; left: var(--gutter); top: calc(var(--nav-h) + clamp(.75rem, 3vh, 2.125rem)); z-index: 0; margin: 0;
   /* Sized so that, at the left, it ends short of the centre line the circle falls down. */
-  font-family: var(--f-script); font-weight: 400; font-size: clamp(2.4rem, 4.4vw, 4.6rem); line-height: 1.05;
+  font-family: var(--f-script); font-weight: 400; font-size: clamp(calc(.1745 * var(--t) + 2.2255rem), 4.4vw, 4.6rem); line-height: 1.05;
   white-space: nowrap; color: var(--t-on-dark); pointer-events: none;
   /* Scaled about its own top centre, so it shrinks toward its centred place. */
   transform: translateX(var(--dn-tx, 0px)) scale(var(--dn-ts, 1)); transform-origin: 50% 0; will-change: transform;
@@ -177,10 +177,10 @@
      well), a quarter larger and more open, so it reads as the title over it; not
      bold (TJ), and "you need most" on a line of its own. */
   margin: 0 0 clamp(.75rem, 1.8vh, 1.125rem); font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(1.12rem, 1.02rem + .42vw, 1.4rem); line-height: 1.25; letter-spacing: .08em; max-width: none;
+  font-size: clamp(calc(1.12 * var(--t)), calc(1.02 * var(--t)) + .42vw, calc(1.12 * var(--t) + .28rem)); line-height: 1.25; letter-spacing: .08em; max-width: none;
   color: rgb(var(--dnt-c));
 }
-.dnf__intro { margin: 0 0 clamp(.875rem, 2.4vh, 1.625rem); font-family: var(--f-read); font-size: clamp(.95rem, .85rem + .3vw, 1.08rem); line-height: 1.6; color: rgb(var(--dnt-c)); }
+.dnf__intro { margin: 0 0 clamp(.875rem, 2.4vh, 1.625rem); font-family: var(--f-read); font-size: clamp(calc(.95 * var(--t)), calc(.85 * var(--t)) + .3vw, calc(1.08 * var(--t))); line-height: 1.6; color: rgb(var(--dnt-c)); }
 /* Both give way as the glass arrives. Hidden until the photograph lands:
    what-we-do-promise.js lifts them in (opacity and a short rise) once it is in place. */
 .dnf__lede, .dnf__intro { opacity: calc(var(--dn-in, 0) * (1 - var(--dn-g) * 1.6)); transform: translateY(calc((1 - var(--dn-in, 0)) * .875rem)); }
@@ -191,16 +191,16 @@
 /* Same font, size and spacing as the title above (TJ, 22 Oct 2026, Ami's font test). */
 .dnf__name {
   margin: 0; font-family: var(--f-read); font-weight: 400; text-transform: uppercase;
-  font-size: clamp(1.12rem, 1.02rem + .42vw, 1.4rem); line-height: 1.25; letter-spacing: .08em; color: inherit;
+  font-size: clamp(calc(1.12 * var(--t)), calc(1.02 * var(--t)) + .42vw, calc(1.12 * var(--t) + .28rem)); line-height: 1.25; letter-spacing: .08em; color: inherit;
 }
-.dnf__hours { margin: 0; font-family: var(--f-mono); font-size: clamp(.82rem, .95vw, 1rem); letter-spacing: .02em; opacity: .86; }
+.dnf__hours { margin: 0; font-family: var(--f-mono); font-size: clamp(calc(.82 * var(--t)), .95vw, calc(1 * var(--t))); letter-spacing: .02em; opacity: .86; }
 
 /* The body: both columns closed to the same height, a soft fade at the foot,
    Read more beneath. what-we-do-promise.js opens it with the glass. */
 .dnf__body {
   --dn-closed: calc(var(--dn-lines) * 1.62em);
   position: relative; overflow: hidden; max-height: 0;
-  font-family: var(--f-read); font-size: clamp(.92rem, .82rem + .3vw, 1.04rem); line-height: 1.62;
+  font-family: var(--f-read); font-size: clamp(calc(.92 * var(--t)), calc(.82 * var(--t)) + .3vw, calc(1.04 * var(--t))); line-height: 1.62;
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
   mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%);
   margin-top: .375rem;
@@ -215,7 +215,7 @@
 }
 .dnf__more {
   align-self: flex-start; margin-top: .25rem; padding: 0; border: 0; background: none; cursor: pointer;
-  font-family: var(--f-body); font-size: .82rem; font-weight: 500; letter-spacing: .04em; color: inherit;
+  font-family: var(--f-body); font-size: calc(.82 * var(--t)); font-weight: 500; letter-spacing: .04em; color: inherit;
   border-bottom: 1px solid currentColor; line-height: 1.6;
   opacity: clamp(0, calc((var(--dn-g) - .65) * 2.86), 1); pointer-events: none;
   max-height: calc(var(--dn-g) * 2.5rem); overflow: hidden;
@@ -235,11 +235,11 @@
   .dnf__opt { padding: 1rem var(--gutter) 1.375rem; gap: .375rem; }
   .dnf__note { left: var(--gutter); right: var(--gutter); width: auto; bottom: 1.75rem; }
   /* Small enough that "Care arranged around the hours" holds one line. */
-  .dnf__lede { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
+  .dnf__lede { font-size: min(calc(1.12 * var(--t)), 4.3vw); letter-spacing: .05em; }
   .dnf__opt--day { padding-top: calc(var(--nav-h) + .75rem); }
-  .dnf__name { font-size: min(1.12rem, 4.3vw); letter-spacing: .05em; }
+  .dnf__name { font-size: min(calc(1.12 * var(--t)), 4.3vw); letter-spacing: .05em; }
   .dn-wrap { --dn-lines: 4; }
-  .dnf__intro { font-size: .85rem; line-height: 1.5; }
+  .dnf__intro { font-size: calc(.85 * var(--t)); line-height: 1.5; }
   .dnf__opt.is-open .dnf__body { max-height: calc(50svh - 9.375rem + var(--dns-extra, 0px) / 2) !important; }
 }
 
@@ -250,7 +250,7 @@
 
 /* Phone text floor (MOBILE-PLAN item 2): Morning, Afternoon, Evening, Night were 8px. */
 @media (max-width: 860px) {
-  .dn-wrap .act--peak .peak__states { font-size: .8125rem; letter-spacing: .14em; display: grid; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; gap: .5rem 1.375rem; max-width: none; }
+  .dn-wrap .act--peak .peak__states { font-size: calc(.8125 * var(--t)); letter-spacing: .14em; display: grid; grid-template-columns: repeat(2, auto); justify-content: center; justify-items: center; gap: .5rem 1.375rem; max-width: none; }
 }
 
 /* ---- Phones: Day to Night on one line (TJ, 12 Oct 2026) ----
@@ -267,7 +267,7 @@
   .dnl__ends { display: flex; justify-content: space-between; }
   .dnl__end {
     all: unset; box-sizing: border-box; cursor: pointer; min-height: 2.75rem; padding: .75rem 0;
-    font-family: var(--f-body); font-size: .8125rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+    font-family: var(--f-body); font-size: calc(.8125 * var(--t)); font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
     color: inherit; pointer-events: none; -webkit-tap-highlight-color: transparent;
   }
   .dnl__end:focus-visible { outline: .125rem solid currentColor; outline-offset: .125rem; }

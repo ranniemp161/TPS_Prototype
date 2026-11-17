@@ -444,7 +444,7 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       var d = sel.days;
       var night = sel.shift === 'night' && sel.format === 'in';
       var esc = function (t) { return String(t).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); };
-      if (lede) lede.textContent = 'One specialist, reserved for your family alone for ' + d + ' days.';
+      if (lede) lede.textContent = 'One specialist, reserved for your family for ' + d + ' days.';
 
       // The totals. Every treatment she kept is named with its count (TJ, 14 Nov 2026).
       var rows = [];
@@ -966,6 +966,26 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       if (v0) { selected = iso(v0.year, v0.month, v0.day); cur = { year: v0.year, month: v0.month }; }
       render(); paintSelection();
     })();
+    /* Select all on What matters most (TJ, 17 Nov 2026). It sets the six, each
+       through its own change event so the summary and recommendations follow,
+       and it shows on when all six are on, however they got there. */
+    var selAll = form.querySelector('[data-select-all]');
+    var syncAll = function () {
+      if (!selAll) return;
+      var boxes = form.querySelectorAll('input[name^="p-"]');
+      selAll.checked = boxes.length > 0 && [].every.call(boxes, function (i) { return i.checked; });
+    };
+    form.addEventListener('change', function (e) {
+      if (e.target !== selAll) { if (e.target && /^p-/.test(e.target.name || '')) syncAll(); return; }
+      e.stopPropagation();
+      var on = selAll.checked;
+      [].forEach.call(form.querySelectorAll('input[name^="p-"]'), function (i) {
+        if (i.checked === on) return;
+        i.checked = on; i.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      syncAll();
+    }, true);
+    syncAll();
     form.addEventListener('change', function (e) {
       var name = e.target && e.target.name;
       if (!name || name === 'budget') return;

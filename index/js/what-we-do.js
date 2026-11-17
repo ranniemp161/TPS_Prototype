@@ -162,8 +162,12 @@
 
   /* ---------- Length of stay ----------
      One control, and the numbers beside it change. Only figures the client's
-     copy states: three freshly cooked meals a day, a herbal rinse every day,
-     belly binding every day. Nothing about price. */
+     copy states: three freshly cooked meals a day, belly binding every day, and
+     (TJ, 17 Nov 2026, in place of herbal rinses) the most restorative treatments
+     the length can hold, as the builder counts them: the most massages offered
+     plus every counted treatment (build-your-programme-pricing.js), 9, 18 and 36.
+     Nothing about price. */
+  function treatsFor(d) { return d >= 30 ? 36 : d >= 14 ? 18 : d >= 7 ? 9 : Math.round(d * 9 / 7); }
   function ledger() {
     var roots = [].slice.call(document.querySelectorAll('[data-ledger]'));
     roots.forEach(function (root) {
@@ -171,7 +175,7 @@
     var STOPS = [7, 14, 30];
     var out = {};
     [].slice.call(root.querySelectorAll('[data-out]')).forEach(function (el) { out[el.getAttribute('data-out')] = el; });
-    var shown = { days: 7, meals: 21, baths: 7, binds: 7 };
+    var shown = { days: 7, meals: 21, treats: 9, binds: 7 };
     var raf = 0, started = false, currentDay = 7, countTarget = 7;
     function set(k, v) { out[k].textContent = String(Math.round(v)); }
     function paint() { Object.keys(shown).forEach(function (k) { set(k, shown[k]); }); }
@@ -181,10 +185,10 @@
     }
     function countTo(days, dur) {
       countTarget = days;
-      var to = { days: days, meals: days * 3, baths: days, binds: days };
+      var to = { days: days, meals: days * 3, treats: treatsFor(days), binds: days };
       cancelAnimationFrame(raf);
       if (reduced) { Object.keys(to).forEach(function (k) { shown[k] = to[k]; set(k, to[k]); }); return; }
-      var from = { days: shown.days, meals: shown.meals, baths: shown.baths, binds: shown.binds };
+      var from = { days: shown.days, meals: shown.meals, treats: shown.treats, binds: shown.binds };
       var t0 = performance.now();
       (function tick(now) {
         var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
@@ -219,7 +223,7 @@
         started = true;
         setMarker(days, 1);
         cancelAnimationFrame(raf);
-        shown = { days: days, meals: days * 3, baths: days, binds: days };
+        shown = { days: days, meals: days * 3, treats: treatsFor(days), binds: days };
         countTarget = days;
         paint();
       },
@@ -286,11 +290,11 @@
     // Tailored For You (TJ, 9 Oct 2026) is driven by scroll on every screen
     // by what-we-do-tailored.js, which calls arrive() and scrub() below.
     if (!reduced && (root.hasAttribute('data-ty-driven') || window.matchMedia('(min-width: 901px)').matches)) {
-      shown = { days: 0, meals: 0, baths: 0, binds: 0 };
+      shown = { days: 0, meals: 0, treats: 0, binds: 0 };
       paint();
       setMarker(0, 1);
     } else if (!reduced) {
-      shown = { days: 0, meals: 0, baths: 0, binds: 0 };
+      shown = { days: 0, meals: 0, treats: 0, binds: 0 };
       paint();
       root.style.setProperty('--tl-dur', '1ms');
       root.style.setProperty('--sel', '0');

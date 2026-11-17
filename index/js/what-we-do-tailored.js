@@ -78,9 +78,9 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
 
   function teardown() {
     drive = null;
-    sec.classList.remove('is-live', 'is-flow', 'is-calm', 'is-tight');
+    sec.classList.remove('is-live', 'is-flow', 'is-calm', 'is-tight', 'is-grown');
     if (sec._tyRo) { sec._tyRo.disconnect(); sec._tyRo = null; }
-    ['--ty-ci', '--ty-di', '--ty-sw', '--ph-t', '--ph-r', '--ph-b', '--ph-l', '--ph-rad'].forEach(function (p) { sec.style.removeProperty(p); });
+    ['--ty-ci', '--ty-di', '--ty-sw', '--ty-gnow', '--ty-gfd', '--ty-gfs', '--ph-t', '--ph-r', '--ph-b', '--ph-l', '--ph-rad'].forEach(function (p) { sec.style.removeProperty(p); });
     titles.forEach(function (t) { t.style.transform = ''; }); tslot.style.height = '';
     img.style.width = ''; img.style.height = ''; img.style.transform = '';
     delete track._tlSeekDay;
@@ -115,7 +115,10 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       var top = Math.min.apply(null, kids.map(function (k) { return k.getBoundingClientRect().top; }));
       var bot = Math.max.apply(null, kids.map(function (k) { return k.getBoundingClientRect().bottom; }));
       var need = bot - top + 28 * tpsU();
-      if (need > card.clientHeight + 2) ok = false;
+      // Open, the card may grow down over the days and figures (TJ, 15 Nov 2026),
+      // as far as 24px above the foot of the stage, so that room counts too.
+      var allow = open ? Math.max(0, stage.getBoundingClientRect().bottom - 24 * tpsU() - card.getBoundingClientRect().bottom) : 0;
+      if (need > card.clientHeight + allow + 2) ok = false;
     });
     panel.classList.toggle('is-open', wasOpen); sec.classList.toggle('is-wide', wasWide);
     void card.offsetHeight;
@@ -137,15 +140,23 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
     sizeTslot();
     // Measured from the layout itself (offsets), not the screen, so the figures'
     // entrance movement at build time does not count.
+    // The lowest row is the days line since the figures moved above the cards
+    // (TJ, 17 Nov 2026).
+    var low = sec.querySelector('.ty__days');
     var lowGap = function () {
-      var y = stay.offsetHeight, e = stay;
+      var y = low.offsetHeight, e = low;
       while (e && e !== stg) { y += e.offsetTop; e = e.offsetParent; }
-      return (e === stg ? stg.clientHeight : stg.getBoundingClientRect().bottom - stay.getBoundingClientRect().top) - y;
+      return (e === stg ? stg.clientHeight : stg.getBoundingClientRect().bottom - low.getBoundingClientRect().top) - y;
     };
     while (ar > 3.0 && lowGap() < 24 * tpsU()) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); sizeTslot(); }
-    var calm = window.innerHeight < CALM_H;
+    // Click driven on every screen (TJ, 17 Nov 2026): no longer driven by scroll,
+    // so the section scrolls with the page and opens on 7 days with the figures
+    // showing; a click on a day, on the line or a drag of the circle moves it.
+    // This is the calm layout that short windows already used.
+    var calm = true;
     if (!calm && !cardFits()) { sec.classList.add('is-tight'); if (!cardFits()) calm = true; }
-    if (calm) sec.classList.add('is-calm');
+    // A calm card grows with its words, so it keeps its full spacing (TJ, 17 Nov 2026).
+    if (calm) { sec.classList.add('is-calm'); sec.classList.remove('is-tight'); }
 
     var tW, tH, tS, sl, RAD, A, SW, SH, r0, r1, BASE, tX, tY;
     var cover = function (bx, by, bw, bh, fx) { var w = Math.max(bw, bh * A), h = w / A; return { x: bx + (bw - w) * fx, y: by + (bh - h) / 2, w: w, h: h }; };
@@ -190,14 +201,61 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       while (ar > 3.0 && lowGap() < 24 * tpsU()) { ar = Math.round((ar - 0.05) * 100) / 100; sec.style.setProperty('--ty-ar', ar); geom(); }
     }
 
+    // Room in the open card (TJ, 15 Nov 2026). The text holds its size on smaller
+    // screens while the card scales with the layout, so open, the words can
+    // squeeze the room around the heading and Read less. Measured here, open,
+    // with transitions off: if the room is less than on the master screen (the
+    // gap under the heading 39 and under Read less 33, in design pixels), the
+    // card and the photograph grow downward by what is missing, and the days and
+    // figures fade under them while it is open. On the master screen GROW is 0.
+    var GROW = 0, gNow = 0, gShown = -1, gDays = 0, gStay = 0, gU = tpsU();
+    if (!calm) {
+      var gCard = sec.querySelector('.ty__card'), gPanel = sec.querySelector('[data-tl-readmore]');
+      var gLead = sec.querySelector('.ty__lead'), gCopy = sec.querySelector('.tl-readmore__copy'), gTog = sec.querySelector('.tl-readmore__toggle');
+      var gOpen = gPanel.classList.contains('is-open'), gWide = sec.classList.contains('is-wide');
+      sec.classList.add('ty-measure'); gPanel.classList.add('is-open'); sec.classList.add('is-wide');
+      gCard.style.setProperty('--ty-lift', '0px');
+      var u = tpsU(), room = stage.getBoundingClientRect().bottom - 24 * u - gCard.getBoundingClientRect().bottom;
+      for (var gi = 0; gi < 5; gi++) {
+        sec.style.setProperty('--ty-gnow', GROW.toFixed(1) + 'px');
+        var cR = gCard.getBoundingClientRect(), short = Math.max(0, 33 * u - (cR.bottom - gTog.getBoundingClientRect().bottom))
+          + Math.max(0, 39 * u - (gCopy.getBoundingClientRect().top - gLead.getBoundingClientRect().bottom));
+        if (short < 1 || GROW >= room) break;
+        GROW = Math.min(room, GROW + short);
+      }
+      GROW = Math.max(0, Math.round(GROW));
+      // How far below the open card's foot the days line and the figures start
+      // (layout offsets, so entrance movement does not count): each fades only
+      // as the grown card reaches it.
+      sec.style.setProperty('--ty-gnow', '0px');
+      var gFoot = gCard.offsetTop + gCard.offsetHeight;
+      gDays = sec.querySelector('.ty__days').offsetTop - gFoot; gStay = stay.offsetTop - gFoot;
+      if (gStay < 0) gStay = Infinity;   // the figures sit above the card, never under it
+      gPanel.classList.toggle('is-open', gOpen); sec.classList.toggle('is-wide', gWide);
+      sec.style.setProperty('--ty-gnow', '0px'); void gCard.offsetHeight;
+      sec.classList.remove('ty-measure');
+      sec.classList.toggle('is-grown', GROW > 0);
+    }
+    var growTick = function () {
+      var gt = sec.classList.contains('is-wide') ? GROW : 0, d = gt - gNow;
+      gNow = Math.abs(d) < 0.5 ? gt : gNow + d * 0.16;
+      if (gNow === gShown) return false;
+      sec.style.setProperty('--ty-gnow', gNow.toFixed(1) + 'px');
+      var fade = function (gap) { return Math.min(1, Math.max(0, (gNow - gap + 12 * gU) / (24 * gU))); };
+      sec.style.setProperty('--ty-gfd', fade(gDays).toFixed(3));
+      sec.style.setProperty('--ty-gfs', fade(gStay).toFixed(3));
+      gShown = gNow; return true;
+    };
+
     function render(p, keepDays) {
       var e = 1;   // the split from the start (no opening)
       sec.style.setProperty('--ph-t', (e * sl.t).toFixed(1) + 'px');
       sec.style.setProperty('--ph-r', (e * sl.r).toFixed(1) + 'px');
-      sec.style.setProperty('--ph-b', (e * sl.b).toFixed(1) + 'px');
+      sec.style.setProperty('--ph-b', (e * sl.b - gNow).toFixed(1) + 'px');
       sec.style.setProperty('--ph-l', (e * sl.l).toFixed(1) + 'px');
       sec.style.setProperty('--ph-rad', (e * RAD).toFixed(1) + 'px');
-      var x = r0.x + (r1.x - r0.x) * e, y = r0.y + (r1.y - r0.y) * e, w = r0.w + (r1.w - r0.w) * e;
+      var rg = gNow ? cover(sl.l, sl.t, SW - sl.l - sl.r, SH - sl.t - sl.b + gNow, .8) : r1;
+      var x = r0.x + (rg.x - r0.x) * e, y = r0.y + (rg.y - r0.y) * e, w = r0.w + (rg.w - r0.w) * e;
       img.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + (w / BASE).toFixed(4) + ')';
       var tf = 'translate(' + (tX * e).toFixed(1) + 'px,' + (tY * e).toFixed(1) + 'px) scale(' + (1 + (tS - 1) * e).toFixed(4) + ')';
       titles.forEach(function (t) { t.style.transform = tf; });
@@ -229,7 +287,8 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
     var cur = live(), shown = -1;
     drive = function () {
       cur = ease(cur, live());
-      if (cur !== shown) { render(cur); shown = cur; }
+      var gm = growTick();
+      if (cur !== shown || gm) { render(cur); shown = cur; }
     };
     render(cur);
 
@@ -387,4 +446,21 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
   var t = 0;
   new MutationObserver(function () { card.style.setProperty('--ty-lift', '0px'); clearTimeout(t); t = setTimeout(lift, 650); }).observe(panel, { attributes: true, attributeFilter: ['class'] });
   addEventListener('resize', function () { setTimeout(lift, 300); });
+})();
+
+/* The chevrons either side of the cards (TJ, 17 Nov 2026): each steps to the
+   previous or next length through the day buttons, so the line, the circle and
+   the figures move exactly as for a click on a day. */
+(function () {
+  var sec = document.querySelector('[data-ty]');
+  if (!sec) return;
+  var prev = sec.querySelector('[data-ty-prev]'), next = sec.querySelector('[data-ty-next]');
+  var days = [].slice.call(sec.querySelectorAll('.ty__day'));
+  if (!prev || !next || !days.length) return;
+  var cur = function () { for (var i = 0; i < days.length; i++) if (days[i].getAttribute('aria-checked') === 'true') return i; return 0; };
+  var sync = function () { var i = cur(); prev.disabled = i <= 0; next.disabled = i >= days.length - 1; };
+  prev.addEventListener('click', function () { var i = cur(); if (i > 0) days[i - 1].click(); });
+  next.addEventListener('click', function () { var i = cur(); if (i < days.length - 1) days[i + 1].click(); });
+  days.forEach(function (d) { new MutationObserver(sync).observe(d, { attributes: true, attributeFilter: ['aria-checked'] }); });
+  sync();
 })();

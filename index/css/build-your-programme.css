@@ -99,7 +99,7 @@ html { background: var(--g-canvas); }
    a rule rather than by a box. */
 .reserve-note {
   font-family: var(--f-body);
-  font-size: .82rem;
+  font-size: calc(.82 * var(--t));
   line-height: 1.6;
   color: var(--t-mute);
   max-width: 54ch;
@@ -121,7 +121,7 @@ html { background: var(--g-canvas); }
 .act--build { padding-block: var(--section); }
 
 .movement--lead {
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(calc(1.0473 * var(--t) + .5527rem), 3vw, calc(.1745 * var(--t) + 2.2255rem));
   margin-bottom: 2rem;
   padding-bottom: 1.1rem;
 }
@@ -242,7 +242,7 @@ html { background: var(--g-canvas); }
   font-family: var(--f-display);
   text-transform: uppercase;
   font-weight: 400;
-  font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+  font-size: clamp(calc(1.1 * var(--t)), 1.8vw, calc(1.12 * var(--t) + .28rem));
   letter-spacing: .04em;
   line-height: 1.1;
   color: var(--t-ink);
@@ -269,7 +269,7 @@ html { background: var(--g-canvas); }
   align-items: baseline;
   gap: .8rem;
   font-family: var(--f-body);
-  font-size: 1rem;
+  font-size: calc(1 * var(--t));
   font-weight: 600;
   letter-spacing: .01em;
   color: var(--t-ink);
@@ -282,7 +282,7 @@ html { background: var(--g-canvas); }
    not a decorative section counter. */
 .step__n {
   font-family: var(--f-mono);
-  font-size: .78rem;
+  font-size: calc(.78 * var(--t));
   font-weight: 500;
   letter-spacing: .08em;
   color: var(--reach-link);
@@ -290,7 +290,7 @@ html { background: var(--g-canvas); }
 
 .step__note {
   font-family: var(--f-body);
-  font-size: .8rem;
+  font-size: calc(.8 * var(--t));
   line-height: 1.6;
   color: var(--t-mute);
   max-width: 62ch;
@@ -378,14 +378,14 @@ html { background: var(--g-canvas); }
 .choice__title {
   display: block;
   font-family: var(--f-body);
-  font-size: .95rem;
+  font-size: calc(.95 * var(--t));
   font-weight: 600;
   color: var(--t-ink);
 }
 .choice__meta {
   display: block;
   font-family: var(--f-body);
-  font-size: .78rem;
+  font-size: calc(.78 * var(--t));
   color: var(--t-mute);
   margin-top: .3rem;
 }
@@ -409,7 +409,7 @@ html { background: var(--g-canvas); }
    block, where plain Ember is under AA. */
 .prio__count {
   font-family: var(--f-body);
-  font-size: .82rem;
+  font-size: calc(.82 * var(--t));
   font-weight: 600;
   color: var(--reach-script);
   margin: 1.1rem 0 0;
@@ -508,7 +508,7 @@ html { background: var(--g-canvas); }
 /* A label now, not the headline. The fee under it is the headline. */
 .summary__head {
   font-family: var(--f-body);
-  font-size: .64rem;
+  font-size: calc(.64 * var(--t));
   font-weight: 600;
   letter-spacing: .16em;
   text-transform: uppercase;
@@ -526,7 +526,7 @@ html { background: var(--g-canvas); }
 }
 .summary__tab {
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   font-weight: 600;
   letter-spacing: .04em;
   color: var(--t-mute);
@@ -556,7 +556,7 @@ html { background: var(--g-canvas); }
 
 /* In the panel the budget is the whole view, so it carries no rule of
    its own and the field runs the full width. */
-.view.budget .budget__label { font-size: .85rem; }
+.view.budget .budget__label { font-size: calc(.85 * var(--t)); }
 .view.budget .fit { margin-top: 1rem; }
 
 .areas { margin: 0; }
@@ -574,7 +574,7 @@ html { background: var(--g-canvas); }
 
 .summary__hint {
   font-family: var(--f-body);
-  font-size: .7rem;
+  font-size: calc(.7 * var(--t));
   line-height: 1.5;
   color: var(--t-mute);
   margin: 0 0 1rem;
@@ -584,7 +584,7 @@ html { background: var(--g-canvas); }
 
 .area__label {
   font-family: var(--f-body);
-  font-size: .63rem;
+  font-size: calc(.63 * var(--t));
   font-weight: 600;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -647,7 +647,7 @@ html { background: var(--g-canvas); }
 }
 .area__body {
   font-family: var(--f-read);
-  font-size: .79rem;
+  font-size: calc(.79 * var(--t));
   line-height: 1.45;
   color: var(--t-soft);
   margin: 0;
@@ -662,7 +662,7 @@ html { background: var(--g-canvas); }
   margin: 0 0 1rem;
   padding: .7rem .8rem;
   font-family: var(--f-body);
-  font-size: .76rem;
+  font-size: calc(.76 * var(--t));
   font-weight: 500;
   color: var(--reach-link);
   text-align: left;
@@ -691,7 +691,7 @@ html { background: var(--g-canvas); }
 .fee__amount {
   display: block;
   font-family: var(--f-display);
-  font-size: clamp(2.2rem, 3.2vw, 2.8rem);
+  font-size: clamp(calc(.48 * var(--t) + 1.72rem), 3.2vw, 2.8rem);
   font-weight: 400;
   line-height: 1.05;
   letter-spacing: .01em;
@@ -703,7 +703,7 @@ html { background: var(--g-canvas); }
 }
 .fee__intro {
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   color: var(--t-mute);
   margin: .5rem 0 0;
 }
@@ -724,7 +724,7 @@ html { background: var(--g-canvas); }
 
 .notice {
   font-family: var(--f-body);
-  font-size: .76rem;
+  font-size: calc(.76 * var(--t));
   line-height: 1.55;
   margin: 0 0 1rem;
   padding: .8rem .9rem;
@@ -735,7 +735,7 @@ html { background: var(--g-canvas); }
 
 .summary__reserve {
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   line-height: 1.55;
   color: var(--t-mute);
   margin: 1rem 0 0;
@@ -750,13 +750,13 @@ html { background: var(--g-canvas); }
 .budget__label {
   display: block;
   font-family: var(--f-body);
-  font-size: .82rem;
+  font-size: calc(.82 * var(--t));
   font-weight: 600;
   color: var(--t-ink);
 }
 .budget__help {
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   line-height: 1.5;
   color: var(--t-mute);
   margin: .35rem 0 .7rem;
@@ -777,7 +777,7 @@ html { background: var(--g-canvas); }
   align-items: center;
   padding: 0 .1rem 0 .8rem;
   font-family: var(--f-mono);
-  font-size: .9rem;
+  font-size: calc(.9 * var(--t));
   color: var(--t-mute);
 }
 .budget__input {
@@ -787,7 +787,7 @@ html { background: var(--g-canvas); }
   background: transparent;
   padding: .7rem .8rem .7rem .3rem;
   font-family: var(--f-mono);
-  font-size: .9rem;
+  font-size: calc(.9 * var(--t));
   /* ink-soft rather than ink-mute: a placeholder any lighter than this
      stops clearing AA against paper. */
   color: var(--t-ink);
@@ -800,7 +800,7 @@ html { background: var(--g-canvas); }
    one first. */
 .budget__answer {
   font-family: var(--f-body);
-  font-size: .74rem;
+  font-size: calc(.74 * var(--t));
   line-height: 1.55;
   color: var(--t-mute);
   margin: .7rem 0 0;
@@ -819,7 +819,7 @@ html { background: var(--g-canvas); }
 }
 .fit__head {
   font-family: var(--f-body);
-  font-size: .85rem;
+  font-size: calc(.85 * var(--t));
   font-weight: 600;
   line-height: 1.45;
   color: var(--t-ink);
@@ -827,7 +827,7 @@ html { background: var(--g-canvas); }
 }
 .fit__body {
   font-family: var(--f-read);
-  font-size: .82rem;
+  font-size: calc(.82 * var(--t));
   line-height: 1.5;
   color: var(--t-soft);
   margin: .4rem 0 0;
@@ -846,7 +846,7 @@ html { background: var(--g-canvas); }
 .summary__act { display: grid; gap: .5rem; }
 .summary__act .btn { text-align: center; }
 
-.btn--sm { padding: .625rem 1rem; font-size: .85rem; }
+.btn--sm { padding: .625rem 1rem; font-size: calc(.85 * var(--t)); }
 
 /* Something has landed in here since it was last opened. The Blush fill
    is the same signal a chosen control carries, so the button reads as
@@ -862,7 +862,7 @@ html { background: var(--g-canvas); }
 .summary__support,
 .summary__disclaimer {
   font-family: var(--f-body);
-  font-size: .7rem;
+  font-size: calc(.7 * var(--t));
   line-height: 1.5;
   color: var(--t-mute);
   margin: .8rem 0 0;
@@ -951,7 +951,7 @@ html { background: var(--g-canvas); }
 }
 .shape__grid[data-scale="week"] .day:last-child { border-right: none; }
 .shape__grid[data-scale="week"] .day__n {
-  font-size: .6rem;
+  font-size: calc(.6 * var(--t));
   color: var(--t-mute);
   margin-top: .3rem;
 }
@@ -1008,7 +1008,7 @@ html { background: var(--g-canvas); }
 
 .day__n {
   font-family: var(--f-mono);
-  font-size: .58rem;
+  font-size: calc(.58 * var(--t));
   letter-spacing: .04em;
   color: var(--t-mute);
   text-align: center;
@@ -1016,9 +1016,9 @@ html { background: var(--g-canvas); }
 }
 .day__n:empty { min-height: .8rem; }
 
-.shape__grid[data-scale="mid"] .day__n  { font-size: .64rem; }
+.shape__grid[data-scale="mid"] .day__n  { font-size: calc(.64 * var(--t)); }
 .shape__grid[data-scale="short"] .day__n {
-  font-size: .7rem;
+  font-size: calc(.7 * var(--t));
   color: var(--t-soft);
   margin-top: .7rem;
 }
@@ -1036,7 +1036,7 @@ html { background: var(--g-canvas); }
   align-items: center;
   gap: .5rem;
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   color: var(--t-mute);
 }
 .key__mark { width: .875rem; height: .625rem; border-radius: var(--r-mark); }
@@ -1048,7 +1048,7 @@ html { background: var(--g-canvas); }
 
 .shape__empty {
   font-family: var(--f-body);
-  font-size: .85rem;
+  font-size: calc(.85 * var(--t));
   line-height: 1.6;
   color: var(--t-mute);
   max-width: 62ch;
@@ -1082,7 +1082,7 @@ html { background: var(--g-canvas); }
 }
 .included__list li {
   font-family: var(--f-read);
-  font-size: .95rem;
+  font-size: calc(.95 * var(--t));
   line-height: 1.5;
   color: var(--t-soft);
   padding: .5rem 0;
@@ -1117,7 +1117,7 @@ html { background: var(--g-canvas); }
 
 .brief__text {
   font-family: var(--f-mono);
-  font-size: .78rem;
+  font-size: calc(.78 * var(--t));
   line-height: 1.7;
   color: var(--t-soft);
   white-space: pre-wrap;
@@ -1186,7 +1186,7 @@ html { background: var(--g-canvas); }
 
 .foot__legal {
   font-family: var(--f-body);
-  font-size: .72rem;
+  font-size: calc(.72 * var(--t));
   line-height: 1.6;
   color: var(--t-mute);
   max-width: 68ch;
@@ -1269,8 +1269,8 @@ html { background: var(--g-canvas); }
      the four stopped being comparable at a glance. Stacked on every row
      instead: it is narrower, so the titles fit, and the figures still
      line up down the right, which is the only reason the count is there. */
-  .rhythm__count { font-size: .9rem; line-height: 1.1; text-align: right; }
-  .rhythm__count::after { display: block; font-size: .56rem; }
+  .rhythm__count { font-size: calc(.9 * var(--t)); line-height: 1.1; text-align: right; }
+  .rhythm__count::after { display: block; font-size: calc(.56 * var(--t)); }
 
   /* Each pill sized to its own text made a staircase down the block.
      One per row reads as a list of six things to choose between, which
@@ -1313,25 +1313,25 @@ html { background: var(--g-canvas); }
 }
 body.is-ticking .ticker { transform: none; opacity: 1; pointer-events: auto; }
 .ticker__inner { display: flex; align-items: center; gap: .875rem; max-width: var(--max, 67.5rem); margin-inline: auto; padding: .625rem var(--gutter); min-height: 4rem; }
-.ticker__label { font-family: var(--f-body); font-size: .62rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
-.ticker__fee { font-family: var(--f-display); font-size: 2.4rem; line-height: 1; color: var(--t-ink); font-variant-numeric: tabular-nums; }
+.ticker__label { font-family: var(--f-body); font-size: calc(.62 * var(--t)); font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
+.ticker__fee { font-family: var(--f-display); font-size: calc(.1745 * var(--t) + 2.2255rem); line-height: 1; color: var(--t-ink); font-variant-numeric: tabular-nums; }
 .ticker__chip {
-  font-family: var(--f-mono); font-size: .78rem; font-weight: 500; color: var(--reach-script);
+  font-family: var(--f-mono); font-size: calc(.78 * var(--t)); font-weight: 500; color: var(--reach-script);
   opacity: 0; transform: translateY(.25rem);
   transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
 }
 .ticker__chip.is-down { color: var(--t-mute); }
 .ticker__chip.is-on { opacity: 1; transform: none; }
-.ticker__note { margin-left: auto; font-family: var(--f-body); font-size: .72rem; color: var(--t-mute); }
+.ticker__note { margin-left: auto; font-family: var(--f-body); font-size: calc(.72 * var(--t)); color: var(--t-mute); }
 .ticker__cta { flex: none; }
 /* The sticky panel clears the band. */
 body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 @media (max-width: 860px) {
   .ticker__inner { min-height: 3.5rem; gap: .625rem; }
-  .ticker__fee { font-size: 1.9rem; }
+  .ticker__fee { font-size: calc(.8291 * var(--t) + 1.0709rem); }
   .ticker__note { display: none; }
   .ticker__cta { margin-left: auto; }
-  .ticker__label { font-size: .8125rem; letter-spacing: .06em; }
+  .ticker__label { font-size: calc(.8125 * var(--t)); letter-spacing: .06em; }
 }
 @media (max-width: 420px) {
   .ticker__label { display: none; }
@@ -1358,7 +1358,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 /* ---------- Step 02: sub line and complete programme price ---------- */
 
 /* ---------- Step 03: the night care rule ---------- */
-.band { margin: .9rem 0 0; padding: .8rem 1rem; border-radius: var(--r-card); font-family: var(--f-body); font-size: .85rem; line-height: 1.5; color: var(--t-soft); }
+.band { margin: .9rem 0 0; padding: .8rem 1rem; border-radius: var(--r-card); font-family: var(--f-body); font-size: calc(.85 * var(--t)); line-height: 1.5; color: var(--t-soft); }
 .band--haze { background: var(--g-haze); }
 .band[hidden] { display: none; }
 
@@ -1368,7 +1368,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 
 /* ---------- Step 06: rhythm sub line ---------- */
 .rhythm__body { flex-wrap: wrap; }
-.rhythm__sub { font-family: var(--f-body); font-size: .8125rem; color: var(--t-mute); }
+.rhythm__sub { font-family: var(--f-body); font-size: calc(.8125 * var(--t)); color: var(--t-mute); }
 .rhythm:has(input:checked) .rhythm__sub { color: var(--t-soft); }
 
 /* ---------- Step 07: What matters most, Device D rows with the dot (restyle chat 6, 12 Oct 2026) ----------
@@ -1387,22 +1387,22 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .prio .dk-dot { grid-column: 1; align-self: start; }
 .prio__body { grid-column: 2; display: block; min-width: 0; padding-top: .6875rem; }
 .prio__title {
-  display: block; font-family: var(--f-body); font-size: .8125rem; font-weight: 500; line-height: 1.4;
+  display: block; font-family: var(--f-body); font-size: calc(.8125 * var(--t)); font-weight: 500; line-height: 1.4;
   letter-spacing: 0; text-transform: none; color: var(--t-ink);
 }
 .prio__what {
-  display: block; margin-top: .125rem; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--t-soft);
+  display: block; margin-top: .125rem; font-family: var(--f-read); font-size: calc(.8125 * var(--t)); line-height: 1.5; color: var(--t-soft);
 }
 @media (max-width: 860px) {
   .priorities { grid-template-columns: minmax(0, 1fr); column-gap: 0; }
   .priorities .prio:nth-child(2) { border-top: 1px solid var(--line); }
 }
 @media (max-width: 620px) {
-  .prio__title { font-size: .875rem; }
+  .prio__title { font-size: calc(.875 * var(--t)); }
 }
 
 /* ---------- The panel ---------- */
-.summary__title { margin: 0 0 .8rem; font-family: var(--f-body); font-size: .85rem; font-weight: 600; color: var(--t-ink); }
+.summary__title { margin: 0 0 .8rem; font-family: var(--f-body); font-size: calc(.85 * var(--t)); font-weight: 600; color: var(--t-ink); }
 .fee__amount.roll { display: inline-flex; }
 
 /* Included rows carry no tick box and read as on (Build 10). */
@@ -1435,8 +1435,8 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
    (it is on the summary and in the legal line). */
 .dk-fee { display: flex; flex-direction: column; justify-content: center; gap: .3125rem; min-width: 0; }
 .dk-fee__row { display: flex; align-items: baseline; gap: .625rem; white-space: nowrap; }
-.dk-fee__label { font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--t-mute); line-height: 1; white-space: nowrap; }
-.dk-fee__amount { font-family: var(--f-read); font-weight: 400; font-size: clamp(2rem, 3vw, 2.6rem); line-height: 1; color: var(--t-ink); font-variant-numeric: tabular-nums; }
+.dk-fee__label { font-family: var(--f-body); font-size: calc(.8125 * var(--t)); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--t-mute); line-height: 1; white-space: nowrap; }
+.dk-fee__amount { font-family: var(--f-read); font-weight: 400; font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), 3vw, 2.6rem); line-height: 1; color: var(--t-ink); font-variant-numeric: tabular-nums; }
 /* .dk-fee__chip came off (TJ, 25 Oct 2026). */
 /* While it counts, a hairline of ember draws under the figure. */
 .dk-fee__amount, .dk-sumfee { position: relative; }
@@ -1463,8 +1463,8 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 
 /* Page titles: Instrument Serif capitals (the step numbers went, TJ, 12 Oct 2026). */
 .dk-step { display: flex; align-items: baseline; gap: .875rem; padding: 0; margin: 0 0 1rem; }
-.dk-step__t { font-family: var(--f-display); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(2rem, 4vw, 3.2rem); color: var(--t-ink); }
-.dk-page .step__note--lead { margin: 0 0 1.6rem; max-width: 60ch; font-family: var(--f-read); font-size: clamp(.98rem, .94rem + .2vw, 1.08rem); line-height: 1.6; color: var(--t-soft); }
+.dk-step__t { font-family: var(--f-display); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), 4vw, 3.2rem); color: var(--t-ink); }
+.dk-page .step__note--lead { margin: 0 0 1.6rem; max-width: 60ch; font-family: var(--f-read); font-size: clamp(calc(.98 * var(--t)), calc(.94 * var(--t)) + .2vw, calc(1.08 * var(--t))); line-height: 1.6; color: var(--t-soft); }
 
 /* ---------- Start ---------- */
 /* The start page is one block (restyle chat 2, 12 Oct 2026): the photograph on
@@ -1475,10 +1475,10 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
    .op__kicker, coral, above the capitals. */
 /* The page's one Quentin line (TJ, restyle chat 1, 12 Oct 2026): coral, above the
    capitals. Sized (Claude, chat 2) to hold ONE line in the copy column, so a vw term. */
-.dk-kicker { display: block; white-space: nowrap; font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: clamp(2rem, 3.3vw, 2.85rem); line-height: 1.15; color: var(--reach-script-soft); }
-.dk-h1 { margin: .6rem 0 1.2rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .01em; font-size: clamp(2.4rem, 4.2vw, 4rem); color: var(--t-ink); }
+.dk-kicker { display: block; white-space: nowrap; font-family: var(--f-script); font-weight: 400; text-transform: none; letter-spacing: 0; font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), 3.3vw, 2.85rem); line-height: 1.15; color: var(--reach-script-soft); }
+.dk-h1 { margin: .6rem 0 1.2rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: .98; letter-spacing: .01em; font-size: clamp(calc(.1745 * var(--t) + 2.2255rem), 4.2vw, 4rem); color: var(--t-ink); }
 .dk-h1 em { display: block; font-style: italic; color: var(--reach-link); }
-.dk-lede { margin: 0 0 1.2rem; max-width: 52ch; font-family: var(--f-read); font-size: clamp(1.02rem, .98rem + .25vw, 1.18rem); line-height: 1.6; color: var(--t-soft); }
+.dk-lede { margin: 0 0 1.2rem; max-width: 52ch; font-family: var(--f-read); font-size: clamp(calc(1.02 * var(--t)), calc(.98 * var(--t)) + .25vw, calc(1.1328 * var(--t) + .0472rem)); line-height: 1.6; color: var(--t-soft); }
 .dk-start__frame { grid-column: 7 / 13; grid-row: 1; position: relative; z-index: 0; margin: 0; border-radius: var(--r-card); overflow: hidden; aspect-ratio: 4 / 5; }
 .dk-start__copy { grid-column: 1 / 9; grid-row: 1; position: relative; z-index: 1; isolation: isolate; padding: clamp(1.5rem, 3vw, 2.75rem); padding-right: calc(var(--st-fade) * .55 + clamp(1.5rem, 3vw, 2.75rem)); }
 .dk-start__copy::before {
@@ -1489,7 +1489,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
   mask-image: linear-gradient(to right, rgba(0,0,0,1.000) calc(100% - var(--st-fade) * 1), rgba(0,0,0,0.957) calc(100% - var(--st-fade) * 0.875), rgba(0,0,0,0.844) calc(100% - var(--st-fade) * 0.75), rgba(0,0,0,0.684) calc(100% - var(--st-fade) * 0.625), rgba(0,0,0,0.500) calc(100% - var(--st-fade) * 0.5), rgba(0,0,0,0.316) calc(100% - var(--st-fade) * 0.375), rgba(0,0,0,0.156) calc(100% - var(--st-fade) * 0.25), rgba(0,0,0,0.043) calc(100% - var(--st-fade) * 0.125), rgba(0,0,0,0.000) 100%);
 }
 /* The "isn't a quote" note is plain Karla on the glass. */
-.dk-note { margin: 0; max-width: 52ch; font-family: var(--f-read); font-size: .95rem; line-height: 1.55; color: var(--t-soft); }
+.dk-note { margin: 0; max-width: 52ch; font-family: var(--f-read); font-size: calc(.95 * var(--t)); line-height: 1.55; color: var(--t-soft); }
 .dk-start__frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .band--mist { background: none; }
 .band--blush { background: var(--g-tint); }
@@ -1503,15 +1503,15 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-card { background: none; border: 0; border-radius: 0; padding: 0; }
 .dk-sum > .dk-card:not(.dk-card--fee) { position: relative; padding-top: clamp(1.375rem, 3.4vh, 2.125rem); }
 .dk-sum > .dk-card:not(.dk-card--fee)::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--line-firm); }
-.dk-card__label { margin: 0; font-family: var(--f-body); font-size: .8125rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--t-mute); }
+.dk-card__label { margin: 0; font-family: var(--f-body); font-size: calc(.8125 * var(--t)); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--t-mute); }
 .dk-sumfee { display: inline-block; margin: .3rem 0 .4rem; font-family: var(--f-read); font-size: clamp(2.8rem, 5vw, 3.8rem); line-height: 1; color: var(--reach-price); font-variant-numeric: tabular-nums; }
-.dk-card__small { margin: 0 0 .8rem; font-family: var(--f-read); font-size: .8125rem; color: var(--t-mute); }
-.dk-card--fee .dk-note { margin-top: .6rem; max-width: 46ch; font-size: .9rem; }
+.dk-card__small { margin: 0 0 .8rem; font-family: var(--f-read); font-size: calc(.8125 * var(--t)); color: var(--t-mute); }
+.dk-card--fee .dk-note { margin-top: .6rem; max-width: 46ch; font-size: calc(.9 * var(--t)); }
 .dk-card--fee .dk-note[hidden] { display: none; }
-.dk-h2 { display: block; margin: 0 0 1rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: 1.02; font-size: clamp(1.4rem, 2.4vw, 1.9rem); color: var(--t-ink); }
-.dk-p { margin: 0 0 1.2rem; font-family: var(--f-read); font-size: 1rem; line-height: 1.6; color: var(--t-soft); }
+.dk-h2 { display: block; margin: 0 0 1rem; font-family: var(--f-display); font-weight: 400; text-transform: uppercase; line-height: 1.02; font-size: clamp(calc(1.12 * var(--t) + .28rem), 2.4vw, calc(.8291 * var(--t) + 1.0709rem)); color: var(--t-ink); }
+.dk-p { margin: 0 0 1.2rem; font-family: var(--f-read); font-size: calc(1 * var(--t)); line-height: 1.6; color: var(--t-soft); }
 .dk-actions { display: flex; flex-wrap: wrap; gap: .25rem 2rem; margin-bottom: 1rem; }
-.dk-legal { margin: .4rem 0 0; font-family: var(--f-read); font-size: .8125rem; color: var(--t-mute); }
+.dk-legal { margin: .4rem 0 0; font-family: var(--f-read); font-size: calc(.8125 * var(--t)); color: var(--t-mute); }
 .dk-link[hidden] { display: none; }
 /* The photograph and the fee block: the start page's recipe, a wider crop. */
 .dk-sumhero.dk-start { max-width: none; }
@@ -1522,11 +1522,11 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-sum .area { display: grid; grid-template-columns: 11rem minmax(0, 1fr) auto; gap: .375rem 1rem; align-items: baseline; padding: .55rem 0 .55rem 1.25rem; border-top: 0; border-left: 1px solid var(--line-firm); }
 .dk-sum .area:first-child { padding-top: .55rem; }
 .dk-sum .area::before { left: -1px; width: 1px; }
-.dk-sum .area__label { margin: 0; font-family: var(--f-body); font-size: .7rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--t-soft); }
-.dk-sum .area__body { margin: 0; font-family: var(--f-read); font-size: .95rem; line-height: 1.5; color: var(--t-soft); }
+.dk-sum .area__label { margin: 0; font-family: var(--f-body); font-size: calc(.7 * var(--t)); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--t-soft); }
+.dk-sum .area__body { margin: 0; font-family: var(--f-read); font-size: calc(.95 * var(--t)); line-height: 1.5; color: var(--t-soft); }
 .dk-sum .area.is-empty .area__body { color: var(--t-mute); }
 .dk-sum .area__change { margin: 0; }
-.dk-sum .area__jump { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; min-height: 2.75rem; font-family: var(--f-body); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--t-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .3125rem; -webkit-tap-highlight-color: transparent; }
+.dk-sum .area__jump { all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; min-height: 2.75rem; font-family: var(--f-body); font-size: calc(.72 * var(--t)); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--t-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .3125rem; -webkit-tap-highlight-color: transparent; }
 .dk-sum .area__jump:hover { color: var(--reach-script); }
 .dk-sum .area__jump:focus-visible { outline: .125rem solid var(--focus); outline-offset: .25rem; }
 .dk-sum .areas__restore { background: none; border: 0; border-radius: 0; padding: 0; width: auto; margin: 0 0 1rem; text-decoration: underline; text-underline-offset: .3125rem; }
@@ -1534,8 +1534,8 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-sum .included__list li { padding: .3rem 0 .3rem 1.25rem; border-left: 1px solid var(--line-firm); }
 /* The budget: an underlined field, the recommendation a left rule in ember, Apply a link. */
 .dk-sum .budget { margin-top: 0; }
-.dk-sum .budget__label { font-family: var(--f-display); font-weight: 400; font-size: clamp(1.4rem, 2.4vw, 1.9rem); line-height: 1.02; text-transform: uppercase; margin: 0 0 1rem; }
-.dk-sum .budget__help { margin: 0 0 .8rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.6; color: var(--t-soft); }
+.dk-sum .budget__label { font-family: var(--f-display); font-weight: 400; font-size: clamp(calc(1.12 * var(--t) + .28rem), 2.4vw, calc(.8291 * var(--t) + 1.0709rem)); line-height: 1.02; text-transform: uppercase; margin: 0 0 1rem; }
+.dk-sum .budget__help { margin: 0 0 .8rem; font-family: var(--f-read); font-size: calc(.95 * var(--t)); line-height: 1.6; color: var(--t-soft); }
 .dk-sum .budget__field { background: none; border: 0; border-bottom: 1px solid var(--line-firm); border-radius: 0; max-width: 18rem; }
 .dk-sum .budget__field:focus-within { border-bottom-color: var(--acc); }
 .dk-sum .budget__prefix { padding-left: 0; }
@@ -1543,13 +1543,13 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 /* Chat 8 (Claude's call, via the orchestrator): no native number spinner on the budget; type and behaviour unchanged. */
 .budget__input::-webkit-outer-spin-button, .budget__input::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; margin: 0; }
 .budget__input { -moz-appearance: textfield; appearance: textfield; }
-.dk-sum .budget__answer { margin: .8rem 0 0; font-family: var(--f-read); font-size: .9rem; color: var(--t-soft); }
+.dk-sum .budget__answer { margin: .8rem 0 0; font-family: var(--f-read); font-size: calc(.9 * var(--t)); color: var(--t-soft); }
 .dk-sum .fit { background: none; border: 0; border-left: 1px solid var(--acc); border-radius: 0; padding: .2rem 0 .2rem 1.25rem; margin-top: 1rem; }
-.dk-sum .fit__head { font-family: var(--f-body); font-weight: 500; font-size: .9rem; }
-.dk-sum .fit__body { font-family: var(--f-read); font-size: .9rem; }
+.dk-sum .fit__head { font-family: var(--f-body); font-weight: 500; font-size: calc(.9 * var(--t)); }
+.dk-sum .fit__body { font-family: var(--f-read); font-size: calc(.9 * var(--t)); }
 .dk-sum .fit__apply { margin-top: .4rem; }
 .dk-sum .fit__alt { border-top: 0; margin-top: .6rem; padding-top: 0; }
-.dk-sum .brief__text { margin: 0; white-space: pre-wrap; font-family: var(--f-mono); font-size: .78rem; line-height: 1.6; color: var(--t-soft); background: none; border-left: 1px solid var(--line-firm); border-radius: 0; padding: .25rem 0 .25rem 1.25rem; }
+.dk-sum .brief__text { margin: 0; white-space: pre-wrap; font-family: var(--f-mono); font-size: calc(.78 * var(--t)); line-height: 1.6; color: var(--t-soft); background: none; border-left: 1px solid var(--line-firm); border-radius: 0; padding: .25rem 0 .25rem 1.25rem; }
 .dk-card--shape .shape { margin-bottom: .8rem; }
 
 /* ---------- The bar, one layer (TJ, 12 Oct 2026) ----------
@@ -1580,7 +1580,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 /* Device E: What We Do's Read more link (.ty .tl-readmore__toggle). */
 .dk-link {
   all: unset; box-sizing: border-box; cursor: pointer; display: inline-flex; align-items: center; min-height: 2.75rem;
-  font-family: var(--f-body); font-size: .72rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+  font-family: var(--f-body); font-size: calc(.72 * var(--t)); font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
   color: var(--t-ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .3125rem;
   -webkit-tap-highlight-color: transparent;
 }
@@ -1605,7 +1605,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 /* The step name: Tailored's DAYS (.ty__unit), over the current stop. */
 .dk-bar__name {
   margin: 0; white-space: nowrap; line-height: 1.2;
-  font-family: var(--f-body); font-size: .66rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
+  font-family: var(--f-body); font-size: calc(.66 * var(--t)); font-weight: 500; letter-spacing: .18em; text-transform: uppercase;
   color: var(--t-ink); opacity: .7;
 }
 .dk-line__win {
@@ -1656,8 +1656,8 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
     -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--st-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--st-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--st-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--st-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--st-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--st-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--st-fade) * 0.875), rgba(0,0,0,1.000) var(--st-fade));
     mask-image: linear-gradient(to bottom, rgba(0,0,0,0.000) 0px, rgba(0,0,0,0.043) calc(var(--st-fade) * 0.125), rgba(0,0,0,0.156) calc(var(--st-fade) * 0.25), rgba(0,0,0,0.316) calc(var(--st-fade) * 0.375), rgba(0,0,0,0.500) calc(var(--st-fade) * 0.5), rgba(0,0,0,0.684) calc(var(--st-fade) * 0.625), rgba(0,0,0,0.844) calc(var(--st-fade) * 0.75), rgba(0,0,0,0.957) calc(var(--st-fade) * 0.875), rgba(0,0,0,1.000) var(--st-fade));
   }
-  .dk-kicker { font-size: clamp(1.8rem, 8vw, 3.4rem); }
-  .dk-h1 { font-size: clamp(2.2rem, 10.5vw, 3.2rem); }
+  .dk-kicker { font-size: clamp(calc(.9164 * var(--t) + .8836rem), 8vw, 3.4rem); }
+  .dk-h1 { font-size: clamp(calc(.48 * var(--t) + 1.72rem), 10.5vw, 3.2rem); }
   /* Phones (TJ, 12 Oct 2026; layout Claude's): two rows, the fee on the left
      with Back and Next on the right, then the line across the full width. */
   .dk-bar__in {
@@ -1665,13 +1665,13 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
     grid-template-areas: "fee back next" "line line line";
     gap: .25rem 1rem; padding: .625rem max(var(--gutter, 1.5rem), 1.5rem) .25rem;
   }
-  .dk-bar__name { font-size: .75rem; }
+  .dk-bar__name { font-size: calc(.75 * var(--t)); }
   /* Claude: beside the figure the change chip ran into Back on the longest
      row (See my programme); on phones it shows under the figure, at the left
      of the line's row, level with the step name. */
   .dk-fee { position: relative; }
   .dk-next.btn { padding: .75rem 1rem; }
-  .dk-link { font-size: .8125rem; min-height: 2.75rem; }
+  .dk-link { font-size: calc(.8125 * var(--t)); min-height: 2.75rem; }
   .dk-sum .area { grid-template-columns: minmax(0, 1fr) auto; }
   .dk-sum .area__label { grid-column: 1 / -1; }
   .dk-sumhero .dk-start__frame { grid-column: 1; aspect-ratio: 4 / 3; }
@@ -1696,13 +1696,13 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-bar .is-hidden { visibility: hidden; }
 .dk-bar .dk-back.btn, .dk-bar .dk-next.btn {
   min-height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
-  padding: .75rem 1.5rem; font-size: .95rem; font-weight: 600; letter-spacing: .02em;
+  padding: .75rem 1.5rem; font-size: calc(.95 * var(--t)); font-weight: 600; letter-spacing: .02em;
 }
 .dk-bar .dk-back.btn[disabled] { cursor: default; }
 .dk-next.btn[aria-disabled="true"] { border: 1px solid var(--line); }
 .dk-line__stop[hidden], .dk-line__stop.is-near[hidden] { display: none; }
 @media (max-width: 860px) {
-  .dk-bar .dk-back.btn, .dk-bar .dk-next.btn { padding: .6875rem 1.125rem; font-size: .9rem; }
+  .dk-bar .dk-back.btn, .dk-bar .dk-next.btn { padding: .6875rem 1.125rem; font-size: calc(.9 * var(--t)); }
 }
 
 /* Fixes (10 Oct 2026): the summary column never grows past the page; the
@@ -1710,7 +1710,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-sum { grid-template-columns: minmax(0, 1fr); }
 .dk-card { min-width: 0; }
 .dk-sum .brief__text { max-width: 100%; overflow-x: auto; }
-@media (max-width: 860px) { .dk-fee__label { font-size: .75rem; letter-spacing: .1em; } }
+@media (max-width: 860px) { .dk-fee__label { font-size: calc(.75 * var(--t)); letter-spacing: .1em; } }
 
 /* ---------- Two way steps: 01, 03, 04 (restyle chat 3, 12 Oct 2026) ----------
    What We Do's two stop line (.dnl, what-we-do-day-night.css) over the two real
@@ -1726,7 +1726,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dkl__end {
   position: relative; display: flex; align-items: flex-end; box-sizing: border-box; min-height: 2.75rem; padding: .75rem 0 .625rem;
   flex: 0 1 auto; cursor: pointer; -webkit-tap-highlight-color: transparent;
-  font-family: var(--f-body); font-size: .8125rem; font-weight: 500; line-height: 1.35; letter-spacing: .16em; text-transform: uppercase;
+  font-family: var(--f-body); font-size: calc(.8125 * var(--t)); font-weight: 500; line-height: 1.35; letter-spacing: .16em; text-transform: uppercase;
   color: var(--t-ink); opacity: .5; transition: opacity 280ms var(--ease-out);
 }
 .dkl__end--b { text-align: right; justify-content: flex-end; }
@@ -1754,14 +1754,14 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dkl__metas { display: grid; margin-top: .75rem; }
 .dkl__meta {
   grid-area: 1 / 1; margin: 0; max-width: 46ch;
-  font-family: var(--f-read); font-size: clamp(.92rem, .9rem + .12vw, 1rem); line-height: 1.55; color: var(--t-soft);
+  font-family: var(--f-read); font-size: clamp(calc(.92 * var(--t)), calc(.9 * var(--t)) + .12vw, calc(1 * var(--t))); line-height: 1.55; color: var(--t-soft);
   opacity: 0; visibility: hidden; transition: opacity 300ms var(--ease-out), visibility 0s linear 300ms;
 }
 .dkl__meta--b { justify-self: end; text-align: right; }
 .dkl:not(:has(.dkl__end--b input:checked)) .dkl__meta--a,
 .dkl:has(.dkl__end--b input:checked) .dkl__meta--b { opacity: 1; visibility: visible; transition: opacity 300ms var(--ease-out), visibility 0s; }
 /* The night note: plain text on the ground, as the start page's note (chat 2). */
-#step-03 [data-night-band] { background: none; padding: 0; margin-top: 1.4rem; max-width: 60ch; font-family: var(--f-read); font-size: clamp(.92rem, .9rem + .12vw, 1rem); color: var(--t-soft); }
+#step-03 [data-night-band] { background: none; padding: 0; margin-top: 1.4rem; max-width: 60ch; font-family: var(--f-read); font-size: clamp(calc(.92 * var(--t)), calc(.9 * var(--t)) + .12vw, calc(1 * var(--t))); color: var(--t-soft); }
 @media (max-width: 860px) {
   .dkl { max-width: none; }
   .dkl__ends { gap: 1rem; }
@@ -1792,12 +1792,12 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dkd__day, .dkd__stop, .dkd__zone { --p: calc(var(--a) + var(--at) * var(--st)); }
 .dkd__fill, .dkd__tip { --p: calc(var(--a) + var(--i) * var(--st)); }
 .dkd__days { position: relative; height: clamp(4.75rem, 10.5vh, 6.75rem); margin-right: 1.625rem; }
-.dkd__unit { position: absolute; left: 0; bottom: 1.875rem; font-family: var(--f-body); font-size: .66rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--t-ink); opacity: .7; }
+.dkd__unit { position: absolute; left: 0; bottom: 1.875rem; font-family: var(--f-body); font-size: calc(.66 * var(--t)); font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--t-ink); opacity: .7; }
 .dkd__day {
   position: absolute; top: 0; left: calc(var(--p) * 100%); transform: translateX(-50%);
   box-sizing: border-box; min-width: 2.75rem; min-height: 2.75rem; padding: .125rem .375rem; text-align: center; cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  font-family: var(--f-display); font-size: clamp(1.8rem, min(3.4vw, 5vh), 3.1rem); line-height: 1;
+  font-family: var(--f-display); font-size: clamp(calc(.9164 * var(--t) + .8836rem), min(3.4vw, 5vh), 3.1rem); line-height: 1;
   color: var(--t-ink); opacity: .38; transition: opacity 280ms var(--ease-out);
 }
 .dkd__day:hover { opacity: .78; }
@@ -1819,7 +1819,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 /* The chosen stay, one row under the line; the others sit behind it, hidden. */
 .dkd__infos { display: grid; margin-top: .75rem; }
 .dkd__info {
-  grid-area: 1 / 1; margin: 0; font-family: var(--f-read); font-size: clamp(.92rem, .9rem + .12vw, 1rem); line-height: 1.55; color: var(--t-soft);
+  grid-area: 1 / 1; margin: 0; font-family: var(--f-read); font-size: clamp(calc(.92 * var(--t)), calc(.9 * var(--t)) + .12vw, calc(1 * var(--t))); line-height: 1.55; color: var(--t-soft);
   opacity: 0; visibility: hidden; transition: opacity 300ms var(--ease-out), visibility 0s linear 300ms;
 }
 .dkd__info .length__sub::after { content: " \00b7  "; white-space: pre; }
@@ -1831,8 +1831,8 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
   .dkd { max-width: none; }
   .dkd__days { height: 6.75rem; margin-top: .5rem; margin-right: 1.375rem; }
   .dkd__rail { height: 2.75rem; }
-  .dkd__day { font-size: clamp(1.9rem, 8.2vw, 2.6rem); padding: .625rem .1875rem; }
-  .dkd__unit { font-size: .8125rem; }
+  .dkd__day { font-size: clamp(calc(.8291 * var(--t) + 1.0709rem), 8.2vw, 2.6rem); padding: .625rem .1875rem; }
+  .dkd__unit { font-size: calc(.8125 * var(--t)); }
 }
 @media (prefers-reduced-motion: reduce) {
   .dkd__fill, .dkd__tip, .dkd__stop, .dkd__day, .dkd__info { transition: none; }
@@ -1877,24 +1877,24 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .treat--included .treat__body { grid-column: 1 / -1; padding-top: .6875rem; }
 .treat__head, .rhythm__head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .treat__title, .rhythm__title {
-  font-family: var(--f-body); font-size: .8125rem; font-weight: 500; line-height: 1.4;
+  font-family: var(--f-body); font-size: calc(.8125 * var(--t)); font-weight: 500; line-height: 1.4;
   letter-spacing: 0; text-transform: none; color: var(--t-ink);
 }
 .treat__count, .rhythm__std, .treat__tag {
-  flex: none; font-family: var(--f-mono); font-size: .8125rem; line-height: 1.4; background: none; padding: 0; border-radius: 0;
+  flex: none; font-family: var(--f-mono); font-size: calc(.8125 * var(--t)); line-height: 1.4; background: none; padding: 0; border-radius: 0;
 }
 .treat:has(input:checked) .treat__count { color: var(--reach-script); }
 .treat:not(:has(input:checked)) .treat__count { color: var(--t-mute); }
 .rhythm__std, .treat__tag { text-transform: uppercase; letter-spacing: .08em; color: var(--t-soft); }
 .treat__what, .rhythm__sub {
-  display: block; margin-top: .125rem; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--t-soft);
+  display: block; margin-top: .125rem; font-family: var(--f-read); font-size: calc(.8125 * var(--t)); line-height: 1.5; color: var(--t-soft);
 }
 /* The whole step already dims to .4 (.step.is-off); dimming the rows again made .16. */
 .treat:has(input:disabled), .rhythm:has(input:disabled) { background: none; opacity: 1; cursor: default; }
 .rhythm .dk-dot:has(input:disabled), .rhythm input:disabled + .dk-dot { opacity: 1; }
 @media (max-width: 620px) {
   .treat__head, .rhythm__head { gap: .625rem; }
-  .treat__title, .rhythm__title { font-size: .875rem; }
+  .treat__title, .rhythm__title { font-size: calc(.875 * var(--t)); }
 }
 
 /* ============================================================
@@ -1914,7 +1914,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 
 /* Step titles sized for the space. */
 .dk-step { margin: 0 0 clamp(.45rem, 1.3vh, .9rem); }
-.dk-step__t { font-size: clamp(1.6rem, min(3.2vw, 5.2vh), 2.8rem); }
+.dk-step__t { font-size: clamp(calc(1.0473 * var(--t) + .5527rem), min(3.2vw, 5.2vh), 2.8rem); }
 .dk-page .step__note--lead { margin: 0 0 clamp(.7rem, 2.2vh, 1.6rem); }
 
 /* ---------- The start screen ----------
@@ -1927,10 +1927,10 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 }
 .dk-page--start .dk-start__frame { align-self: center; justify-self: stretch; max-height: 100%; }
 .dk-page--start .dk-start__copy { align-self: center; padding: clamp(1.125rem, min(3vw, 4.4vh), 2.75rem); padding-right: calc(var(--st-fade) * .55 + clamp(1.125rem, min(3vw, 4.4vh), 2.75rem)); }
-.dk-kicker { font-size: clamp(1.8rem, min(3.3vw, 6vh), 2.85rem); }
-.dk-h1 { margin: clamp(.2rem, .7vh, .6rem) 0 clamp(.6rem, 1.8vh, 1.2rem); font-size: clamp(2rem, min(4.2vw, 7.4vh), 4rem); }
-.dk-lede { margin: 0 0 clamp(.6rem, 1.6vh, 1.2rem); font-size: clamp(.9rem, min(.98rem + .25vw, 2.2vh), 1.18rem); }
-.dk-start .dk-note { font-size: clamp(.85rem, 1.9vh, .95rem); }
+.dk-kicker { font-size: clamp(calc(.9164 * var(--t) + .8836rem), min(3.3vw, 6vh), 2.85rem); }
+.dk-h1 { margin: clamp(.2rem, .7vh, .6rem) 0 clamp(.6rem, 1.8vh, 1.2rem); font-size: clamp(calc(.7273 * var(--t) + 1.2727rem), min(4.2vw, 7.4vh), 4rem); }
+.dk-lede { margin: 0 0 clamp(.6rem, 1.6vh, 1.2rem); font-size: clamp(calc(.9 * var(--t)), min(calc(.98 * var(--t)) + .25vw, 2.2vh), calc(1.1328 * var(--t) + .0472rem)); }
+.dk-start .dk-note { font-size: clamp(calc(.85 * var(--t)), 1.9vh, calc(.95 * var(--t))); }
 
 /* ---------- The summary, seven pages (four screens from 1024px wide) ---------- */
 .dk-page--summary > .dk-sum { max-width: 67.5rem; align-content: start; }
@@ -1948,7 +1948,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-sum--fee .dk-start__frame { align-self: center; justify-self: stretch; max-height: 100%; aspect-ratio: 4 / 5; grid-column: 7 / 13; }
 .dk-sum--fee .dk-start__copy { align-self: center; grid-column: 1 / 9; }
 .dk-sum--fee .dk-sumfee { font-size: clamp(2.8rem, min(5.4vw, 10vh), 5rem); }
-.dk-sum--fee .dk-card--fee .dk-note { font-size: clamp(.85rem, 1.9vh, .95rem); max-width: 44ch; }
+.dk-sum--fee .dk-card--fee .dk-note { font-size: clamp(calc(.85 * var(--t)), 1.9vh, calc(.95 * var(--t))); max-width: 44ch; }
 
 /* What you have built: the rows a little closer. */
 .dk-sum--built .dk-h2 { margin-bottom: clamp(.5rem, 1.6vh, 1rem); }
@@ -1983,11 +1983,11 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
   .dk:not(.is-free) .dk-sum--built .area__change { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
 }
 .dk-sum .included__list li { padding-block: clamp(.15rem, .5vh, .3rem); }
-.dk-sum .dk-h2 { font-size: clamp(1.4rem, min(2.4vw, 4.2vh), 1.9rem); }
+.dk-sum .dk-h2 { font-size: clamp(calc(1.12 * var(--t) + .28rem), min(2.4vw, 4.2vh), calc(.8291 * var(--t) + 1.0709rem)); }
 
 /* ---------- Phones ---------- */
 @media (max-width: 860px) {
-  .dk-step__t { font-size: clamp(1.5rem, 7vw, 2.1rem); }
+  .dk-step__t { font-size: clamp(calc(1.0909 * var(--t) + .4091rem), 7vw, calc(.6109 * var(--t) + 1.4891rem)); }
   .dk-in { padding: clamp(.75rem, 2.4vh, 1.75rem) var(--gutter, 1.5rem) clamp(.75rem, 2vh, 1.5rem); }
   /* The start screen and the fee: the photograph above takes what the copy
      leaves (its height from the window, not a fixed 4:3), the card merged
@@ -2004,12 +2004,12 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
     flex: none; align-self: stretch; margin-top: calc(var(--st-up) * -1);
     padding: calc(clamp(1rem, 4.4vw, 1.625rem) + var(--st-fade) * .62) clamp(1rem, 4.4vw, 1.625rem) clamp(.75rem, 2vh, 1.5rem);
   }
-  .dk-kicker { font-size: clamp(1.7rem, min(8vw, 5vh), 3.4rem); }
-  .dk-h1 { font-size: clamp(1.8rem, min(10.5vw, 5.6vh), 3.2rem); }
-  .dk-lede { font-size: clamp(.8125rem, 2.3vh, 1.02rem); line-height: 1.5; }
-  .dk-start .dk-note { font-size: clamp(.8125rem, 2.1vh, .95rem); line-height: 1.5; }
+  .dk-kicker { font-size: clamp(calc(.9891 * var(--t) + .7109rem), min(8vw, 5vh), 3.4rem); }
+  .dk-h1 { font-size: clamp(calc(.9164 * var(--t) + .8836rem), min(10.5vw, 5.6vh), 3.2rem); }
+  .dk-lede { font-size: clamp(calc(.8125 * var(--t)), 2.3vh, calc(1.02 * var(--t))); line-height: 1.5; }
+  .dk-start .dk-note { font-size: clamp(calc(.8125 * var(--t)), 2.1vh, calc(.95 * var(--t))); line-height: 1.5; }
   .dk-sum--fee .dk-sumfee { font-size: clamp(2.6rem, min(13vw, 7vh), 3.6rem); }
-  .dk-sum .area__body { font-size: clamp(.8125rem, 2vh, .95rem); line-height: 1.45; }
+  .dk-sum .area__body { font-size: clamp(calc(.8125 * var(--t)), 2vh, calc(.95 * var(--t))); line-height: 1.45; }
   .dk-sum .area { padding-left: 1rem; gap: 0 .75rem; }
   .dk-sum .area__change { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
   .dk-sum .area__label { grid-column: 1; }
@@ -2020,23 +2020,23 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
    Closer spacing and smaller type, within limits: body text never under 13px. */
 .dk-page.is-tight .dk-in { padding-top: clamp(.5rem, 1.6vh, 1.5rem); padding-bottom: clamp(.5rem, 1.4vh, 1rem); }
 .dk-page.is-tight .dk-step { margin-bottom: .25rem; }
-.dk-page.is-tight .dk-step__t { font-size: clamp(1.4rem, min(2.8vw, 4.4vh), 2.4rem); }
-.dk-page.is-tight .step__note--lead { margin-bottom: .6rem; font-size: .8125rem; line-height: 1.5; }
+.dk-page.is-tight .dk-step__t { font-size: clamp(calc(1.12 * var(--t) + .28rem), min(2.8vw, 4.4vh), calc(.1745 * var(--t) + 2.2255rem)); }
+.dk-page.is-tight .step__note--lead { margin-bottom: .6rem; font-size: calc(.8125 * var(--t)); line-height: 1.5; }
 .dk-page.is-tight .treat, .dk-page.is-tight .rhythm, .dk-page.is-tight .prio { padding-top: 0; padding-bottom: .25rem; }
 .dk-page.is-tight .treat__body, .dk-page.is-tight .rhythm__body, .dk-page.is-tight .prio__body { padding-top: .75rem; }
 .dk-page.is-tight .treat__what, .dk-page.is-tight .rhythm__sub, .dk-page.is-tight .prio__what { margin-top: 0; line-height: 1.4; }
 .dk-page.is-tight .dkd__days { height: clamp(4.25rem, 9vh, 6rem); }
 .dk-page.is-tight .dkl__metas, .dk-page.is-tight .dkd__infos { margin-top: .375rem; }
-.dk-page.is-tight .dk-kicker { font-size: clamp(1.5rem, min(3vw, 5vh), 2.6rem); }
-.dk-page.is-tight .dk-h1 { font-size: clamp(1.7rem, min(3.8vw, 6.4vh), 3.6rem); margin: .15rem 0 .5rem; }
-.dk-page.is-tight .dk-lede { font-size: .8125rem; line-height: 1.45; margin-bottom: .5rem; }
-.dk-page.is-tight .dk-start .dk-note, .dk-page.is-tight .dk-card--fee .dk-note { font-size: .8125rem; line-height: 1.45; }
+.dk-page.is-tight .dk-kicker { font-size: clamp(calc(1.0909 * var(--t) + .4091rem), min(3vw, 5vh), 2.6rem); }
+.dk-page.is-tight .dk-h1 { font-size: clamp(calc(.9891 * var(--t) + .7109rem), min(3.8vw, 6.4vh), 3.6rem); margin: .15rem 0 .5rem; }
+.dk-page.is-tight .dk-lede { font-size: calc(.8125 * var(--t)); line-height: 1.45; margin-bottom: .5rem; }
+.dk-page.is-tight .dk-start .dk-note, .dk-page.is-tight .dk-card--fee .dk-note { font-size: calc(.8125 * var(--t)); line-height: 1.45; }
 .dk-page.is-tight .dk-sum { gap: .75rem; }
 .dk-page.is-tight .dk-sum > .dk-card:not(:first-child) { padding-top: .75rem; }
-.dk-page.is-tight .dk-sum .dk-h2 { font-size: clamp(1.2rem, min(2vw, 3.6vh), 1.6rem); margin-bottom: .4rem; }
+.dk-page.is-tight .dk-sum .dk-h2 { font-size: clamp(calc(1.1345 * var(--t) + .0655rem), min(2vw, 3.6vh), calc(1.0473 * var(--t) + .5527rem)); margin-bottom: .4rem; }
 .dk-page.is-tight .dk-sum .area { padding-block: .1rem; }
 .dk-page.is-tight .dk-sum .area__body, .dk-page.is-tight .dk-sum .included__list li, .dk-page.is-tight .dk-p,
-.dk-page.is-tight .budget__help, .dk-page.is-tight .budget__answer, .dk-page.is-tight .fit__body, .dk-page.is-tight .fit__head { font-size: .8125rem; line-height: 1.45; }
+.dk-page.is-tight .budget__help, .dk-page.is-tight .budget__answer, .dk-page.is-tight .fit__body, .dk-page.is-tight .fit__head { font-size: calc(.8125 * var(--t)); line-height: 1.45; }
 .dk-page.is-tight .dk-sum .included__list li { padding-block: .1rem; }
 .dk-page.is-tight .dk-card__small { margin-bottom: .4rem; }
 .dk-page.is-tight .shape__key { margin-top: .4rem; gap: .2rem 1rem; }
@@ -2046,12 +2046,12 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-page.is-tight .shape__grid[data-scale="week"] { --mark-h: .3125rem; --mark-h-massage: .5625rem; --mark-h-night: .1875rem; --mark-gap: .125rem; }
 .dk-page.is-tight .shape__grid[data-scale="week"] .day { min-height: 0; padding-bottom: .15rem; }
 .dk-page.is-tight .shape__grid[data-scale="week"] .day__n { margin-top: .15rem; }
-.dk-page.is-tight .dk-card__small { font-size: .8125rem; line-height: 1.45; }
+.dk-page.is-tight .dk-card__small { font-size: calc(.8125 * var(--t)); line-height: 1.45; }
 /* The calendar is taller than the old field: on a page that would not fit, the head, the
    weekday row and the note close up and the grid narrows a little. Day buttons stay 40px or
    more (TJ, 13 Oct 2026). */
 .dk-page.is-tight .due { max-width: 20rem; }
-.dk-page.is-tight .due__note--top { margin-bottom: .3rem; font-size: .85rem; line-height: 1.25; }
+.dk-page.is-tight .due__note--top { margin-bottom: .3rem; font-size: calc(.85 * var(--t)); line-height: 1.25; }
 .dk-page.is-tight #step-due .step__note--lead { margin-bottom: .35rem; }
 .dk-page.is-tight .due-cal__head { margin-bottom: .2rem; }
 .dk-page.is-tight .due-cal__wd { padding-bottom: .1rem; line-height: 1.1; }
@@ -2061,7 +2061,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-page.is-tight .due-cal__grid[data-rows="6"] { gap: 1px; }
 .dk-page.is-tight .due-cal__grid[data-rows="6"] .due-day { height: 2.25rem; }
 .dk-page.is-tight[data-block="due"] .dk-in { padding-top: .5rem; padding-bottom: .375rem; }
-.dk-page.is-tight .due__chosen { margin-top: .2rem; font-size: .85rem; min-height: 1.25em; line-height: 1.25; }
+.dk-page.is-tight .due__chosen { margin-top: .2rem; font-size: calc(.85 * var(--t)); min-height: 1.25em; line-height: 1.25; }
 .dk-page.is-tight .fit__apply, .dk-page.is-tight .dk-actions .dk-link { letter-spacing: .1em; }
 .dk-page.is-tight .budget__help { margin-bottom: .4rem; }
 .dk-page.is-tight .budget__answer { margin-top: .5rem; }
@@ -2184,7 +2184,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
    ============================================================ */
 .tgl { --tg-off: var(--g-taupe-lite); display: block; max-width: 40rem; margin: clamp(.125rem, .8vh, .625rem) 0 0; padding: 0; list-style: none; }
 .tgl--included { margin: 0; }
-.tgl__hint { margin: 0 0 .25rem; font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
+.tgl__hint { margin: 0 0 .25rem; font-family: var(--f-body); font-size: calc(.6875 * var(--t)); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
 .tgl__rows { display: block; }
 .tg {
   position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto 2.75rem; align-items: center; column-gap: .875rem;
@@ -2196,15 +2196,15 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .tg:focus-within { outline: 0; }
 .tg__body { grid-column: 1; display: block; min-width: 0; }
 .tg__t {
-  display: block; font-family: var(--f-body); font-size: .875rem; font-weight: 500; line-height: 1.35; letter-spacing: 0; text-transform: none;
+  display: block; font-family: var(--f-body); font-size: calc(.875 * var(--t)); font-weight: 500; line-height: 1.35; letter-spacing: 0; text-transform: none;
   color: var(--t-mute); transition: color 240ms var(--ease-out);
 }
 .tg__s {
-  display: block; margin-top: .125rem; font-family: var(--f-read); font-size: .8125rem; line-height: 1.45;
+  display: block; margin-top: .125rem; font-family: var(--f-read); font-size: calc(.8125 * var(--t)); line-height: 1.45;
   color: var(--t-mute); transition: color 240ms var(--ease-out);
 }
 .tg__aside {
-  grid-column: 2; font-family: var(--f-body); font-size: .75rem; font-weight: 500; letter-spacing: .04em; white-space: nowrap;
+  grid-column: 2; font-family: var(--f-body); font-size: calc(.75 * var(--t)); font-weight: 500; letter-spacing: .04em; white-space: nowrap;
   color: var(--t-mute); transition: color 240ms var(--ease-out);
 }
 .tg__sw {
@@ -2229,7 +2229,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .tg--included { cursor: default; grid-template-columns: minmax(0, 1fr) auto; }
 .tg--included .tg__t, .tg--included .tg__aside { color: var(--acc); }
 .tg--included .tg__s { color: var(--t-soft); }
-.tg--included .tg__aside { grid-column: 2; text-transform: uppercase; letter-spacing: .1em; font-size: .6875rem; }
+.tg--included .tg__aside { grid-column: 2; text-transform: uppercase; letter-spacing: .1em; font-size: calc(.6875 * var(--t)); }
 .dk-page.is-tight .tg { min-height: 2.75rem; padding: .25rem 0; }
 .dk-page.is-tight .tg__s { margin-top: 0; line-height: 1.35; }
 @media (max-width: 860px) { .tgl { max-width: none; } }
@@ -2250,7 +2250,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .nav__return { display: none; }
 .page--builder .nav__return {
   display: inline-flex; align-items: center; min-height: 2.75rem; padding: 0 .125rem;
-  font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
+  font-family: var(--f-body); font-size: calc(.6875 * var(--t)); font-weight: 500; letter-spacing: .14em; text-transform: uppercase;
   color: var(--t-mute); text-decoration: none; text-underline-offset: .25rem; white-space: nowrap;
   opacity: 0; visibility: hidden; pointer-events: none;
   transition: opacity 240ms var(--ease-out), visibility 0s linear 240ms, color 240ms var(--ease-out);
@@ -2279,7 +2279,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 }
 /* Phones: the link wraps to two lines in the slot Enquire had, clear of the wordmark. */
 @media (max-width: 860px) {
-  .page--builder .nav__return { max-width: 5.75rem; white-space: normal; text-align: right; line-height: 1.5; font-size: .625rem; letter-spacing: .12em; justify-content: flex-end; }
+  .page--builder .nav__return { max-width: 5.75rem; white-space: normal; text-align: right; line-height: 1.5; font-size: calc(.625 * var(--t)); letter-spacing: .12em; justify-content: flex-end; }
 }
 
 /* ==========================================================================
@@ -2290,13 +2290,13 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .due { max-width: 22rem; }
 .due .due__note--top { margin: 0 0 1rem; }
 .due .due__chosen { min-height: 1.5em; }
-.due__note { margin: .8rem 0 0; font-family: var(--f-read); font-size: .9rem; line-height: 1.5; color: var(--t-mute); }
+.due__note { margin: .8rem 0 0; font-family: var(--f-read); font-size: calc(.9 * var(--t)); line-height: 1.5; color: var(--t-mute); }
 /* The due date calendar. These rules mirror booking.css's .bk-cal and .bk-day (the single
    treatments booking calendar): same sizes, borders, radius and colour tokens, under page
    specific names because booking.css is not loaded on this page (TJ, 13 Oct 2026). Unlike
    booking there is no disabled state: no limits either way, every day selectable. */
 .due-cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
-.due-cal__month { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: .875rem; letter-spacing: .1em; text-transform: uppercase; color: var(--t-ink); }
+.due-cal__month { margin: 0; font-family: var(--f-body); font-weight: 500; font-size: calc(.875 * var(--t)); letter-spacing: .1em; text-transform: uppercase; color: var(--t-ink); }
 .due-cal__step {
   display: flex; height: 2.75rem; width: 2.75rem; align-items: center; justify-content: center;
   border-radius: var(--r-button); border: 1px solid var(--line); background: var(--g-paper);
@@ -2306,11 +2306,11 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .due-cal__step:hover { border-color: var(--g-stone); }
 .due-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: .125rem; }
 @media (min-width: 640px) { .due-cal__grid { gap: .25rem; } }
-.due-cal__wd { padding-bottom: .5rem; text-align: center; font-family: var(--f-body); font-weight: 500; font-size: .625rem; letter-spacing: .1em; text-transform: uppercase; color: var(--t-mute); }
+.due-cal__wd { padding-bottom: .5rem; text-align: center; font-family: var(--f-body); font-weight: 500; font-size: calc(.625 * var(--t)); letter-spacing: .1em; text-transform: uppercase; color: var(--t-mute); }
 .due-day {
   display: flex; aspect-ratio: 1; align-items: center; justify-content: center;
   border-radius: var(--r-button); border: 1px solid var(--line); background: var(--g-paper);
-  font-family: var(--f-read); font-size: .875rem; color: var(--t-ink); cursor: pointer;
+  font-family: var(--f-read); font-size: calc(.875 * var(--t)); color: var(--t-ink); cursor: pointer;
   transition: border-color 140ms var(--ease-out), background-color 140ms var(--ease-out);
 }
 .due-day:hover { border-color: var(--acc); }
@@ -2345,7 +2345,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-page.is-tight .dk-sum--call { gap: 0; }
 .dk-page.is-tight .dk-sum--call .callcopy { margin: .2rem 0 0; }
 .dk-page.is-tight .dk-sum--call .callcopy .dk-link { min-height: 2.25rem; }
-.dk-page.is-tight .dk-sum--call .dk-legal { margin-top: .3rem; font-size: .75rem; line-height: 1.4; }
+.dk-page.is-tight .dk-sum--call .dk-legal { margin-top: .3rem; font-size: calc(.75 * var(--t)); line-height: 1.4; }
 
 /* ============================================================
    THE CLOSE AND DONE (TJ, 13 Oct 2026; FUNNEL-PLAN.md chat 5)
@@ -2366,17 +2366,17 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
   flex: 1 1 16.25rem; min-width: 0; min-height: 2.75rem; box-sizing: border-box;
   border: 0; border-bottom: 1px solid var(--line-firm); border-radius: 0;
   background: transparent; padding: .7rem .3rem; margin: 0;
-  font-family: var(--f-body); font-size: 1rem; color: var(--t-ink);
+  font-family: var(--f-body); font-size: calc(1 * var(--t)); color: var(--t-ink);
   appearance: none; -webkit-appearance: none;
 }
 .capture__email:focus { outline: none; border-bottom: .125rem solid var(--acc); margin-bottom: -1px; }
 .capture__btn { flex: none; min-height: 2.75rem; }
-.capture__note { margin: .8rem 0 0; font-family: var(--f-read); font-size: .875rem; line-height: 1.5; color: var(--t-mute); }
+.capture__note { margin: .8rem 0 0; font-family: var(--f-read); font-size: calc(.875 * var(--t)); line-height: 1.5; color: var(--t-mute); }
 .dk-sum--close .dk-legal { margin-top: clamp(.8rem, 2.4vh, 1.6rem); max-width: 56ch; }
 .dk-sum--done .dk-actions { margin-top: clamp(.8rem, 2.4vh, 1.4rem); display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; }
 .dk-page.is-tight .capture { margin-top: .5rem; }
-.dk-page.is-tight .capture__note { margin-top: .4rem; font-size: .8125rem; }
-.dk-page.is-tight .dk-sum--close .dk-legal { margin-top: .4rem; font-size: .75rem; line-height: 1.4; }
+.dk-page.is-tight .capture__note { margin-top: .4rem; font-size: calc(.8125 * var(--t)); }
+.dk-page.is-tight .dk-sum--close .dk-legal { margin-top: .4rem; font-size: calc(.75 * var(--t)); line-height: 1.4; }
 @media (max-width: 620px) {
   .capture__btn { flex: 1 1 100%; }
 }
@@ -2447,28 +2447,28 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-decide .dk-sumfee { font-size: clamp(2.8rem, min(5vw, 8.4vh), 4.4rem); margin: .2rem 0 .3rem; }
 .dk-decide .dk-card__small { margin: 0 0 .9rem; }
 .dk-decide__line { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem 1rem; }
-.dk-decide__built { margin: 0; font-family: var(--f-display); font-size: clamp(1.25rem, min(1.8vw, 3.2vh), 1.6rem); line-height: 1.2; text-transform: uppercase; color: var(--t-ink); }
+.dk-decide__built { margin: 0; font-family: var(--f-display); font-size: clamp(calc(1.1364 * var(--t) + .1136rem), min(1.8vw, 3.2vh), calc(1.0473 * var(--t) + .5527rem)); line-height: 1.2; text-transform: uppercase; color: var(--t-ink); }
 .dk-decide__change { min-height: 2.75rem; }
 .dk-decide__more { margin-top: clamp(.6rem, 1.8vh, 1.2rem); }
 .dk-decide__toggle { display: none; }
 .dk-decide__toggle::-webkit-details-marker { display: none; }
-.dk-decide__shape-t { margin: 0 0 .5rem; font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
-.dk-decide__incl { margin: .8rem 0 0; max-width: 60ch; font-family: var(--f-read); font-size: .8125rem; line-height: 1.5; color: var(--t-mute); }
+.dk-decide__shape-t { margin: 0 0 .5rem; font-family: var(--f-body); font-size: calc(.6875 * var(--t)); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-mute); }
+.dk-decide__incl { margin: .8rem 0 0; max-width: 60ch; font-family: var(--f-read); font-size: calc(.8125 * var(--t)); line-height: 1.5; color: var(--t-mute); }
 .dk-decide__ask .step__note--lead { margin: 0; }
 .dk-decide__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1.75rem; margin: clamp(1rem, 2.6vh, 1.6rem) 0 0; }
 .dk-decide__book { min-height: 3rem; padding-inline: 1.75rem; }
 .dk-decide__no { min-height: 2.75rem; }
-.dk-decide__ask [data-brief-copy] { margin-top: clamp(.6rem, 1.8vh, 1.2rem); min-height: 2.25rem; font-size: .625rem; color: var(--t-mute); }
+.dk-decide__ask [data-brief-copy] { margin-top: clamp(.6rem, 1.8vh, 1.2rem); min-height: 2.25rem; font-size: calc(.625 * var(--t)); color: var(--t-mute); }
 .dk-decide .brief__text { display: none; }
 @media (max-width: 860px) {
   .dk-decide { grid-template-columns: minmax(0, 1fr); row-gap: clamp(.8rem, 2.2vh, 1.4rem); align-content: center; }
-  .dk-decide .dk-sumfee { font-size: clamp(2.4rem, min(12vw, 7vh), 3.2rem); }
+  .dk-decide .dk-sumfee { font-size: clamp(calc(.1745 * var(--t) + 2.2255rem), min(12vw, 7vh), 3.2rem); }
   .dk-decide .dk-card__small { margin-bottom: .5rem; }
-  .dk-decide__built { font-size: 1.15rem; }
+  .dk-decide__built { font-size: calc(1.1291 * var(--t) + .0209rem); }
   .dk-decide__more { margin-top: .2rem; }
   .dk-decide__toggle {
     display: inline-flex; align-items: center; gap: .5rem; min-height: 2.75rem; cursor: pointer; list-style: none;
-    font-family: var(--f-body); font-size: .6875rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-soft);
+    font-family: var(--f-body); font-size: calc(.6875 * var(--t)); font-weight: 500; letter-spacing: .14em; text-transform: uppercase; color: var(--t-soft);
   }
   .dk-decide__toggle::after { content: ""; width: .375rem; height: .375rem; border-right: .0938rem solid currentColor; border-bottom: .0938rem solid currentColor; transform: translateY(-.125rem) rotate(45deg); transition: transform 240ms var(--ease-out); }
   .dk-decide__more[open] > .dk-decide__toggle::after { transform: translateY(1px) rotate(-135deg); }
@@ -2488,9 +2488,9 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 @media (max-width: 860px) {
   .dk-page.is-tight .dk-decide { row-gap: .4rem; }
   .dk-page.is-tight .dk-decide__ask [data-brief-copy] { display: none; }
-  .dk-page.is-tight .dk-decide .dk-sumfee { font-size: 2.2rem; margin: 0; }
+  .dk-page.is-tight .dk-decide .dk-sumfee { font-size: calc(.48 * var(--t) + 1.72rem); margin: 0; }
   .dk-page.is-tight .dk-decide__change, .dk-page.is-tight .dk-decide__toggle { min-height: 2.25rem; }
-  .dk-page.is-tight .dk-decide__ask .step__note--lead { font-size: .875rem; line-height: 1.45; }
+  .dk-page.is-tight .dk-decide__ask .step__note--lead { font-size: calc(.875 * var(--t)); line-height: 1.45; }
   .dk-page.is-tight .dk-decide__actions { gap: .25rem 1.25rem; margin-top: .5rem; }
   .dk-page.is-tight .dk-decide__book { min-height: 2.75rem; }
 }
@@ -2566,7 +2566,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
   min-height: 2.75rem; width: 100%; box-sizing: border-box;
   border-radius: var(--r-button); border: 1px solid var(--line);
   background: var(--g-paper); padding: .5rem .75rem; margin: 0;
-  font-family: var(--f-body); font-size: .9375rem; color: var(--t-ink); outline: none;
+  font-family: var(--f-body); font-size: calc(.9375 * var(--t)); color: var(--t-ink); outline: none;
 }
 .capture__email:focus, .capture__email:focus-visible { border: 1px solid var(--acc); border-bottom-width: 1px; margin-bottom: 0; outline: none; }
 .capture__email::placeholder { color: var(--t-mute); opacity: 1; }
@@ -2593,13 +2593,13 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 /* The close with two fields on small phones (TJ, 14 Oct 2026): when tight, close up so it stays one
    screen and the frame stays held. The summary note drops; the legal line stays, smaller. */
 @media (max-width: 860px) {
-  .dk-page.is-tight .dk-sum--close .step__note--lead { font-size: .875rem; line-height: 1.45; }
+  .dk-page.is-tight .dk-sum--close .step__note--lead { font-size: calc(.875 * var(--t)); line-height: 1.45; }
   .dk-page.is-tight .dk-sum--close .capture { margin-top: .4rem; }
   .dk-page.is-tight .dk-sum--close .capture__label { margin-bottom: .25rem; }
   .dk-page.is-tight .dk-sum--close .capture__label--email { margin-top: .4rem; }
   .dk-page.is-tight .dk-sum--close .capture__btn { margin-top: .5rem; }
   .dk-page.is-tight .dk-sum--close .capture__note { display: none; }
-  .dk-page.is-tight .dk-sum--close .dk-legal { margin-top: .5rem; font-size: .6875rem; line-height: 1.4; }
+  .dk-page.is-tight .dk-sum--close .dk-legal { margin-top: .5rem; font-size: calc(.6875 * var(--t)); line-height: 1.4; }
 }
 
 /* One body text size through the builder (TJ, 24 Oct 2026): the size of "The
@@ -2607,11 +2607,11 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
    each step title, "Already had your baby?" and the name of every choice take
    it; the line under each choice stays a step smaller. The tight versions for
    short screens still win where a screen would not otherwise fit. */
-.dk-page .step__note--lead, .due .due__note--top, .tg__t { font-size: .95rem; }
-.dk-lede, .dk-start .dk-lede { font-size: .95rem; }
-.dk-start .dk-lede { font-size: clamp(.85rem, 1.9vh, .95rem); }
+.dk-page .step__note--lead, .due .due__note--top, .tg__t { font-size: calc(.95 * var(--t)); }
+.dk-lede, .dk-start .dk-lede { font-size: calc(.95 * var(--t)); }
+.dk-start .dk-lede { font-size: clamp(calc(.85 * var(--t)), 1.9vh, calc(.95 * var(--t))); }
 @media (max-width: 860px) {
-  .dk-start .dk-lede { font-size: clamp(.8125rem, 2.1vh, .95rem); line-height: 1.5; }
+  .dk-start .dk-lede { font-size: clamp(calc(.8125 * var(--t)), 2.1vh, calc(.95 * var(--t))); line-height: 1.5; }
 }
 
 /* Batch 5 (Ami's 24 Oct 2026 notes). The fee is per day: the unit sits beside
@@ -2620,7 +2620,7 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
    in place of the day chart. */
 .dk-fee__row { align-items: baseline; }
 .dk-fee__per, .dk-sumfee__per {
-  font-family: var(--f-body); font-size: .68rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
+  font-family: var(--f-body); font-size: calc(.68 * var(--t)); font-weight: 500; letter-spacing: .16em; text-transform: uppercase;
   color: var(--t-mute); white-space: nowrap;
 }
 .dk-fee__per { margin-left: .5rem; }
@@ -2628,15 +2628,15 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-sumfee-row .dk-sumfee { margin: 0; }
 .tg__rec {
   display: inline-block; margin-left: .5rem; vertical-align: .12em;
-  font-family: var(--f-body); font-size: .62rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  font-family: var(--f-body); font-size: calc(.62 * var(--t)); font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
   color: var(--reach-link);
 }
 .tg__rec[hidden] { display: none; }
 .dk-decide__list { list-style: none; margin: 1rem 0 0; padding: 0; max-width: 52ch; }
 .dk-decide__list li { display: grid; gap: .125rem; padding: .7rem 0; border-top: 1px solid var(--line); }
 .dk-decide__list li:last-child { border-bottom: 1px solid var(--line); }
-.dk-decide__k { font-family: var(--f-body); font-size: .68rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--t-mute); }
-.dk-decide__v { font-family: var(--f-read); font-size: .95rem; line-height: 1.5; color: var(--t-soft); }
+.dk-decide__k { font-family: var(--f-body); font-size: calc(.68 * var(--t)); font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--t-mute); }
+.dk-decide__v { font-family: var(--f-read); font-size: calc(.95 * var(--t)); line-height: 1.5; color: var(--t-soft); }
 .dk-decide__list + .dk-decide__incl { margin-top: 1rem; }
 
 /* The bespoke prices match the Programmes card exactly (TJ, 25 Oct 2026):
@@ -2646,12 +2646,12 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .dk-bar .dk-fee__amount,
 .dk .dk-decide .dk-sumfee,
 .dk .dk-page.is-tight .dk-decide .dk-sumfee,
-.dk .dk-sum--fee .dk-sumfee { font-size: clamp(1.792rem, 3.328vw, 2.816rem); font-variant-numeric: normal; }
+.dk .dk-sum--fee .dk-sumfee { font-size: clamp(calc(.9227 * var(--t) + .8693rem), 3.328vw, 2.816rem); font-variant-numeric: normal; }
 @media (max-width: 860px) {
   .dk-bar .dk-fee__amount,
   .dk .dk-decide .dk-sumfee,
   .dk .dk-page.is-tight .dk-decide .dk-sumfee,
-  .dk .dk-sum--fee .dk-sumfee { font-size: 1.664rem; }
+  .dk .dk-sum--fee .dk-sumfee { font-size: calc(1.0117 * var(--t) + .6523rem); }
 }
 .dk-price__digits { letter-spacing: -0.044em; margin-right: 0.044em; }
 
@@ -2661,9 +2661,9 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
    rows and the small print "Always included" line. */
 .dk .dk-decide .dk-decide__built { padding-bottom: .9rem; border-bottom: 1px solid var(--line); }
 .dk .dk-decide__list { margin: .9rem 0 0; padding: 0; list-style: none; max-width: 52ch; }
-.dk .dk-decide__list li { padding: .32rem 0; border: 0; font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: var(--t-soft); }
+.dk .dk-decide__list li { padding: .32rem 0; border: 0; font-family: var(--f-read); font-size: calc(.95 * var(--t)); line-height: 1.45; color: var(--t-soft); }
 .dk .dk-decide__list li:last-child { border: 0; }
-.dk .dk-page.is-tight .dk-decide__list li { padding: .18rem 0; font-size: .875rem; }
+.dk .dk-page.is-tight .dk-decide__list li { padding: .18rem 0; font-size: calc(.875 * var(--t)); }
 @media (max-width: 860px) { .dk .dk-decide__list { margin-bottom: 1.1rem; } }
 /* A small bullet before each item (Ami, 28 Oct 2026; was a drawn dash, TJ,
    25 Oct 2026): a drawn 4px dot, not a typed character, centred on the first
@@ -2682,10 +2682,10 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .pc { margin-top: 1.4rem; max-width: 22.5rem; }
 .pc .capture__label { display: block; margin-bottom: .4rem; }
 .pc__input { width: 100%; text-transform: uppercase; }
-.pc__msg { margin: .55rem 0 0; min-height: 1.4em; font-family: var(--f-read); font-size: .875rem; line-height: 1.45; color: var(--t-mute); }
+.pc__msg { margin: .55rem 0 0; min-height: 1.4em; font-family: var(--f-read); font-size: calc(.875 * var(--t)); line-height: 1.45; color: var(--t-mute); }
 .pc__msg.is-error, .pc__msg.is-out { color: var(--err); }
 .close__gets { list-style: none; margin: .2rem 0 1.4rem; padding: 0; }
-.close__gets li { position: relative; padding: .2rem 0 .2rem 1rem; font-family: var(--f-read); font-size: .95rem; line-height: 1.45; color: var(--t-soft); }
+.close__gets li { position: relative; padding: .2rem 0 .2rem 1rem; font-family: var(--f-read); font-size: calc(.95 * var(--t)); line-height: 1.45; color: var(--t-soft); }
 /* The site's one bullet, the Programmes dot (TJ, 1 Nov 2026; was a dash). */
 .close__gets li::before { content: ""; position: absolute; left: 0; top: calc(.2rem + .725em - .1563rem); width: .3125rem; height: .3125rem; border-radius: 50%; background: var(--acc); }
 .dk-sum--close > .capture__label { display: block; margin-top: .6rem; }
@@ -2703,11 +2703,11 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 .rq-phone__cc {
   display: inline-flex; align-items: center; padding: 0 .875rem; min-height: 2.875rem; border-radius: var(--r-badge, .5rem);
   border: 1px solid var(--line-firm); background: rgba(255, 255, 255, .6);
-  font-family: var(--f-read); font-size: 1rem; color: var(--t-ink); white-space: nowrap;
+  font-family: var(--f-read); font-size: calc(1 * var(--t)); color: var(--t-ink); white-space: nowrap;
 }
-.rq-hint, .pc__hint { margin: -.15rem 0 .1rem; font-family: var(--f-read); font-size: .8125rem; line-height: 1.4; color: var(--t-mute); }
+.rq-hint, .pc__hint { margin: -.15rem 0 .1rem; font-family: var(--f-read); font-size: calc(.8125 * var(--t)); line-height: 1.4; color: var(--t-mute); }
 .rq-babies { margin: .9rem 0 0; padding: 0; border: 0; display: grid; gap: .55rem; }
-.rq-radio, .rq-check { display: flex; align-items: center; gap: .625rem; cursor: pointer; font-family: var(--f-read); font-size: .95rem; line-height: 1.4; color: var(--t-soft); }
+.rq-radio, .rq-check { display: flex; align-items: center; gap: .625rem; cursor: pointer; font-family: var(--f-read); font-size: calc(.95 * var(--t)); line-height: 1.4; color: var(--t-soft); }
 .rq-radio input, .rq-check input { width: 1.125rem; height: 1.125rem; margin: 0; flex: none; accent-color: var(--acc); }
 .rq-check { margin-top: .9rem; }
 @media (max-width: 420px) { .rq-pair { grid-template-columns: 1fr; } }
@@ -2756,16 +2756,16 @@ body.is-ticking .build__summary { top: calc(var(--nav-h) + 4rem + 1rem); }
 body .nav__return, .tgl__hint, .capture__label, .tg__aside, .tg__rec, .due-cal__month, .dk-bar__name, .dk-link {
   text-transform: none; letter-spacing: .01em;
 }
-body .nav__return { font-size: .8125rem; }
-.tgl__hint, .capture__label { font-size: .875rem; }
-.tg__aside, .tg__rec { font-size: .8125rem; }
-.due-cal__month { font-size: 1rem; }
-.dk-bar__name { font-size: .8125rem; }
-.dk-link { font-size: .875rem; }
-.due-day { font-size: 1rem; }
-.tg__t { font-size: 1rem; }
-.page--builder .nav__return, .page--builder.is-funnelled .nav__return { text-transform: none; letter-spacing: .01em; font-size: .8125rem; }
-.tg--included .tg__aside { text-transform: none; letter-spacing: .01em; font-size: .8125rem; }
+body .nav__return { font-size: calc(.8125 * var(--t)); }
+.tgl__hint, .capture__label { font-size: calc(.875 * var(--t)); }
+.tg__aside, .tg__rec { font-size: calc(.8125 * var(--t)); }
+.due-cal__month { font-size: calc(1 * var(--t)); }
+.dk-bar__name { font-size: calc(.8125 * var(--t)); }
+.dk-link { font-size: calc(.875 * var(--t)); }
+.due-day { font-size: calc(1 * var(--t)); }
+.tg__t { font-size: calc(1 * var(--t)); }
+.page--builder .nav__return, .page--builder.is-funnelled .nav__return { text-transform: none; letter-spacing: .01em; font-size: calc(.8125 * var(--t)); }
+.tg--included .tg__aside { text-transform: none; letter-spacing: .01em; font-size: calc(.8125 * var(--t)); }
 
 /* Half length hairlines (TJ, 13 Nov 2026, TPS-0098, from Ami): every separator
    between the choices on the steps runs half the width, from the left, the
@@ -2827,8 +2827,8 @@ body .nav__return { font-size: .8125rem; }
 }
 
 /* TJ, 14 Nov 2026: totals stacked one per row, number then label on one line with a fixed number column; all card text 14px; the card column is wider. */
-.dk .dk-pay { --pay-fs: .875rem; --pay-nfs: clamp(1.05rem, min(1.5vw, 2.8vh), 1.45rem); --pay-ncol: calc(var(--pay-nfs) * 1.28 + .75rem); }
-.dk-page.is-tight .dk-pay { --pay-nfs: 1.05rem; padding: .875rem 1.125rem; }
+.dk .dk-pay { --pay-fs: calc(.875 * var(--t)); --pay-nfs: clamp(calc(1.05 * var(--t)), min(1.5vw, 2.8vh), calc(1.1073 * var(--t) + .3427rem)); --pay-ncol: calc(var(--pay-nfs) * 1.28 + .75rem); }
+.dk-page.is-tight .dk-pay { --pay-nfs: calc(1.05 * var(--t)); padding: .875rem 1.125rem; }
 .dk-pay__stats li { display: grid; grid-template-columns: var(--pay-ncol) minmax(0, 1fr); column-gap: 0; align-items: baseline; min-width: 0; }
 .dk-page.is-tight .dk-pay__lede { margin-top: .2rem; }
 .dk-page.is-tight .dk-pay__stats { margin-top: .5rem; padding: .5rem 0; row-gap: .3rem; }
