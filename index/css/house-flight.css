@@ -1468,8 +1468,16 @@ html.is-flight-playing .aurora__field::after { animation-play-state: paused; }
 @media (min-width: 1100px) {
   .zones.zones--click { height: auto !important; }
   .zones--click .zones__stage { position: relative; }
-  .zones--click .zones__video { display: none; }
-  .zones--click .zones__title, .zones--click .zones__line { opacity: 1; visibility: visible; }
+  /* The film plays its arrival once and holds; the room pictures fade in over it. */
+  .zones--click .zones__video { z-index: 0; }
+  .zones--click .zones__poster { z-index: 1; }
+  /* The film keeps its layers to itself, so the words and rooms stay above it and clickable. */
+  .zones--click .zones__film { z-index: 0; }
+  .zones--click .zones__stage.has-clip .zones__poster { opacity: 0; transition: opacity 500ms var(--ease-out); }
+  .zones--click .zones__stage.has-clip .zones__poster.is-on { opacity: 1; }
+  /* The words rise in as the film starts, as on phones. */
+  .zones--click .zones__title, .zones--click .zones__line { transform: translateY(.625rem); transition: opacity 800ms var(--ease-out), transform 800ms var(--ease-out), visibility 0s linear 800ms; }
+  .zones--click .zones__title.is-in, .zones--click .zones__line.is-in { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
   .zones--click .zones__rooms { padding-top: 2.25rem; }
   .zones--click .zones__home { all: unset; position: absolute; z-index: 2; left: 0; top: var(--zr, 0px); width: 2.75rem; height: 2.75rem; margin: -1.375rem 0 0 calc(-1.375rem + var(--tline) / 2); cursor: pointer; }
   .zones--click .zones__home::after { content: ""; position: absolute; left: 50%; top: 50%; width: var(--tdot); height: var(--tdot); margin: calc(var(--tdot) / -2) 0 0 calc(var(--tdot) / -2); border-radius: 50%; background: var(--reach-script); }
