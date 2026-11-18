@@ -314,9 +314,6 @@ function actPeak() {
   // occupies; every beat below is defined against 0 to 1 of the motion
   // itself and then remapped onto that fraction, so the beats' relative
   // timing to each other is untouched by adding the hold.
-  const TOTAL_VH = PEAK_PIN_VH + DN_BEAT_VH + PEAK_HOLD_VH;
-  const MOTION_FRAC = PEAK_PIN_VH / TOTAL_VH;
-
   // Where each beat sits on the motion's own 0 to 1, before the hold is
   // added. Named because the order is the whole design and it has to be
   // readable here: the clock owns the middle, and it is gone before the
@@ -325,6 +322,14 @@ function actPeak() {
   const CLOCK_OUT  = 0.74;   // fully gone by GONE, below
   const GONE       = 0.82;
   const ANSWER_IN  = 0.86;
+
+  // Released at sunset on desktop (Ami via TJ, 18 Nov 2026): the page moves
+  // on the moment the sun has gone fully under the line (CLOCK_OUT), instead
+  // of holding for about half a screen more. The sun keeps its pace; only the
+  // tail after it is cut. Phones keep the full range, since their note only
+  // rises in after the sun has set. Before: lab/what-we-do-promise.before-sunset-release.js.bak
+  const TOTAL_VH = DN_PHONE ? PEAK_PIN_VH + DN_BEAT_VH + PEAK_HOLD_VH : PEAK_PIN_VH * CLOCK_OUT;
+  const MOTION_FRAC = PEAK_PIN_VH / TOTAL_VH;
 
   const between = (p, a, b) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 

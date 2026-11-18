@@ -1924,7 +1924,8 @@ function gallery() {
    ------------------------------------------------------------ */
 // Real testimonials from The Postpartum Suite's client feedback sheet (TJ, 14 Nov
 // 2026, TPS-0102). Consent as given on the sheet: Roubina and Helena agreed to
-// their first name; the third asked to stay anonymous, so no name is shown.
+// their first name; the third asked to stay anonymous, so he shows as
+// "Father, London" (TJ, 18 Nov 2026).
 const TV2 = [
   {
     quote: "I left feeling absolutely amazing! The massage was so relaxing and exactly what my body and mind needed after giving birth. I felt lighter, calmer and completely refreshed. It was such a lovely opportunity to take some time for myself, release all the tension and feel looked after. I felt relaxed, re-energised and so much more at ease afterwards. A truly wonderful experience that I would highly recommend to any new mum.",
@@ -1940,8 +1941,10 @@ const TV2 = [
   },
   {
     quote: "My wife said she enjoyed it, she felt relaxed. So all good.",
-    author: "Anonymous",
-    role: "Postpartum Massage with Traditional Hot Stone",
+    // Name line and service per TJ, 18 Nov 2026 (was "Anonymous",
+    // "Postpartum Massage with Traditional Hot Stone").
+    author: "Father, London",
+    role: "Postpartum Massage",
     place: ""
   },
   {
