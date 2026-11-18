@@ -2848,3 +2848,84 @@ html body .dk-sum--close .close__script { margin: .35rem 0 .5rem; font-family: v
 html body .dk-page.is-snug .dk-sum--close > .close__script { margin: .1rem 0 .3rem; }
 .dk-sum--close .close__gets li { font-size: calc(1 * var(--t)); color: var(--t-ink); }
 .dk-sum--close .close__gets li + li { margin-top: .25rem; }
+
+
+/* ---- Your programme as a card (Ami via TJ, 18 Nov 2026) ----
+   The approved mock-up (css/programme-summary-options.css, round three) moved
+   into the builder: the heading and script line, the frosted card with the name,
+   the totals and hours, a rule, then her choices in four columns; the three steps
+   under it and the one button centred. Four columns become two below 860px and
+   one below 520px. No shadows, tokens only. */
+.dk-page--summary > .dk-ps { max-width: 72rem; display: block; }
+.dk-ps__head { text-align: center; }
+.dk-ps__t {
+  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  letter-spacing: .01em; line-height: 1;
+  font-size: clamp(calc(1.0473 * var(--t) + .5527rem), min(3.2vw, 5.4vh), 3.2rem); color: var(--t-ink);
+}
+.dk-ps__script {
+  margin: .2rem 0 0; font-family: var(--f-script); font-weight: 400; line-height: 1.15;
+  font-size: clamp(calc(.9164 * var(--t) + .8836rem), min(2.6vw, 4.4vh), 2.6rem); color: var(--reach-script);
+}
+.dk-ps__card {
+  margin: clamp(.75rem, 2.4vh, 1.75rem) auto 0;
+  padding: clamp(1.1rem, min(3vw, 3.6vh), 2.5rem) clamp(1.25rem, 3.4vw, 2.75rem);
+  border-radius: var(--r-card);
+  background: rgba(255, 255, 255, .62); border: 1px solid rgba(255, 255, 255, .7);
+  backdrop-filter: blur(.875rem) saturate(1.2); -webkit-backdrop-filter: blur(.875rem) saturate(1.2);
+}
+.dk-ps__top { text-align: center; padding-bottom: clamp(.8rem, 2.2vh, 1.6rem); border-bottom: 1px solid var(--line-firm); }
+.dk-ps__name {
+  margin: 0; font-family: var(--f-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(calc(.9723 * var(--t) + .7527rem), min(2.4vw, 4vh), 2.2rem); line-height: 1; letter-spacing: .02em; color: var(--t-ink);
+}
+.dk-ps__line { margin: .7rem 0 0; font-family: var(--f-read); font-size: calc(1 * var(--t)); line-height: 1.4; color: var(--t-soft); }
+.dk-ps__line b { font-weight: 600; color: var(--t-ink); }
+.dk-ps__cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding-top: clamp(.8rem, 2.2vh, 1.6rem); text-align: left; }
+.dk-ps__col { padding: 0 clamp(.9rem, 1.6vw, 1.5rem); border-left: 1px solid var(--line); }
+.dk-ps__col:first-child { padding-left: 0; border-left: 0; }
+.dk-ps__col:last-child { padding-right: 0; }
+.dk-ps__h { margin: 0 0 .6rem; font-family: var(--f-body); font-weight: 700; font-size: calc(.85 * var(--t)); line-height: 1.3; color: var(--reach-link); }
+.dk-ps__list { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.dk-ps__list li { font-family: var(--f-read); font-size: calc(.92 * var(--t)); line-height: 1.35; color: var(--t-ink); }
+.dk-ps__steps { margin: clamp(1rem, 3vh, 2.25rem) auto 0; max-width: 72rem; }
+.dk-ps__steps .steps3__p { max-width: 20rem; margin-left: auto; margin-right: auto; }
+.dk-ps__cta { margin-top: clamp(1rem, 2.8vh, 2rem); text-align: center; }
+.dk-ps__btn { min-height: 3rem; padding-inline: 1.75rem; }
+.dk-ps .brief__text { display: none; }
+
+@media (max-width: 860px) {
+  .dk-ps__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 1.25rem; }
+  .dk-ps__col:nth-child(3) { padding-left: 0; border-left: 0; }
+  .dk-ps__col:nth-child(2) { padding-right: 0; }
+  .dk-ps__steps { max-width: 30rem; }
+}
+@media (max-width: 760px) {
+  .dk-ps__t { font-size: clamp(calc(1.0909 * var(--t) + .4091rem), 9vw, 2.6rem); }
+  .dk-ps__script { font-size: clamp(calc(.9891 * var(--t) + .7109rem), 8vw, 2.4rem); }
+}
+@media (max-width: 520px) {
+  .dk-ps__cols { grid-template-columns: 1fr; row-gap: 0; padding-top: 0; }
+  .dk-ps__col, .dk-ps__col:nth-child(3) { padding: 1rem 0; border-left: 0; border-top: 1px solid var(--line); }
+  .dk-ps__col:first-child { border-top: 0; }
+  .dk-ps__col:last-child { padding-bottom: 0; }
+  .dk-ps__btn { width: 100%; }
+}
+/* The card's own width wins over the summary pages' narrower measure, as in the
+   mock-up, so each choice keeps to one line or two. On shorter laptops the screen
+   closes up (.is-tight, then .is-snug) so it still fits in the frame. */
+.dk .dk-page.dk-page--summary > .dk-in.dk-ps { max-width: calc(72rem + 2 * var(--gutter, 1.5rem)); width: 100%; }
+.dk-page.is-tight .dk-ps__card { margin-top: .6rem; padding-block: 1rem; }
+.dk-page.is-tight .dk-ps__top, .dk-page.is-tight .dk-ps__cols { padding-block: .6rem 0; }
+.dk-page.is-tight .dk-ps__top { padding-top: 0; padding-bottom: .7rem; }
+.dk-page.is-tight .dk-ps__line { margin-top: .45rem; }
+.dk-page.is-tight .dk-ps__list { gap: .2rem; }
+.dk-page.is-tight .dk-ps__steps { margin-top: .9rem; }
+.dk-page.is-tight .dk-ps__cta { margin-top: .8rem; }
+.dk:not(.is-free) .dk-page.is-snug .dk-ps__script { margin-top: 0; }
+.dk:not(.is-free) .dk-page.is-snug .dk-ps__card { margin-top: .4rem; padding-block: .75rem; }
+.dk:not(.is-free) .dk-page.is-snug .dk-ps__h { margin-bottom: .3rem; }
+.dk:not(.is-free) .dk-page.is-snug .dk-ps__list li { font-size: calc(.875 * var(--t)); line-height: 1.3; }
+.dk:not(.is-free) .dk-page.is-snug .dk-ps__steps { margin-top: .6rem; }
+.dk:not(.is-free) .dk-page.is-snug .dk-ps__steps .steps3__p { font-size: calc(.875 * var(--t)); line-height: 1.4; }
+.dk:not(.is-free) .dk-page.is-snug .dk-ps__cta { margin-top: .5rem; }

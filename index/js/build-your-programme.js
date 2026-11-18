@@ -353,11 +353,71 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       return bits.join(' · ');
     }
 
+    // Night care does not change the meals (TJ, 18 Nov 2026): three a day either way.
     function mealsLine(sel) {
-      var night = sel.shift === 'night' && sel.format === 'in';
       return sel.meals
-        ? (night ? 'Lunch and dinner' : 'Breakfast, lunch and dinner') + ' cooked daily · herbal teas and lactation drinks'
+        ? 'Breakfast, lunch and dinner cooked daily · herbal teas and lactation drinks'
         : 'No cooked meals · herbal teas and lactation drinks still included';
+    }
+
+    /* ---------- Your programme, the card (Ami via TJ, 18 Nov 2026) ----------
+       The approved mock-up, filled from her choices. The totals use the Programmes
+       page figures (TJ, 18 Nov 2026): with every treatment kept the card shows exactly
+       what that page promises for the length; with some taken out, the figure drops in
+       proportion to the sessions she removed, counted the way the builder plans them.
+       Meals are three a day for every day, with or without night care (TJ). */
+    var PG_TREATMENTS = { 7: 8, 14: 15, 30: 30 };   // as js/programmes.js
+    var PG_MEALS = { 7: 21, 14: 42, 30: 90 };       // as js/programmes.js
+    var CARD_TREAT = {
+      scrub: 'Full body scrub',
+      reflex: 'Foot reflexology',
+      facial: 'Facial massage',
+      herbfoot: 'Herbal foot spa',
+      thermal: 'Thermal blanket treatment'
+    };
+
+    function sessionsOf(sel) {
+      var n = sel.massage ? P.massageSessions(sel.rhythm, sel.days) : 0;
+      P.COUNTED.forEach(function (k) { if (sel[k]) n += P.STD[sel.days][k]; });
+      return n;
+    }
+
+    function cardTreatments(sel) {
+      var full = sessionsOf(P.completeSelection(sel.days));
+      var mine = sessionsOf(sel);
+      var top = PG_TREATMENTS[sel.days];
+      return full > 0 ? Math.round(top * mine / full) : 0;
+    }
+
+    function paintCard(sel) {
+      var night = sel.shift === 'night' && sel.format === 'in';
+      var esc = function (t) { return String(t).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); };
+      var list = function (name, rows) {
+        var ul = document.querySelector('[data-ps-list="' + name + '"]');
+        if (ul) ul.innerHTML = rows.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('');
+      };
+      var t = cardTreatments(sel), m = PG_MEALS[sel.days];
+      var totals = document.querySelector('[data-ps-totals]');
+      if (totals) totals.innerHTML = t > 0
+        ? 'Up to <b>' + t + '</b> treatment' + (t === 1 ? '' : 's') + ' and <b>' + m + '</b> meals across your stay.'
+        : 'Up to <b>' + m + '</b> meals across your stay.';
+      var hours = document.querySelector('[data-ps-hours]');
+      if (hours) hours.textContent = sel.format !== 'in'
+        ? 'Daytime in-home care, 7am to 7pm.'
+        : night ? 'Daily live-in support, day and night.' : 'Daily live-in support, 7am to 7pm.';
+
+      var baby = ['Hands on support with your baby', 'Caring for your baby while you rest'];
+      if (night) baby.push('Caring for your baby through the night');
+      baby.push('Nappy changes', 'Sterilising and bottle cleaning');
+      list('baby', baby);
+
+      var treats = ['Herbal rinse and belly binding'];
+      if (sel.massage) treats.push('Postpartum massage with hot stone therapy');
+      P.COUNTED.forEach(function (k) { if (sel[k]) treats.push(CARD_TREAT[k]); });
+      list('treatments', treats);
+
+      list('meals', ['Fresh postpartum meals, up to 3 a day']);
+      list('home', ['Light housekeeping', 'Laundry and ironing', 'Grocery collection']);
     }
 
     function paintSummary(sel, result) {
@@ -377,6 +437,7 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
 
       paintDecideList(sel);
       paintPayoff(sel);
+      paintCard(sel);
 
       // The fee, per day (Ami, 24 Oct 2026: never a programme total): counted, not swapped.
       var value = Math.round(result.fee / sel.days);
