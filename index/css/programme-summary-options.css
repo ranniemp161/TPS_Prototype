@@ -48,103 +48,20 @@
   font-size: clamp(calc(.9164 * var(--t) + .8836rem), 2.6vw, 2.6rem);
   color: var(--reach-script);
 }
-.pso-head__built {
-  margin: clamp(1.1rem, 3vh, 1.75rem) 0 0;
-  font-family: var(--f-display);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: .01em;
-  line-height: 1.2;
-  font-size: calc(1.1364 * var(--t) + .1136rem);
-  color: var(--t-ink);
-}
-.pso-head__totals {
-  margin: .4rem 0 0;
-  font-family: var(--f-read);
-  font-size: calc(1 * var(--t));
-  line-height: 1.5;
-  color: var(--t-soft);
-}
-.pso-head__n {
-  font-family: var(--f-display);
-  font-size: calc(1.0473 * var(--t) + .5527rem);
-  line-height: 1;
-  color: var(--t-ink);
-}
 
-/* ---- 2. Her choices, four groups ---- */
-.pso-groups {
-  display: grid;
-  /* Two columns as wide as their lines, the pair centred under the heading. */
-  grid-template-columns: repeat(2, minmax(0, max-content));
-  justify-content: center;
-  gap: clamp(1.75rem, 4.5vh, 2.75rem) clamp(3rem, 4.5vw, 6rem);
-  margin: clamp(2.25rem, 6vh, 3.5rem) auto 0;
-  max-width: 62rem;
-}
-/* The group label as on the Programmes card: Montserrat bold, not capitals, coral. */
-.pso-group__h {
-  margin: 0 0 .55rem;
-  font-family: var(--f-body);
-  font-weight: 700;
-  font-size: calc(.85 * var(--t));
-  line-height: 1.3;
-  letter-spacing: .01em;
-  text-transform: none;
-  color: var(--reach-link);
-}
-.pso-group__list { list-style: none; margin: 0; padding: 0; }
-/* The site's one bullet, the small coral dot (as .close__gets). */
-.pso-group__list li {
-  position: relative;
-  padding: .2rem 0 .2rem 1rem;
-  font-family: var(--f-read);
-  font-weight: 400;
-  font-size: calc(1 * var(--t));
-  line-height: 1.45;
-  color: var(--t-ink);
-}
-.pso-group__list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: calc(.2rem + .725em - .1563rem);
-  width: .3125rem;
-  height: .3125rem;
-  border-radius: 50%;
-  background: var(--acc);
-}
-
-/* ---- 3. The sentence and the button ---- */
-.pso-close {
-  margin: clamp(2.5rem, 6.5vh, 3.75rem) auto 0;
-  max-width: 46rem;
-  text-align: center;
-}
-.pso-close__p {
-  margin: 0 auto;
-  max-width: 40em;
-  font-family: var(--f-read);
-  font-size: calc(1 * var(--t));
-  line-height: 1.55;
-  color: var(--t-soft);
-}
-.pso-close__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 10.5rem;
-  min-height: 3rem;
-  margin-top: clamp(1.1rem, 3vh, 1.6rem);
-  padding-inline: 1.75rem;
-}
-
-/* ---- Phones: one column ---- */
+/* ---- Round two (TJ, 18 Nov 2026): the Programmes card and the three steps ----
+   The card and its rows are programmes.css as they stand; only its width and
+   the space around it are set here, kept tight so the whole screen fits above
+   the fold on a laptop. */
+.pso { padding-top: clamp(1rem, 3vh, 2rem); padding-bottom: clamp(1.5rem, 4vh, 3rem); }
+.pso__tag { margin-bottom: clamp(1rem, 3vh, 2rem); }
+.pso-screen__in { max-width: 60rem; }
+.pso-card { margin: clamp(1.25rem, 3.5vh, 2.25rem) auto 0; max-width: 60rem; }
+.pso-card .pg-care dd { display: block; }
+.pso-steps { margin: clamp(1.75rem, 4.5vh, 2.75rem) auto 0; max-width: 60rem; }
 @media (max-width: 760px) {
   .pso { padding: 1.5rem 1rem 3rem; }
-  .pso__tag { margin-bottom: 2rem; }
   .pso-head__t { font-size: clamp(calc(1.0909 * var(--t) + .4091rem), 9vw, 2.6rem); }
   .pso-head__script { font-size: clamp(calc(.9891 * var(--t) + .7109rem), 8vw, 2.4rem); }
-  .pso-groups { grid-template-columns: minmax(0, 1fr); justify-content: stretch; gap: 1.75rem; margin-top: 2.25rem; }
-  .pso-close__btn { display: flex; width: 100%; }
+  .pso-steps { max-width: 30rem; }
 }

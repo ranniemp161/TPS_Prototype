@@ -17,6 +17,7 @@
      live-in programme, daytime care, every treatment kept. Every word is copy that
      already exists on the site. -->
 <link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/programmes.css" />
 <link rel="stylesheet" href="css/programme-summary-options.css" />
 </head>
 <body>
@@ -30,57 +31,35 @@
       <header class="pso-head">
         <h1 class="pso-head__t">Your programme</h1>
         <p class="pso-head__script">Tailored to you</p>
-        <p class="pso-head__built">30 day bespoke programme</p>
-        <p class="pso-head__totals">Up to <span class="pso-head__n">30</span> treatments and <span class="pso-head__n">90</span> meals across your stay.</p>
       </header>
 
-      <div class="pso-groups">
-        <div class="pso-group">
-          <h2 class="pso-group__h">Mother and baby care</h2>
-          <ul class="pso-group__list">
-            <li>Daily live-in support, 7am to 7pm</li>
-            <li>Hands on support with your baby</li>
-            <li>Caring for your baby while you rest</li>
-            <li>Accompanying you and your baby on outings</li>
-            <li>Nappy changes, sterilising and bottle cleaning</li>
-          </ul>
+      <!-- Round two (TJ, 18 Nov 2026): the Programmes page card, its own classes from
+           programmes.css, holding what she built. Left: the length, the totals, the
+           hours and the button. Right: the four kinds of care, her choices in each.
+           In the builder the button goes on to the close form, which already holds
+           her due date, baby and area from the build and asks only what is missing. -->
+      <div class="pg-card pso-card">
+        <div class="pg-price">
+          <h2 class="pg-price__days">30 day bespoke programme</h2>
+          <p class="pg-price__totals">Up to <span class="pg-totals__n">30</span> treatments and <span class="pg-totals__n">90</span> meals across your stay.</p>
+          <p class="pg-price__held">Daily live-in support, 7am to 7pm.</p>
+          <div class="pg-price__cta"><a class="btn btn--primary" href="request-a-place.html">Check availability</a></div>
         </div>
-        <div class="pso-group">
-          <h2 class="pso-group__h">Treatments</h2>
-          <ul class="pso-group__list">
-            <li>Herbal rinse, daily</li>
-            <li>Belly binding, daily</li>
-            <li>Postpartum massage with hot stone therapy</li>
-            <li>Thermal blanket treatment</li>
-            <li>Full body scrub</li>
-            <li>Foot reflexology</li>
-            <li>Facial massage</li>
-            <li>Herbal foot spa</li>
-          </ul>
-        </div>
-        <div class="pso-group">
-          <h2 class="pso-group__h">Meals</h2>
-          <ul class="pso-group__list">
-            <li>Fresh postpartum meals, up to 3 a day</li>
-            <li>Nourishing herbal teas</li>
-            <li>Lactation support drinks</li>
-          </ul>
-        </div>
-        <div class="pso-group">
-          <h2 class="pso-group__h">Home support</h2>
-          <ul class="pso-group__list">
-            <li>Light housekeeping</li>
-            <li>Laundry and ironing</li>
-            <li>Grocery collection</li>
-            <li>Organising your baby&rsquo;s wardrobe</li>
-          </ul>
-        </div>
+        <dl class="pg-care">
+          <div class="pg-care__row"><dt>Mother and baby care</dt><dd>Hands on support with your baby, caring for your baby while you rest, nappy changes, sterilising and bottle cleaning</dd></div>
+          <div class="pg-care__row"><dt>Treatments</dt><dd>Herbal rinse and belly binding, postpartum massage with hot stone therapy, full body scrub, foot reflexology, facial massage, herbal foot spa, thermal blanket treatment</dd></div>
+          <div class="pg-care__row"><dt>Meals</dt><dd>Fresh postpartum meals, up to 3 a day</dd></div>
+          <div class="pg-care__row"><dt>Home support</dt><dd>Light housekeeping, laundry and ironing, grocery collection</dd></div>
+        </dl>
+        <div class="pg-price__cta pg-price__cta--foot"><a class="btn btn--primary" href="request-a-place.html">Check availability</a></div>
       </div>
 
-      <div class="pso-close">
-        <p class="pso-close__p">Your programme brochure arrives in your inbox straight away, with everything you need to arrange your free 30 minute consultation.</p>
-        <a class="btn btn--primary pso-close__btn" href="request-a-place.html">Check availability</a>
-      </div>
+      <!-- The three steps from the Date availability page, as on the home page. -->
+      <ol class="steps3 pso-steps">
+        <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h3 class="steps3__t"><span class="steps3__n">Step 1</span>Share your details</h3><p class="steps3__p">Your due date and a few details about you.</p></li>
+        <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h3 class="steps3__t"><span class="steps3__n">Step 2</span>Receive our programme brochure</h3><p class="steps3__p">Everything you need to plan your care, sent straight to your inbox.</p></li>
+        <li class="steps3__item"><span class="steps3__dot" aria-hidden="true"></span><h3 class="steps3__t"><span class="steps3__n">Step 3</span>Arrange your consultation</h3><p class="steps3__p">Inside the brochure, you will find an invitation to arrange your free private consultation at a time that suits you.</p></li>
+      </ol>
 
     </div>
   </section>
