@@ -111,19 +111,52 @@
         { opacity: 1, y: 0, duration: 0.4, stagger: 0.06, ease: EASE, delay: first ? 0.08 : 0 });
     }
 
+    // The stacked menu below 1100px (TJ, 19 Nov 2026): Menu opens the items as a
+    // list with nothing expanded; tapping a section opens its links right under it
+    // (.nav__sub in the header) and closes any other, tapping it again folds it.
+    // The drop panels are desktop only. Same block in home.js and build-your-programme.js.
+    var STACK = window.matchMedia('(max-width: 1100px)');
+    function stackToggle(tab) {
+      var on = tab.getAttribute('aria-expanded') === 'true';
+      tabs.forEach(function (t) { t.setAttribute('aria-expanded', String(!on && t === tab)); });
+    }
+    function stackShow(show) {
+      if (burger) burger.setAttribute('aria-expanded', String(show));
+      root.classList.toggle('is-open', show);
+      tabs.forEach(function (t) { t.setAttribute('aria-expanded', 'false'); });
+      open = null;
+      menu.hidden = true;
+      veil.hidden = !show;
+      if (show) { if (REDUCED) gsap.set(veil, { opacity: 1 }); else gsap.fromTo(veil, { opacity: 0 }, { opacity: 1, duration: 0.26, ease: EASE }); }
+    }
+
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
+        if (STACK.matches) { stackToggle(tab); return; }
         if (open === tab.dataset.tab) close(true);
         else openPanel(tab.dataset.tab);
       });
     });
 
-    veil.addEventListener('click', function () { close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && open) close(true); });
-    root.addEventListener('focusout', function (e) { if (open && !root.contains(e.relatedTarget)) close(); });
+    veil.addEventListener('click', function () { if (STACK.matches) stackShow(false); else close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (STACK.matches) { if (root.classList.contains('is-open')) { stackShow(false); if (burger) burger.focus(); } }
+      else if (open) close(true);
+    });
+    root.addEventListener('focusout', function (e) {
+      if (STACK.matches) { if (root.classList.contains('is-open') && e.relatedTarget && !root.contains(e.relatedTarget)) stackShow(false); return; }
+      if (open && !root.contains(e.relatedTarget)) close();
+    });
 
     if (burger) {
       burger.addEventListener('click', function () {
+        if (STACK.matches) {
+          var was = root.classList.contains('is-open');
+          stackShow(!was);
+          if (!was) { var first = root.querySelector('.nav__tabs .tab'); if (first) first.focus(); }
+          return;
+        }
         var isOpen = burger.getAttribute('aria-expanded') === 'true';
         burger.setAttribute('aria-expanded', String(!isOpen));
         root.classList.toggle('is-open', !isOpen);

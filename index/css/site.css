@@ -4427,6 +4427,31 @@ html:not(.js) .arrive { display: none; }
    centred wordmark (TJ and Ami, 24 Oct 2026). */
 @media (max-width: 520px) {
   .tab.tab--cta { width: 5.375rem; min-width: 0; height: auto; min-height: var(--tab-h); padding: .3125rem .5rem; white-space: normal; text-align: center; font-size: calc(.72 * var(--t)); line-height: 1.12; }
+  /* More room round the two lines (TJ, 19 Nov 2026): it looked cramped. Was
+     width 5.375rem, padding .3125rem .5rem, line height 1.12. */
+  .tab.tab--cta { width: 6.25rem; padding: .5rem .75rem; line-height: 1.22; }
+}
+/* The smallest phones keep the narrower width so it stays clear of the wordmark,
+   with the same extra room above and below. */
+@media (max-width: 359px) {
+  .tab.tab--cta { width: 5rem; padding: .5rem .375rem; }
+}
+/* Menu mirrors the button on phones (TJ, 19 Nov 2026): the bigger red button made
+   the bar look lopsided. Menu now has the same box (width, height, corners, same
+   distance from its edge) with no fill and a soft hairline, so the two ends weigh
+   alike and the wordmark reads as centred, while the solid button stays the one
+   strong thing in the bar. */
+@media (max-width: 520px) {
+  .nav .tab.tab--menu {
+    width: 6.25rem; height: auto; min-height: 2.75rem; padding: .5rem .75rem;
+    /* A very slight outline (TJ, 19 Nov 2026; was ink 28%, white 40%, coral 70%). */
+    border: 1px solid color-mix(in srgb, var(--t-ink) 12%, transparent);
+  }
+  .nav.is-dark .tab.tab--menu { border-color: rgba(255, 255, 255, .2); }
+  .nav .tab.tab--menu[aria-expanded="true"] { border-color: color-mix(in srgb, var(--acc) 35%, transparent); }
+}
+@media (max-width: 359px) {
+  .nav .tab.tab--menu { width: 5rem; padding: .5rem .375rem; }
 }
 
 /* The bespoke line outside the card, under it (TJ, 25 Oct 2026): not part of
@@ -5034,3 +5059,109 @@ html body .gifts-soon p a:not([class]):is(:hover, :focus-visible, :active) { col
   .tv2--two .tv2__nav--prev { left: 1.5rem; }
   .tv2--two .tv2__nav--next { left: 4.625rem; }
 }
+
+
+/* ---- The stacked menu, phones and tablets (TJ, 19 Nov 2026) ----
+   Menu drops the items down as a list, one per row, each with room to tap.
+   What We Do, Our Offering and About Us carry a chevron; tapping one opens its
+   links right under it (.nav__sub, in the header partial), one section at a time
+   (inner-nav.js, home.js and build-your-programme.js), and no heading repeats
+   the item. The drop panels stay for desktop only. Selectors repeat .nav__tabs
+   on purpose: the older phone row rules above are heavier and must lose. */
+.nav__sub { display: none; }
+@media (max-width: 1100px) {
+  /* The Menu button's own text size, shared by the list and its links. */
+  .nav { --menu-fs: clamp(calc(.72 * var(--t)), calc(.6 * var(--t)) + .28vw, calc(.86 * var(--t))); }
+  .nav .menu { display: none !important; }
+  .nav.nav--glass.is-open::before { bottom: 0; }
+
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs {
+    display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+    position: absolute; top: 100%; left: 0; right: 0; z-index: 2;
+    height: auto; max-height: calc(100vh - var(--nav-h, 5rem)); max-height: calc(100svh - var(--nav-h, 5rem));
+    overflow-y: auto; overscroll-behavior: contain;
+    gap: 0; padding: .25rem var(--gutter) 1.25rem;
+    /* One colour with the bar above it while the menu is open (TJ, 19 Nov 2026):
+       both solid canvas, so the logo band and the list read as one ground.
+       Glass made them differ, since each blurred something different. */
+    background: var(--g-canvas);
+    border-bottom: 1px solid var(--line);
+    /* The page behind stays sharp and a soft shadow lifts the menu off it
+       (TJ, 19 Nov 2026). The one shadow on the site, at TJ's request; the
+       design rules otherwise allow none. */
+    box-shadow: 0 .875rem 1.75rem -.5rem rgba(10, 10, 10, .22);
+    /* The shadow falls below only, never back up onto the bar. */
+    clip-path: inset(0 0 -3rem 0);
+    animation: navRowIn 220ms var(--ease-out) both;
+  }
+  /* The veil stays, so a tap on the page still closes the menu, but clear. */
+  .veil { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .nav.nav--glass.is-open::before { background: var(--g-canvas); backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .nav.nav--glass.is-dark.is-open::before,
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs.nav__tabs { background: var(--g-taupe); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs.nav__tabs { border-bottom-color: rgba(255, 255, 255, .14); }
+  /* The open section, its item and its links, sits on a slightly lighter wash
+     that runs to both edges (TJ, 19 Nov 2026). */
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab[aria-expanded="true"],
+  .nav.is-open .nav__tabs .tab[aria-expanded="true"] + .nav__sub {
+    margin-inline: calc(var(--gutter) * -1);
+    background: color-mix(in srgb, var(--g-paper) 55%, transparent);
+  }
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab[aria-expanded="true"] { width: auto; padding-inline: var(--gutter); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs.nav__tabs .tab[aria-expanded="true"],
+  .nav.nav--glass.is-dark.is-open .nav__tabs .tab[aria-expanded="true"] + .nav__sub { background: rgba(255, 255, 255, .08); }
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab {
+    position: relative; flex: none; width: 100%; height: auto; min-height: 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .75rem 0; margin: 0;
+    background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0;
+    /* The same type as the Menu button (TJ, 19 Nov 2026; was 1.05 of the text unit). */
+    font-family: var(--f-body); font-size: var(--menu-fs); font-weight: 500; letter-spacing: .02em;
+    text-align: left; white-space: normal; color: var(--t-ink);
+  }
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab:last-child { border-bottom: 0; }
+  /* The chevron on the three sections: down when closed, up when open. */
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab[data-tab]::after {
+    content: ""; position: static; flex: none; width: .375rem; height: .375rem; margin: 0 .25rem 0 1rem;
+    background: none; border-right: .078rem solid currentColor; border-bottom: .078rem solid currentColor;
+    transform: translateY(-.15rem) rotate(45deg); transition: transform 200ms var(--ease-out);
+  }
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab[aria-expanded="true"] { color: var(--acc); border-bottom-color: transparent; }
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab[aria-expanded="true"]::after { transform: translateY(.15rem) rotate(-135deg); background: none; }
+  /* On the dark frame the list takes the bar's dark glass, so the type reads light. */
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs.nav__tabs .tab { color: var(--g-paper); border-bottom-color: rgba(255, 255, 255, .14); }
+  .nav.nav--glass.is-dark.is-open .nav__side--l .nav__tabs.nav__tabs .tab[aria-expanded="true"] { color: var(--g-tint); }
+  .nav.nav--glass.is-dark.is-open .nav__sub a { color: var(--g-paper); }
+  .nav.nav--glass.is-dark.is-open .nav__sub li + li { border-top-color: rgba(255, 255, 255, .14); }
+
+  /* A section's links, set in a little and a little smaller than the items. */
+  .nav.is-open .nav__tabs .tab[aria-expanded="true"] + .nav__sub {
+    display: block; list-style: none; margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter) .75rem calc(var(--gutter) + 1rem);
+    /* No hairlines in or around an open section (TJ, 19 Nov 2026): the lighter
+       wash alone marks it. */
+    border-bottom: 0;
+    animation: navRowIn 200ms var(--ease-out) both;
+  }
+  /* Inside an open section a hairline sits above each link, from where the links
+     start, so the item and its links are divided but the block has no frame (TJ,
+     19 Nov 2026, from his sketch). */
+  .nav__sub li { border-top: 1px solid var(--line); }
+  .nav.nav--glass.is-dark.is-open .nav__sub li { border-top-color: rgba(255, 255, 255, .14); }
+  /* The line above an open section goes too, and so does the one where it ends. */
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab:has(+ .tab[aria-expanded="true"]),
+  .nav.is-open .nav__side--l .nav__tabs.nav__tabs .tab:has(+ .nav__sub + .tab[aria-expanded="true"]) { border-bottom-color: transparent; }
+  .nav__sub a {
+    display: block; padding: .6rem 0;
+    /* Montserrat like the items and the Menu button (TJ, 19 Nov 2026; Jost looked smaller). */
+    font-family: var(--f-body); font-size: var(--menu-fs); font-weight: 400; letter-spacing: .02em; line-height: 1.4;
+    color: var(--t-soft); text-decoration: none;
+  }
+  .nav__sub a:focus-visible { outline: .125rem solid var(--focus); outline-offset: .125rem; }
+}
+
+/* Ami's expert-led line (19 Nov 2026). At the end of the file so it beats the one-line hero rules above: the first part stands out, the rest wraps under it. */
+.act--hero .stage__copy .lede--strong { color: var(--t-ink); font-weight: 500; font-size: calc(1.2 * var(--t)) !important; white-space: normal !important; max-width: 40ch !important; margin-top: 1rem; }
+/* The other three trust factors, as a quiet row of small tags under the strong line. */
+.act--hero .stage__copy .trust { list-style: none; margin: .75rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; color: var(--t-soft); font-family: var(--f-body); font-size: calc(.82 * var(--t)); line-height: 1.3; }
+.act--hero .stage__copy .trust li { display: inline-flex; align-items: center; gap: .4rem; white-space: nowrap; }
+.act--hero .stage__copy .trust svg { width: 1.15em; height: 1.15em; flex: none; color: var(--acc); }
