@@ -2330,3 +2330,7 @@ Footer England row shortened to "Available across England" and set at the same s
 
 ## 19 Nov 2026: home hero trust points matched to the Who Comes list (local, not pushed)
 Ami pointed at the three points at the top of Who Comes Into Your Home as the look that stands out. The home hero trust points now copy that style exactly: one fact per line, spaced capitals in the body face, a single fine upright line down the left, no icons. Home page only (TJ). Rules sit at the end of site.css.
+
+## Fly through heading (19 Nov 2026)
+
+Ami asked to rename the home fly through heading. "Fly through the service" is now "A day at home with us", chosen over "Step inside a day of care" because it is shorter and fits one line on a phone.
