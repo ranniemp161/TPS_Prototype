@@ -5161,14 +5161,16 @@ html body .gifts-soon p a:not([class]):is(:hover, :focus-visible, :active) { col
 
 /* Ami's expert-led line (19 Nov 2026). At the end of the file so it beats the one-line hero rules above: the first part stands out, the rest wraps under it. */
 .act--hero .stage__copy .lede--strong { color: var(--t-ink); font-weight: 500; font-size: calc(1.2 * var(--t)) !important; white-space: normal !important; max-width: 64ch !important; margin-top: 1rem; }
-/* The trust factors under the strong line: plain type, no icons (Ami, 19 Nov 2026).
-   Ordinary sentence case, never capitals (Ami finds capital accent text looks AI made),
-   with thin upright lines between and no horizontal lines (TJ, 19 Nov 2026);
-   on phones they simply stack. */
-.act--hero .stage__copy .trust { list-style: none; margin: .7rem 0 0; padding: 0; display: flex; flex-wrap: wrap; width: fit-content; max-width: 100%; color: var(--t-ink); font-family: inherit; font-size: calc(.9 * var(--t)); font-weight: 500; letter-spacing: 0; line-height: 1.3; }
-.act--hero .stage__copy .trust li { white-space: nowrap; }
-.act--hero .stage__copy .trust li + li { margin-left: 1.1rem; padding-left: 1.1rem; border-left: 1px solid color-mix(in srgb, var(--t-ink) 30%, transparent); }
-@media (max-width: 640px) {
-  .act--hero .stage__copy .trust { flex-direction: column; width: 100%; }
-  .act--hero .stage__copy .trust li + li { margin: .35rem 0 0; padding: 0; border-left: 0; }
+/* The trust factors under the strong line, matched to the three points at the top of
+   Who Comes Into Your Home (.spec__checks.wc-points), which Ami picked as the look
+   she wants (19 Nov 2026): one fact per line, spaced capitals in the body face, a
+   single fine upright line down the left. No icons. Home page only. */
+.act--hero .stage__copy .trust { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, max-content); }
+.act--hero .stage__copy .trust li { position: relative; padding: .5625rem 0 .5625rem 1.25rem; font-family: var(--f-body); font-size: calc(.805 * var(--t)); font-weight: 500; letter-spacing: .16em; line-height: 1.3; text-transform: uppercase; white-space: nowrap; color: var(--t-soft); }
+.act--hero .stage__copy .trust li::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--line-firm); }
+@media (max-width: 860px) {
+  .act--hero .stage__copy .trust li { font-size: calc(.84 * var(--t)); padding: .4375rem 0 .4375rem .875rem; letter-spacing: .12em; }
+}
+@media (max-width: 359px) {
+  .act--hero .stage__copy .trust li { white-space: normal; letter-spacing: .08em; }
 }
