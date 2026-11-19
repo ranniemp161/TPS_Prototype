@@ -2322,3 +2322,8 @@ Dev dot follow up, same day: when open, the panel sits under the header at the t
 
 ## 19 Nov 2026: three home page wording changes from Ami
 "Restorative bodywork" is now "restorative treatments" (What is postpartum care). The home meals panel drops "up to": "3 fresh meals a day" and "3 fresh postpartum meals a day". "Stay with us for 7, 14 or 30 days" is now "Choose 7, 14 or 30 days of support at home" (the specialist stays with the family, not the other way round). The same "up to 3" and "stay with us" wording still stands on Programmes, What We Do and the FAQs, awaiting TJ's word.
+
+## 19 Nov 2026: Ami's review of the eleven spots, round two (local, not pushed)
+Hero strong line is now "Expert-led postpartum care, with over 10 years of experience" (non-medical leaves the banner at Ami's request, it stays everywhere else). Trust factors lose their icons for good: small spaced capitals, a fine line above, thin upright lines between, stacked with fine lines on phones. No icons anywhere for these (TJ). The treatments non-medical line moved from under the heading to the foot of the page. Spots 3 to 9 approved by Ami and untouched.
+
+Footer England row shortened to "Available across England" and set at the same size as the email links (TJ, 19 Nov 2026). Trust points are sentence case, not capitals (Ami).
