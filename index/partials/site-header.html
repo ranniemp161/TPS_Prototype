@@ -25,11 +25,30 @@
            their place below 1100px. What We Do, Our Offering and About Us open
            panels; Home and Gifts are page links (TJ, 22 Oct 2026: FAQs moved
            into the What We Do panel, Gifts took its place in the bar). -->
+      <!-- The stacked phone menu (TJ, 19 Nov 2026): below 1100px the items stack and
+           each section's links open right under it (.nav__sub), one section at a
+           time, with no heading repeating the item. Desktop never shows these lists;
+           it keeps the drop panels further down. Keep each list the same as its panel. -->
       <div class="nav__tabs" data-tabs>
         <a class="tab" href="index.html">Home</a>
         <button class="tab" type="button" data-tab="what-we-do" aria-expanded="false" aria-controls="panel-what-we-do">What We Do</button>
+        <ul class="nav__sub" data-sub="what-we-do">
+          <li><a href="what-we-do.html">Our Postpartum Care</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+        </ul>
         <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
+        <ul class="nav__sub" data-sub="offerings">
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+          <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+          <li><a href="gifts.html">Gifts</a></li>
+        </ul>
         <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
+        <ul class="nav__sub" data-sub="about">
+          <li><a href="about.html">The Suite</a></li>
+          <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
+        </ul>
         <a class="tab" href="gifts.html">Gifts</a>
       </div>
       <!-- Takes the place of the five above it below 1100px. A word, not a
@@ -51,7 +70,7 @@
     </a>
 
     <div class="nav__side nav__side--r">
-      <a class="tab tab--cta" href="{{ENQUIRE}}">Check availability</a>
+      <a class="tab tab--cta" href="{{ENQUIRE}}">Check Availability</a>
     </div>
 
   </div>

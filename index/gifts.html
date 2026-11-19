@@ -83,11 +83,30 @@
            their place below 1100px. What We Do, Our Offering and About Us open
            panels; Home and Gifts are page links (TJ, 22 Oct 2026: FAQs moved
            into the What We Do panel, Gifts took its place in the bar). -->
+      <!-- The stacked phone menu (TJ, 19 Nov 2026): below 1100px the items stack and
+           each section's links open right under it (.nav__sub), one section at a
+           time, with no heading repeating the item. Desktop never shows these lists;
+           it keeps the drop panels further down. Keep each list the same as its panel. -->
       <div class="nav__tabs" data-tabs>
         <a class="tab" href="index.html">Home</a>
         <button class="tab" type="button" data-tab="what-we-do" aria-expanded="false" aria-controls="panel-what-we-do">What We Do</button>
+        <ul class="nav__sub" data-sub="what-we-do">
+          <li><a href="what-we-do.html">Our Postpartum Care</a></li>
+          <li><a href="faqs.html">FAQs</a></li>
+        </ul>
         <button class="tab" type="button" data-tab="offerings" aria-expanded="false" aria-controls="panel-offerings">Our Offering</button>
+        <ul class="nav__sub" data-sub="offerings">
+          <li><a href="programmes.html">Programmes</a></li>
+          <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+          <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+          <li><a href="gifts.html">Gifts</a></li>
+        </ul>
         <button class="tab" type="button" data-tab="about" aria-expanded="false" aria-controls="panel-about">About Us</button>
+        <ul class="nav__sub" data-sub="about">
+          <li><a href="about.html">The Suite</a></li>
+          <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
+        </ul>
         <a class="tab" href="gifts.html">Gifts</a>
       </div>
       <!-- Takes the place of the five above it below 1100px. A word, not a
@@ -109,7 +128,7 @@
     </a>
 
     <div class="nav__side nav__side--r">
-      <a class="tab tab--cta" href="request-a-place.html">Check availability</a>
+      <a class="tab tab--cta" href="request-a-place.html">Check Availability</a>
     </div>
 
   </div>
@@ -184,8 +203,8 @@
 
     <div class="sf__brand">
       <a href="index.html" aria-label="The Postpartum Suite, home">
+        <!-- The stacked logo on every screen (TJ, 19 Nov 2026; phones had the side by side one). -->
         <picture>
-          <source media="(max-width: 760px)" srcset="../assets/img/logo-inline.webp" />
           <img class="sf__logo" src="../assets/img/the-postpartum-suite-logo.webp" alt="The Postpartum Suite" width="700" height="900" decoding="async" />
         </picture>
       </a>
@@ -193,13 +212,30 @@
 
     <nav class="sf__col" aria-label="Footer">
       <h2 class="sf__head">Explore</h2>
-      <ul>
-        <li><a href="what-we-do.html">What We Do</a></li>
-        <li><a href="programmes.html">Programmes</a></li>
-        <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
-        <li><a href="single-treatments.html">Signature Treatments</a></li>
-        <li><a href="about.html">The Suite</a></li>
-        <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+      <!-- The same items as the header menu, stacked and expandable, one section open
+           at a time (the shared name does that with no script), quieter than the
+           header's (TJ, 19 Nov 2026). Keep these lists the same as the header's. -->
+      <ul class="sf__menu">
+        <li><a class="sf__item" href="index.html">Home</a></li>
+        <li><details name="sf-explore"><summary class="sf__item">What We Do</summary>
+          <ul>
+            <li><a href="what-we-do.html">Our Postpartum Care</a></li>
+            <li><a href="faqs.html">FAQs</a></li>
+          </ul></details></li>
+        <li><details name="sf-explore"><summary class="sf__item">Our Offering</summary>
+          <ul>
+            <li><a href="programmes.html">Programmes</a></li>
+            <li><a href="build-your-programme.html">Bespoke Programmes</a></li>
+            <li><a href="single-treatments.html">Standalone Signature Treatments</a></li>
+            <li><a href="gifts.html">Gifts</a></li>
+          </ul></details></li>
+        <li><details name="sf-explore"><summary class="sf__item">About Us</summary>
+          <ul>
+            <li><a href="about.html">The Suite</a></li>
+            <li><a href="who-comes-into-your-home.html">Who Comes To Your Home</a></li>
+            <li><a href="about.html#contact">Contact</a></li>
+          </ul></details></li>
+        <li><a class="sf__item" href="gifts.html">Gifts</a></li>
       </ul>
     </nav>
 
@@ -210,6 +246,7 @@
         <li><span class="sf__label">Client relations team:</span><a href="mailto:concierge@thepostpartumsuite.com">concierge@thepostpartumsuite.com</a></li>
         <li><span class="sf__label">Brand Partnerships:</span><a href="mailto:partnerships@thepostpartumsuite.com">partnerships@thepostpartumsuite.com</a></li>
         <li><span class="sf__label">Phone:</span><a href="tel:+447477693300">+44 7477 693300</a></li>
+        <li id="dev-footer"><span class="sf__label">Where we work:</span><span>Based in London, caring for families across England</span></li>
       </ul>
       <!-- The social icons sit at the foot of Contact (TJ, 17 Nov 2026). -->
       <ul class="sf__social">
@@ -224,9 +261,9 @@
   <p class="sf__tagline">The care mothers deserve, at home</p>
 
   <div class="sf__base">
-    <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved.</p>
+    <p class="sf__copy">&copy; <span data-year>2026</span> The Postpartum Suite. All rights reserved</p>
     <ul class="sf__legal">
-      <li><a href="https://booking.thepostpartumsuite.com/terms">Terms and Conditions</a></li>
+      <li><a href="https://booking.thepostpartumsuite.com/terms">Terms &amp; Conditions</a></li>
       <li><a href="https://booking.thepostpartumsuite.com/privacy">Privacy Policy</a></li>
     </ul>
   </div>

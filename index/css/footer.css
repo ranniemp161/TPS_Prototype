@@ -106,7 +106,8 @@
   .sf__brand { justify-self: center; }
   .sf__brand picture { display: block; }
   .sf__brand > a { display: block; margin: 0; transform: none; }
-  .sf__logo { width: min(84vw, 20.625rem); height: auto; }
+  /* The stacked logo, at its desktop size (TJ, 19 Nov 2026; was the side by side logo at min(84vw, 20.625rem) wide). */
+  .sf__logo { width: auto; height: 10.8rem; }
   .sf__tagline { white-space: nowrap; font-size: calc((100vw - 3rem) / 15); }
   .sf__base { justify-content: center; text-align: center; }
   .sf__brand .sf__social { margin: 1rem 0 0; transform: none; }
@@ -160,6 +161,11 @@
 }
 @media (max-width: 760px) {
   .sf__col .sf__social { justify-content: center; }
+  /* Phones (TJ, 19 Nov 2026): Terms and Conditions and Privacy Policy above the
+     copyright line, which keeps to one line, scaling down on the narrowest phones. */
+  .sf__base { flex-direction: column; gap: .75rem; }
+  .sf__legal { order: -1; justify-content: center; }
+  .sf__copy { white-space: nowrap; font-size: min(calc(.84 * var(--t)), 3.5vw); }
 }
 /* The icons keep their own row, not the Contact list's two columns. */
 .sf__col:not(nav) ul.sf__social { display: flex; flex-direction: row; grid-template-columns: none; flex: none; }
@@ -168,3 +174,70 @@
   /* The rows' own gap does the spacing, as in Explore. */
   .sf__col:not(nav) ul:not(.sf__social) li + li { margin-top: 0; }
 }
+
+
+/* ---- Phones: Explore and Contact rebalanced (TJ, 19 Nov 2026) ----
+   Explore in two columns of three, so it is half the height. Contact centred to
+   match, each small label over its detail with clear space between the pairs,
+   and each detail a comfortable tap. One gap between the footer's parts.
+   Before: lab/footer.before-phone-layout.css.bak */
+@media (max-width: 760px) {
+  .sf__inner { gap: 2.5rem; }
+  .sf__col { width: 100%; }
+  /* Explore and Contact as quiet labels over their lists (TJ, 19 Nov 2026): on the
+     lists' left edge, small spaced capitals in the menu's font and the soft
+     colour, close above the list with a hairline under, so label and list read
+     as one block. (They were centred display capitals with a wide gap below.) */
+  .sf__col .sf__head {
+    max-width: 22rem; margin: 0 auto; padding-bottom: .7rem; text-align: left;
+    border-bottom: 1px solid var(--sf-rule);
+    /* Back in their own serif capitals, in the new position (TJ, 19 Nov 2026). */
+    font: 400 1.35rem/1 var(--f-display); letter-spacing: .02em; color: var(--sf-text);
+  }
+  /* Explore is the stacked menu below (.sf__menu); here it takes the footer's width. */
+  nav.sf__col .sf__menu { max-width: 22rem; margin-inline: auto; text-align: left; }
+  nav.sf__col .sf__item { min-height: 2.75rem; }
+  /* Contact as a list matching Explore (TJ, 19 Nov 2026): the same width, left
+     edge, hairlines and text size; the small label over its detail; the whole
+     row is the tap. The icons sit under it on the same left edge. (It was centred.) */
+  .sf__col:not(nav) ul:not(.sf__social) { display: block; max-width: 22rem; margin-inline: auto; text-align: left; }
+  .sf__col:not(nav) ul:not(.sf__social) li { position: relative; display: block; margin: 0; padding: .55rem 0 .6rem; border-bottom: 1px solid var(--sf-rule); }
+  .sf__col:not(nav) ul:not(.sf__social) li:last-child { border-bottom: 0; }
+  .sf__col:not(nav) .sf__label { display: block; margin-bottom: .1rem; font-size: calc(.72 * var(--t)); font-weight: 500; letter-spacing: .04em; color: var(--sf-mute); }
+  .sf__col:not(nav) .sf__label + a { display: block; font-size: calc(.84 * var(--t)); font-weight: 400; color: var(--sf-soft); }
+  .sf__col:not(nav) .sf__label + a::after { content: ""; position: absolute; inset: 0; }
+  .sf__col:not(nav) ul.sf__social { max-width: 22rem; margin: 1rem auto 0; gap: 1.5rem; justify-content: flex-start; }
+}
+
+/* ---- Explore as a stacked, expandable menu (TJ, 19 Nov 2026) ----
+   The header menu's items and behaviour, quieter: the footer's small type, soft
+   white hairlines, a small chevron, no colour change and no wash. One section
+   open at a time (details with a shared name). All widths. */
+.sf__menu { min-width: 13.5rem; }
+.sf__menu > li { margin: 0; border-bottom: 1px solid var(--sf-rule); }
+.sf__menu > li + li { margin-top: 0; }
+.sf__menu > li:last-child { border-bottom: 0; }
+.sf__menu .sf__item {
+  display: flex; align-items: center; justify-content: space-between; min-height: 2.25rem; padding: .25rem 0;
+  font-size: calc(.84 * var(--t)); font-weight: 400; line-height: 1.4; color: var(--sf-soft);
+  cursor: pointer; list-style: none; -webkit-tap-highlight-color: transparent;
+}
+.sf__menu summary::-webkit-details-marker { display: none; }
+.sf__menu summary::after {
+  content: ""; flex: none; width: .3125rem; height: .3125rem; margin: 0 .25rem 0 1rem;
+  border-right: 1px solid currentColor; border-bottom: 1px solid currentColor; opacity: .8;
+  transform: translateY(-.1rem) rotate(45deg); transition: transform 200ms ease;
+}
+.sf__menu details[open] > summary { color: var(--sf-text); }
+.sf__menu details[open] > summary::after { transform: translateY(.1rem) rotate(-135deg); }
+.sf__menu summary:hover, .sf__menu summary:focus-visible { color: var(--sf-text); }
+.sf__menu summary:focus-visible { outline: 1px solid var(--sf-soft); outline-offset: .125rem; }
+.sf__menu details > ul { padding: 0 0 .6rem .875rem; }
+.sf__menu details li { margin: 0; }
+.sf__menu details li + li { margin-top: 0; }
+.sf__menu details a { display: block; padding: .3rem 0; color: var(--sf-mute); }
+.sf__menu details a:hover, .sf__menu details a:focus-visible { color: var(--sf-text); }
+@media (max-width: 760px) {
+  .sf__menu details a { padding: .55rem 0; }
+}
+@media (prefers-reduced-motion: reduce) { .sf__menu summary::after { transition: none; } }
