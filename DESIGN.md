@@ -2334,3 +2334,13 @@ Ami pointed at the three points at the top of Who Comes Into Your Home as the lo
 ## Fly through heading (19 Nov 2026)
 
 Ami asked to rename the home fly through heading. "Fly through the service" is now "A day at home with us", chosen over "Step inside a day of care" because it is shorter and fits one line on a phone.
+
+## While You Rest: showing the rooms can be opened (20 Nov 2026)
+
+Ami said nothing showed that Living room, Kitchen and Nursery can be opened now the scroll film is gone. Two changes, local only until TJ approves. The first room opens by itself about a second and a half after the house settles, on laptop and phone, unless the visitor has already chosen; this replaces "nothing chosen until the reader taps a room" (11 Oct 2026). On laptop each room name carries the header menu's hairline arrow, down when closed and up when open. The phone row of names has no arrows. No written hint. Backups in lab: what-we-do-zones.before-room-arrows.js.bak and house-flight.before-room-arrows.css.bak.
+
+Same day, TJ: a click or tap on the open room closes it, so every room can be closed, and one room is open at most. With all closed the whole house shows, in colour, on laptop and phone.
+
+## Founders' names off the site, and the daytime supplement line (20 Nov 2026)
+
+Ami asked for the founders' names to be removed for now. On About: the Our Founders section (both profiles) is out, the three story paragraphs that named the sisters now say "one of us" and "her sister", the page description no longer names them, and the sign off reads only "Co-Founders, The Postpartum Suite". The approved expert-led paragraph that sat in a profile moved to the last section. Everything removed, with how to restore it, is in "Founders names and profiles, how to restore.md" in the TPS project folder; the page before is lab/about.before-names-removed.html.bak. On Build Your Programme, the Daytime in-home care option lost "A daily supplement applies towards her travel and accommodation." at Ami's request; the same disclosure stays in the price summary and the later note. Local only until TJ says push.

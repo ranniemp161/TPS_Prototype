@@ -91,7 +91,7 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
     if (srList) srList.parentNode.removeChild(srList);
     line.appendChild(panels);
 
-    var active = null, introDone = false, started = false, loaded = false;
+    var active = null, introDone = false, started = false, loaded = false, touched = false;
 
     function placeMarker() {
       var t = tabs.filter(function (b) { return b.dataset.key === active; })[0];
@@ -132,6 +132,8 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       // Back to nothing: the room's still fades and the film's unlit frame shows
       // again (or the first still, if the film never played).
       if (introDone) showStill(key || (stage.classList.contains('has-clip') ? null : 'intro'));
+      // Every room closed by the reader: the film is parked on the house, not its misty start (TJ, 20 Nov 2026).
+      if (introDone && !key && video && stage.classList.contains('has-clip')) { video.pause(); if (Math.abs(video.currentTime - STOP) > .05) video.currentTime = STOP; }
     }
     function finishIntro() {
       if (introDone) return;
@@ -140,6 +142,9 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       if (title) title.classList.add('is-in');
       line.classList.add('is-in');
       if (active) showStill(active);
+      // The first room opens by itself a moment after the house settles, so the
+      // row reads as something to tap (Ami, 20 Nov 2026). A tap before then wins.
+      setTimeout(function () { if (!touched && !active) select(tabs[0].dataset.key); }, 1400);
     }
 
     // Film seconds: the house dimmed, no room lit yet (TJ, 11 Oct 2026; the
@@ -182,18 +187,20 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       setTimeout(function () { if (!introDone) finishIntro(); }, 8000);
     }
 
-    home.addEventListener('click', function () { select(null); finishIntro(); });
+    home.addEventListener('click', function () { touched = true; select(null); finishIntro(); });
     tablist.addEventListener('click', function (e) {
       var b = e.target.closest ? e.target.closest('.zones__tab') : null;
       if (!b) return;
-      select(b.dataset.key);
+      touched = true;
+      // A tap on the open room closes it (TJ, 20 Nov 2026).
+      select(active === b.dataset.key ? null : b.dataset.key);
       finishIntro();
     });
     tablist.addEventListener('keydown', function (e) {
       var i = tabs.map(function (b) { return b.dataset.key; }).indexOf(active), n = tabs.length, to = -1;
       if (e.key === 'ArrowRight') to = (i + 1) % n; else if (e.key === 'ArrowLeft') to = i < 0 ? n - 1 : (i + n - 1) % n;
       if (to < 0) return;
-      e.preventDefault(); select(tabs[to].dataset.key); tabs[to].focus(); finishIntro();
+      e.preventDefault(); touched = true; select(tabs[to].dataset.key); tabs[to].focus(); finishIntro();
     });
 
     // Nothing chosen until the reader taps a room (TJ, 11 Oct 2026).
@@ -239,7 +246,7 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
     var home = document.createElement('button');
     home.type = 'button'; home.className = 'zones__home'; home.setAttribute('aria-label', 'The whole house');
     list.appendChild(fill); list.appendChild(tip); list.appendChild(home);
-    var active = null, introDone = false, started = false, loaded = false;
+    var active = null, introDone = false, started = false, loaded = false, touched = false;
     function place() {
       // The start: half way down the space above the first room, a little already drawn.
       var pad = btns[0].parentNode.offsetTop, bh = btns[0].offsetHeight, rest = Math.round(pad / 2);
@@ -253,7 +260,9 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
     function paintPoster() {
       // A room's picture over the film; the house in colour is the film's own
       // last frame, or the day poster where the film never played.
-      var want = active ? POSTER[active] : (stage.classList.contains('has-clip') ? null : (introDone ? '0' : null));
+      // Once the room has been chosen and closed again, the house still stands in, so
+      // closing every room never leaves the film's misty first frame (TJ, 20 Nov 2026).
+      var want = active ? POSTER[active] : (introDone && (touched || !stage.classList.contains('has-clip')) ? '0' : null);
       Object.keys(posters).forEach(function (k) { posters[k].classList.toggle('is-on', k === want); });
     }
     function select(key) {
@@ -277,6 +286,9 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       introDone = true;
       if (video && stage.classList.contains('has-clip')) { video.pause(); video.currentTime = STOP_D; }
       showWords(); paintPoster();
+      // The first room opens by itself a moment after the house settles, so the
+      // list reads as something to open (Ami, 20 Nov 2026). A click before then wins.
+      setTimeout(function () { if (!touched && !active) select(btns[0].dataset.zroom); }, 1400);
     }
     function loadVideo() {
       if (loaded || reduced || !video) return;
@@ -304,8 +316,9 @@ function tpsPx(v) { var n = parseFloat(v); if (isNaN(n)) return n; return /rem\s
       // If the film cannot play, or starts and then stalls, settle on the house in colour.
       setTimeout(function () { if (!introDone) finishIntro(); }, 8000);
     }
-    btns.forEach(function (b) { b.addEventListener('click', function () { finishIntro(); select(b.dataset.zroom); }); });
-    home.addEventListener('click', function () { finishIntro(); select(null); });
+    // A click on the open room closes it, so every room can be closed (TJ, 20 Nov 2026).
+    btns.forEach(function (b) { b.addEventListener('click', function () { touched = true; finishIntro(); select(active === b.dataset.zroom ? null : b.dataset.zroom); }); });
+    home.addEventListener('click', function () { touched = true; finishIntro(); select(null); });
     select(null);
     addEventListener('resize', place);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(place);

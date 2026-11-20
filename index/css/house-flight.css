@@ -805,6 +805,14 @@
 .zones__rooms button:hover,
 .zones__room.is-open button { color: var(--t-ink); }
 .zones__rooms button:focus-visible { outline: .125rem solid var(--focus); outline-offset: .25rem; }
+/* The header menu's hairline arrow beside each room: down when closed, up when
+   open, so the names read as things to open (Ami, 20 Nov 2026). */
+.zones__rooms button::after {
+  content: ""; display: inline-block; vertical-align: middle; width: .375rem; height: .375rem; margin-left: .875rem;
+  border-right: .078rem solid currentColor; border-bottom: .078rem solid currentColor;
+  transform: translateY(-.2rem) rotate(45deg); transition: transform 200ms var(--ease-out);
+}
+.zones__room.is-open button::after { transform: translateY(.05rem) rotate(-135deg); }
 
 /* The words for the room, opening beneath its name. */
 .zones__more {
